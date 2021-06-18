@@ -30,8 +30,14 @@ for i=1:length(images)
     imname= [ 'uoadr_na_healthy_'  in  ];
     end
     
+    I(round(0.97*(size(I,1)):end),1:round(0.25*(size(I,1))),:)=0;
+    V(round(0.97*(size(I,1)):end),1:round(0.25*(size(I,1))),:)=0;
+    D(round(0.97*(size(I,1)):end),1:round(0.25*(size(I,1))),:)=0;
+    C(round(0.97*(size(I,1)):end),1:round(0.25*(size(I,1))),:)=0;
+    fov(round(0.97*(size(I,1)):end),1:round(0.25*(size(I,1))),:)=0;
+    
     imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(V,[out_f '\Vessels\' imname '_mask.tiff'])
+    imwrite_single(V,[out_f '\Vessels\' imname '_ves.tiff'])
     imwrite_single(D,[out_f '\Disc\' imname '_disc.tiff'])
     imwrite_single(C,[out_f '\Cup\' imname '_cup.tiff'])
     imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])

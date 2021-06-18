@@ -9,7 +9,7 @@ for i=1:length(images)
 
     im=imread([path 'AVRDB\' images(i).name '\' images(i).name '.JPG']);
     ves=imread([path 'AVRDB\' images(i).name '\' images(i).name '--vessels.jpg']);
-    ves=~logical(ves);
+    ves=ves(:,:,1)<128;
     figure(1)
     sgtitle(i)
     [I,V,~,~,fov]=image_adjustment(im,rc,degree,ves,0,0, 'avrdb',0);

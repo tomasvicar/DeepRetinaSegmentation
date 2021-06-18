@@ -7,8 +7,8 @@ function [I2,M1,M2,M3,F]=image_adjustment(im,rc,degree,M1,M2,M3, dat, fov)
     minc=(sloup-prumer)*(prumer<sloup)+1*(prumer>=sloup);
     maxc=(sloup+prumer)*(size(im,2)>=(sloup+prumer))+size(im,2)*(size(im,2)<(sloup+prumer));
 
-    
-lengthI =  max(maxr-minr,maxc-minc);
+lengthI =  2*prumer;
+% lengthI =  max(maxr-minr,maxc-minc);
 I = im;    
 I2=imresize(I,(rc*degree)/lengthI); 
 
