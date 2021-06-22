@@ -8,7 +8,6 @@ import segmentation_models_pytorch as smp
 from shutil import rmtree
 
 from dataset import Dataset
-from unet import Unet
 from utils.log import Log
 from utils.gpu_logger import GpuLogger
 from utils.training_fcns import l1_loss,l2_loss,dice_loss_logit
@@ -18,16 +17,16 @@ from utils.training_fcns import l1_loss,l2_loss,dice_loss_logit
 
 
 
-def train(config,data_split):
+def train(config,data_train,data_valid):
 
-    
+    gpuLogger = GpuLogger()
     device = torch.device(config.device)
     
 
-    train_generator = Dataset(data_split['train'],augment=True,crop=True,config=config)
+    train_generator = Dataset(data_train,augment=True,crop=True,config=config)
     train_generator = data.DataLoader(train_generator,batch_size=config.train_batch_size,num_workers= config.train_num_workers, shuffle=True,drop_last=True)
 
-    valid_generator = Dataset(data_split['valid'],augment=False,crop=True,config=config)
+    valid_generator = Dataset(data_valid,augment=False,crop=True,config=config)
     valid_generator = data.DataLoader(valid_generator,batch_size=config.valid_batch_size, num_workers=config.valid_num_workers, shuffle=True,drop_last=True)
 
     
@@ -35,7 +34,7 @@ def train(config,data_split):
         model = smp.Unet(
             encoder_name="efficientnet-b2",        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
             encoder_weights='imagenet',     # use `imagenet` pre-trained weights for encoder initialization
-            in_channels=1,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+            in_channels=3,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
             classes=1,                      # model output channels (number of classes in your dataset)
         )
         model.config = config
@@ -47,16 +46,16 @@ def train(config,data_split):
         model = smp.Unet(
             encoder_name="efficientnet-b2",        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
             encoder_weights=None,     # use `imagenet` pre-trained weights for encoder initialization
-            in_channels=1,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+            in_channels=3,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
             classes=1,                      # model output channels (number of classes in your dataset)
         )
         model.config = config
         
         
         
-    model=model.to(device)
+    model = model.to(device)
     
-    model.log =Log()
+    model.log = Log(names=['loss'])
     
     
     
@@ -67,52 +66,52 @@ def train(config,data_split):
     for epoch in range(config.max_epochs):
         
         model.train()
-        for img,mask,gt in train_generator:
+        for img,mask in train_generator:
             
             img = img.to(torch.device(config.device))
             
             res=model(img)
             
             
-            if config.method == 'dt' or config.method == 'ndt' or config.method == 'pretraining':
+            if config.method == 'pretraining':
                 loss=l2_loss(res,mask)
             else:
                 loss=dice_loss_logit(res,mask)
             
             optimizer.zero_grad()
             loss.backward()
+            gpuLogger.save_gpu_memory()
             optimizer.step()
+            gpuLogger.save_gpu_memory()
             
-            model.log.save_tmp_log(loss,'train')
-            measured_gpu_memory.append(get_gpu_memory(nvidia_smi))
+            model.log.append_train([loss.detach().cpu().numpy()])
+            
                 
             
         model.eval()
         with torch.no_grad():
-            for img,mask,gt in valid_generator:
+            for img,mask in valid_generator:
                 
                 img = img.to(torch.device(config.device))
                 
                 res=model(img)
                 
                 
-                if config.method == 'dt' or config.method == 'ndt' or config.method == 'pretraining':
+                if config.method == 'pretraining':
                     loss=l2_loss(res,mask)
                 else:
                     loss=dice_loss_logit(res,mask)
                 
-                model.log.save_tmp_log(loss,'valid')
-                measured_gpu_memory.append(get_gpu_memory(nvidia_smi))
+                model.log.append_valid([loss.detach().cpu().numpy()])
+                gpuLogger.save_gpu_memory()
             
         
-        model.log.save_log_data_and_clear_tmp()
+        model.log.save_and_reset()
         
-        model.log.plot_training()
-        
-        
+
         
         
-        if not (config.method == 'dt' or config.method == 'ndt' or config.method == 'pretraining'):
+        if not (config.method == 'pretraining'):
             res=torch.sigmoid(res)
             
         res = res.detach().cpu().numpy()
@@ -126,24 +125,26 @@ def train(config,data_split):
     
         xstr = lambda x:"{:.5f}".format(x)
         lr=optimizer.param_groups[0]['lr']
-        info= '_' + str(epoch) + '_' + xstr(lr) + '_gpu_' + xstr(np.max(measured_gpu_memory)) + '_train_'  + xstr(model.log.train_loss_log[-1]) + '_valid_' + xstr(model.log.valid_loss_log[-1]) 
+        info= '_' + str(epoch) + '_' + xstr(lr) + '_gpu_' + xstr(np.max(gpuLogger.measured_gpu_memory)) + '_train_'  + xstr(model.log.train_log['loss'][-1]) + '_valid_' + xstr(model.log.valid_log['loss'][-1]) 
+        
         print(info)
         
         model_name=config.model_save_dir+ os.sep + config.method + info  + '.pt'
         
-        model_names.append(model_name)
+        model.log.save_log_model_name(model_name)
         
         torch.save(model,model_name)
         
-        model.log.plot_training(model_name.replace('.pt','loss.png'))
+        model.log.plot(model_name.replace('.pt','loss.png'))
         
         scheduler.step()
     
     
-    
-    best_model_ind=np.argmin(model.log.valid_loss_log)
-    best_model_name= model_names[best_model_ind]   
-    best_model_name_new=best_model_name.replace(config.model_save_dir,config.best_models_dir)
+    last_x_to_use = 3
+    last_x_to_use = len(model.log.valid_loss_log) - last_x_to_use
+    best_model_ind = np.argmin(model.log.valid_loss_log[last_x_to_use:]) + last_x_to_use
+    best_model_name = model_names[best_model_ind]   
+    best_model_name_new = best_model_name.replace(config.model_save_dir,config.best_models_dir)
     
     copyfile(best_model_name,best_model_name_new)
     
@@ -154,3 +155,6 @@ def train(config,data_split):
 
 
     return best_model_name_new
+
+
+

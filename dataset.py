@@ -57,6 +57,10 @@ def augmentation(img,mask,config):
     img = cv2.warpPerspective(img,matrix, (cols,rows),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT)
     if not config.method == 'pretraining':
         mask = cv2.warpPerspective(mask,matrix, (cols,rows),flags=cv2.INTER_NEAREST,borderMode=cv2.BORDER_REFLECT)
+        
+    # img = cv2.warpPerspective(img,matrix, (cols,rows),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_CONSTANT,borderValue=-0.5)
+    # if not config.method == 'pretraining':
+    #     mask = cv2.warpPerspective(mask,matrix, (cols,rows),flags=cv2.INTER_NEAREST,borderMode=cv2.BORDER_CONSTANT,borderValue=0)
     
     r=[torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(4,(1,1)).view(-1).numpy()]
     if r[0]:
@@ -127,17 +131,18 @@ class Dataset(data.Dataset):
         name = self.names[idx]
         
         if not self.config.method == 'pretraining':
-            mask=imread(name)
+            mask=imread(name)>0
             mask=mask.astype(np.float32)
             
         else:
             mask = None
             
         name_tmp = '_'.join(name.split('_')[:-1]) + '.png'
-        name_tmp = name_tmp 
+        name_tmp = name_tmp.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
             
         img=imread(name_tmp)
         img=img.astype(np.float64)
+        img = (img/255)-0.5
         
         
         if self.augment:
@@ -157,20 +162,12 @@ class Dataset(data.Dataset):
                 r = [100,100]
             
             
-            img=img[r[0]:r[0]+out_size[0],r[1]:r[1]+out_size[1]]
+            img=img[r[0]:r[0]+out_size[0],r[1]:r[1]+out_size[1],:]
             if not self.config.method == 'pretraining':
                 mask=mask[r[0]:r[0]+out_size[0],r[1]:r[1]+out_size[1]]    
          
 
             
-                
-            
-        shape=np.shape(img)
-        if not self.config.method == 'pretraining':
-            gt=torch.from_numpy(mask.reshape((1,shape[0],shape[1])).astype(np.float32))
-        else:
-            gt = 0
-        
          
             
         if self.config.method =='pretraining':
@@ -198,7 +195,7 @@ class Dataset(data.Dataset):
             
             block_types = [block_types[k] for k in p]
                 
-            used = np.zeros(img_shape)
+            used = np.zeros(img_shape[:2])
             for k,block_type in enumerate(block_types):
                 
                 if block_type == 'del':
@@ -216,16 +213,22 @@ class Dataset(data.Dataset):
                 posx = int(np.round(rand()*(img_shape[0]-block_sizex)))
                 posy = int(np.round(rand()*(img_shape[1]-block_sizey)))
                 
-                if np.sum(used[posx:posx+block_sizex,posy:posy+block_sizey])==00:
+                if np.sum(used[posx:posx+block_sizex,posy:posy+block_sizey])==0:
                     used[posx:posx+block_sizex,posy:posy+block_sizey] = 1
                     
                     
                     if block_type == 'del':
-                        block = torch.randn([block_sizex,block_sizey]).numpy()*self.config.pretrain_std + self.config.pretrain_mean
+                        std_tmp = self.config.pretrain_std
+                        mean_tmp = self.config.pretrain_mean
+                        
+                        # std_tmp = np.std(img[posx:posx+block_sizex,posy:posy+block_sizey,:])
+                        # mean_tmp = np.mean(img[posx:posx+block_sizex,posy:posy+block_sizey,:])
+                        
+                        block = torch.randn([block_sizex,block_sizey,img.shape[2]]).numpy()*std_tmp + mean_tmp
                     
                     if block_type == 'rot':
                         
-                        block = img[posx:posx+block_sizex,posy:posy+block_sizey]
+                        block = img[posx:posx+block_sizex,posy:posy+block_sizey,:]
                         # if rand()>0.5:
                         #     block = block + 0.2
                         # else:
@@ -245,7 +248,7 @@ class Dataset(data.Dataset):
 
                     if block_type == 'chess':
                         
-                        block = img[posx:posx+block_sizex,posy:posy+block_sizey]
+                        block = img[posx:posx+block_sizex,posy:posy+block_sizey,:]
                         # if rand()>0.5:
                         #     block = block + 0.2
                         # else:
@@ -259,27 +262,29 @@ class Dataset(data.Dataset):
                         
                         sub_blocks = []
 
-                        sub_blocks.append(block[:x_split,:y_split].copy())
-                        sub_blocks.append(block[x_split:,:y_split].copy())
-                        sub_blocks.append(block[:x_split,y_split:].copy())
-                        sub_blocks.append(block[x_split:,y_split:].copy())
+                        sub_blocks.append(block[:x_split,:y_split,:].copy())
+                        sub_blocks.append(block[x_split:,:y_split,:].copy())
+                        sub_blocks.append(block[:x_split,y_split:,:].copy())
+                        sub_blocks.append(block[x_split:,y_split:,:].copy())
                         
-                        block[:x_split,:y_split] = sub_blocks[p[0]]
-                        block[x_split:,:y_split] = sub_blocks[p[1]]
-                        block[:x_split,y_split:] = sub_blocks[p[2]]
-                        block[x_split:,y_split:] = sub_blocks[p[3]]
+                        
+                        block[:x_split,:y_split,:] = sub_blocks[p[0]]
+                        block[x_split:,:y_split,:] = sub_blocks[p[1]]
+                        block[:x_split,y_split:,:] = sub_blocks[p[2]]
+                        block[x_split:,y_split:,:] = sub_blocks[p[3]]
                     
                     
-                    img[posx:posx+block_sizex,posy:posy+block_sizey] = block
+                    img[posx:posx+block_sizex,posy:posy+block_sizey,:] = block
                     
                     
 
-            
-        mask=torch.from_numpy(mask.reshape((1,shape[0],shape[1])).astype(np.float32))
-        img=torch.from_numpy(img.reshape((1,shape[0],shape[1])).astype(np.float32))
+        if len(mask.shape)==2:
+            mask = mask.reshape([mask.shape[0],mask.shape[1],1])
+        mask=torch.from_numpy(np.transpose(mask,(2,0,1)).astype(np.float32))
+        img=torch.from_numpy(np.transpose(img,(2,0,1)).astype(np.float32))
         
         
-        return img,mask,gt
+        return img,mask
 
 
 
@@ -288,16 +293,17 @@ class Dataset(data.Dataset):
 
 
 if __name__ == "__main__":
+    
+    
     from config import Config    
     
     config = Config()
     config.method = 'pretraining'
-    config.border_width = 10
     
     config.pretrain_num_blocks = 20
     config.pretrain_max_block_size = 40
-    config.pretrain_noise_std_fraction = 0
-    config.pretrain_noise_pixel_p = 0
+    config.pretrain_noise_std_fraction = 0.1
+    config.pretrain_noise_pixel_p = 0.02
     config.pretrain_chessboard_num_blocks = 20
     config.pretrain_chessboard_max_block_size = 40
     config.pretrain_rot_num_blocks = 20
@@ -309,14 +315,51 @@ if __name__ == "__main__":
     
     
     train_generator = Dataset(data_split['train'],augment=True,crop=True,config=config)
-    train_generator = data.DataLoader(train_generator,batch_size=config.train_batch_size,num_workers= 0, shuffle=True,drop_last=True)
+    train_generator = data.DataLoader(train_generator,batch_size=1,num_workers= 0, shuffle=True,drop_last=True)
     
 
     for img,mask,gt in train_generator:
         
-        plt.imshow(img[0,0,:,:],vmin=-0.5,vmax=2)
+        plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5)
         plt.show()
-        plt.imshow(mask[0,0,:,:],vmin=-0.5,vmax=2)
+        plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5)
         plt.show()
         
         break
+    
+    
+    
+    
+    
+    from config import Config    
+    
+    config = Config()
+    config.method = 'segmentation'
+    
+    config.pretrain_num_blocks = 20
+    config.pretrain_max_block_size = 40
+    config.pretrain_noise_std_fraction = 0.1
+    config.pretrain_noise_pixel_p = 0.02
+    config.pretrain_chessboard_num_blocks = 20
+    config.pretrain_chessboard_max_block_size = 40
+    config.pretrain_rot_num_blocks = 20
+    config.pretrain_rot_max_block_size = 40
+    
+    
+    
+    data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS,seed=42)
+    
+    
+    train_generator = Dataset(data_split['train'],augment=True,crop=True,config=config)
+    train_generator = data.DataLoader(train_generator,batch_size=1,num_workers= 0, shuffle=True,drop_last=True)
+    
+
+    for img,mask,gt in train_generator:
+        
+        plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5)
+        plt.show()
+        plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5)
+        plt.show()
+        
+        break
+    

@@ -17,10 +17,15 @@ class Config:
     split_ratio_pretrain_train_valid = [9.5,0.5]
     
     
-    train_batch_size = 16
-    train_num_workers = 8
-    valid_batch_size = 4
-    valid_num_workers = 2
+    # train_batch_size = 16
+    # train_num_workers = 8
+    # valid_batch_size = 4
+    # valid_num_workers = 2
+    
+    train_batch_size = 4
+    train_num_workers = 0
+    valid_batch_size = 2
+    valid_num_workers = 0
 
 
     init_lr = 0.01
@@ -43,8 +48,8 @@ class Config:
     
     pretrain_num_blocks = 0
     pretrain_max_block_size = 20
-    pretrain_mean = 0.10273255
-    pretrain_std = 0.31816605
+    pretrain_mean = -0.17507726083630085
+    pretrain_std = 0.24185812541237633
     pretrain_noise_std_fraction = None
     pretrain_noise_pixel_p = None
     pretrain_noise_pixel_std_fraction = 5

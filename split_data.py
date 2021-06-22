@@ -8,6 +8,23 @@ from glob import glob
 class DataSpliter:
 
     DATA_TYPE_VESSELS = 'Vessels'
+    
+    
+    
+    
+    @staticmethod
+    def filter_database(names,database_name):
+        
+        names_new = []
+        for name in names:
+            tmp = os.path.split(name)[1].replace('.png','').split('_')[0]
+            if tmp == database_name:
+                names_new.append(name)
+            
+        
+        return names_new
+
+    
 
     @staticmethod
     def split_data(data_type=DATA_TYPE_VESSELS,seed=42,config=Config()):
@@ -50,6 +67,8 @@ class DataSpliter:
             
             dataset_names = [os.path.split(name)[1].replace('.png','').split('_')[0] for name in names]
             dataset_splits = [os.path.split(name)[1].replace('.png','').split('_')[1] for name in names]
+            
+            data_split['database_names'] = list(set(dataset_names))
             
             for dataset_name in set(dataset_names):
                 
