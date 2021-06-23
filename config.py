@@ -43,7 +43,7 @@ class Config:
     device='cuda:0'
     
     
-    patch_size=256
+    patch_size = 384
     
     
     pretrain_num_blocks = 0

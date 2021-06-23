@@ -76,6 +76,7 @@ class DataSpliter:
                 dataset_names_selected = [y for x,y in zip(dataset_names,names) if x==dataset_name]
                 
                 if any([x=='test' for x in  dataset_splits_selected]):
+                # if False: ############################################################################
                                         
                     test_ind = []
                     other_ind = []
