@@ -73,9 +73,9 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         
         corners=[]
         cx=0
-        while cx<img_size[0]-patch_size-1: 
+        while cx<img_size[0]-patch_size: 
             cy=0
-            while cy<img_size[1]-patch_size-1:
+            while cy<img_size[1]-patch_size:
                 
                 corners.append([cx,cy])
                 
@@ -83,16 +83,16 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
             cx=cx+patch_size-border
            
         cx=0
-        while cx<img_size[0]-patch_size-1:
-            corners.append([cx,img_size[1]-1-patch_size])
+        while cx<img_size[0]-patch_size:
+            corners.append([cx,img_size[1]-patch_size])
             cx=cx+patch_size-border
             
         cy=0
-        while cy<img_size[1]-patch_size-1:
-            corners.append([img_size[0]-1-patch_size,cy])
+        while cy<img_size[1]-patch_size:
+            corners.append([img_size[0]-patch_size,cy])
             cy=cy+patch_size-border   
             
-        corners.append([img_size[0]-1-patch_size,img_size[1]-1-patch_size])
+        corners.append([img_size[0]-patch_size,img_size[1]-patch_size])
         
         for corner in corners:
             subimg = img[corner[0]:corner[0]+patch_size,corner[1]:corner[1]+patch_size,:]
@@ -115,7 +115,7 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         
         final=sum_img/count_img
         
-        X = (final>0).astype(np.float32)[fov==1]
+        X = (final>0.5).astype(np.float32)[fov==1]
         X_nonbinar = final.astype(np.float32)[fov==1]
         Y = (mask>0).astype(np.float32)[fov==1]
         
@@ -126,9 +126,8 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         
         dice = (2 * TP )/ ((2 * TP) + FP + FN)
         
-        acc = TP / (TP + FP + FN + TN)
+        acc = (TP+TN) / (TP + FP + FN + TN)
         
-        gfddfg
         auc = roc_auc_score(Y,X_nonbinar)
         
         

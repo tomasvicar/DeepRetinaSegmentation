@@ -31,7 +31,7 @@ for i=1:length(images)
     ves2=mat2gray(im2double(imread([path 'DRIVE\test\2nd_manual\' in(1:2) '_manual2.gif'])));
     fov=imread([path 'DRIVE\test\mask\' in '_mask.gif']);
 
-    [I,V,V2,~]=image_adjustment(im,rc,degree,ves,ves2,0, 'drive', fov);
+    [I,V,V2,~,fov]=image_adjustment(im,rc,degree,ves,ves2,0, 'drive', fov);
     
     num=in(1:2);
     if sum(str2num(num)==[3 8 14 17])

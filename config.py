@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 class Config:
     
@@ -6,7 +7,14 @@ class Config:
     
     best_models_dir='../best_models'
     
-    data_path ="../data_preprocessed"
+    
+    if os.path.isdir("../data_preprocessed"):
+        data_path = "../data_preprocessed" 
+    elif os.path.isdir("../../data_preprocessed"): 
+        data_path = "../../data_preprocessed"
+    else:
+        raise Exception('no data')
+        
     
     results_folder = '../results'
     
@@ -17,15 +25,15 @@ class Config:
     split_ratio_pretrain_train_valid = [9.5,0.5]
     
     
-    # train_batch_size = 16
-    # train_num_workers = 8
-    # valid_batch_size = 4
-    # valid_num_workers = 2
+    train_batch_size = 16
+    train_num_workers = 8
+    valid_batch_size = 4
+    valid_num_workers = 2
     
-    train_batch_size = 4
-    train_num_workers = 0
-    valid_batch_size = 2
-    valid_num_workers = 0
+    # train_batch_size = 4
+    # train_num_workers = 0
+    # valid_batch_size = 2
+    # valid_num_workers = 0
 
 
     init_lr = 0.01
@@ -33,14 +41,9 @@ class Config:
     gamma = 0.1
     max_epochs = lr_changes_list[-1]
     
-    
 
-    filters=list((np.array([64,128,256,512,1024])/4).astype(np.int))
-    in_size=1
-    out_size=1
-    
-    
-    device='cuda:0'
+
+    device ='cuda:0'
     
     
     patch_size = 384
@@ -61,7 +64,6 @@ class Config:
     
     model_name_load = None
     method = None
-    border_width = None
 
 
 

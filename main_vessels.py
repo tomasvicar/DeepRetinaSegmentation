@@ -14,29 +14,30 @@ if __name__ == "__main__":
     
     
     
-    resutls = dict()
+    resutls_separate = dict()
+    resutls_retrained = dict()
+    resutls_universal = dict()
     
+    init_model = None
     
     # logging.basicConfig(filename='debug.log',level=logging.INFO)
     # try:
     if True:
-        for cv_iter in range(2):
-            
+        for cv_iter in range(1):
             
             config = Config()
             
             data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS,seed=cv_iter*100)
             
-            if not resutls:
+            
+            
+            if not resutls_separate:
                 for database_name in data_split['database_names']:
-                    resutls[database_name] = {'ACC':[],
-                                              'AUC':[],
-                                              'DICE':[],
-                                              'TP':[],
-                                              'FP':[],
-                                              'FN':[],
-                                              'TN':[],
-                                              }
+                    resutls_separate[database_name] = {'ACC':[],'AUC':[],'DICE':[],'TP':[],'FP':[],'FN':[],'TN':[],}
+                    resutls_retrained[database_name] = {'ACC':[],'AUC':[],'DICE':[],'TP':[],'FP':[],'FN':[],'TN':[],}
+                    resutls_universal[database_name] = {'ACC':[],'AUC':[],'DICE':[],'TP':[],'FP':[],'FN':[],'TN':[],}
+                    
+                    
             
             if os.path.isdir(config.model_save_dir):
                 rmtree(config.model_save_dir) 
@@ -52,15 +53,14 @@ if __name__ == "__main__":
                 os.mkdir(config.results_folder)
             
             
+
+            
+            config.method = 'segmentation_universal'
+            config.model_name_load = init_model
             
             
-            config.method = 'segmentation'
-            config.model_name_load = None
-            config.lr_changes_list = np.cumsum([2,2,2])
-            config.max_epochs = config.lr_changes_list[-1]
-            
-            # universal_model_name = train(config,data_train=data_split['train'],data_valid=data_split['valid'])
-            universal_model_name = '../best_models/segmentation_9_0.00001_gpu_0.00000_train_0.38325_valid_0.35431.pt'
+            universal_model_name = train(config,data_train=data_split['train'],data_valid=data_split['valid'])
+            # universal_model_name = '../best_models/segmentation_9_0.00001_gpu_0.00000_train_0.38325_valid_0.35431.pt'
             
             
             
@@ -71,15 +71,47 @@ if __name__ == "__main__":
                 tmp_test = DataSpliter.filter_database(data_split['test'],database_name)
                 
                 
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../outputs_' + database_name , config, universal_model_name, tmp_test)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../outputs_' + database_name + str(cv_iter), config, universal_model_name, tmp_test)
                 
-                resutls[database_name]['ACC'].append(accs)
-                resutls[database_name]['AUC'].append(aucs)
-                resutls[database_name]['DICE'].append(dices)
-                resutls[database_name]['TP'].append(tps)
-                resutls[database_name]['FP'].append(fps)
-                resutls[database_name]['FN'].append(fns)
-                resutls[database_name]['TN'].append(tns)
+                resutls_universal[database_name]['ACC'].append(accs)
+                resutls_universal[database_name]['AUC'].append(aucs)
+                resutls_universal[database_name]['DICE'].append(dices)
+                resutls_universal[database_name]['TP'].append(tps)
+                resutls_universal[database_name]['FP'].append(fps)
+                resutls_universal[database_name]['FN'].append(fns)
+                resutls_universal[database_name]['TN'].append(tns)
+                
+                
+                config.method = 'segmentation_retrained' + database_name
+                config.model_name_load = universal_model_name
+                
+                model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../outputs_' + database_name + str(cv_iter), config, model_name, tmp_test)
+                
+                resutls_retrained[database_name]['ACC'].append(accs)
+                resutls_retrained[database_name]['AUC'].append(aucs)
+                resutls_retrained[database_name]['DICE'].append(dices)
+                resutls_retrained[database_name]['TP'].append(tps)
+                resutls_retrained[database_name]['FP'].append(fps)
+                resutls_retrained[database_name]['FN'].append(fns)
+                resutls_retrained[database_name]['TN'].append(tns)
+                
+                
+                config.method = 'segmentation_separate' + database_name
+                config.model_name_load = init_model
+                
+                
+                model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../outputs_' + database_name + str(cv_iter), config, model_name, tmp_test)
+                
+                resutls_separate[database_name]['ACC'].append(accs)
+                resutls_separate[database_name]['AUC'].append(aucs)
+                resutls_separate[database_name]['DICE'].append(dices)
+                resutls_separate[database_name]['TP'].append(tps)
+                resutls_separate[database_name]['FP'].append(fps)
+                resutls_separate[database_name]['FN'].append(fns)
+                resutls_separate[database_name]['TN'].append(tns)
+                
         
       
 
