@@ -3,6 +3,7 @@ from shutil import rmtree
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 
 from split_data import DataSpliter
 from train import train
@@ -20,9 +21,9 @@ if __name__ == "__main__":
     
     init_model = None
     
-    # logging.basicConfig(filename='debug.log',level=logging.INFO)
-    # try:
-    if True:
+    logging.basicConfig(filename='debug.log',level=logging.INFO)
+    try:
+    # if True:
         for cv_iter in range(1):
             
             config = Config()
@@ -112,9 +113,17 @@ if __name__ == "__main__":
                 resutls_separate[database_name]['FN'].append(fns)
                 resutls_separate[database_name]['TN'].append(tns)
                 
+                
+            
+            results = dict()
+            results['resutls_universal'] = resutls_universal
+            results['resutls_retrained'] = resutls_retrained
+            results['resutls_separate'] = resutls_separate
+            with open('../result_test1_' + str(cv_iter) + '.json', 'w') as outfile:
+                json.dump(results, outfile)    
         
       
 
         
-    # except Exception as e:
-    #     logging.critical(e, exc_info=True)
+    except Exception as e:
+        logging.critical(e, exc_info=True)

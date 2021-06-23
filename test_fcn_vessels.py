@@ -59,10 +59,7 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         img=img.astype(np.float64)
         img = (img/255)-0.5
         
-        # if len(mask.shape)==2:
-        #     mask = mask.reshape([mask.shape[0],mask.shape[1],1])
-        # mask=torch.from_numpy(np.transpose(mask,(2,0,1)).astype(np.float32))
-        # img=torch.from_numpy(np.transpose(img,(2,0,1)).astype(np.float32))
+        
         
         img_size=img.shape
         
@@ -115,14 +112,14 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         
         final=sum_img/count_img
         
-        X = (final>0.5).astype(np.float32)[fov==1]
-        X_nonbinar = final.astype(np.float32)[fov==1]
-        Y = (mask>0).astype(np.float32)[fov==1]
+        X = (final>0.5).astype(np.float64)[fov==1]
+        X_nonbinar = final.astype(np.float64)[fov==1]
+        Y = (mask>0).astype(np.float64)[fov==1]
         
-        TP = np.sum(((X==1)&(Y==1)).astype(np.float32))
-        FP = np.sum(((X==1)&(Y==0)).astype(np.float32))
-        FN = np.sum(((X==0)&(Y==1)).astype(np.float32))
-        TN = np.sum(((X==0)&(Y==0)).astype(np.float32))
+        TP = np.sum(((X==1)&(Y==1)).astype(np.float64))
+        FP = np.sum(((X==1)&(Y==0)).astype(np.float64))
+        FN = np.sum(((X==0)&(Y==1)).astype(np.float64))
+        TN = np.sum(((X==0)&(Y==0)).astype(np.float64))
         
         dice = (2 * TP )/ ((2 * TP) + FP + FN)
         
