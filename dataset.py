@@ -124,7 +124,7 @@ def augmentation(img,mask,config):
 
 
 
-class Dataset(data.Dataset,data_type=None):
+class Dataset(data.Dataset):
 
 
     def __init__(self, names,augment,crop,config,crop_same=False,data_type=None):
