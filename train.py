@@ -11,7 +11,7 @@ from dataset import Dataset
 from utils.log import Log
 from utils.gpu_logger import GpuLogger
 from utils.training_fcns import l1_loss,l2_loss,dice_loss_logit,bce_logit
-from get_dice import get_dice
+from utils.get_dice import get_dice
 
 
 
