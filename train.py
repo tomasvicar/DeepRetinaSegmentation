@@ -23,18 +23,18 @@ def train(config,data_train,data_valid):
     device = torch.device(config.device)
     
 
-    train_generator = Dataset(data_train,augment=True,crop=True,config=config)
+    train_generator = Dataset(data_train,augment=True,crop=True,config=config,data_type='train')
     train_generator = data.DataLoader(train_generator,batch_size=config.train_batch_size,num_workers= config.train_num_workers, shuffle=True,drop_last=True)
 
-    valid_generator = Dataset(data_valid,augment=False,crop=True,config=config)
-    valid_generator = data.DataLoader(valid_generator,batch_size=config.valid_batch_size, num_workers=config.valid_num_workers, shuffle=True,drop_last=True)
+    valid_generator = Dataset(data_valid,augment=False,crop=True,config=config,data_type='valid')
+    valid_generator = data.DataLoader(valid_generator,batch_size=config.valid_batch_size, num_workers=config.valid_num_workers, shuffle=True,drop_last=False)
 
     
     if config.model_name_load == 'imagenet':
         model = smp.Unet(
-            encoder_name="efficientnet-b2",        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+            encoder_name=config.net_name,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
             encoder_weights='imagenet',     # use `imagenet` pre-trained weights for encoder initialization
-            in_channels=3,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+            in_channels=config.in_channels,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
             classes=1,                      # model output channels (number of classes in your dataset)
         )
         model.config = config
@@ -44,9 +44,9 @@ def train(config,data_train,data_valid):
     else:
         # model=Unet(config, filters=config.filters,in_size=config.in_size,out_size=config.out_size)
         model = smp.Unet(
-            encoder_name="efficientnet-b2",        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+            encoder_name=config.net_name,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
             encoder_weights=None,     # use `imagenet` pre-trained weights for encoder initialization
-            in_channels=3,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+            in_channels=config.in_channels,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
             classes=1,                      # model output channels (number of classes in your dataset)
         )
         model.config = config
@@ -135,7 +135,12 @@ def train(config,data_train,data_valid):
         
         torch.save(model,model_name)
         
-        model.log.plot(model_name.replace('.pt','loss.png'))
+        if not os.path.isdir(config.results_folder + os.sep + config.method):
+            os.mkdir(config.results_folder + os.sep + config.method)
+        
+        model_name2=config.results_folder + os.sep + config.method + os.sep + config.method + info  + '.pt'
+        
+        model.log.plot(model_name2.replace('.pt','loss.png'))
         
         scheduler.step()
     
@@ -150,8 +155,9 @@ def train(config,data_train,data_valid):
     
     if os.path.isdir(config.model_save_dir):
         rmtree(config.model_save_dir) 
+        
     if not os.path.isdir(config.model_save_dir):
-            os.mkdir(config.model_save_dir)
+        os.mkdir(config.model_save_dir)
 
 
     return best_model_name_new

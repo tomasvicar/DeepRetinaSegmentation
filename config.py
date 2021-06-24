@@ -36,7 +36,7 @@ class Config:
     # valid_num_workers = 0
 
 
-    init_lr = 0.01
+    init_lr = 0.001
     lr_changes_list = np.cumsum([40,20,10,5])
     gamma = 0.1
     max_epochs = lr_changes_list[-1]
@@ -47,6 +47,14 @@ class Config:
     
     
     patch_size = 384
+    
+    
+    net_name = "efficientnet-b1"
+    in_channels = 3
+    multipy = 0.1
+    add = 0.1
+    clahe = False
+    
     
     
     pretrain_num_blocks = 0

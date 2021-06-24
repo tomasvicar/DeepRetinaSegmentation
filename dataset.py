@@ -76,21 +76,40 @@ def augmentation(img,mask,config):
         mask=np.rot90(mask,k=r[2])    
     
     
-    multipy=0.2 
+    multipy=config.multipy
     multipy=1+rand()*multipy
     if rand()>0.5:
         img=img*multipy
     else:
         img=img/multipy
        
-    add=0.2     
+    add=config.add     
     add=(1-2*rand())*add
     img=img+add
     
     
+    for slice_num in range(img.shape[2]):
+        
+        slice_ = img[:,:,slice_num]
+        
+        multipy=0.1 
+        multipy=1+rand()*multipy
+        if rand()>0.5:
+            slice_=slice_*multipy
+        else:
+            slice_=slice_/multipy
+           
+        add=0.1     
+        add=(1-2*rand())*add
+        slice_=slice_+add
+        
+        img[:,:,slice_num] = slice_
     
     
     
+    
+    
+
     bs_r=(-0.5,0.5)
     r=1-2*rand()
     if r<=0:
@@ -105,21 +124,17 @@ def augmentation(img,mask,config):
 
 
 
+class Dataset(data.Dataset,data_type=None):
 
 
-
-
-class Dataset(data.Dataset):
-
-
-    def __init__(self, names,augment,crop,config,crop_same=False):
+    def __init__(self, names,augment,crop,config,crop_same=False,data_type=None):
        
         self.names = names
         self.augment = augment
         self.crop = crop
         self.config = config
         self.crop_same = crop_same
-        
+        self.data_type = data_type
         
 
     def __len__(self):

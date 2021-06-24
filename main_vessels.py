@@ -29,8 +29,7 @@ if __name__ == "__main__":
             config = Config()
             
             data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS,seed=cv_iter*100)
-            
-            
+            data_split['database_names'] = ['drive']
             
             if not resutls_separate:
                 for database_name in data_split['database_names']:
@@ -72,7 +71,7 @@ if __name__ == "__main__":
                 tmp_test = DataSpliter.filter_database(data_split['test'],database_name)
                 
                 
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../outputs_' + database_name + str(cv_iter), config, universal_model_name, tmp_test)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' config.method + '/' + database_name + str(cv_iter), config, universal_model_name, tmp_test)
                 
                 resutls_universal[database_name]['ACC'].append(accs)
                 resutls_universal[database_name]['AUC'].append(aucs)
@@ -87,7 +86,7 @@ if __name__ == "__main__":
                 config.model_name_load = universal_model_name
                 
                 model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../outputs_' + database_name + str(cv_iter), config, model_name, tmp_test)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
                 
                 resutls_retrained[database_name]['ACC'].append(accs)
                 resutls_retrained[database_name]['AUC'].append(aucs)
@@ -103,7 +102,7 @@ if __name__ == "__main__":
                 
                 
                 model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../outputs_' + database_name + str(cv_iter), config, model_name, tmp_test)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
                 
                 resutls_separate[database_name]['ACC'].append(accs)
                 resutls_separate[database_name]['AUC'].append(aucs)
