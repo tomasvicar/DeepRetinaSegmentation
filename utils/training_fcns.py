@@ -42,3 +42,5 @@ def dice_loss_logit(result, target):
     B_sum = torch.sum(tflat)
     
     return 1 - ((2. * intersection + smooth) / (A_sum + B_sum + smooth) )
+
+

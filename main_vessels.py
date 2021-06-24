@@ -60,7 +60,6 @@ if __name__ == "__main__":
             
             
             universal_model_name = train(config,data_train=data_split['train'],data_valid=data_split['valid'])
-            # universal_model_name = '../best_models/segmentation_9_0.00001_gpu_0.00000_train_0.38325_valid_0.35431.pt'
             
             
             
@@ -118,7 +117,7 @@ if __name__ == "__main__":
             results['resutls_universal'] = resutls_universal
             results['resutls_retrained'] = resutls_retrained
             results['resutls_separate'] = resutls_separate
-            with open('../result_test2_' + str(cv_iter) + '.json', 'w') as outfile:
+            with open('../result_test3_bce_' + str(cv_iter) + '.json', 'w') as outfile:
                 json.dump(results, outfile)    
         
       

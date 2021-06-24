@@ -3,7 +3,9 @@ import numpy as np
 import pandas as pd
 
 
+# resutlt_type = 'ACC'
 resutlt_type = 'AUC'
+# resutlt_type = 'DICE'
 
 
 resutls_retrained = []
@@ -13,7 +15,7 @@ databases = []
 
 for cv_iter in range(1):
 
-    path = '../xxxx/result_test1_' + str(cv_iter) + '.json'
+    path = '../xxxx/result_test2_' + str(cv_iter) + '.json'
 
     
     with open(path, 'r') as f:

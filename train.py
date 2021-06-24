@@ -11,7 +11,7 @@ from dataset import Dataset
 from utils.log import Log
 from utils.gpu_logger import GpuLogger
 from utils.training_fcns import l1_loss,l2_loss,dice_loss_logit
-
+import torch.nn.functional as F
 
 
 
@@ -76,7 +76,12 @@ def train(config,data_train,data_valid):
             if config.method == 'pretraining':
                 loss=l2_loss(res,mask)
             else:
-                loss=dice_loss_logit(res,mask)
+                if config.loss == 'bce':
+                    loss = F.binary_cross_entropy(F.sigmoid(res),mask)
+                elif config.loss == 'dice_loss':
+                    loss=dice_loss_logit(res,mask)
+                else:
+                    raise Exception('incorect loss')
             
             optimizer.zero_grad()
             loss.backward()
@@ -100,7 +105,15 @@ def train(config,data_train,data_valid):
                 if config.method == 'pretraining':
                     loss=l2_loss(res,mask)
                 else:
-                    loss=dice_loss_logit(res,mask)
+                    if config.loss == 'bce':
+                        loss = F.binary_cross_entropy(F.sigmoid(res),mask)
+                    elif config.loss == 'dice_loss':
+                        loss=dice_loss_logit(res,mask)
+                    else:
+                        raise Exception('incorect loss')
+                    
+                    
+                    
                 
                 model.log.append_valid([loss.detach().cpu().numpy()])
                 gpuLogger.save_gpu_memory()
@@ -145,7 +158,7 @@ def train(config,data_train,data_valid):
         scheduler.step()
     
     
-    last_x_to_use = 3
+    last_x_to_use = 10
     last_x_to_use = len(model.log.valid_log['loss']) - last_x_to_use
     best_model_ind = np.argmin(model.log.valid_log['loss'][last_x_to_use:]) + last_x_to_use
     best_model_name = model.log.model_names[best_model_ind]   

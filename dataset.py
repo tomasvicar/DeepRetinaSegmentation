@@ -24,100 +24,105 @@ def augmentation(img,mask,config):
         
             return torch.rand(1).numpy()[0]
     
-    cols=img.shape[0]
-    rows=img.shape[1]
-    sr=0.2
-    gr=0.05
-    tr=0
-    dr=100
-    rr=180
-    #sr = scales
-    #gr = shears
-    #tr = tilt
-    #dr = translation
-    sx=1+sr*rand()
     if rand()>0.5:
-        sx=1/sx
-    sy=1+sr*rand()
-    if rand()>0.5:
-        sy=1/sy
-    gx=(0-gr)+gr*2*rand()
-    gy=(0-gr)+gr*2*rand()
-    tx=(0-tr)+tr*2*rand()
-    ty=(0-tr)+tr*2*rand()
-    dx=(0-dr)+dr*2*rand()
-    dy=(0-dr)+dr*2*rand()
-    t=(0-rr)+rr*2*rand()
+        cols=img.shape[0]
+        rows=img.shape[1]
+        sr=0.2
+        gr=0.05
+        tr=0
+        dr=100
+        rr=180
+        #sr = scales
+        #gr = shears
+        #tr = tilt
+        #dr = translation
+        sx=1+sr*rand()
+        if rand()>0.5:
+            sx=1/sx
+        sy=1+sr*rand()
+        if rand()>0.5:
+            sy=1/sy
+        gx=(0-gr)+gr*2*rand()
+        gy=(0-gr)+gr*2*rand()
+        tx=(0-tr)+tr*2*rand()
+        ty=(0-tr)+tr*2*rand()
+        dx=(0-dr)+dr*2*rand()
+        dy=(0-dr)+dr*2*rand()
+        t=(0-rr)+rr*2*rand()
+        
+        M=np.array([[sx, gx, dx], [gy, sy, dy],[tx, ty, 1]])
+        R=cv2.getRotationMatrix2D((cols / 2, rows / 2), t, 1)
+        R=np.concatenate((R,np.array([[0,0,1]])),axis=0)
+        matrix= np.matmul(R,M)
     
-    M=np.array([[sx, gx, dx], [gy, sy, dy],[tx, ty, 1]])
-    R=cv2.getRotationMatrix2D((cols / 2, rows / 2), t, 1)
-    R=np.concatenate((R,np.array([[0,0,1]])),axis=0)
-    matrix= np.matmul(R,M)
-
-    img = cv2.warpPerspective(img,matrix, (cols,rows),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT)
-    if not config.method == 'pretraining':
-        mask = cv2.warpPerspective(mask,matrix, (cols,rows),flags=cv2.INTER_NEAREST,borderMode=cv2.BORDER_REFLECT)
+        img = cv2.warpPerspective(img,matrix, (cols,rows),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT)
+        if not config.method == 'pretraining':
+            mask = cv2.warpPerspective(mask,matrix, (cols,rows),flags=cv2.INTER_NEAREST,borderMode=cv2.BORDER_REFLECT)
         
     # img = cv2.warpPerspective(img,matrix, (cols,rows),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_CONSTANT,borderValue=-0.5)
     # if not config.method == 'pretraining':
     #     mask = cv2.warpPerspective(mask,matrix, (cols,rows),flags=cv2.INTER_NEAREST,borderMode=cv2.BORDER_CONSTANT,borderValue=0)
     
-    r=[torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(4,(1,1)).view(-1).numpy()]
-    if r[0]:
-        img=np.fliplr(img)
-        if not config.method == 'pretraining':
-            mask=np.fliplr(mask)
-    if r[1]:
-        img=np.flipud(img)
-        if not config.method == 'pretraining':
-            mask=np.flipud(mask) 
-    img=np.rot90(img,k=r[2]) 
-    if not config.method == 'pretraining':
-        mask=np.rot90(mask,k=r[2])    
-    
-    
-    multipy=config.multipy
-    multipy=1+rand()*multipy
     if rand()>0.5:
-        img=img*multipy
-    else:
-        img=img/multipy
+        r=[torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(4,(1,1)).view(-1).numpy()]
+        if r[0]:
+            img=np.fliplr(img)
+            if not config.method == 'pretraining':
+                mask=np.fliplr(mask)
+        if r[1]:
+            img=np.flipud(img)
+            if not config.method == 'pretraining':
+                mask=np.flipud(mask) 
+        img=np.rot90(img,k=r[2]) 
+        if not config.method == 'pretraining':
+            mask=np.rot90(mask,k=r[2])    
+    
+    if rand()>0.5:
+        multipy=config.multipy
+        multipy=1+rand()*multipy
+        if rand()>0.5:
+            img=img*multipy
+        else:
+            img=img/multipy
        
-    add=config.add     
-    add=(1-2*rand())*add
-    img=img+add
+    if rand()>0.5:
+        add=config.add     
+        add=(1-2*rand())*add
+        img=img+add
     
     
     for slice_num in range(img.shape[2]):
         
         slice_ = img[:,:,slice_num]
         
-        multipy=0.1 
-        multipy=1+rand()*multipy
         if rand()>0.5:
-            slice_=slice_*multipy
-        else:
-            slice_=slice_/multipy
+            multipy=0.1 
+            multipy=1+rand()*multipy
+            if rand()>0.5:
+                slice_=slice_*multipy
+            else:
+                slice_=slice_/multipy
            
-        add=0.1     
-        add=(1-2*rand())*add
-        slice_=slice_+add
-        
+        if rand()>0.5:
+            add=0.1     
+            add=(1-2*rand())*add
+            slice_=slice_+add
+            
         img[:,:,slice_num] = slice_
     
     
     
     
     
-
-    bs_r=(-0.5,0.5)
-    r=1-2*rand()
-    if r<=0:
-        par=bs_r[0]*r
-        img=img-par*laplace(img)
-    if r>0:
-        par=bs_r[1]*r
-        img=gaussian_filter(img,par)
+    if rand()>0.5:
+        bs_r=(-0.5,0.5)
+        r=1-2*rand()
+        if r<=0:
+            par=bs_r[0]*r
+            img=img-par*laplace(img)
+        if r>0:
+            par=bs_r[1]*r
+            img=gaussian_filter(img,par)
 
     
     return img,mask

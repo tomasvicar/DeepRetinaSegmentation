@@ -41,7 +41,8 @@ class Config:
     gamma = 0.1
     max_epochs = lr_changes_list[-1]
     
-
+    loss = 'bce'
+    # loss = 'dice_loss'
 
     device ='cuda:0'
     
@@ -49,7 +50,7 @@ class Config:
     patch_size = 384
     
     
-    net_name = "efficientnet-b1"
+    net_name = "efficientnet-b0"
     in_channels = 3
     multipy = 0.1
     add = 0.1
