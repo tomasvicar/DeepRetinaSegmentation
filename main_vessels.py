@@ -71,7 +71,7 @@ if __name__ == "__main__":
                 tmp_test = DataSpliter.filter_database(data_split['test'],database_name)
                 
                 
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' config.method + '/' + database_name + str(cv_iter), config, universal_model_name, tmp_test)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' + config.method + '/' + database_name + str(cv_iter), config, universal_model_name, tmp_test)
                 
                 resutls_universal[database_name]['ACC'].append(accs)
                 resutls_universal[database_name]['AUC'].append(aucs)
@@ -86,7 +86,7 @@ if __name__ == "__main__":
                 config.model_name_load = universal_model_name
                 
                 model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' + config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
                 
                 resutls_retrained[database_name]['ACC'].append(accs)
                 resutls_retrained[database_name]['AUC'].append(aucs)
@@ -102,7 +102,7 @@ if __name__ == "__main__":
                 
                 
                 model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' + config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
                 
                 resutls_separate[database_name]['ACC'].append(accs)
                 resutls_separate[database_name]['AUC'].append(aucs)
@@ -118,7 +118,7 @@ if __name__ == "__main__":
             results['resutls_universal'] = resutls_universal
             results['resutls_retrained'] = resutls_retrained
             results['resutls_separate'] = resutls_separate
-            with open('../result_test1_' + str(cv_iter) + '.json', 'w') as outfile:
+            with open('../result_test2_' + str(cv_iter) + '.json', 'w') as outfile:
                 json.dump(results, outfile)    
         
       
