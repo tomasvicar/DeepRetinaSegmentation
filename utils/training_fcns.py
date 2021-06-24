@@ -1,5 +1,5 @@
 import torch
-
+import torch.nn.functional as F
 
 def l1_loss(result, target):
     
@@ -44,3 +44,19 @@ def dice_loss_logit(result, target):
     return 1 - ((2. * intersection + smooth) / (A_sum + B_sum + smooth) )
 
 
+
+def bce_logit(result, target):
+    
+    cuda_check = result.is_cuda
+    if cuda_check:
+        cuda_device = result.get_device()
+        device = torch.device('cuda:' + str(cuda_device) )
+    target=target.to(device)
+    
+  
+    result=torch.sigmoid(result)
+    
+    return F.binary_cross_entropy(result,target)
+    
+
+    

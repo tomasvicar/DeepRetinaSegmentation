@@ -10,8 +10,8 @@ from shutil import rmtree
 from dataset import Dataset
 from utils.log import Log
 from utils.gpu_logger import GpuLogger
-from utils.training_fcns import l1_loss,l2_loss,dice_loss_logit
-import torch.nn.functional as F
+from utils.training_fcns import l1_loss,l2_loss,dice_loss_logit,bce_logit
+from get_dice import get_dice
 
 
 
@@ -55,7 +55,7 @@ def train(config,data_train,data_valid):
         
     model = model.to(device)
     
-    model.log = Log(names=['loss'])
+    model.log = Log(names=['loss','dice'])
     
     
     
@@ -77,7 +77,7 @@ def train(config,data_train,data_valid):
                 loss=l2_loss(res,mask)
             else:
                 if config.loss == 'bce':
-                    loss = F.binary_cross_entropy(F.sigmoid(res),mask)
+                    loss = bce_logit(res,mask)
                 elif config.loss == 'dice_loss':
                     loss=dice_loss_logit(res,mask)
                 else:
@@ -89,7 +89,9 @@ def train(config,data_train,data_valid):
             optimizer.step()
             gpuLogger.save_gpu_memory()
             
-            model.log.append_train([loss.detach().cpu().numpy()])
+            dice = get_dice(res,mask)
+            
+            model.log.append_train([loss.detach().cpu().numpy(),dice])
             
                 
             
@@ -106,16 +108,16 @@ def train(config,data_train,data_valid):
                     loss=l2_loss(res,mask)
                 else:
                     if config.loss == 'bce':
-                        loss = F.binary_cross_entropy(F.sigmoid(res),mask)
+                        loss = bce_logit(res,mask)
                     elif config.loss == 'dice_loss':
                         loss=dice_loss_logit(res,mask)
                     else:
                         raise Exception('incorect loss')
                     
                     
-                    
+                dice = get_dice(res,mask)
                 
-                model.log.append_valid([loss.detach().cpu().numpy()])
+                model.log.append_valid([loss.detach().cpu().numpy(),dice])
                 gpuLogger.save_gpu_memory()
             
         
