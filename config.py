@@ -52,8 +52,8 @@ class Config:
     
     net_name = "efficientnet-b0"
     in_channels = 3
-    multipy = 0.1
-    add = 0.1
+    multipy = 0.0
+    add = 0.0
     clahe = False
     
     
