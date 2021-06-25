@@ -19,7 +19,8 @@ if __name__ == "__main__":
     resutls_retrained = dict()
     resutls_universal = dict()
     
-    init_model = 'imagenet'
+    # init_model = 'imagenet'
+    init_model = None
     
     logging.basicConfig(filename='debug.log',level=logging.INFO)
     try:
@@ -117,7 +118,7 @@ if __name__ == "__main__":
             results['resutls_universal'] = resutls_universal
             results['resutls_retrained'] = resutls_retrained
             results['resutls_separate'] = resutls_separate
-            with open('../result_test4_imagenet_' + str(cv_iter) + '.json', 'w') as outfile:
+            with open('../result_test4_clahe_' + str(cv_iter) + '.json', 'w') as outfile:
                 json.dump(results, outfile)    
         
       

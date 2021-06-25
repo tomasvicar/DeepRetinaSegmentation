@@ -37,7 +37,7 @@ class Config:
 
 
     init_lr = 0.001
-    lr_changes_list = np.cumsum([40,20,10,5])
+    lr_changes_list = np.cumsum([60,30,15,7])
     gamma = 0.1
     max_epochs = lr_changes_list[-1]
     
@@ -48,13 +48,24 @@ class Config:
     
     
     patch_size = 384
+    clahe_grid = 16 #### for 384 patch
+    clahe_clip = 5 #### for 384 patch
     
     
     net_name = "efficientnet-b0"
-    in_channels = 3
+    in_channels = 1
+    deformation = True
+    scale_deform = 0.2
+    shear_deform = 0.05
     multipy = 0.2
     add = 0.1
-    clahe = False
+    p=0.7
+    clahe = True
+    local_normalization = False
+    
+    # img_type = 'rgb'
+    img_type = 'green'
+    # img_type = 'gray'
     
     
     

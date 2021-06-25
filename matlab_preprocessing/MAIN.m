@@ -3,8 +3,12 @@ close all;clear all;clc;
 path = 'G:/Sdílené disky/Retina GAČR/Data/databases/';
 
 %%  SET
-resolution = 25;  % pixels/degree - e.g. 30
-output_folder = '../../data_preprocessed';
+% resolution = 25;  % pixels/degree - e.g. 25
+% output_folder = '../../data_preprocessed';
+
+resolution = 12;  % pixels/degree - e.g. 25
+output_folder = '../../data_preprocessed_drive';
+
 % rmdir(output_folder,'s')
 %%
 folder_creation(output_folder);
@@ -24,7 +28,7 @@ folder_creation(output_folder);
 % 
 % load_drishtigs(resolution, path, output_folder);
 % 
-% load_drive(resolution, path, output_folder);
+load_drive(resolution, path, output_folder);
 % 
 % load_eophtha(resolution, path, output_folder);
 % 
