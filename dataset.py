@@ -241,7 +241,7 @@ class Dataset(data.Dataset):
                 img = img.astype(np.float64)/255
                 
          
-            img = img - 0.5
+        img = img - 0.5
             
         if self.config.method =='pretraining':
             mask = img.copy()
