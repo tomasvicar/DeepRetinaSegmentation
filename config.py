@@ -66,11 +66,13 @@ class Config:
     net_name = "efficientnet-b0"
     in_channels = 1
     deformation = True
-    scale_deform = 0.2
-    shear_deform = 0.05
-    multipy = 0.2
-    add = 0.1
-    p=0.7
+    scale_deform = 0.4
+    shear_deform = 0.2
+    multipy = 0.4
+    add = 0.2
+    sharp = 1
+    blur = 2
+    p=0.8
     
     local_normalization = False
     

@@ -119,8 +119,8 @@ def augmentation(img,mask,config):
     
     
     
-    if rand()>0.5:
-        bs_r=(-0.5,0.5)
+    if rand()>config.p:
+        bs_r=(-config.sharp,config.blur)
         r=1-2*rand()
         if r<=0:
             par=bs_r[0]*r
