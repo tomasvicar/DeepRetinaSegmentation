@@ -37,7 +37,9 @@ class Config:
 
 
     init_lr = 0.001
-    lr_changes_list = np.cumsum([60,30,15,7])
+    # lr_changes_list = np.cumsum([50,25,12,6])
+    lr_changes_list = np.cumsum([5,5,2])
+    
     gamma = 0.1
     max_epochs = lr_changes_list[-1]
     

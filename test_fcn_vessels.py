@@ -5,6 +5,9 @@ import numpy as np
 import torch 
 from scipy.signal import convolve2d 
 from sklearn.metrics import roc_auc_score
+import cv2
+from skimage.color import rgb2gray
+
 
 
 def test_fcn_vessels(save_folder, config, model_name, data_names):
@@ -92,8 +95,59 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         corners.append([img_size[0]-patch_size,img_size[1]-patch_size])
         
         for corner in corners:
+            
             subimg = img[corner[0]:corner[0]+patch_size,corner[1]:corner[1]+patch_size,:]
             
+            
+            if model.config.img_type == 'rgb':
+                pass
+            elif model.config.img_type == 'green':
+                img = img[:,:,1]
+                img = np.expand_dims(img,2)
+            elif model.config.img_type == 'gray':  
+                img = rgb2gray(img)
+                img = np.expand_dims(img,2)
+            else:
+                raise Exception('incorect image type')
+                
+                
+            if model.config.clahe:
+            
+                if img.shape[2]==1:
+                    
+                    img = (img+0.5)*255
+                    img[img<0] = 0
+                    img[img>255] = 255
+                    img=img.astype(np.uint8)
+                    
+                    clahe = cv2.createCLAHE(clipLimit=model.config.clahe_clip,tileGridSize=(model.config.clahe_grid,model.config.clahe_grid))
+                    img = clahe.apply(img[:,:,0])
+                    
+                    img = img.astype(np.float64)/255-0.5
+                    img = np.expand_dims(img,2)
+                    
+                else:
+                    
+                    img = (img+0.5)*255
+                    img[img<0] = 0
+                    img[img>255] = 255
+                    img=img.astype(np.uint8)
+                    
+                    planes = cv2.split(img)
+            
+                    clahe = cv2.createCLAHE(clipLimit=model.config.clahe_clip,tileGridSize=(model.config.clahe_grid,model.config.clahe_grid))
+                    
+                    planes[0] = clahe.apply(planes[0])
+                    planes[1] = clahe.apply(planes[1])
+                    planes[2] = clahe.apply(planes[2])
+                    
+                    img = cv2.merge(planes)
+                    
+                    img = img.astype(np.float64)/255-0.5
+                
+                
+                
+                
             
             subimg = torch.from_numpy(np.transpose(subimg,(2,0,1)).astype(np.float32))
             
