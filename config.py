@@ -25,18 +25,18 @@ class Config:
     split_ratio_pretrain_train_valid = [9.5,0.5]
     
     
-    train_batch_size = 64
-    train_num_workers = 8
-    valid_batch_size = 16
-    valid_num_workers = 2
+    # train_batch_size = 64
+    # train_num_workers = 8
+    # valid_batch_size = 16
+    # valid_num_workers = 2
     
     multiply_dataset = 5
     
     
-    # train_batch_size = 4
-    # train_num_workers = 0
-    # valid_batch_size = 2
-    # valid_num_workers = 0
+    train_batch_size = 4
+    train_num_workers = 0
+    valid_batch_size = 2
+    valid_num_workers = 0
 
 
     init_lr = 0.001

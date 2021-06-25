@@ -83,7 +83,7 @@ class Unet(nn.Module):
         self.out_size = out_size
         
         self.filters = np.array([1, 2, 3, 4, 5])*filters
-        
+        filters = self.filters
         
         
         self.conv1 = nn.Sequential(unetConv2(in_size, filters[0]),unetConv2(filters[0], filters[0], dov=do),unetConv2(filters[0], filters[0], dov=do))
