@@ -15,7 +15,7 @@ databases = []
 
 for cv_iter in range(1):
 
-    path = '../xxxx/result_test3_bce_' + str(cv_iter) + '.json'
+    path = '../xxxx/result_test3_nocontrast_aug_' + str(cv_iter) + '.json'
 
     
     with open(path, 'r') as f:
