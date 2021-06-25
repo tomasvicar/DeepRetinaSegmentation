@@ -63,15 +63,22 @@ class Config:
     
     
     
-    net_name = "efficientnet-b0"
+    # net_name = "efficientnet-b0"
+    
+    net_name = 'unet'
+    filters = 8
+    drop_out = 0.2
+    
+    
     in_channels = 1
+    
     deformation = True
-    scale_deform = 0.4
-    shear_deform = 0.2
-    multipy = 0.4
-    add = 0.2
+    scale_deform = 0.3
+    shear_deform = 0.1
+    multipy = 0.2
+    add = 0.1
     sharp = 1
-    blur = 2
+    blur = 1
     p=0.8
     
     local_normalization = False

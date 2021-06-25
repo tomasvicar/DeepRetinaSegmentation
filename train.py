@@ -12,7 +12,7 @@ from utils.log import Log
 from utils.gpu_logger import GpuLogger
 from utils.training_fcns import l1_loss,l2_loss,dice_loss_logit,bce_logit
 from utils.get_dice import get_dice
-
+from unet import Unet
 
 
 
@@ -30,36 +30,40 @@ def train(config,data_train,data_valid):
     valid_generator = data.DataLoader(valid_generator,batch_size=config.valid_batch_size, num_workers=config.valid_num_workers, shuffle=True,drop_last=False)
 
     
-    if config.model_name_load == 'imagenet':
-        model = smp.Unet(
-            encoder_name=config.net_name,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
-            encoder_weights='imagenet',     # use `imagenet` pre-trained weights for encoder initialization
-            in_channels=config.in_channels,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
-            classes=1,                      # model output channels (number of classes in your dataset)
-        )
-        model.config = config
+    if config.net_name == 'unet':
+        model = Unet(filters=config.filters,in_size=config.in_channels,out_size=1,do=config.drop_out)
     
-    elif config.model_name_load:
-        model=torch.load(config.model_name_load)
     else:
-        # model=Unet(config, filters=config.filters,in_size=config.in_size,out_size=config.out_size)
-        model = smp.Unet(
-            encoder_name=config.net_name,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
-            encoder_weights=None,     # use `imagenet` pre-trained weights for encoder initialization
-            in_channels=config.in_channels,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
-            classes=1,                      # model output channels (number of classes in your dataset)
-        )
-        model.config = config
+
+        if config.model_name_load == 'imagenet':
+            model = smp.Unet(
+                encoder_name=config.net_name,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+                encoder_weights='imagenet',     # use `imagenet` pre-trained weights for encoder initialization
+                in_channels=config.in_channels,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+                classes=1,                      # model output channels (number of classes in your dataset)
+            )
+            
+        
+        elif config.model_name_load:
+            model=torch.load(config.model_name_load)
+        else:
+            # model=Unet(config, filters=config.filters,in_size=config.in_size,out_size=config.out_size)
+            model = smp.Unet(
+                encoder_name=config.net_name,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+                encoder_weights=None,     # use `imagenet` pre-trained weights for encoder initialization
+                in_channels=config.in_channels,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+                classes=1,                      # model output channels (number of classes in your dataset)
+            )
         
         
-        
+    model.config = config
     model = model.to(device)
     
     model.log = Log(names=['loss','dice'])
     
     
     
-    optimizer = torch.optim.AdamW(model.parameters(),lr =config.init_lr ,betas= (0.9, 0.999),eps=1e-8,weight_decay=1e-8)
+    optimizer = torch.optim.AdamW(model.parameters(),lr =config.init_lr ,betas= (0.9, 0.999),eps=1e-8,weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, config.lr_changes_list, gamma=config.gamma, last_epoch=-1)
 
     model_names=[]
