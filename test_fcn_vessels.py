@@ -102,38 +102,38 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
             if model.config.img_type == 'rgb':
                 pass
             elif model.config.img_type == 'green':
-                img = img[:,:,1]
-                img = np.expand_dims(img,2)
+                subimg = subimg[:,:,1]
+                subimg = np.expand_dims(subimg,2)
             elif model.config.img_type == 'gray':  
-                img = rgb2gray(img)
-                img = np.expand_dims(img,2)
+                subimg = rgb2gray(subimg)
+                subimg = np.expand_dims(subimg,2)
             else:
                 raise Exception('incorect image type')
                 
                 
             if model.config.clahe:
             
-                if img.shape[2]==1:
+                if subimg.shape[2]==1:
                     
-                    img = (img+0.5)*255
-                    img[img<0] = 0
-                    img[img>255] = 255
-                    img=img.astype(np.uint8)
+                    subimg = (subimg+0.5)*255
+                    subimg[subimg<0] = 0
+                    subimg[subimg>255] = 255
+                    subimg=subimg.astype(np.uint8)
                     
                     clahe = cv2.createCLAHE(clipLimit=model.config.clahe_clip,tileGridSize=(model.config.clahe_grid,model.config.clahe_grid))
-                    img = clahe.apply(img[:,:,0])
+                    subimg = clahe.apply(subimg[:,:,0])
                     
-                    img = img.astype(np.float64)/255-0.5
-                    img = np.expand_dims(img,2)
+                    subimg = subimg.astype(np.float64)/255-0.5
+                    subimg = np.expand_dims(subimg,2)
                     
                 else:
                     
-                    img = (img+0.5)*255
-                    img[img<0] = 0
-                    img[img>255] = 255
-                    img=img.astype(np.uint8)
+                    subimg = (subimg+0.5)*255
+                    subimg[subimg<0] = 0
+                    subimg[subimg>255] = 255
+                    subimg=subimg.astype(np.uint8)
                     
-                    planes = cv2.split(img)
+                    planes = cv2.split(subimg)
             
                     clahe = cv2.createCLAHE(clipLimit=model.config.clahe_clip,tileGridSize=(model.config.clahe_grid,model.config.clahe_grid))
                     
@@ -141,9 +141,9 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
                     planes[1] = clahe.apply(planes[1])
                     planes[2] = clahe.apply(planes[2])
                     
-                    img = cv2.merge(planes)
+                    subimg = cv2.merge(planes)
                     
-                    img = img.astype(np.float64)/255-0.5
+                    subimg = subimg.astype(np.float64)/255-0.5
                 
                 
                 

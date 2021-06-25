@@ -61,7 +61,7 @@ if __name__ == "__main__":
             
             
             universal_model_name = train(config,data_train=data_split['train'],data_valid=data_split['valid'])
-            
+            # universal_model_name= '../best_models\segmentation_universal_5_0.00001_gpu_0.00000_train_0.18774_valid_0.18266.pt'
             
             
             for database_name in data_split['database_names']:
