@@ -15,8 +15,8 @@ class unetConv2(nn.Module):
         self.conv=nn.Conv2d(in_size, out_size,filter_size,stride,pad)
         self.bn=nn.BatchNorm2d(out_size,momentum=0.1)
 
+        self.dov=dov
         if self.dov>0:
-            self.dov=dov
             self.do=nn.Sequential(nn.Dropout(dov),nn.Dropout2d(dov))
 
     def forward(self, inputs):

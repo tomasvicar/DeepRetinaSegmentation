@@ -23,8 +23,8 @@ if __name__ == "__main__":
     init_model = None
     
     logging.basicConfig(filename='debug.log',level=logging.INFO)
-    # try:
-    if True:
+    try:
+    # if True:
         for cv_iter in range(1):
             
             config = Config()
@@ -123,5 +123,5 @@ if __name__ == "__main__":
       
 
         
-    # except Exception as e:
-    #     logging.critical(e, exc_info=True)
+    except Exception as e:
+        logging.critical(e, exc_info=True)
