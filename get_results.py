@@ -18,9 +18,11 @@ for cv_iter in range(1):
     # path = '../xxxx/result_test4_imagenet_' + str(cv_iter) + '.json'
     # path = '../xxxx/result_test3_nocontrast_aug_' + str(cv_iter) + '.json'
     # path = '../xxxx/result_unet8_do_' + str(cv_iter) + '.json'
-    path = '../xxxx/result_unet8_do_loveraug_' + str(cv_iter) + '.json'
-
+    # path = '../xxxx/result_unet8_do_loveraug_' + str(cv_iter) + '.json'
+    # path = '../xxxx/result_unet8_do_lowerlr_' + str(cv_iter) + '.json'
+    path = '../xxxx/result_unet8_do_highlr' + str(cv_iter) + '.json'
     
+
     with open(path, 'r') as f:
         
         data = json.load(f)
