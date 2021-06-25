@@ -40,7 +40,7 @@ class Config:
 
 
     init_lr = 0.001
-    lr_changes_list = np.cumsum([20,10,5,5])
+    lr_changes_list = np.cumsum([50,25,10,5])
     # lr_changes_list = np.cumsum([2,2,2])
     
     gamma = 0.1
@@ -66,19 +66,20 @@ class Config:
     # net_name = "efficientnet-b0"
     
     net_name = 'unet'
-    filters = 8
-    drop_out = 0.2
+    filters = 16
+    drop_out = 0.1
     
+    weight_decay = 1e-5
     
     in_channels = 1
     
     deformation = True
-    scale_deform = 0.3
+    scale_deform = 0.25
     shear_deform = 0.1
     multipy = 0.2
     add = 0.1
-    sharp = 1
-    blur = 1
+    sharp = 0.5
+    blur = 0.5
     p=0.8
     
     local_normalization = False
