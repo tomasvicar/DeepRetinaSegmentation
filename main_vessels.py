@@ -60,7 +60,7 @@ if __name__ == "__main__":
             config.model_name_load = init_model
             
             
-            universal_model_name = train(config,data_train=data_split['train'],data_valid=data_split['valid'])
+            # universal_model_name = train(config,data_train=data_split['train'],data_valid=data_split['valid'])
             # universal_model_name= '../best_models\segmentation_universal_5_0.00001_gpu_0.00000_train_0.18774_valid_0.18266.pt'
             
             
@@ -71,30 +71,30 @@ if __name__ == "__main__":
                 tmp_test = DataSpliter.filter_database(data_split['test'],database_name)
                 
                 
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' + config.method + '/' + database_name + str(cv_iter), config, universal_model_name, tmp_test)
+                # accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' + config.method + '/' + database_name + str(cv_iter), config, universal_model_name, tmp_test)
                 
-                resutls_universal[database_name]['ACC'].append(accs)
-                resutls_universal[database_name]['AUC'].append(aucs)
-                resutls_universal[database_name]['DICE'].append(dices)
-                resutls_universal[database_name]['TP'].append(tps)
-                resutls_universal[database_name]['FP'].append(fps)
-                resutls_universal[database_name]['FN'].append(fns)
-                resutls_universal[database_name]['TN'].append(tns)
+                # resutls_universal[database_name]['ACC'].append(accs)
+                # resutls_universal[database_name]['AUC'].append(aucs)
+                # resutls_universal[database_name]['DICE'].append(dices)
+                # resutls_universal[database_name]['TP'].append(tps)
+                # resutls_universal[database_name]['FP'].append(fps)
+                # resutls_universal[database_name]['FN'].append(fns)
+                # resutls_universal[database_name]['TN'].append(tns)
                 
                 
-                config.method = 'segmentation_retrained' + database_name
-                config.model_name_load = universal_model_name
+                # config.method = 'segmentation_retrained' + database_name
+                # config.model_name_load = universal_model_name
                 
-                model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' + config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
+                # model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
+                # accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' + config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
                 
-                resutls_retrained[database_name]['ACC'].append(accs)
-                resutls_retrained[database_name]['AUC'].append(aucs)
-                resutls_retrained[database_name]['DICE'].append(dices)
-                resutls_retrained[database_name]['TP'].append(tps)
-                resutls_retrained[database_name]['FP'].append(fps)
-                resutls_retrained[database_name]['FN'].append(fns)
-                resutls_retrained[database_name]['TN'].append(tns)
+                # resutls_retrained[database_name]['ACC'].append(accs)
+                # resutls_retrained[database_name]['AUC'].append(aucs)
+                # resutls_retrained[database_name]['DICE'].append(dices)
+                # resutls_retrained[database_name]['TP'].append(tps)
+                # resutls_retrained[database_name]['FP'].append(fps)
+                # resutls_retrained[database_name]['FN'].append(fns)
+                # resutls_retrained[database_name]['TN'].append(tns)
                 
                 
                 config.method = 'segmentation_separate' + database_name
@@ -118,7 +118,7 @@ if __name__ == "__main__":
             results['resutls_universal'] = resutls_universal
             results['resutls_retrained'] = resutls_retrained
             results['resutls_separate'] = resutls_separate
-            with open('../result_test4_clahe_' + str(cv_iter) + '.json', 'w') as outfile:
+            with open('../result_xxx_' + str(cv_iter) + '.json', 'w') as outfile:
                 json.dump(results, outfile)    
         
       

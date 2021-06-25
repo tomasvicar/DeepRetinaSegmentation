@@ -167,7 +167,7 @@ class Dataset(data.Dataset):
             
         img=imread(name_tmp)
         img=img.astype(np.float64)
-        img = (img/255)-0.5
+        img = img/255
         
         if self.config.img_type == 'rgb':
             pass
@@ -207,7 +207,7 @@ class Dataset(data.Dataset):
             
             if img.shape[2]==1:
                 
-                img = (img+0.5)*255
+                img = img*255
                 img[img<0] = 0
                 img[img>255] = 255
                 img=img.astype(np.uint8)
@@ -215,12 +215,12 @@ class Dataset(data.Dataset):
                 clahe = cv2.createCLAHE(clipLimit=self.config.clahe_clip,tileGridSize=(self.config.clahe_grid,self.config.clahe_grid))
                 img = clahe.apply(img[:,:,0])
                 
-                img = img.astype(np.float64)/255-0.5
+                img = img.astype(np.float64)/255
                 img = np.expand_dims(img,2)
                 
             else:
                 
-                img = (img+0.5)*255
+                img = img*255
                 img[img<0] = 0
                 img[img>255] = 255
                 img=img.astype(np.uint8)
@@ -235,9 +235,10 @@ class Dataset(data.Dataset):
                 
                 img = cv2.merge(planes)
                 
-                img = img.astype(np.float64)/255-0.5
+                img = img.astype(np.float64)/255
                 
          
+            img = img - 0.5
             
         if self.config.method =='pretraining':
             mask = img.copy()

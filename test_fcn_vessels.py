@@ -60,7 +60,7 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         
         img=imread(name_tmp)
         img=img.astype(np.float64)
-        img = (img/255)-0.5
+        img = img/255
         
         
         
@@ -115,7 +115,7 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
             
                 if subimg.shape[2]==1:
                     
-                    subimg = (subimg+0.5)*255
+                    subimg = subimg*255
                     subimg[subimg<0] = 0
                     subimg[subimg>255] = 255
                     subimg=subimg.astype(np.uint8)
@@ -123,12 +123,12 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
                     clahe = cv2.createCLAHE(clipLimit=model.config.clahe_clip,tileGridSize=(model.config.clahe_grid,model.config.clahe_grid))
                     subimg = clahe.apply(subimg[:,:,0])
                     
-                    subimg = subimg.astype(np.float64)/255-0.5
+                    subimg = subimg.astype(np.float64)/255
                     subimg = np.expand_dims(subimg,2)
                     
                 else:
                     
-                    subimg = (subimg+0.5)*255
+                    subimg = subimg*255
                     subimg[subimg<0] = 0
                     subimg[subimg>255] = 255
                     subimg=subimg.astype(np.uint8)
@@ -143,11 +143,11 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
                     
                     subimg = cv2.merge(planes)
                     
-                    subimg = subimg.astype(np.float64)/255-0.5
+                    subimg = subimg.astype(np.float64)/255
                 
                 
                 
-                
+            subimg = subimg - 0.5
             
             subimg = torch.from_numpy(np.transpose(subimg,(2,0,1)).astype(np.float32))
             

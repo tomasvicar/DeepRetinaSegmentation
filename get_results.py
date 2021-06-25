@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 
-# resutlt_type = 'ACC'
-resutlt_type = 'AUC'
+resutlt_type = 'ACC'
+# resutlt_type = 'AUC'
 # resutlt_type = 'DICE'
 
 
@@ -16,8 +16,8 @@ databases = []
 for cv_iter in range(1):
 
     # path = '../xxxx/result_test4_imagenet_' + str(cv_iter) + '.json'
-    path = '../xxxx/result_test3_nocontrast_aug_' + str(cv_iter) + '.json'
-    
+    # path = '../xxxx/result_test3_nocontrast_aug_' + str(cv_iter) + '.json'
+    path = '../xxxx/result_test4_clahe_' + str(cv_iter) + '.json'
 
     
     with open(path, 'r') as f:
