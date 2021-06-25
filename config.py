@@ -39,7 +39,7 @@ class Config:
     # valid_num_workers = 0
 
 
-    init_lr = 0.001
+    init_lr = 1e-4
     lr_changes_list = np.cumsum([50,25,10,5])
     # lr_changes_list = np.cumsum([2,2,2])
     
