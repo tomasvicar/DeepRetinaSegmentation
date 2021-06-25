@@ -146,6 +146,9 @@ class Dataset(data.Dataset):
         self.crop_same = crop_same
         self.data_type = data_type
         
+        self.names = self.names*config.multiply_dataset
+        
+        
 
     def __len__(self):
         return len(self.names)

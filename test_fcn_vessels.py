@@ -18,8 +18,8 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
     model.eval()
     model=model.to(device)
     
-    patch_size = 384  ### larger->faster, but need more ram (gpu ram)
-    border = 33
+    patch_size = model.config.patch_size  ### larger->faster, but need more ram (gpu ram)
+    border = 17
     
     
     weigth_window=2*np.ones((patch_size,patch_size))

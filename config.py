@@ -25,10 +25,13 @@ class Config:
     split_ratio_pretrain_train_valid = [9.5,0.5]
     
     
-    train_batch_size = 16
+    train_batch_size = 64
     train_num_workers = 8
-    valid_batch_size = 4
+    valid_batch_size = 16
     valid_num_workers = 2
+    
+    multiply_dataset = 5
+    
     
     # train_batch_size = 4
     # train_num_workers = 0
@@ -37,7 +40,7 @@ class Config:
 
 
     init_lr = 0.001
-    lr_changes_list = np.cumsum([50,25,12,6])
+    lr_changes_list = np.cumsum([20,10,5,5])
     # lr_changes_list = np.cumsum([2,2,2])
     
     gamma = 0.1
@@ -49,9 +52,15 @@ class Config:
     device ='cuda:0'
     
     
-    patch_size = 384
-    clahe_grid = 16 #### for 384 patch
-    clahe_clip = 5 #### for 384 patch
+    # patch_size = 384
+    patch_size = 96
+    clahe = True
+    # clahe_grid = 16 #### for 384 patch
+    # clahe_clip = 5 
+    clahe_grid = 4 #### for 96 patch
+    clahe_clip = 4 
+    
+    
     
     
     net_name = "efficientnet-b0"
@@ -62,7 +71,7 @@ class Config:
     multipy = 0.2
     add = 0.1
     p=0.7
-    clahe = True
+    
     local_normalization = False
     
     # img_type = 'rgb'
