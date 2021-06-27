@@ -20,7 +20,7 @@ for cv_iter in range(1):
     # path = '../xxxx/result_unet8_do_' + str(cv_iter) + '.json'
     # path = '../xxxx/result_unet8_do_loveraug_' + str(cv_iter) + '.json'
     # path = '../xxxx/result_unet8_do_lowerlr_' + str(cv_iter) + '.json'
-    path = '../xxxx/result_unet8_do_highlr' + str(cv_iter) + '.json'
+    path = '../xxxx/result_unet8_do_all_' + str(cv_iter) + '.json'
     
 
     with open(path, 'r') as f:
@@ -31,9 +31,9 @@ for cv_iter in range(1):
     for database in list(data['resutls_retrained'].keys()):
         
 
-        # resutls_retrained.append(np.mean(data['resutls_retrained'][database][resutlt_type][cv_iter]))
+        resutls_retrained.append(np.mean(data['resutls_retrained'][database][resutlt_type][cv_iter]))
         resutls_separate.append(np.mean(data['resutls_separate'][database][resutlt_type][cv_iter]))
-        # resutls_universal.append(np.mean(data['resutls_universal'][database][resutlt_type][cv_iter]))
+        resutls_universal.append(np.mean(data['resutls_universal'][database][resutlt_type][cv_iter]))
         databases.append(database)
         
         print(resutls_separate)

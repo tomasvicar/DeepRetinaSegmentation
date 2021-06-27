@@ -33,7 +33,11 @@ def augmentation(img,mask,config):
             gr=config.shear_deform
             tr=0
             dr=100
-            rr=180
+            
+            if config.rotate:
+                rr=180
+            else:
+                rr = 0
             #sr = scales
             #gr = shears
             #tr = tilt

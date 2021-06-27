@@ -76,6 +76,7 @@ class Config:
     deformation = True
     scale_deform = 0.25
     shear_deform = 0.1
+    rotate = True
     multipy = 0.2
     add = 0.1
     sharp = 0.5
