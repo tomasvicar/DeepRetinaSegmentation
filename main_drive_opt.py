@@ -111,8 +111,8 @@ if __name__ == "__main__":
 
 
     logging.basicConfig(filename='debug.log',level=logging.INFO)
-    # try:
-    if True:
+    try:
+    # if True:
 
         pbounds = {'init_lr':[1,5], 
                    'lr_changes_list':[10,80],
@@ -140,8 +140,8 @@ if __name__ == "__main__":
         optimizer_bayes.maximize(init_points=2,n_iter=100)
 
         
-    # except Exception as e:
-    #     logging.critical(e, exc_info=True)
+    except Exception as e:
+        logging.critical(e, exc_info=True)
         
         
         
