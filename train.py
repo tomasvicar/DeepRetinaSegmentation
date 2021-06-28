@@ -22,6 +22,7 @@ def train(config,data_train,data_valid):
     gpuLogger = GpuLogger()
     device = torch.device(config.device)
     
+    torch.cuda.empty_cache()
 
     train_generator = Dataset(data_train,augment=True,crop=True,config=config,data_type='train')
     train_generator = data.DataLoader(train_generator,batch_size=config.train_batch_size,num_workers= config.train_num_workers, shuffle=True,drop_last=True)
