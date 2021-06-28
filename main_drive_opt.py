@@ -152,6 +152,10 @@ class Wrapper(object):
             config.img_type = 'gray' 
             config.in_channels = 1
             
+        if config.clahe>0.5:
+            config.clahe = True
+        else:
+            config.clahe = False 
 
         self.iter = self.iter + 1
         return train_one_model(config, self.iter)
@@ -187,6 +191,7 @@ if __name__ == "__main__":
                    'blur':[0,2],
                    'img_type':[0,3],
                    'depth':[2,5],
+                   'clahe':[0,1]
                     }
         
         
