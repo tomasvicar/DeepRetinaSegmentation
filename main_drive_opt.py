@@ -84,7 +84,9 @@ class Wrapper(object):
             
         config.patch_size = int(32* np.round(config.patch_size))
         
-        config.filters = int(config.filters)
+        config.filters = int(np.round(config.filters))
+        
+        config.depth = int(np.round(config.depth))
         
         config.weight_decay = 10**(-config.weight_decay)
         
@@ -94,6 +96,16 @@ class Wrapper(object):
             config.rotate = False
         
         
+        if config.img_type==0:
+            config.img_type = 'rgb'
+            config.in_channels = 3
+        elif config.img_type==1:
+            config.img_type = 'green'
+            config.in_channels = 1
+        elif config.img_type==2:
+            config.img_type = 'gray' 
+            config.in_channels = 1
+            
 
         self.iter = self.iter + 1
         return train_one_model(config, self.iter)
@@ -115,19 +127,21 @@ if __name__ == "__main__":
     # if True:
 
         pbounds = {'init_lr':[1,5], 
-                   'lr_changes_list':[10,80],
+                   'lr_changes_list':[30,150],
                    'loss':[0,1],
-                   'patch_size':[2,8],
-                   'filters':[6,42],
-                   'drop_out':[0,0.7],
+                   'patch_size':[1,8],
+                   'filters':[16,64],
+                   'drop_out':[0,0.5],
                    'weight_decay':[2,7],
-                   'scale_deform':[0,0.4],
+                   'scale_deform':[0,0.5],
                    'shear_deform':[0,0.3],
                    'rotate':[0,1],
                    'multipy':[0,0.4],
                    'add':[0,0.3],
                    'sharp':[0,2],
                    'blur':[0,2],
+                   'img_type':[0,2],
+                   'depth':[2,5],
                     }
         
         

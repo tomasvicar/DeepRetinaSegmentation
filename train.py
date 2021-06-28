@@ -31,7 +31,7 @@ def train(config,data_train,data_valid):
 
     
     if config.net_name == 'unet':
-        model = Unet(filters=config.filters,in_size=config.in_channels,out_size=1,do=config.drop_out)
+        model = Unet(filters=config.filters,in_size=config.in_channels,out_size=1,do=config.drop_out,depth=config.depth)
     
     else:
 
@@ -66,14 +66,13 @@ def train(config,data_train,data_valid):
     optimizer = torch.optim.AdamW(model.parameters(),lr =config.init_lr ,betas= (0.9, 0.999),eps=1e-8,weight_decay=config.weight_decay)
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, config.lr_changes_list, gamma=config.gamma, last_epoch=-1)
 
-    model_names=[]
     for epoch in range(config.max_epochs):
         
         model.train()
         for img,mask in train_generator:
             
             img = img.to(torch.device(config.device))
-            
+             
             res=model(img)
             
             

@@ -68,10 +68,11 @@ class Config:
     net_name = 'unet'
     filters = 16
     drop_out = 0.1
+    depth = 5
     
     weight_decay = 1e-5
     
-    in_channels = 1
+    
     
     deformation = True
     scale_deform = 0.25
@@ -88,7 +89,7 @@ class Config:
     # img_type = 'rgb'
     img_type = 'green'
     # img_type = 'gray'
-    
+    in_channels = 1
     
     
     pretrain_num_blocks = 0

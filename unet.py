@@ -75,14 +75,14 @@ class unetUp(nn.Module):
 
 
 class Unet(nn.Module):
-    def __init__(self, filters=64,in_size=3,out_size=1,do=0):
+    def __init__(self, filters=64,in_size=3,out_size=1,do=0,depth=5):
         super().__init__()
         
         
         self.do = do
         self.out_size = out_size
         
-        self.filters = np.array([1, 2, 3, 4, 5])*filters
+        self.filters = (np.arange(depth)+1)*filters
         filters = self.filters
         
         
