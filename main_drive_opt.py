@@ -77,10 +77,10 @@ class Wrapper(object):
         config.lr_changes_list = np.cumsum(np.round(config.lr_changes_list*1/2**(np.arange(4))).astype(np.int32))
         config.max_epochs = config.lr_changes_list[-1]
         
-        if config.loss>0.5:
-            config.loss = 'bce'
-        else:
-            config.loss = 'dice_loss'
+        # if config.loss>0.5:
+        #     config.loss = 'bce'
+        # else:
+        #     config.loss = 'dice_loss'
             
         config.patch_size = int(32* np.round(config.patch_size))
         
@@ -96,13 +96,15 @@ class Wrapper(object):
             config.rotate = False
         
         
-        if config.img_type==0:
+        config.img_type
+        
+        if config.img_type<1:
             config.img_type = 'rgb'
             config.in_channels = 3
-        elif config.img_type==1:
+        elif config.img_type<2:
             config.img_type = 'green'
             config.in_channels = 1
-        elif config.img_type==2:
+        else:
             config.img_type = 'gray' 
             config.in_channels = 1
             
@@ -128,7 +130,6 @@ if __name__ == "__main__":
 
         pbounds = {'init_lr':[1,5], 
                    'lr_changes_list':[30,150],
-                   'loss':[0,1],
                    'patch_size':[1,8],
                    'filters':[16,64],
                    'drop_out':[0,0.5],
@@ -140,7 +141,7 @@ if __name__ == "__main__":
                    'add':[0,0.3],
                    'sharp':[0,2],
                    'blur':[0,2],
-                   'img_type':[0,2],
+                   'img_type':[0,3],
                    'depth':[2,5],
                     }
         
