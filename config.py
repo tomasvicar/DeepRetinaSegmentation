@@ -19,7 +19,7 @@ class Config:
     results_folder = '../results'
     
     
-    split_ratio_train_valid_test=[7.5,0.5,2] ##test only if test set does not exist
+    split_ratio_train_valid_test=[6.5,1.5,2] ##test only if test set does not exist
     
 
     split_ratio_pretrain_train_valid = [9.5,0.5]
@@ -30,7 +30,7 @@ class Config:
     valid_batch_size = 8
     valid_num_workers = 2
     
-    multiply_dataset = 10
+    multiply_dataset = 20
     
     
     # train_batch_size = 4
