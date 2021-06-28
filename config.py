@@ -30,7 +30,7 @@ class Config:
     valid_batch_size = 8
     valid_num_workers = 2
     
-    multiply_dataset = 5
+    multiply_dataset = 10
     
     
     # train_batch_size = 4

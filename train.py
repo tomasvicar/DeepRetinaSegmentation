@@ -163,9 +163,11 @@ def train(config,data_train,data_valid):
         scheduler.step()
     
     
-    last_x_to_use = 10
-    last_x_to_use = len(model.log.valid_log['loss']) - last_x_to_use
-    best_model_ind = np.argmin(model.log.valid_log['loss'][last_x_to_use:]) + last_x_to_use
+    # last_x_to_use = 10
+    # last_x_to_use = len(model.log.valid_log['loss']) - last_x_to_use
+    # best_model_ind = np.argmin(model.log.valid_log['loss'][last_x_to_use:]) + last_x_to_use
+    
+    best_model_ind = np.argmin(model.log.valid_log['loss'])
     best_model_name = model.log.model_names[best_model_ind]   
     best_model_name_new = best_model_name.replace(config.model_save_dir,config.best_models_dir)
     

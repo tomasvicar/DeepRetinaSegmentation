@@ -129,7 +129,7 @@ if __name__ == "__main__":
     # if True:
 
         pbounds = {'init_lr':[1,5], 
-                   'lr_changes_list':[30,150],
+                   'lr_changes_list':[20,100],
                    'patch_size':[1,8],
                    'filters':[16,64],
                    'drop_out':[0,0.5],
