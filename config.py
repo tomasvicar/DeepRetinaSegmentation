@@ -53,12 +53,14 @@ class Config:
     
     
     # patch_size = 384
-    patch_size = 96
+    patch_size = 64
     clahe = True
     # clahe_grid = 16 #### for 384 patch
     # clahe_clip = 5 
-    clahe_grid = 4 #### for 96 patch
-    clahe_clip = 4 
+    # clahe_grid = 4 #### for 96 patch
+    # clahe_clip = 4 
+    clahe_grid = 4 
+    clahe_clip = 2 
     
     
     

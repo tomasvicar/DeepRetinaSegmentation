@@ -154,8 +154,10 @@ class Wrapper(object):
             
         if config.clahe>0.5:
             config.clahe = True
+            config.clahe_grid = int(np.round(config.patch_size/16))
         else:
             config.clahe = False 
+            
 
         self.iter = self.iter + 1
         return train_one_model(config, self.iter)
@@ -178,7 +180,7 @@ if __name__ == "__main__":
 
         pbounds = {'init_lr':[1,5], 
                    'lr_changes_list':[10,50],
-                   'patch_size':[1,8],
+                   'patch_size':[2,8],
                    'filters':[16,64],
                    'drop_out':[0,0.5],
                    'weight_decay':[2,7],
@@ -191,7 +193,8 @@ if __name__ == "__main__":
                    'blur':[0,2],
                    'img_type':[0,3],
                    'depth':[2,5],
-                   'clahe':[0,1]
+                   'clahe':[0,1],
+                   'clahe_clip':[0.5,5]
                     }
         
         
