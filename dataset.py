@@ -4,6 +4,7 @@ import torch
 import os
 from skimage.io import imread
 from glob import glob
+import time
 
 from scipy.ndimage.filters import gaussian_filter
 from scipy.ndimage.filters import laplace
@@ -372,37 +373,37 @@ class Dataset(data.Dataset):
 if __name__ == "__main__":
     
     
-    from config import Config    
+    # from config import Config    
     
-    config = Config()
-    config.method = 'pretraining'
+    # config = Config()
+    # config.method = 'pretraining'
     
-    config.pretrain_num_blocks = 20
-    config.pretrain_max_block_size = 40
-    config.pretrain_noise_std_fraction = 0.1
-    config.pretrain_noise_pixel_p = 0.02
-    config.pretrain_chessboard_num_blocks = 20
-    config.pretrain_chessboard_max_block_size = 40
-    config.pretrain_rot_num_blocks = 20
-    config.pretrain_rot_max_block_size = 40
-    
-    
-    
-    data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS,seed=42)
+    # config.pretrain_num_blocks = 20
+    # config.pretrain_max_block_size = 40
+    # config.pretrain_noise_std_fraction = 0.1
+    # config.pretrain_noise_pixel_p = 0.02
+    # config.pretrain_chessboard_num_blocks = 20
+    # config.pretrain_chessboard_max_block_size = 40
+    # config.pretrain_rot_num_blocks = 20
+    # config.pretrain_rot_max_block_size = 40
     
     
-    train_generator = Dataset(data_split['train'],augment=True,crop=True,config=config)
-    train_generator = data.DataLoader(train_generator,batch_size=1,num_workers= 0, shuffle=True,drop_last=True)
+    
+    # data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS,seed=42)
+    
+    
+    # train_generator = Dataset(data_split['train'],augment=True,crop=True,config=config)
+    # train_generator = data.DataLoader(train_generator,batch_size=1,num_workers= 0, shuffle=True,drop_last=True)
     
 
-    for img,mask in train_generator:
+    # for img,mask in train_generator:
         
-        plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-        plt.show()
-        plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-        plt.show()
+    #     plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
+    #     plt.show()
+    #     plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
+    #     plt.show()
         
-        break
+    #     break
     
     
     
@@ -430,13 +431,18 @@ if __name__ == "__main__":
     train_generator = Dataset(data_split['train'],augment=True,crop=True,config=config)
     train_generator = data.DataLoader(train_generator,batch_size=1,num_workers= 0, shuffle=True,drop_last=True)
     
-
-    for img,mask in train_generator:
+    start = time.time()
+    for it,(img,mask) in enumerate(train_generator):
         
-        plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-        plt.show()
-        plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-        plt.show()
+        if it%10 == 0:
+            end = time.time()
+            print(end - start)
+            start = time.time()
         
-        break
+        # plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
+        # plt.show()
+        # plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
+        # plt.show()
+        
+        # break
     
