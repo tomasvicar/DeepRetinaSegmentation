@@ -15,18 +15,15 @@ else
    error('unknown') 
 end
 
-output_folder = '../../data_preprocessed';
+output_folder = '../../data_preprocessed_hdf5';
 
-if ~exist([output_folder '\Pretraining'], 'dir')
-    mkdir([output_folder '\Pretraining'])
-end
 
 
 data_path = [path 'EyePACS'];
 files = subdir([data_path '/*.jpeg']);
 
 % fprintf(1,'%s\n\n',repmat('.',1,length(files)));
-parfor file_num=1:length(files)
+for file_num=1:1000%length(files)
 % for file_num=1:length(files)
 %     fprintf(1,'\b|\n');
     
@@ -52,7 +49,7 @@ parfor file_num=1:length(files)
     
     
     
-    imwrite_single(im,[output_folder '\Pretraining\' imname '.tiff'])
+    imwrite_single2(im,[output_folder '\Pretraining\' imname '.tiff'])
     
 
 end

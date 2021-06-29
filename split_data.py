@@ -1,7 +1,8 @@
 import numpy as np
 from config import Config
 import os
-from glob import glob
+import h5py
+
 
 
 
@@ -17,7 +18,7 @@ class DataSpliter:
         
         names_new = []
         for name in names:
-            tmp = os.path.split(name)[1].replace('.png','').split('_')[0]
+            tmp = os.path.split(name)[1].split('_')[0]
             if tmp == database_name:
                 names_new.append(name)
             
@@ -34,8 +35,12 @@ class DataSpliter:
         
         data_split = dict()
         
-      
-        names = glob(config.data_path + '/Pretraining/*.png')
+        
+        with h5py.File(config.data_path + '/dataset_pretrain.hdf5','r') as f:
+            
+            names = f['Pretraining'].keys()
+            names = ['Pretraining' + '/' + name for name in names]
+        
         
         perm=np.random.permutation(len(names))   
              
@@ -63,10 +68,16 @@ class DataSpliter:
             data_split['test'] = []
             
             
-            names = glob(config.data_path + '/Vessels/*ves.png')
+            with h5py.File(config.data_path + '/dataset.hdf5','r') as f:
             
-            dataset_names = [os.path.split(name)[1].replace('.png','').split('_')[0] for name in names]
-            dataset_splits = [os.path.split(name)[1].replace('.png','').split('_')[1] for name in names]
+                names = f['Vessels'].keys()
+                names = [name for name in names if name.endswith('ves') ]
+                names = ['Vessels' + '/' + name for name in names]
+            
+            
+            
+            dataset_names = [os.path.split(name)[1].split('_')[0] for name in names]
+            dataset_splits = [os.path.split(name)[1].split('_')[1] for name in names]
             
             data_split['database_names'] = list(set(dataset_names))
             
@@ -129,8 +140,13 @@ class DataSpliter:
             raise Exception('wrong data type')
         
         
-        names_all = glob(config.data_path + '/Vessels/*.png')
-        names_all_ves2plus =[x for x in names_all if not 'ves.png' in x]
+        with h5py.File(config.data_path + '/dataset.hdf5','r') as f:
+            
+                names_all = f['Vessels'].keys()
+                names_all = ['Vessels' + '/' + name for name in names_all]
+                
+                
+        names_all_ves2plus =[x for x in names_all if ('ves2' in x) or ('ves3' in x) or ('ves4' in x) or ('ves5' in x) or ('ves6' in x)]
         
         for tmp_data in [data_split['train'],data_split['valid'],data_split['test']]:
             

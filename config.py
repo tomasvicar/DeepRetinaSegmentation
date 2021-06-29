@@ -8,10 +8,10 @@ class Config:
     best_models_dir='../best_models'
     
     
-    if os.path.isdir("../data_preprocessed"):
-        data_path = "../data_preprocessed" 
-    elif os.path.isdir("../../data_preprocessed"): 
-        data_path = "../../data_preprocessed"
+    if os.path.isdir("../data_preprocessed_hdf5"):
+        data_path = "../data_preprocessed_hdf5" 
+    elif os.path.isdir("../../data_preprocessed_hdf5"): 
+        data_path = "../../data_preprocessed_hdf5"
     else:
         raise Exception('no data')
         
@@ -25,15 +25,15 @@ class Config:
     split_ratio_pretrain_train_valid = [9.5,0.5]
     
     
-    # train_batch_size = 32
-    # train_num_workers = 8
-    # valid_batch_size = 8
-    # valid_num_workers = 2
-    
     train_batch_size = 32
-    train_num_workers = 12
+    train_num_workers = 8
     valid_batch_size = 8
-    valid_num_workers = 4
+    valid_num_workers = 2
+    
+    # train_batch_size = 32
+    # train_num_workers = 12
+    # valid_batch_size = 8
+    # valid_num_workers = 4
     
     
     multiply_dataset = 10000

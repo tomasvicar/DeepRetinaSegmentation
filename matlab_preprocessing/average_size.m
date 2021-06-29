@@ -1,11 +1,14 @@
 clc;clear all;close all;
 
-data_path = 'D:\DeepRetinaSegmentation\data_preprocessed\Images';
+data_path = 'D:\DeepRetinaSegmentation\data_preprocessed_hdf5\dataset.hdf5';
 
 
-image_names  = subdir([data_path '/*.png']);
+% image_names  = subdir([data_path '/*.png']);
 
-image_names = {image_names(:).name};
+info = h5info(data_path,'/Images');
+
+
+image_names = {info.Datasets(:).Name};
 
 sizes = zeros(length(image_names),2);
 
@@ -16,9 +19,10 @@ for img_num = 1:length(image_names)
    image_name = image_names{img_num};
     
     
-   info = imfinfo(image_name);
+   info = h5info(data_path,['/Images/' image_name]);
     
-   sizes(img_num,:) = [info.Height,info.Width];
+   xxx = info.Dataspace.Size;
+   sizes(img_num,:) = xxx(1:2);
 end
 
 
