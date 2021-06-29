@@ -30,7 +30,7 @@ class Config:
     valid_batch_size = 8
     valid_num_workers = 2
     
-    multiply_dataset = 20
+    multiply_dataset = 1000
     
     
     # train_batch_size = 4
@@ -39,9 +39,9 @@ class Config:
     # valid_num_workers = 0
 
 
-    init_lr = 1e-2
-    lr_changes_list = np.cumsum([50,25,10,5])
-    # lr_changes_list = np.cumsum([2,2,2])
+    init_lr = 1e-3
+    # lr_changes_list = np.cumsum([50,25,10,5])
+    lr_changes_list = np.cumsum([5,2,2])
     
     gamma = 0.1
     max_epochs = lr_changes_list[-1]
@@ -53,13 +53,14 @@ class Config:
     
     
     # patch_size = 384
-    patch_size = 64
+    patch_size = 96
     clahe = True
     # clahe_grid = 16 #### for 384 patch
     # clahe_clip = 5 
     # clahe_grid = 4 #### for 96 patch
     # clahe_clip = 4 
-    clahe_grid = 4 
+    
+    clahe_grid = 16 
     clahe_clip = 2 
     
     
@@ -68,23 +69,22 @@ class Config:
     # net_name = "efficientnet-b0"
     
     net_name = 'unet'
-    filters = 16
-    drop_out = 0.1
-    depth = 5
+    filters = 32
+    drop_out = 0
+    depth = 4
     
     weight_decay = 1e-5
     
     
-    
-    deformation = True
+    deformation = False
     scale_deform = 0.25
     shear_deform = 0.1
-    rotate = True
-    multipy = 0.2
-    add = 0.1
-    sharp = 0.5
-    blur = 0.5
-    p=0.8
+    rotate = False
+    multipy = 0
+    add = 0
+    sharp = 0
+    blur = 0
+    p=0
     
     local_normalization = False
     

@@ -28,7 +28,8 @@ folder_creation(output_folder);
 % 
 % load_drishtigs(resolution, path, output_folder);
 % 
-load_drive(resolution, path, output_folder);
+% load_drive(resolution, path, output_folder);
+load_drive_orig(resolution, path, output_folder);
 % 
 % load_eophtha(resolution, path, output_folder);
 % 
