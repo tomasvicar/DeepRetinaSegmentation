@@ -12,66 +12,13 @@ from scipy.ndimage.filters import laplace
 import matplotlib.pyplot as plt
 import cv2
 from skimage.color import rgb2gray
-
+from PIL import Image
 
 from split_data import DataSpliter
 
 
 def augmentation(img,mask,config):
     
-    def rand(size=None):
-        if size:
-            return torch.rand(size).numpy()
-        else:
-        
-            return torch.rand(1).numpy()[0]
-    
-    if config.deformation:
-        if rand()>config.p:
-            cols=img.shape[0]
-            rows=img.shape[1]
-            sr=config.scale_deform
-            gr=config.shear_deform
-            tr=0
-            dr=100
-            
-            if config.rotate:
-                rr=180
-            else:
-                rr = 0
-            #sr = scales
-            #gr = shears
-            #tr = tilt
-            #dr = translation
-            sx=1+sr*rand()
-            if rand()>0.5:
-                sx=1/sx
-            sy=1+sr*rand()
-            if rand()>0.5:
-                sy=1/sy
-            gx=(0-gr)+gr*2*rand()
-            gy=(0-gr)+gr*2*rand()
-            tx=(0-tr)+tr*2*rand()
-            ty=(0-tr)+tr*2*rand()
-            dx=(0-dr)+dr*2*rand()
-            dy=(0-dr)+dr*2*rand()
-            t=(0-rr)+rr*2*rand()
-            
-            M=np.array([[sx, gx, dx], [gy, sy, dy],[tx, ty, 1]])
-            R=cv2.getRotationMatrix2D((cols / 2, rows / 2), t, 1)
-            R=np.concatenate((R,np.array([[0,0,1]])),axis=0)
-            matrix= np.matmul(R,M)
-        
-            img = cv2.warpPerspective(img,matrix, (cols,rows),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT)
-            if len(img.shape)==2:
-                img = np.expand_dims(img, 2)
-            
-            if not config.method == 'pretraining':
-                mask = cv2.warpPerspective(mask,matrix, (cols,rows),flags=cv2.INTER_NEAREST,borderMode=cv2.BORDER_REFLECT)
-        
-    # img = cv2.warpPerspective(img,matrix, (cols,rows),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_CONSTANT,borderValue=-0.5)
-    # if not config.method == 'pretraining':
-    #     mask = cv2.warpPerspective(mask,matrix, (cols,rows),flags=cv2.INTER_NEAREST,borderMode=cv2.BORDER_CONSTANT,borderValue=0)
     
     r=[torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(4,(1,1)).view(-1).numpy()]
     if r[0]:
@@ -86,96 +33,74 @@ def augmentation(img,mask,config):
     if not config.method == 'pretraining':
         mask=np.rot90(mask,k=r[2])    
     
-    if rand()>config.p:
-        multipy=config.multipy
-        multipy=1+rand()*multipy
-        if rand()>0.5:
-            img=img*multipy
-        else:
-            img=img/multipy
-       
-    if rand()>config.p:
-        add=config.add     
-        add=(1-2*rand())*add
-        img=img+add
-    
-    
-    if img.shape[2]>1:
-        for slice_num in range(img.shape[2]):
-            
-            slice_ = img[:,:,slice_num]
-            
-            if rand()>config.p:
-                multipy=0.1 
-                multipy=1+rand()*multipy
-                if rand()>0.5:
-                    slice_=slice_*multipy
-                else:
-                    slice_=slice_/multipy
-               
-            if rand()>config.p:
-                add=0.1     
-                add=(1-2*rand())*add
-                slice_=slice_+add
-                
-            img[:,:,slice_num] = slice_
-    
-    
-    
-    
-    
-    if rand()>config.p:
-        bs_r=(-config.sharp,config.blur)
-        r=1-2*rand()
-        if r<=0:
-            par=bs_r[0]*r
-            img=img-par*laplace(img)
-        if r>0:
-            par=bs_r[1]*r
-            img=gaussian_filter(img,par)
+    return img,mask 
 
-    
-    return img,mask
 
 
 
 class Dataset(data.Dataset):
 
 
-    def __init__(self, names,augment,crop,config,crop_same=False,data_type=None):
+    def __init__(self, names,augment,config,data_type=None):
        
         self.names = names
         self.augment = augment
-        self.crop = crop
         self.config = config
-        self.crop_same = crop_same
         self.data_type = data_type
         
-        self.names = self.names*config.multiply_dataset
+        self.names = self.names
+        
+        self.pil_images = []
+        self.pil_masks = []
+        for name in self.names:
+            
+            if not self.config.method == 'pretraining':
+                name_tmp = '_'.join(name.split('_')[:-1]) + '.png'
+                name_tmp = name_tmp.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
+                self.pil_images.append(Image.open(name_tmp))
+                self.pil_masks.append(Image.open(name))
+                
+            else:
+                self.pil_images.append(Image.open(name))
+                
+            
+        self.N = len(self.pil_images)
         
         
 
     def __len__(self):
-        return len(self.names)
+        return self.N*self.config.multiply_dataset
 
 
     def __getitem__(self, idx):
 
-        name = self.names[idx]
+        idx = idx % self.N
+
+        pil_image = self.pil_images[idx]
         
         if not self.config.method == 'pretraining':
-            mask=imread(name)>0
-            mask=mask.astype(np.float32)
+            pil_mask = self.pil_masks[idx]
             
         else:
+            pil_mask = None
+            
+        
+        in_size = [pil_image.height,pil_image.width]
+        out_size = [self.config.patch_size,self.config.patch_size]
+        
+        
+        
+        r1=torch.randint(in_size[0]-out_size[0],(1,1)).view(-1).numpy()[0]
+        r2=torch.randint(in_size[1]-out_size[1],(1,1)).view(-1).numpy()[0]
+        r=[r1,r2]
+        
+        img = np.array(pil_image.crop((r[1],r[0],r[1]+out_size[1],r[0]+out_size[0])))
+        if not self.config.method == 'pretraining':
+            mask = np.array(pil_mask.crop((r[1],r[0],r[1]+out_size[1],r[0]+out_size[0])))
+            mask = np.expand_dims(mask,2)
+        else:
             mask = None
-            
-        name_tmp = '_'.join(name.split('_')[:-1]) + '.png'
-        name_tmp = name_tmp.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
-            
-        img=imread(name_tmp)
-        img=img.astype(np.float64)
-        img = img/255
+  
         
         if self.config.img_type == 'rgb':
             pass
@@ -193,23 +118,7 @@ class Dataset(data.Dataset):
             img,mask = augmentation(img,mask,self.config)
         
         
-        in_size=img.shape
-        out_size=[self.config.patch_size,self.config.patch_size]
-        
-        
-        if self.crop:
-            r1=torch.randint(in_size[0]-out_size[0],(1,1)).view(-1).numpy()[0]
-            r2=torch.randint(in_size[1]-out_size[1],(1,1)).view(-1).numpy()[0]
-            r=[r1,r2]
-            
-            if self.crop_same:
-                r = [100,100]
-            
-            
-            img=img[r[0]:r[0]+out_size[0],r[1]:r[1]+out_size[1],:]
-            if not self.config.method == 'pretraining':
-                mask=mask[r[0]:r[0]+out_size[0],r[1]:r[1]+out_size[1]]    
-         
+
         
         if self.config.clahe:
             
@@ -371,41 +280,7 @@ class Dataset(data.Dataset):
 
 
 if __name__ == "__main__":
-    
-    
-    # from config import Config    
-    
-    # config = Config()
-    # config.method = 'pretraining'
-    
-    # config.pretrain_num_blocks = 20
-    # config.pretrain_max_block_size = 40
-    # config.pretrain_noise_std_fraction = 0.1
-    # config.pretrain_noise_pixel_p = 0.02
-    # config.pretrain_chessboard_num_blocks = 20
-    # config.pretrain_chessboard_max_block_size = 40
-    # config.pretrain_rot_num_blocks = 20
-    # config.pretrain_rot_max_block_size = 40
-    
-    
-    
-    # data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS,seed=42)
-    
-    
-    # train_generator = Dataset(data_split['train'],augment=True,crop=True,config=config)
-    # train_generator = data.DataLoader(train_generator,batch_size=1,num_workers= 0, shuffle=True,drop_last=True)
-    
 
-    # for img,mask in train_generator:
-        
-    #     plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-    #     plt.show()
-    #     plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-    #     plt.show()
-        
-    #     break
-    
-    
     
     
     
@@ -413,6 +288,7 @@ if __name__ == "__main__":
     
     config = Config()
     config.method = 'segmentation'
+    # config.method = 'pretraining'
     
     config.pretrain_num_blocks = 20
     config.pretrain_max_block_size = 40
@@ -427,8 +303,8 @@ if __name__ == "__main__":
     
     data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS,seed=42)
     
-    
-    train_generator = Dataset(data_split['train'],augment=True,crop=True,config=config)
+    train_generator = Dataset(data_split['train'],augment=True,config=config)
+    # train_generator = Dataset(data_split['pretrain_train'],augment=True,config=config)
     train_generator = data.DataLoader(train_generator,batch_size=1,num_workers= 0, shuffle=True,drop_last=True)
     
     start = time.time()
@@ -443,6 +319,5 @@ if __name__ == "__main__":
         # plt.show()
         # plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
         # plt.show()
-        
         # break
     

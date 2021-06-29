@@ -25,12 +25,18 @@ class Config:
     split_ratio_pretrain_train_valid = [9.5,0.5]
     
     
-    train_batch_size = 32
-    train_num_workers = 8
-    valid_batch_size = 8
-    valid_num_workers = 2
+    # train_batch_size = 32
+    # train_num_workers = 8
+    # valid_batch_size = 8
+    # valid_num_workers = 2
     
-    multiply_dataset = 1000
+    train_batch_size = 32
+    train_num_workers = 12
+    valid_batch_size = 8
+    valid_num_workers = 4
+    
+    
+    multiply_dataset = 10000
     
     
     # train_batch_size = 4
@@ -55,11 +61,7 @@ class Config:
     # patch_size = 384
     patch_size = 96
     clahe = True
-    # clahe_grid = 16 #### for 384 patch
-    # clahe_clip = 5 
-    # clahe_grid = 4 #### for 96 patch
-    # clahe_clip = 4 
-    
+
     clahe_grid = 16 
     clahe_clip = 2 
     
@@ -75,16 +77,6 @@ class Config:
     
     weight_decay = 1e-5
     
-    
-    deformation = False
-    scale_deform = 0.25
-    shear_deform = 0.1
-    rotate = False
-    multipy = 0
-    add = 0
-    sharp = 0
-    blur = 0
-    p=0
     
     local_normalization = False
     

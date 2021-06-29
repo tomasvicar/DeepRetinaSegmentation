@@ -24,10 +24,10 @@ def train(config,data_train,data_valid):
     
     torch.cuda.empty_cache()
 
-    train_generator = Dataset(data_train,augment=True,crop=True,config=config,data_type='train')
+    train_generator = Dataset(data_train,augment=True,config=config,data_type='train')
     train_generator = data.DataLoader(train_generator,batch_size=config.train_batch_size,num_workers= config.train_num_workers, shuffle=True,drop_last=True)
 
-    valid_generator = Dataset(data_valid,augment=False,crop=True,config=config,data_type='valid')
+    valid_generator = Dataset(data_valid,augment=False,config=config,data_type='valid')
     valid_generator = data.DataLoader(valid_generator,batch_size=config.valid_batch_size, num_workers=config.valid_num_workers, shuffle=True,drop_last=False)
 
     

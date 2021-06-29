@@ -5,7 +5,7 @@ from PIL import Image
 
 
 
-# start = time.time()
+start = time.time()
 
 
 # xx = []
@@ -17,7 +17,8 @@ from PIL import Image
 
     
 for k in range(50):
-    mmm = mm.crop([0,0,50,50])
+    mm = Image.open(r"D:\DeepRetinaSegmentation\data_preprocessed\Images\aria_na_amd_10027.png")
+    mmm = mm.crop([0,0,50,60])
     array = np.array(mmm)
 
 end = time.time()
