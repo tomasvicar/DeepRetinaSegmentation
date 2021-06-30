@@ -36,7 +36,7 @@ class Config:
     # valid_num_workers = 4
     
     
-    multiply_dataset = 10000
+    multiply_dataset = 1000
     
     
     # train_batch_size = 4
@@ -62,8 +62,8 @@ class Config:
     patch_size = 96
     clahe = True
 
-    clahe_grid = 16 
-    clahe_clip = 2 
+    clahe_grid = 16
+    clahe_clip = 2
     
     
     

@@ -23,7 +23,7 @@ for i=1:length(images)
     
     imwrite_single(I,[out_f '\Images\' imname '.tiff'])
     imwrite_single(V,[out_f '\Vessels\' imname '_ves.tiff'])
-    imwrite_single(D,[out_f '\Disc\' imname '_dis.tiff'])
+    imwrite_single(D,[out_f '\Disc\' imname '_disc.tiff'])
     imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
 
 end

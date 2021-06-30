@@ -117,7 +117,7 @@ if __name__ == "__main__":
             results['resutls_universal'] = resutls_universal
             results['resutls_retrained'] = resutls_retrained
             results['resutls_separate'] = resutls_separate
-            with open('../result_unet8_do_' + str(cv_iter) + '.json', 'w') as outfile:
+            with open('../result_new_loader_10000_' + str(cv_iter) + '.json', 'w') as outfile:
                 json.dump(results, outfile)    
         
       

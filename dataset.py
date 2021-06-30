@@ -1,18 +1,13 @@
 from torch.utils import data
 import numpy as np
 import torch 
-import os
-from skimage.io import imread
-from glob import glob
 import time
-
-from scipy.ndimage.filters import gaussian_filter
-from scipy.ndimage.filters import laplace
-
+import h5py
 import matplotlib.pyplot as plt
 import cv2
 from skimage.color import rgb2gray
-from PIL import Image
+
+
 
 from split_data import DataSpliter
 
@@ -50,56 +45,65 @@ class Dataset(data.Dataset):
         
         self.names = self.names
         
-        self.pil_images = []
-        self.pil_masks = []
-        for name in self.names:
-            
-            if not self.config.method == 'pretraining':
-                name_tmp = '_'.join(name.split('_')[:-1]) + '.png'
-                name_tmp = name_tmp.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
-                self.pil_images.append(Image.open(name_tmp))
-                self.pil_masks.append(Image.open(name))
-                
-            else:
-                self.pil_images.append(Image.open(name))
-                
-            
-        self.N = len(self.pil_images)
+        self.N = len(self.names)
         
+        if not self.config.method == 'pretraining':
+            
+            self.h5data_file = config.data_path + '/' +  'dataset.hdf5'
+            
+        else:
+            
+            self.h5data_file = config.data_path + '/' +  'dataset_pretrain.hdf5'
         
+        self.h5data = None
 
     def __len__(self):
         return self.N*self.config.multiply_dataset
 
 
     def __getitem__(self, idx):
+        
+        if  self.h5data is None:
+            self.h5data = h5py.File(self.h5data_file, 'r')
 
         idx = idx % self.N
 
-        pil_image = self.pil_images[idx]
+        name = self.names[idx]
         
+
         if not self.config.method == 'pretraining':
-            pil_mask = self.pil_masks[idx]
+            
+            tmp = name.split('/')
+            mask = self.h5data[tmp[0]][tmp[1]][:,:]
+            mask = np.transpose(mask,(1,0))
+            name_tmp = '_'.join(name.split('_')[:-1])
+            name_tmp = name_tmp.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
             
         else:
-            pil_mask = None
+            mask = None
+            name_tmp = name
             
         
-        in_size = [pil_image.height,pil_image.width]
-        out_size = [self.config.patch_size,self.config.patch_size]
+        tmp = name_tmp.split('/') 
+        img = self.h5data[tmp[0]][tmp[1]][:,:,:]
+        img = np.transpose(img,(2,1,0))
         
+               
+            
         
+        in_size=img.shape
+        out_size=[self.config.patch_size,self.config.patch_size]
         
+
         r1=torch.randint(in_size[0]-out_size[0],(1,1)).view(-1).numpy()[0]
         r2=torch.randint(in_size[1]-out_size[1],(1,1)).view(-1).numpy()[0]
         r=[r1,r2]
         
-        img = np.array(pil_image.crop((r[1],r[0],r[1]+out_size[1],r[0]+out_size[0])))
+        
+        
+        img=img[r[0]:r[0]+out_size[0],r[1]:r[1]+out_size[1],:]
         if not self.config.method == 'pretraining':
-            mask = np.array(pil_mask.crop((r[1],r[0],r[1]+out_size[1],r[0]+out_size[0])))
-            mask = np.expand_dims(mask,2)
-        else:
-            mask = None
+            mask=mask[r[0]:r[0]+out_size[0],r[1]:r[1]+out_size[1]] 
   
         
         if self.config.img_type == 'rgb':
@@ -124,23 +128,14 @@ class Dataset(data.Dataset):
             
             if img.shape[2]==1:
                 
-                img = img*255
-                img[img<0] = 0
-                img[img>255] = 255
-                img=img.astype(np.uint8)
                 
                 clahe = cv2.createCLAHE(clipLimit=self.config.clahe_clip,tileGridSize=(self.config.clahe_grid,self.config.clahe_grid))
                 img = clahe.apply(img[:,:,0])
-                
-                img = img.astype(np.float64)/255
                 img = np.expand_dims(img,2)
-                
+
             else:
                 
-                img = img*255
-                img[img<0] = 0
-                img[img>255] = 255
-                img=img.astype(np.uint8)
+
                 
                 planes = cv2.split(img)
         
@@ -152,10 +147,8 @@ class Dataset(data.Dataset):
                 
                 img = cv2.merge(planes)
                 
-                img = img.astype(np.float64)/255
                 
-         
-        img = img - 0.5
+        img = img.astype(np.float32)/255 - 0.5
             
         if self.config.method =='pretraining':
             mask = img.copy()
@@ -315,9 +308,9 @@ if __name__ == "__main__":
             print(end - start)
             start = time.time()
         
-        # plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-        # plt.show()
-        # plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-        # plt.show()
-        # break
+        plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
+        plt.show()
+        plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
+        plt.show()
+        break
     
