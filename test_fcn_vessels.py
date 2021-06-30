@@ -7,7 +7,7 @@ from scipy.signal import convolve2d
 from sklearn.metrics import roc_auc_score
 import cv2
 from skimage.color import rgb2gray
-
+import h5py
 
 
 def test_fcn_vessels(save_folder, config, model_name, data_names):
@@ -44,24 +44,33 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         
     for name_num,name in enumerate(data_names):
         
-        mask = imread(name)>0
-        mask = mask.astype(np.float32)
+
         
-        name_tmp = '_'.join(name.split('_')[:-1]) + '_fov.png'
-        name_tmp = name_tmp.replace('Vessels','Fov').replace('Disc','Fov').replace('Cup','Fov')
+        h5data_file = model.config.data_path + '/' +  'dataset.hdf5'
         
-        fov = imread(name_tmp) > 0
-        
-        
-        name_tmp = '_'.join(name.split('_')[:-1]) + '.png'
-        name_tmp = name_tmp.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
+        with h5py.File(h5data_file,"r") as h5data:
             
-        name_save = save_folder + '/' + os.path.split(name_tmp)[1]
+            tmp = name.split('/')
+            mask = h5data[tmp[0]][tmp[1]][:,:]
+            mask = np.transpose(mask,(1,0))
+            mask = (mask>0).astype(np.uint8)
+            name_tmp = '_'.join(name.split('_')[:-1])
+            name_tmp = name_tmp.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
         
-        img=imread(name_tmp)
-        img=img.astype(np.float64)
-        img = img/255
+            name_save = save_folder + '/' + os.path.split(name_tmp)[1] + '.png'
         
+            tmp = name_tmp.split('/') 
+            img = h5data[tmp[0]][tmp[1]][:,:,:]
+            img = np.transpose(img,(2,1,0))
+            
+            
+            
+            name_tmp = '_'.join(name.split('_')[:-1]) + '_fov'
+            name_tmp = name_tmp.replace('Vessels','Fov').replace('Disc','Fov').replace('Cup','Fov')
+            tmp = name_tmp.split('/')
+            fov = h5data[tmp[0]][tmp[1]][:,:]
+            fov = np.transpose(fov,(1,0))
+            fov = (fov>0).astype(np.uint8)
         
         
         img_size=img.shape
@@ -115,23 +124,14 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
             
                 if subimg.shape[2]==1:
                     
-                    subimg = subimg*255
-                    subimg[subimg<0] = 0
-                    subimg[subimg>255] = 255
-                    subimg=subimg.astype(np.uint8)
                     
                     clahe = cv2.createCLAHE(clipLimit=model.config.clahe_clip,tileGridSize=(model.config.clahe_grid,model.config.clahe_grid))
                     subimg = clahe.apply(subimg[:,:,0])
                     
-                    subimg = subimg.astype(np.float64)/255
                     subimg = np.expand_dims(subimg,2)
                     
                 else:
                     
-                    subimg = subimg*255
-                    subimg[subimg<0] = 0
-                    subimg[subimg>255] = 255
-                    subimg=subimg.astype(np.uint8)
                     
                     planes = cv2.split(subimg)
             
@@ -142,12 +142,10 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
                     planes[2] = clahe.apply(planes[2])
                     
                     subimg = cv2.merge(planes)
-                    
-                    subimg = subimg.astype(np.float64)/255
+
                 
                 
-                
-            subimg = subimg - 0.5
+            subimg = subimg.astype(np.float32)/255 - 0.5
             
             subimg = torch.from_numpy(np.transpose(subimg,(2,0,1)).astype(np.float32))
             
