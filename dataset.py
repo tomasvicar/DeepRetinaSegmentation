@@ -308,6 +308,8 @@ if __name__ == "__main__":
             print(end - start)
             start = time.time()
         
+        mask = np.transpose(mask[0,:,:,:].numpy(),(1,2,0))
+        
         plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
         plt.show()
         plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
