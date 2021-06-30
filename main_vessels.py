@@ -22,9 +22,9 @@ if __name__ == "__main__":
     # init_model = 'imagenet'
     init_model = None
     
-    # logging.basicConfig(filename='debug.log',level=logging.INFO)
-    # try:
-    if True:
+    logging.basicConfig(filename='debug.log',level=logging.INFO)
+    try:
+    # if True:
         for cv_iter in range(1):
             
             config = Config()
@@ -100,8 +100,8 @@ if __name__ == "__main__":
                 config.method = 'segmentation_separate' + database_name
                 config.model_name_load = init_model
                 
-                model_name = '../best_models/segmentation_separatedrive_8_0.00001_gpu_3.05870_train_0.09566_valid_0.12364.pt'
-                # model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
+                # model_name = '../best_models/segmentation_separatedrive_8_0.00001_gpu_3.05870_train_0.09566_valid_0.12364.pt'
+                model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
                 accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' + config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
                 
                 resutls_separate[database_name]['ACC'].append(accs)
@@ -126,5 +126,5 @@ if __name__ == "__main__":
       
 
         
-    # except Exception as e:
-    #     logging.critical(e, exc_info=True)
+    except Exception as e:
+        logging.critical(e, exc_info=True)
