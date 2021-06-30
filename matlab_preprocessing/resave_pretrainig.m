@@ -23,7 +23,7 @@ data_path = [path 'EyePACS'];
 files = subdir([data_path '/*.jpeg']);
 
 % fprintf(1,'%s\n\n',repmat('.',1,length(files)));
-for file_num=1:length(files)
+for file_num=54459:length(files)
 % for file_num=1:length(files)
 %     fprintf(1,'\b|\n');
     
@@ -48,13 +48,13 @@ for file_num=1:length(files)
     imname= [ 'EyePACS_'  in];
     
     
-%     try
+    try
         imwrite_single2(im,[output_folder '\Pretraining\' imname '.tiff'])
-%     catch EM
-%         
-%         save(['../../error' num2str(file_num) '.mat'],'EM')
-%         
-%     end
+    catch EM
+        
+        save(['../../error' num2str(file_num) '.mat'],'EM')
+        
+    end
 
 end
 

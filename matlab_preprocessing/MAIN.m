@@ -3,17 +3,17 @@ close all;clear all;clc;
 path = 'G:/Sdílené disky/Retina GAČR/Data/databases/';
 
 %%  SET
-resolution = 25;  % pixels/degree - e.g. 25
-output_folder = '../../data_preprocessed_hdf5';%%%%%%zmenit v imwrite_single
+% resolution = 25;  % pixels/degree - e.g. 25
+% output_folder = '../../data_preprocessed_hdf5';%%%%%%zmenit v imwrite_single
 
 
 
-% resolution = 12;  % pixels/degree - e.g. 25
-% output_folder = '../../data_preprocessed_drive';
+resolution = 12;  % pixels/degree - e.g. 25
+output_folder = '../../data_preprocessed_hdf5_12';
 % try
 %     rmdir(output_folder,'s')
 % end
-% mkdir(output_folder)
+mkdir(output_folder)
 %%
 % folder_creation(output_folder);
 

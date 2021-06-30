@@ -1,7 +1,7 @@
 function []=imwrite_single(data,name)
 
 
-output_folder = '../../data_preprocessed_hdf5';%%%%%%zmenit v imwrite_single
+output_folder = '../../data_preprocessed_hdf5_12';%%%%%%zmenit v imwrite_single
 
 name = replace(name,output_folder,'');
 name = replace(name,'\','/');

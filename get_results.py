@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 
-# resutlt_type = 'ACC'
-resutlt_type = 'AUC'
+resutlt_type = 'ACC'
+# resutlt_type = 'AUC'
 # resutlt_type = 'DICE'
 
 
@@ -21,7 +21,7 @@ for cv_iter in range(1):
     # path = '../xxxx/result_unet8_do_loveraug_' + str(cv_iter) + '.json'
     # path = '../xxxx/result_unet8_do_lowerlr_' + str(cv_iter) + '.json'
     # path = '../xxxx/result_unet8_do_all_' + str(cv_iter) + '.json'
-    path = '../xxxx/result_1000.json'
+    path = '../xxxx/result_new_loader_1000_0.json'
     
 
     with open(path, 'r') as f:

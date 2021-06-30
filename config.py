@@ -8,12 +8,19 @@ class Config:
     best_models_dir='../best_models'
     
     
-    if os.path.isdir("../data_preprocessed_hdf5"):
-        data_path = "../data_preprocessed_hdf5" 
-    elif os.path.isdir("../../data_preprocessed_hdf5"): 
-        data_path = "../../data_preprocessed_hdf5"
+    # if os.path.isdir("../data_preprocessed_hdf5"):
+    #     data_path = "../data_preprocessed_hdf5" 
+    # elif os.path.isdir("../../data_preprocessed_hdf5"): 
+    #     data_path = "../../data_preprocessed_hdf5"
+    # else:
+    #     raise Exception('no data')
+        
+    if os.path.isdir("../data_preprocessed_hdf5_12"):
+        data_path = "../data_preprocessed_hdf5_12" 
+    elif os.path.isdir("../../data_preprocessed_hdf5_12"): 
+        data_path = "../../data_preprocessed_hdf5_12"
     else:
-        raise Exception('no data')
+        raise Exception('no data')  
         
     
     results_folder = '../results'
@@ -36,7 +43,7 @@ class Config:
     # valid_num_workers = 4
     
     
-    multiply_dataset = 1000
+    multiply_dataset = 100
     
     
     # train_batch_size = 4
@@ -59,7 +66,7 @@ class Config:
     
     
     # patch_size = 384
-    patch_size = 96
+    patch_size = 48
     clahe = True
 
     clahe_grid = 16
