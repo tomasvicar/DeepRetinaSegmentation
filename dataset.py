@@ -76,6 +76,7 @@ class Dataset(data.Dataset):
             tmp = name.split('/')
             mask = self.h5data[tmp[0]][tmp[1]][:,:]
             mask = np.transpose(mask,(1,0))
+            mask = (mask>0).astype(np.uint8)
             name_tmp = '_'.join(name.split('_')[:-1])
             name_tmp = name_tmp.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
             
