@@ -55,9 +55,16 @@ if __name__ == "__main__":
             
             
 
+            config.method = 'pretraining'
+            config.model_name_load = init_model
+            config.multiply_dataset = 10
             
+
+            init_model = train(config,data_train=data_split['pretrain_train'],data_valid=data_split['pretrain_valid'])
+
             config.method = 'segmentation_universal'
             config.model_name_load = init_model
+            config.multiply_dataset = 100
             
             
             universal_model_name = train(config,data_train=data_split['train'],data_valid=data_split['valid'])

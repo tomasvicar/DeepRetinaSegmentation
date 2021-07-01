@@ -170,91 +170,32 @@ class Dataset(data.Dataset):
                 
                 
                 
-            block_types = ['chess' for _ in range(self.config.pretrain_chessboard_num_blocks)] + ['rot' for _ in range(self.config.pretrain_rot_num_blocks)] + ['del' for _ in range(self.config.pretrain_num_blocks)]
+            block_types = ['del' for _ in range(self.config.pretrain_num_blocks)]
                 
-            p = torch.randperm(len(block_types)).numpy()
-            
-            block_types = [block_types[k] for k in p]
-                
+
             used = np.zeros(img_shape[:2])
             for k,block_type in enumerate(block_types):
                 
-                if block_type == 'del':
-                    block_sizex = int(np.ceil(rand()*self.config.pretrain_max_block_size))
-                    block_sizey = int(np.ceil(rand()*self.config.pretrain_max_block_size))
-                elif block_type == 'chess':
-                    block_sizex = int(np.ceil(self.config.pretrain_chessboard_max_block_size/2 + rand()*self.config.pretrain_chessboard_max_block_size/2)/2)*2
-                    # block_sizey = int(np.ceil(self.config.pretrain_chessboard_max_block_size/2 + rand()*self.config.pretrain_chessboard_max_block_size/2)/2)*2
-                    block_sizey = block_sizex
-                    
-                else:
-                    block_sizex = int(np.ceil(self.config.pretrain_chessboard_max_block_size/2 + rand()*self.config.pretrain_chessboard_max_block_size/2))
-                    block_sizey = block_sizex
-                
+
+                block_sizex = int(np.ceil(rand()*self.config.pretrain_max_block_size))
+                block_sizey = int(np.ceil(rand()*self.config.pretrain_max_block_size))
+  
                 posx = int(np.round(rand()*(img_shape[0]-block_sizex)))
                 posy = int(np.round(rand()*(img_shape[1]-block_sizey)))
                 
-                if np.sum(used[posx:posx+block_sizex,posy:posy+block_sizey])==0:
+                # if np.sum(used[posx:posx+block_sizex,posy:posy+block_sizey])==0:
+                if True:
+                    
                     used[posx:posx+block_sizex,posy:posy+block_sizey] = 1
                     
                     
-                    if block_type == 'del':
-                        std_tmp = self.config.pretrain_std
-                        mean_tmp = self.config.pretrain_mean
-                        
-                        # std_tmp = np.std(img[posx:posx+block_sizex,posy:posy+block_sizey,:])
-                        # mean_tmp = np.mean(img[posx:posx+block_sizex,posy:posy+block_sizey,:])
-                        
-                        block = torch.randn([block_sizex,block_sizey,img.shape[2]]).numpy()*std_tmp + mean_tmp
-                    
-                    if block_type == 'rot':
-                        
-                        block = img[posx:posx+block_sizex,posy:posy+block_sizey,:]
-                        # if rand()>0.5:
-                        #     block = block + 0.2
-                        # else:
-                        #     block = block - 0.2
-                        
-                        
-                        r=[torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(2,(1,1)).view(-1).numpy(),torch.randint(4,(1,1)).view(-1).numpy()]
-                        
-                        if r[0]:
-                            block=np.fliplr(block)
-        
-                        if r[1]:
-                            block=np.flipud(block)
-        
-                        block=np.rot90(block,k=r[2]) 
+            
+                    std_tmp = self.config.pretrain_std
+                    mean_tmp = self.config.pretrain_mean
 
-
-                    if block_type == 'chess':
-                        
-                        block = img[posx:posx+block_sizex,posy:posy+block_sizey,:]
-                        # if rand()>0.5:
-                        #     block = block + 0.2
-                        # else:
-                        #     block = block - 0.2
-                        
-                        
-                        p = torch.randperm(4).numpy()
-                        
-                        x_split = int(block_sizex/2)
-                        y_split = int(block_sizey/2)
-                        
-                        sub_blocks = []
-
-                        sub_blocks.append(block[:x_split,:y_split,:].copy())
-                        sub_blocks.append(block[x_split:,:y_split,:].copy())
-                        sub_blocks.append(block[:x_split,y_split:,:].copy())
-                        sub_blocks.append(block[x_split:,y_split:,:].copy())
-                        
-                        
-                        block[:x_split,:y_split,:] = sub_blocks[p[0]]
-                        block[x_split:,:y_split,:] = sub_blocks[p[1]]
-                        block[:x_split,y_split:,:] = sub_blocks[p[2]]
-                        block[x_split:,y_split:,:] = sub_blocks[p[3]]
-                    
-                    
+                    # block = torch.randn([block_sizex,block_sizey,img.shape[2]]).numpy()*std_tmp + mean_tmp
+                    block = torch.randn([block_sizex,block_sizey,img.shape[2]]).numpy()*0 + mean_tmp
+                
                     img[posx:posx+block_sizex,posy:posy+block_sizey,:] = block
                     
                     
@@ -281,39 +222,30 @@ if __name__ == "__main__":
     from config import Config    
     
     config = Config()
-    config.method = 'segmentation'
-    # config.method = 'pretraining'
-    
-    config.pretrain_num_blocks = 20
-    config.pretrain_max_block_size = 40
-    config.pretrain_noise_std_fraction = 0.1
-    config.pretrain_noise_pixel_p = 0.02
-    config.pretrain_chessboard_num_blocks = 20
-    config.pretrain_chessboard_max_block_size = 40
-    config.pretrain_rot_num_blocks = 20
-    config.pretrain_rot_max_block_size = 40
+    # config.method = 'segmentation'
+    config.method = 'pretraining'
     
     
     
     data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS,seed=42)
     
-    train_generator = Dataset(data_split['train'],augment=True,config=config)
-    # train_generator = Dataset(data_split['pretrain_train'],augment=True,config=config)
+    # train_generator = Dataset(data_split['train'],augment=True,config=config)
+    train_generator = Dataset(data_split['pretrain_train'],augment=True,config=config)
     train_generator = data.DataLoader(train_generator,batch_size=1,num_workers= 0, shuffle=True,drop_last=True)
     
     start = time.time()
     for it,(img,mask) in enumerate(train_generator):
         
-        if it%10 == 0:
-            end = time.time()
-            print(end - start)
-            start = time.time()
+        # if it%10 == 0:
+        #     end = time.time()
+        #     print(end - start)
+        #     start = time.time()
         
-        mask = np.transpose(mask[0,:,:,:].numpy(),(1,2,0))
+        # mask = np.transpose(mask[0,:,:,:].numpy(),(1,2,0))
         
-        # plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-        # plt.show()
-        # plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
-        # plt.show()
-        # break
+        plt.imshow(np.transpose(img[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
+        plt.show()
+        plt.imshow(np.transpose(mask[0,:,:,:].numpy(),(1,2,0))+0.5,vmin=0,vmax=1)
+        plt.show()
+        break
     

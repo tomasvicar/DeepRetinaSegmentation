@@ -93,17 +93,13 @@ class Config:
     in_channels = 1
     
     
-    pretrain_num_blocks = 0
-    pretrain_max_block_size = 20
-    pretrain_mean = -0.17507726083630085
-    pretrain_std = 0.24185812541237633
-    pretrain_noise_std_fraction = None
-    pretrain_noise_pixel_p = None
+    pretrain_num_blocks = 5
+    pretrain_max_block_size = 15
+    pretrain_mean = -0.042632774 
+    pretrain_std = 0.13752356
+    pretrain_noise_std_fraction = 0
+    pretrain_noise_pixel_p = 0.03
     pretrain_noise_pixel_std_fraction = 5
-    pretrain_chessboard_num_blocks = 0
-    pretrain_chessboard_max_block_size = 20
-    pretrain_rot_num_blocks = 0
-    pretrain_rot_max_block_size = 20
     
     
     model_name_load = None
