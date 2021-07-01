@@ -53,7 +53,7 @@ class Config:
 
 
     init_lr = 1e-3
-    lr_changes_list = np.cumsum([50,25,10,5])
+    lr_changes_list = np.cumsum([50,10,5,5])
     # lr_changes_list = np.cumsum([5,2,2])
     
     gamma = 0.1
