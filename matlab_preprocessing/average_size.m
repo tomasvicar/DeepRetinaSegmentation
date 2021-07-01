@@ -1,6 +1,6 @@
 clc;clear all;close all;
 
-data_path = 'D:\DeepRetinaSegmentation\data_preprocessed_hdf5\dataset.hdf5';
+data_path = 'D:\DeepRetinaSegmentation\data_preprocessed_hdf5_12\dataset.hdf5';
 
 
 % image_names  = subdir([data_path '/*.png']);

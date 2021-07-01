@@ -8,14 +8,17 @@ close all;clear all;clc;
 
 path = 'D:/DeepRetinaSegmentation/datasets_tmp/';
 
-resolution = 25;  % pixels/degree - e.g. 30
+% resolution = 25;  % pixels/degree - e.g. 30
+resolution = 12;
 if resolution==25
     size_mean = [1042.86346616742,1345.84661674244];
+elseif resolution==12  
+    size_mean = [500.9018  646.2399];
 else
    error('unknown') 
 end
 
-output_folder = '../../data_preprocessed_hdf5_tmp';
+output_folder = '../../data_preprocessed_hdf5_12_tmp';
 
 
 
@@ -23,7 +26,7 @@ data_path = [path 'EyePACS'];
 files = subdir([data_path '/*.jpeg']);
 
 % fprintf(1,'%s\n\n',repmat('.',1,length(files)));
-for file_num=54459:length(files)
+for file_num=1:length(files)
 % for file_num=1:length(files)
 %     fprintf(1,'\b|\n');
     
