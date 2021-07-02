@@ -4,6 +4,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import json
+import sys
 
 from split_data import DataSpliter
 from train import train
@@ -22,12 +23,22 @@ if __name__ == "__main__":
     # init_model = 'imagenet'
     init_model = None
     
-    logging.basicConfig(filename='debug.log',level=logging.INFO)
+    output_folder = sys.argv[0]
+    
+    logging.basicConfig(filename=output_folder + '/debug.log', level=logging.INFO)
     try:
     # if True:
         for cv_iter in range(1):
             
             config = Config()
+            
+            config.model_save_dir = output_folder + '/tmp'
+    
+            config.best_models_dir = output_folder + '/best_models'
+            
+            config.results_folder = output_folder + '/results'
+            
+            
             
             data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS,seed=cv_iter*100)
             data_split['database_names'] = ['drive']
@@ -55,12 +66,12 @@ if __name__ == "__main__":
             
             
 
-            config.method = 'pretraining'
-            config.model_name_load = init_model
-            config.multiply_dataset = 10
+            # config.method = 'pretraining'
+            # config.model_name_load = init_model
+            # config.multiply_dataset = 10
             
 
-            init_model = train(config,data_train=data_split['pretrain_train'],data_valid=data_split['pretrain_valid'])
+            # init_model = train(config,data_train=data_split['pretrain_train'],data_valid=data_split['pretrain_valid'])
 
             config.method = 'segmentation_universal'
             config.model_name_load = init_model
@@ -111,7 +122,7 @@ if __name__ == "__main__":
                 
                 # model_name = '../best_models/segmentation_separatedrive_8_0.00001_gpu_3.05870_train_0.09566_valid_0.12364.pt'
                 model_name = train(config,data_train=tmp_train,data_valid=tmp_valid)
-                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels('../' + config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
+                accs,aucs,dices,tps,fps,fns,tns = test_fcn_vessels(config.results_folder + '/' + config.method + '/' + database_name + str(cv_iter), config, model_name, tmp_test)
                 
                 resutls_separate[database_name]['ACC'].append(accs)
                 resutls_separate[database_name]['AUC'].append(aucs)
@@ -121,15 +132,13 @@ if __name__ == "__main__":
                 resutls_separate[database_name]['FN'].append(fns)
                 resutls_separate[database_name]['TN'].append(tns)
                 
-                print(np.mean(aucs))
-                print(np.mean(accs))
                 
             
             results = dict()
             results['resutls_universal'] = resutls_universal
             results['resutls_retrained'] = resutls_retrained
             results['resutls_separate'] = resutls_separate
-            with open('../result_new_loader_1000_' + str(cv_iter) + '.json', 'w') as outfile:
+            with open(config.results_folder + '/result_new_loader_1000_' + str(cv_iter) + '.json', 'w') as outfile:
                 json.dump(results, outfile)    
         
       
