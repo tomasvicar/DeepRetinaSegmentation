@@ -35,7 +35,6 @@ def train(config,data_train,data_valid):
         model = Unet(filters=config.filters,in_size=config.in_channels,out_size=1,do=config.drop_out,depth=config.depth)
     
     else:
-
         if config.model_name_load == 'imagenet':
             model = smp.Unet(
                 encoder_name=config.net_name,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
@@ -45,9 +44,8 @@ def train(config,data_train,data_valid):
             )
             
         
-        elif config.model_name_load:
-            model=torch.load(config.model_name_load)
-        else:
+        
+        elif config.model_name_load=='none':
             # model=Unet(config, filters=config.filters,in_size=config.in_size,out_size=config.out_size)
             model = smp.Unet(
                 encoder_name=config.net_name,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
@@ -55,6 +53,9 @@ def train(config,data_train,data_valid):
                 in_channels=config.in_channels,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
                 classes=1,                      # model output channels (number of classes in your dataset)
             )
+            
+        else:
+            model=torch.load(config.model_name_load)
         
         
     model.config = config

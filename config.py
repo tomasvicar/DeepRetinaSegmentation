@@ -53,8 +53,8 @@ class Config:
 
 
     init_lr = 1e-3
-    # lr_changes_list = np.cumsum([50,10,5,5])
-    lr_changes_list = np.cumsum([2,1])
+    lr_changes_list = np.cumsum([50,10,5,5])
+    # lr_changes_list = np.cumsum([2,1])
     # lr_changes_list = np.cumsum([5,2,2])
     
     gamma = 0.1
@@ -67,7 +67,7 @@ class Config:
     
     
     # patch_size = 384
-    patch_size = 48
+    patch_size = 64
     clahe = True
 
     clahe_grid = 16
@@ -76,12 +76,12 @@ class Config:
     
     
     
-    # net_name = "efficientnet-b0"
+    net_name = "efficientnet-b0"
     
-    net_name = 'unet'
-    filters = 32
-    drop_out = 0
-    depth = 4
+    # net_name = 'unet'
+    # filters = 32
+    # drop_out = 0
+    # depth = 4
     
     weight_decay = 1e-5
     
