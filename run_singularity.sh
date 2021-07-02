@@ -9,5 +9,3 @@ cd $SCRATCHDIR/DeepRetinaSegmentation
 
 
 python main_vessels.py $DATADIR
-
-
