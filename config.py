@@ -53,7 +53,7 @@ class Config:
 
 
     init_lr = 1e-3
-    lr_changes_list = np.cumsum([50,10,5,5])
+    lr_changes_list = np.cumsum([30,10,5,5])
     # lr_changes_list = np.cumsum([2,1])
     # lr_changes_list = np.cumsum([5,2,2])
     
@@ -67,7 +67,7 @@ class Config:
     
     
     # patch_size = 384
-    patch_size = 64
+    patch_size = 128
     clahe = True
 
     clahe_grid = 16
@@ -95,11 +95,11 @@ class Config:
     
     
     pretrain_num_blocks = 5
-    pretrain_max_block_size = 15
+    pretrain_max_block_size = 25
     pretrain_mean = -0.042632774 
     pretrain_std = 0.13752356
     pretrain_noise_std_fraction = 0
-    pretrain_noise_pixel_p = 0.03
+    pretrain_noise_pixel_p = 0.05
     pretrain_noise_pixel_std_fraction = 5
     
     
