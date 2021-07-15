@@ -8,19 +8,19 @@ class Config:
     best_models_dir='../best_models'
     
     
-    # if os.path.isdir("../data_preprocessed_hdf5"):
-    #     data_path = "../data_preprocessed_hdf5" 
-    # elif os.path.isdir("../../data_preprocessed_hdf5"): 
-    #     data_path = "../../data_preprocessed_hdf5"
-    # else:
-    #     raise Exception('no data')
-        
-    if os.path.isdir("../data_preprocessed_hdf5_12"):
-        data_path = "../data_preprocessed_hdf5_12" 
-    elif os.path.isdir("../../data_preprocessed_hdf5_12"): 
-        data_path = "../../data_preprocessed_hdf5_12"
+    if os.path.isdir("../data_preprocessed_hdf5"):
+        data_path = "../data_preprocessed_hdf5" 
+    elif os.path.isdir("../../data_preprocessed_hdf5"): 
+        data_path = "../../data_preprocessed_hdf5"
     else:
-        raise Exception('no data')  
+        raise Exception('no data')
+        
+    # if os.path.isdir("../data_preprocessed_hdf5_12"):
+    #     data_path = "../data_preprocessed_hdf5_12" 
+    # elif os.path.isdir("../../data_preprocessed_hdf5_12"): 
+    #     data_path = "../../data_preprocessed_hdf5_12"
+    # else:
+    #     raise Exception('no data')  
         
     
     results_folder = '../results'
@@ -67,16 +67,27 @@ class Config:
     
     
     # patch_size = 384
-    patch_size = 128
+    patch_size = 32*8
     clahe = True
 
-    clahe_grid = 16
+    clahe_grid = 4*8
     clahe_clip = 2
     
     
     
+    deformation = True
+    scale_deform = 0.25
+    shear_deform = 0.1
+    rotate = True
+    multipy = 0.2
+    add = 0.1
+    sharp = 0.5
+    blur = 0.5
+    p=0.8
     
-    net_name = "efficientnet-b0"
+    
+    
+    net_name = "efficientnet-b2"
     
     # net_name = 'unet'
     # filters = 32
