@@ -106,7 +106,7 @@ end
 if database=='rimone'
     hr=fov;
     fov=ones(size(fov));
-elseif database=='erlangen'
+elseif database=='erlangen' || database=='erlangen_videodata'
     hr=ones(size(fov));
     hr(:,2:end-1)=0;
 elseif database=='roc' || database=='riga'
