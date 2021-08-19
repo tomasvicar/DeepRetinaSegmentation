@@ -106,6 +106,9 @@ end
 if database=='rimone'
     hr=fov;
     fov=ones(size(fov));
+elseif database=='erlangen'
+    hr=ones(size(fov));
+    hr(:,2:end-1)=0;
 elseif database=='roc' || database=='riga'
 hr=zeros(size(final_closed));
 hr(20:end-20,20:end-20)=edge(final_closed(20:end-20,20:end-20));
