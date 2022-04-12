@@ -13,16 +13,16 @@ I = im;
 I2=imresize(I,(rc*degree)/lengthI); 
 
 F = fov;
-F=imresize(F,(rc*degree)/lengthI); 
+F=imresize(F,(rc*degree)/lengthI,'nearest'); 
 
 if length(M1)>5
-    M1=imresize(M1,(rc*degree)/lengthI); 
+    M1=imresize(M1,(rc*degree)/lengthI,'nearest'); 
 end
 if length(M2)>5
-    M2=imresize(M2,(rc*degree)/lengthI);   
+    M2=imresize(M2,(rc*degree)/lengthI,'nearest');   
 end
 if length(M3)>5
-    M3=imresize(M3,(rc*degree)/lengthI);  
+    M3=imresize(M3,(rc*degree)/lengthI,'nearest');  
 end
 
     

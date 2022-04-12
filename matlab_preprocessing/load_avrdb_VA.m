@@ -1,0 +1,49 @@
+function[] = load_avrdb_VA(rc, path, out_f)
+degree = 30;
+
+%% AVRDB
+images = dir([path 'AVRDB']);
+images(1:2)=[];
+
+for i=1:length(images)
+
+    im=imread([path 'AVRDB\' images(i).name '\' images(i).name '.JPG']);
+    ves=imread([path 'AVRDB\' images(i).name '\' images(i).name '--vessels.jpg']);
+    ves=ves(:,:,1)<128;
+    try
+        art=imread([path 'AVRDB\' images(i).name '\' images(i).name '--artery.jpg']);
+    end
+    try
+        art=imread([path 'AVRDB\' images(i).name '\' images(i).name '--arteries.jpg']);
+    end
+    art=mean(im2double(art),3);
+    art(art>0.80)=0;
+    art(art~=0)=1;
+    try
+        vein=imread([path 'AVRDB\' images(i).name '\' images(i).name '--vein.jpg']);
+    end
+    try
+        vein=imread([path 'AVRDB\' images(i).name '\' images(i).name '--veins.jpg']);
+    end
+    vein=mean(im2double(vein),3);
+    vein(vein>0.80)=0;
+    vein(vein~=0)=1;
+    va = art;
+    va(vein==1)=2;
+    figure(1)
+    sgtitle(i)
+    [I,V,VA,~,fov]=image_adjustment(im,rc,degree,ves,va,0, 'avrdb',0);
+    I = uint16(round(I.*2.^12));
+
+    in=images(i).name;
+    imname= [ 'avrdb_'  in(end-3:end)  ];
+
+    dicomwrite(I(:,:,1),[out_f '\' imname '_R.dcm'])
+    dicomwrite(I(:,:,2),[out_f '\' imname '_G.dcm'])
+    dicomwrite(I(:,:,3),[out_f '\' imname '_B.dcm'])
+    dicomwrite(uint16(V),[out_f '\' imname '_ves.dcm'])
+    dicomwrite(uint16(fov),[out_f '\' imname '_fov.dcm'])
+    dicomwrite(uint16(VA),[out_f '\' imname '_va.dcm'])
+
+end
+end
