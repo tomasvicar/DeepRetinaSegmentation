@@ -17,3 +17,5 @@ load_drive_VA(resolution, path, output_folder);
 
 load_hrf_VA(resolution, path, output_folder);
 
+load_drhagis_VA(resolution, path, output_folder);
+

@@ -2,27 +2,28 @@ function [I2,M1,M2,M3,F]=image_adjustment(im,rc,degree,M1,M2,M3, dat, fov)
     im=im2double(im);
     [rad,sloup,prumer,fov]=souradnice(im, dat, fov);
     
-    minr=(rad-prumer)*(prumer<rad)+1*(prumer>=rad);
-    maxr=(rad+prumer)*(size(im,1)>=(rad+prumer))+size(im,1)*(size(im,1)<(rad+prumer));
-    minc=(sloup-prumer)*(prumer<sloup)+1*(prumer>=sloup);
-    maxc=(sloup+prumer)*(size(im,2)>=(sloup+prumer))+size(im,2)*(size(im,2)<(sloup+prumer));
+%     minr=(rad-prumer)*(prumer<rad)+1*(prumer>=rad);
+%     maxr=(rad+prumer)*(size(im,1)>=(rad+prumer))+size(im,1)*(size(im,1)<(rad+prumer));
+%     minc=(sloup-prumer)*(prumer<sloup)+1*(prumer>=sloup);
+%     maxc=(sloup+prumer)*(size(im,2)>=(sloup+prumer))+size(im,2)*(size(im,2)<(sloup+prumer));
 
 lengthI =  2*prumer;
 % lengthI =  max(maxr-minr,maxc-minc);
-I = im;    
-I2=imresize(I,(rc*degree)/lengthI); 
+I2=imresize(im,(rc*degree)/lengthI); 
+numrows = size(I2,1);
+numcols = size(I2,2);
 
 F = fov;
-F=imresize(F,(rc*degree)/lengthI,'nearest'); 
+F=imresize(F,[numrows numcols],'nearest'); 
 
 if length(M1)>5
-    M1=imresize(M1,(rc*degree)/lengthI,'nearest'); 
+    M1=imresize(M1,[numrows numcols],'nearest'); 
 end
 if length(M2)>5
-    M2=imresize(M2,(rc*degree)/lengthI,'nearest');   
+    M2=imresize(M2,[numrows numcols],'nearest');   
 end
 if length(M3)>5
-    M3=imresize(M3,(rc*degree)/lengthI,'nearest');  
+    M3=imresize(M3,[numrows numcols],'nearest');  
 end
 
     
