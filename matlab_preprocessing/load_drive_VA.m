@@ -9,15 +9,22 @@ for i=1:length(images)
     disp(['DRIVE/RITE Train: ' num2str(i) '/' num2str(length(images))])
     in=images(i).name(1:end-4);
     im=imread([path 'RITE\AV_groundTruth\training\images\' images(i).name ]);
-    ves=mat2gray(im2double(imread([path 'RITE\AV_groundTruth\training\vessel\' in '.png'])));
-    fov=mat2gray(imread([path 'DRIVE\training\mask\' in '_mask.gif']));
+    ves=logical(mat2gray(im2double(imread([path 'RITE\AV_groundTruth\training\vessel\' in '.png']))));
+    fov=logical(mat2gray(imread([path 'DRIVE\training\mask\' in '_mask.gif'])));
     va_tmp=imread([path 'RITE\AV_groundTruth\training\av\' in '.png']);
     
     va = zeros(size(ves));
     va(va_tmp(:,:,1)==255 | va_tmp(:,:,2)==255 & va_tmp(:,:,3)~=255) = 1;
     va(va_tmp(:,:,3)==255 & va_tmp(:,:,1)~=255) = 2;
     
+    chck_labels = unique(va(:));
+    if length(chck_labels)>3
+        disp(['DRIVE: ' in 'has incorrect labels:' strjoin(string(chck_labels))])
+    end
+    
     [I,V,VA,~,fov]=image_adjustment(im,rc,degree,ves,va,0, 'drive', fov);
+    VA = uint8(VA).*uint8(V);
+    V(VA==0) = 0;
     I = uint16(round(I.*2.^12));
     
     num=in(1:2);

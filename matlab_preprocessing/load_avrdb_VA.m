@@ -31,7 +31,15 @@ for i=1:length(images)
     vein(vein~=0)=1;
     va = art;
     va(vein==1)=2;
+    
+    chck_labels = unique(va(:));
+    if length(chck_labels)>3
+        disp(['AVRDB: ' in 'has incorrect labels:' strjoin(string(chck_labels))])
+    end
+    
     [I,V,VA,~,fov]=image_adjustment(im,rc,degree,ves,va,0, 'avrdb',0);
+    VA = uint8(VA).*uint8(V);
+    V(VA==0) = 0;
     I = uint16(round(I.*2.^12));
 
     in=images(i).name;

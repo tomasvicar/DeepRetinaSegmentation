@@ -15,8 +15,16 @@ for i=1:length(images)
     va(va==50) = 0;
     va(va==100) = 1;
     va(va==150) = 2;
+    va(va==255) = 0; % ???
+    
+    chck_labels = unique(va(:));
+    if length(chck_labels)>3
+        disp(['HRF: ' in 'has incorrect labels:' strjoin(string(chck_labels))])
+    end
 
     [I,V,VA,~, fov]=image_adjustment(im,rc,degree,ves,va,0, 'hrf', fov);
+    VA = VA.*uint8(V);
+    V(VA==0) = 0;
     I = uint16(round(I.*2.^12));
     
     ind=strfind(in,'_');
