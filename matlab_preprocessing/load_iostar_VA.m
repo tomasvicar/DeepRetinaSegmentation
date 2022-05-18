@@ -19,7 +19,14 @@ for i=1:length(images)
     va(va_tmp(:,:,1)>230 & va_tmp(:,:,2)<230) = 1;
     va(va_tmp(:,:,3)>230 & va_tmp(:,:,2)<230) = 2;
     
+    chck_labels = unique(va(:));
+    if length(chck_labels)>3
+        disp(['IOSTAR: ' in 'has incorrect labels:' strjoin(string(chck_labels))])
+    end
+    
     [I,V,VA,~,fov]=image_adjustment(im,rc,degree,ves,va,0, 'iostar',fov);
+    VA = uint8(VA).*uint8(V);
+    V(VA==0) = 0;
     I = uint16(round(I.*2.^12));
     
     imname= [ 'iostar_'  in(6:7) ];
