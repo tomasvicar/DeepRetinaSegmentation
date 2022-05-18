@@ -36,16 +36,16 @@ num_ite = int(np.round(num_ite))
  
 torch.cuda.empty_cache()   
  
-# net = Network.Net(enc_chs=(4,32,64,128,256), dec_chs=(256,128,64,32), head=(128), num_class=3)
+net = Network.Net(enc_chs=(4,32,64,128,256), dec_chs=(256,128,64,32), head=(128), num_class=3)
 # net = Network.AttU_Net(img_ch=1,output_ch=1)
-# Network.init_weights(net,init_type= 'xavier', gain=0.02)
+Network.init_weights(net,init_type= 'xavier', gain=0.02)
 
 
-version = "net_v0_0_1"
-net = torch.load(r"//mnt/Data/jakubicek/Ophtalmo/SegmMyo/Models/" + version + ".pt")
+# version = "net_v0_0_1"
+# net = torch.load("/home/chmelikj/Documents/chmelikj/Ophtalmo/DeepRetinaSegmentation/Ves_Class/Models/" + version + ".pt")
 
 
-version_new = "v0_0_2"
+version_new = "v0_0_3"
 
 
 net = net.cuda()
@@ -58,7 +58,7 @@ scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=0.1,
 data_list_1_train=[];data_list_1_test=[];
 
 # # # ## Data OPTHALMO
-path_data = '/mnt/Data/chmelikj/Ophthalmo'  # Linux bioeng358
+path_data = '/home/chmelikj/Documents/chmelikj/Ophtalmo/Data/data_preprocessed_dicom_12'  # Linux bioeng358
 data_list = Loaders.CreateDataset_dcm(os.path.normpath( path_data ), '','')
 
 b = int(len(data_list)*0.80)
@@ -187,13 +187,19 @@ for epch in range(0,num_epch):
     plt.figure
     plt.imshow(resTe[0,2,:,:], cmap='jet')
     plt.show()
+    plt.figure
+    plt.imshow(MasksTE[0,0,:,:], cmap='jet')
+    plt.show()
+    plt.figure
+    plt.imshow(ImgsTe[0,3,:,:], cmap='jet')
+    plt.show()
    
     
     plt.figure()
     plt.plot(diceTr_Clin,label='Joint Train')
     plt.plot(diceTe_Clin,label='Joint Test')
 
-    plt.ylim([0.5, 0.7])
+    plt.ylim([0.1, 0.9])
     plt.legend()
     plt.show()    
     
