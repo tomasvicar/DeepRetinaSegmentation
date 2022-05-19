@@ -45,7 +45,7 @@ Network.init_weights(net,init_type= 'xavier', gain=0.02)
 # net = torch.load("/home/chmelikj/Documents/chmelikj/Ophtalmo/DeepRetinaSegmentation/Ves_Class/Models/" + version + ".pt")
 
 
-version_new = "v0_0_3"
+version_new = "v0_0_4"
 
 
 net = net.cuda()
@@ -59,7 +59,7 @@ data_list_1_train=[];data_list_1_test=[];
 
 # # # ## Data OPTHALMO
 path_data = '/home/chmelikj/Documents/chmelikj/Ophtalmo/Data/data_preprocessed_dicom_12'  # Linux bioeng358
-data_list = Loaders.CreateDataset_dcm(os.path.normpath( path_data ), '','')
+data_list = Loaders.CreateDataset_dcm_with_DC(os.path.normpath( path_data ), '','')
 
 b = int(len(data_list)*0.80)
 data_list_1_train = data_list_1_train + data_list[1:b+1]

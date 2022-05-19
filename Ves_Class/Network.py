@@ -153,6 +153,7 @@ class Training():
             
             img_paths = data_list[b]['img_path']
             mask_path = data_list[b]['mask_path']
+            dc_pos = data_list[b]['dc_pos']
             
     
             augm_params=[]; 
@@ -176,8 +177,13 @@ class Training():
                 mask = dataset.pixel_array               
                                 
                 if not augm:
-                    img = Util.resize_with_padding(img,(vel,vel))
-                    mask = Util.resize_with_padding(mask,(vel,vel))    
+                    # central crop and padding to same size
+                    # img = Util.resize_with_padding(img,(vel,vel))
+                    # mask = Util.resize_with_padding(mask,(vel,vel))
+                    
+                    # optical disc position crop and padding to same size
+                    img = Util.resize_with_padding_dc(img, (vel,vel), dc_pos)
+                    mask = Util.resize_with_padding_dc(mask, (vel,vel), dc_pos) 
                 
                 img = np.expand_dims(img, 0).astype(np.float32)
                 mask = np.expand_dims(mask, 0).astype(np.float32)    
@@ -186,8 +192,8 @@ class Training():
                 mask = torch.tensor(mask)
                 
                 if  augm:
-                    img = Util.augmentation2(img, augm_params)
-                    mask = Util.augmentation2(mask, augm_params)
+                    img = Util.augmentation3(img, augm_params, dc_pos)
+                    mask = Util.augmentation3(mask, augm_params, dc_pos)
                     # mask = mask>0.5   
                      
             
