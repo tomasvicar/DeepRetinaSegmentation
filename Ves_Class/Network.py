@@ -161,7 +161,7 @@ class Training():
                             'Crop_size': random.randint(params[1],params[2]),
                             'Angle': random.randint(params[3],params[4]),
                             'Transl': (random.randint(params[5],params[6]),random.randint(params[7],params[8])),
-                            'Scale': random.uniform(1.0,1.0),
+                            'Scale': random.uniform(params[9],params[10]),
                             'Flip':  np.random.random()>0.5
                             })
             
@@ -173,40 +173,59 @@ class Training():
              
                 dataset = dcm.dcmread(ch_path)
                 img = dataset.pixel_array.astype(dtype='float32')
-                dataset = dcm.dcmread(mask_path)
-                mask = dataset.pixel_array               
                                 
                 if not augm:
                     # central crop and padding to same size
                     # img = Util.resize_with_padding(img,(vel,vel))
-                    # mask = Util.resize_with_padding(mask,(vel,vel))
                     
                     # optical disc position crop and padding to same size
                     img = Util.resize_with_padding_dc(img, (vel,vel), dc_pos)
-                    mask = Util.resize_with_padding_dc(mask, (vel,vel), dc_pos) 
-                
                 img = np.expand_dims(img, 0).astype(np.float32)
-                mask = np.expand_dims(mask, 0).astype(np.float32)    
-    
                 img = torch.tensor(img)
-                mask = torch.tensor(mask)
                 
                 if  augm:
                     img = Util.augmentation3(img, augm_params, dc_pos)
-                    mask = Util.augmentation3(mask, augm_params, dc_pos)
-                    # mask = mask>0.5   
-                     
-            
+
                 Imgs[b,ch,:,:] = img
+                
+            dataset = dcm.dcmread(mask_path)
+            mask = dataset.pixel_array
+            # mask = Util.resize_with_padding(mask,(vel,vel))
+            if not augm:
+                mask = Util.resize_with_padding_dc(mask, (vel,vel), dc_pos) 
+                
+            mask = np.expand_dims(mask, 0).astype(np.float32)
+            mask = torch.tensor(mask)
+            
+            if  augm:
+                mask = Util.augmentation3(mask, augm_params, dc_pos)
+                # mask = mask>0.5 
+                
             Masks[b,0,:,:] = torch.round(mask)
 
         res = net( Imgs.cuda() )
-        res = torch.softmax(res,dim=1)
+        
+        res_vec = torch.reshape(res, (batch, res.size(dim=1), res.size(dim=2)*res.size(dim=3)))
+        res_vec = res_vec[:,(1,2),:]
+        res_pp = torch.softmax(res_vec,dim=1)
+        res_pp0 = torch.reshape(res_pp[:,0,:], [-1])
+        res_pp1 = torch.reshape(res_pp[:,1,:], [-1])
         
         loss = nn.CrossEntropyLoss()
         
         # output = loss( res, torch.squeeze(Masks).long().cuda() )
-        output = loss( res[:,:,:,:], torch.squeeze(Masks[:,:,:,:]).long().cuda() )
+        # output = loss( res[:,:,:,:], torch.squeeze(Masks[:,:,:,:]).long().cuda() )
+        Masks_vec = torch.reshape(torch.squeeze(Masks[:,:,:,:]).long().cuda(), (batch, res_pp.size(dim=2)))
+        Masks_vec = torch.reshape(Masks_vec, [-1])
+        
+        res_pp0 = res_pp0[Masks_vec>0]
+        res_pp1 = res_pp1[Masks_vec>0]
+        Masks_vec = Masks_vec[Masks_vec>0]
+        Masks_vec = Masks_vec-1
+        
+        res_vec = torch.cat((torch.unsqueeze(res_pp0, 0), torch.unsqueeze(res_pp1, 0)), 0)
+        output = loss(torch.unsqueeze(res_vec, 0), torch.unsqueeze(Masks_vec, 0))
+        # output = loss( res[:,:,:,:], torch.squeeze(Masks[:,:,:,:]).long().cuda() )
  
         # loss = nn.MultiLabelSoftMarginLoss()
         # output = loss(res, Util.ToOneHot(Masks, numClass=3 ).cuda())

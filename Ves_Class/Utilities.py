@@ -10,6 +10,7 @@ import cv2
 import SimpleITK as sitk
 from scipy.stats import norm
 import sys
+import copy
     
 from scipy import ndimage
 
@@ -82,10 +83,11 @@ def augmentation3(img, params, dc_pos):
     CenterCrop = params[0]['Crop_size']
     flip = params[0]['Flip']
     vel = params[0]['Output_size']
+    augm_dc_pos = copy.deepcopy(dc_pos)
     
     if flip:
         img = torch.flip(img, [len(img.size())-1])
-        dc_pos[1] = img.shape[1] - dc_pos[1]
+        augm_dc_pos[0] = img.shape[2] - augm_dc_pos[0]
     
     # img = T.CenterCrop(size=CenterCrop)(img)
     augm_img = T.functional.affine(img, angle, translate, scale, shear,  T.InterpolationMode('nearest'))
@@ -103,7 +105,7 @@ def augmentation3(img, params, dc_pos):
     Gy = np.array([[1, 0, 0], [shear, 1, 0], [0, 0, 1]])
     A = Gx@Gy@S@R
     
-    augm_dc_pos = A@np.array([[dc_pos[1]], [dc_pos[0]], [1]])
+    augm_dc_pos = A@np.array([[augm_dc_pos[0]], [augm_dc_pos[1]], [1]])
     
     augm_img_cpu = augm_img.detach().cpu().numpy().squeeze()
     augm_img_cpu = resize_with_padding_dc(augm_img_cpu, (vel,vel),
@@ -203,10 +205,10 @@ def resize_with_padding(img, expected_size):
     return img
 
 def resize_with_padding_dc(img, expected_size, positions):
-    delta_left = positions[1] - expected_size[1] // 2
-    delta_right = positions[1] + expected_size[1] // 2
-    delta_top = positions[0] - expected_size[0] // 2
-    delta_bottom = positions[0] + expected_size[0] // 2
+    delta_left = positions[0] - expected_size[0] // 2
+    delta_right = positions[0] + expected_size[0] // 2
+    delta_top = positions[1] - expected_size[1] // 2
+    delta_bottom = positions[1] + expected_size[1] // 2
     
     if delta_left > 0:
         pos_left = delta_left
@@ -288,6 +290,10 @@ def dice_coef_batch(X, Y):
     eps = 0.000001
     dice = ((2. * torch.sum(X*Y,(1, 2)) + eps) / (torch.sum(X,(1, 2)) + torch.sum(Y,(1, 2)) + eps) )
     return dice
+
+def acc_metric(X, Y):
+    acc = np.sum(X == Y) / np.size(X)
+    return acc
 
 def MASD_compute(A, B):
     
