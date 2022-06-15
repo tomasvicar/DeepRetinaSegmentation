@@ -13,6 +13,7 @@ import torchvision.transforms as T
 import pickle
 import pydicom as dcm
 from scipy.stats import norm
+import copy
 
 import Utilities as Util
 import Loaders
@@ -22,12 +23,12 @@ import Network as Network
 
 lr         = 0.001
 L2         = 0.000001
-batch      = 8
+batch      = 12
 step_size  = 200
 sigma      = 0.7
 lambda_Train = 1.0
 num_ite    = 50
-num_epch   = 500
+num_epch   = 1000
 
 
 batchTr = int(np.round(batch))
@@ -42,10 +43,10 @@ torch.cuda.empty_cache()
 
 
 version = "net_v0_0_1"
-net = torch.load(r"//mnt/Data/jakubicek/Ophtalmo/SegmMyo/Models/" + version + ".pt")
+net = torch.load("/home/chmelikj/Documents/chmelikj/Ophtalmo/DeepRetinaSegmentation/Ves_Class/Models/" + version + ".pt")
 
 
-version_new = "v0_0_2"
+version_new = "v0_0_4"
 
 
 net = net.cuda()
@@ -58,8 +59,8 @@ scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=0.1,
 data_list_1_train=[];data_list_1_test=[];
 
 # # # ## Data OPTHALMO
-path_data = '/mnt/Data/chmelikj/Ophthalmo'  # Linux bioeng358
-data_list = Loaders.CreateDataset_dcm(os.path.normpath( path_data ), '','')
+path_data = '/home/chmelikj/Documents/chmelikj/Ophtalmo/Data/data_preprocessed_dicom_12'  # Linux bioeng358
+data_list = Loaders.CreateDataset_dcm_with_DC(os.path.normpath( path_data ), '','')
 
 b = int(len(data_list)*0.80)
 data_list_1_train = data_list_1_train + data_list[1:b+1]
@@ -68,6 +69,7 @@ data_list_1_test = data_list_1_test + data_list[b:]
 
 
 diceTr_Clin=[]; diceTr_Other=[]; diceTr_Cons=[]; diceTe_Clin=[];
+accTr=[]; accTe=[];
 
 D1 = np.zeros((len(data_list_1_train),2))
 D1[:,0] = np.arange(0,len(data_list_1_train))
@@ -88,11 +90,13 @@ for epch in range(0,num_epch):
         ## Pro StT our dataset CLINIC
         Indx_Sort = Util.rand_norm_distrb(batchTr, mu1, sigma1, [0,len(data_list_1_train)]).astype('int')
         Indx_Orig = D1[Indx_Sort,0].astype('int')
-        sub_set = list(map(data_list_1_train.__getitem__, Indx_Orig))
+        sub_set = copy.deepcopy(list(map(data_list_1_train.__getitem__, Indx_Orig)))
         
         # params = (256,  186,276,  -170,170,  -40,40,-40,40,  0.9,1.2,  1.0)
         # params = (128,  108,148, -170,170,  -10,10,-10,10)
-        params = (380,  256,400,  -20,20,  -10,10,-10,10,  1.0,1.0 )
+        # params = (380,  256,400,  -20,20,  -10,10,-10,10,  1.0,1.0 )
+        # params = (300,  300,300,  -0,0,  -0,0 , -0,0,  1.0,1.0 )
+        params = (300,  300,300,  -10,10,  -30,30 , -30,30,  0.9,1.1 )
         
         loss_train, res, _, Masks = Network.Training.straightForward(sub_set, net, params, TrainMode=True, Contrast=False)
 
@@ -144,13 +148,15 @@ for epch in range(0,num_epch):
     net.train(mode=False)
    
     ### validation
-    params = (380,  380,380,  -0,0,  -0,0,-0,0,    1.0,1.0,   1.0)
+    params = (300,  300,300,  -0,0,  -0,0,-0,0,    1.0,1.0,   1.0)
+    # params = (380,  380,380,  -0,0,  -0,0,-0,0,    1.0,1.0,   1.0)
     # params = (128,  108,148, -170,170,  -10,10,-10,10)
     batchTe = 20
     random.shuffle(data_list_1_test)
     # for num in range(0,len(data_list_1_test), batchTe):
-    for num in range(0,1):   
-        sub_set = data_list_1_test[num:num+batchTe]
+    for num in range(0,1):
+        sub_set = copy.deepcopy(data_list_1_test[num:num+batchTe])
+        
         with torch.no_grad():
             
             loss_test, resTe, ImgsTe, MasksTE = Network.Training.straightForward(sub_set, net, params, TrainMode=False, Contrast=False)       
@@ -171,29 +177,53 @@ for epch in range(0,num_epch):
     # resTe = np.round( resTe.detach().cpu().numpy() )
     resTe = resTe.detach().cpu().numpy()
 
-    
+    # print('image: {:s}'.format(sub_set[0]['file_name']))
     # plt.figure
     # # plt.imshow(ImgsTe[0,0,:,:].detach().numpy(), cmap='gray')
     # plt.imshow(resTe[0,1,:,:], cmap='jet', alpha=0.5)
     # plt.imshow(resTe[0,2,:,:], cmap='jet', alpha=0.5)
     # plt.show()
     
+    resTeClass = np.zeros(resTe[:,0,:,:].shape)
+    resTeClass[resTe[:,1,:,:]>resTe[:,2,:,:]] = 1
+    resTeClass[resTe[:,1,:,:]<resTe[:,2,:,:]] = 2
+    resTeClass[MasksTE[:,0,:,:]==0] = 0
+    
+    resTeClassVec = np.reshape(resTeClass, [-1])
+    MasksTEVec = np.reshape(MasksTE.detach().cpu().numpy(), [-1])
+    resTeClassVec = resTeClassVec[MasksTEVec>0]
+    MasksTEVec = MasksTEVec[MasksTEVec>0]
+    
+    accTe1 = Util.acc_metric(resTeClassVec, MasksTE)
+    
+    accTe.append(accTe1)
+    
+    # plt.figure
+    # plt.imshow(resTe[0,0,:,:], cmap='jet')
+    # plt.show()
+    # plt.figure
+    # plt.imshow(resTe[0,1,:,:], cmap='jet')
+    # plt.show()   
+    # plt.figure
+    # plt.imshow(resTe[0,2,:,:], cmap='jet')
+    # plt.show()
     plt.figure
-    plt.imshow(resTe[0,0,:,:], cmap='jet')
+    plt.imshow(MasksTE[0,0,:,:], cmap='jet')
     plt.show()
     plt.figure
-    plt.imshow(resTe[0,1,:,:], cmap='jet')
-    plt.show()   
-    plt.figure
-    plt.imshow(resTe[0,2,:,:], cmap='jet')
+    plt.imshow(resTeClass[0,:,:], cmap='jet')
     plt.show()
+    # plt.figure
+    # plt.imshow(ImgsTe[0,3,:,:], cmap='jet')
+    # plt.show()
    
     
     plt.figure()
     plt.plot(diceTr_Clin,label='Joint Train')
     plt.plot(diceTe_Clin,label='Joint Test')
+    plt.plot(accTe,label='Accuracy Test')
 
-    plt.ylim([0.5, 0.7])
+    plt.ylim([0.1, 0.9])
     plt.legend()
     plt.show()    
     

@@ -10,6 +10,7 @@ import cv2
 import SimpleITK as sitk
 from scipy.stats import norm
 import sys
+import copy
     
 from scipy import ndimage
 
@@ -74,6 +75,46 @@ def augmentation2(img, params):
 
     return augm_img
 
+def augmentation3(img, params, dc_pos):        
+    angle = params[0]['Angle']
+    translate = params[0]['Transl']
+    scale = params[0]['Scale']
+    shear = 0
+    CenterCrop = params[0]['Crop_size']
+    flip = params[0]['Flip']
+    vel = params[0]['Output_size']
+    augm_dc_pos = copy.deepcopy(dc_pos)
+    
+    if flip:
+        img = torch.flip(img, [len(img.size())-1])
+        augm_dc_pos[0] = img.shape[2] - augm_dc_pos[0]
+    
+    # img = T.CenterCrop(size=CenterCrop)(img)
+    augm_img = T.functional.affine(img, angle, translate, scale, shear,  T.InterpolationMode('nearest'))
+    # augm_img = T.CenterCrop(size=CenterCrop)(augm_img)
+    # resize = T.Resize((*scale,*scale), T.InterpolationMode('nearest'))
+    # augm_img = resize(augm_img)
+    # augm_img = resize_with_padding_Tensor(augm_img,(vel,vel))
+    # augm_img = T.CenterCrop(size=vel)(augm_img)
+    
+    R = np.array([[np.cos(np.deg2rad(angle)), - np.sin(np.deg2rad(angle)), translate[0]],
+                  [np.sin(np.deg2rad(angle)), np.cos(np.deg2rad(angle)), translate[1]],
+                  [0, 0, 1]])
+    S = np.array([[scale, 0, 0], [0, scale, 0], [0, 0, 1]])
+    Gx = np.array([[1, shear, 0], [0, 1, 0], [0, 0, 1]])
+    Gy = np.array([[1, 0, 0], [shear, 1, 0], [0, 0, 1]])
+    A = Gx@Gy@S@R
+    
+    augm_dc_pos = A@np.array([[augm_dc_pos[0]], [augm_dc_pos[1]], [1]])
+    
+    augm_img_cpu = augm_img.detach().cpu().numpy().squeeze()
+    augm_img_cpu = resize_with_padding_dc(augm_img_cpu, (vel,vel),
+                                          [round(augm_dc_pos[0][0].tolist()),
+                                           round(augm_dc_pos[1][0].tolist())])
+    augm_img_cpu = np.expand_dims(augm_img_cpu, axis=0)
+    augm_img = torch.from_numpy(augm_img_cpu)
+
+    return augm_img
 
 def crop_min(img):
     s = min( img.shape)
@@ -163,6 +204,56 @@ def resize_with_padding(img, expected_size):
     img = crop_center(img, new_width=expected_size[0], new_height=expected_size[1])
     return img
 
+def resize_with_padding_dc(img, expected_size, positions):
+    delta_left = positions[0] - expected_size[0] // 2
+    delta_right = positions[0] + expected_size[0] // 2
+    delta_top = positions[1] - expected_size[1] // 2
+    delta_bottom = positions[1] + expected_size[1] // 2
+    
+    if delta_left > 0:
+        pos_left = delta_left
+        delta_left = 0
+    elif delta_left < 0:
+        pos_left = 0
+        delta_left = np.abs(delta_left)
+    else:
+        pos_left = 0
+        delta_left = 0
+        
+    if delta_right > img.shape[1]:
+        pos_right = delta_right + delta_left
+        delta_right = delta_right - img.shape[1]
+    elif delta_right == img.shape[1]:
+        pos_right = delta_right + delta_left
+        delta_right = 0
+    else:
+        pos_right = delta_right + delta_left
+        delta_right = 0
+        
+    if delta_top > 0:
+        pos_top = delta_top
+        delta_top = 0
+    elif delta_top < 0:
+        pos_top = 0
+        delta_top = np.abs(delta_top)
+    else:
+        pos_top = 0
+        delta_top = 0
+        
+    if delta_bottom > img.shape[0]:
+        pos_bottom = delta_bottom + delta_top
+        delta_bottom = delta_bottom - img.shape[0]
+    elif delta_bottom == img.shape[0]:
+        pos_bottom = delta_bottom + delta_top
+        delta_bottom = 0
+    else:
+        pos_bottom = delta_bottom + delta_top
+        delta_bottom = 0    
+
+    img_new = np.pad(img, ((delta_top, delta_bottom), (delta_left, delta_right)), mode='constant')
+    img_new = img_new[pos_top:pos_bottom, pos_left:pos_right, ...]
+    return img_new
+
 
 def rot_transl(img, r, transl, flip=False, invers=False):
     
@@ -199,6 +290,10 @@ def dice_coef_batch(X, Y):
     eps = 0.000001
     dice = ((2. * torch.sum(X*Y,(1, 2)) + eps) / (torch.sum(X,(1, 2)) + torch.sum(Y,(1, 2)) + eps) )
     return dice
+
+def acc_metric(X, Y):
+    acc = np.sum(X == Y) / np.size(X)
+    return acc
 
 def MASD_compute(A, B):
     
