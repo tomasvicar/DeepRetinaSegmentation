@@ -2,8 +2,8 @@ close all;clear all;clc;
 
 path = 'G:\Sdílené disky\Retina GAČR\Data\databases\';
 
-resolution = 12;  % pixels/degree - e.g. 25
-output_folder = 'data_preprocessed_dicom_12';
+resolution = 25;  % pixels/degree - e.g. 25
+output_folder = 'data_preprocessed_dicom_25';
 
 mkdir(output_folder)
 addpath('matlab_preprocessing')

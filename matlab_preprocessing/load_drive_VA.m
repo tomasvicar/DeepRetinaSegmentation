@@ -55,7 +55,9 @@ for i=1:length(images)
     va(va_tmp(:,:,1)>192 & va_tmp(:,:,2)<250) = 1;
     va(va_tmp(:,:,3)>192 & va_tmp(:,:,2)<250) = 2;
     
-    [I,V,~,~,fov]=image_adjustment(im,rc,degree,ves,va,0, 'drive', fov);
+    [I,V,VA,~,fov]=image_adjustment(im,rc,degree,ves,va,0, 'drive', fov);
+    VA = uint8(VA).*uint8(V);
+    V(VA==0) = 0;
     I = uint16(round(I.*2.^12));
     
     num=in(1:2);
