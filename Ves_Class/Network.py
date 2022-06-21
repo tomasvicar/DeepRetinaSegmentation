@@ -170,7 +170,7 @@ class Training():
             
             t=0; sl=0
             for ch, ch_path in enumerate(img_paths):
-             
+                # print('{:s}'.format(ch_path))
                 dataset = dcm.dcmread(ch_path)
                 img = dataset.pixel_array.astype(dtype='float32')
                                 

@@ -250,8 +250,8 @@ def resize_with_padding_dc(img, expected_size, positions):
         pos_bottom = delta_bottom + delta_top
         delta_bottom = 0    
 
-    img_new = np.pad(img, ((delta_top, delta_bottom), (delta_left, delta_right)), mode='constant')
-    img_new = img_new[pos_top:pos_bottom, pos_left:pos_right, ...]
+    img_new = np.pad(img, ((int(delta_top), int(delta_bottom)), (int(delta_left), int(delta_right))), mode='constant')
+    img_new = img_new[int(pos_top):int(pos_bottom), int(pos_left):int(pos_right)]
     return img_new
 
 

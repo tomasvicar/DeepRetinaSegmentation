@@ -21,15 +21,17 @@ import Network as Network
 # import Network_v9 as Network
 
 
-lr         = 0.001
+lr         = 0.00005
 L2         = 0.000001
-batch      = 12
+batch      = 6
 step_size  = 200
 sigma      = 0.7
 lambda_Train = 1.0
 num_ite    = 50
-num_epch   = 1000
+num_epch   = 200
+crop_size  = 450
 
+# np.random.seed(2021)
 
 batchTr = int(np.round(batch))
 step_size = int(np.round(step_size))
@@ -42,11 +44,11 @@ torch.cuda.empty_cache()
 # Network.init_weights(net,init_type= 'xavier', gain=0.02)
 
 
-version = "net_v0_0_1"
+version = "net_v0_0_5"
 net = torch.load("/home/chmelikj/Documents/chmelikj/Ophtalmo/DeepRetinaSegmentation/Ves_Class/Models/" + version + ".pt")
 
 
-version_new = "v0_0_4"
+version_new = "v0_0_6"
 
 
 net = net.cuda()
@@ -59,7 +61,7 @@ scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=0.1,
 data_list_1_train=[];data_list_1_test=[];
 
 # # # ## Data OPTHALMO
-path_data = '/home/chmelikj/Documents/chmelikj/Ophtalmo/Data/data_preprocessed_dicom_12'  # Linux bioeng358
+path_data = '/home/chmelikj/Documents/chmelikj/Ophtalmo/Data/data_preprocessed_dicom_25'  # Linux bioeng358
 data_list = Loaders.CreateDataset_dcm_with_DC(os.path.normpath( path_data ), '','')
 
 b = int(len(data_list)*0.80)
@@ -96,10 +98,9 @@ for epch in range(0,num_epch):
         # params = (128,  108,148, -170,170,  -10,10,-10,10)
         # params = (380,  256,400,  -20,20,  -10,10,-10,10,  1.0,1.0 )
         # params = (300,  300,300,  -0,0,  -0,0 , -0,0,  1.0,1.0 )
-        params = (300,  300,300,  -10,10,  -30,30 , -30,30,  0.9,1.1 )
+        params = (crop_size,  crop_size,crop_size,  -10,10,  -crop_size//10,crop_size//10 , -crop_size//10,crop_size//10,  0.9,1.1 )
         
         loss_train, res, _, Masks = Network.Training.straightForward(sub_set, net, params, TrainMode=True, Contrast=False)
-
                                            
         # dice = torch.sum(Util.ToOneHot(Masks, numClass=3 ).cuda()  (res>0.5) )
          
@@ -114,7 +115,7 @@ for epch in range(0,num_epch):
         
         D1[np.array(Indx_Sort),1] = np.array(10-metric)
 
-        del Masks, res
+        # del Masks, res
 
         
         D1 = D1[D1[:, 1].argsort()]
@@ -141,6 +142,19 @@ for epch in range(0,num_epch):
     # plt.ylim([0.0, 1.1])
     # plt.show()
 
+    resCPU = res.detach().cpu().numpy()
+    MasksCPU = Masks.detach().cpu().numpy()
+    resClass = np.zeros(resCPU[:,0,:,:].shape)
+    resClass[resCPU[:,1,:,:]>resCPU[:,2,:,:]] = 1
+    resClass[resCPU[:,1,:,:]<resCPU[:,2,:,:]] = 2
+    resClass[MasksCPU[:,0,:,:]==0] = 0
+    
+    plt.figure
+    plt.imshow(MasksCPU[0,0,:,:], cmap='jet')
+    plt.show()
+    plt.figure
+    plt.imshow(resClass[0,:,:], cmap='jet')
+    plt.show()
     
     if epch>0:
         scheduler.step()
@@ -148,7 +162,7 @@ for epch in range(0,num_epch):
     net.train(mode=False)
    
     ### validation
-    params = (300,  300,300,  -0,0,  -0,0,-0,0,    1.0,1.0,   1.0)
+    params = (crop_size,  crop_size,crop_size,  -0,0,  -0,0,-0,0,    1.0,1.0,   1.0)
     # params = (380,  380,380,  -0,0,  -0,0,-0,0,    1.0,1.0,   1.0)
     # params = (128,  108,148, -170,170,  -10,10,-10,10)
     batchTe = 20
@@ -194,7 +208,7 @@ for epch in range(0,num_epch):
     resTeClassVec = resTeClassVec[MasksTEVec>0]
     MasksTEVec = MasksTEVec[MasksTEVec>0]
     
-    accTe1 = Util.acc_metric(resTeClassVec, MasksTE)
+    accTe1 = Util.acc_metric(resTeClassVec, MasksTEVec)
     
     accTe.append(accTe1)
     
@@ -223,7 +237,7 @@ for epch in range(0,num_epch):
     plt.plot(diceTe_Clin,label='Joint Test')
     plt.plot(accTe,label='Accuracy Test')
 
-    plt.ylim([0.1, 0.9])
+    plt.ylim([0.3, 1.0])
     plt.legend()
     plt.show()    
     
