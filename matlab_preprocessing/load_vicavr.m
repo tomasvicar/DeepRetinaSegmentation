@@ -15,8 +15,8 @@ for i=1:length(images)
     
     imname= [ 'vicavr_na_na_'  in(6:end) ];
     
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,[out_f '\Images\' imname ])
+    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
 
 end
 end

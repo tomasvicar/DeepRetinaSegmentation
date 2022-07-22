@@ -20,8 +20,8 @@ for i=1:length(images)
     
     imname= [ 'eophtha_na_ex_'  in  ];
 
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,[out_f '\Images\' imname ])
+    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
 end
 
 %% E-Ophtha MA
@@ -43,8 +43,8 @@ for i=1:length(images)
     imname= [ 'eophtha_na_ma_'  in  ];
 
 
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,[out_f '\Images\' imname ])
+    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
 end
 %% E-Ophtha healthy
 folders = dir([path 'E-Ophtha\e_optha_EX\healthy\']);
@@ -66,7 +66,7 @@ for i=1:length(images)
     imname= [ 'eophtha_na_healthy_'  in  ];
 
 
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,[out_f '\Images\' imname ])
+    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
 end
 end

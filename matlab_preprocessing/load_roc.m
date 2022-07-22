@@ -18,8 +18,8 @@ for i=1:length(images)
     ind=strfind(in,'_');
     imname= [ 'roc_' in(ind+1:end) '_na_'  in(6:ind)  ];
 
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,[out_f '\Images\' imname ])
+    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
 
 end
 end

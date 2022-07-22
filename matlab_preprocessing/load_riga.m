@@ -71,16 +71,16 @@ for i=1:length(images)
         [I,D,C,~, fov]=image_adjustment(im,rc,degree,disc,cup,0, 'riga', 0); 
 
         if h==1
-        imwrite_single(D,[out_f '\Disc\' imname '_disc.tiff'])
-        imwrite_single(C,[out_f '\Cup\' imname '_cup.tiff'])
+        imwrite_2_h5(D,[out_f '\Disc\' imname '_disc'])
+        imwrite_2_h5(C,[out_f '\Cup\' imname '_cup'])
         else
-        imwrite_single(D,[out_f '\Disc\' imname '_disc' num2str(h) '.tiff'])
-        imwrite_single(C,[out_f '\Cup\' imname '_cup' num2str(h) '.tiff'])
+        imwrite_2_h5(D,[out_f '\Disc\' imname '_disc' num2str(h) ])
+        imwrite_2_h5(C,[out_f '\Cup\' imname '_cup' num2str(h) ])
         end       
     end
     
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
+    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,[out_f '\Images\' imname ])
 
 end
 end

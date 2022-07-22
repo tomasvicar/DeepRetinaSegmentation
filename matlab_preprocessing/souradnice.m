@@ -136,3 +136,4 @@ Z=sqrt(X.^2 + Y.^2);
 prumer=round(mode(Z(logical(hr))))+1;
 end
     
+

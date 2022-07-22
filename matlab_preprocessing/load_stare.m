@@ -33,13 +33,13 @@ for i=1:length(images)
     imname= [ 'stare_na_na_'  in ];
 
     if length(shoda)==2
-    imwrite_single(V1,[out_f '\Vessels\' imname '_ves.tiff'])
-    imwrite_single(V2,[out_f '\Vessels\' imname '_ves2.tiff'])
+    imwrite_2_h5(V1,[out_f '\Vessels\' imname '_ves'])
+    imwrite_2_h5(V2,[out_f '\Vessels\' imname '_ves2'])
     elseif length(shoda)==1
-    imwrite_single(V1,[out_f '\Vessels\' imname '_ves.tiff'])
+    imwrite_2_h5(V1,[out_f '\Vessels\' imname '_ves'])
     end
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,[out_f '\Images\' imname ])
+    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
 
 end
 end

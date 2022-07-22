@@ -17,9 +17,10 @@ for i=1:length(images)
     in=images(i).name;
     imname= [ 'avrdb_na_na_'  in(end-3:end)  ];
 
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(V,[out_f '\Vessels\' imname '_ves.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,[out_f '\Images\' imname ])
+    imwrite_2_h5(V,[out_f '\Vessels\' imname '_ves'])
+    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
 
 end
 end
+
