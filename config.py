@@ -1,6 +1,8 @@
 import numpy as np
 import os
 
+
+
 class Config:
     
     model_save_dir='../tmp'
