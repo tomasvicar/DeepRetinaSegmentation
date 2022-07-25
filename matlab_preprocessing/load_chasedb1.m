@@ -17,10 +17,10 @@ for i=1:length(images)
     num(strfind(num,'_'))=[];
     imname= [ 'chasedb1_na_child_'  num  ];
     
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(V1,[out_f '\Vessels\' imname '_ves'])
-    imwrite_2_h5(V2,[out_f '\Vessels\' imname '_ves2'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(V1,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(V2,out_f, ['\Vessels\' imname '_ves2'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 end
 
 end

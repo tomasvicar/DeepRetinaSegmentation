@@ -21,10 +21,10 @@ for i=1:length(images)
     
     imname= [ 'iostar_na_na_'  in(6:7) ];
     
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(V,[out_f '\Vessels\' imname '_ves'])
-    imwrite_2_h5(D,[out_f '\Disc\' imname '_disc'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(V,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 end

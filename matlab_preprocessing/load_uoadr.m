@@ -36,11 +36,11 @@ for i=1:length(images)
     C(round(0.97*(size(I,1)):end),1:round(0.25*(size(I,1))),:)=0;
     fov(round(0.97*(size(I,1)):end),1:round(0.25*(size(I,1))),:)=0;
     
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(V,[out_f '\Vessels\' imname '_ves'])
-    imwrite_2_h5(D,[out_f '\Disc\' imname '_disc'])
-    imwrite_2_h5(C,[out_f '\Cup\' imname '_cup'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(V,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(C,out_f, ['\Cup\' imname '_cup'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 end

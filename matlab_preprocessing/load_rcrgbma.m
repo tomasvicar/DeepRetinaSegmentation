@@ -15,8 +15,8 @@ for i=1:length(images)
     in=images(i).name(ind+1:end-5);
     imname= [ 'rcrgbma_na_na_'  in ];
     
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 end

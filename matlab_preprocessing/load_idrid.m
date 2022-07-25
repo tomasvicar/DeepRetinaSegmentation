@@ -15,8 +15,8 @@ for i=1:length(images)
     num=in(ind+1:end);
     imname= [ 'idrid_na_na_ctra'  num  ];
         
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 
@@ -34,8 +34,8 @@ for i=1:length(images)
     num=in(ind+1:end);
     imname= [ 'idrid_na_na_ctes'  num  ];
         
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 end

@@ -24,11 +24,11 @@ for i=1:length(images)
     num(strfind(num,'_'))='0';
     imname= [ 'aria_na_healthy_'  num  ];
 
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(V1,[out_f '\Vessels\' imname '_ves.tiff'])
-    imwrite_single(V2,[out_f '\Vessels\' imname '_ves2.tiff'])
-    imwrite_single(D,[out_f '\Disc\' imname '_disc.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(V1,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(V2,out_f, ['\Vessels\' imname '_ves2'])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 
@@ -47,10 +47,10 @@ for i=1:length(images)
     num(strfind(num,'_'))='0';
     imname= [ 'aria_na_amd_'  num  ];
     
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(V1,[out_f '\Vessels\' imname '_ves.tiff'])
-    imwrite_single(V2,[out_f '\Vessels\' imname '_ves2.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(V1,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(V2,out_f, ['\Vessels\' imname '_ves2'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 end
 
 %% ARIA DIABETIC
@@ -86,11 +86,11 @@ for i=1:length(images)
     end
     imname= [ 'aria_na_diabetes_'  num  ];
   
-    imwrite_single(I,[out_f '\Images\' imname '.tiff'])
-    imwrite_single(V1,[out_f '\Vessels\' imname '_ves.tiff'])
-    imwrite_single(V2,[out_f '\Vessels\' imname '_ves2.tiff'])
-    imwrite_single(D,[out_f '\Disc\' imname '_disc.tiff'])
-    imwrite_single(fov,[out_f '\Fov\' imname '_fov.tiff'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(V1,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(V2,out_f, ['\Vessels\' imname '_ves2'])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 end

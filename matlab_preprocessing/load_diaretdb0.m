@@ -18,8 +18,8 @@ for i=1:length(images)
      imname= [ 'diaretdb0_na_dr_'  num  ];
     end
     
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 end

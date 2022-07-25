@@ -3,7 +3,7 @@ clc;clear all;close all;
 listing = subdir('.');
 
 
-for file_num = 5:length(listing)
+for file_num = 1:length(listing)
     filename = listing(file_num).name;
     disp(filename)
     if contains(filename,'replace_imwrite_single.m')||contains(filename,'MAIN.m')
@@ -24,6 +24,8 @@ for file_num = 5:length(listing)
             s = replace(s,'imwrite_single(','imwrite_2_h5(');
             s = replace(s,'''.tiff''','');
             s = replace(s,'.tiff','');
+            s = replace(s,'[out_f ','out_f, [');
+
         end
         fprintf(fid,'%s', s );
         fprintf(fid, '\r\n' );

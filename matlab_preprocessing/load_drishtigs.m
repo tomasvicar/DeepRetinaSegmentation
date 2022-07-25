@@ -15,10 +15,10 @@ for i=1:length(images)
     num=in(ind+1:end);
     imname= [ 'drishti_train_na_'  num  ];
 
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(C,[out_f '\Cup\' imname '_cup'])
-    imwrite_2_h5(D,[out_f '\Disc\' imname '_disc'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(C,out_f, ['\Cup\' imname '_cup'])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 end
 
 %% Drihsti-GS Test
@@ -35,9 +35,9 @@ for i=1:length(images)
     num=in(ind+1:end);
     imname= [ 'drishti_test_na_'  num  ];
 
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(C,[out_f '\Cup\' imname '_cup'])
-    imwrite_2_h5(D,[out_f '\Disc\' imname '_disc'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(C,out_f, ['\Cup\' imname '_cup'])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 end
 end

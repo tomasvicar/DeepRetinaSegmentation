@@ -27,9 +27,9 @@ for i=1:length(images)
     imname= [ 'drhagis_na_dramd_'  in  ];    
     end
     
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(V,[out_f '\Vessels\' imname '_ves'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(V,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 end

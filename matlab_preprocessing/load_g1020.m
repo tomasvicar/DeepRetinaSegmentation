@@ -49,13 +49,13 @@ for i=1:length(images)
     imname= [ 'g1020_na_na_'  in(6:end)  ];
 
 
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
     if length(D)>1
-    imwrite_2_h5(D,[out_f '\Disc\' imname '_disc'])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
     end
     if length(C)>1
-    imwrite_2_h5(C,[out_f '\Cup\' imname '_cup'])
+    imwrite_2_h5(C,out_f, ['\Cup\' imname '_cup'])
     end
 end
 

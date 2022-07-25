@@ -137,3 +137,4 @@ prumer=round(mode(Z(logical(hr))))+1;
 end
     
 
+

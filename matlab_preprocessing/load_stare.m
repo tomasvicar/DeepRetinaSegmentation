@@ -12,6 +12,10 @@ end
 
 for i=1:length(images)
 
+    if contains(images(i).name,'im0261')
+        continue;
+    end
+
     im=imread([images(i).folder '\' images(i).name ]);
     
     in=images(i).name(1:end-4);
@@ -33,13 +37,13 @@ for i=1:length(images)
     imname= [ 'stare_na_na_'  in ];
 
     if length(shoda)==2
-    imwrite_2_h5(V1,[out_f '\Vessels\' imname '_ves'])
-    imwrite_2_h5(V2,[out_f '\Vessels\' imname '_ves2'])
+    imwrite_2_h5(V1,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(V2,out_f, ['\Vessels\' imname '_ves2'])
     elseif length(shoda)==1
-    imwrite_2_h5(V1,[out_f '\Vessels\' imname '_ves'])
+    imwrite_2_h5(V1,out_f, ['\Vessels\' imname '_ves'])
     end
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 end

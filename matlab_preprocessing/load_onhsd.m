@@ -72,12 +72,12 @@ for i=1:length(images)
     imname= [ 'onhsd_na_na_'  in  ];   
     
    
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(D1,[out_f '\Disc\' imname '_disc'])
-    imwrite_2_h5(D2,[out_f '\Disc\' imname '_disc2'])
-    imwrite_2_h5(D3,[out_f '\Disc\' imname '_disc3'])
-    imwrite_2_h5(D4,[out_f '\Disc\' imname '_disc4'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(D1,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(D2,out_f, ['\Disc\' imname '_disc2'])
+    imwrite_2_h5(D3,out_f, ['\Disc\' imname '_disc3'])
+    imwrite_2_h5(D4,out_f, ['\Disc\' imname '_disc4'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
     
 end
 

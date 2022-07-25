@@ -25,10 +25,10 @@ for i=1:length(images)
     imname= [ 'refuge_train_healthy_'  in  ];   
     end
    
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(D,[out_f '\Disc\' imname '_disc'])
-    imwrite_2_h5(C,[out_f '\Cup\' imname '_cup'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(C,out_f, ['\Cup\' imname '_cup'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 
@@ -50,10 +50,10 @@ for i=1:length(images)
     
     imname= [ 'refuge_validation_na_'  in  ];
        
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(D,[out_f '\Disc\' imname '_disc'])
-    imwrite_2_h5(C,[out_f '\Cup\' imname '_cup'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(C,out_f, ['\Cup\' imname '_cup'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 
@@ -81,10 +81,10 @@ for i=1:length(images)
      imname= [ 'refuge_test_glaucoma_'  in  ];
     end
        
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(D,[out_f '\Disc\' imname '_disc'])
-    imwrite_2_h5(C,[out_f '\Cup\' imname '_cup'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(D,out_f, ['\Disc\' imname '_disc'])
+    imwrite_2_h5(C,out_f, ['\Cup\' imname '_cup'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 
 end
 end

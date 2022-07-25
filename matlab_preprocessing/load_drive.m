@@ -18,9 +18,9 @@ for i=1:length(images)
     imname= [ 'drive_train_healthy_'  num  ];
     end
 
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(V,[out_f '\Vessels\' imname '_ves'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(V,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 end
 %% DRIVE Test
 images = dir([path 'DRIVE\test\images\*.bmp']);
@@ -40,9 +40,9 @@ for i=1:length(images)
     imname= [ 'drive_test_healthy_'  num  ];
     end
 
-    imwrite_2_h5(I,[out_f '\Images\' imname ])
-    imwrite_2_h5(V,[out_f '\Vessels\' imname '_ves'])
-    imwrite_2_h5(V2,[out_f '\Vessels\' imname '_ves2'])
-    imwrite_2_h5(fov,[out_f '\Fov\' imname '_fov'])
+    imwrite_2_h5(I,out_f, ['\Images\' imname ])
+    imwrite_2_h5(V,out_f, ['\Vessels\' imname '_ves'])
+    imwrite_2_h5(V2,out_f, ['\Vessels\' imname '_ves2'])
+    imwrite_2_h5(fov,out_f, ['\Fov\' imname '_fov'])
 end
 end
