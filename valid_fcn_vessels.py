@@ -1,24 +1,21 @@
 import os
-from skimage.io import imread
 from skimage.io import imsave
 import numpy as np
 import torch 
 from scipy.signal import convolve2d 
 from sklearn.metrics import roc_auc_score
-import cv2
-from skimage.color import rgb2gray
 import h5py
+import matplotlib.pyplot as plt
 
-
-def test_fcn_vessels(save_folder, config, model_name, data_names):
+def valid_fcn_vessels(save_folder, config, model_name, data_names):
     
-    device = torch.device('cuda:0')
+    device = config.device
 
     model=torch.load(model_name)
     model.eval()
     model=model.to(device)
     
-    patch_size = model.config.patch_size  ### larger->faster, but need more ram (gpu ram)
+    patch_size = model.config.patch_size  
     border = 17
     
     
@@ -42,35 +39,47 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
     
     
         
-    for name_num,name in enumerate(data_names):
+    for name_num,name_mask in enumerate(data_names):
         
 
         
-        h5data_file = model.config.data_path + '/' +  'dataset.hdf5'
+        h5data_file = config.data_path
         
         with h5py.File(h5data_file,"r") as h5data:
             
-            tmp = name.split('/')
-            mask = h5data[tmp[0]][tmp[1]][:,:]
+            groups_mask = name_mask.split('/');
+            
+            name_img = '_'.join(name_mask.split('_')[:-1])
+            if not config.Gauss_and_Clahe:
+                name_img = name_img.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
+            else:
+                name_img = name_img.replace('Vessels','Images_Gauss_and_Clahe').replace('Disc','Images_Gauss_and_Clahe').replace('Cup','Images_Gauss_and_Clahe') + '_gc'
+            groups_img = name_img.split('/');
+            
+            name_fov = '_'.join(name_mask.split('_')[:-1]) + '_fov'
+            name_fov = name_fov.replace('Vessels','Fov').replace('Disc','Fov').replace('Cup','Fov')
+            groups_fov = name_fov.split('/')
+            
+            
+            
+            
+            mask = h5data[groups_mask[0]][groups_mask[1]][:,:]
             mask = np.transpose(mask,(1,0))
-            mask = (mask>0).astype(np.uint8)
-            name_tmp = '_'.join(name.split('_')[:-1])
-            name_tmp = name_tmp.replace('Vessels','Images').replace('Disc','Images').replace('Cup','Images')
-        
-            name_save = save_folder + '/' + os.path.split(name_tmp)[1] + '.png'
-        
-            tmp = name_tmp.split('/') 
-            img = h5data[tmp[0]][tmp[1]][:,:,:]
+            mask = (mask > 0).astype(np.uint8)
+            
+            img = h5data[groups_img[0]][groups_img[1]][:,:,:]
             img = np.transpose(img,(2,1,0))
+            img = img.astype(np.float64)/255 - 0.5
             
             
             
-            name_tmp = '_'.join(name.split('_')[:-1]) + '_fov'
-            name_tmp = name_tmp.replace('Vessels','Fov').replace('Disc','Fov').replace('Cup','Fov')
-            tmp = name_tmp.split('/')
-            fov = h5data[tmp[0]][tmp[1]][:,:]
+            fov = h5data[groups_fov[0]][groups_fov[1]][:,:]
             fov = np.transpose(fov,(1,0))
             fov = (fov>0).astype(np.uint8)
+            
+            
+        
+            name_save = save_folder + '/' + os.path.split(name_img)[1] + '.png'
         
         
         img_size=img.shape
@@ -106,46 +115,8 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         for corner in corners:
             
             subimg = img[corner[0]:corner[0]+patch_size,corner[1]:corner[1]+patch_size,:]
-            
-            
-            if model.config.img_type == 'rgb':
-                pass
-            elif model.config.img_type == 'green':
-                subimg = subimg[:,:,1]
-                subimg = np.expand_dims(subimg,2)
-            elif model.config.img_type == 'gray':  
-                subimg = rgb2gray(subimg)
-                subimg = np.expand_dims(subimg,2)
-            else:
-                raise Exception('incorect image type')
-                
-                
-            if model.config.clahe:
-            
-                if subimg.shape[2]==1:
-                    
-                    
-                    clahe = cv2.createCLAHE(clipLimit=model.config.clahe_clip,tileGridSize=(model.config.clahe_grid,model.config.clahe_grid))
-                    subimg = clahe.apply(subimg[:,:,0])
-                    
-                    subimg = np.expand_dims(subimg,2)
-                    
-                else:
-                    
-                    
-                    planes = cv2.split(subimg)
-            
-                    clahe = cv2.createCLAHE(clipLimit=model.config.clahe_clip,tileGridSize=(model.config.clahe_grid,model.config.clahe_grid))
-                    
-                    planes[0] = clahe.apply(planes[0])
-                    planes[1] = clahe.apply(planes[1])
-                    planes[2] = clahe.apply(planes[2])
-                    
-                    subimg = cv2.merge(planes)
 
-                
-                
-            subimg = subimg.astype(np.float32)/255 - 0.5
+            subimg = subimg.astype(np.float32)
             
             subimg = torch.from_numpy(np.transpose(subimg,(2,0,1)).astype(np.float32))
             
@@ -199,7 +170,21 @@ def test_fcn_vessels(save_folder, config, model_name, data_names):
         
         
     return accs,aucs,dices,tps,fps,fns,tns
+
+
+
+if __name__ == "__main__":
         
-        
-        
+    from DataSpliter import DataSpliter
     
+    model_name = r"C:\Data\Vicar\retina_vessels_segmentation\best_models\norm_all_1_4_0.00008_gpu_7930869760.00000_train_0.31525_valid_0.33181.pt"
+     
+    
+    
+    model=torch.load(model_name)
+    config = model.config
+    
+    data_split = DataSpliter.split_data(data_type=DataSpliter.DATA_TYPE_VESSELS)
+    
+     
+    accs,aucs,dices,tps,fps,fns,tns = valid_fcn_vessels('../' + 'tmpx' + '/valid_results', config, model_name, data_split['valid'])

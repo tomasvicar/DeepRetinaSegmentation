@@ -8,7 +8,7 @@ info = h5info(data_filename,'/Fov');
 img_names = {info.Datasets(:).Name};
 img_names = cellfun(@(x) replace(x,'_fov',''),img_names,UniformOutput=false);
 
-for img_num = 3641:length(img_names)
+for img_num = 1:length(img_names)
     disp([num2str(img_num) ' / ' num2str(length(img_names))])
 
     img_name = img_names{img_num};

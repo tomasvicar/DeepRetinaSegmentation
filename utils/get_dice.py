@@ -15,10 +15,3 @@ def get_dice(results,target):
     
     
     return dice
-    
-    
-    
-    
-    
-    
-    
