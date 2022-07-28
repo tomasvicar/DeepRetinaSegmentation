@@ -130,8 +130,8 @@ def train(config,data_split):
     
     shutil.copyfile(best_model_name,best_model_name_new)
     
-    if os.path.isdir(config.model_save_dir):
-        shutil.rmtree(config.model_save_dir) 
+    # if os.path.isdir(config.model_save_dir):
+    #     shutil.rmtree(config.model_save_dir) 
         
         
     return best_model_name_new

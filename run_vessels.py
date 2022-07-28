@@ -1,4 +1,5 @@
 
+
 import numpy as np
 import matplotlib.pyplot as plt
 import json
@@ -39,69 +40,12 @@ def train_one_model(config,it):
 
 
 
-    
-
-
-
-class Wrapper(object):
-    def __init__(self, config, iter_init=0):
-        self.iter= iter_init
-        self.config = config
-
-    def __call__(self, **params_in):
-        
-        config = self.config
-        
-        
-        for key in list(params_in.keys()):
-            
-            
-            setattr(config,key,params_in[key]) 
-
-        
-        config.init_lr = 10**(-config.init_lr)
-            
-        config.patch_size = int(32* np.round(config.patch_size))
-        
-        config.filters = int(np.round(config.filters))
-        
-        config.depth = int(np.round(config.depth))
-        
-        
-        if config.rotate>0.5:
-            config.rotate = True
-        else:
-            config.rotate = False
-        
-            
-
-        self.iter = self.iter + 1
-        return train_one_model(config, self.iter)
-
-
-
-
-
-
 
 
 
 if __name__ == "__main__":
     
 
-
-    pbounds = {'init_lr':[2,4], 
-               'patch_size':[2,7],
-               'filters':[16,64],
-               'scale_deform':[0,0.4],
-               'shear_deform':[0,0.3],
-               'rotate':[0,1],
-               'multipy':[0,0.3],
-               'add':[0,0.3],
-               'sharp_blur':[0,2],
-               'depth':[2,5],
-                }
-    
     
     config = Config()
     
@@ -138,24 +82,16 @@ if __name__ == "__main__":
     if not os.path.isdir(final_dir):
         os.makedirs(final_dir) 
     
-    optimizer_bayes = BayesianOptimization(f=Wrapper(config),pbounds=pbounds,random_state=0)
-    
-    logger_bayes = JSONLogger(path= final_dir + os.sep +'/opt_' + config.main_name + '.json')
-    optimizer_bayes.subscribe(Events.OPTIMIZATION_STEP, logger_bayes)
+    value = train_one_model(config, 0)
   
-    optimizer_bayes.maximize(init_points=config.init_points,n_iter=config.n_iter)
-    
-    best_iter = np.argmax([x['target'] for x in optimizer_bayes.res])
+    best_iter = 0
     best_name = config.best_models_dir + os.sep + config.main_name + '_' + str(best_iter)
     best_name = glob(best_name + '*.pt')[0]
     
     
+    
     shutil.copy(best_name, final_dir)
     with open(final_dir + os.sep + config.main_name + '_valid_res.json', 'w') as json_file:
-        json.dump(optimizer_bayes.max, json_file)
+        json.dump(value, json_file)
     
     
-    
-    
-    
-

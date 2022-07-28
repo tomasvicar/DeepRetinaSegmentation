@@ -19,8 +19,8 @@ class Config:
     results_folder = '../results'
     
     
-    init_points = 3
-    n_iter = 1
+    init_points = 5
+    n_iter = 20
     
     split_ratio_train_valid_test=[8,2,0] 
     
@@ -41,8 +41,8 @@ class Config:
     
 
     init_lr = 1e-3
-    # lr_changes_list = np.cumsum([40,20,10,5])
-    lr_changes_list = np.cumsum([1,1])
+    lr_changes_list = np.cumsum([40,20,10,5])
+    # lr_changes_list = np.cumsum([1,1])
 
     
     gamma = 0.1
@@ -72,10 +72,11 @@ class Config:
     
 
 
-    filters = 32
+    filters = 64
     depth = 5
     
     weight_decay = 1e-6
     
 
     Gauss_and_Clahe = True
+    data_use = 'all'
