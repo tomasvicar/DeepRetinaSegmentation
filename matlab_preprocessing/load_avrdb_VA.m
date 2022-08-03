@@ -40,6 +40,7 @@ for i=1:length(images)
     [I,V,VA,~,fov]=image_adjustment(im,rc,degree,ves,va,0, 'avrdb',0);
     VA = uint8(VA).*uint8(V);
     V(VA==0) = 0;
+    I = local_contrast_and_clahe(I,fov>0);
     I = uint16(round(I.*2.^12));
 
     in=images(i).name;

@@ -27,6 +27,7 @@ for i=1:length(images)
     [I,V,VA,~,fov]=image_adjustment(im,rc,degree,ves,va,0, 'iostar',fov);
     VA = uint8(VA).*uint8(V);
     V(VA==0) = 0;
+    I = local_contrast_and_clahe(I,fov>0);
     I = uint16(round(I.*2.^12));
     
     imname= [ 'iostar_'  in(6:7) ];
