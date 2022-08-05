@@ -90,3 +90,27 @@ def CreateDataset_dcm_with_DC(path_data, text1, text2):
                                               'dc_pos': dc_pos} )
             
     return data_list_tr
+
+# create dataset in dicom for prediction
+def CreateDataset_dcm_predict(pat_name, text1, text2):
+    data_list_te = []
+    f = os.listdir(pat_name)
+    if pat_name.find(text1)>=0:
+        for _,file in enumerate(f):
+            if file.find('_R')>0:
+                if file.find(text2)>=0:
+                    path_maps=[]
+                    
+                    path_img = os.path.join(pat_name, file)
+                    name = file.replace('_R.dcm','')
+                    
+                    path_maps.append( path_img )
+                    path_maps.append( path_img.replace('R','G') )
+                    path_maps.append( path_img.replace('R','B') )
+                    path_maps.append( path_img.replace('R','ves') )
+                    
+                    data_list_te.append( {'img_path': path_maps,
+                                          'pat_name': pat_name,
+                                          'file_name': name} )
+            
+    return data_list_te

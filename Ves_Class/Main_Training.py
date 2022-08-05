@@ -1,18 +1,11 @@
-#for training version 3, ACDC, StT new
-
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import SimpleITK as sitk
 import torch
-from torch.utils import data
 import torch.optim as optim
-import glob
+
 import random
-import torchvision.transforms as T
 import pickle
-import pydicom as dcm
-from scipy.stats import norm
 import copy
 
 import Utilities as Util
@@ -21,103 +14,120 @@ import Network as Network
 # import Network_v9 as Network
 
 
-lr         = 0.00005
-L2         = 0.000001
-batch      = 6
-step_size  = 200
-sigma      = 0.7
-lambda_Train = 1.0
-num_ite    = 50
-num_epch   = 200
-crop_size  = 450
+params = {'optim_lr':       0.0000002,
+          'optim_L2':       0.000001,
+          'optim_type':     'Adam',
+          'loss_type':      'CrossEntropy',
+          'batchTr':        6,
+          'batchVal':      20,
+          'sch_step_size':200,
+          'sch_gamma':    0.1,
+          'sch_type':       'StepLR',
+          'hdm_sigma':      0.7,
+          'lambda_Train':   1.0,
+          'num_ite':       50,
+          'num_epch':    1000,
+          'aug_crop_size':450,
+          'aug_rot_angle': 10,
+          'aug_trans_%':  30,
+          'aug_scale_%':   15,
+          'aug_flip_p':     0.5,
+          'augTr_p':        0.7,
+          'augVal_p':       0.0,
+          'init_weights':   'xavier',
+          'init_gain':      0.02,
+          'tr_val_ratio':   0.80,
+          'rng_seed':    2022,
+          'net_type':       'UNet',
+          'net_enc_chs':    (4,32,64,128,256),
+          'net_dec_chs':    (256,128,64,32),
+          'net_head':       (128),
+          'num_class':      3,
+          'dataset':        'data_preprocessed_dicom_25N',
+          'version':        'v0_0_9'}
 
-# np.random.seed(2021)
+np.random.seed(params['rng_seed'])
 
-batchTr = int(np.round(batch))
-step_size = int(np.round(step_size))
-num_ite = int(np.round(num_ite))
+batchTr = int(np.round(params['batchTr']))
+step_size = int(np.round(params['sch_step_size']))
+num_ite = int(np.round(params['num_ite']))
  
 torch.cuda.empty_cache()   
- 
-# net = Network.Net(enc_chs=(4,32,64,128,256), dec_chs=(256,128,64,32), head=(128), num_class=3)
-# net = Network.AttU_Net(img_ch=1,output_ch=1)
-# Network.init_weights(net,init_type= 'xavier', gain=0.02)
 
+# if params['net_type']=='UNet':
+#     net = Network.Net(enc_chs=params['net_enc_chs'], dec_chs=params['net_dec_chs'], head=params['net_head'], num_class=params['num_class'])
+# elif params['net_type']=='AttUNet':
+#     net = Network.AttU_Net(img_ch=1,output_ch=1)
+    
+# Network.init_weights(net,init_type= params['init_weights'], gain=params['init_gain'])
 
-version = "net_v0_0_5"
-net = torch.load("/home/chmelikj/Documents/chmelikj/Ophtalmo/DeepRetinaSegmentation/Ves_Class/Models/" + version + ".pt")
-
-
-version_new = "v0_0_6"
-
+version_load = 'net_v0_0_8'
+net = torch.load("/home/chmelikj/Documents/chmelikj/Ophtalmo/DeepRetinaSegmentation/Ves_Class/Models/" + version_load + ".pt")
 
 net = net.cuda()
-optimizer = optim.Adam(net.parameters(), lr=lr, weight_decay=L2)
-# optimizer = optim.SGD(net2.parameters(), lr=0.000001, weight_decay=0.0001, momentum= 0.8)
-scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=0.1, verbose=False)
+if params['optim_type']=='Adam':
+    optimizer = optim.Adam(net.parameters(), lr=params['optim_lr'], weight_decay=params['optim_L2'])
+elif params['optim_type']=='SGD':
+    optimizer = optim.SGD(net.parameters(), lr=params['optim_lr'], weight_decay=params['optim_L2'], momentum= 0.8)
 
+scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=params['sch_step_size'], gamma=params['sch_gamma'], verbose=False)
 
+data_list_1_train=[];data_list_1_val=[];
 
-data_list_1_train=[];data_list_1_test=[];
-
-# # # ## Data OPTHALMO
-path_data = '/home/chmelikj/Documents/chmelikj/Ophtalmo/Data/data_preprocessed_dicom_25'  # Linux bioeng358
+## Data OPTHALMO
+path_data = '/home/chmelikj/Documents/chmelikj/Ophtalmo/Data/' + params['dataset']
 data_list = Loaders.CreateDataset_dcm_with_DC(os.path.normpath( path_data ), '','')
 
-b = int(len(data_list)*0.80)
+b = int(len(data_list)*params['tr_val_ratio'])
 data_list_1_train = data_list_1_train + data_list[1:b+1]
-data_list_1_test = data_list_1_test + data_list[b:]
+data_list_1_val = data_list_1_val + data_list[b:]
 
 
-
-diceTr_Clin=[]; diceTr_Other=[]; diceTr_Cons=[]; diceTe_Clin=[];
-accTr=[]; accTe=[];
+lossTr=[]; lossVal=[];
+accTr=[]; accVal=[];
 
 D1 = np.zeros((len(data_list_1_train),2))
 D1[:,0] = np.arange(0,len(data_list_1_train))
 
 
-for epch in range(0,num_epch):
+for epch in range(0,params['num_epch']):
     
-    mu1, sigma1 = len(data_list_1_train)/10 , sigma*len(data_list_1_train)
+    mu1, sigma1 = len(data_list_1_train)/10 , params['hdm_sigma']*len(data_list_1_train)
     
     net.train(mode=True)
 
-    diceTr1=[]; diceTe1=[];
+    lossTr1=[]; lossVal1=[];
                
-    # for num_ite in range(0,len(data_list_1_train)-batch-1, batch):
-    # for num_ite in range(0,len(data_list_1_train)/batch):
+    # for num_ite in range(0,len(data_list_1_train)-batchTr-1, batchTr):
+    # for num_ite in range(0,len(data_list_1_train)/batchTr):
     for n_ite in range(0,num_ite):
       
-        ## Pro StT our dataset CLINIC
         Indx_Sort = Util.rand_norm_distrb(batchTr, mu1, sigma1, [0,len(data_list_1_train)]).astype('int')
         Indx_Orig = D1[Indx_Sort,0].astype('int')
         sub_set = copy.deepcopy(list(map(data_list_1_train.__getitem__, Indx_Orig)))
         
-        # params = (256,  186,276,  -170,170,  -40,40,-40,40,  0.9,1.2,  1.0)
-        # params = (128,  108,148, -170,170,  -10,10,-10,10)
-        # params = (380,  256,400,  -20,20,  -10,10,-10,10,  1.0,1.0 )
-        # params = (300,  300,300,  -0,0,  -0,0 , -0,0,  1.0,1.0 )
-        params = (crop_size,  crop_size,crop_size,  -10,10,  -crop_size//10,crop_size//10 , -crop_size//10,crop_size//10,  0.9,1.1 )
+        params_aug_tr = (params['aug_crop_size'], # output size
+                         params['aug_crop_size'], # crop size x
+                         params['aug_crop_size'], # crop size y
+                         -params['aug_rot_angle'], # max rotation angle CCW
+                         params['aug_rot_angle'], # max rotation angle CW
+                         int(-params['aug_crop_size']/100*params['aug_trans_%']), # max translation left (% of crop)
+                         int(params['aug_crop_size']/100*params['aug_trans_%']), # max translation right (% of crop)
+                         int(-params['aug_crop_size']/100*params['aug_trans_%']), # max translation up (% of crop)
+                         int(params['aug_crop_size']/100*params['aug_trans_%']), # max translation down (% of crop)
+                         (100-params['aug_scale_%'])/100, # max shrink %
+                         (100+params['aug_scale_%'])/100,
+                         params['aug_flip_p'], # probaility of fliping
+                         params['augTr_p']) # probaility augmentation
         
-        loss_train, res, _, Masks = Network.Training.straightForward(sub_set, net, params, TrainMode=True, Contrast=False)
-                                           
-        # dice = torch.sum(Util.ToOneHot(Masks, numClass=3 ).cuda()  (res>0.5) )
-         
-        # m = Util.ToOneHot(Masks, numClass=3 ).cuda()
-        # correct = (torch.round(res[:,[1,2],:,:]) == m[:,[1:2],:,:]).sum().item()
-           
-        # diceTr1.append( np.mean( dice.detach().cpu().numpy() ) )
+        loss_train, res, _, Masks = Network.Training.straightForward(sub_set, net, params_aug_tr, TrainMode=True, Contrast=False)
         
         metric  = loss_train.detach().cpu().item() 
         
-        diceTr1.append( metric )
+        lossTr1.append( metric )
         
         D1[np.array(Indx_Sort),1] = np.array(10-metric)
 
-        # del Masks, res
-
-        
         D1 = D1[D1[:, 1].argsort()]
         
 
@@ -125,14 +135,12 @@ for epch in range(0,num_epch):
         net.train(mode=True)
         if epch>0:
             
-            loss = lambda_Train*loss_train
+            loss = params['lambda_Train']*loss_train
             
             optimizer.zero_grad()
             loss.backward()
             # torch.nn.utils.clip_grad_value_(net.parameters(), clip_value=1.0)
             optimizer.step()
-    
-    
     
     # pd = norm(mu1,sigma1)
     # plt.figure()
@@ -162,91 +170,94 @@ for epch in range(0,num_epch):
     net.train(mode=False)
    
     ### validation
-    params = (crop_size,  crop_size,crop_size,  -0,0,  -0,0,-0,0,    1.0,1.0,   1.0)
-    # params = (380,  380,380,  -0,0,  -0,0,-0,0,    1.0,1.0,   1.0)
-    # params = (128,  108,148, -170,170,  -10,10,-10,10)
-    batchTe = 20
-    random.shuffle(data_list_1_test)
-    # for num in range(0,len(data_list_1_test), batchTe):
+    params_aug_val = (params['aug_crop_size'], # output size
+                     params['aug_crop_size'], # crop size x
+                     params['aug_crop_size'], # crop size y
+                     -params['aug_rot_angle'], # max rotation angle CCW
+                     params['aug_rot_angle'], # max rotation angle CW
+                     int(-params['aug_crop_size']/100*params['aug_trans_%']), # max translation left (% of crop)
+                     int(params['aug_crop_size']/100*params['aug_trans_%']), # max translation right (% of crop)
+                     int(-params['aug_crop_size']/100*params['aug_trans_%']), # max translation up (% of crop)
+                     int(params['aug_crop_size']/100*params['aug_trans_%']), # max translation down (% of crop)
+                     (100-params['aug_scale_%'])/100, # max shrink %
+                     (100+params['aug_scale_%'])/100,
+                     params['aug_flip_p'], # probaility of fliping
+                     params['augVal_p']) # probaility augmentation
+    
+    batchVal = params['batchVal']
+    random.shuffle(data_list_1_val)
+    # for num in range(0,len(data_list_1_val), batchVal):
     for num in range(0,1):
-        sub_set = copy.deepcopy(data_list_1_test[num:num+batchTe])
+        sub_set = copy.deepcopy(data_list_1_val[num:num+batchVal])
         
         with torch.no_grad():
             
-            loss_test, resTe, ImgsTe, MasksTE = Network.Training.straightForward(sub_set, net, params, TrainMode=False, Contrast=False)       
-            # _, resTe, ImgsTe, MasksTE = Network.Training.straightForwardFour(sub_set, net, params, TrainMode=False, Contrast=False)       
-                         
+            loss_val, resVal, ImgsVal, MasksVal = Network.Training.straightForward(sub_set, net, params_aug_val, TrainMode=False, Contrast=False)   
         
-        # dice = Util.dice_coef( resTe[:,0,:,:]>0.5, MasksTE[:,0,:,:].cuda() )                
-        
-        diceTe1.append(loss_test.detach().cpu().item() )
-
+        lossVal1.append(loss_val.detach().cpu().item() )
 
     torch.cuda.empty_cache() 
-     
 
-    diceTr_Clin.append(np.mean(diceTr1))
-    diceTe_Clin.append(np.mean(diceTe1))
-    
-    # resTe = np.round( resTe.detach().cpu().numpy() )
-    resTe = resTe.detach().cpu().numpy()
+    lossTr.append(np.mean(lossTr1))
+    lossVal.append(np.mean(lossVal1))
+
+    resVal = resVal.detach().cpu().numpy()
 
     # print('image: {:s}'.format(sub_set[0]['file_name']))
     # plt.figure
-    # # plt.imshow(ImgsTe[0,0,:,:].detach().numpy(), cmap='gray')
-    # plt.imshow(resTe[0,1,:,:], cmap='jet', alpha=0.5)
-    # plt.imshow(resTe[0,2,:,:], cmap='jet', alpha=0.5)
+    # # plt.imshow(ImgsVal[0,0,:,:].detach().numpy(), cmap='gray')
+    # plt.imshow(resVal[0,1,:,:], cmap='jet', alpha=0.5)
+    # plt.imshow(resVal[0,2,:,:], cmap='jet', alpha=0.5)
     # plt.show()
     
-    resTeClass = np.zeros(resTe[:,0,:,:].shape)
-    resTeClass[resTe[:,1,:,:]>resTe[:,2,:,:]] = 1
-    resTeClass[resTe[:,1,:,:]<resTe[:,2,:,:]] = 2
-    resTeClass[MasksTE[:,0,:,:]==0] = 0
+    resValClass = np.zeros(resVal[:,0,:,:].shape)
+    resValClass[resVal[:,1,:,:]>resVal[:,2,:,:]] = 1
+    resValClass[resVal[:,1,:,:]<resVal[:,2,:,:]] = 2
+    resValClass[MasksVal[:,0,:,:]==0] = 0
     
-    resTeClassVec = np.reshape(resTeClass, [-1])
-    MasksTEVec = np.reshape(MasksTE.detach().cpu().numpy(), [-1])
-    resTeClassVec = resTeClassVec[MasksTEVec>0]
-    MasksTEVec = MasksTEVec[MasksTEVec>0]
+    resValClassVec = np.reshape(resValClass, [-1])
+    MasksValVec = np.reshape(MasksVal.detach().cpu().numpy(), [-1])
+    resValClassVec = resValClassVec[MasksValVec>0]
+    MasksValVec = MasksValVec[MasksValVec>0]
     
-    accTe1 = Util.acc_metric(resTeClassVec, MasksTEVec)
+    accVal1 = Util.acc_metric(resValClassVec, MasksValVec)
     
-    accTe.append(accTe1)
+    accVal.append(accVal1)
     
     # plt.figure
-    # plt.imshow(resTe[0,0,:,:], cmap='jet')
+    # plt.imshow(resVal[0,0,:,:], cmap='jet')
     # plt.show()
     # plt.figure
-    # plt.imshow(resTe[0,1,:,:], cmap='jet')
+    # plt.imshow(resVal[0,1,:,:], cmap='jet')
     # plt.show()   
     # plt.figure
-    # plt.imshow(resTe[0,2,:,:], cmap='jet')
+    # plt.imshow(resVal[0,2,:,:], cmap='jet')
     # plt.show()
     plt.figure
-    plt.imshow(MasksTE[0,0,:,:], cmap='jet')
+    plt.imshow(MasksVal[0,0,:,:], cmap='jet')
     plt.show()
     plt.figure
-    plt.imshow(resTeClass[0,:,:], cmap='jet')
+    plt.imshow(resValClass[0,:,:], cmap='jet')
     plt.show()
     # plt.figure
-    # plt.imshow(ImgsTe[0,3,:,:], cmap='jet')
+    # plt.imshow(ImgsVal[0,3,:,:], cmap='jet')
     # plt.show()
    
     
     plt.figure()
-    plt.plot(diceTr_Clin,label='Joint Train')
-    plt.plot(diceTe_Clin,label='Joint Test')
-    plt.plot(accTe,label='Accuracy Test')
+    plt.plot(lossTr,label='Joint Train')
+    plt.plot(lossVal,label='Joint Val')
+    plt.plot(accVal,label='Accuracy Val')
 
     plt.ylim([0.3, 1.0])
     plt.legend()
-    plt.show()    
+    plt.show()
     
-
-torch.save(net, 'Models/net_' + version_new + '.pt')
-
-
-# file_name = "Models/Res_net_" + version + ".pkl"
-# open_file = open(file_name, "wb")
-# pickle.dump([diceTr_Clin, diceTe_Clin, diceTr_Other, diceTr_Cons, HD_Te_Clin], open_file)
-# open_file.close()
-
+    accValBest = max(accVal)
+    if accVal[-1] >= accValBest:
+        torch.save(net, 'Models/net_' + params['version'] + '.pt')
+    
+        file_name = "Models/net_" + params['version'] + ".pkl"
+        open_file = open(file_name, "wb")
+        pickle.dump([params, {'lossTr': lossTr, 'lossVal': lossVal, 'accVal': accVal, 'epoch': epch}], open_file)
+        open_file.close()

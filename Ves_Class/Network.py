@@ -162,13 +162,15 @@ class Training():
                             'Angle': random.randint(params[3],params[4]),
                             'Transl': (random.randint(params[5],params[6]),random.randint(params[7],params[8])),
                             'Scale': random.uniform(params[9],params[10]),
-                            'Flip':  np.random.random()>0.5
+                            'FlipLR': np.random.random()<params[11],
+                            'FlipUD': np.random.random()<params[11],
+                            'DoAugm': random.uniform(0, 1)<params[12]
                             })
             
-            augm = random.uniform(0, 1)>=0.3
+            augm = augm_params[0]['DoAugm']
+            # augm = random.uniform(0, 1)>=0.3
             # augm = True
             
-            t=0; sl=0
             for ch, ch_path in enumerate(img_paths):
                 # print('{:s}'.format(ch_path))
                 dataset = dcm.dcmread(ch_path)
@@ -234,5 +236,21 @@ class Training():
     
    
     
-   
+def Predict(data_list, net, TrainMode=False): 
+
+    net.train(mode=TrainMode)
+    num_ch = len(data_list['img_path'])
+    img_paths = data_list['img_path']
+    
+    for ch, ch_path in enumerate(img_paths):
+        dataset = dcm.dcmread(ch_path)
+        img = dataset.pixel_array.astype(dtype='float32')
+        img = torch.tensor(img)
+        if ch==0:
+            Imgs = torch.tensor(np.zeros((1,num_ch,img.size()[0],img.size()[1]) ), dtype=torch.float32)
+        Imgs[0,ch,:,:] = img
+
+    res = net( Imgs.cuda() )
+    
+    return res, Imgs
    

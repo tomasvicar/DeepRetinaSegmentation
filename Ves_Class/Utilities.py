@@ -81,13 +81,21 @@ def augmentation3(img, params, dc_pos):
     scale = params[0]['Scale']
     shear = 0
     CenterCrop = params[0]['Crop_size']
-    flip = params[0]['Flip']
+    flipLR = params[0]['FlipLR']
+    flipUD = params[0]['FlipUD']
     vel = params[0]['Output_size']
     augm_dc_pos = copy.deepcopy(dc_pos)
-    
-    if flip:
+
+    if flipLR & flipUD:
+        img = torch.flip(img, [len(img.size())-1, len(img.size())-2])
+        augm_dc_pos[0] = img.shape[2] - augm_dc_pos[0]
+        augm_dc_pos[1] = img.shape[1] - augm_dc_pos[1]
+    elif flipLR:
         img = torch.flip(img, [len(img.size())-1])
         augm_dc_pos[0] = img.shape[2] - augm_dc_pos[0]
+    elif flipUD:
+        img = torch.flip(img, [len(img.size())-2])
+        augm_dc_pos[1] = img.shape[1] - augm_dc_pos[1]
     
     # img = T.CenterCrop(size=CenterCrop)(img)
     augm_img = T.functional.affine(img, angle, translate, scale, shear,  T.InterpolationMode('nearest'))
