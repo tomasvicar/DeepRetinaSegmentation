@@ -48,6 +48,9 @@ for file_num = 1:length(files)
     I = local_contrast_and_clahe(I,fov>0);
     I = uint16(round(I.*2.^12));
     
+    im_size_orig = size(im);
+    writematrix(im_size_orig, [out_f '\UBMI\' imname '_orig_size_info.csv'])
+    
     dicomwrite(I(:,:,1),[out_f '\UBMI\' imname '_R.dcm'])
     dicomwrite(I(:,:,2),[out_f '\UBMI\' imname '_G.dcm'])
     dicomwrite(I(:,:,3),[out_f '\UBMI\' imname '_B.dcm'])
