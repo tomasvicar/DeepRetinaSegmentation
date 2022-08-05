@@ -2,7 +2,7 @@ import numpy as np
 import os
 import pydicom as dcm
 import pandas as pd
-
+import csv
 import matplotlib.pyplot as plt
 
 # from Utilities import size_nii
@@ -109,8 +109,15 @@ def CreateDataset_dcm_predict(pat_name, text1, text2):
                     path_maps.append( path_img.replace('R','B') )
                     path_maps.append( path_img.replace('R','ves') )
                     
+                    file = open(path_img.replace('R.dcm','orig_size_info.csv'))
+                    csvreader = csv.reader(file)
+                    for row in csvreader:
+                            orig_size = [int(x) for x in row]
+                    file.close()
+                    
                     data_list_te.append( {'img_path': path_maps,
                                           'pat_name': pat_name,
-                                          'file_name': name} )
+                                          'file_name': name,
+                                          'orig_size': orig_size} )
             
     return data_list_te

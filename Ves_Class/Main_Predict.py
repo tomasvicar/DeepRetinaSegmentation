@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import torch
 import Loaders
 import Network as Network
+import cv2
 # import Network_v9 as Network
 
 torch.cuda.empty_cache()   
@@ -24,7 +25,7 @@ data_list_1_predict = data_list
         
 net.train(mode=False)
 
-for num in range(0,1):
+for num in range(0,len(data_list_1_predict)):
     with torch.no_grad():
         resVal, Imgs = Network.Predict(data_list_1_predict[num], net, TrainMode=False)   
 
@@ -41,5 +42,14 @@ for num in range(0,1):
         plt.imshow(resValClass, cmap='jet')
         plt.show()
         
-        plt.imsave(path_save + '/' + data_list_1_predict[num]['file_name'] + 
-                   'VA_classification_whole.png', resValClass)
+        resValClassOrig = cv2.resize(resValClass, dsize=(data_list_1_predict[num]['orig_size'][1], data_list_1_predict[num]['orig_size'][0]), interpolation=cv2.INTER_NEAREST)
+        
+        full_path_save = path_save + '/Sada_01/' + data_list_1_predict[num]['file_name'] + '/ImageAnalysis/VesselsClass/'
+        isExist = os.path.exists(full_path_save)
+        if not isExist:
+          os.makedirs(full_path_save)
+        
+        plt.imsave(path_save + '/Sada_01/' + data_list_1_predict[num]['file_name'] + 
+                   '/ImageAnalysis/VesselsClass/' +
+                   data_list_1_predict[num]['file_name'] +
+                   '_VA_classification_whole.png', resValClassOrig)
