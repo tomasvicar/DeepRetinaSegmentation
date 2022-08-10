@@ -11,6 +11,8 @@ import SimpleITK as sitk
 from scipy.stats import norm
 import sys
 import copy
+from skimage import morphology
+import skan
     
 from scipy import ndimage
 
@@ -360,3 +362,19 @@ def ToOneHot(ten, numClass=3 ):
         OH[:,ind,:,:] = torch.squeeze( ten==ind )
     
     return OH 
+
+def vaClassPostprocessing(img):
+    binary_img = copy.deepcopy(img)
+    binary_img[binary_img>0] = 255
+    skeleton = morphology.skeletonize(binary_img.astype(bool))
+    element = morphology.disk(3)
+    mask = morphology.binary_dilation(skeleton, footprint=element, out=None)
+    branch_points = skan.csr.make_degree_image(skeleton)
+    branch_points[branch_points<3] = 0
+    branch_points[branch_points>0] = 1
+    branch_points_dil = morphology.binary_dilation(branch_points, footprint=element, out=None)
+    skeleton_split = copy.deepcopy(skeleton)
+    skeleton_split[branch_points_dil==1] = 0;
+    skeleton_split = morphology.remove_small_objects(skeleton_split, 80, connectivity=8)
+    img_new = img
+    return img_new

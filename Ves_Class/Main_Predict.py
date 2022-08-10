@@ -5,6 +5,8 @@ import torch
 import Loaders
 import Network as Network
 import cv2
+import scipy.misc
+from Utilities import vaClassPostprocessing
 # import Network_v9 as Network
 
 torch.cuda.empty_cache()   
@@ -44,12 +46,15 @@ for num in range(0,len(data_list_1_predict)):
         
         resValClassOrig = cv2.resize(resValClass, dsize=(data_list_1_predict[num]['orig_size'][1], data_list_1_predict[num]['orig_size'][0]), interpolation=cv2.INTER_NEAREST)
         
+        resValClassOrigPostprocessed = vaClassPostprocessing(resValClassOrig)
+        
         full_path_save = path_save + '/Sada_01/' + data_list_1_predict[num]['file_name'] + '/ImageAnalysis/VesselsClass/'
         isExist = os.path.exists(full_path_save)
         if not isExist:
           os.makedirs(full_path_save)
         
-        plt.imsave(path_save + '/Sada_01/' + data_list_1_predict[num]['file_name'] + 
+        scipy.misc.toimage(resValClassOrigPostprocessed, cmin=0.0, cmax=...).save(path_save +
+                   '/Sada_01/' + data_list_1_predict[num]['file_name'] + 
                    '/ImageAnalysis/VesselsClass/' +
                    data_list_1_predict[num]['file_name'] +
-                   '_VA_classification_whole.png', resValClassOrig)
+                   '_VA_classification_whole_pp.png', )
