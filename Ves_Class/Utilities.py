@@ -12,9 +12,11 @@ from scipy.stats import norm
 import sys
 import copy
 from skimage import morphology
+from skimage.segmentation import watershed
 import skan
-    
-from scipy import ndimage
+import skfmm
+from scipy import ndimage as ndi   
+import scipy.stats
 
 EPS = np.finfo(float).eps
     
@@ -368,7 +370,6 @@ def vaClassPostprocessing(img):
     binary_img[binary_img>0] = 255
     skeleton = morphology.skeletonize(binary_img.astype(bool))
     element = morphology.disk(3)
-    mask = morphology.binary_dilation(skeleton, footprint=element, out=None)
     branch_points = skan.csr.make_degree_image(skeleton)
     branch_points[branch_points<3] = 0
     branch_points[branch_points>0] = 1
@@ -376,5 +377,61 @@ def vaClassPostprocessing(img):
     skeleton_split = copy.deepcopy(skeleton)
     skeleton_split[branch_points_dil==1] = 0;
     skeleton_split = morphology.remove_small_objects(skeleton_split, 80, connectivity=8)
-    img_new = img
+    D = bwdistgeodesic(skeleton_split, binary_img)
+    markers = ndi.label(skeleton_split,ndi.generate_binary_structure(2,2))
+    splitmask = watershed(D, markers[0], mask=binary_img, connectivity=8)
+    
+    img_new = np.zeros_like(img)
+    for ind in range(1,np.max(splitmask)):
+        count_classes = scipy.stats.mode(img[splitmask==ind], axis=None)
+        majority_class = count_classes[0][np.argmax(count_classes[1])].astype('int16')
+        img_new[splitmask==ind] = majority_class
     return img_new
+
+def bwdistgeodesic(seeds, mask, bakround_value=np.Inf, seed2zero=True, diminsion_weights = None):
+    """
+    Parameters
+    ----------
+    seeds : bool ndarray 
+        True at seed positions.
+    mask : bool ndarray
+        True at foregorund.
+    bakround_value : number, optional
+        value that is put on backgroud (mask false positions). The default is -1.
+    seed2zero : bool, optional
+        if True, values inside seeds are put to zero; negative values of distance otherwise. The default is True.
+    diminsion_weights : list of ints of dimensind size, optional
+        weghts for individual dimensions. The default is None - ones.
+    Returns
+    -------
+    distance : array
+        geodesic distance tranform - image of distances from seeds when walking on mask only.
+    """
+    
+    
+    
+    m = np.ones_like(seeds,dtype=np.float32)
+    m[seeds > 0] = -1;
+    
+    
+    m = np.ma.masked_array(m, mask==0)
+    
+    if diminsion_weights:
+        distance = skfmm.distance(m,dx=1/np.array(diminsion_weights))
+    else:
+        distance = skfmm.distance(m)
+    
+    distance = distance.data
+    
+    if seed2zero:
+        distance[distance < 0] = 0
+    
+    distance[mask == 0] = bakround_value
+
+    return distance
+
+def imposemin(img, minima):
+    marker = np.full(img.shape, np.inf)
+    marker[minima == 1] = 0
+    mask = np.minimum((img + 1), marker)
+    return morphology.reconstruction(marker, mask, method='erosion')

@@ -5,8 +5,9 @@ import torch
 import Loaders
 import Network as Network
 import cv2
-import scipy.misc
+from skimage.io import imsave
 from Utilities import vaClassPostprocessing
+
 # import Network_v9 as Network
 
 torch.cuda.empty_cache()   
@@ -53,8 +54,18 @@ for num in range(0,len(data_list_1_predict)):
         if not isExist:
           os.makedirs(full_path_save)
         
-        scipy.misc.toimage(resValClassOrigPostprocessed, cmin=0.0, cmax=...).save(path_save +
-                   '/Sada_01/' + data_list_1_predict[num]['file_name'] + 
-                   '/ImageAnalysis/VesselsClass/' +
-                   data_list_1_predict[num]['file_name'] +
-                   '_VA_classification_whole_pp.png', )
+        resValClassOrig[resValClassOrig==1] = 128
+        resValClassOrig[resValClassOrig==2] = 255
+        imsave(path_save +
+                '/Sada_01/' + data_list_1_predict[num]['file_name'] + 
+                '/ImageAnalysis/VesselsClass/' +
+                data_list_1_predict[num]['file_name'] +
+                '_VA_classification_whole.png', resValClassOrig.astype('uint8'))
+        
+        resValClassOrigPostprocessed[resValClassOrigPostprocessed==1] = 128
+        resValClassOrigPostprocessed[resValClassOrigPostprocessed==2] = 255
+        imsave(path_save +
+                '/Sada_01/' + data_list_1_predict[num]['file_name'] + 
+                '/ImageAnalysis/VesselsClass/' +
+                data_list_1_predict[num]['file_name'] +
+                '_VA_classification_whole_pp.png', resValClassOrigPostprocessed.astype('uint8'))
