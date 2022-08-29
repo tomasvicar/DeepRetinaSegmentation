@@ -6,7 +6,9 @@ import Loaders
 import Network as Network
 import cv2
 from skimage.io import imsave
+from skimage.io import imread
 from Utilities import vaClassPostprocessing
+from Utilities import imfusion
 
 # import Network_v9 as Network
 
@@ -22,6 +24,7 @@ net = net.cuda()
 
 ## Data OPTHALMO
 path_data = '/home/chmelikj/Documents/chmelikj/Ophtalmo/Data/data_preprocessed_dicom_25N_UBMI'
+path_data_orig = '/home/chmelikj/Documents/chmelikj/Ophtalmo/Data/Sada_01'
 data_list = Loaders.CreateDataset_dcm_predict(os.path.normpath( path_data ), '','')
 
 data_list_1_predict = data_list
@@ -41,9 +44,9 @@ for num in range(0,len(data_list_1_predict)):
         resValClass[resVal[0,1,:,:]<resVal[0,2,:,:]] = 2
         resValClass[Imgs[0,3,:,:]==0] = 0
         
-        plt.figure
-        plt.imshow(resValClass, cmap='jet')
-        plt.show()
+        # plt.figure
+        # plt.imshow(resValClass, cmap='jet')
+        # plt.show()
         
         resValClassOrig = cv2.resize(resValClass, dsize=(data_list_1_predict[num]['orig_size'][1], data_list_1_predict[num]['orig_size'][0]), interpolation=cv2.INTER_NEAREST)
         
@@ -69,3 +72,22 @@ for num in range(0,len(data_list_1_predict)):
                 '/ImageAnalysis/VesselsClass/' +
                 data_list_1_predict[num]['file_name'] +
                 '_VA_classification_whole_pp.png', resValClassOrigPostprocessed.astype('uint8'))
+        
+        full_path_orig = path_data_orig + '/' + data_list_1_predict[num]['file_name'] + '/' + data_list_1_predict[num]['file_name'][0:len(data_list_1_predict[num]['file_name'])-5] + 'L.jpg'
+        isExist = os.path.exists(full_path_orig)
+        if isExist:
+            Orig = imread(full_path_orig)
+            
+        full_path_orig = path_data_orig + '/' + data_list_1_predict[num]['file_name'] + '/' + data_list_1_predict[num]['file_name'][0:len(data_list_1_predict[num]['file_name'])-5] + 'L.JPG'
+        isExist = os.path.exists(full_path_orig)
+        if isExist:
+            Orig = imread(full_path_orig)
+            
+        resValClassFusion = imfusion(Orig, resValClassOrigPostprocessed)
+        imsave(path_save +
+                '/Sada_01/' + data_list_1_predict[num]['file_name'] + 
+                '/ImageAnalysis/VesselsClass/' +
+                data_list_1_predict[num]['file_name'] +
+                '_VA_classification_whole_fusion.png', resValClassFusion.astype('uint8'))
+        print('Scan: {} done! ({}/{})'.format(data_list_1_predict[num]['file_name'],
+                                              num, len(data_list_1_predict)))

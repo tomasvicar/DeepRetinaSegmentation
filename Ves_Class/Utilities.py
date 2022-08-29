@@ -430,8 +430,25 @@ def bwdistgeodesic(seeds, mask, bakround_value=np.Inf, seed2zero=True, diminsion
 
     return distance
 
-def imposemin(img, minima):
-    marker = np.full(img.shape, np.inf)
-    marker[minima == 1] = 0
-    mask = np.minimum((img + 1), marker)
-    return morphology.reconstruction(marker, mask, method='erosion')
+def imfusion(img, classes):
+    element = morphology.disk(3)
+    eroded = morphology.binary_erosion(classes.astype(bool), footprint=element, out=None)
+    classes_edge = ~eroded & classes.astype(bool)
+    
+    mask = copy.deepcopy(classes);
+    mask[mask==255] = 0
+    mask = mask * classes_edge.astype('uint8')
+    img[mask==128,0] = 255
+    img[mask==128,1] = 0
+    img[mask==128,2] = 0
+    
+    mask = copy.deepcopy(classes);
+    mask[mask==128] = 0
+    mask = mask * classes_edge.astype('uint8')
+
+    img[mask==255,0] = 0
+    img[mask==255,1] = 0
+    img[mask==255,2] = 255
+    
+    return img
+    
