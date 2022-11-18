@@ -11,14 +11,14 @@ task = 'Task535_Ophtalmo';
 
 %%
 
-load_avrdb_VA(resolution, path, [output_folder '\' task]);
+% load_avrdb_VA(resolution, path, [output_folder '\' task]);
 
-load_iostar_VA(resolution, path, [output_folder '\' task]);
-
-load_drive_VA(resolution, path, [output_folder '\' task]);
-
-load_hrf_VA(resolution, path, [output_folder '\' task]);
-
-load_drhagis_VA(resolution, path, [output_folder '\' task]);
+% load_iostar_VA(resolution, path, [output_folder '\' task]);
+% 
+% load_drive_VA(resolution, path, [output_folder '\' task]);
+% 
+% load_hrf_VA(resolution, path, [output_folder '\' task]);
+% 
+% load_drhagis_VA(resolution, path, [output_folder '\' task]);
 
 load_ubmi_VA(resolution, path_ubmi, [output_folder '\' task]);

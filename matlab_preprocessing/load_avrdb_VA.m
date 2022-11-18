@@ -108,21 +108,25 @@ for i=1:length(images)
     info.PixelDimensions(3) = 999;
     info.raw.pixdim(4) = 999;
     niftiwrite(cat(3,I(:,:,1), I(:,:,1)), [out_f '\imagesTr\' imname '_0000'],info,'Compressed',true)
+
     niftiwrite(cat(3,I(:,:,2), I(:,:,2)),[out_f '\imagesTr\' imname '_0001'],'Compressed',true)
     info = niftiinfo([out_f '\imagesTr\' imname '_0001']);
     info.PixelDimensions(3) = 999;
     info.raw.pixdim(4) = 999;
     niftiwrite(cat(3,I(:,:,2), I(:,:,2)), [out_f '\imagesTr\' imname '_0001'],info,'Compressed',true)
+
     niftiwrite(cat(3,I(:,:,3), I(:,:,3)),[out_f '\imagesTr\' imname '_0002'],'Compressed',true)
     info = niftiinfo([out_f '\imagesTr\' imname '_0002']);
     info.PixelDimensions(3) = 999;
     info.raw.pixdim(4) = 999;
     niftiwrite(cat(3,I(:,:,3), I(:,:,3)), [out_f '\imagesTr\' imname '_0002'],info,'Compressed',true)
+    disp([info.raw.dim])
+
     niftiwrite(cat(3,VA, VA),[out_f '\labelsTr\' imname],'Compressed',true)
     info = niftiinfo([out_f '\labelsTr\' imname]);
     info.PixelDimensions(3) = 999;
     info.raw.pixdim(4) = 999;
     niftiwrite(cat(3,VA, VA),[out_f '\labelsTr\' imname],info,'Compressed',true)
-
+    disp([info.raw.dim])
 end
 end
