@@ -26,7 +26,8 @@ img_interp(:,:,1) = interp2(img(:,:,1),xxx,yyy,'linear',0);
 img_interp(:,:,2) = interp2(img(:,:,2),xxx,yyy,'linear',0);
 img_interp(:,:,3) = interp2(img(:,:,3),xxx,yyy,'linear',0);
 
-G = imgaussfilt(img_interp, sigma);
+% G = imgaussfilt(img_interp, sigma);
+G = imgaussfilt(img_interp, sigma'symmetric');
 img_interp = (img_interp - G) ./ G + 0.5;
 img_interp(img_interp < 0) = 0; 
 img_interp(img_interp > 1) = 1;

@@ -1,6 +1,7 @@
 clc;clear all; close all;
 
-data_filename = "../../tmp_retina_hdf5.hdf5";
+% data_filename = "../../tmp_retina_hdf5.hdf5";
+data_filename = "../../retina_segmentation_databases_25_gauss_clahe.hdf5";
 
 
 info = h5info(data_filename,'/Fov');
@@ -8,7 +9,7 @@ info = h5info(data_filename,'/Fov');
 img_names = {info.Datasets(:).Name};
 img_names = cellfun(@(x) replace(x,'_fov',''),img_names,UniformOutput=false);
 
-for img_num = 1:length(img_names)
+for img_num = 1:9:length(img_names)
     disp([num2str(img_num) ' / ' num2str(length(img_names))])
 
     img_name = img_names{img_num};
@@ -27,7 +28,9 @@ for img_num = 1:length(img_names)
 
     shape = size(img_interp);
 
-    h5create(data_filename,name,shape,'Datatype','uint8','ChunkSize',ChunkSize,'Deflate',4)
-    h5write(data_filename,name,img_interp,start,shape)
+%     h5create(data_filename,name,shape,'Datatype','uint8','ChunkSize',ChunkSize,'Deflate',4)
+%     h5write(data_filename,name,img_interp,start,shape)
+
+    imwrite(img_interp,['../../control/' img_name '.png'])
 
 end
