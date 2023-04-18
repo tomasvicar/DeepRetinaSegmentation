@@ -5,7 +5,7 @@
 #PBS -l walltime=6:00:00
 #PBS -m ae
 
-SINGULARITYFILE=/cvmfs/singularity.metacentrum.cz/NGC/PyTorch\:21.05-py3.SIF
+SINGULARITYFILE=/cvmfs/singularity.metacentrum.cz/NGC/PyTorch\:22.10-py3.SIF
 DATADIR_ORIG=$PBS_O_WORKDIR/../data
 CODEDIR_ORIG=$PBS_O_WORKDIR
 RESULTSDIR=$PBS_O_WORKDIR/..

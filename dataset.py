@@ -65,7 +65,7 @@ class Dataset(data.Dataset):
         mask = np.transpose(mask,(1,0))
         mask = (mask > 0).astype(np.uint8)
         
-        img = self.h5data[groups_img[0]][groups_img[1]][:,r[0]:r[0]+out_size[0],r[1]:r[1]+out_size[1]]
+        img = self.h5data[groups_img[0]][groups_img[1]][1:2,r[0]:r[0]+out_size[0],r[1]:r[1]+out_size[1]]
         img = np.transpose(img,(2,1,0))
         img = img.astype(np.float64)/255 - 0.5
         

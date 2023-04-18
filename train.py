@@ -35,7 +35,7 @@ def train(config,data_split):
 
     
     
-    model = Unet(filters=config.filters,in_size=3,out_size=1,depth=config.depth)
+    model = Unet(filters=config.filters,in_size=1,out_size=1,depth=config.depth)
     model.config = config
     model = model.to(device)
     model.log = Log(names=['loss','dice'])
