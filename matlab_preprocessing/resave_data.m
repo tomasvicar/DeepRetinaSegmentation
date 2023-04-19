@@ -1,5 +1,5 @@
 clc;clear all; close all;
-data_path = '../../Sada_01';
+data_path = '../../Sada_02';
 
 degree = 45;
 rc = 25;
@@ -30,8 +30,8 @@ for file_num = 1:length(files)
     file = files{file_num};
 
     [filepath,name,ext] = fileparts(file);
-%     file_save = [filepath '/ImageAnalysis/VesselsSeg/' name '_preprocessed_norm' '.png'];
-    file_save = [filepath '/ImageAnalysis/VesselsSeg/' name '_preprocessed' '.png'];
+    file_save = [filepath '/ImageAnalysis/VesselsSeg/' name '_preprocessed_norm' '.png'];
+%     file_save = [filepath '/ImageAnalysis/VesselsSeg/' name '_preprocessed' '.png'];
     
     im=imread(file);
 
@@ -78,8 +78,8 @@ for file_num = 1:length(files)
 
     im = uint8(im*255);
 
-%     img_interp = uint8(local_contrast_and_clahe(double(im)/255,fov>0)*255);
-    img_interp = im;
+    img_interp = uint8(local_contrast_and_clahe(double(im)/255,fov>0)*255);
+%     img_interp = im;
     
     mkdir(fileparts(file_save))
     imwrite(img_interp,file_save);

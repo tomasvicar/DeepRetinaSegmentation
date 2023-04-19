@@ -20,7 +20,7 @@ from skimage.transform import resize
 model_name = r"C:\Data\Vicar\retina_vessels_segmentation\manual_models\norm_hrf_0_45_0.00010_gpu_5.24120_train_0.18426_valid_0.15602.pt"
 save_text = 'segmentation_norm_hrf'
 control_resutls_path = '../segmentation_norm_hrf_control'
-filenames = glob('../Sada_01/**/*_preprocessed_norm.png',recursive=True)
+filenames = glob('../Sada_02/**/*_preprocessed_norm.png',recursive=True)
 filenames_nonorm = [x.replace('_preprocessed_norm.png','_preprocessed.png') for x in filenames]
 
 

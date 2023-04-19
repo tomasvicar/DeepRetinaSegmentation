@@ -6,8 +6,8 @@ import shutil
 # input_path = '../spocitane_trasformace_all/Sada_01'
 # output_path = '../final_multimodal_results/Sada_01'
 
-input_path = r'C:\Data\Vicar\retina_vessels_segmentation\Sada_01\Sada_01'
-output_path = r'C:\Data\Vicar\retina_vessels_segmentation\trasfromed_segmentation\Sada_01'
+input_path = r'C:\Data\Vicar\retina_vessels_segmentation\Sada_02'
+output_path = r'C:\Data\Vicar\retina_vessels_segmentation\trasfromed_segmentation_02\Sada_01'
 
 
 sub_path = '/ImageAnalysis/VesselsSeg/'
