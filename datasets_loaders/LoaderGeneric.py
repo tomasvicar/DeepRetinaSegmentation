@@ -3,42 +3,135 @@ from skimage.io import imread
 import matplotlib.pyplot as plt
 from skimage.filters import apply_hysteresis_threshold
 import numpy as np
-from skimage.morphology import binary_closing, disk
+from skimage.morphology import binary_closing, disk, binary_erosion
 from skimage.measure import label
-from scipy.ndimage.morphology import binary_fill_holes
+from scipy.ndimage import binary_fill_holes
 from skimage import io, color, filters, morphology, measure, feature
+import h5py
+from skimage.transform import rescale, resize
 
 import sys
 sys.path.append("..")
 
 from utils.visboundaries import visboundaries
+from utils.image_utils import get_bbox, crop_to_bbox
 
 class LoaderGeneric(ABC):
+    
+    VESSEL = 'vessel'
+    VESSEL2 = 'vessel2'
+    VESSEL3 = 'vessel3'
+    VESSEL_CLASS = 'vessel_class'
+    VESSEL_CLASS2 = 'vessel_class2'
+    DISK = 'disk'
+    DISK2 = 'disk2'
+    DISK3 = 'disk3'
+    DISK4 = 'disk4'
+    DISK5 = 'disk5'
+    DISK6 = 'disk6'
+    CUP = 'cup'
+    CUP2 = 'cup2'
+    CUP3 = 'cup3'
+    CUP4 = 'cup4'
+    CUP5 = 'cup5'
+    CUP6 = 'cup6'
     
     def __init__(self, data_path, pix_per_deg, out_fname, preprocess_f):
         self.data_path = data_path
         self.pix_per_deg = pix_per_deg
         self.out_fname = out_fname
         self.preprocess_f = preprocess_f
+
         
         
-    def preprocess(self):
-        for fname_num, fname_img in enumerate(self.fnames_imgs):  
-            
-            img = imread(fname_img)
-            fov = self.get_fov(fname_img, img)
-            plt.imshow(img)
-            visboundaries(fov)
-            plt.show()
-            
-            # for mask_num, mask_name_key in  enumerate(self.masks_getfname_fcns):
-            #     mask_name = self.masks_getfname_fcns[mask_name_key](fname_img)
-            #     preprocess_fcn = self.preprocess_fcns[mask_name_key]
+    def preprocess(self, show_fov=False, show_masks=False):
+        
+        with h5py.File(self.out_fname, "a") as file:
+        
+            # for fname_num, fname_img in enumerate(self.fnames_imgs[:5]):  
+            for fname_num, fname_img in enumerate(self.fnames_imgs): 
                 
-            #     print(mask_name)
-            #     mask = imread(mask_name)
-            #     mask = preprocess_fcn(mask)
+                img = self.read_img_fcn(fname_img)
+                img = self.prepare_img(img)
+                fov = self.get_fov(fname_img, img)
                 
+                bbox = get_bbox(fov)
+                rescale_factor = self.pix_per_deg * self.dataset_fov_deg / np.max(img.shape) 
+                orig_size = img.shape[:2]
+                
+                img = crop_to_bbox(img, bbox)
+                img = rescale(img, rescale_factor, channel_axis=2)
+                fov = crop_to_bbox(fov, bbox)
+                fov = rescale(fov, rescale_factor)
+                
+                img = self.preprocess_f(img, fov, self.pix_per_deg)
+                
+                if show_fov:
+                    print(fname_img)
+                    plt.imshow(img)
+                    visboundaries(fov)
+                    plt.show()
+                
+                
+                savename = self.get_savename(fname_img) + str(fname_num).zfill(4)
+                original_filename = fname_img.replace(self.data_path, '')
+                
+                
+                self.save_hdf5(file, img, savename + '/img', original_filename, bbox, orig_size, rescale_factor)
+                self.save_hdf5(file, fov, savename + '/fov', original_filename, bbox, orig_size, rescale_factor)
+                
+                for mask_num, mask_name_key in  enumerate(self.masks_getfname_fcns):
+                    
+                    mask_name = self.masks_getfname_fcns[mask_name_key](fname_img)
+                    if mask_name == None:
+                        continue
+                    preprocess_fcn = self.preprocess_fcns[mask_name_key]
+                    
+                    mask = self.read_img_fcn(mask_name)
+                    mask = preprocess_fcn(mask)
+                    
+                    mask = crop_to_bbox(mask, bbox)
+                    mask = rescale(mask, rescale_factor)
+                    
+                    original_filename_mask = mask_name.replace(self.data_path, '')
+                    
+                    self.save_hdf5(file, fov, savename + '/' + mask_name_key, original_filename_mask, bbox, orig_size, rescale_factor)
+                    
+                    if show_masks:
+                        print(mask_name)
+                        plt.imshow(img)
+                        if len(mask.shape) > 2:
+                            mask = mask[:, :, 0]
+                        visboundaries(mask)
+                        plt.show()
+                    
+    def prepare_img(self, img):
+        return img           
+                
+                
+    def save_hdf5(self, file, data, name, orig_name, crop_position, orig_size, rescale_factor):
+        
+        chunks = [128,128]
+        if len(data.shape) > 2:
+            chunks.append(data.shape[2])
+        chunks = tuple(chunks)    
+        
+        dts = file.create_dataset(name, data=data, chunks=chunks, compression="gzip", compression_opts=2)
+        dts.attrs['orig_name'] = orig_name
+        dts.attrs['crop_position'] = crop_position
+        dts.attrs['orig_size'] = orig_size
+        dts.attrs['rescale_factor'] = rescale_factor
+
+    @property 
+    def read_img_fcn(self):
+        return imread
+                
+    @abstractmethod
+    def get_savename(self, fname_img):
+        '''
+        name to save
+        '''
+        pass             
                 
         
     @abstractmethod
@@ -48,14 +141,16 @@ class LoaderGeneric(ABC):
         '''
         pass
     
-    
-    def get_fov_auto(self, img, t1=7, t2=15):
+    @staticmethod
+    def get_fov_auto(img, t1=7, t2=15):
         
         averageRGB = np.mean(img,axis=2)
         
         mask = apply_hysteresis_threshold(averageRGB,t1,t2)
         
         mask = binary_closing(mask, disk(10))
+        
+        mask = binary_erosion(mask, disk(6))
         
         mask = label(mask)
         largest_mask = np.bincount(mask.flat)[1:].argmax() + 1
@@ -67,72 +162,13 @@ class LoaderGeneric(ABC):
     
     
     
-    
-    
-    
-    def get_fov_auto_evca(self, im, database):
-        
-        im = color.rgb2gray(im)
-        thresholds = filters.threshold_multiotsu(im, classes=4)
-        prah1_dict = {
-            'diaretdb': thresholds[0] * 0.1,
-            'review': thresholds[0] * 0.1,
-            'drishtigs': thresholds[2],
-            # Add other databases and their conditions here...
-        }
-        prah1 = prah1_dict.get(database, 0)
-        
-        prah2 = im.max() * 0.4 if database == 'inspireavr' else im.max() * 0.8
-        
-        highmask = im > prah2
-        lowmask = measure.label(im > prah1)
-        unique_labels = np.unique(lowmask[highmask])
-        final = np.isin(lowmask, unique_labels)
-        se = morphology.disk(10)
-        final_closed = morphology.binary_closing(final, se)
-
-        # Further computations for `bpx`, `wpx`, etc.
-        bpx = 1 - (np.sum(final_closed) / (im.shape[0] * im.shape[1]))
-        wpx = 1 - bpx
-        prah = 0.1  # default value
-        
-        if database == 'aria' or database == 'g1020':
-            bpx = 0.1343  
-            # You can add more conditions or variables specific to these databases here if needed
-        
-        elif database == 'diaretdb':
-            bpx = 0.1634
-        
-        elif database == 'stare':
-            bpx = 0.269
-        
-        elif database == 'drishtigs':
-            bpx = 0.1568
-            prah = 0.05
-            if im.shape[1] > 2200:  # Assuming `im` is a numpy array, this gets its width
-                bpx = 0.2929
-        
-        elif database == 'eophtha':
-            bpx = 0.45
-            prah = 0.15
-        
-        else:
-            pass
-        
-        if np.sum(final_closed) / (im.shape[0] * im.shape[1]) > (wpx + prah) or np.sum(final_closed) / (im.shape[0] * im.shape[1]) < (wpx - prah):
-            counts, edges = np.histogram(im, bins=250)
-            cc = np.cumsum(counts)
-            prah1 = edges[np.min(np.where(cc > bpx * (im.shape[0] * im.shape[1])))]
-            prah2 = im.max() * 0.8
-            highmask = im > prah2
-            lowmask = measure.label(im > prah1)
-            final = np.isin(lowmask, unique_labels)
-            final_closed = morphology.binary_closing(final, se)
-
-        fov = binary_fill_holes(final_closed)
-        
-        return fov
-        
+    @property
+    @abstractmethod
+    def dataset_fov_deg(self):
+        '''
+        value of degrees of fov for this dataset
+        '''
+        pass
     
         
     @property
