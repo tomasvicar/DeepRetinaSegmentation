@@ -48,8 +48,15 @@ class LoaderGeneric(ABC):
         
         with h5py.File(self.out_fname, "a") as file:
         
-            # for fname_num, fname_img in enumerate(self.fnames_imgs[:5]):  
-            for fname_num, fname_img in enumerate(self.fnames_imgs): 
+            
+            
+            # fnames_imgs = self.fnames_imgs
+            fnames_imgs = self.fnames_imgs[:50] ###########################################!!!!!!
+            
+            
+            for fname_num, fname_img in enumerate(fnames_imgs): 
+                
+                print(str(fname_num) + ' / ' + str(len(fnames_imgs)))
                 
                 img = self.read_img_fcn(fname_img)
                 img = self.prepare_img(img)
@@ -89,6 +96,8 @@ class LoaderGeneric(ABC):
                     
                     mask = self.read_img_fcn(mask_name)
                     mask = preprocess_fcn(mask)
+                    
+                    mask = mask > 0
                     
                     mask = crop_to_bbox(mask, bbox)
                     mask = rescale(mask, rescale_factor)
