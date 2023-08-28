@@ -18,11 +18,11 @@ from utils.image_utils import get_bbox, crop_to_bbox
 
 class LoaderGeneric(ABC):
     
-    VESSEL = 'vessel'
-    VESSEL2 = 'vessel2'
-    VESSEL3 = 'vessel3'
-    VESSEL_CLASS = 'vessel_class'
-    VESSEL_CLASS2 = 'vessel_class2'
+    VESSEL = 'vessels'
+    VESSEL2 = 'vessels2'
+    VESSEL3 = 'vessels3'
+    VESSEL_CLASS = 'ves_class'
+    VESSEL_CLASS2 = 'ves_class2'
     DISK = 'disk'
     DISK2 = 'disk2'
     DISK3 = 'disk3'
@@ -50,8 +50,8 @@ class LoaderGeneric(ABC):
         
             
             
-            # fnames_imgs = self.fnames_imgs
-            fnames_imgs = self.fnames_imgs[:50] ###########################################!!!!!!
+            fnames_imgs = self.fnames_imgs
+            # fnames_imgs = self.fnames_imgs[800:] ###########################################!!!!!!
             
             
             for fname_num, fname_img in enumerate(fnames_imgs): 
@@ -62,14 +62,16 @@ class LoaderGeneric(ABC):
                 img = self.prepare_img(img)
                 fov = self.get_fov(fname_img, img)
                 
+                fov = fov > 0
+                
                 bbox = get_bbox(fov)
                 rescale_factor = self.pix_per_deg * self.dataset_fov_deg / np.max(img.shape) 
                 orig_size = img.shape[:2]
                 
                 img = crop_to_bbox(img, bbox)
-                img = rescale(img, rescale_factor, channel_axis=2)
+                img = rescale(img, rescale_factor, channel_axis=2, preserve_range=True).astype(np.uint8)
                 fov = crop_to_bbox(fov, bbox)
-                fov = rescale(fov, rescale_factor)
+                fov = rescale(fov, rescale_factor, order=0)
                 
                 img = self.preprocess_f(img, fov, self.pix_per_deg)
                 
@@ -100,11 +102,14 @@ class LoaderGeneric(ABC):
                     mask = mask > 0
                     
                     mask = crop_to_bbox(mask, bbox)
-                    mask = rescale(mask, rescale_factor)
+                    if len(mask.shape) == 3:
+                        mask = rescale(mask, rescale_factor, channel_axis=2, order=0)
+                    else:
+                        mask = rescale(mask, rescale_factor, order=0)
                     
                     original_filename_mask = mask_name.replace(self.data_path, '')
                     
-                    self.save_hdf5(file, fov, savename + '/' + mask_name_key, original_filename_mask, bbox, orig_size, rescale_factor)
+                    self.save_hdf5(file, mask, savename + '/' + mask_name_key, original_filename_mask, bbox, orig_size, rescale_factor)
                     
                     if show_masks:
                         print(mask_name)

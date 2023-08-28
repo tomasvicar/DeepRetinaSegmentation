@@ -50,7 +50,7 @@ class LoaderHrf(LoaderGeneric):
 
     def get_fov(self, fname_img, img):
         
-        fov = imread(fname_img.replace('.JPG','.jpg').replace('.jpg','_mask.tif').replace('images','mask'))
+        fov = imread(fname_img.replace('.JPG','.jpg').replace('.jpg','_mask.tif').replace('images','mask'))[:, :, 0]
         
         return fov
     

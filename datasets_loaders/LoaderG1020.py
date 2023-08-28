@@ -37,7 +37,7 @@ class LoaderG1020(LoaderGeneric):
         def does_contain(name, text):
             with open(name, 'r') as f:
                 output = f.read()
-                return text in output
+                return '"' + text + '"' in output
         
         
         def name_disk(x):
@@ -130,19 +130,30 @@ if __name__ == "__main__":
 
     loader = LoaderG1020(data_path, pix_per_deg, out_fname, preprocess_f)
     # loader.preprocess()
-    loader.preprocess(show_fov=True)
-    # loader.preprocess(show_masks=True)
+    # loader.preprocess(show_fov=True)
+    loader.preprocess(show_masks=True)
     
     with h5py.File(out_fname, "r") as f:
+        
+        
+        num = 1
         image_names = [n for n in f.keys()]
         print(image_names)
-        image_types = [n for n in f[image_names[0]].keys()]
+        image_types = [n for n in f[image_names[num]].keys()]
         print(image_types)
         
-        image_dts = f[image_names[0]][image_types[1]]
-        image = image_dts[...]
+        for image_type in f[image_names[num]]:
+            img = f[image_names[num]][image_type][...]
+            print(image_type)
+            print(np.max(img))
+            print(np.min(img))
+            print(img.shape)
+            print(img.dtype)
+            print(f[image_names[num]][image_type].attrs['orig_name'])
+            plt.imshow(img)
+            plt.show()
+
         
-        print(image_dts.attrs['orig_name'])
-        plt.imshow(image)
+            
 
 

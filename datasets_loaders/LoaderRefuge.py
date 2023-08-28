@@ -23,7 +23,7 @@ class LoaderRefuge(LoaderGeneric):
     @property
     def fnames_imgs(self):
         
-        self.mask_names = [x for x in glob(self.data_path + '/REFUGE/**/*.bmp', recursive=True) if 'Annotation' not in x]
+        self.mask_names = [x for x in glob(self.data_path + '/REFUGE/**/*.bmp', recursive=True)]
         return [x for x in glob(self.data_path + '/REFUGE/**/*.jpg', recursive=True) if 'Annotation' not in x]
         
     
@@ -102,9 +102,9 @@ class LoaderRefuge(LoaderGeneric):
             diagnosis = 'glaucoma'
         elif 'Non-Glaucoma' in fname_img or 'Non-Glaucoma' in mask_name:
             diagnosis = 'normal' 
-        if '/G/' in fname_img or '/G/' in mask_name:
+        elif '\\G\\' in fname_img or '\\G\\' in mask_name:
             diagnosis = 'glaucoma'
-        elif '/N/' in fname_img or '/N/' in mask_name:
+        elif '\\N\\' in fname_img or '\\N\\' in mask_name:
             diagnosis = 'normal'    
         elif 'Validation' in fname_img:
             diagnosis = 'na' 

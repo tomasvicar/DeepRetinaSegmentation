@@ -62,9 +62,9 @@ class LoaderUoa_dr(LoaderGeneric):
     @property
     def preprocess_fcns(self):
         preprocess_fcns = dict()
-        preprocess_fcns[LoaderGeneric.VESSEL] = lambda x : x > 128
-        preprocess_fcns[LoaderGeneric.DISK] = lambda x : x > 128
-        preprocess_fcns[LoaderGeneric.CUP] = lambda x : x > 128
+        preprocess_fcns[LoaderGeneric.VESSEL] = lambda x : x[:, :, 0] > 128
+        preprocess_fcns[LoaderGeneric.DISK] = lambda x : x[:, :, 0] > 128
+        preprocess_fcns[LoaderGeneric.CUP] = lambda x : x[:, :, 0] > 128
         return preprocess_fcns
     
     @property 
@@ -91,11 +91,11 @@ class LoaderUoa_dr(LoaderGeneric):
 
         num = int(os.path.split(fname_img)[-1][:-4])
         if num in my_list_npdr:  
-            return 'stare_na_npdr_'
+            return 'uoadr_na_npdr_'
         elif num in my_list_pdr:  
-            return 'stare_na_pdr_'
+            return 'uoadr_na_pdr_'
         elif num in my_list_normal:  
-            return 'stare_na_normal_'
+            return 'uoadr_na_normal_'
         else:
             raise(Exception('nenalezena_patologie'))
         

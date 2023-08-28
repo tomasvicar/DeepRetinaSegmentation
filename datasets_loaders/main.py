@@ -16,11 +16,12 @@ from LoaderUoa_dr import LoaderUoa_dr
 
 import os
 
+
 if __name__ == "__main__":
     
     
     data_path = '../../databases'
-    pix_per_deg = 30
+    pix_per_deg = 25
     preprocess_f = lambda img, fov, pix_per_deg : img
     # preprocess_f = local_contrast_and_clahe
     out_fname = '../../data_' + str(pix_per_deg) + '.hdf5'
