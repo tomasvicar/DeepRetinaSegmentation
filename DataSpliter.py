@@ -7,12 +7,12 @@ import h5py
 
 class DataSpliter:
     
-    VESSEL = 'vessel'
-    VESSEL_CLASS = 'vessel_class'
+    VESSEL = 'vessels'
+    VESSEL_CLASS = 'ves_class'
     DISK = 'disk'
     CUP = 'cup'
     
-    def __init__(self, data_fname_hdf5, train_valid_test_frac, mask_type_use, seed=42):
+    def __init__(self, data_fname_hdf5, train_valid_test_frac, mask_type_use, seed=None):
         self.data_fname_hdf5 = data_fname_hdf5
         self.train_valid_test_frac = train_valid_test_frac
         self.mask_type_use = mask_type_use
@@ -113,7 +113,8 @@ class DataSpliter:
         return dataset_dict
 
     def split_data(self):
-        np.random.seed(self.seed)
+        if self.seed:
+            np.random.seed(self.seed)
         dataset_dict = self.get_dataset_dict()
         dataset_dict = self.na_splits_to_random(dataset_dict)
         dataset_dict = self.add_valid_if_not_exists_random(dataset_dict)
@@ -124,7 +125,7 @@ class DataSpliter:
 if __name__ == "__main__":
     
     
-    data_spliter = DataSpliter('../data_30.hdf5',
+    data_spliter = DataSpliter('../data_25.hdf5',
                                train_valid_test_frac=[0.7, 0.1, 0.2],
                                mask_type_use=[DataSpliter.VESSEL, DataSpliter.VESSEL_CLASS, DataSpliter.DISK, DataSpliter.CUP],
                                seed=42

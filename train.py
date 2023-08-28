@@ -38,7 +38,7 @@ def train(config):
     valid_generator = DataLoader(valid_generator, batch_size=config.valid_batch_size, num_workers=config.valid_num_workers, shuffle=True, drop_last=False)
 
     
-    model = Unet(filters=config.filters, in_size=config.in_channels, out_size=1, do=config.drop_out, depth=config.depth)
+    model = Unet(filters=config.filters, in_size=3, out_size=1, do=config.drop_out, depth=config.depth)
     
     model.config = config
     model = model.to(device)
