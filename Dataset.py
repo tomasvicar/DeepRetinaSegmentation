@@ -33,11 +33,82 @@ class RandomCropper():
         return img[r[0]:r[0] + self.out_shape[0], r[1]:r[1] + self.out_shape[1], ...]
 
 
+class CenterCropper():
+    def __init__(self, in_shape, out_shape):
+        self.in_shape = in_shape
+        self.out_shape = out_shape
+        self.random_pos = [int((in_shape[0]-out_shape[0])/2), int((in_shape[1]-out_shape[1])/2)]
+             
+    def crop(self, img):
+        r = self.random_pos
+        return img[r[0]:r[0] + self.out_shape[0], r[1]:r[1] + self.out_shape[1], ...]
+
+
 def make_generator_infinite(generator):
     while True:
-        for data in generator:
-            yield data
+        for datax in generator:
+            yield datax
     
+    
+    
+def augmentation(img, mask, config):
+    
+    
+    
+    # in_shape = img.shape[:2]
+    # out_shape = [config.patch_size, config.patch_size]
+    
+    # random_croper = CenterCropper(in_shape, out_shape) 
+    # img = random_croper.crop(img)
+    # mask = random_croper.crop(mask)
+    
+    
+    
+    r = randint(2, size=3)
+    if r[0]:
+        img = np.fliplr(img)
+        mask = np.fliplr(mask)
+    if r[1]:
+        img = np.flipud(img)
+        mask = np.flipud(mask)
+    img = np.rot90(img, k=r[2])
+    mask = np.rot90(mask, k=r[2])
+
+    if rand() > config.p:
+        multipy = config.multipy
+        multipy = 1+rand()*multipy
+        if rand() > 0.5:
+            img = img*multipy
+        else:
+            img = img/multipy
+
+    if rand() > config.p:
+        add = config.add
+        add = (1-2*rand())*add
+        img = img+add
+
+    if img.shape[2]>1:
+       for slice_num in range(img.shape[2]):
+           
+           slice_ = img[:,:,slice_num]
+           
+           if rand()>config.p:
+               multipy = config.multipy
+               multipy=1+rand()*multipy
+               if rand()>0.5:
+                   slice_=slice_*multipy
+               else:
+                   slice_=slice_/multipy
+              
+           if rand()>config.p:
+               add=config.add    
+               add=(1-2*rand())*add
+               slice_=slice_+add
+               
+           img[:,:,slice_num] = slice_    
+    
+    
+    return img.copy(), mask.copy()
     
 
 class Dataset(data.Dataset):
@@ -101,12 +172,15 @@ class Dataset(data.Dataset):
         img = random_croper.crop(img_hdf5)
         mask = random_croper.crop(mask_hdf5)
         
-        print(name)
-        print(mask_type_final)
-        print(mask.shape)
-        
-        
         img = img.astype(np.float32) / 255 - 0.5
+        
+        # print(name)
+        # print(mask_type_final)
+        # print(mask.shape)
+        
+        if self.augment:
+          img,mask = augmentation(img,mask,self.config)
+        
         img = torch.from_numpy(np.transpose(img, (2, 0, 1)))
         
         mask = mask.astype(np.float32)
@@ -133,7 +207,7 @@ if __name__ == "__main__":
     
     
     config = Config()
-    config.train_batch_size = 1
+    config.train_batch_size = 5
 
     dataset_dict = DataSpliter(config.dataset_fname, config.train_valid_test_frac, config.mask_type_use, config.seed).split_data()        
         
