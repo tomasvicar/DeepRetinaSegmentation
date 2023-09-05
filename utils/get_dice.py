@@ -1,11 +1,16 @@
 import numpy as np
-
+import torch
 
 def get_dice(results,target):
     
-    X = results.detach().cpu().numpy()>0
-    Y = target.detach().cpu().numpy()>0
+    if torch.is_tensor(results):
+        results = results.detach().cpu().numpy()
+        
+    if torch.is_tensor(target):
+        target = target.detach().cpu().numpy()
     
+    X = results > 0
+    Y = target > 0
 
     TP = np.sum(((X==1)&(Y==1)).astype(np.float64))
     FP = np.sum(((X==1)&(Y==0)).astype(np.float64))
@@ -24,7 +29,9 @@ def get_dice(results,target):
 def get_dice_mask_type(results, target, mask_types, mask_type_use):
     
     
+    
     Xs = results.detach().cpu().numpy()>0
+    
     Ys = target.detach().cpu().numpy()>0
     
 

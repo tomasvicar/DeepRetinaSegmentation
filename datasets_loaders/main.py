@@ -1,4 +1,5 @@
 
+
 from LoaderAria import LoaderAria
 from LoaderAvrdb import LoaderAvrdb
 from LoaderDrhagis import LoaderDrhagis
@@ -16,6 +17,9 @@ from LoaderUoa_dr import LoaderUoa_dr
 
 import os
 
+import sys
+sys.path.append("..")
+from utils.local_contrast_and_clahe import local_contrast_and_clahe
 
 if __name__ == "__main__":
     
@@ -23,8 +27,8 @@ if __name__ == "__main__":
     data_path = '../../databases'
     pix_per_deg = 25
     preprocess_f = lambda img, fov, pix_per_deg : img
-    # preprocess_f = local_contrast_and_clahe
-    out_fname = '../../data_' + str(pix_per_deg) + '.hdf5'
+    preprocess_f = local_contrast_and_clahe
+    out_fname = '../../data_' + str(pix_per_deg) + '_normalized.hdf5'
     
     if os.path.exists(out_fname):
         os.remove(out_fname)

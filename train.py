@@ -142,10 +142,11 @@ def train(config):
     #     os.mkdir(config.model_save_dir)
     
     dataset_dict_test = {key : value for key, value in dataset_dict.items() if value['split'] == 'test'}
-    dice = evaluate(dataset_dict_test, model_name)
+    dices = evaluate(dataset_dict_test, model_name)
+    dices_types = {key : np.mean(value) for key, value in dices.items()}
+    dice = np.mean(np.array(list(dices_types.values())))
     
-    
-    return None
+    return dice
     
     
 if __name__ == "__main__":
