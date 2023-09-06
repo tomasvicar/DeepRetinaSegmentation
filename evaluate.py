@@ -28,19 +28,19 @@ def evaluate(dataset_dict, model_name):
     
     patch_size = model.config.patch_size  ### larger->faster, but need more ram (gpu ram)
     border = int(model.config.patch_size / 8)
-    out_layers = len(config.mask_type_use)
+    out_layers = len(model.config.mask_type_use)
     
-    mask_types_use = config.mask_type_use
+    mask_types_use = model.config.mask_type_use
     
     dices = {mask_type_use : [] for mask_type_use in mask_types_use}
     
-    with h5py.File(config.dataset_fname, "r") as file:
+    with h5py.File(model.config.dataset_fname, "r") as file:
         
         
-        for file_num, name in enumerate(dataset_dict_test):
+        for file_num, name in enumerate(dataset_dict):
             
-            print(str(file_num) + ' / ' + str(len(dataset_dict_test)))
-            print(name)
+            # print(str(file_num) + ' / ' + str(len(dataset_dict)))
+            # print(name)
             
             img = file[name]['img'][...]
             img = img.astype(np.float32) / 255 - 0.5

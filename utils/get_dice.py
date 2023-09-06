@@ -56,6 +56,9 @@ def get_dice_mask_type(results, target, mask_types, mask_type_use):
     
     dice = (2 * TPs )/ ((2 * TPs) + FPs + FNs)
     
+    if np.isnan(dice):
+        print('dice nan !!!!')
+        return 0
     
     return dice
     

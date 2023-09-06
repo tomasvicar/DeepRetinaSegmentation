@@ -52,7 +52,10 @@ def train(config):
     for epoch in range(config.max_epochs):
         
         model.train()
-        for img, mask, mask_type in train_generator:
+        N = len(train_generator)
+        for it, (img, mask, mask_type) in enumerate(train_generator):
+            
+            # print(str(it) + ' / ' + str(N))
             
             img = img.to(torch.device(config.device))
              
@@ -83,7 +86,7 @@ def train(config):
   
                     
                 dice = get_dice_mask_type(res, mask, mask_type, config.mask_type_use)
-                print(round(dice, 2), end=" ")
+                # print(round(dice, 2), end=" ")
                 
                 model.log.append_valid([loss.detach().cpu().numpy(),dice])
             
@@ -107,39 +110,41 @@ def train(config):
         
         print(info)
         
-        model_name=config.results_folder+ os.sep + config.method + info  + '.pt'
+        tmp_folder = config.tmp_folder.replace('_method_', config.method)
+        
+        model_name = tmp_folder + os.sep + info  + '.pt'
         
         model.log.save_log_model_name(model_name)
         
-        if not os.path.isdir(config.results_folder):
-            os.mkdir(config.results_folder)
         
-        torch.save(model,model_name)
+        if not os.path.isdir(os.path.split(model_name)[0]):
+            os.makedirs(os.path.split(model_name)[0])
         
-        if not os.path.isdir(config.results_folder + os.sep + config.method):
-            os.mkdir(config.results_folder + os.sep + config.method)
+        torch.save(model, model_name)
         
-        model_name2=config.results_folder + os.sep + config.method + os.sep + config.method + info  + '.pt'
+        model_name_plot = model_name.replace('.pt','loss.png')
         
-        model.log.plot(model_name2.replace('.pt','loss.png'))
+        model.log.plot(model_name_plot)
         
         scheduler.step()
         
         
+    tmp_folder = config.tmp_folder.replace('_method_', config.method)
+    best_model_folder = config.best_model_folder.replace('_method_', config.method) 
+    
     best_model_ind = np.argmin(model.log.valid_log['loss'])
     best_model_name = model.log.model_names[best_model_ind]   
-    best_model_name_new = best_model_name.replace(config.results_folder, config.results_folder + os.sep + 'best_models')
+    best_model_name_new = best_model_name.replace(tmp_folder, best_model_folder)
     
-    if not os.path.isdir(config.results_folder + os.sep + 'best_models'):
-        os.mkdir(config.results_folder + os.sep + 'best_models')
+
+    if not os.path.isdir(os.path.split(best_model_name_new)[0]):
+        os.makedirs(os.path.split(best_model_name_new)[0])
     
     copyfile(best_model_name,best_model_name_new)
     
-    # if os.path.isdir(config.model_save_dir):
-    #     rmtree(config.model_save_dir) 
+    # if os.path.isdir(tmp_folder):
+    #     rmtree(tmp_folder) 
         
-    # if not os.path.isdir(config.model_save_dir):
-    #     os.mkdir(config.model_save_dir)
     
     dataset_dict_test = {key : value for key, value in dataset_dict.items() if value['split'] == 'test'}
     dices = evaluate(dataset_dict_test, model_name)

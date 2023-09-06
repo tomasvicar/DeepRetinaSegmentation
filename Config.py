@@ -8,9 +8,12 @@ class Config:
     
     dataset_fname = '../data_25.hdf5'
     
-    results_folder = '../tmp'
     
     method = 'test'
+    tmp_folder = '../_method_/tmp'
+    best_model_folder = '../_method_/best_models'
+    
+    
     
     seed = 42
     
@@ -31,8 +34,8 @@ class Config:
     
     
     init_lr = 1e-3
-    # lr_changes_list = np.cumsum([200,50,10,10])
-    lr_changes_list = np.cumsum([2,1])
+    lr_changes_list = np.cumsum([100,25,10,10])
+    # lr_changes_list = np.cumsum([1,1])
     gamma = 0.1
     
     
