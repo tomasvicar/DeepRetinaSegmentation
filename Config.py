@@ -9,7 +9,10 @@ class Config:
     dataset_fname = '../data_25.hdf5'
     
     
-    method = 'test'
+    # method = 'test'
+    # method = 'test_vessels_seg'
+    method = 'test_disk'
+    
     tmp_folder = '../_method_/tmp'
     best_model_folder = '../_method_/best_models'
     
@@ -47,7 +50,9 @@ class Config:
     
     
     # mask_type_use = [DataSpliter.VESSEL, DataSpliter.DISK, DataSpliter.CUP, DataSpliter.VESSEL_CLASS]
-    mask_type_use = [DataSpliter.VESSEL, DataSpliter.DISK, DataSpliter.CUP]
+    # mask_type_use = [DataSpliter.VESSEL, DataSpliter.DISK, DataSpliter.CUP]
+    # mask_type_use = [DataSpliter.VESSEL,]
+    mask_type_use = [DataSpliter.DISK,]
     
     device ='cuda:0'
     
