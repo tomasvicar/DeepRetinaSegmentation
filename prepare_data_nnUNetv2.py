@@ -30,7 +30,13 @@ def convert_to_nnUNetv2(dataset_name, data_path, segmentation_type):
         with h5py.File(data_path, 'r') as h5f:
             group = h5f[key]
             image = np.array(group['img'])
-            label = np.array(group[segmentation_type])
+            label_tmp = np.array(group[segmentation_type])
+            if segmentation_type=='ves_class':
+                label = np.zeros((label_tmp.shape[0], label_tmp.shape[1]), dtype=np.uint8)
+                label[label_tmp[:,:,0]==True] = 1
+                label[label_tmp[:,:,1]==True] = 2
+            else:
+                label = label_tmp
             if split == 'train':
                 path_save_img = path_imagesTr
                 path_save_lbl = path_labelsTr
@@ -51,7 +57,7 @@ if __name__ == '__main__':
     num_train = convert_to_nnUNetv2(dataset_name, data_path, segmentation_type)
     generate_dataset_json(os.path.join('../nnUNet_raw', dataset_name),
                           {0: 'R', 1: 'G', 2: 'B'},
-                          {'background': 0, 'vessel': 1},
+                          {'background': 0, 'artery': 1, 'vein': 2},
                           num_training_cases=num_train,
                           file_ending='.png',
                           dataset_name=dataset_name,
