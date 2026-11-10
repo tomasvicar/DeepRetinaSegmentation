@@ -2,7 +2,7 @@
 
 **Status:** original trained models are bundled with verified prepared-input
 inference. Three additional single-dataset pilots remain explicitly preliminary.
-Full unified-model training and comparison are still in progress.
+A completed full-data unified baseline is bundled; model optimization and final comparison remain in progress.
 The agreed deliverable is recorded in [GOAL.md](docs/GOAL.md).
 
 A Python package for retinal **vessel segmentation**, **artery/vein classification**,
@@ -11,7 +11,7 @@ The branch preserves five original trained checkpoints and three explicitly name
 pilot checkpoints. Original architectures, weights and prepared-input inference
 have been checked numerically against the historical implementations. The newer
 pilots are small single-dataset experiments; they are not replacements for the
-original models. A new unified model is being developed separately.
+original models. The separately named full-data unified baseline is also ready for inference.
 See [the project goal and completion criteria](docs/GOAL.md).
 
 ## Install
@@ -98,6 +98,7 @@ and [preprocessing evidence](docs/LEGACY_PREPROCESSING.md).
 | Included model | Provenance / outputs |
 | --- | --- |
 | `legacy-universal` | Original trained single_net: vessel, disc, cup |
+| `unified-full-data-baseline` | Completed60-epoch five-output baseline; selected E56 on validation, no TEST yet |
 | `legacy-vessels` | Original trained vessel network |
 | `legacy-disc-0`, `legacy-disc-1` | Two original trained disc networks |
 | `legacy-av` | Original trained A/V classifier; requires vessel support |

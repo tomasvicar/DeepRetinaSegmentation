@@ -1,6 +1,6 @@
 {
   "format_version": 1,
-  "description": "Original trained models with verified ports, plus explicitly named preliminary pilot models. Preprocessing provenance and quality evidence are separate.",
+  "description": "Original trained models with verified ports, one completed full-data unified baseline, and explicitly named preliminary pilots. Validation evidence is not held-out test evidence.",
   "models": {
     "pilot-vessels": {
       "filename": "vessels.pt",
@@ -280,6 +280,38 @@
       "limitations": "Single-seed pilot. AV class metrics use labeled reference vessel pixels. Disc/cup can produce bright-border false positives.",
       "family": "pilot_unet",
       "status": "single-dataset functionality pilot, not the final new unified model"
+    },
+    "unified-full-data-baseline": {
+      "filename": "unified-full-data-baseline.pt",
+      "sha256": "bfe957460dfed168f2344b1b84ef99b7f502e9dbc8ce1fd4d68632c3234708b1",
+      "family": "unified",
+      "task": "unified",
+      "channels": [
+        "vessel",
+        "artery",
+        "vein",
+        "disc",
+        "cup"
+      ],
+      "status": "completed 60-epoch full-data baseline; validation-selected, optimization ongoing, no test evaluation",
+      "selected_epoch": 56,
+      "completed_epochs": 60,
+      "training_photos": 2221,
+      "training_annotation_records": 5281,
+      "training_sources": 17,
+      "preprocessing_profile": "legacy25_raw",
+      "pixels_per_degree": 25,
+      "default_threshold": 0.5,
+      "validation": {
+        "selection_metric": "macro_dataset_mean_dice",
+        "training_score": 0.8001230874055754,
+        "threshold": 0.5,
+        "photos": 770
+      },
+      "source_commit": "3157bb957fcf6e6f632a5c49d6df2c8a78ea3747",
+      "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+      "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+      "limitations": "Single-seed validation-selected baseline. HPO ongoing; no held-out test evaluation or claim of superiority across all tasks. Missing labels are ignored; A/V probabilities are conditional and cup decoding is constrained inside disc."
     }
   },
   "aliases": {

@@ -1,0 +1,5 @@
+# Completed full-data baseline provenance
+
+`unified-full-data-baseline` ships the exact original validation-selected E56 bytes, SHA256 `bfe957460dfed168f2344b1b84ef99b7f502e9dbc8ce1fd4d68632c3234708b1`. The run completed E60 and its terminal best/last/optimizer/source/data/scheduler/coverage QA passed. [QA](qa-summary.json) and [full training CSV](metrics.csv) are retained; QA refers to the independent training milestone, not a bundled optimizer.
+
+This is a usable baseline, not the final HPO winner. It trained from scratch on 2221 photos /5281 annotation records from17 sources, for8192 samples/epoch and60 epochs. Missing/unknown annotations remain ignored. Best E56 training validation source-macro Dice .8001230874 uses threshold .5. The shipped inference threshold remains .5; separate validation threshold experiments do not alter it. No held-out TEST evaluation has been performed. Validation selection, one seed, uncertain patient identities in some datasets and historical exposure of original-model references limit comparative claims.

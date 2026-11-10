@@ -1,0 +1,63 @@
+{
+  "scope": "actual CLI CPU functionality on a raw TRAIN photograph, no GT scoring or TEST",
+  "model": "unified-full-data-baseline",
+  "checkpoint_sha256": "bfe957460dfed168f2344b1b84ef99b7f502e9dbc8ce1fd4d68632c3234708b1",
+  "command": [
+    "deepretina",
+    "predict",
+    "--model",
+    "unified-full-data-baseline",
+    "--input",
+    "21_training.tif",
+    "--fov",
+    "21_training_mask.gif",
+    "--dataset",
+    "drive",
+    "--device",
+    "cpu"
+  ],
+  "source_resources": [
+    "DRIVE.zip:training/images/21_training.tif",
+    "DRIVE.zip:training/mask/21_training_mask.gif"
+  ],
+  "input_sha256": {
+    "21_training.tif": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+    "21_training_mask.gif": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7"
+  },
+  "original_shape": [
+    584,
+    565
+  ],
+  "probability_shape": [
+    5,
+    584,
+    565
+  ],
+  "outputs_sha256": {
+    "probabilities.npz": "7c98123864c5e27746a9ee5faed9ab2be5d151af9feea6b57dd182fb807e3ee2",
+    "vessel.png": "22f3eee804f5bd768c2f467815ba7a67d5e9df05dc3ba57a249dc9db2eec579e",
+    "artery.png": "3112efc7b18aae66063400d784f157b20dce382cac02a686e2d6056d67f50a4f",
+    "vein.png": "3d483ce3e4130138e8f51535c831fc31e5cdb63d00289c711a1613c6e5ad8625",
+    "disc.png": "8b4147274f214569912741c4dae90f018be6932a19540f62355cfd0d7b7a3dee",
+    "cup.png": "95f1a1adc0c2ed488bab72f5dcf32e16cfcee25638b870262cc374c6759c1bdc",
+    "av.png": "13d0cdab81ea6807647b81c144a0f01dd07fe60416ffaeb6db5c5a1258bfe749",
+    "overlay.png": "bc2e473d5ce20e8fc4cc283811a517eab58602119d3c0f52c4e4a0876d2de9c8",
+    "prediction.json": "e8d36093b8ce9a1e8e64fea5acf1d5e706644872365ffbdf982efc69ce565cf4"
+  },
+  "mask_positive_pixels": {
+    "vessel": 23468,
+    "artery": 9568,
+    "vein": 13900,
+    "disc": 6087,
+    "cup": 1997
+  },
+  "finite_probabilities": true,
+  "all_five_original_frame_masks": true,
+  "cup_inside_disc": true,
+  "av_exclusive_partition_of_predicted_vessels": true,
+  "outside_fov_masks_empty": true,
+  "default_threshold": 0.5,
+  "gpu_used": false,
+  "quality_claim": false,
+  "test_evaluation_performed": false
+}

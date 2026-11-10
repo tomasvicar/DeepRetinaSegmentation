@@ -11,7 +11,7 @@ from deepretina.bundled import bundled_checkpoint, model_catalog
 from deepretina.cli import main
 
 
-def test_original_and_explicit_pilot_models_exist_and_match_checksums():
+def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums():
     catalog = model_catalog()["models"]
     assert set(catalog) == {
         "legacy-vessels",
@@ -22,6 +22,7 @@ def test_original_and_explicit_pilot_models_exist_and_match_checksums():
         "pilot-vessels",
         "pilot-av",
         "pilot-disc-cup",
+        "unified-full-data-baseline",
     }
     for name, info in catalog.items():
         with bundled_checkpoint(name) as checkpoint:
@@ -32,6 +33,12 @@ def test_original_and_explicit_pilot_models_exist_and_match_checksums():
             assert saved["family"] == info["family"]
             assert "state_dict" in saved
         assert saved["channels"] == info["channels"]
+        if name == "unified-full-data-baseline":
+            assert saved["epoch"] == info["selected_epoch"] == 56
+            assert saved["config"]["purpose"] == "full_data"
+            assert saved["config"]["preprocessing_profile"] == info["preprocessing_profile"]
+            assert info["completed_epochs"] == 60
+            assert info["default_threshold"] == 0.5
 
 
 def test_cli_predicts_without_dataset_or_external_checkpoint(tmp_path, capsys):

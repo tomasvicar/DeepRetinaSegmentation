@@ -11,6 +11,23 @@ steps use Python. Models need no missing large pretraining database. Set the dat
 root to your ownCloud `fundus_databases` folder; original archives are read only.
 Choose new output directories for preparation and training.
 
+## Use the bundled completed baseline
+
+```bash
+uv run deepretina predict --model unified-full-data-baseline \
+  --input /path/to/fundus.jpg --dataset drive --fov /path/to/fov.png \
+  --output predictions/unified-baseline --device cpu
+```
+
+Use your photograph's actual dataset/camera geometry; `drive` above is an example.
+This single RGB model produces vessel, artery, vein, disc and cup masks,
+probabilities, overlay and original-frame metadata. Defaults retain threshold0.5.
+It completed60 epochs on all2221 eligible training photos /5281 annotation records
+from17 sources, without pretraining; selected checkpoint E56 has training VAL
+source-macro Dice0.800123. It has **no held-out TEST results yet**; HPO and measured
+comparison continue. [Training CSV and terminal QA](../reports/release/control60-baseline/)
+document provenance. Original models and their aliases remain available.
+
 ## Prepare the full suitable annotated corpus
 
 ```bash

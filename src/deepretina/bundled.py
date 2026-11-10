@@ -1,4 +1,4 @@
-"""Portable, checksum-verified original and explicitly named pilot checkpoints."""
+"""Portable, checksum-verified original, full-data baseline and explicitly named pilot checkpoints."""
 
 import hashlib
 import json
