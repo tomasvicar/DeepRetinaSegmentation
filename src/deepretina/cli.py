@@ -73,6 +73,20 @@ def parser() -> argparse.ArgumentParser:
     train.add_argument("--loss", choices=["bce", "bce_dice"])
     train.add_argument("--device", help="auto, cpu, cuda, cuda:0, ...")
 
+    joint = commands.add_parser(
+        "train-unified", help="Experimental five-output training with partial supervision"
+    )
+    joint.add_argument("--manifest", type=Path, required=True)
+    joint.add_argument("--output", type=Path, required=True)
+    joint.add_argument("--config", type=Path, help="Flat JSON or TOML UnifiedConfig settings")
+    joint.add_argument("--resume", type=Path, help="Resume a unified last.pt checkpoint")
+    joint.add_argument("--device")
+    joint.add_argument("--stop-after-epoch", type=int)
+    joint.add_argument("--expected-content-sha256", help="Optional externally pinned corpus hash")
+    joint.add_argument("--purpose", choices=["functionality", "full_data"])
+    for name in ("epochs", "epoch_samples", "max_steps"):
+        joint.add_argument("--" + name.replace("_", "-"), type=int)
+
     evaluate = commands.add_parser("evaluate", help="Score a held-out split with tiled inference")
     evaluate.add_argument("--manifest", type=Path, required=True)
     evaluate.add_argument("--split", choices=["train", "val", "test"], default="test")
@@ -92,8 +106,12 @@ def parser() -> argparse.ArgumentParser:
             help="Use a model bundled with this package",
         )
         cmd.add_argument("--device", default="auto")
-        cmd.add_argument("--tile-size", type=int, default=512)
-        cmd.add_argument("--overlap", type=int, default=64)
+        cmd.add_argument(
+            "--tile-size", type=int, help="Override tile size; unified uses checkpoint default"
+        )
+        cmd.add_argument(
+            "--overlap", type=int, help="Override overlap; unified uses checkpoint default"
+        )
         cmd.add_argument("--threshold", type=float, default=0.5)
     predict.add_argument("--dataset", help="Camera/dataset profile, e.g. drive, hrf, drishti")
     predict.add_argument(
@@ -206,6 +224,10 @@ def dispatch(args: argparse.Namespace):
         config = TrainConfig(**settings)
         print(json.dumps(asdict(config), indent=2), flush=True)
         return {"checkpoint": str(train(args.manifest, args.output, config))}
+    if args.command == "train-unified":
+        from .unified_cli import train_from_args
+
+        return train_from_args(args)
     if args.command == "models":
         from .bundled import model_catalog
 
@@ -255,6 +277,10 @@ def _apply_model(args, checkpoint: Path):
     import torch
 
     family = torch.load(checkpoint, map_location="cpu", weights_only=True).get("family")
+    if family == "unified":
+        from .unified_cli import apply_unified
+
+        return apply_unified(args, checkpoint)
     if family in {"legacy_single_net", "legacy_av"}:
         return _apply_legacy(args, checkpoint, family)
     if args.command == "predict" and (args.av_raw_proxy or args.av_raw_matlab):
@@ -266,8 +292,8 @@ def _apply_model(args, checkpoint: Path):
 
     options = {
         "device": args.device,
-        "tile_size": args.tile_size,
-        "overlap": args.overlap,
+        "tile_size": args.tile_size if args.tile_size is not None else 512,
+        "overlap": args.overlap if args.overlap is not None else 64,
         "threshold": args.threshold,
     }
     if args.command == "evaluate":

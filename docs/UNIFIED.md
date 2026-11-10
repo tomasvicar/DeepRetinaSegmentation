@@ -54,10 +54,10 @@ contain [Pv,Qa,Qv,Pdisc,Pcup]; Qa+Qv=1, including neutral0.5/0.5 outside FOV.
 
 ```bash
 uv run python -m deepretina.unified inspect data/fair-unified/manifest.json
-uv run python -m deepretina.unified train \
+uv run deepretina train-unified \
   --manifest data/fair-unified/manifest.json --output runs/unified-all-sources \
   --purpose full_data --epochs 60 --epoch-samples 8192 --stop-after-epoch 1
-uv run python -m deepretina.unified train \
+uv run deepretina train-unified \
   --manifest data/fair-unified/manifest.json --output runs/unified-all-sources \
   --resume runs/unified-all-sources/last.pt
 ```
@@ -82,18 +82,63 @@ coverage entries, so dataset totals need not sum to the global count.
 `best.pt` is validation-selected and safe to load with `weights_only=True`;
 `last.pt` additionally preserves optimizer, scheduler, all RNG states and actual
 coverage for exact epoch-boundary continuation. Resume requires the original
-manifest hash, configuration and run directory. `--stop-after-epoch` is an
-operational pause, leaving the planned cosine budget unchanged. `--max-steps`
+manifest hash, configuration, executable training-source fingerprint and run directory. `--stop-after-epoch` is an
+operational pause, leaving the planned cosine budget unchanged. New CLI code does
+not migrate existing experiments across source revisions: older pinned training
+checkouts keep running/resuming through their own unchanged sources, while
+their checkpoints remain usable for prediction. `--max-steps`
 is intended for functionality checks and may stop before photo coverage is
 complete. Check the exported coverage rather than assuming completion.
+
+Public `train-unified` accepts a flat `--config settings.json` or `settings.toml`
+containing `UnifiedConfig` field names. Unknown fields and nested tables are
+rejected. `--device`, `--purpose`, `--epochs`, `--epoch-samples`, and `--max-steps`
+override config values. Resume restores the saved config and audited content pin
+before applying explicit overrides; the trainer still rejects changes to the
+planned budget/configuration. Only device and runtime stop-after-epoch can vary
+under the existing continuation contract. Progress logs go to stderr; stdout is
+the JSON command result. Optional `--expected-content-sha256` enforces an external
+corpus pin. Full-data training validates the canonical audit even without that
+option. Functionality checkpoints lacking a corpus pin cannot use public validation.
 
 ## Inference and evaluation
 
 ```bash
-uv run python -m deepretina.unified predict \
+uv run deepretina predict \
   --checkpoint runs/unified-all-sources/best.pt --input fundus.png \
   --output predictions/example --dataset drive
 ```
+
+The public checkpoint dispatcher preserves original and pilot model routes.
+Unified prediction requires raw RGB and canonical25 pixels/degree geometry.
+Provide `--fov` for a single image if available, `--dataset` or
+`--field-of-view-degrees` for the camera. Folder inputs use per-photo automatic
+FOV masks and cannot share one `--fov`. `--pixels-per-degree` must equal25.
+Legacy prepared arrays/DICOM, raw AV proxy/MATLAB, vessel-input and `--normalized`
+options are rejected for unified models.
+
+Checkpoint `tile_size` and `overlap` apply by default. Explicit overrides are
+validated, actually passed to tiled inference, and recorded with checkpoint
+values in `prediction.json`. Whole-view models retain their trained whole-view
+resize/padding policy and reject tiling overrides rather than ignoring them.
+No new unified bundled aliases or final model weights accompany these commands.
+The model and current quality remain experimental.
+
+```bash
+uv run deepretina evaluate --checkpoint runs/unified-all-sources/best.pt \
+  --manifest data/fair-unified/manifest.json --split val \
+  --output metrics/unified-validation.json
+```
+
+Public validation reuses the checkpoint config and requires exactly its manifest
+SHA and audited prepared-content fingerprint, including after relocation. It
+rejects unpinned functionality checkpoints and changed inputs before writing
+metrics. `evaluate` defaults to test for older pilot routes, so **specify
+`--split val`** for unified models. Public train/test split evaluation is blocked;
+there is no file-hash shortcut for a frozen-selection record. A reviewed record
+schema/protocol must be implemented before test evaluation becomes available.
+Low-level evaluators remain research APIs and retain their documented ancestry
+and selection obligations.
 
 Outputs include original-size probabilities, five masks, an AV color map,
 overlay and geometry metadata. `load_unified`, `predict_probabilities` (CHW RGB

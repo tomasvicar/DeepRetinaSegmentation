@@ -832,6 +832,23 @@ def load_unified(path: Path, device="auto"):
     return model.to(device).eval(), payload, device
 
 
+def inference_config(payload, *, tile_size=None, overlap=None):
+    """Use checkpoint geometry; explicit tiling overrides apply only to patch models."""
+    from dataclasses import replace
+
+    config = UnifiedConfig(**payload["config"])
+    if config.train_view == "whole" and (tile_size is not None or overlap is not None):
+        raise ValueError("Whole-view unified checkpoints do not accept tiling overrides")
+    settings = {
+        key: value
+        for key, value in {"tile_size": tile_size, "overlap": overlap}.items()
+        if value is not None
+    }
+    config = replace(config, **settings)
+    config.validate()
+    return config
+
+
 def predict_unified(
     checkpoint: Path,
     image_path: Path,
@@ -842,6 +859,8 @@ def predict_unified(
     fov=None,
     field_of_view_degrees=None,
     threshold=0.5,
+    tile_size=None,
+    overlap=None,
 ):
     """Complete raw-photo prediction with the verified legacy25_raw geometry.
 
@@ -853,7 +872,9 @@ def predict_unified(
     model, payload, device = load_unified(checkpoint, device)
     with Image.open(image_path) as photo:
         original = np.asarray(photo.convert("RGB")).copy()
-    config = UnifiedConfig(**payload["config"])
+    config = inference_config(payload, tile_size=tile_size, overlap=overlap)
+    if not 0 < threshold < 1:
+        raise ValueError("Unified threshold must be in (0,1)")
     prepared = prepare_single_net(
         original,
         dataset=dataset,
@@ -930,6 +951,19 @@ def predict_unified(
         "fusion": "joint AV probabilities interpolated/blended before recovering conditional AV",
         "decoding": "conditional artery/vein argmax gated by vessel threshold; cup within disc; outside FOV segmentation probabilities zero, conditional probabilities0.5",
         "threshold": threshold,
+        "inference": {
+            "mode": "whole" if config.train_view == "whole" else "tiled",
+            "tile_size": config.tile_size if config.train_view == "patch" else None,
+            "overlap": config.overlap if config.train_view == "patch" else None,
+            "view_size": config.view_size if config.train_view == "whole" else None,
+            "checkpoint_tile_size": payload["config"].get("tile_size", 512),
+            "checkpoint_overlap": payload["config"].get("overlap", 64),
+            "overrides": {
+                key: value
+                for key, value in {"tile_size": tile_size, "overlap": overlap}.items()
+                if value is not None
+            },
+        },
         "outputs": paths,
     }
     _write_json(output / "prediction.json", metadata)
