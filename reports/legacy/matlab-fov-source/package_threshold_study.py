@@ -81,17 +81,15 @@ def main():
         except NotImplementedError:
             row["status"] = "degenerate_policy_unported"
         else:
-            indices = np.rint((expected - image.min()) / (image.max() - image.min()) * 255).astype(
-                int
-            )
+            indices = (expected - image.min()) / (image.max() - image.min()) * 255
             delta = result["threshold_indices"] - indices
             row.update(
                 candidate_thresholds=result["thresholds"].tolist(),
                 candidate_threshold_indices=result["threshold_indices"].tolist(),
                 source_threshold_indices=indices.tolist(),
                 index_differences=delta.tolist(),
-                first_threshold_index_equal=bool(delta[0] == 0),
-                all_threshold_indices_equal=bool((delta == 0).all()),
+                first_threshold_index_equal=bool(result["thresholds"][0] == expected[0]),
+                all_threshold_indices_equal=bool(np.array_equal(result["thresholds"], expected)),
                 candidate_effectiveness=result["effectiveness"],
                 candidate_effectiveness_status=result["effectiveness_status"],
                 status="candidate_not_certified",

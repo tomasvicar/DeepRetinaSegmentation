@@ -260,3 +260,17 @@ Follow-up verification:519 focused CPU tests passed on Ada (nice10, one thread,
 CUDA hidden,0.62seconds), including407 bitwise native histogram edge receipts,
 synthetic local-search vectors, preserved known disagreement and the adjacent-
 double/no-epsilon counterexample. Ruff/format checks passed remotely.
+
+## First-cutoff requirement resolved as an explicit optional backend
+
+The follow-up reads the actual7bb source caller and compares the required
+**floating first cutoff**, not unused higher thresholds or rounded coordinates.
+The recovered failed-search rule preserves continuous initial positions. Across
+two new independent batches,1320/1320 first cutoff floats agree bitwise, with
+zero pixel-decision differences. Eighteen synthetic FOV cases and three raw
+train/image-only frames match masks/boundaries/calibration exactly.
+
+The optional backend is explicit, retains separate calibration/processing masks,
+and leaves public/default profiles guarded. [MATLAB_FIRST_CUTOFF.md](MATLAB_FIRST_CUTOFF.md)
+contains its scope, source line references, corrected earlier rounded-index
+measurement, remaining exclusions and composed-profile review boundary.
