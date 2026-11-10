@@ -149,4 +149,3 @@ The exact restored gating mask is `vessel_support` in `probabilities.npz`.
 Artery/vein outputs are mutually exclusive and gated by that restored support.
 Nested vessel prediction metadata links only to the retained `vessel.png`;
 temporary probability, overlay and metadata files are discarded.
-
