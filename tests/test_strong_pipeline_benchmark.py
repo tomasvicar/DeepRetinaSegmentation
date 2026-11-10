@@ -167,3 +167,134 @@ def test_unified_uses_checkpoint_geometry_and_masks_original_frame(benchmark_mod
     assert result[1, 0, 1] and not result[2, 0, 1]
     assert not result[4, 0, 1]  # Cup containment retained.
     assert result[4, 1, 0]
+
+
+def test_palette_fov_uses_displayed_intensity_not_indices(tmp_path, benchmark_module):
+    from PIL import Image
+
+    m = benchmark_module
+    image = tmp_path / "image.png"
+    fov_path = tmp_path / "fov.png"
+    Image.fromarray(np.full((2, 3, 3), 80, np.uint8)).save(image)
+    indices = np.array([[0, 1, 1], [1, 0, 1]], np.uint8)
+    fov = Image.frombytes("P", (3, 2), indices.tobytes())
+    fov.putpalette([255, 255, 255, 0, 0, 0] + [0] * 762)
+    fov.save(fov_path)
+    rgb, mask, identity = m.input_snapshots(image, fov_path)
+    np.testing.assert_array_equal(mask, indices == 0)
+    assert rgb.shape == (2, 3, 3) and identity["fov_sha256"] == m.sha256(fov_path)
+
+
+def test_input_identity_matches_decoded_snapshot_after_path_replacement(
+    tmp_path, benchmark_module, monkeypatch
+):
+    import hashlib
+    import io
+
+    from PIL import Image
+
+    m = benchmark_module
+    image = tmp_path / "image.png"
+    fov = tmp_path / "fov.png"
+    Image.fromarray(np.full((2, 3, 3), 80, np.uint8)).save(image)
+    Image.fromarray(np.array([[0, 255, 255], [255, 0, 255]], np.uint8)).save(fov)
+    image_bytes, fov_bytes = image.read_bytes(), fov.read_bytes()
+    replacement = io.BytesIO()
+    Image.fromarray(np.full((2, 3, 3), 190, np.uint8)).save(replacement, format="PNG")
+    read = Path.read_bytes
+
+    def swap(self):
+        data = read(self)
+        if self == image:
+            self.write_bytes(replacement.getvalue())
+        if self == fov:
+            self.write_bytes(image_bytes)
+        return data
+
+    monkeypatch.setattr(Path, "read_bytes", swap)
+    rgb, mask, identity = m.input_snapshots(image, fov)
+    assert (rgb == 80).all()
+    np.testing.assert_array_equal(mask, np.array([[False, True, True], [True, False, True]]))
+    assert identity == {
+        "input_sha256": hashlib.sha256(image_bytes).hexdigest(),
+        "fov_sha256": hashlib.sha256(fov_bytes).hexdigest(),
+    }
+    assert hashlib.sha256(read(image)).hexdigest() != identity["input_sha256"]
+
+
+def test_benchmark_report_retains_timed_input_snapshot_hashes(
+    tmp_path, benchmark_module, reference_files, monkeypatch
+):
+    import hashlib
+    import json
+
+    from PIL import Image
+
+    m = benchmark_module
+    paths, reference = reference_files
+    image = tmp_path / "input.png"
+    fov = tmp_path / "fov.png"
+    unified = tmp_path / "unified.pt"
+    ref = tmp_path / "ref.json"
+    Image.fromarray(np.full((2, 3, 3), 80, np.uint8)).save(image)
+    Image.fromarray(np.ones((2, 3), np.uint8) * 255).save(fov)
+    unified.write_bytes(b"unified")
+    ref.write_text(json.dumps(reference))
+    snapshots = {
+        "input_sha256": hashlib.sha256(image.read_bytes()).hexdigest(),
+        "fov_sha256": hashlib.sha256(fov.read_bytes()).hexdigest(),
+    }
+    channels = {"vessel": ["vessel"], "disc": ["disc"], "universal": ["vessel", "disc", "cup"]}
+    monkeypatch.setattr(
+        m,
+        "load_single_net",
+        lambda path, device: (
+            torch.nn.Linear(1, 1),
+            {"channels": channels[path.stem], "tiling": {"crop_size": 288, "border": 36}},
+        ),
+    )
+    monkeypatch.setattr(m, "load_av", lambda *args: (torch.nn.Linear(1, 1), {}))
+    model = torch.nn.Linear(1, 1)
+    model.supervised_channels = [True] * 5
+    monkeypatch.setattr(
+        m,
+        "load_unified",
+        lambda *args: (model, {"config": {"purpose": "full_data"}}, torch.device("cpu")),
+    )
+    calls = []
+
+    def inspect_original(rgb, mask, *args):
+        assert (rgb == 80).all() and mask.all()
+        calls.append("original")
+        return np.zeros((5, 2, 3), bool)
+
+    def inspect_unified(rgb, mask, *args):
+        assert (rgb == 80).all() and mask.all()
+        calls.append("unified")
+        return np.zeros((5, 2, 3), bool)
+
+    monkeypatch.setattr(m, "original_operation", inspect_original)
+    monkeypatch.setattr(m, "unified_operation", inspect_unified)
+
+    def measured(operation, *args, **kwargs):
+        operation()
+        image.write_bytes(b"path replaced after decoding")
+        fov.write_bytes(b"path replaced after decoding")
+        return {"median_seconds": 1}
+
+    monkeypatch.setattr(m, "measure", measured)
+    args = SimpleNamespace(
+        **paths,
+        unified=unified,
+        reference_report=ref,
+        input=image,
+        fov=fov,
+        dataset="drive",
+        field_of_view_degrees=None,
+        device="cpu",
+        warmup=0,
+        repeats=1,
+    )
+    report = m.benchmark(args)
+    assert calls == ["original", "unified"]
+    assert {key: report[key] for key in snapshots} == snapshots
