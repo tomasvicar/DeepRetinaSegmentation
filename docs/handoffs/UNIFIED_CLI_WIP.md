@@ -16,12 +16,12 @@ Implemented:
   test remains blocked until a reviewed frozen-selection schema exists.
 - `unified.py`: optional inference tiling overrides are applied/recorded, while
   whole-view checkpoints reject meaningless tile overrides.
-- `test_unified_cli.py`:21 CPU cases, including actual tiny generated all5head
+- `test_unified_cli.py`:24 CPU cases, including actual tiny generated all5head
   training/prediction, JSON/TOML resume bitwise equal to uninterrupted training,
   native outputs, override forwarding, pins, failures, batch and pilot defaults.
 - README and UNIFIED.md document experimental/current nonfinal quality and usage.
 
-Validation: **505 full-suite tests passed**, 58 existing morphology/multiprocessing
+Validation: **509 full-suite tests passed**, 58 existing morphology/multiprocessing
 warnings; ruff check and format checks passed (115files). No new checkpoint alias,
 weights, or quality claim. Test data/checkpoints were generated only in temporary
 test directories. No test metrics were opened for actual experimental models.
@@ -33,3 +33,10 @@ checkpoints remain prediction-compatible; new CLI runs resume exactly as tested.
 
 Next: root review and integration into HPO only. Stable shipping integration and
 final unified model selection remain separate tasks.
+
+Incremental review patch: validation reports are preserved with an early guard
+and exclusive creation; checkpoint hashes identify exactly the loaded safe byte
+snapshot, including live path replacement. Per-photo conditional A/V counts
+reconstruct header metrics and retain missed-vessel conditional scoring. Tests
+cover snapshot weights/probabilities/hash, early/late report preservation, and
+count aggregation. No decode, RNG, loss, or training-math change.

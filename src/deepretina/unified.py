@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import io
 import json
 import math
 import random
@@ -751,15 +752,24 @@ def evaluate_unified_model(model, manifest, split="val", device="cpu", config=No
                 by_dataset[annotation_source][channel] += values[channel]
                 channel_datasets[CHANNELS[channel]] = annotation_source
         known = v[1] & v[2] & (t[1] ^ t[2])
-        av_count += int(known.sum())
-        av_conditional += int(((probability[1] >= probability[2]) == t[1])[known].sum())
-        av_correct += int(((masks[1] & t[1] | masks[2] & t[2]) & known).sum())
+        photo_av_count = int(known.sum())
+        photo_conditional = int(((probability[1] >= probability[2]) == t[1])[known].sum())
+        photo_end_to_end = int(((masks[1] & t[1] | masks[2] & t[2]) & known).sum())
+        av_count += photo_av_count
+        av_conditional += photo_conditional
+        av_correct += photo_end_to_end
         per_photo.append(
             {
                 "photo_id": dataset.photo_ids[index],
                 "record_ids": [r["id"] for r in rows],
                 "dataset": source,
                 "channel_datasets": channel_datasets,
+                "av_conditional_counts": {
+                    "correct": photo_conditional,
+                    "scored_pixels": photo_av_count,
+                    "eligible_pixels": photo_av_count,
+                    "end_to_end_correct": photo_end_to_end,
+                },
                 "channels": {
                     name: _metrics(value) for name, value in zip(CHANNELS, values, strict=True)
                 },
@@ -813,8 +823,11 @@ def evaluate_unified_model(model, manifest, split="val", device="cpu", config=No
     }
 
 
-def load_unified(path: Path, device="auto"):
-    payload = torch.load(path, map_location="cpu", weights_only=True)
+def load_unified(path, device="auto"):
+    """Load one immutable byte snapshot from a path or binary stream, safely."""
+    snapshot = path.read() if hasattr(path, "read") else Path(path).read_bytes()
+    payload = torch.load(io.BytesIO(snapshot), map_location="cpu", weights_only=True)
+    payload["checkpoint_sha256"] = hashlib.sha256(snapshot).hexdigest()
     if payload.get("format_version") != 1 or payload.get("family") != "unified":
         raise ValueError("Expected unified format_version1 checkpoint")
     if tuple(payload["channels"]) != CHANNELS:
@@ -925,6 +938,7 @@ def predict_unified(
     metadata = {
         "family": "unified",
         "checkpoint": str(checkpoint),
+        "checkpoint_sha256": payload["checkpoint_sha256"],
         "lineage": model.lineage,
         "architecture": model.architecture_spec,
         "accuracy_claim": payload.get("accuracy_claim", False),

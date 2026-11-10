@@ -203,3 +203,21 @@ checkpoint. The original checkpoint path is provenance, not a runtime dependency
 For the new student only, an input wrapper fixes height/width padding for odd,
 rectangular and very small images before delegating to the unchanged original
 forward. The historical reference implementation and golden behavior stay intact.
+
+## Report preservation and checkpoint identity
+
+Public unified validation refuses an existing output file before loading the model
+or evaluating, and publishes with exclusive creation to preserve even a report
+created concurrently. Choose a new metrics filename for a new measurement.
+Prediction and validation include `checkpoint_sha256` of the exact immutable byte
+snapshot loaded with `weights_only=True`; replacing a live `best.pt` during
+inference cannot change that report's checkpoint identity.
+
+Each `per_photo` entry includes `av_conditional_counts`: `correct`,
+`scored_pixels`, `eligible_pixels`, and `end_to_end_correct`. Counts use the same
+supported known-class reference-vessel mask as the header. Unified conditional
+classification is scored even where the vessel detector misses a reference
+vessel, so conditional correctness can exceed end-to-end correctness. Per-photo
+correct/scored sums reconstruct header `av_conditional_accuracy`, while
+end-to-end/eligible reconstructs `av_accuracy`. These counts support paired
+uncertainty analysis without changing decoding or training objectives.

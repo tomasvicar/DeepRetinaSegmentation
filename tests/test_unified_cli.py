@@ -412,3 +412,131 @@ def test_unified_training_rejects_unknown_or_nonobject_config(tmp_path, capsys):
         assert exc.value.code == 2
         capsys.readouterr()
         assert not (tmp_path / "bad").exists()
+
+
+def test_existing_validation_report_is_preserved_before_model_or_evaluator(
+    trained, tmp_path, capsys, monkeypatch
+):
+    import deepretina.unified_cli as public
+
+    checkpoint, manifest = trained
+    report = tmp_path / "existing.json"
+    report.write_text("scientific report to preserve\n")
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("Existing report must be rejected before loading model or scoring")
+
+    monkeypatch.setattr(public, "load_unified", forbidden)
+    monkeypatch.setattr(public, "evaluate_unified_model", forbidden)
+    with pytest.raises(SystemExit) as error:
+        main(
+            [
+                "evaluate",
+                "--checkpoint",
+                str(checkpoint),
+                "--manifest",
+                str(manifest),
+                "--split",
+                "val",
+                "--output",
+                str(report),
+                "--device",
+                "cpu",
+            ]
+        )
+    assert error.value.code == 2
+    assert "preserved" in capsys.readouterr().err
+    assert report.read_text() == "scientific report to preserve\n"
+
+
+def test_validation_exclusive_write_handles_late_report_and_hashes_loaded_snapshot(
+    trained, tmp_path, capsys, monkeypatch
+):
+    import io
+
+    import deepretina.unified_cli as public
+
+    checkpoint, manifest = trained
+    snapshot = checkpoint.read_bytes()
+    original = torch.load(io.BytesIO(snapshot), weights_only=True)
+    key = next(k for k, value in original["state_dict"].items() if value.is_floating_point())
+    replacement = dict(original)
+    replacement["state_dict"] = dict(original["state_dict"])
+    replacement["state_dict"][key] = original["state_dict"][key] + 1
+    replacement_path = tmp_path / "replacement.pt"
+    torch.save(replacement, replacement_path)
+    report = tmp_path / "metrics.json"
+
+    def replace_during_evaluation(model, *args, **kwargs):
+        assert torch.equal(model.state_dict()[key], original["state_dict"][key])
+        checkpoint.write_bytes(replacement_path.read_bytes())
+        return {"split": "val"}
+
+    monkeypatch.setattr(public, "evaluate_unified_model", replace_during_evaluation)
+    command = [
+        "evaluate",
+        "--checkpoint",
+        str(checkpoint),
+        "--manifest",
+        str(manifest),
+        "--split",
+        "val",
+        "--output",
+        str(report),
+        "--device",
+        "cpu",
+    ]
+    main(command)
+    result = json.loads(capsys.readouterr().out)
+    assert result["checkpoint_sha256"] == hashlib.sha256(snapshot).hexdigest()
+    assert result["checkpoint_sha256"] != hashlib.sha256(checkpoint.read_bytes()).hexdigest()
+    report.unlink()
+    checkpoint.write_bytes(snapshot)
+
+    def publish_another_report(*args, **kwargs):
+        report.write_text("concurrent scientific result")
+        return {"split": "val"}
+
+    monkeypatch.setattr(public, "evaluate_unified_model", publish_another_report)
+    with pytest.raises(SystemExit) as error:
+        main(command)
+    assert error.value.code == 2
+    assert report.read_text() == "concurrent scientific result"
+    capsys.readouterr()
+
+
+def test_prediction_hash_and_weights_use_same_snapshot_when_checkpoint_path_replaced(
+    trained, tmp_path, capsys, monkeypatch
+):
+    import io
+
+    from deepretina import unified
+
+    checkpoint, manifest = trained
+    snapshot = checkpoint.read_bytes()
+    expected_sha = hashlib.sha256(snapshot).hexdigest()
+    main(predict_args(checkpoint, manifest, tmp_path / "before"))
+    before = json.loads(capsys.readouterr().out)
+    payload = torch.load(io.BytesIO(snapshot), weights_only=True)
+    key = next(k for k, value in payload["state_dict"].items() if value.is_floating_point())
+    payload["state_dict"][key] += 1
+    replacement = tmp_path / "replacement.pt"
+    torch.save(payload, replacement)
+    actual_load = torch.load
+    intercepted = []
+
+    def replace_after_snapshot(source, *args, **kwargs):
+        if isinstance(source, io.BytesIO):
+            assert kwargs["weights_only"] is True
+            checkpoint.write_bytes(replacement.read_bytes())
+            intercepted.append(True)
+        return actual_load(source, *args, **kwargs)
+
+    monkeypatch.setattr(unified.torch, "load", replace_after_snapshot)
+    main(predict_args(checkpoint, manifest, tmp_path / "after"))
+    after = json.loads(capsys.readouterr().out)
+    info = json.loads(Path(after["metadata"]).read_text())
+    assert intercepted and info["checkpoint_sha256"] == expected_sha
+    assert hashlib.sha256(checkpoint.read_bytes()).hexdigest() != expected_sha
+    with np.load(before["probabilities"]) as a, np.load(after["probabilities"]) as b:
+        np.testing.assert_array_equal(a["probability"], b["probability"])

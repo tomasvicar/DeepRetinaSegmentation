@@ -754,3 +754,36 @@ def test_resume_refuses_changed_gt_under_unchanged_manifest(tmp_path):
             manifest, output, config, resume=output / "last.pt", expected_content_sha256=content
         )
     assert torch.load(output / "last.pt", weights_only=True)["epoch"] == 1
+
+
+def test_per_photo_conditional_counts_sum_header_and_include_missed_vessels(tmp_path, monkeypatch):
+    from deepretina import unified
+
+    manifest = make_manifest(tmp_path)
+    # Keep both generated photos in the same scored partition.
+    rows = json.loads(manifest.read_text())
+    for row in rows:
+        row["split"] = "val"
+    manifest.write_text(json.dumps(rows))
+    calls = []
+
+    def missed_vessels(model, image, device, config, tile_size, overlap):
+        calls.append(True)
+        probability = np.full((5, *image.shape[-2:]), 0.1, np.float32)
+        probability[1] = 0.9
+        probability[2] = 0.1
+        return probability
+
+    monkeypatch.setattr(unified, "predict_probabilities", missed_vessels)
+    result = unified.evaluate_unified_model(
+        torch.nn.Identity(), manifest, "val", "cpu", UnifiedConfig()
+    )
+    photos = [photo["av_conditional_counts"] for photo in result["per_photo"]]
+    scored = sum(photo["scored_pixels"] for photo in photos)
+    assert len(calls) == len(photos) and scored == result["av_labeled_pixels"] > 0
+    assert sum(photo["eligible_pixels"] for photo in photos) == scored
+    correct = sum(photo["correct"] for photo in photos)
+    end_to_end = sum(photo["end_to_end_correct"] for photo in photos)
+    assert result["av_conditional_accuracy"] == correct / scored
+    assert result["av_accuracy"] == end_to_end / scored
+    assert correct > 0 and end_to_end == 0
