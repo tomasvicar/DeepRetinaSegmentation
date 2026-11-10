@@ -1,0 +1,40 @@
+"""Produce fresh enriched VAL evidence; this command never evaluates test data."""
+
+import argparse
+
+import torch
+from deepretina.selection import SelectionError
+from deepretina.validation_evidence import produce_validation_evidence
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--checkpoint", required=True)
+    parser.add_argument("--manifest", required=True)
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--device", default="cpu")
+    parser.add_argument("--cpu-threads", type=int, default=1)
+    parser.add_argument("--threshold", type=float, default=0.5)
+    parser.add_argument("--tile-size", type=int)
+    parser.add_argument("--overlap", type=int)
+    args = parser.parse_args(argv)
+    if args.cpu_threads < 1:
+        parser.error("--cpu-threads must be positive")
+    torch.set_num_threads(args.cpu_threads)
+    try:
+        produce_validation_evidence(
+            checkpoint=args.checkpoint,
+            manifest=args.manifest,
+            output=args.output,
+            device=args.device,
+            threshold=args.threshold,
+            tile_size=args.tile_size,
+            overlap=args.overlap,
+        )
+    except (SelectionError, ValueError, KeyError, TypeError, OSError) as error:
+        parser.exit(2, f"unified-validation: {error}\n")
+    print(args.output)
+
+
+if __name__ == "__main__":
+    main()

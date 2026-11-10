@@ -3,8 +3,9 @@
 This is a CPU-only creation/verification workflow for a future held-out evaluation.
 **The public unified CLI still rejects every `--split test` request**, even with a
 valid selection artifact. No test evaluator integration or actual held-out result
-is added here. A fresh enriched validation producer and the final test dispatcher
-require separate review. Running inference/prediction is not part of these scripts.
+is added here. A separate [fresh VAL producer](FRESH_VALIDATION.md) evaluates validation only.
+The final test dispatcher requires separate review. Running inference/prediction
+is not part of these metadata scripts.
 
 ## What is bound
 
@@ -89,8 +90,9 @@ source, config, data, protocol, GT support and completed run are checked again.
 
 Run from this pinned checkout with its frozen uv environment. No GPU is needed;
 the script caps Torch metadata work to two CPU threads (`--cpu-threads 1` is valid).
-The fresh enriched validation producer is intentionally a later reviewed step,
-so no current trained-model decision record is minted as part of this change.
+The separate fresh producer is documented in [FRESH_VALIDATION.md](FRESH_VALIDATION.md).
+Its tests use synthetic CPU snapshots; no current trained-model decision record
+is minted as part of this change.
 
 ```bash
 uv run python scripts/unified_selection.py create \
@@ -149,7 +151,8 @@ nonfinite/teacher/pilot models, LR/optimizer history, timestamps/duplicate JSON,
 Python `-O` and the still-blocked public test route. No actual model selection,
 real validation prediction or test prediction is performed by this test suite.
 
-The next step after stage1 review is an explicitly reviewed **fresh enriched VAL
-producer** under the selected final runtime/protocol. Existing thin historical
-reports must not be retroactively given invented provenance. Stage1 still enables
-no test entrypoint and performs no real validation/test network forward.
+The separate **fresh enriched VAL producer** runs under the selected final
+runtime/protocol; see [FRESH_VALIDATION.md](FRESH_VALIDATION.md). Existing thin
+historical reports must not be retroactively given invented provenance. Stage1
+still enables no test entrypoint and its metadata scripts perform no network
+forward.
