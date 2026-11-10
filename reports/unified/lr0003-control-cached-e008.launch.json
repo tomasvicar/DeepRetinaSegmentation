@@ -1,0 +1,51 @@
+{
+  "pid": 1229496,
+  "launch_utc": "2026-11-10T15:38:11.936581+00:00",
+  "command": [
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python",
+    "-u",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_run_3157bb9/scripts/unified_hpo.py",
+    "run",
+    "--plan",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_3157bb9/plan-av-residual-cached-approved.json",
+    "--trial",
+    "lr_0003_control_cached",
+    "--output",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_3157bb9/runs/lr_0003-control-cached-seed42",
+    "--device",
+    "cuda:0",
+    "--derived-cache",
+    "/var/home/tom/code/DeepRetinaSegmentation_derived_storage/full/61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e/v1-train-val",
+    "--stop-after-epoch",
+    "8"
+  ],
+  "source_commit": "3157bb957fcf6e6f632a5c49d6df2c8a78ea3747",
+  "execution_code_sha256": "8e0481fff8ef53beca760acf074e96b5b73305e3adea2849e79805fb961cb30b",
+  "plan_sha256": "6be48b57fc85e8ffba7772058562aa5a8bf855f9cb445c5180484111ffba5778",
+  "runtime_verification": {
+    "checked_utc": "2026-11-10T15:27:57.517766+00:00",
+    "source_commit": "3157bb957fcf6e6f632a5c49d6df2c8a78ea3747",
+    "execution_code_sha256": "8e0481fff8ef53beca760acf074e96b5b73305e3adea2849e79805fb961cb30b",
+    "training_source_sha256": "dd69012a1741000ae5841634094094397c690a2371c9a91aa411344a436f1136",
+    "torch": "2.6.0+cu124",
+    "python": "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python",
+    "torch_num_threads": 20,
+    "torch_num_interop_threads": 20,
+    "environment": {
+      "OMP_NUM_THREADS": null,
+      "MKL_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "CUBLAS_WORKSPACE_CONFIG": null
+    },
+    "scope": "CPU-only source/runtime verification; no training launched"
+  },
+  "gpu_before_launch": "GPU-d0675605-e6c2-1c85-9799-08b279aab0ff, 1, 1036, 16376",
+  "previous_width16_full_e8_qa_passed": true,
+  "log": "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_3157bb9/lr0003-control-cached-e008.log",
+  "fresh_training": true,
+  "checkpoint_migration": false,
+  "stop_after_epoch": 8,
+  "scheduler_horizon": 60,
+  "next_step": "QA E8 then resume same fresh control unchanged to epoch60",
+  "test_evaluation_performed": false
+}

@@ -1,0 +1,35 @@
+{
+  "updated_utc": "2026-11-10T15:43:47.791101+00:00",
+  "scope": "Workstation storage incident and explicitly authorized cache cleanup; originals in ownCloud untouched",
+  "before_incident_available_gib": 57.97,
+  "after_initial_recovery_available_gib": 75.32,
+  "after_cache_cleanup_df_available": "79G",
+  "atomic_checkpoint_probe": {
+    "utc": "2026-11-10T15:37:26Z",
+    "bytes_each": 16777216,
+    "successful_atomic_replacements": 3
+  },
+  "kernel_observations": [
+    "GNOME shell segfault at16:26 local time",
+    "Btrfs balance canceled with ENOSPC at16:30 local time"
+  ],
+  "cause_status": "Desktop freeze cause not established; IO pressure and GNOME crash observed",
+  "pascal_training": {
+    "pid": 3960002,
+    "state": "SIGSTOP retained for desktop responsiveness",
+    "resume_automatically": false,
+    "do_not_restart_or_discard_in_memory_state": true
+  },
+  "cleanup_authorization": "User explicitly authorized uv, Docker and Podman cache cleanup",
+  "cleanup": {
+    "uv_cache_clean": "Removed6files1.9KiB; cache already nearly empty",
+    "docker_builder_prune_all": "Reported10.91GB logical build cache; now0entries; logical/shared size is not physical space recovered",
+    "docker_dangling_image_prune": "Reported558.9MB reclaimed",
+    "podman_image_prune_build_cache": "Completed with no reclaimed output",
+    "priority": "ionice idle class and nice15",
+    "containers_and_volumes_removed": false,
+    "tagged_custom_images_removed": false
+  },
+  "git_recovery": "Verified published HPO tree against working files, backed up old index, advanced local HEAD/index without rewriting working files; normal commits work again",
+  "training_location": "Ada/old/Meta continue independently; local heavy tests withheld"
+}
