@@ -201,3 +201,24 @@ raw-proxy finite/range/binary/full-frame checks; its proxy metadata and inspecti
 overlay are `reports/legacy/raw-av-proxy-sanity.json` and
 `reports/legacy/raw-av-proxy-drive21.png`. The proxy check is a functionality check,
 not a certified MATLAB comparison.
+
+## Exact automatic-FOV CPU optimization
+
+Automatic FOV closing and erosion use cross decompositions of the historical
+radius-10 and radius-6 disks. Their reconstructed footprints are bitwise equal
+to the original disks. The illumination-correction radius-1 footprint is
+unchanged. This avoids scanning the full large disk at every original pixel.
+
+On five actual G1020 photographs, automatic FOV computation took 14.13 seconds
+with full disks and 7.47 seconds with decomposed disks (1.89× aggregate speedup).
+All five resulting FOVs were bitwise identical. The measurement covers this CPU
+stage on the recorded local runtime; it is not a model-quality or whole-pipeline
+speed claim. Evidence is in
+`reports/legacy/fov-exact-footprint-timing.json`.
+
+Both kernels are checked explicitly. Equivalence tests cover tiny, empty, full,
+random and boundary-touching masks, including the combined closing/erosion
+sequence. The twelve original-source preprocessing comparisons also passed with
+the optimization: RGB, FOV, tensor and geometry remained bitwise equal for raw
+and normalized input profiles. An already-running full-data preparation retains
+the code it loaded at startup; its arrays are unaffected by this later change.

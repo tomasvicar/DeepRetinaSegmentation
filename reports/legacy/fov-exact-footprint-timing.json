@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "scope": "CPU automatic FOV only; no model quality or whole-pipeline speed claim",
+  "runtime": {
+    "platform": "Linux-7.2.11-200.fc44.x86_64-x86_64-with-glibc2.43",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit_image": "0.26.0"
+  },
+  "method": "Same decoded actual G1020 RGB; original disk10 closing/disk6 erosion versus exact-cross-decomposed disks; sequential one pass each, illustrative local timing",
+  "source_rgb_changed": false,
+  "disk6_and_disk10_reconstructed_bitwise_equal": true,
+  "random_and_border_morphology_comparisons_bitwise_equal": 160,
+  "original_source_preprocessing_goldens_bitwise_equal": 12,
+  "total_original_seconds": 14.131445069797337,
+  "total_decomposed_seconds": 7.4728109666612,
+  "aggregate_speedup": 1.8910481119946179,
+  "cases": [
+    {
+      "source": "G1020/image_0.jpg",
+      "shape": [
+        2423,
+        3004,
+        3
+      ],
+      "seconds_original": 3.111774737946689,
+      "seconds_decomposed": 1.6572180788498372,
+      "bitwise_equal": true
+    },
+    {
+      "source": "G1020/image_1.jpg",
+      "shape": [
+        2424,
+        3005,
+        3
+      ],
+      "seconds_original": 3.0796015469823033,
+      "seconds_decomposed": 1.6112959978636354,
+      "bitwise_equal": true
+    },
+    {
+      "source": "G1020/image_10.jpg",
+      "shape": [
+        2425,
+        3006,
+        3
+      ],
+      "seconds_original": 3.097147074062377,
+      "seconds_decomposed": 1.696616395842284,
+      "bitwise_equal": true
+    },
+    {
+      "source": "G1020/image_1000.jpg",
+      "shape": [
+        2424,
+        3004,
+        3
+      ],
+      "seconds_original": 3.2474889159202576,
+      "seconds_decomposed": 1.6862702760845423,
+      "bitwise_equal": true
+    },
+    {
+      "source": "G1020/image_1001.jpg",
+      "shape": [
+        1944,
+        2108,
+        3
+      ],
+      "seconds_original": 1.5954327948857099,
+      "seconds_decomposed": 0.8214102180209011,
+      "bitwise_equal": true
+    }
+  ]
+}
