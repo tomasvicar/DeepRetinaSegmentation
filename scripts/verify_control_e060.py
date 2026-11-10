@@ -187,6 +187,13 @@ def validate_terminal(
         bool(state["optimizer"]["state"]) and bool(state["optimizer"]["param_groups"]),
         "Missing optimizer state",
     )
+    optimizer_steps = [
+        float(item["step"]) for item in state["optimizer"]["state"].values() if "step" in item
+    ]
+    require(
+        bool(optimizer_steps) and max(optimizer_steps) == 122880,
+        "Missing or stale optimizer step counters",
+    )
     scheduler = state["scheduler"]
     require(
         scheduler["T_max"] == 60 and scheduler["last_epoch"] == 60,
@@ -266,6 +273,7 @@ def validate_terminal(
             }
         ),
         "finite_best_last_weights_and_last_optimizer": True,
+        "optimizer_max_step": max(optimizer_steps),
         "rng_components": sorted(required),
         "best_checkpoint_has_optimizer": "training_state" in best,
     }
