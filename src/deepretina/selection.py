@@ -460,12 +460,13 @@ def reference_support(rows, root):
     return counts
 
 
-def validate_metrics(metrics, groups, protocol, config, root):
+def validate_metrics(metrics, groups, protocol, config, root, *, expected_split="val"):
+    require(expected_split in {"val", "test"}, "Unsupported checked metric split")
     require(
         metrics.get("family") == "unified"
-        and metrics.get("split") == "val"
+        and metrics.get("split") == expected_split
         and metrics.get("purpose") == "full_data",
-        "Require full-data VAL metrics",
+        f"Require full-data {expected_split.upper()} metrics",
     )
     require(metrics.get("supervised_channels") == [True] * 5, "VAL evidence lacks5 heads")
     require(
@@ -582,11 +583,17 @@ def validate_metrics(metrics, groups, protocol, config, root):
         and metrics["av_conditional_accuracy"] == conditional / known,
         "VAL AV headers differ",
     )
-    require(
-        metrics.get("selection_metric") == config.selection_metric
-        and metrics.get("selection_score") == metrics[config.selection_metric],
-        "VAL selection metric/score mismatch",
-    )
+    if expected_split == "val":
+        require(
+            metrics.get("selection_metric") == config.selection_metric
+            and metrics.get("selection_score") == metrics[config.selection_metric],
+            "VAL selection metric/score mismatch",
+        )
+    else:
+        require(
+            "selection_metric" not in metrics and "selection_score" not in metrics,
+            "Held-out metrics must not declare a new model-selection score",
+        )
     return metrics[config.selection_metric]
 
 
