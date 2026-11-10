@@ -67,6 +67,9 @@ def clone_parent(parent, output, expected=PARENT_FINGERPRINT):
             raise ValueError(f"Writable inode shared with parent: {path}")
         count += 1
     verify_prepared_content(output / "manifest.json", expected=expected)
+    # A read-only parent is expected. Change owner modes only on independent copies.
+    for directory in [output, *(p for p in output.rglob("*") if p.is_dir())]:
+        directory.chmod(directory.stat().st_mode | 0o700)
     for name in (
         "manifest.json",
         "photos.json",
@@ -122,6 +125,13 @@ def resolve_partitions(parent_rows, rows):
         } & {"val", "test"}
         if len(declared) > 1:
             raise ValueError("Conflicting new official heldout partitions")
+        frozen_groups = {
+            r.get("split_group_id")
+            for r in group
+            if r["id"] in parent_ids and r.get("split_group_id")
+        }
+        if len(frozen_groups) > 1:
+            raise ValueError("New alias bridges multiple frozen parent split groups")
         if frozen and declared - set(frozen):
             raise ValueError("New official heldout alias conflicts with frozen parent membership")
         fixed = (
@@ -154,10 +164,14 @@ def resolve_partitions(parent_rows, rows):
                 continue
             r["split"] = fixed
             r["split_group_id"] = (
-                "sha256:"
-                + hashlib.sha256(
-                    "|".join(sorted({x["source_id"] for x in group})).encode()
-                ).hexdigest()
+                next(iter(frozen_groups))
+                if frozen_groups
+                else (
+                    "sha256:"
+                    + hashlib.sha256(
+                        "|".join(sorted({x["source_id"] for x in group})).encode()
+                    ).hexdigest()
+                )
             )
     excluded = {r["id"] for r in quarantine}
     kept = [r for r in rows if r["id"] not in excluded]
@@ -269,6 +283,19 @@ def append(
                 selected = angle_for(policy, dataset, image.shape)
                 base.FIELDS[dataset] = float(selected["field_of_view_degrees"])
                 details = deepcopy(metadata or {})
+                parent_photo = parent_photo_index.get("sha256:" + base.pixel_sha256(image))
+                if parent_photo is not None:
+                    if parent_photo["field_of_view_degrees"] != selected["field_of_view_degrees"]:
+                        raise ValueError(
+                            "New requested angle conflicts with inherited frozen parent geometry; explicit alias review required"
+                        )
+                    details["geometry_inherited_from_parent"] = {
+                        "photo_id": parent_photo["photo_id"],
+                        "field_of_view_degrees": parent_photo["field_of_view_degrees"],
+                        "geometry": parent_photo["geometry"],
+                        "fov_source": parent_photo["fov_source"],
+                        "application": "Requested rule angle agrees; frozen parent FOV/crop/canonical geometry is retained, not recomputed",
+                    }
                 details["native_physical_calibration"] = details.pop("physical_calibration", None)
                 details.update(
                     physical_calibration=selected,
