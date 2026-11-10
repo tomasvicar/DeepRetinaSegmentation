@@ -22,7 +22,8 @@
     "Other live GPU training may affect host CPU/I/O; affinity and numericalthreads bounded",
     "Excludes image/model file IO and model loading",
     "No final quality, full training or TEST comparison claim",
-    "Final selected model must be measured separately; different architectures need their own timing"
+    "Final selected model must be measured separately; different architectures need their own timing",
+    "Timing uses a native official provided FOV on TRAIN21; the selected quality reference restores canonical FOV to raw geometry for its AV stage. Same calibrated provided-FOV algorithm and selected weights, but no per-pixel input/quality equivalence is claimed."
   ],
   "segmentation_target_pixels_read": false,
   "official_fov_mask_read": true
