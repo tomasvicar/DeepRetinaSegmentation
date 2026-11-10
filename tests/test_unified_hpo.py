@@ -106,3 +106,19 @@ def test_trial_provenance_survives_training_failure(tmp_path, monkeypatch):
     proof = json.loads((tmp_path / "trial.search_trial.json").read_text())
     assert proof["manifest_sha256"] == plan["manifest_sha256"]
     assert proof["trial"] == "baseline"
+
+
+def test_independent_search_never_accepts_exposure_qualified_teacher(tmp_path):
+    helper = module()
+    manifest = inventory(tmp_path)
+    plan = helper.make_plan(manifest)
+    plan["candidates"]["baseline"].update(
+        architecture="legacy_universal",
+        legacy_initialization="historical-teacher.pt",
+        allow_historical_exposure=True,
+    )
+    path = tmp_path / "plan.json"
+    path.write_text(json.dumps(plan))
+    with pytest.raises(ValueError, match="excludes historical teacher"):
+        helper.run_trial(path, "baseline", tmp_path / "trial")
+    assert not (tmp_path / "trial").exists()

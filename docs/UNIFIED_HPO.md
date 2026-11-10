@@ -34,7 +34,7 @@ uv run python scripts/unified_hpo.py run \
 
 Each call runs one selected trial; there is no automatic scheduler submission.
 Candidate names are `baseline`, `lr_0003`, `lr_003`, `augmentation_strong`,
-`width_8` and `width_16`. The baseline uses RGB legacy25 geometry, width 12,
+`width_8`, `width_16` and `legacy_topology_scratch`. The baseline uses RGB legacy25 geometry, width 12,
 patch size 384, AdamW learning rate 0.001, mild augmentation and a 60-epoch cosine schedule.
 Each epoch visits every training photo once, followed by balanced extras to
 8192 samples or the larger training-photo count. Actual successful-update photo
@@ -45,6 +45,9 @@ then average the five outputs. Large FOVs and large datasets therefore do not
 win solely by supplying more pixels. Pooled Dice remains reported separately.
 Per-head/per-dataset regressions must be assessed alongside this selection score;
 a higher average alone does not establish improvement in every task.
+The original-topology candidate is trained from scratch. Historical teacher
+initialization is excluded from this independent search, even with its separate
+exploratory opt-in flag.
 
 The plan freezes execution-source, manifest and prepared-content fingerprints,
 all configurations and the original Git revision. Use a fixed checkout for a

@@ -117,6 +117,7 @@ def make_plan(manifest, *, screen_epochs=8, total_epochs=60, epoch_samples=8192)
         "augmentation_strong": replace(base, augmentation="strong"),
         "width_8": replace(base, base_channels=8),
         "width_16": replace(base, base_channels=16),
+        "legacy_topology_scratch": replace(base, architecture="legacy_universal", base_channels=32),
     }
     for config in variants.values():
         config.validate()
@@ -167,6 +168,8 @@ def run_trial(
     if digest(manifest) != plan["manifest_sha256"]:
         raise ValueError("Trial manifest differs from frozen plan")
     config = UnifiedConfig(**plan["candidates"][trial])
+    if config.legacy_initialization is not None:
+        raise ValueError("Independent full-data search excludes historical teacher initialization")
     if device is not None:
         config = replace(config, device=device)
     config.validate()
