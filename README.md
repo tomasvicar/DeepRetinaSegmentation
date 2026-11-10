@@ -241,9 +241,9 @@ uv run ruff format --check src tests scripts
 The original model ports preserve historical architecture and inference. Their
 prepared-input numerical checks do not establish new quality scores or resolve
 all historical preprocessing uncertainty. Pilot and unified-model quality claims
-require controlled comparisons. Generic `evaluate` currently handles pilot
-checkpoints; original-model evaluation needs the matching geometry and annotation
-protocol and is not silently routed through pilot preprocessing.
+require controlled comparisons. Generic `evaluate` handles pilot checkpoints and pinned unified validation.
+Original-model evaluation needs the matching geometry and annotation protocol
+and is not silently routed through another model family's preprocessing.
 
 Hyperparameter search runs, candidate results and new-model selection are tracked on
 `experiments/leipzig-hpo`. The verified training/prediction pipeline is included here;

@@ -138,3 +138,23 @@ including the actual DRHAGIS24/32 duplicate. Official heldouts stay protected;
 train-only/heldout conflicts fail rather than moving heldouts into training.
 All 137 stable-branch tests, Ruff checks and formatting passed after integration.
 Source data and original model weights were not changed.
+
+
+## 2026-11-10: verified unified workflow for the shipping branch
+
+The public `train-unified`, unified checkpoint prediction and pinned validation
+workflow are now prepared for for_Leipzig. The full-corpus quickstart explicitly
+prepares17sources, repairs known patient/photograph grouping, keeps RIGA/UoA
+train-only without a crosswalk, audits the final corpus and trains the five-head
+RGB model using partial labels. A flat TOML starting preset preserves the60-epoch
+horizon and exact resume. New trained-model selection remains in progress; the
+five original models and three labelled pilots retain identical checkpoint bytes.
+
+Release code1fdeb0b passed538 full CPU tests on Ada (CUDA hidden, CPU1, nice10);
+Ruff/format, public CLI help, doctor and preset validation passed. A built wheel
+contains all required unified modules, the strict original logit threshold fix
+and all8 checkpoint payloads exactly. Evidence is in
+reports/release/unified-cli-verification-20261110.json. Subsequent changes in this
+release step are documentation and this evidence only. Real test evaluation for
+unified checkpoints stays blocked pending reviewed frozen final selection.
+No running immutable training source or original ownCloud data was changed.
