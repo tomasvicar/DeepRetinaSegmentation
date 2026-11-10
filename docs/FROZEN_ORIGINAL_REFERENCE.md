@@ -126,3 +126,11 @@ Historical original training exposure, raw/normalized provenance and documented
 photometric residuals remain qualifications in every report. Final comparisons
 must show each head/source and conditional AV separately; a macro increase does
 not establish improvement on every task.
+
+A subsequent bounded TRAIN-only check is recorded in
+`reports/release/frozen-original-train21-kernel-proof.json`: one actual CPU
+forward per original model on DRIVE21, with exact replayed native mask decoding
+and independently prepared AV inputs on the same canonical-restored FOV. All
+observed pixel/input differences were zero; this supplies functional integration
+evidence, not a quality score or full VAL parity. The focused suite passed61
+tests and Ruff checks. No TEST scoring was run.

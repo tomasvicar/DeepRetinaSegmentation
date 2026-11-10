@@ -1,0 +1,48 @@
+{
+  "kind": "TRAIN-only-original-kernel-integration",
+  "case": "DRIVE21 TRAIN",
+  "input_identity": {
+    "input_sha256": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+    "fov_sha256": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7"
+  },
+  "model_sha256": {
+    "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+    "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+    "disc": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+    "av": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b"
+  },
+  "differing_canonical_segmentation_pixels": {
+    "vessel": 0,
+    "disc": 0,
+    "cup": 0
+  },
+  "av_prepared_inputs_bit_exact": true,
+  "differing_raw_av_pixels": {
+    "classes": 0,
+    "conditional": 0
+  },
+  "canonical_restored_vs_official_native_fov_different_pixels": 0,
+  "real_forwards": {
+    "universal": 1,
+    "vessel": 1,
+    "disc": 1,
+    "av": 1
+  },
+  "seconds": 68.21,
+  "device": "cpu",
+  "threads": 1,
+  "cuda_initialized": false,
+  "policy": "Same canonicalimage/native tiling raw segmentation; oldrefresh/newcalibratedAV on SAME canonical-restoredFOV",
+  "limitations": [
+    "No GT was opened and no quality score or full VAL reproduction was produced",
+    "Native segmentation decoding replays checked logits from one actual forward per selected segmentation model on exactly the same prepared image",
+    "AV compares independently prepared input bytes on the SAME canonical-restored provided FOV, then replays the checked real AV output for decoding; not two independent model executions",
+    "Zero native-vs-restored FOV difference was observed for this one TRAIN case only; no across-dataset boundary parity is claimed"
+  ],
+  "evaluator_script_sha256": "44f1faf4ff41b3dd60b8d6dea747a577bcfd2bb77b1f2366e153bc688fb27a61",
+  "verification": {
+    "focused_cpu_tests": 61,
+    "ruff_check": "PASS",
+    "four_actual_bundled_models_loaded_safe_cpu_bytesio": true
+  }
+}
