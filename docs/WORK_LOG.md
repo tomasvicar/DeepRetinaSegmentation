@@ -136,5 +136,5 @@ when no patient crosswalk is available. Preparation hashes original decoded RGB
 and groups exact-photo aliases transitively with known patient/source IDs,
 including the actual DRHAGIS24/32 duplicate. Official heldouts stay protected;
 train-only/heldout conflicts fail rather than moving heldouts into training.
-All137 stable-branch tests, Ruff checks and formatting passed after integration.
+All 137 stable-branch tests, Ruff checks and formatting passed after integration.
 Source data and original model weights were not changed.

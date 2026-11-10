@@ -46,7 +46,7 @@ repozitáře a ke sdíleným datům v ownCloudu mají i kolegové. Zdrojový ZIP
 Na `for_Leipzig` jsou nyní přibalené čtyři původní single_net checkpointy a
 původní A/V v9 model. Převod zachovává váhy i architektury; připnuté referenční
 implementace dávají na zaznamenaných shodných připravených vstupech stejné logity.
-Prošlo 119 testů a kontrola balíčku s osmi checkpointy (pět původních a tři pilotní).
+Při prvním předání prošlo 119 testů a kontrola balíčku s osmi checkpointy (pět původních a tři pilotní).
 
 Historická volba raw/normalizovaného vstupu single_net není průkazně doložená.
 Raw A/V Python preprocessing je výslovně označený jako aproximace MATLABu;
@@ -55,9 +55,15 @@ nejsou považovány za nově ověřenou kvalitu na skutečných fotografiích.
 
 Migrace 31 datových adaptérů je implementovaná. Dříve vydané malé modely jsou
 pouze 30epochové piloty z jednotlivých databází, nikoli finální náhrada originálů.
-Nový pětivýstupový model prošel krátkou funkční CUDA kontrolou; probíhá příprava
-plného korpusu ze 17 vhodných anotovaných zdrojů a práce na vyhodnocení. Plný
-trénink, optimalizace a doložené porovnání jsou stále nedokončené.
+Plný korpus prošel kontrolou: 3820 fotografií, 7365 použitelných variant anotací
+ze 17 zdrojů; 2221 fotografií train, 770 validation a 829 test. G1020 používá
+CSV pacientské skupiny, ARIA sjednocuje prefixy a RIGA/UoA jsou kvůli chybějící
+pacientské vazbě pouze v tréninku. První plné epochy již proběhly a skutečně
+použily všech 2221 trénovacích fotografií. Pracuje se na validačním porovnání
+learning rate, šířky sítě a normalizace; původní modely se zároveň vyhodnocují
+na stejném validačním korpusu. Testovací skóre nových modelů se nepoužilo pro
+ladění. Úplný trénovací rozpočet, optimalizace a konečné porovnání ještě hotové
+nejsou; první epocha není finální předatelný model.
 
 Provozní MetaCentrum poznámky, PBS skripty a evidence testů jsou vedené samostatně
 v soukromém repozitáři `metacentrum-workflows`. Cíl zůstává aktivní, dokud nejsou
