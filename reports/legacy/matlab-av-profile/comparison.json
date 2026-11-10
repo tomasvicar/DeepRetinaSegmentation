@@ -1,0 +1,315 @@
+{
+  "scope": "Explicit providedFOV/diameter calibrated MATLAB-style AV profile; numerical agreement is not universal bitwise parity",
+  "runtime_reference": "MATLAB R2026b Update1 singleCompThread CUDA hidden",
+  "production_route_activated": false,
+  "full_pipeline_certified": false,
+  "historical_training_file_provenance_verified": false,
+  "real_goldens": [
+    {
+      "name": "drive",
+      "golden_sha256": "5869305d9f6ba9a4afe3ef644b96bed591a5f4d547adb04c651a05818c2a0016",
+      "profile_rgb_sha256_c_order_uint16_le": "a8f5d9f41895eb1be7effdfd48d72fe9266404b71affcf5edfe619d9cfe3417c",
+      "shape": [
+        1222,
+        1182,
+        3
+      ],
+      "fov_disagreements": 0,
+      "resized_rgb_fov": {
+        "mae": 9.05780906797668e-17,
+        "p95": 2.220446049250313e-16,
+        "max": 1.4432899320127035e-15,
+        "equal_fraction": 0.2822838483546187
+      },
+      "photometric_from_reference_resized_stored12": {
+        "mae": 0.00010970108647956049,
+        "p95": 0.0,
+        "max": 26.0,
+        "equal_fraction": 0.9999122391308164
+      },
+      "full_raw_stored12": {
+        "mae": 0.00010970108647956049,
+        "p95": 0.0,
+        "max": 26.0,
+        "equal_fraction": 0.9999122391308164
+      },
+      "profile": {
+        "name": "vesclass_matlab_provided_fov_calibrated",
+        "matlab_parity_certified": false,
+        "reference_runtime": "R2026b Update1",
+        "scope": "provided FOV and explicit diameter; measured numerical residuals remain",
+        "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+        "pixels_per_degree": 25.0,
+        "photometry_pixels_per_degree": 25.0,
+        "field_of_view_degrees": 45.0,
+        "fov_diameter_pixels": 538.0,
+        "fov_source": "provided original-frame FOV",
+        "diameter_source": "explicit supplied calibration; no heuristic substitute",
+        "mask_resampling": "nearest to explicit resized image dimensions",
+        "storage": "dicom12",
+        "historical_training_file_provenance_verified": false,
+        "original_single_net_python_profile_changed": false
+      },
+      "stages": {
+        "distance": {
+          "mae": 0.0,
+          "p95": 0.0,
+          "max": 0.0,
+          "equal_fraction": 1.0
+        },
+        "gx": {
+          "mae": 1.1684920965347126e-07,
+          "p95": 0.0,
+          "max": 0.000213623046875,
+          "equal_fraction": 0.9956480319910496
+        },
+        "gy": {
+          "mae": 3.0376991443681094e-08,
+          "p95": 0.0,
+          "max": 3.0517578125e-05,
+          "equal_fraction": 0.9972736159689395
+        },
+        "x": {
+          "mae": 4.925880587526418e-06,
+          "p95": 0.0,
+          "max": 0.01397705078125,
+          "equal_fraction": 0.9957207263341835
+        },
+        "y": {
+          "mae": 1.312247999704809e-06,
+          "p95": 0.0,
+          "max": 0.00225830078125,
+          "equal_fraction": 0.9976758580009472
+        },
+        "extrapolated_allpixels": {
+          "mae": 2.5219115698359556e-08,
+          "p95": 1.1102230246251565e-16,
+          "max": 0.0002521245492930202,
+          "equal_fraction": 0.8542067639432366
+        },
+        "background_fov": {
+          "mae": 2.5232212004347144e-10,
+          "p95": 5.551115123125783e-16,
+          "max": 8.182665056644112e-08,
+          "equal_fraction": 0.14856261197949366
+        },
+        "corrected_fov": {
+          "mae": 4.6113787969436513e-10,
+          "p95": 9.43689570931383e-16,
+          "max": 1.6157805154959348e-07,
+          "equal_fraction": 0.15232046488957657
+        }
+      },
+      "v_bin_disagreements_fov": 1,
+      "reference_v_injection_stored12": {
+        "mae": 6.750836091049876e-06,
+        "p95": 0.0,
+        "max": 1.0,
+        "equal_fraction": 0.999993249163909
+      }
+    },
+    {
+      "name": "hrf",
+      "golden_sha256": "ccfc06162ca1abd9f2e28daad749a3076fad82851bdce3ce1aaea75b09323536",
+      "profile_rgb_sha256_c_order_uint16_le": "9291e00fb0a90f02a5bfc3aae78f0e2253f916fb27c55b391dba9b0ecd441ad8",
+      "shape": [
+        1073,
+        1610,
+        3
+      ],
+      "fov_disagreements": 0,
+      "resized_rgb_fov": {
+        "mae": 7.836913563512253e-17,
+        "p95": 3.3306690738754696e-16,
+        "max": 1.2212453270876722e-15,
+        "equal_fraction": 0.2224111993867455
+      },
+      "photometric_from_reference_resized_stored12": {
+        "mae": 3.8830924217111465e-06,
+        "p95": 0.0,
+        "max": 1.0,
+        "equal_fraction": 0.9999961169075783
+      },
+      "full_raw_stored12": {
+        "mae": 3.8830924217111465e-06,
+        "p95": 0.0,
+        "max": 1.0,
+        "equal_fraction": 0.9999961169075783
+      },
+      "profile": {
+        "name": "vesclass_matlab_provided_fov_calibrated",
+        "matlab_parity_certified": false,
+        "reference_runtime": "R2026b Update1",
+        "scope": "provided FOV and explicit diameter; measured numerical residuals remain",
+        "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+        "pixels_per_degree": 25.0,
+        "photometry_pixels_per_degree": 25.0,
+        "field_of_view_degrees": 60.0,
+        "fov_diameter_pixels": 3266.0,
+        "fov_source": "provided original-frame FOV",
+        "diameter_source": "explicit supplied calibration; no heuristic substitute",
+        "mask_resampling": "nearest to explicit resized image dimensions",
+        "storage": "dicom12",
+        "historical_training_file_provenance_verified": false,
+        "original_single_net_python_profile_changed": false
+      },
+      "stages": {
+        "distance": {
+          "mae": 0.0,
+          "p95": 0.0,
+          "max": 0.0,
+          "equal_fraction": 1.0
+        },
+        "gx": {
+          "mae": 1.9218894983801836e-08,
+          "p95": 0.0,
+          "max": 0.00018310546875,
+          "equal_fraction": 0.999218537449422
+        },
+        "gy": {
+          "mae": 4.435819667909281e-09,
+          "p95": 0.0,
+          "max": 2.288818359375e-05,
+          "equal_fraction": 0.9995363322199904
+        },
+        "x": {
+          "mae": 6.858717615262561e-07,
+          "p95": 0.0,
+          "max": 0.0087890625,
+          "equal_fraction": 0.9992550057017823
+        },
+        "y": {
+          "mae": 1.538218216317155e-07,
+          "p95": 0.0,
+          "max": 0.0008544921875,
+          "equal_fraction": 0.9995872720010651
+        },
+        "extrapolated_allpixels": {
+          "mae": 4.171139370359559e-09,
+          "p95": 1.3877787807814457e-17,
+          "max": 0.0014642567430971365,
+          "equal_fraction": 0.9309370411319436
+        },
+        "background_fov": {
+          "mae": 4.871823668466573e-11,
+          "p95": 4.440892098500626e-16,
+          "max": 1.0390691229655857e-07,
+          "equal_fraction": 0.1509074786989539
+        },
+        "corrected_fov": {
+          "mae": 2.0746288966976781e-10,
+          "p95": 8.326672684688674e-16,
+          "max": 4.2592580318245865e-07,
+          "equal_fraction": 0.151280940823042
+        }
+      },
+      "v_bin_disagreements_fov": 0,
+      "reference_v_injection_stored12": {
+        "mae": 0.0,
+        "p95": 0.0,
+        "max": 0.0,
+        "equal_fraction": 1.0
+      }
+    },
+    {
+      "name": "drive_35",
+      "golden_sha256": "9c6494b9af201134cb8b4a17ac891aa0b3932aebb87bc4efdc727496ef67a0a1",
+      "profile_rgb_sha256_c_order_uint16_le": "863b856eb7c971882c4f15a0eff3d293e15275224934790e159c26306d743ff0",
+      "shape": [
+        1710,
+        1655,
+        3
+      ],
+      "fov_disagreements": 0,
+      "resized_rgb_fov": {
+        "mae": 8.960420138158286e-17,
+        "p95": 2.220446049250313e-16,
+        "max": 1.6653345369377348e-15,
+        "equal_fraction": 0.28644283138793203
+      },
+      "photometric_from_reference_resized_stored12": {
+        "mae": 3.100927435713898e-06,
+        "p95": 0.0,
+        "max": 1.0,
+        "equal_fraction": 0.9999968990725643
+      },
+      "full_raw_stored12": {
+        "mae": 3.100927435713898e-06,
+        "p95": 0.0,
+        "max": 1.0,
+        "equal_fraction": 0.9999968990725643
+      },
+      "profile": {
+        "name": "vesclass_matlab_provided_fov_calibrated",
+        "matlab_parity_certified": false,
+        "reference_runtime": "R2026b Update1",
+        "scope": "provided FOV and explicit diameter; measured numerical residuals remain",
+        "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+        "pixels_per_degree": 35.0,
+        "photometry_pixels_per_degree": 25.0,
+        "field_of_view_degrees": 45.0,
+        "fov_diameter_pixels": 538.0,
+        "fov_source": "provided original-frame FOV",
+        "diameter_source": "explicit supplied calibration; no heuristic substitute",
+        "mask_resampling": "nearest to explicit resized image dimensions",
+        "storage": "dicom12",
+        "historical_training_file_provenance_verified": false,
+        "original_single_net_python_profile_changed": false
+      }
+    }
+  ],
+  "synthetic_photometry": [
+    {
+      "name": "constant",
+      "normalized_rgb": {
+        "mae": 3.9070598608266966e-17,
+        "p95": 1.1102230246251565e-16,
+        "max": 2.220446049250313e-16,
+        "equal_fraction": 0.6641041666666667
+      },
+      "stored12": {
+        "mae": 0.0,
+        "p95": 0.0,
+        "max": 0.0,
+        "equal_fraction": 1.0
+      }
+    },
+    {
+      "name": "smooth_full",
+      "normalized_rgb": {
+        "mae": 0.0005498954179310167,
+        "p95": 0.008009331586428005,
+        "max": 0.008916666666667572,
+        "equal_fraction": 0.18979166666666666
+      },
+      "stored12": {
+        "mae": 2.2523125,
+        "p95": 33.0,
+        "max": 37.0,
+        "equal_fraction": 0.9311041666666666
+      }
+    },
+    {
+      "name": "smooth_circle",
+      "normalized_rgb": {
+        "mae": 1.7247553939335538e-06,
+        "p95": 8.833906209315632e-09,
+        "max": 0.008916666666666684,
+        "equal_fraction": 0.165834414605696
+      },
+      "stored12": {
+        "mae": 0.007156057091180749,
+        "p95": 0.0,
+        "max": 37.0,
+        "equal_fraction": 0.9993971087432338
+      }
+    }
+  ],
+  "no_ad_hoc_epsilon_or_bin_snapping": true,
+  "synthetic_gaussian_domain_probe": {
+    "matlab_auto_vs_spatial_max": 0.0,
+    "matlab_auto_vs_frequency_max": 1.5543122344752192e-15,
+    "python_vs_matlab_auto_max": 8.326672684688674e-16,
+    "oracle_sha256": "83aeea523d4a4823d3ce117c241da589ccbbe38d2cbf516a3d08d289cd894df6"
+  }
+}

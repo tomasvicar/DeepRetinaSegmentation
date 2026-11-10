@@ -1,13 +1,16 @@
 """Explicit raw-photograph convenience path for the original A/V network.
 
-The network port is exact. This Python preprocessing surrogate is not certified
-against the historical MATLAB/DICOM exports, and is never selected silently.
+The default Python surrogate and explicit calibrated MATLAB-style profile have
+separate numerical qualifications. Neither is selected silently or certified as
+universal bitwise parity with historical MATLAB/DICOM exports.
 """
 
 from __future__ import annotations
 
 import json
+import math
 import tempfile
+from dataclasses import asdict
 from pathlib import Path
 
 import numpy as np
@@ -15,7 +18,7 @@ from PIL import Image
 
 from ..bundled import bundled_checkpoint
 from .inference import predict_legacy
-from .preprocessing import prepare_vesclass_raw_proxy
+from .preprocessing import DATASET_FOV_DEGREES, prepare_vesclass_raw_proxy
 
 
 def predict_raw_av(
@@ -33,15 +36,46 @@ def predict_raw_av(
     fov_diameter_pixels=None,
     pixels_per_degree=25.0,
     threshold=0.5,
+    preprocessing_profile="proxy",
 ):
+    if preprocessing_profile not in {"proxy", "matlab"}:
+        raise ValueError("Choose raw A/V preprocessing_profile=proxy or matlab")
+    if preprocessing_profile == "matlab":
+        if fov_path is None:
+            raise ValueError("--av-raw-matlab requires provided --fov")
+        if (
+            fov_diameter_pixels is None
+            or not math.isfinite(fov_diameter_pixels)
+            or fov_diameter_pixels <= 0
+        ):
+            raise ValueError("--av-raw-matlab requires positive finite --fov-diameter-pixels")
+        angle = field_of_view_degrees
+        if angle is None:
+            angle = DATASET_FOV_DEGREES.get((dataset or "").lower())
+        if angle is None or not math.isfinite(angle) or angle <= 0:
+            raise ValueError(
+                "--av-raw-matlab requires a known --dataset or positive finite --field-of-view-degrees"
+            )
+        if not math.isfinite(pixels_per_degree) or pixels_per_degree <= 0:
+            raise ValueError("--pixels-per-degree must be positive and finite")
     with Image.open(image_path) as image:
         rgb = np.array(image.convert("RGB"))
     output = Path(output)
-    output.mkdir(parents=True, exist_ok=True)
     fov = None
     if fov_path:
         with Image.open(fov_path) as image:
             fov = np.array(image.convert("L")) > 0
+    if fov is not None and fov.shape != rgb.shape[:2]:
+        raise ValueError("Original-frame FOV and RGB image dimensions differ")
+    if preprocessing_profile == "matlab":
+        if not fov.any():
+            raise ValueError("Provided --fov must contain foreground pixels")
+        scale = pixels_per_degree * angle / fov_diameter_pixels
+        shape = np.ceil(np.asarray(rgb.shape[:2]) * scale)
+        if np.any(np.floor(shape / (250 / (55 / 25)) + 0.5) < 2):
+            raise ValueError(
+                "Calibrated MATLAB AV image is too small for the source CLAHE tile grid"
+            )
     vessel_metadata = None
     if vessel_mask_path:
         with Image.open(vessel_mask_path) as image:
@@ -75,7 +109,12 @@ def predict_raw_av(
             vessel_metadata = json.loads(Path(paths["metadata"]).read_text())
     if vessel.shape != rgb.shape[:2]:
         raise ValueError("Original-frame vessel mask and RGB image dimensions differ")
-    prepared = prepare_vesclass_raw_proxy(
+    prepare = prepare_vesclass_raw_proxy
+    if preprocessing_profile == "matlab":
+        from .matlab_av import prepare_vesclass_matlab_calibrated
+
+        prepare = prepare_vesclass_matlab_calibrated
+    prepared = prepare(
         rgb,
         vessel,
         dataset=dataset,
@@ -97,8 +136,12 @@ def predict_raw_av(
     paths["vessel"] = str(vessel_path)
     metadata_path = Path(paths["metadata"])
     metadata = json.loads(metadata_path.read_text())
-    metadata["raw_av_proxy"] = prepared.metadata
-    metadata["raw_av_proxy"]["matlab_parity_certified"] = False
+    metadata["raw_av_preprocessing"] = prepared.metadata
+    metadata["raw_av_geometry"] = asdict(prepared.geometry)
+    metadata["preprocessing"]["raw_profile"] = prepared.metadata["name"]
+    if preprocessing_profile == "proxy":
+        metadata["raw_av_proxy"] = prepared.metadata
+    metadata["raw_av_preprocessing"]["matlab_parity_certified"] = False
     metadata["vessel_source"] = (
         str(vessel_mask_path) if vessel_mask_path else "original single_net vessel checkpoint"
     )

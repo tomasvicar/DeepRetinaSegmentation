@@ -118,3 +118,21 @@ stored-input inference. It does **not** certify the raw MATLAB CLAHE/resampling
 pipeline: original preprocessed DICOM/MATLAB goldens were not supplied. Prepared
 DICOM mode retains the exact old input contract; raw-image surrogate preprocessing
 must be labeled accordingly.
+
+## Explicit calibrated raw CLI profile
+
+`uv run deepretina predict --model legacy-av --av-raw-matlab` selects the
+separate calibrated Python profile. Supply `--input`, `--fov`, a positive
+`--fov-diameter-pixels`, `--dataset` (or `--field-of-view-degrees`), and `--output`.
+An optional original-frame `--vessel-mask` bypasses automatic original vessel
+prediction. The raw mode cannot be combined with prepared arrays, DICOMs,
+`--prepared`, or `--av-raw-proxy`. See the complete [README command](../README.md)
+and [numerical qualifications](MATLAB_AV_PROFILE.md).
+
+Output metadata records `raw_av_preprocessing`, its actual profile name,
+`raw_av_geometry`, and the vessel source. The calibrated profile keeps
+`matlab_parity_certified=false` and
+`historical_training_file_provenance_verified=false`. Classes/overlays are
+restored to the original photograph dimensions. The earlier proxy retains its
+`raw_av_proxy` metadata for compatibility. Native prepared inputs and original
+single-net normalization remain separate routes.

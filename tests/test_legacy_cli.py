@@ -129,3 +129,160 @@ def test_cli_refuses_to_treat_raw_rgb_as_certified_av_input(tmp_path):
             ]
         )
     assert error.value.code == 2
+
+
+def matlab_cli_args(tmp_path):
+    rng = np.random.default_rng(81)
+    image = tmp_path / "fundus.png"
+    Image.fromarray(rng.integers(35, 220, (96, 112, 3), np.uint8)).save(image)
+    fov = tmp_path / "fov.png"
+    mask = np.zeros((96, 112), np.uint8)
+    mask[4:-4, 4:-4] = 255
+    Image.fromarray(mask).save(fov)
+    vessel = tmp_path / "vessel.png"
+    mask[:] = 0
+    mask[12:80, 25:29] = 255
+    mask[38:42, 15:90] = 255
+    Image.fromarray(mask).save(vessel)
+    return [
+        "predict",
+        "--model",
+        "legacy-av",
+        "--av-raw-matlab",
+        "--input",
+        str(image),
+        "--fov",
+        str(fov),
+        "--field-of-view-degrees",
+        "8",
+        "--fov-diameter-pixels",
+        "100",
+        "--vessel-mask",
+        str(vessel),
+        "--output",
+        str(tmp_path / "out"),
+        "--device",
+        "cpu",
+    ]
+
+
+def test_cli_matlab_profile_bundled_av_canary(tmp_path, capsys):
+    main(matlab_cli_args(tmp_path))
+    outputs = json.loads(capsys.readouterr().out)
+    info = json.loads(Path(outputs["metadata"]).read_text())
+    assert info["family"] == "legacy_av"
+    assert info["shape"] == [96, 112]
+    assert info["inference_shape"] == [192, 224]
+    profile = info["raw_av_preprocessing"]
+    assert profile["name"] == "vesclass_matlab_provided_fov_calibrated"
+    assert not profile["matlab_parity_certified"]
+    assert not profile["historical_training_file_provenance_verified"]
+    assert not profile["original_single_net_python_profile_changed"]
+    assert info["preprocessing"]["raw_profile"] == profile["name"]
+    assert info["raw_av_geometry"]["original_shape"] == [96, 112]
+    assert info["raw_av_geometry"]["prepared_shape"] == [192, 224]
+    assert "raw_av_proxy" not in info
+    assert info["vessel_prediction"] is None
+    for name in ["artery", "vein", "classes", "vessel", "overlay"]:
+        assert Image.open(outputs[name]).size == (112, 96)
+
+
+@pytest.mark.parametrize(
+    ("remove", "extra", "message"),
+    [
+        ("--fov", [], "provided --fov"),
+        ("--fov-diameter-pixels", [], "positive finite --fov-diameter-pixels"),
+        ("--field-of-view-degrees", [], "known --dataset"),
+        ("--fov-diameter-pixels", ["--fov-diameter-pixels", "-1"], "positive finite"),
+        ("--fov-diameter-pixels", ["--fov-diameter-pixels", "nan"], "positive finite"),
+        ("--field-of-view-degrees", ["--field-of-view-degrees", "0"], "known --dataset"),
+        (None, ["--prepared"], "prepared input modes"),
+        (None, ["--av-raw-proxy"], "not allowed with argument"),
+        (None, ["--prepared-array", "missing.npy"], "single prepared"),
+        (None, ["--dicoms", "r", "g", "b", "v"], "prepared input modes"),
+    ],
+)
+def test_cli_matlab_rejects_invalid_modes_before_prediction(
+    tmp_path, monkeypatch, capsys, remove, extra, message
+):
+    import deepretina.legacy.raw_proxy as raw
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("Invalid calibration must be rejected before any model inference")
+
+    monkeypatch.setattr(raw, "predict_legacy", forbidden)
+    args = matlab_cli_args(tmp_path)
+    if remove:
+        i = args.index(remove)
+        del args[i : i + 2]
+    with pytest.raises(SystemExit) as exc:
+        main(args + extra)
+    assert exc.value.code == 2
+    assert message in capsys.readouterr().err
+    assert not (tmp_path / "out").exists()
+
+
+def test_cli_matlab_rejects_wrong_model(tmp_path, capsys):
+    args = matlab_cli_args(tmp_path)
+    args[args.index("legacy-av")] = "pilot-vessels"
+    with pytest.raises(SystemExit) as exc:
+        main(args)
+    assert exc.value.code == 2
+    assert "original A/V model" in capsys.readouterr().err
+    assert not (tmp_path / "out").exists()
+
+
+def test_cli_matlab_auto_vessel_path_preserves_original_model(tmp_path, monkeypatch, capsys):
+    import deepretina.legacy.raw_proxy as raw
+
+    actual = raw.predict_legacy
+    calls = []
+    args = matlab_cli_args(tmp_path)
+    i = args.index("--vessel-mask")
+    vessel = args[i + 1]
+    del args[i : i + 2]
+
+    def segmentation_then_actual_av(checkpoint, image, output, **kwargs):
+        calls.append(kwargs)
+        if "prepared_inputs" in kwargs:
+            return actual(checkpoint, image, output, **kwargs)
+        # Segmentation result contract only; the A/V forward still uses bundled weights.
+        metadata = output / "metadata.json"
+        metadata.write_text(json.dumps({"family": "legacy_single_net"}))
+        return {"vessel": vessel, "metadata": str(metadata)}
+
+    monkeypatch.setattr(raw, "predict_legacy", segmentation_then_actual_av)
+    main(args)
+    outputs = json.loads(capsys.readouterr().out)
+    info = json.loads(Path(outputs["metadata"]).read_text())
+    assert len(calls) == 2
+    assert calls[0]["normalized"] is False
+    assert calls[0]["fov_path"] == tmp_path / "fov.png"
+    assert info["vessel_prediction"]["family"] == "legacy_single_net"
+    assert info["raw_av_preprocessing"]["name"] == "vesclass_matlab_provided_fov_calibrated"
+
+
+@pytest.mark.parametrize("invalid", ["shape", "empty", "tiny"])
+def test_cli_matlab_geometry_guard_before_vessel_model(tmp_path, monkeypatch, capsys, invalid):
+    import deepretina.legacy.raw_proxy as raw
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("Invalid FOV/calibration reached vessel model")
+
+    monkeypatch.setattr(raw, "predict_legacy", forbidden)
+    args = matlab_cli_args(tmp_path)
+    i = args.index("--vessel-mask")
+    del args[i : i + 2]
+    if invalid == "shape":
+        Image.fromarray(np.ones((40, 50), np.uint8)).save(tmp_path / "fov.png")
+    elif invalid == "empty":
+        Image.fromarray(np.zeros((96, 112), np.uint8)).save(tmp_path / "fov.png")
+    else:
+        args[args.index("--fov-diameter-pixels") + 1] = "10000"
+    with pytest.raises(SystemExit) as exc:
+        main(args)
+    assert exc.value.code == 2
+    assert not (tmp_path / "out").exists()
+    assert {"shape": "dimensions differ", "empty": "foreground", "tiny": "too small"}[
+        invalid
+    ] in capsys.readouterr().err

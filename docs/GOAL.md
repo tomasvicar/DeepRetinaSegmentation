@@ -65,6 +65,31 @@ na stejném validačním korpusu. Testovací skóre nových modelů se nepoužil
 ladění. Úplný trénovací rozpočet, optimalizace a konečné porovnání ještě hotové
 nejsou; první epocha není finální předatelný model.
 
+MATLAB R2026b na Adě nyní slouží jako numerická reference pro převod původního
+A/V preprocessingu. Samostatný Python CLAHE krok odpovídá 80 syntetickým testům
+a oběma skutečným V rovinám DRIVE/HRF do maximální absolutní chyby 4,45e-16.
+Vývoj je na `experiments/matlab-clahe-parity`; celý raw řetězec se ještě ověřuje
+a jeho kalibrovaná varianta je nyní dostupná přes explicitní `--av-raw-matlab`.
+Vyžaduje původní FOV a změřený průměr. Na DRIVE/HRF daly skutečné A/V váhy se
+stejnými ručními cévními maskami stejné výsledné třídy uvnitř cév. Zbývající
+numerická rezidua a syntetický protipříklad jsou v `MATLAB_AV_PROFILE.md`;
+obecnou bitovou shodu netvrdíme. Celá předatelná větev prošla 283 testy.
+MATLAB není závislostí výsledného balíčku.
+
+Na `experiments/unified-loader-fast` je oddělená optimalizace načítání anotací.
+663 párových vzorků zachovalo shodné tensory, anotátory a stavy RNG; 227 testů
+prošlo. Potvrzovací CPU měření snížilo čas přípravy vzorku přibližně o 30 %.
+Rychlost celé GPU epochy tím ještě doložená není. Běžící tréninky nadále používají
+neměnný kód `87cf045`, původní plány a stejný ověřený datový korpus.
+Následný skutečný DataLoader se dvěma workery zachoval dalších 1496 párových
+vzorků včetně RNG a dodával shodná data 1,59× rychleji. Jde o CPU dodávku dat.
+
+Párové validační porovnání E3 zahrnuje 770 fotografií a 612 známých skupin
+pacientů či fotografií. Nový model má lepší celkový průměr díky disku/cupu,
+ale cévy a A/V jsou zatím horší než u původní sestavy. Zlepšení průměru proto
+nepovažujeme za splněný cíl všech úloh; podrobnosti jsou na experimentální
+větvi v `reports/unified/paired-epoch3/`.
+
 Provozní MetaCentrum poznámky, PBS skripty a evidence testů jsou vedené samostatně
 v soukromém repozitáři `metacentrum-workflows`. Cíl zůstává aktivní, dokud nejsou
 dokončené obě části a doložené jejich porovnání.
