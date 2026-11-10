@@ -16,11 +16,17 @@ the existing evaluator's RGB roundtrip and `local_contrast_and_clahe` with its
 first-row FOV and 25 pixels/degree. It is the original **Python** profile;
 historical choice of raw versus normalized training inputs remains uncertain.
 
-Every weight/output is checked finite. Reports contain baseline source commit,
+Every weight and selected disc-logit output is checked finite. Reports contain baseline source commit,
 evaluator SHA, checkpoint SHA/architecture/tiling, canonical content and manifest
 SHA, exact command, CPU thread limit, timing, pooled and per-dataset metrics,
 and per-photo source/counts. The report's `source_commit` names the pinned core
 baseline; the additive evaluator is independently identified by `script_sha256`.
+The initial waiter snapshot records the evaluator SHA at waiter creation; the
+subsequent explicit OpenCV thread cap is identified by the final canary and
+final evaluation report SHA. The final helper was rechecked on the same three
+photos with exact count/source agreement after that cap:
+[thread-capped canary](../reports/disc-reference/universal-raw-threadcap-canary.json).
+
 Primary variant selection should use macro-dataset **disc** Dice on validation;
 report pooled Dice too. The universal model is a candidate, not an assumed winner.
 
@@ -28,7 +34,7 @@ report pooled Dice too. The universal model is a candidate, not an assumed winne
 
 Three focused tests pass: strict-zero/unknown-support/finite-output behavior and
 exact canary count/source checks, and deferred resource/reference gating. Ruff passes. On Ada with GPU visibility disabled,
-nice5 and four CPU threads, a three-photo universal/raw canary exactly matched
+nice5 and four CPU threads (including an explicit OpenCV thread cap), a three-photo universal/raw canary exactly matched
 all per-photo TP/FP/FN/valid-pixel counts and disc annotation source in the full
 strong-raw validation report. Total time 15.09 seconds (forward time 10.37 s).
 The canary independently verified full prepared fingerprint `61032be218c6…` and

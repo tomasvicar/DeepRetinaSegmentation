@@ -15,6 +15,7 @@ import sys
 import time
 from pathlib import Path
 
+import cv2
 import numpy as np
 import torch
 
@@ -70,6 +71,7 @@ def compare_reference(result, reference):
 def evaluate(manifest, checkpoints, profiles, *, limit=None, threads=4, progress=None):
     started = time.perf_counter()
     torch.set_num_threads(threads)
+    cv2.setNumThreads(threads)
     torch.set_num_interop_threads(1)
     manifest = Path(manifest)
     fingerprint = verify_prepared_content(manifest)

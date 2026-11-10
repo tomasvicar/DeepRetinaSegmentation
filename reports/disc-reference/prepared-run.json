@@ -2,7 +2,7 @@
   "status": "deferred_waiter_started_full_evaluation_not_started",
   "reason": "Wait for existing normalized reference PID1023129 to complete; avoid training contention",
   "base_source_commit": "0d6d9087a92f0f07cf75fd1083c590e8af6bb18a",
-  "script_sha256": "6013c41465f92fd1051e8d917ab36b5c2325b1f16191a24bd3460be6edc8deb1",
+  "script_sha256": "d04bd20a5742bbe4281ff9b8a184200cac9153c23b00515c8e678eed568818e1",
   "niceness": 5,
   "threads": 4,
   "device": "cpu",
@@ -25,5 +25,8 @@
     "load1 <= cpu_count-8",
     "MemAvailable>=10GiB",
     "no HOLD file"
-  ]
+  ],
+  "thread_cap": "torch4, interop1, OpenCV4; OMP/MKL/OPENBLAS4 in launch environment",
+  "final_canary_report": "universal-raw-threadcap-canary.json",
+  "initial_waiter_sha_note": "deferred-launch.json script_sha256 was captured at waiter creation before explicit OpenCV cap; final evaluation self-records actual runtime script SHA"
 }
