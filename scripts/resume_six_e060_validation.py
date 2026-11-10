@@ -10,7 +10,7 @@ import tomllib
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-CONTROL_SHA = "6681f0fced6097516aef9eaa1f2127ea2b992bf8c9ecf805d4e2236f53a9770b"
+CONTROL_SHA = "4a66b2eddbe974210089703ddf385411a6254bb4d41223f2ceab8094442fdfa7"
 QA_SHA = "f4ebab64f77fc574a112bcd487950cfd8d7df4c3f607363010e3bfa722cfcf20"
 BEST = "bfe957460dfed168f2344b1b84ef99b7f502e9dbc8ce1fd4d68632c3234708b1"
 LAST = "60f6d66845a0f453d78b50679815a1123a874a2725fd3897b0eb62fa09d77796"
@@ -77,11 +77,28 @@ def check_desktop_processes(rows, allowed, observed):
     return accepted
 
 
+REUSED_REPORTS = {
+    0.5: "f2be07e77a8877339d63db519004098612a7c7249e048b612014a41dc16fa7a5",
+    0.35: "2c223ffa1761f2fa2c91608faf95b83d5cea92f262f506f7d9353ba7654b47da",
+}
+
+
+def reuse_completed_report(folder, threshold):
+    path = folder / f"threshold-{round(threshold * 100):03d}.json"
+    payload = path.read_bytes()
+    require(
+        hashlib.sha256(payload).hexdigest() == REUSED_REPORTS[threshold],
+        "Completed producer report changed",
+    )
+    return payload
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     for key in ["output", "control-helper", "qa-helper", "threshold-plan", "approved-desktop"]:
         p.add_argument("--" + key, type=Path, required=True)
     p.add_argument("--approved-desktop-sha256", required=True)
+    p.add_argument("--reuse-first-two", type=Path)
     a = p.parse_args()
     require(not a.output.exists(), "Fresh continuation directory required")
     a.output.mkdir(parents=True)
@@ -243,6 +260,8 @@ def main():
             "threshold_order": h.THRESHOLDS,
             "no_TEST": True,
             "no_selection_or_autopromotion": True,
+            "completed_reports_reused_from": str(a.reuse_first_two) if a.reuse_first_two else None,
+            "completed_report_pins": REUSED_REPORTS if a.reuse_first_two else {},
         }
         save(a.output / "threshold-addendum.json", addendum)
         event(
@@ -288,26 +307,38 @@ def main():
                 "--threshold",
                 str(threshold),
             ]
-            save(
-                a.output / (name + "-command.json"),
-                {
-                    "command": command,
-                    "environment": {
-                        k: env[k]
-                        for k in [
-                            "CUDA_VISIBLE_DEVICES",
-                            "OMP_NUM_THREADS",
-                            "MKL_NUM_THREADS",
-                            "OPENBLAS_NUM_THREADS",
-                            "PYTHONPATH",
-                            "CUBLAS_WORKSPACE_CONFIG",
-                        ]
+            reused = a.reuse_first_two is not None and threshold in REUSED_REPORTS
+            if reused:
+                payload = reuse_completed_report(a.reuse_first_two, threshold)
+                with report.open("xb") as f:
+                    f.write(payload)
+                event(
+                    "validation_reused_no_new_forward",
+                    threshold=threshold,
+                    report_sha256=sha(report),
+                    original_path=str(a.reuse_first_two / report.name),
+                )
+            else:
+                save(
+                    a.output / (name + "-command.json"),
+                    {
+                        "command": command,
+                        "environment": {
+                            k: env[k]
+                            for k in [
+                                "CUDA_VISIBLE_DEVICES",
+                                "OMP_NUM_THREADS",
+                                "MKL_NUM_THREADS",
+                                "OPENBLAS_NUM_THREADS",
+                                "PYTHONPATH",
+                                "CUBLAS_WORKSPACE_CONFIG",
+                            ]
+                        },
+                        "readiness": observed,
                     },
-                    "readiness": observed,
-                },
-            )
-            event("validation_start", threshold=threshold)
-            h.run_child(command, env, a.output / (name + ".log"))
+                )
+                event("validation_start", threshold=threshold)
+                h.run_child(command, env, a.output / (name + ".log"))
             e = json.loads(report.read_text())
             require(
                 {k: v for k, v in e["source"].items() if k != "training_source_sha256"} == probe,
@@ -320,6 +351,7 @@ def main():
             summaries.append(
                 {
                     "threshold": threshold,
+                    "producer_phase": "reused_completed_producer" if reused else "new_producer",
                     "report_sha256": sha(report),
                     "macro": m["macro_dataset_mean_dice"],
                     "pooled_dice": {c: v["dice"] for c, v in m["channels"].items()},
@@ -343,7 +375,7 @@ def main():
                 "results": summaries,
                 "checkpoint_sha256": BEST,
                 "threshold_plan_sha256": h.THRESHOLD_PLAN,
-                "all6source_data_GT_runtime_and_conditional_counts_identical": True,
+                "all6source_data_GT_runtime_and_ungated_conditional_counts_identical": True,
                 "desktop_background_scope": initial,
                 "no_TEST_selection_or_autopromotion": True,
             },

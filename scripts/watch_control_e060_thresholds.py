@@ -131,7 +131,10 @@ def photo_support(metrics):
             r["record_ids"],
             r["channel_datasets"],
             {c: [v["valid_pixels"], v["tp"] + v["fn"]] for c, v in r["channels"].items()},
-            r["av_conditional_counts"],
+            {
+                key: r["av_conditional_counts"][key]
+                for key in ("correct", "eligible_pixels", "scored_pixels")
+            },
         )
         for r in metrics["per_photo"]
     ]

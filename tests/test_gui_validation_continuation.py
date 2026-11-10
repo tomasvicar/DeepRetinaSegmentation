@@ -50,3 +50,14 @@ def test_xml_filters_target_uuid_without_retaining_command_lines():
     assert h.xml_processes(xml, "GPU-target") == [{"pid": 3, "type": "C+G"}]
     with pytest.raises(ValueError):
         h.xml_processes(xml, "GPU-wrong")
+
+
+def test_reused_completed_report_requires_exact_bytes(tmp_path, monkeypatch):
+    path = tmp_path / "threshold-050.json"
+    payload = b'{"complete":true}\n'
+    path.write_bytes(payload)
+    monkeypatch.setattr(h, "REUSED_REPORTS", {0.5: h.hashlib.sha256(payload).hexdigest()})
+    assert h.reuse_completed_report(tmp_path, 0.5) == payload
+    path.write_bytes(b'{"complete":false}\n')
+    with pytest.raises(ValueError, match="changed"):
+        h.reuse_completed_report(tmp_path, 0.5)

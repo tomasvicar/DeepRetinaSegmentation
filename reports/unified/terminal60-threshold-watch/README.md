@@ -122,3 +122,38 @@ pins, selected epoch56, geometry metadata and qualified GUI background. Exact
 executed argv/environment/readiness for the first call are retained beside it.
 The same20:00 UTC deadline applies, six calls maximum, no retry/tuning/TEST or
 selection artifact. Completion and cross-threshold evidence checks are pending.
+
+## Corrected controller check; two valid reports reused
+
+The0.50 producer completed at19:30:50, fresh macro0.8001228113884421, SHA
+`f2be07e77a8877339d63db519004098612a7c7249e048b612014a41dc16fa7a5`.
+The0.35 producer completed at19:32:26, macro0.8049553712100683, SHA
+`2c223ffa1761f2fa2c91608faf95b83d5cea92f262f506f7d9353ba7654b47da`.
+Both are complete existing-producer outputs with unchanged checkpoint/source/
+configuration/data/runtime bindings and exact identical GT/observer support.
+
+The controller then stopped because **its check was wrong**: the object named
+`av_conditional_counts` also contains `end_to_end_correct`, which is vessel-gated
+and should change with threshold. Comparing that whole object was too broad.
+All per-photo ungated `correct`, `eligible_pixels` and `scored_pixels` are exactly
+equal between the two reports; conditional accuracy is0.7986622924253431 in both.
+Only the gated end-to-end counts changed. This was neither GT drift nor evidence
+of CUDA numerical drift. Original failure and produced report bytes are retained.
+
+The corrected control helper4a66b2ed compares only the three ungated fields while
+preserving every original hard source/GT/runtime check. A regression now includes
+the real four-field schema: gated count changes pass, ungated changes still fail.
+GUI continuation57f91ba4 accepts only the two exact saved report SHAs above via
+explicit `--reuse-first-two`; it copies unchanged evidence/original timestamps,
+labels their reused phase and does not perform those two forwards again.
+Twenty-five tiny CPU tests passed in0.03s, including changed-reuse-hash refusal.
+There is no numerical tolerance and no product/model/8c source change.
+
+This explicit remaining phase started19:41:17 UTC, PID1330037, in
+`~/code/DeepRetinaSegmentation_e060_VAL_remaining_20261110/result/`.
+Both saved reports revalidated successfully with the corrected check;0.40 is the
+first new producer call, followed by0.45,0.55,0.60. The total remains six original
+fresh producer evaluations, not eight or repeated attempts. The20:00 cutoff and
+all snapshot/GUI/source pins remain unchanged. Files under
+`remaining-four-continuation/` record the semantic diagnosis, new addendum and
+initial actual events. No selection artifact or TEST evaluation is produced.
