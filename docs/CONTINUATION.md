@@ -1,6 +1,7 @@
 # Stav pro navázání po compactu
 
 **Novější stav: [CONTINUATION_2026-11-10_1752.md](CONTINUATION_2026-11-10_1752.md).**
+Vyhodnocovací kód a novější důkazy: [freeze v18:03UTC](handoffs/EVALUATION_FREEZE_20261110.md).
 Níže je historický snímek ve 14:04 UTC, nikoli aktuální seznam procesů.
 
 Ověřeno **10. 11. 2026 ve 14:04 UTC / 15:04 CET**. Je to časový snímek;
