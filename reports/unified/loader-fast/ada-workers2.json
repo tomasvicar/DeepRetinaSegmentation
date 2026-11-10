@@ -1,0 +1,317 @@
+{
+  "scope": "CPU DataLoader delivery only; no model/GPU/epoch speed claim",
+  "protocol_sha256": "1409a141f08248e524238c0794822e881e8534f1afb0bfcf70746b85861093cd",
+  "reference_module_sha256": "724f6ee57dbb464e21bcd776f08465054a1889b9ca9dc3f4a460a56522752c3e",
+  "candidate_module_sha256": "b3e14ca009072531dcfd15aaa9f803593020814d88f759fbea47dc8970940dfa",
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "frozen_plan_sha256": "907713f6c4a94c7281e2a5e226777fb02a5cdf613b0d79c20e0fe14831cf5e14",
+  "runtime": {
+    "torch": "2.6.0+cu124",
+    "parent_threads": 2,
+    "workers": 2,
+    "batch_size": 4,
+    "worker_threads": 1,
+    "prefetch_factor": 2,
+    "pin_memory": false,
+    "persistent_workers": false
+  },
+  "training_config": {
+    "architecture": "compact_unet",
+    "legacy_initialization": null,
+    "allow_historical_exposure": false,
+    "preprocessing_profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "epochs": 60,
+    "epoch_samples": 8192,
+    "coverage_first": true,
+    "batch_size": 4,
+    "patch_size": 384,
+    "base_channels": 12,
+    "depth": 4,
+    "norm": "batch",
+    "lr": 0.001,
+    "weight_decay": 1e-05,
+    "scheduler": "cosine",
+    "min_lr_ratio": 0.05,
+    "seed": 42,
+    "workers": 2,
+    "device": "cpu",
+    "sampling": "dataset_task_balanced",
+    "train_view": "patch",
+    "view_size": 512,
+    "foreground_probability": 0.5,
+    "augmentation": "mild",
+    "bce_weight": 1.0,
+    "dice_weight": 1.0,
+    "av_weight": 1.0,
+    "tile_size": 512,
+    "overlap": 64,
+    "require_all_heads": true,
+    "selection_metric": "macro_dataset_mean_dice",
+    "purpose": "full_data",
+    "max_steps": null
+  },
+  "startup_seconds_excluded": {
+    "reference": 78.37091349303955,
+    "candidate": 81.01792220503557
+  },
+  "gate_sources": [
+    "aria",
+    "avrdb",
+    "chasedb1",
+    "drhagis",
+    "drishti",
+    "drive",
+    "erlangen",
+    "g1020",
+    "hrf",
+    "iostar",
+    "onhsd",
+    "refuge",
+    "riga",
+    "rimone",
+    "rite",
+    "stare",
+    "uoadr"
+  ],
+  "gate_photos": 36,
+  "gates": [
+    {
+      "augmentation": "basic",
+      "view": "patch",
+      "paired_samples": 36,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "mild",
+      "view": "patch",
+      "paired_samples": 36,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "strong",
+      "view": "patch",
+      "paired_samples": 36,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "basic",
+      "view": "whole",
+      "paired_samples": 36,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "mild",
+      "view": "whole",
+      "paired_samples": 36,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "strong",
+      "view": "whole",
+      "paired_samples": 36,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    }
+  ],
+  "warmup_batches": 8,
+  "measured_batches": 64,
+  "timing": [
+    {
+      "repeat": 0,
+      "execution_order": [
+        "reference",
+        "candidate"
+      ],
+      "reference": {
+        "iterator_and_warmup_seconds": 2.8762409589835443,
+        "measured_seconds": 16.718021192005835,
+        "samples_per_second": 15.312817052918511
+      },
+      "candidate": {
+        "iterator_and_warmup_seconds": 1.4657992870197631,
+        "measured_seconds": 10.808821556973271,
+        "samples_per_second": 23.684358063515496
+      },
+      "throughput_ratio": 1.5467015625972904,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 256,
+      "sources": [
+        "aria",
+        "avrdb",
+        "chasedb1",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "iostar",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "stare",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    },
+    {
+      "repeat": 1,
+      "execution_order": [
+        "candidate",
+        "reference"
+      ],
+      "candidate": {
+        "iterator_and_warmup_seconds": 1.4109410700039007,
+        "measured_seconds": 9.610389904002659,
+        "samples_per_second": 26.63783702400855
+      },
+      "reference": {
+        "iterator_and_warmup_seconds": 1.9613447620067745,
+        "measured_seconds": 15.629862606001552,
+        "samples_per_second": 16.37890277434052
+      },
+      "throughput_ratio": 1.6263505187746676,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 256,
+      "sources": [
+        "aria",
+        "avrdb",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "iostar",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "stare",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    },
+    {
+      "repeat": 2,
+      "execution_order": [
+        "reference",
+        "candidate"
+      ],
+      "reference": {
+        "iterator_and_warmup_seconds": 2.1558489750023,
+        "measured_seconds": 16.28591542498907,
+        "samples_per_second": 15.71910410434738
+      },
+      "candidate": {
+        "iterator_and_warmup_seconds": 1.4581212649936788,
+        "measured_seconds": 10.268496293982025,
+        "samples_per_second": 24.93062203762316
+      },
+      "throughput_ratio": 1.5860078203011696,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 256,
+      "sources": [
+        "aria",
+        "avrdb",
+        "chasedb1",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "iostar",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "stare",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    },
+    {
+      "repeat": 3,
+      "execution_order": [
+        "reference",
+        "candidate"
+      ],
+      "reference": {
+        "iterator_and_warmup_seconds": 2.287077335000504,
+        "measured_seconds": 14.343476815032773,
+        "samples_per_second": 17.84783447564802
+      },
+      "candidate": {
+        "iterator_and_warmup_seconds": 1.90045747498516,
+        "measured_seconds": 8.465865561040118,
+        "samples_per_second": 30.239081657298108
+      },
+      "throughput_ratio": 1.6942717447630398,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 256,
+      "sources": [
+        "aria",
+        "avrdb",
+        "chasedb1",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "stare",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    },
+    {
+      "repeat": 4,
+      "execution_order": [
+        "reference",
+        "candidate"
+      ],
+      "reference": {
+        "iterator_and_warmup_seconds": 2.149838130979333,
+        "measured_seconds": 12.500034218013752,
+        "samples_per_second": 20.479943937359735
+      },
+      "candidate": {
+        "iterator_and_warmup_seconds": 1.4520871809800155,
+        "measured_seconds": 8.416953403037041,
+        "samples_per_second": 30.414805422069815
+      },
+      "throughput_ratio": 1.4851019863675894,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 256,
+      "sources": [
+        "aria",
+        "avrdb",
+        "chasedb1",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    }
+  ],
+  "max_parent_rss_kib": 3246140
+}

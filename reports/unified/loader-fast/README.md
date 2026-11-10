@@ -64,3 +64,46 @@ uv run --frozen python scripts/benchmark_unified_loader.py \
 Add `--only-mild-patch` for the confirmation timing protocol. The manifest and
 both loader hashes are stored in each JSON; the confirmation also records its
 benchmark script hash. The initial exploratory JSON predates that extra field.
+
+## Actual two-worker DataLoader gate on Ada
+
+`benchmark_unified_workers.py` compared the unchanged `87cf045` reference module
+with candidate `5031792` using the frozen baseline configuration, batch size 4,
+two DataLoader workers, default prefetch factor 2, no persistent workers and
+two parent CPU threads. CUDA was hidden; the process and its workers ran at
+niceness 5. No model, optimizer, canonical file or active training source was
+changed. Both module SHA256 values were checked against their Git objects.
+
+All six patch/whole-view and basic/mild/strong augmentation combinations passed:
+**216 paired samples across all 17 sources**, with bitwise-equal RGB, targets,
+validity, sample indices and observer traces. The gate additionally compared
+worker CPU RNG, private augmentation RNG and parent sampler-generator states.
+
+Five randomized-order timing pairs used the real full-population coverage
+sampler with seeds 42–46. Dataset/support initialization and eight warmup batches
+were excluded. Each timed window consumed 64 batches / 256 distinct photographs
+from the shuffled coverage prefix. Tensor and observer-trace equality was checked
+after timing on all **1,280 additional paired samples**.
+
+| Pair | Order | Reference seconds | Candidate seconds | Throughput ratio |
+|---|---|---:|---:|---:|
+| 1 | Reference, candidate | 16.718 | 10.809 | 1.547× |
+| 2 | Candidate, reference | 15.630 | 9.610 | 1.626× |
+| 3 | Reference, candidate | 16.286 | 10.268 | 1.586× |
+| 4 | Reference, candidate | 14.343 | 8.466 | 1.694× |
+| 5 | Reference, candidate | 12.500 | 8.417 | 1.485× |
+
+Equal delivery work took **75.477 → 47.571 seconds**, an aggregate **1.5866×**
+throughput ratio; median paired ratio 1.5860×. Peak parent RSS was 3.10 GiB;
+retaining both sides for exact comparison accounted for 2.79 GB of tensors.
+
+This measures a warmed CPU DataLoader prefix. Ada was shared with the running
+GPU experiment and eight-thread original-model reference. Randomized orders
+happened to contain four reference-first pairs and one candidate-first pair;
+all five improved, including the candidate-first pair. The result establishes
+CPU delivery improvement under this measured workload. Full-epoch and GPU
+training speed require separate measurement. The balanced extra-sampling tail
+was not timed.
+
+Evidence: `ada-workers2.json`, `ada-workers2-summary.json`,
+`ada-workers2-launch.json`; protocol: `scripts/benchmark_unified_workers.py`.
