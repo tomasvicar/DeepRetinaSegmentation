@@ -1,6 +1,7 @@
 """Source profile opt-in routing and paired preprocessing, without model forwards."""
 
 import json
+from dataclasses import asdict
 from pathlib import Path
 
 import numpy as np
@@ -137,6 +138,19 @@ def test_provided_source_uses_processing_mask_and_explicit_diameter(tmp_path, mo
     assert called[0]["fov_diameter_pixels"] == 200
     assert called[0]["fov"] is prepared.source_fov.processing_fov
     assert prepared.profile["diameter_source"] == "explicit supplied override"
+    assert prepared.profile["fov_calibration"] == {
+        "mode": "explicit_override",
+        "method": "caller_supplied_diameter",
+        "center_row_one_based": None,
+        "center_col_one_based": None,
+        "radius_pixels": 100,
+    }
+    assert prepared.profile["used_diameter_pixels"] == 200
+    assert prepared.profile["source_fov_calibration"] == {
+        "mode": "estimated_from_source_provided_fov",
+        "method": "provided_erlangen_rails",
+        **asdict(prepared.source_fov.calibration),
+    }
     assert prepared.profile["matlab_parity_certified"] is False
 
 

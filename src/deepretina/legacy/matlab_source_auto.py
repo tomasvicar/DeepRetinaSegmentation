@@ -134,6 +134,22 @@ def prepare_vesclass_matlab_source(
         pixels_per_degree=25.0,
         storage=storage,
     )
+    source_calibration = {
+        "mode": "estimated_from_source_automatic_fov"
+        if fov is None
+        else "estimated_from_source_provided_fov",
+        "method": source.source_branch,
+        **asdict(source.calibration),
+    }
+    used_calibration = source_calibration.copy()
+    if fov_diameter_pixels is not None:
+        used_calibration = {
+            "mode": "explicit_override",
+            "method": "caller_supplied_diameter",
+            "center_row_one_based": None,
+            "center_col_one_based": None,
+            "radius_pixels": diameter / 2,
+        }
     profile = {
         **prepared.profile,
         "name": "vesclass_matlab_source_auto" if fov is None else "vesclass_matlab_source_provided",
@@ -147,13 +163,8 @@ def prepare_vesclass_matlab_source(
         "diameter_source": "explicit supplied override"
         if fov_diameter_pixels is not None
         else "source boundary calibration; explicitly transferred without second calibration",
-        "fov_calibration": {
-            "mode": "estimated_from_source_automatic_fov"
-            if fov is None
-            else "estimated_from_source_provided_fov",
-            "method": source.source_branch,
-            **asdict(source.calibration),
-        },
+        "fov_calibration": used_calibration,
+        "source_fov_calibration": source_calibration,
         "calibration_boundary_policy": "final_closed before hole filling; source-special rules remain separate"
         if fov is None
         else source.source_branch,
