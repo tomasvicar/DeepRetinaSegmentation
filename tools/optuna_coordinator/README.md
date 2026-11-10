@@ -89,3 +89,11 @@ protocol with `python -m deepretina_optuna.v2 --source-commit ...
 new source. Use new database, state, queue, envelope, and output roots; never attach
 v2 to a v1 database or queues. Freeze all protocol/profile hashes before first DB
 creation. The protocol alone launches no worker or job.
+
+Finite v2 issuance and report promotions use a single SQLite-backed study transition
+journal. Issuance saves worker/GPU/lease identity before Optuna changes a queued
+trial to RUNNING; report saves the full receipt decision before changing pending
+task or receipt attributes. Startup and subsequent ask/report calls replay incomplete
+transitions idempotently and clear the journal only after committed task/decision state.
+Fault-injection tests cover every issuance, promotion and terminal-tell boundary.
+Existing V1 task records and transition behavior remain unchanged.

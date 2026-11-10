@@ -274,6 +274,7 @@ class Coordinator:
             self._restore_sampler_state()
             if self.finite:
                 self._ensure_finite_queue()
+                self._recover_transition()
             self.study.set_user_attr("protocol_sha256", self.protocol_sha)
             self.study.set_user_attr("bindings_sha256", bindings)
             self.study.set_user_attr(
@@ -291,6 +292,54 @@ class Coordinator:
         except Exception:
             self.close()
             raise
+
+    def _transition_point(self, point):
+        """Fault-injection seam; production transitions do not raise here."""
+
+    def _recover_transition(self):
+        journal = self.study.user_attrs.get("finite_transition")
+        if not journal:
+            return None
+        t = self._trial(journal["number"])
+        if journal["op"] == "issue":
+            frozen = self._trials()[journal["number"]]
+            if frozen.state == TrialState.WAITING:
+                t = self.study.ask()
+                require(t.number == journal["number"], "Finite issuance queue changed")
+            self._transition_point("issued_running")
+            t.suggest_categorical("candidate", self.protocol["search_space"]["candidate"]["choices"])
+            t.set_user_attr("origin", "optuna_new")
+            self._transition_point("issued_origin")
+            t.set_user_attr("meta", journal["meta"])
+            self._transition_point("issued_meta")
+            task = self._task(t, journal["meta"], 3, 0)
+            t.set_user_attr("pending_task", task)
+            self._transition_point("issued_pending")
+            self._persist_sampler_state()
+            result = task
+        else:
+            require(journal["op"] == "report", "Unknown finite transition")
+            decision = journal["decision"]
+            frozen = self._trials()[journal["number"]]
+            if frozen.state == TrialState.RUNNING:
+                if "next_task" in decision:
+                    t.set_user_attr("pending_task", decision["next_task"])
+                    self._transition_point("reported_pending")
+                t.set_user_attr("last_receipt_sha256", decision["receipt_sha256"])
+                self._transition_point("reported_receipt")
+                t.set_user_attr("last_decision", decision)
+                self._transition_point("reported_decision")
+                if decision["trial_state"] != "RUNNING":
+                    self.study.tell(t.number,
+                        decision["value"] if decision["trial_state"] == "COMPLETE" else None,
+                        state=TrialState[decision["trial_state"]])
+                    self._transition_point("reported_told")
+            else:
+                require(frozen.user_attrs.get("last_decision") == decision,
+                        "Terminal journal decision differs")
+            result = decision
+        self.study.set_user_attr("finite_transition", None)
+        return result
 
     def _ensure_finite_queue(self):
         existing = self._trials()
@@ -556,6 +605,8 @@ class Coordinator:
 
     def ask(self, worker_id, gpu_uuid=None):
         with self.guard:
+            if self.finite:
+                self._recover_transition()
             require(worker_id in self.profiles, "Worker not approved")
             binding = self.profiles[worker_id]
             active = [t for t in self._trials() if t.state == TrialState.RUNNING]
@@ -617,6 +668,14 @@ class Coordinator:
                 self.study.enqueue_trial(
                     self.protocol["seed_candidate"], user_attrs={"seed_candidate": True}
                 )
+            if self.finite:
+                number = next(t.number for t in self._trials() if t.state == TrialState.WAITING)
+                meta = {"worker_id": worker_id, "profile": kind,
+                    "profile_sha256": binding["profile_sha256"], "output_root": binding["output_root"],
+                    "gpu_uuid": gpu_uuid or binding.get("gpu_uuid"), "lease": uuid.uuid4().hex}
+                self.study.set_user_attr("finite_transition", {"op": "issue", "number": number, "meta": meta})
+                self._transition_point("issued_journal")
+                return self._recover_transition()
             self._persist_sampler_state(phase="before_ask")
             t = self.study.ask()
             t.set_user_attr("origin", "optuna_new")
@@ -733,6 +792,8 @@ class Coordinator:
 
     def report(self, r):
         with self.guard:
+            if self.finite:
+                self._recover_transition()
             require(type(r.get("trial_number")) is int, "Integer trial number required")
             t = self._trial(r["trial_number"])
             receipt_sha = digest(r)
@@ -830,8 +891,13 @@ class Coordinator:
                     and next_task["config_sha256"] == task["config_sha256"],
                     "Plan/config changed across rungs",
                 )
-                t.set_user_attr("pending_task", next_task)
+                if not self.finite:
+                    t.set_user_attr("pending_task", next_task)
                 decision["next_task"] = next_task
+            if self.finite:
+                self.study.set_user_attr("finite_transition", {"op": "report", "number": t.number, "decision": decision})
+                self._transition_point("reported_journal")
+                return self._recover_transition()
             t.set_user_attr("last_receipt_sha256", receipt_sha)
             t.set_user_attr("last_decision", decision)
             if state is not None:
