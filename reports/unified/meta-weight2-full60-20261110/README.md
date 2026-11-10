@@ -75,6 +75,6 @@ with unchanged config, source, cache, scheduler and allocated GPU. This proposal
 does not itself authorize that submission or controller execution.
 
 The private wrapper/review remains separate. Public plan uses portable `/data`,
-`/cache` and `/code` mounts and contains no account/storage credentials. No TEST
+`/cache` and `/workspace` mounts and contains no account/storage credentials. No TEST
 evaluation or selection freeze is included; completed models still require fresh
 VAL evidence and reviewed final selection.
