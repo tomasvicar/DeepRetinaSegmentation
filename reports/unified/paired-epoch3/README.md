@@ -35,6 +35,13 @@ and examine those heads explicitly; retain the original models as usable choices
 Both pooled and dataset-balanced per-head intervals are in
 [the checked result](comparison-checked.json).
 
+Conditional A/V accuracy on the same 2,626,284 labelled reference vessel pixels
+is 0.710883 for the original chain versus 0.611499 for the new E3 model.
+End-to-end A/V accuracy, including missed vessels, is 0.598154 versus 0.451254.
+These are the upstream reports' point estimates, without paired conditional
+accuracy intervals: conditional per-photo counts were not recorded. Both vessel
+detection and artery/vein classification still need improvement.
+
 ## Provenance and reproduction
 
 The new report is extracted directly from the safe-loaded `best.pt` embedded
