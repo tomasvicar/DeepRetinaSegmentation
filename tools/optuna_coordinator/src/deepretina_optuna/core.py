@@ -283,7 +283,7 @@ class Coordinator:
             "trial_number": t.number,
             "trial": name,
             "task_id": f"{name}-e{target:03d}",
-            "lease": meta["lease"],
+            "lease": f"{meta['lease']}-e{target:03d}",
             "worker_id": meta["worker_id"],
             "profile": meta["profile"],
             "profile_sha256": meta["profile_sha256"],

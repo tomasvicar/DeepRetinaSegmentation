@@ -23,7 +23,11 @@ caller-provided approved output roots, not connection endpoints.
 Tasks use the shared `trial`/`lease`/`trialNNNN-eNNN` schema and inline immutable
 plan. Hashes are SHA256 of sorted compact JSON **including a final newline**.
 Promotions return `{action:"continue",next_task:...}` and preserve plan/config,
-worker/physicalGPU/cache/profile/output/lease. Workers return audit's
+worker/physicalGPU/cache/profile/output. Each newly generated stage receives a
+deterministic per-rung lease token (`trial lease` + `-eNNN`) so exclusive stage
+logs do not collide. Stored pending envelopes, including old unsuffixed E3
+tokens, remain verbatim and their exact receipts remain valid. Decision tokens
+identify the completed stage; retry/restart preserves each stage token. Workers return audit's
 `checkpoint_qa` schema plus actual CSV text; core checks complete contiguous
 learning curves, best-so-far metric, finite flags, coverage, budgets and pins.
 Outer worker `COMPLETE` means stage completion, not an Optuna final model.
