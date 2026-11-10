@@ -168,10 +168,15 @@ def compare_reports(reference_path, candidate_path, manifest_path, *, repeats=20
                     ]
     point = _score(grouped.sum(axis=1))
     for model, report in enumerate(reports):
-        if "macro_dataset_mean_dice" in report and not np.isclose(
-            report["macro_dataset_mean_dice"], point[model, 0], rtol=0, atol=1e-12
-        ):
-            raise ValueError("Reported macro score disagrees with per-photo confusion counts")
+        if "macro_dataset_mean_dice" in report:
+            declared = report["macro_dataset_mean_dice"]
+            matches = (
+                not np.isfinite(point[model, 0])
+                if declared is None
+                else np.isclose(declared, point[model, 0], rtol=0, atol=1e-12)
+            )
+            if not matches:
+                raise ValueError("Reported macro score disagrees with per-photo confusion counts")
         if "channels" in report:
             for channel, name in enumerate(CHANNELS):
                 if not np.array_equal(_counts(report["channels"][name]), totals[model, channel]):

@@ -60,8 +60,8 @@ hashes and the comparison module hash are retained. It uses each source's pooled
 confusion counts for Dice, then averages supported sources per head and heads for
 the macro metric; it does not silently substitute a mean of photo Dice values.
 Undefined bootstrap metrics stay undefined and their defined draw counts are
-reported. Thirteen focused tests cover pairing/identity failures, summary
-consistency, deterministic grouped sampling and a synthetic case where the
+reported. Fourteen focused tests cover pairing/identity failures, summary
+consistency, resampling paired eyes together, deterministic grouped sampling and a synthetic case where the
 aggregate gain masks A/V regression. Ruff and formatting checks passed.
 
 `comparison.json` retains the initial exploratory calculation before the added
