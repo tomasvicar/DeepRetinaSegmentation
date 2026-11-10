@@ -63,13 +63,14 @@ Target base: `~/code/DeepRetinaSegmentation_derived_storage/full` on Ada, outsid
 canonical/raw trees. Exact output will be `<base>/<canonicalFP>/v1-train-val`.
 Launch only nice5/max2CPU with CUDA hidden. Use `/usr/bin/time -v` for wall/CPU/RSS;
 record wrapper+actual Python PIDs, command, source commit, result/log/resource paths.
-**Full build launch PID will be appended in the next committed note immediately
-following the gate/capacity commit.** Scheduling budget10–30minutes, not a measured
+**Full build is now RUNNING:** Python PID1053957, `/usr/bin/time` wrapper
+PID1053955, launched2026-11-10T14:03:02.159464Z from committed source
+`c141493a778a25158e2334eb3dfea5c40766af33`. See the committed launch JSON. Scheduling budget10–30minutes, not a measured
 promise. A monitor may only read progress, never launch or restart training.
 
 After launch/completion:
 
-1. Save exact PIDs in this handoff and notify root before compacting context.
+1. PIDs are saved here and sent to root. Continue with read-only build monitoring.
 2. Inspect own build PID/log periodically; leave all87 training processes alone.
 3. On terminal completion require a complete JSON result and `_SUCCESS`; inspect
    `/usr/bin/time` exit status, wall/CPU/maxRSS and final logical/allocated disk usage.
@@ -100,3 +101,22 @@ After launch/completion:
 - Original normalized CPU-reference PID1023129 has ended (not killed by us).
 - These are unfinished validation screens. Do not claim final superiority across
   tasks; original A/V raw preprocessing comparison remains an uncertified proxy.
+
+## Actual full-build launch, 14:03 UTC
+
+- Python PID: **1053957**, time-wrapper PID: **1053955** on Ada.
+- Exact source: `c141493a778a25158e2334eb3dfea5c40766af33`, tracked-clean at launch.
+- CUDA hidden, nice5, OMP/MKL/OpenBLAS2; no GPU and no training restart.
+- Canonical6103 reverified immediately before launch; free disk1,023,329,628,160B.
+- Actual command and runtime provenance:
+  `reports/unified/derived-cache/ada-full-build-launch.json`.
+- Completion result on Ada clone:
+  `reports/unified/derived-cache/ada-full-build.json`.
+- stderr: same directory `ada-full-build.log`; resource report:
+  `ada-full-build-resource.txt` (time wall/CPU/maxRSS and exit status).
+- Fresh output:
+  `~/code/DeepRetinaSegmentation_derived_storage/full/61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e/v1-train-val`.
+- No full cache fingerprint yet: derive only after successful terminal output and
+  pinned reopening/full-reference coverage checks. Never present the partial sample
+  fingerprint as the full cache identity.
+- Later handoff/report commits do not update the active Ada checkout or source files.
