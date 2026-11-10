@@ -32,3 +32,18 @@ Review any differences before changing committed fixtures. Real-photo cases are
 represented by source hashes, generated loader FOV shapes and calibration facts;
 real arrays are excluded from the fixture archive. This gate covers provided
 source branches only and does not certify automatic FOV or full photometry.
+
+Automatic-stage study (optional, not public prediction): after the same verified
+`souradnice.m` has been placed in the scratch directory, copy and run
+`generate_automatic_primitives.m`, then `generate_automatic_zero.m` in MATLAB
+with CUDA hidden, `nice -n10`, `-singleCompThread`. Both use synthetic inputs only.
+Run Python `package_automatic.py --oracle-dir SCRATCH --fixture-dir FIXTURES
+--report NEW_REPORT.json` with this branch on `PYTHONPATH`. The packaged small
+synthetic fixtures require no MATLAB at test time. `generate_histogram_counterexample.m`
+uses `automatic_zero_goldens.mat` to reproduce the rejected floating edge guess;
+it prints true source edge locations without inspecting toolbox source.
+
+`automatic-comparison.json` explicitly distinguishes supplied oracle histogram
+edges from native Python behavior. N3/4/5 multithresh and automatic histogram
+edge placement remain guarded. Neither synthetic stage agreement nor the
+provided-special measurements certify the complete image_adjustment chain.

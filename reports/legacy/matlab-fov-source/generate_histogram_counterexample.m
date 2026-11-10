@@ -1,0 +1,2 @@
+clear;Z=load('automatic_zero_goldens.mat');arrays={Z.cases(4).gray,linspace(.0039,.57,1000),linspace(.123,.879,1000),linspace(.17,.9,1000),linspace(.4,.41,1000),linspace(-.123,.879,1000),linspace(.00001,.99998,1000)};cases=struct('values',{},'counts',{},'edges',{});
+for k=1:numel(arrays),v=arrays{k};[n,e]=histcounts(v(:),250);cases(k)=struct('values',v,'counts',n,'edges',e);fprintf('%d min %.17g max %.17g first %.17g width %.17g last %.17g\n',k,min(v(:)),max(v(:)),e(1),e(2)-e(1),e(end));end;save('hist_probe.mat','cases','-v7');
