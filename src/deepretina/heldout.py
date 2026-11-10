@@ -180,7 +180,7 @@ def evaluate_reviewed_heldout(
             stream.flush()
             lease()
             written = os.fstat(stream.fileno())
-            published = output.stat()
+            published = output.lstat()
             gate.require(
                 (written.st_dev, written.st_ino) == (published.st_dev, published.st_ino),
                 "Held-out output replaced during emission",
@@ -188,7 +188,7 @@ def evaluate_reviewed_heldout(
         except BaseException:
             info = os.fstat(stream.fileno())
             try:
-                current = output.stat()
+                current = output.lstat()
                 if (current.st_dev, current.st_ino) == (info.st_dev, info.st_ino):
                     output.unlink()
             except FileNotFoundError:

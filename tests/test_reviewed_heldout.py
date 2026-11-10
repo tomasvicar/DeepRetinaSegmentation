@@ -545,3 +545,23 @@ def test_whole_view_frozen_protocol_uses_no_tile_override(selected, tmp_path):
     assert report["inference_protocol"]["tile_size"] is None
     assert report["inference_protocol"]["overlap"] is None
     assert report["inference_protocol"]["view_size"] == 32
+
+
+def test_foreign_symlink_to_open_report_inode_is_preserved(selected, tmp_path, monkeypatch):
+    original = Path.open
+    output = tmp_path / "test-report.json"
+    target = []
+
+    def replaced(path, *a, **k):
+        stream = original(path, *a, **k)
+        if path == output and a and a[0] == "xb":
+            target.append(f"/proc/self/fd/{stream.fileno()}")
+            path.unlink()
+            path.symlink_to(target[0])
+        return stream
+
+    monkeypatch.setattr(Path, "open", replaced)
+    with pytest.raises(gate.SelectionError, match="output replaced"):
+        run(selected, tmp_path)
+    assert output.is_symlink()
+    assert os.readlink(output) == target[0]
