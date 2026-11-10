@@ -1,0 +1,9 @@
+# BIOMISA fixed filename-role policy review
+
+This followup is based on archive-audit e87f336; it does not alter corpusv1, HPO, stable defaults or the raw quarantine inventory. [Policy and qualifications](../../../docs/BIOMISA_FIXED_EXPORT_ROLES.md) define the optional API. `biomisa(source, emit)` defaults to invalid/quarantined supervision. The explicit `FIXED_POLICY` maps namedCup→disc and namedDisc→cup for the entire source; it never chooses roles by area.
+
+[Full native validation](native-verification.json) passes all45 labelled photos:44 complete pairs and1disc-only P10Left. Every target pixel equals its fixed source-role mask exactly, all mapped cups stay inside discs, encoded masks/rawphotos are pinned, and no exact v1 decoded-photo alias exists. No source masks are modified. Runtime24.85s, peakRSS395812KiB at CPU1/nice10/CUDAhidden under180s cap. No forward/training/TEST scoring occurred.
+
+[Three independent visual overlays](visual-overlay-provenance.json) remain outside repo with hashes. Cyan namedCup traces outer disc-like boundary, red namedDisc inner cup-like boundary, across glaucoma and healthy examples. Only metadata is committed. The correct primary composite dataset docs confirm fundus annotation context and camera model, **not** a filename erratum. This is a locally audited explicit interpretation, not author-certified export semantics or clinical validation. The device-based45° suggestion stays separate from unresolved physical calibration; default field angle remainsNone.
+
+[Receipt](receipt.json) and [actual pass reproducer](verify_actual_native_policy.py) retain execution/resource provenance. The reproducer uses the original local data/v1 paths; set PYTHONPATH to this branch before running. Run only after reviewing those inputs and choose a fresh output path when adapting it. Existing v1 masks and all TEST labels remain unopened.
