@@ -3,9 +3,9 @@
 No independent original-versus-new score is established yet.
 **The initial 21-photo preview reports predate the patient-grouping review.**
 They are pipeline diagnostics only and must not select the final model or support
-held-out improvement claims. G1020's recoverable patient CSV is being applied;
-RIGA/UOA require a conservative training-only policy where patient pairing cannot
-be established. Exact affected report hashes and required corrective steps are in
+held-out improvement claims. The final corpus now applies G1020's recovered
+patient CSV and a conservative RIGA/UOA training-only policy where patient pairing
+cannot be established. Exact affected report hashes and corrective steps are in
 `reports/benchmark/pre-patient-review-notice.json`.
  The original
 single-net checkpoint indices contain 3,803/646 indexed images, not that many
@@ -89,6 +89,13 @@ A smaller model, more training data or longer training is a named ablation;
 none by itself establishes a quality improvement. If independent eligibility
 cannot be demonstrated, label results as an exposure-qualified reference
 comparison and retain that limitation beside every headline score.
+
+The dataset-balanced five-channel mean is the declared search selection metric,
+not evidence that every task improved. Compare each output and conditional A/V
+accuracy separately against the validation-selected original reference. A gain
+in disc/cup must not conceal a decline in vessels or A/V behind an aggregate
+claim. A partially trained model with a higher mean remains a candidate until
+the full training budget and per-task evaluation are complete.
 
 ## Reproducible latency measurement
 
