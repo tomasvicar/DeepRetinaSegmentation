@@ -71,3 +71,31 @@ Real caller gate reproduction:
 The recorded runtime used the existing Python/uv environment and MATLAB R2026b,
 CPU1 only. MATLAB remains an optional reference generator, never a runtime
 package dependency.
+
+Bounded threshold follow-up reproduction:
+
+- In the same external oracle directory, run the public-API synthetic generators
+  `generate_hist_multithresh_probe.m`, `generate_hist_holdout.m`,
+  `generate_hist_constant.m`, `generate_multithresh_fminsearch.m`, and
+  `generate_threshold_holdout.m` in order. Each is a script; invoke its actual
+  filename stem with MATLAB `-batch`. Use CUDA hidden, nice10 and
+  `-singleCompThread`; these are small histogram/search calls, not model inference.
+  The last script uses the previously extracted two real frames at stride8 and
+  never loads annotations or performs model-quality evaluation.
+- Run `package_threshold_study.py --oracle-dir SCRATCH --fixture NEW_METADATA.json
+  --report NEW_REPORT.json`. It imports the adjacent, clearly uncertified
+  `nelder_mead_candidate.py`. Reports/metadata open exclusively.
+- `package_multithresh_fixture.py --oracle-dir SCRATCH --fixture-dir NEW_DIRECTORY`
+  packages only synthetic images; names beginning`real_` are excluded. The small
+  synthetic NPZ is85,992bytes. CI retains the known local-search counterexample.
+- `threshold-study-report.json` records407 native fixed250 histogram matches,
+  the54 nondegenerate threshold cases (53 full vectors/54 first cutoffs match),
+  negative-infinity statuses and unported degenerate policies. Native histograms
+  are available only in the optional module; no public profile was activated.
+
+The explicit non250 development counterexample and source local/global objective
+contrast prevent extending the measured claim to arbitrary histogram bin counts
+or a global Otsu substitute. No proprietary toolbox source was inspected.
+
+`global_otsu_counterexample.py --oracle-dir SCRATCH` independently recomputes the
+reported three-mode global-DP objective contrast; it is not a runtime replacement.

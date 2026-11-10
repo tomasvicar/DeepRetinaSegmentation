@@ -28,9 +28,7 @@ class MatlabSourceFOV:
 def _binary(mask):
     values = np.asarray(mask)
     if values.ndim != 2 or min(values.shape) < 2 or max(values.shape) <= 5:
-        raise ValueError(
-            "Source provided-mask branch requires a 2D mask with max dimension >5"
-        )
+        raise ValueError("Source provided-mask branch requires a 2D mask with max dimension >5")
     if not np.isfinite(values).all():
         raise ValueError("Provide a finite binary source FOV")
     levels = np.unique(values)
@@ -58,9 +56,7 @@ def _calibration(boundary):
     col = math.floor(float(_mode(midpoints(boundary))) + 0.5)
     row = math.floor(float(_mode(midpoints(boundary.T))) + 0.5)
     y, x = np.where(boundary)
-    distance = np.sqrt(
-        (x.astype(float) + 1 - col) ** 2 + (y.astype(float) + 1 - row) ** 2
-    )
+    distance = np.sqrt((x.astype(float) + 1 - col) ** 2 + (y.astype(float) + 1 - row) ** 2)
     radius = math.floor(float(_mode(distance)) + 0.5) + 1
     return FOVCalibration(row, col, radius, int(boundary.sum()))
 
@@ -166,26 +162,70 @@ def source_close(mask):
     return binary_closing(padded, structure=source_disk10())[9:-9, 9:-9]
 
 
-def source_histcounts250(values, *, oracle_edges=None):
-    """Count explicit oracle bins; automatic MATLAB edge selection is unresolved.
+def implicit_histcounts250_edges(values):
+    """Measured double-grayscale250-bin rule; source rounding quirks retained.
 
-    MATLAB's public documentation specifies coverage and bin count but not the
-    floating edge placement. A guessed nice-number rule failed a measured case.
-    The optional study API therefore requires the actual measured edges.
+    This fixed250-bin domain is independently checked against synthetic ranges,
+    constants and subsampled real images. It is not a general histcounts clone.
     """
     data = np.asarray(values, np.float64)
     if not data.size or not np.isfinite(data).all():
         raise ValueError("Histogram requires finite nonempty source grayscale")
-    if oracle_edges is None:
-        raise NotImplementedError(
-            "Source histcounts250 automatic edges are unresolved; provide measured oracle edges explicitly for study"
+    lo, hi = float(data.min()), float(data.max())
+    if lo < 0 or hi > 1:
+        raise ValueError(
+            "Native source histogram supports grayscale in [0,1]; use measured edges outside this domain"
         )
-    edges = np.asarray(oracle_edges, np.float64)
-    if (
-        edges.shape != (251,)
-        or not np.isfinite(edges).all()
-        or not (np.diff(edges) > 0).all()
-    ):
+    if lo == hi:
+        lower = math.floor(2 * lo - 0.5) / 2
+        upper = math.ceil(2 * hi + 0.5) / 2
+        return lower + np.arange(251, dtype=np.float64) * ((upper - lower) / 250)
+    raw_width = (hi - lo) / 250
+    if raw_width <= 0:
+        raise NotImplementedError("Unrepresentable native histogram range; supply measured edges")
+    magnitude = 10.0 ** math.floor(math.log10(raw_width))
+    # A log10 result may round exactly to the next decimal exponent. Its
+    # leading digit remains at least1; this preserves measured adjacent-double
+    # .4/.65 boundary behavior without a numerical epsilon.
+    if magnitude == 0:
+        raise NotImplementedError(
+            "Unrepresentable native histogram magnitude; supply measured edges"
+        )
+    coarse = max(1, math.floor(raw_width / magnitude)) * magnitude
+    lower = math.floor(lo / coarse) * coarse
+    target = (hi - lower) / 250
+    if target / 250 <= 0:
+        raise NotImplementedError(
+            "Unrepresentable native histogram resolution; supply measured edges"
+        )
+    power = math.ceil(math.log10(target / 250))
+    for _ in range(16):
+        # Recompute decimal powers. Dividing a previous power by10 changes its
+        # rounding and loses measured .4/.65-style one-unit width behavior.
+        unit = 10.0**power
+        if unit == 0:
+            break
+        width = math.ceil(target / unit) * unit
+        if width / 250 >= unit:
+            edges = lower + np.arange(251, dtype=np.float64) * width
+            if edges[0] <= lo and edges[-1] >= hi and (np.diff(edges) > 0).all():
+                return edges
+            break
+        power -= 1
+    raise NotImplementedError("Unresolved native histogram numeric range; supply measured edges")
+
+
+def source_histcounts250(values, *, oracle_edges=None):
+    """Source250-bin grayscale counts, with an explicitly tagged oracle override."""
+    data = np.asarray(values, np.float64)
+    if not data.size or not np.isfinite(data).all():
+        raise ValueError("Histogram requires finite nonempty source grayscale")
+    edges = (
+        implicit_histcounts250_edges(data)
+        if oracle_edges is None
+        else np.asarray(oracle_edges, np.float64)
+    )
+    if edges.shape != (251,) or not np.isfinite(edges).all() or not (np.diff(edges) > 0).all():
         raise ValueError("Provide exactly 251 finite strictly increasing oracle edges")
     if edges[0] > data.min() or edges[-1] < data.max():
         raise ValueError("Oracle edges must cover all source grayscale values")
@@ -269,22 +309,16 @@ def automatic_fov_stages(
     elif name == "eophtha":
         expected_black = 0.45
         tolerance = 0.15
-    fallback = white > (1 - expected_black + tolerance) or white < (
-        1 - expected_black - tolerance
-    )
+    fallback = white > (1 - expected_black + tolerance) or white < (1 - expected_black - tolerance)
     closed = initial_closed
     if fallback:
         counts, edges = source_histcounts250(gray, oracle_edges=histogram_edges)
-        index = int(
-            np.searchsorted(np.cumsum(counts), expected_black * gray.size, side="right")
-        )
+        index = int(np.searchsorted(np.cumsum(counts), expected_black * gray.size, side="right"))
         low = float(edges[index])
         high = float(gray.max()) * 0.8
         selected = components(low)
         closed = source_close(selected)
-    filled = binary_fill_holes(
-        closed, structure=np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]], bool)
-    )
+    filled = binary_fill_holes(closed, structure=np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]], bool))
     return {
         "gray": gray,
         "selected": selected,
@@ -296,7 +330,11 @@ def automatic_fov_stages(
         "high_threshold": high,
         "fallback_used": bool(fallback),
         "multithresh_backend": "supplied_oracle_vector" if n else "not_required",
-        "histogram_backend": "supplied_oracle_edges" if fallback else "not_required",
+        "histogram_backend": (
+            "python_source_histcounts250" if histogram_edges is None else "supplied_oracle_edges"
+        )
+        if fallback
+        else "not_required",
         "initial_white_fraction": white,
         "expected_black_fraction": expected_black,
     }
@@ -318,19 +356,13 @@ def automatic_fov_source(
     # Source RIM uses fov AFTER fill as its boundary; generic/ROI uses final_closed.
     boundary_input = stages["filled"] if name in {"rim", "rimone"} else stages["closed"]
     result = provided_fov_source(boundary_input, dataset=name)
-    processing = (
-        np.ones_like(stages["filled"])
-        if name in {"rim", "rimone"}
-        else stages["filled"]
-    )
+    processing = np.ones_like(stages["filled"]) if name in {"rim", "rimone"} else stages["filled"]
     branch = (
         "automatic_rimone_filled_boundary"
         if name in {"rim", "rimone"}
         else result.source_branch.replace("provided_", "automatic_", 1)
     )
-    diagnostics = {
-        key: value for key, value in stages.items() if not isinstance(value, np.ndarray)
-    }
+    diagnostics = {key: value for key, value in stages.items() if not isinstance(value, np.ndarray)}
     return replace(
         result,
         processing_fov=processing,
