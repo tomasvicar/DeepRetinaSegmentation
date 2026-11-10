@@ -1,3 +1,28 @@
+# Aktuální předání: 10. 11. 2026, 20:38 UTC
+
+Cíl z [GOAL.md](GOAL.md) zůstává aktivní. `for_Leipzig` od `2d07be5`
+obsahuje původních pět ověřených modelů, tři výslovně předběžné piloty a nově
+`unified-full-data-baseline`: dokončených60 epoch na všech2 221 vhodných TRAIN
+fotografiích/5 281 anotacích/17 zdrojích. Vybraný checkpoint je E56; training-VAL
+macro Dice0.800123 při prahu0.5. TEST zatím neproběhl a baseline není prohlášena
+za finální optimum. Přesné váhy, E60 QA, celé CSV a skutečný CPU CLI smoke jsou
+v [release důkazech](../reports/release/control60-baseline/README.md).
+
+Optuna běží odděleně v experimentální větvi; na Adě, old a Pascalu jsou spuštěny
+tři pracovní procesy. Je povoleno až5 Meta GPU navíc,48 nových konfigurací,
+etapy3/9/27/60 a konec11. 11. v07:00UTC. Meta zatím blokuje vypršelý Kerberos
+lístek; žádný noční PBS job dosud nebyl odeslán. Účty, připojení a přesné joby
+patří pouze do soukromého `metacentrum-workflows`, kde jsou zapsané skripty,
+limity, průběžné commity i návod obnovy. Procesy vždy znovu ověřit; tento text
+je časový snímek, nikoli trvalé tvrzení, že právě běží.
+
+Výsledky úplného E60 ověření, šesti nových VAL prahů a párové Cup studie jsou
+na [experimentální větvi](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo).
+Následující poznámky jsou zachované historické předání a jejich údaje o běžících
+procesech nebo dokončených epochách už neplatí.
+
+---
+
 # Stav pro navázání po compactu
 
 Ověřeno **10. 11. 2026 ve 14:04 UTC / 15:04 CET**. Je to časový snímek;

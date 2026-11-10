@@ -3,8 +3,10 @@
 This branch implements one shared network with five logits: vessel, artery
 conditional on vessel, vein conditional on vessel, disc, cup. The default compact
 UNet has 1,106,597 parameters (base width12, depth4, BatchNorm). This is a verified training/prediction pipeline for an experimental model.
-Full17-source training and validation screens are running; a final new model has
-not yet been selected. Functional tests and short screens do not establish final quality. Published original
+The bundled `unified-full-data-baseline` completed60 epochs on all2,221 eligible
+TRAIN photographs across17 sources, with all5,281 annotation records contributing.
+Its validation-selected checkpoint is epoch56; optimization continues and a final
+new model has not yet been selected. Functional tests and short screens do not establish final quality. Published original
 models remain the reference until the full-data comparison is complete.
 
 ## Data and geometry
