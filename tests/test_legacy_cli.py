@@ -334,3 +334,31 @@ def test_cli_matlab_auto_calibration_fails_closed_before_vessel_model(
     expected = {"empty": "foreground", "full": "paired edge", "special": "special souradnice"}
     assert expected[invalid] in capsys.readouterr().err
     assert not (tmp_path / "out").exists()
+
+
+@pytest.mark.parametrize(("dtype", "tiny"), [(torch.float32, 1e-8), (torch.float64, 1e-16)])
+def test_raw_av_automatic_vessel_pipeline_preserves_tiny_positive_default_logits(
+    tmp_path, monkeypatch, capsys, dtype, tiny
+):
+    from deepretina.legacy import inference
+
+    def tiny_vessel_logits(model, image, *args, **kwargs):
+        h, w = image.shape[-2:]
+        logits = torch.full((1, h, w), -tiny, dtype=dtype)
+        logits[:, h // 4 : 3 * h // 4, w // 2 : w // 2 + 4] = tiny
+        logits[:, 0] = 0
+        assert (logits.sigmoid() == 0.5).all()
+        return logits
+
+    monkeypatch.setattr(inference, "tiled_logits", tiny_vessel_logits)
+    args = matlab_cli_args(tmp_path)
+    i = args.index("--vessel-mask")
+    del args[i : i + 2]
+    main(args)
+    paths = json.loads(capsys.readouterr().out)
+    info = json.loads(Path(paths["metadata"]).read_text())
+    vessel = np.asarray(Image.open(paths["vessel"])) > 0
+    assert 0 < vessel.sum() < vessel.size
+    assert info["vessel_prediction"]["mask_decision"] == "strict_logit_gt_zero"
+    assert info["vessel_prediction"]["threshold"] == 0.5
+    assert Image.open(paths["classes"]).size == (112, 96)
