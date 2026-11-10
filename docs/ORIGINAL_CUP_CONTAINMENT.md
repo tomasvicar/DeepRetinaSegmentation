@@ -79,3 +79,10 @@ The process checks canonical/reference/model hashes and all native count gates
 again. Per-photo JSONL is flushed as it progresses. Full reports are written only
 after every supported photo passes. A count mismatch must be investigated rather
 than accommodated by relaxed tolerances or changed GT.
+
+After a successful full run, `scripts/summarize_cup_containment.py --result
+/path/to/result --reference-dir reports/disc-reference --output /new/summary.json`
+reports native and clipped cup counts, TP removals and FP reductions for each
+source and pooled support, plus all five pooled/source-macro metrics and the
+five-head macro. It requires complete 612-photo results, rechecks reference byte
+hashes, and verifies all 770 photos and non-cup counts remain unchanged.
