@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "manifest": "/data/manifest.json",
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "derived_cache": {
+    "schema": 1,
+    "fingerprint": "4e39e40def03d0f2859dd147107a3736a62b4fc0249dd440a1280a9803aa8591",
+    "canonical_fingerprint": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+    "allow_canonical_fallback": false
+  },
+  "training_photos": 2221,
+  "datasets": [
+    "aria",
+    "avrdb",
+    "chasedb1",
+    "drhagis",
+    "drishti",
+    "drive",
+    "erlangen",
+    "g1020",
+    "hrf",
+    "iostar",
+    "onhsd",
+    "refuge",
+    "riga",
+    "rimone",
+    "rite",
+    "stare",
+    "uoadr"
+  ],
+  "purpose": "full_data_validation_search",
+  "review_status": "root_reviewed_ready_for_source_and_runtime_checks",
+  "source_commit": "3157bb957fcf6e6f632a5c49d6df2c8a78ea3747",
+  "execution_code_sha256": "8e0481fff8ef53beca760acf074e96b5b73305e3adea2849e79805fb961cb30b",
+  "training_source_sha256": "dd69012a1741000ae5841634094094397c690a2371c9a91aa411344a436f1136",
+  "screen_epochs": 8,
+  "total_epochs": 60,
+  "candidates": {
+    "lr_0003_control_cached": {
+      "architecture": "compact_unet",
+      "legacy_initialization": null,
+      "allow_historical_exposure": false,
+      "preprocessing_profile": "legacy25_raw",
+      "pixels_per_degree": 25.0,
+      "epochs": 60,
+      "epoch_samples": 8192,
+      "coverage_first": true,
+      "batch_size": 4,
+      "patch_size": 384,
+      "base_channels": 12,
+      "depth": 4,
+      "norm": "batch",
+      "lr": 0.0003,
+      "weight_decay": 1e-05,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05,
+      "seed": 42,
+      "workers": 2,
+      "device": "cuda:0",
+      "sampling": "dataset_task_balanced",
+      "train_view": "patch",
+      "view_size": 512,
+      "foreground_probability": 0.5,
+      "augmentation": "mild",
+      "bce_weight": 1.0,
+      "dice_weight": 1.0,
+      "av_weight": 1.0,
+      "tile_size": 512,
+      "overlap": 64,
+      "require_all_heads": true,
+      "selection_metric": "macro_dataset_mean_dice",
+      "purpose": "full_data",
+      "max_steps": null
+    },
+    "lr_0003_av_residual_cached": {
+      "architecture": "compact_unet_av_residual",
+      "legacy_initialization": null,
+      "allow_historical_exposure": false,
+      "preprocessing_profile": "legacy25_raw",
+      "pixels_per_degree": 25.0,
+      "epochs": 60,
+      "epoch_samples": 8192,
+      "coverage_first": true,
+      "batch_size": 4,
+      "patch_size": 384,
+      "base_channels": 12,
+      "depth": 4,
+      "norm": "batch",
+      "lr": 0.0003,
+      "weight_decay": 1e-05,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05,
+      "seed": 42,
+      "workers": 2,
+      "device": "cuda:0",
+      "sampling": "dataset_task_balanced",
+      "train_view": "patch",
+      "view_size": 512,
+      "foreground_probability": 0.5,
+      "augmentation": "mild",
+      "bce_weight": 1.0,
+      "dice_weight": 1.0,
+      "av_weight": 1.0,
+      "tile_size": 512,
+      "overlap": 64,
+      "require_all_heads": true,
+      "selection_metric": "macro_dataset_mean_dice",
+      "purpose": "full_data",
+      "max_steps": null
+    }
+  },
+  "selection_policy": "Bounded common-source architecture screen: control8 QA then optional AV-residual8 on the same single-GPU allocation; inspect all heads/sources/AV counts. No final or independent improvement claim.",
+  "protocol": {
+    "name": "meta_common_allocation_av_residual_e008_v1",
+    "created_utc": "2026-11-10T17:01:46.545795+00:00",
+    "parent_approved_ada_plan_sha256": "6be48b57fc85e8ffba7772058562aa5a8bf855f9cb445c5180484111ffba5778",
+    "execution_order": [
+      "lr_0003_control_cached",
+      "lr_0003_av_residual_cached"
+    ],
+    "candidate_config_changes": {
+      "architecture": {
+        "control": "compact_unet",
+        "residual": "compact_unet_av_residual"
+      }
+    },
+    "fresh_from_scratch_both": true,
+    "resume_existing_ada_or_meta_run": false,
+    "execution_scope": "proposal only; root review of this exact plan fingerprint and private wrapper is required before submission",
+    "runtime": {
+      "environment": {
+        "OMP_NUM_THREADS": "4",
+        "MKL_NUM_THREADS": "4",
+        "OPENBLAS_NUM_THREADS": "4",
+        "PYTHONHASHSEED": "42"
+      },
+      "torch_num_threads": 4,
+      "torch_num_interop_threads": 1,
+      "dataloader_workers": 2,
+      "record_actual_runtime_before_each_trial": true,
+      "source_runtime_code_changes": false,
+      "note": "The source per-trial CLI does not apply these metadata fields; the reviewed external launcher must enforce and record them before application imports/parallel work."
+    },
+    "allocation": {
+      "ncpus": 4,
+      "ngpus": 1,
+      "max_concurrent_trials": 1,
+      "walltime_seconds": 7200,
+      "job_arrays": false,
+      "same_physical_gpu_uuid_for_both_trials": true,
+      "same_allocation_id_for_both_trials": true,
+      "same_runtime_image_digest_for_both_trials": true,
+      "memory_and_scratch_request": "private wrapper proposal, separately reviewed; no resource request submitted here"
+    },
+    "container_paths": {
+      "manifest": "/data/manifest.json",
+      "derived_cache": "/cache",
+      "source": "/workspace",
+      "plan": "/config/plan.json",
+      "run_parent": "/runs"
+    },
+    "control_run": {
+      "trial_id": "lr_0003_control_cached",
+      "output_basename": "lr0003-control-e008",
+      "stop_after_epoch": 8,
+      "final": false,
+      "resume": false
+    },
+    "residual_run": {
+      "trial_id": "lr_0003_av_residual_cached",
+      "output_basename": "lr0003-av-residual-e008",
+      "stop_after_epoch": 8,
+      "final": false,
+      "resume": false
+    },
+    "second_trial_gate": {
+      "evaluate_after": "control terminal E8 plus checkpoint/coverage/pin QA; never run concurrently",
+      "clock_origin": "allocation entry before staging/imports/setup; use one monotonic clock throughout",
+      "elapsed_includes": "staging, setup, source/runtime validation, control8 and control QA through decision time",
+      "skip_if_elapsed_allocation_seconds_gt": 2700,
+      "threshold_equality": "2700 seconds exactly does not trigger the budget skip",
+      "other_skip_reasons": [
+        "control failed or did not reach exactly E8",
+        "nonfinite model/optimizer or invalid checkpoint",
+        "source/config/data/cache/runtime/GPU/allocation pins differ",
+        "any of2221 train photos not covered",
+        "not16384 optimizer steps or65536 delivered samples at control E8",
+        "scheduler horizon not60 or last_epoch not8",
+        "cleanup/staging/runtime readiness failed"
+      ],
+      "skip_action": "persist control milestone and explicit control_only_budget/control_failed status; do not submit another job or silently extend budget",
+      "if_residual_incomplete": "retain actual completed-epoch checkpoints/metrics and report partial_pair, never a completed matched8E comparison"
+    },
+    "checkpoint_qa": {
+      "expected_epoch": 8,
+      "expected_steps": 16384,
+      "expected_delivered_samples": 65536,
+      "eligible_training_photos": 2221,
+      "finite_model_optimizer": true,
+      "unchanged_scheduler_horizon": 60,
+      "scheduler_last_epoch": 8,
+      "preserve_independent_milestone_before_next_trial": true,
+      "full_cache_integrity": "verified during compute-node stage and runtime preflight; every derived read remains byte-hash checked"
+    },
+    "validation_reporting": {
+      "split": "val",
+      "photos": 770,
+      "primary_selection_metric": "macro_dataset_mean_dice",
+      "heads": [
+        "vessel",
+        "artery",
+        "vein",
+        "disc",
+        "cup"
+      ],
+      "per_source_and_per_head_counts": [
+        "tp",
+        "fp",
+        "fn",
+        "valid_pixels"
+      ],
+      "per_photo_fields": [
+        "photo_id",
+        "record_ids",
+        "dataset",
+        "channel_datasets",
+        "channels",
+        "av_conditional_counts"
+      ],
+      "per_photo_av_conditional_counts": [
+        "correct",
+        "scored_pixels",
+        "eligible_pixels",
+        "end_to_end_correct"
+      ],
+      "required_summaries": [
+        "all5 pooled and source-macro Dice",
+        "conditional and end-to-end AV accuracy",
+        "per-source AV correct/scored/eligible/end_to_end sums from channel_datasets attribution",
+        "parameter count",
+        "train/validation/total wall times and complete learning curves"
+      ],
+      "pair_support_check": "same770 photo IDs/record variants/valid and positive GT counts and conditional eligible pixels; fail comparison on mismatch"
+    },
+    "data_and_execution_constraints": {
+      "installations_or_downloads": false,
+      "frontend_compute_or_build": false,
+      "new_test_inference_or_selection": false,
+      "test_integrity_byte_hashing": "allowed only as required by frozen canonical schema2 identity; never prediction or training",
+      "source_data_cache_read_only": true,
+      "no_checkpoint_migration": true
+    },
+    "interpretation": {
+      "architecture_single_factor_within_pair": true,
+      "same_seed_and_initial_backbone_contract": "source3157 private residual initialization restores global RNG and zero-initializes corrections; identical backbone/init logits at matched seed",
+      "comparison_to_ada": "context only: hardware and common runtime differ; not the paired causal control",
+      "limits": [
+        "single-seed8E screening, not a final trained model",
+        "fixed control-first order can confound runtime through warm caches, GPU clocks and scheduling",
+        "same allocation controls hardware/runtime within this observed pair, but does not establish population/seed robustness",
+        "all heads and sources must be reported; aggregate gain cannot establish every-task improvement",
+        "preserved split groups are not all proven independent patients"
+      ]
+    }
+  },
+  "limitations": [
+    "Approved new plan; historical checkpoints are not migrated or resumed into the new source. Fresh control and candidate only.",
+    "Historical LR.0003 E8 results are context, not the fresh same-source control",
+    "No architecture quality improvement or GPU timing measured; CUDA warn_only is not universal determinism proof"
+  ],
+  "reviewed_utc": "2026-11-10T15:25:56.819903+00:00",
+  "draft_sha256": "173048f9a2c0a273a6833dee761d91325d82f04e0dbab6c2784bb11f43735178"
+}
