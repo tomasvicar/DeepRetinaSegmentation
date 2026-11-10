@@ -1,0 +1,159 @@
+{
+  "source_commit": "feb26e2",
+  "checkpoint_sha256": "34e69e9d601092db1bbd71872009a24b183333da296f451113a1303da69eb2d7",
+  "snapshot": {
+    "checkpoint_sha256": "34e69e9d601092db1bbd71872009a24b183333da296f451113a1303da69eb2d7",
+    "source_hash_before_after_equal": true,
+    "image_member": "content/drive/Shareddrives/Retina GAC\u030cR/Data/databases/DRIONS-DB/images/image_001.jpg",
+    "image_sha256": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1",
+    "scope": "TRAIN input only; no GT read or quality scoring; functional early-weights smoke"
+  },
+  "actual_cli": "python -m deepretina predict --checkpoint SNAPSHOT/best.pt --input SNAPSHOT/input.jpg --dataset drions --output SNAPSHOT/prediction --device cpu",
+  "cpu_affinity": 0,
+  "nice": 10,
+  "threads": 1,
+  "cuda_visible_devices": "",
+  "exit_code": 0,
+  "preprocessing": {
+    "profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "field_of_view_degrees": 30.0,
+    "normalized": false,
+    "normalization": "RGB/255-0.5",
+    "fov_source": "automatic original Python thresholds",
+    "geometry": {
+      "original_shape": [
+        400,
+        600
+      ],
+      "crop_position": [
+        0,
+        399,
+        0,
+        599
+      ],
+      "rescale_factor": 1.25,
+      "prepared_shape": [
+        500,
+        750
+      ]
+    },
+    "geometry_policy": {
+      "policy_id": "corpusv2_nominal_fov_20261110_v1",
+      "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+      "dataset": "drions",
+      "native_shape_hw": [
+        400,
+        600
+      ],
+      "policy_applied": true,
+      "declared_rule": {
+        "alternatives_degrees": [
+          25.0,
+          30.0,
+          45.0
+        ],
+        "camera": "unspecified analog fundus camera",
+        "confidence": "low",
+        "evidence_ids": [
+          "drions_creator"
+        ],
+        "field_of_view_degrees": 30.0,
+        "nominal_assumption": true,
+        "per_image_angle_measured": false,
+        "qualification": "Research scale convention for the disc-centered low-resolution scan, not measured FoV.30 avoids an unsupported45degree default and greater upsampling; neither is proven correct. Do not fit angle from disc GT.",
+        "sources": [
+          "https://www.ia.uned.es/~ejcarmona/DRIONS-DB_2.html"
+        ],
+        "status": "research_nominal_unknown_camera",
+        "policy_id": "corpusv2_nominal_fov_20261110_v1",
+        "native_shape_hw": [
+          400,
+          600
+        ],
+        "camera_attribution_method": "dataset_acquisition_description_or_explicit_nominal_research_policy"
+      },
+      "unseen_native_shape": false,
+      "selection": "checkpoint_recorded_geometry_policy",
+      "field_of_view_degrees": 30.0,
+      "unseen_native_shape_fallback": false
+    }
+  },
+  "arrays": {
+    "probability": {
+      "shape": [
+        5,
+        400,
+        600
+      ],
+      "finite": true,
+      "min": 0.0003951803082600236,
+      "max": 0.9999982714653015
+    },
+    "channels": {
+      "shape": [
+        5
+      ],
+      "dtype": "<U6"
+    },
+    "supervised_channels": {
+      "shape": [
+        5
+      ],
+      "finite": true,
+      "min": 1.0,
+      "max": 1.0
+    },
+    "fov": {
+      "shape": [
+        400,
+        600
+      ],
+      "finite": true,
+      "min": 1.0,
+      "max": 1.0
+    },
+    "conditional_channels": {
+      "shape": [
+        2
+      ],
+      "finite": true,
+      "min": 1.0,
+      "max": 2.0
+    }
+  },
+  "png_shapes": {
+    "vessel.png": [
+      400,
+      600
+    ],
+    "artery.png": [
+      400,
+      600
+    ],
+    "vein.png": [
+      400,
+      600
+    ],
+    "disc.png": [
+      400,
+      600
+    ],
+    "cup.png": [
+      400,
+      600
+    ],
+    "av.png": [
+      400,
+      600,
+      3
+    ],
+    "overlay.png": [
+      400,
+      600,
+      3
+    ]
+  },
+  "qualification": "Real corpus-v2 E2 weights, TRAIN DRIONS input only, no GT read, no quality/TEST claim; original preparation directory absent on inference host",
+  "initial_non_entrypoint_attempt": "python -m deepretina.cli exits without invoking main; no prediction files; corrected to package entrypoint"
+}
