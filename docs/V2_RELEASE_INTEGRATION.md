@@ -1,6 +1,10 @@
-# V2 release integration proposal
+# Verified V2 release integration
 
-This branch starts from stable `for_Leipzig` commit
+Merged into `for_Leipzig` after root review of the scoped runtime diff, complete
+CPU test evidence and bundled-file preservation receipt. No training process
+or checkpoint bytes changed during the merge.
+
+This integration starts from stable `for_Leipzig` commit
 `0b8c74ccf6824057100fffc9b4328e5b6fc9c61e`. It selectively integrates V2 preparation,
 loss controls and portable checkpoint geometry. It does not merge the HPO branch.
 No new trained model, model-quality improvement, new default, or Meta V2 readiness

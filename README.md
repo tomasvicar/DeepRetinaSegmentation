@@ -2,7 +2,7 @@
 
 **Status:** original trained models are bundled with verified prepared-input
 inference. Three additional single-dataset pilots remain explicitly preliminary.
-A completed corpus-v1 unified baseline is bundled (17 TRAIN sources,2221 photos); model optimization and final comparison remain in progress.
+A completed corpus-v1 unified baseline is bundled (17 TRAIN sources, 2,221 photos); model optimization and final comparison remain in progress.
 The agreed deliverable is recorded in [GOAL.md](docs/GOAL.md).
 
 A Python package for retinal **vessel segmentation**, **artery/vein classification**,
@@ -98,7 +98,7 @@ and [preprocessing evidence](docs/LEGACY_PREPROCESSING.md).
 | Included model | Provenance / outputs |
 | --- | --- |
 | `legacy-universal` | Original trained single_net: vessel, disc, cup |
-| `unified-full-data-baseline` | Corpus-v1 completed60-epoch five-output baseline (17 TRAIN sources,2221 photos); selected E56 on validation, no TEST yet |
+| `unified-full-data-baseline` | Corpus-v1 completed60-epoch five-output baseline (17 TRAIN sources, 2,221 photos); selected E56 on validation, no TEST yet |
 | `legacy-vessels` | Original trained vessel network |
 | `legacy-disc-0`, `legacy-disc-1` | Two original trained disc networks |
 | `legacy-av` | Original trained A/V classifier; requires vessel support |
@@ -137,7 +137,7 @@ its private source is not included.
 V2 additionally decodes native DRIONS, GAMMA and `idrid_disc` annotations;
 BIOMISA remains quarantined unless its audited export-role policy is explicit.
 The [V2 append preparation guide](docs/CORPUS_V2_PREPARATION.md) describes the
-verified21-source TRAIN corpus (2529photos) and independent retraining path.
+verified 21-source TRAIN corpus (2,529 photos) and independent retraining path.
 See [portable geometry and release scope](docs/V2_RELEASE_INTEGRATION.md).
 See [dataset formats and annotation rules](docs/DATASETS.md) before mixing databases.
 For a bounded integrity preview, add `--limit 3`; this limits source groups per dataset
