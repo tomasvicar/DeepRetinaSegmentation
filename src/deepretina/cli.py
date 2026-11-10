@@ -113,10 +113,16 @@ def parser() -> argparse.ArgumentParser:
     predict.add_argument("--dicoms", type=Path, nargs=4, metavar=("R", "G", "B", "VESSEL"))
     predict.add_argument("--vessel-mask", type=Path, help="Binary vessel mask for original A/V")
     predict.add_argument("--original-size", type=int, nargs=2, metavar=("HEIGHT", "WIDTH"))
-    predict.add_argument(
+    raw_av_mode = predict.add_mutually_exclusive_group()
+    raw_av_mode.add_argument(
         "--av-raw-proxy",
         action="store_true",
         help="Explicit approximate Python preprocessing for raw A/V photographs",
+    )
+    raw_av_mode.add_argument(
+        "--av-raw-matlab",
+        action="store_true",
+        help="Calibrated MATLAB-style AV profile; requires --fov and --fov-diameter-pixels",
     )
     predict.add_argument(
         "--vessel-checkpoint", type=Path, help="Override automatic legacy-vessels model for raw A/V"
@@ -249,6 +255,8 @@ def _apply_model(args, checkpoint: Path):
     family = torch.load(checkpoint, map_location="cpu", weights_only=True).get("family")
     if family in {"legacy_single_net", "legacy_av"}:
         return _apply_legacy(args, checkpoint, family)
+    if args.command == "predict" and (args.av_raw_proxy or args.av_raw_matlab):
+        raise ValueError("Raw A/V profiles require the original A/V model")
     if args.command == "predict" and args.input is None:
         raise ValueError("--input is required for pilot model prediction")
     from .engine import evaluate
@@ -286,17 +294,19 @@ def _apply_legacy(args, checkpoint: Path, family: str):
 
     if args.input is None and args.dicoms is None and args.prepared_array is None:
         raise ValueError("Supply --input, --dicoms, or --prepared-array")
-    if args.prepared_array and (args.dicoms or args.prepared or args.av_raw_proxy):
+    if args.prepared_array and (
+        args.dicoms or args.prepared or args.av_raw_proxy or args.av_raw_matlab
+    ):
         raise ValueError("Choose a single prepared A/V input mode")
 
     def one(image_path, output):
-        if args.av_raw_proxy:
+        if args.av_raw_proxy or args.av_raw_matlab:
             if family != "legacy_av" or image_path is None:
                 raise ValueError(
-                    "--av-raw-proxy requires the original A/V model and a raw RGB input"
+                    "Raw A/V profiles require the original A/V model and a raw RGB input"
                 )
             if args.prepared or args.dicoms or args.prepared_array:
-                raise ValueError("Raw A/V proxy cannot be combined with prepared input modes")
+                raise ValueError("Raw A/V profiles cannot be combined with prepared input modes")
             from .legacy.raw_proxy import predict_raw_av
 
             return predict_raw_av(
@@ -313,6 +323,7 @@ def _apply_legacy(args, checkpoint: Path, family: str):
                 fov_diameter_pixels=args.fov_diameter_pixels,
                 pixels_per_degree=args.pixels_per_degree,
                 threshold=args.threshold,
+                preprocessing_profile="matlab" if args.av_raw_matlab else "proxy",
             )
         inputs = None
         if args.prepared_array:

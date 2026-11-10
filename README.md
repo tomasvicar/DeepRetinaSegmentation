@@ -62,7 +62,30 @@ uv run deepretina predict --model legacy-av --av-raw-proxy \
   --input /path/to/fundus.jpg --dataset drive --output predictions/av
 ```
 
-This raw A/V mode is functional but **not certified pixel-equivalent to MATLAB**.
+For the separately calibrated MATLAB-style Python profile, provide the original
+FOV mask and its measured diameter. A known `--dataset` or explicit positive
+`--field-of-view-degrees` is required:
+
+```bash
+uv run deepretina predict --model legacy-av --av-raw-matlab \
+  --input /path/to/fundus.jpg --fov /path/to/fov.png \
+  --fov-diameter-pixels YOUR_MEASURED_DIAMETER --dataset drive \
+  --output predictions/av --device cpu
+```
+
+`YOUR_MEASURED_DIAMETER` must be replaced with a positive pixel measurement for
+that photograph. Add `--vessel-mask /path/to/vessels.png` to classify supplied
+original-frame vessels; otherwise the original vessel model runs first. The two
+raw profile flags are mutually exclusive. Missing calibration is rejected before
+vessel inference or output creation. Runtime remains entirely Python/uv; MATLAB
+scripts in the repository only generate test references.
+
+[The calibrated profile evidence](docs/MATLAB_AV_PROFILE.md) records numerical
+residuals and a synthetic counterexample. Actual saved-model checks on two real
+DRIVE/HRF inputs had **zero vessel-gated class disagreements**; this limited
+result does not establish universal parity or historical training-file provenance.
+
+Both raw A/V modes are **not certified pixel-equivalent to MATLAB**.
 Prepared-input model arithmetic is verified separately. See
 [original model details](docs/LEGACY_MODELS.md), [A/V input contracts](docs/LEGACY_AV.md)
 and [preprocessing evidence](docs/LEGACY_PREPROCESSING.md).
