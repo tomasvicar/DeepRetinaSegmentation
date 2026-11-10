@@ -225,6 +225,7 @@ class Coordinator:
                 self.study.user_attrs.get("bindings_sha256") in (None, bindings),
                 "Approved worker bindings changed",
             )
+            self._restore_sampler_state()
             self.study.set_user_attr("protocol_sha256", self.protocol_sha)
             self.study.set_user_attr("bindings_sha256", bindings)
             self.study.set_user_attr(
@@ -235,11 +236,152 @@ class Coordinator:
                     "started_utc": clock().isoformat(),
                     "optuna": optuna.__version__,
                     "sampler_restart_replay_claim": False,
+                    "sampler_state_policy": "JSON restore of both pinned Optuna5 RandomState streams; asynchronous history/order is not replayed",
+                    "sampler_state_restoration": self.sampler_restoration,
                 },
             )
         except Exception:
             self.close()
             raise
+
+    def _rngs(self):
+        require(optuna.__version__ == "5.0.0", "Sampler state requires pinned Optuna5.0.0")
+        sampler = self.study.sampler
+        return {"tpe": sampler._rng.rng, "random_sampler": sampler._random_sampler._rng.rng}
+
+    def _parameter_history(self):
+        # Reporting, promotions and session timestamps do not consume sampler RNG.
+        return [{"number": t.number, "params": t.params} for t in self._trials()]
+
+    @staticmethod
+    def _encode_rng(rng):
+        algorithm, keys, position, has_gauss, cached = rng.get_state()
+        return {
+            "algorithm": algorithm,
+            "keys": keys.tolist(),
+            "position": position,
+            "has_gauss": has_gauss,
+            "cached_gaussian": float(cached),
+        }
+
+    @staticmethod
+    def _decode_rng(value):
+        require(
+            set(value) == {"algorithm", "keys", "position", "has_gauss", "cached_gaussian"},
+            "Sampler RNG field inventory differs",
+        )
+        require(value["algorithm"] == "MT19937", "Unsupported sampler RNG algorithm")
+        keys = value["keys"]
+        require(
+            isinstance(keys, list)
+            and len(keys) == 624
+            and all(type(k) is int and 0 <= k < 2**32 for k in keys),
+            "Invalid MT19937 keys",
+        )
+        require(
+            type(value["position"]) is int and 0 <= value["position"] <= 624,
+            "Invalid MT19937 position",
+        )
+        require(
+            type(value["has_gauss"]) is int and value["has_gauss"] in (0, 1),
+            "Invalid cached Gaussian flag",
+        )
+        require(
+            type(value["cached_gaussian"]) is float and math.isfinite(value["cached_gaussian"]),
+            "Invalid cached Gaussian value",
+        )
+        return ("MT19937", keys, value["position"], value["has_gauss"], value["cached_gaussian"])
+
+    def _persist_sampler_state(self, phase="committed"):
+        value = {
+            "schema_version": 1,
+            "optuna_version": optuna.__version__,
+            "protocol_sha256": self.protocol_sha,
+            "bindings_sha256": digest(self.profiles),
+            "history_sha256": digest(self._parameter_history()),
+            "phase": phase,
+            "streams": {name: self._encode_rng(rng) for name, rng in self._rngs().items()},
+        }
+        value["sha256"] = digest(value)
+        # One SQLite-backed JSON attribute commits both streams together.
+        self.study.set_user_attr("sampler_state", value)
+
+    def _restore_sampler_state(self):
+        rngs = self._rngs()
+        saved = self.study.user_attrs.get("sampler_state")
+        history = self._parameter_history()
+        if saved is not None:
+            require(
+                set(saved)
+                == {
+                    "schema_version",
+                    "optuna_version",
+                    "protocol_sha256",
+                    "bindings_sha256",
+                    "history_sha256",
+                    "phase",
+                    "streams",
+                    "sha256",
+                },
+                "Sampler state field inventory differs",
+            )
+            payload = {k: v for k, v in saved.items() if k != "sha256"}
+            require(saved.get("sha256") == digest(payload), "Sampler state checksum differs")
+            require(
+                saved["schema_version"] == 1
+                and saved["optuna_version"] == optuna.__version__
+                and saved["protocol_sha256"] == self.protocol_sha
+                and saved["bindings_sha256"] == digest(self.profiles)
+                and saved["phase"] in {"committed", "before_ask"},
+                "Sampler state pins differ",
+            )
+            require(set(saved["streams"]) == set(rngs), "Sampler stream inventory differs")
+            decoded = {name: self._decode_rng(saved["streams"][name]) for name in rngs}
+            if saved["history_sha256"] == digest(history):
+                for name, rng in rngs.items():
+                    rng.set_state(decoded[name])
+                self.sampler_restoration = "exact_saved_streams"
+                return
+        if not history:
+            require(saved is None, "Unexpected sampler state/history mismatch for empty study")
+            self.sampler_restoration = "new_study_seed42"
+        else:
+            # Old versions saved no RNG. An interrupted ask can also leave trial
+            # parameters newer than its write-ahead RNG snapshot. Neither case
+            # can honestly recover the original streams: derive and record new
+            # streams from immutable stored history and the preceding session.
+            context = {
+                "study_id": self.protocol["study_id"],
+                "protocol_sha256": self.protocol_sha,
+                "bindings_sha256": digest(self.profiles),
+                "history": history,
+                "last_session": self.study.user_attrs.get("last_session"),
+                "prior_state_sha256": saved.get("sha256") if saved else None,
+            }
+            context_sha = digest(context)
+            seeds = {
+                name: int(digest({"context": context_sha, "stream": name})[:8], 16) for name in rngs
+            }
+            for name, rng in rngs.items():
+                if seeds[name] == 42:
+                    seeds[name] ^= 0x9E3779B9
+                rng.seed(seeds[name])
+            event = {
+                "schema_version": 1,
+                "reason": "missing_legacy_state"
+                if saved is None
+                else "unclean_ask_history_mismatch",
+                "recorded_utc": self.clock().isoformat(),
+                "history_sha256": digest(history),
+                "context_sha256": context_sha,
+                "derivation_context": context,
+                "derived_seeds": seeds,
+                "original_stream_recovery_claim": False,
+            }
+            events = self.study.user_attrs.get("sampler_state_migrations", [])
+            self.study.set_user_attr("sampler_state_migrations", [*events, event])
+            self.sampler_restoration = event["reason"]
+        self._persist_sampler_state()
 
     def close(self):
         if not self.closed:
@@ -351,6 +493,7 @@ class Coordinator:
                 self.study.enqueue_trial(
                     self.protocol["seed_candidate"], user_attrs={"seed_candidate": True}
                 )
+            self._persist_sampler_state(phase="before_ask")
             t = self.study.ask()
             t.set_user_attr("origin", "optuna_new")
             params = {}
@@ -373,6 +516,7 @@ class Coordinator:
             t.set_user_attr("meta", meta)
             task = self._task(t, meta, 3, 0)
             t.set_user_attr("pending_task", task)
+            self._persist_sampler_state()
             return task
 
     def _validate_receipt(self, r, task):
@@ -613,6 +757,7 @@ class Coordinator:
                 },
             )
             self.study.add_trial(frozen)
+            self._persist_sampler_state()
             return self._trials()[-1].number
 
     def status(self):
@@ -622,6 +767,11 @@ class Coordinator:
                 "protocol_sha256": self.protocol_sha,
                 "search_space_sha256": self.search_sha,
                 "deadline_utc": self.protocol["deadline_utc"],
+                "sampler_state_sha256": self.study.user_attrs["sampler_state"]["sha256"],
+                "sampler_state_restoration": self.sampler_restoration,
+                "sampler_state_migrations": self.study.user_attrs.get(
+                    "sampler_state_migrations", []
+                ),
                 "new_configs": sum(
                     t.user_attrs.get("origin") == "optuna_new" for t in self._trials()
                 ),
