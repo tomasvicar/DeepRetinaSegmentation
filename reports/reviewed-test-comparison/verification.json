@@ -1,0 +1,31 @@
+{
+  "base_commit": "c0690e2b6d22b332f70b4cd22f6eb257499b4f2c",
+  "original_producer_schema_commit": "be72a953bc502e5a032c99a426009b0ac4aceb0e",
+  "script": "scripts/compare_reviewed_test.py",
+  "tests": {
+    "passed": 70,
+    "cpu_affinity": [
+      0
+    ],
+    "nice": 10,
+    "numerical_library_threads": 1,
+    "CUDA_VISIBLE_DEVICES": "",
+    "log_sha256": "7caec09bfb45034ccc172e35c4be6b0e2b4606fe45cfe0c973a0795b0e8b41ac"
+  },
+  "ruff": "PASS",
+  "bootstrap": {
+    "draws": 2000,
+    "seed": 42,
+    "include_sources": true,
+    "include_av": true
+  },
+  "src_or_execution_gate_edits": false,
+  "actual_test_evaluation_performed": false,
+  "qualifications": [
+    "Synthetic saved metadata/counts only; no actual TEST data read",
+    "No model/GT/checkpoint files, Torch or execution gate imports",
+    "No live runtime/default/selection/threshold change",
+    "Each pipeline source is bound to its own frozen review artifact; different identities are permitted",
+    "Whole wrapped input and derived temporary view hashes are explicitly distinct"
+  ]
+}
