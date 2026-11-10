@@ -151,9 +151,8 @@ metadata; the original 33 GB archive collection is not copied into this output.
 The all-source `--limit 3` check retained 65 physical photographs and 146 dense
 annotation variants; one unlabelled Erlangen record was excluded. Shape, binary
 labels, profile, photograph identity and source-group partitions were checked on
-all 146 variants. This is a functionality result only. Full Ada preparation is
-written separately to `data/unified25`; inspect its completion marker and
-composition before starting a full-data experiment.
+all 146 variants. This is a functionality result only. The completed full Ada
+preparation and its independent integrity pass are recorded below.
 
 After completion, check every retained mask and obtain counts per source,
 partition and output channel:
@@ -197,3 +196,84 @@ vessel/disc label swap was found. RIM-ONE and Erlangen were outside the original
 results, rather than proof of a data-adapter error or of independent quality.
 The numeric source evidence is saved in
 `reports/legacy/iostar-uoa-source-annotations.json`.
+
+## Completed full-source preparation
+
+The full Ada pass completed on 2026-11-10. It reads all 17 selected sources,
+without a preview limit, and retains **7,365 usable annotation variants on 3,820
+distinct decoded photographs**. The explicit patient repair completed before
+the final audit: G1020 retains all 432 patient IDs across 1,019 usable labelled
+images; ARIA counters are normalized; RIGA and UoA are training-only. The repair
+moved 892 photographs relative to the earlier image-group partitions, without
+regenerating RGB, FOV or NPZ arrays. Original metadata and the CSV SHA256 remain
+in the patient-regrouping report and metadata backups.
+
+| Partition | Distinct photographs | Annotation variants |
+|---|---:|---:|
+| Training | 2,221 | 5,281 |
+| Validation | 770 | 993 |
+| Test | 829 | 1,091 |
+
+| Source | Photographs | Annotation variants | Training / validation / test photographs |
+|---|---:|---:|---|
+| ARIA | 143 | 406 | 87 / 28 / 28 |
+| AVRDB | 99 | 200 | 59 / 20 / 20 |
+| CHASEDB1 | 28 | 56 | 16 / 6 / 6 |
+| DRHAGIS | 39 | 56 | 23 / 8 / 8 |
+| Drishti-GS | 101 | 101 | 40 / 10 / 51 |
+| DRIVE | 40 | 60 | 16 / 4 / 20 |
+| Erlangen | 106 | 106 | 63 / 22 / 21 |
+| G1020 | 1,019 | 1,019 | 609 / 204 / 206 |
+| HRF | 45 | 90 | 27 / 9 / 9 |
+| IOSTAR | 30 | 90 | 18 / 6 / 6 |
+| ONHSD | 88 | 343 | 53 / 17 / 18 |
+| REFUGE | 1,200 | 1,200 | 400 / 400 / 400 |
+| RIGA | 510 | 2,681 | 510 / 0 / 0 |
+| RIM-ONE | 159 | 477 | 95 / 32 / 32 |
+| RITE | 40 | 40 | 16 / 4 / 20 |
+| STARE | 20 | 40 | 12 / 4 / 4 |
+| UoA-DR | 193 | 400 | 193 / 0 / 0 |
+
+Exact photograph aliases are counted once globally, including DRIVE/RITE and
+duplicates within some sources. Annotation variants retain their separate masks.
+The per-source photograph column therefore must not be summed to obtain the
+global photograph total.
+
+Valid output-channel support, counted in annotation variants:
+
+| Output | Training | Validation | Test |
+|---|---:|---:|---:|
+| Vessel | 768 | 187 | 239 |
+| Artery | 130 | 42 | 59 |
+| Vein | 130 | 42 | 59 |
+| Disc | 4,513 | 806 | 851 |
+| Cup | 3,867 | 676 | 709 |
+
+These channel counts include observers and parallel vessel/A-V labels; they are
+not independent photograph counts. Per-source distinct supported photographs,
+positive photographs and valid/positive pixel totals are in the
+[complete integrity report](../reports/data/unified25/integrity.json).
+
+Excluded records comprise 1,813 unrecoverable RIGA outlines, 53 invalid ONHSD
+radial annotations, one ambiguous G1020 JSON, 377 unlabelled STARE photographs and
+40 unlabelled Erlangen photographs. The first 1,867 are quarantined dense labels;
+the remaining 417 provide no requested dense supervision.
+
+The final audit checked every retained NPZ and passed all binary-label, geometry,
+conditional-class, validity, photograph/patient grouping, official holdout and
+source-policy checks. Its frozen identifiers are:
+
+* Manifest SHA256: `529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69`
+* Prepared-content SHA256, schema 2: `61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e`
+* Finalizer/auditor source commit: `87cf045ab89425c4994df577fd510d210a1a0eab`
+
+Prepared data live on Ada at
+`~/code/DeepRetinaSegmentation_for_Leipzig/data/unified25`. The repository contains
+the [compact summary](../reports/data/unified25/summary.json),
+[composition](../reports/data/unified25/composition.json),
+[patient repair](../reports/data/unified25/patient-regrouping.json) and
+[compact source provenance](../reports/data/unified25/source-provenance.json).
+The complete archive-member metadata remain in the prepared output; the compact
+report records their SHA256 and per-archive member counts.
+This establishes a completed, checked training input. Model-quality conclusions
+require the separate training and evaluation experiments.
