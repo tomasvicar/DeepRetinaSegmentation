@@ -1,6 +1,13 @@
 # Original-model versus unified-model comparison
 
-No independent original-versus-new score is established yet. The original
+No independent original-versus-new score is established yet.
+**The initial 21-photo preview reports predate the patient-grouping review.**
+They are pipeline diagnostics only and must not select the final model or support
+held-out improvement claims. G1020's recoverable patient CSV is being applied;
+RIGA/UOA require a conservative training-only policy where patient pairing cannot
+be established. Exact affected report hashes and required corrective steps are in
+`reports/benchmark/pre-patient-review-notice.json`.
+ The original
 single-net checkpoint indices contain 3,803/646 indexed images, not that many
 training images: their `split` values must be inspected. IDs such as
 `hrf_na_dr_0000` come from unsorted original filesystem enumeration. A clean
