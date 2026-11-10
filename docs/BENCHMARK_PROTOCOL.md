@@ -154,3 +154,8 @@ keeping the source-inferred raw default for subsequent validation; it does not
 prove which historical HDF5 filename was used. Neither preview result is a final
 quality benchmark. Low raw scores on RIM-ONE, Erlangen, UoA-DR and IOSTAR disc are
 being checked against source geometry and annotations before interpretation.
+
+The v2 raw preview report adds macro dataset scores and attributes each channel
+to its selected annotation's source (for example, RITE A/V on a shared DRIVE
+photo). Its pooled confusion counts match the initial raw report exactly.
+Earlier reports remain immutable evidence of the original measurement version.
