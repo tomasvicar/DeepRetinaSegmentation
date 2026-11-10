@@ -44,7 +44,12 @@ def evidence(t=0.5):
             "record_ids": [str(i)],
             "channel_datasets": {"cup": "toy"},
             "channels": {"cup": {"tp": 1, "fp": 2, "fn": 3, "valid_pixels": 10}},
-            "av_conditional_counts": {"correct": 2, "scored_pixels": 3},
+            "av_conditional_counts": {
+                "correct": 2,
+                "eligible_pixels": 3,
+                "scored_pixels": 3,
+                "end_to_end_correct": 1,
+            },
         }
         for i in range(770)
     ]
@@ -134,6 +139,7 @@ def test_actual_gpu_uuid_driver_and_no_other_compute_are_required():
 def test_six_reports_can_change_only_threshold_and_prediction_counts():
     first = evidence()
     second = evidence(0.35)
+    second["metrics"]["per_photo"][0]["av_conditional_counts"]["end_to_end_correct"] = 2
     second["metrics"]["per_photo"][0]["channels"]["cup"].update(tp=2, fn=2, fp=3)
     h.check_qa(qa())
     h.check_evidence(first, 0.5, qa())
