@@ -608,3 +608,146 @@ def test_optional_runtime_module_addition_and_change_affect_source_identity(tmp_
         "pydicom",
     }
     assert "not queried" in changed["hardware_status"]
+
+
+def _change_canonical_input(root, kind):
+    if kind == "rgb":
+        path = root / "v0.png"
+        with Image.open(path) as source:
+            pixels = np.asarray(source).copy()
+        pixels[0, 0, 0] ^= 1
+        Image.fromarray(pixels).save(path)
+    else:
+        path = root / "v0-av.npz"
+        with np.load(path, allow_pickle=False) as labels:
+            arrays = {name: labels[name].copy() for name in labels.files}
+        old_counts = arrays["target"].sum(axis=(1, 2)).copy()
+        arrays["target"][[1, 2]] = arrays["target"][[2, 1]]
+        assert np.array_equal(old_counts, arrays["target"].sum(axis=(1, 2)))
+        np.savez(path, **arrays)
+
+
+@pytest.mark.parametrize("kind", ["rgb", "same_totals_val_label"])
+def test_canonical_mutation_after_initial_fingerprint_is_rejected(
+    case, tmp_path, monkeypatch, kind
+):
+    original = s.verify_prepared_content
+    mutated = False
+
+    def race(manifest, *a, **kw):
+        nonlocal mutated
+        result = original(manifest, *a, **kw)
+        if not mutated:
+            mutated = True
+            _change_canonical_input(Path(manifest).parent, kind)
+        return result
+
+    monkeypatch.setattr(s, "verify_prepared_content", race)
+    with pytest.raises(s.SelectionError, match="Canonical data changed during"):
+        create(case, tmp_path)
+
+
+@pytest.mark.parametrize("kind", ["rgb", "same_totals_val_label", "restored_bytes_and_mtime"])
+def test_canonical_mutation_during_val_support_read_is_rejected(case, tmp_path, monkeypatch, kind):
+    original = s.reference_support
+    mutated = False
+
+    def race(rows, root):
+        nonlocal mutated
+        result = original(rows, root)
+        if not mutated:
+            mutated = True
+            if kind == "restored_bytes_and_mtime":
+                path = root / "v0.png"
+                before = path.stat()
+                snapshot = path.read_bytes()
+                _change_canonical_input(root, "rgb")
+                path.write_bytes(snapshot)
+                os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
+            else:
+                _change_canonical_input(root, kind)
+        return result
+
+    monkeypatch.setattr(s, "reference_support", race)
+    with pytest.raises(s.SelectionError, match="Canonical data changed during"):
+        create(case, tmp_path)
+
+
+def test_full_canonical_fingerprint_repeated_after_val_gt_read(case, tmp_path, monkeypatch):
+    calls = []
+    original = s.verify_prepared_content
+
+    def observe(manifest, *a, **kw):
+        calls.append(kw.get("expected"))
+        return original(manifest, *a, **kw)
+
+    monkeypatch.setattr(s, "verify_prepared_content", observe)
+    create(case, tmp_path)
+    assert len(calls) == 2 and calls[0] == calls[1]
+
+
+def _replace_av_counts(case, artery, vein, conditional):
+    evidence = json.loads(case["validation_evidence"].read_text())
+    metrics = evidence["metrics"]
+    photo = metrics["per_photo"][0]
+    for name, values in [("artery", artery), ("vein", vein)]:
+        value = s._metrics(np.array(values))
+        photo["channels"][name] = value
+        metrics["channels"][name] = value
+        metrics["by_dataset"]["synthetic"][name] = value
+    end = artery[0] + vein[0]
+    photo["av_conditional_counts"].update(correct=conditional, end_to_end_correct=end)
+    metrics["av_accuracy"] = end / 8
+    metrics["av_conditional_accuracy"] = conditional / 8
+    macro = {name: value["dice"] for name, value in metrics["channels"].items()}
+    score = float(np.mean(list(macro.values())))
+    metrics.update(
+        macro_dataset_channel_dice=macro,
+        macro_dataset_mean_dice=score,
+        mean_dice=score,
+        selection_score=score,
+    )
+    case["validation_evidence"].write_bytes(s.canonical(evidence))
+
+
+@pytest.mark.parametrize(
+    "artery,vein,conditional",
+    [
+        ([4, 4, 0, 8], [4, 4, 0, 8], 8),  # Both exclusive heads predict every pixel.
+        (
+            [3, 0, 1, 8],
+            [2, 2, 2, 8],
+            5,
+        ),  # Artery true positives + wrong vein exceed actual arteries.
+        ([2, 3, 2, 8], [2, 0, 2, 8], 4),  # Symmetric vein constraint.
+        (
+            [3, 0, 1, 8],
+            [2, 1, 2, 8],
+            8,
+        ),  # A predicted false positive cannot be conditionally correct.
+        ([3, 0, 1, 8], [2, 1, 2, 8], 4),  # End-to-end correct cannot exceed conditional correct.
+    ],
+)
+def test_impossible_exclusive_av_decoder_counts_rejected(case, tmp_path, artery, vein, conditional):
+    _replace_av_counts(case, artery, vein, conditional)
+    with pytest.raises(s.SelectionError, match="AV exclusive decoder|exclusive conditional"):
+        create(case, tmp_path)
+
+
+@pytest.mark.parametrize(
+    "artery,vein,conditional",
+    [
+        ([4, 0, 0, 8], [4, 0, 0, 8], 8),
+        (
+            [0, 0, 4, 8],
+            [0, 0, 4, 8],
+            8,
+        ),  # Correct conditional classifier, vessel misses everything.
+        ([0, 4, 4, 8], [0, 4, 4, 8], 0),  # Every known vessel assigned to the wrong class.
+        ([2, 1, 2, 8], [2, 1, 2, 8], 6),
+    ],
+)
+def test_legitimate_exclusive_av_decoder_counts_accepted(case, tmp_path, artery, vein, conditional):
+    _replace_av_counts(case, artery, vein, conditional)
+    path, expected = create(case, tmp_path)
+    assert check(case, path, expected).test_evaluation_enabled is False

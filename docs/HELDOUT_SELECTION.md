@@ -58,12 +58,25 @@ The raw `metrics` use the existing unified evaluator format, with explicit
 `selection_metric`/`selection_score`. They must contain every eligible VAL photo
 exactly once, correct annotation-source/record IDs, all five supervised heads and
 finite count-derived per-photo/per-dataset/pooled/macro and A/V accuracy headers.
+The exclusive A/V decoder also requires per-photo
+`tpA + fpV <= positiveGT_A`, `tpV + fpA <= positiveGT_V`, and
+`tpA + tpV == end_to_end_correct <= conditional_correct <= nKnown - fpA - fpV`.
+A gated class false positive is necessarily a conditional-classification error;
+both heads cannot claim the same known vessel pixel as a correct positive.
 
 The checker decodes **only the selected VAL GT NPZs**, through the shared canonical
 mapper/FOV rules, to verify actual valid and positive pixel counts. It never
 decodes test GT. Prepared-content verification streams bytes of the whole frozen
 artifact for identity, including held-out files; hashing is not label interpretation
-or evaluation. Training/final-inference validation scores are recorded separately:
+or evaluation. The full canonical fingerprint is checked before and after selected
+VAL GT reads, against the same external checkpoint pin. Referenced-file metadata
+(device/inode/size/mtime/ctime/mode, plus manifest/photos/audit/completion files)
+must remain stable across the whole operation; this detects replacement, same-GT-
+total label swaps and changed-then-restored bytes/mtime during a check. Canonical
+inputs must be immutable by contract. These are operation-scoped checks, not a
+promise that storage cannot change after the receipt or protection against an
+operator controlling the filesystem/runtime. A future evaluator must enforce
+its own immutable-input contract and reverify at its evaluation boundary. Training/final-inference validation scores are recorded separately:
 a fresh final-protocol validation can differ from the earlier training measurement,
 but both are bound explicitly to the selected checkpoint and evidence.
 
@@ -135,3 +148,8 @@ wrong source/config/data/protocol/GT, thin/arbitrary evidence, incorrect complet
 nonfinite/teacher/pilot models, LR/optimizer history, timestamps/duplicate JSON,
 Python `-O` and the still-blocked public test route. No actual model selection,
 real validation prediction or test prediction is performed by this test suite.
+
+The next step after stage1 review is an explicitly reviewed **fresh enriched VAL
+producer** under the selected final runtime/protocol. Existing thin historical
+reports must not be retroactively given invented provenance. Stage1 still enables
+no test entrypoint and performs no real validation/test network forward.

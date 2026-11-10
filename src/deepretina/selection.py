@@ -299,8 +299,55 @@ def checkpoint_snapshot(path):
     return snapshot, payload
 
 
+def _canonical_metadata(manifest):
+    """Operation-scoped observations, not a promise of future storage immutability."""
+    manifest = Path(manifest)
+    root = manifest.parent.resolve()
+    rows = parse_json(manifest.read_bytes())
+    photos = parse_json((root / "photos.json").read_bytes())
+    paths = {manifest.name, "photos.json", "integrity.json", "_SUCCESS"}
+    for row in rows:
+        paths.update((row["image"], row["mask"]))
+    for photo in photos:
+        paths.update((photo["image"], photo["fov"]))
+    observed = {}
+    for relative in sorted(paths):
+        candidate = Path(relative)
+        path = root / candidate
+        require(
+            not candidate.is_absolute()
+            and ".." not in candidate.parts
+            and path.resolve(strict=True).is_relative_to(root)
+            and not path.is_symlink(),
+            "Canonical path escaped immutable input tree",
+        )
+        info = path.stat()
+        observed[relative] = (
+            info.st_dev,
+            info.st_ino,
+            info.st_size,
+            info.st_mtime_ns,
+            info.st_ctime_ns,
+            info.st_mode,
+        )
+    return observed
+
+
+def _finish_canonical_read(manifest, expected, before):
+    require(
+        _canonical_metadata(manifest) == before,
+        "Canonical data changed during selection verification",
+    )
+    verify_prepared_content(manifest, expected=expected)
+    require(
+        _canonical_metadata(manifest) == before,
+        "Canonical data changed during selection verification",
+    )
+
+
 def data_identity(manifest, checkpoint):
     manifest = Path(manifest)
+    metadata_before = _canonical_metadata(manifest)
     before, rows = json_snapshot(manifest)
     require(
         isinstance(rows, list) and all(isinstance(row, dict) for row in rows),
@@ -364,6 +411,10 @@ def data_identity(manifest, checkpoint):
         ]
         for split, values in groups.items()
     }
+    require(
+        _canonical_metadata(manifest) == metadata_before,
+        "Canonical data changed during identity verification",
+    )
     return {
         "manifest_sha256": digest(before),
         "prepared_content_sha256": fingerprint,
@@ -475,8 +526,15 @@ def validate_metrics(metrics, groups, protocol, config, root):
             "AV support mismatch",
         )
         require(
-            cc["end_to_end_correct"] == a["tp"] + v["tp"] <= cc["correct"] <= cc["scored_pixels"],
-            "AV correct counts inconsistent",
+            a["tp"] + v["fp"] <= a["tp"] + a["fn"] and v["tp"] + a["fp"] <= v["tp"] + v["fn"],
+            "AV exclusive decoder counts impossible for positive GT support",
+        )
+        require(
+            cc["end_to_end_correct"]
+            == a["tp"] + v["tp"]
+            <= cc["correct"]
+            <= cc["scored_pixels"] - a["fp"] - v["fp"],
+            "AV correct counts inconsistent with exclusive conditional decoding",
         )
         conditional += cc["correct"]
         end_to_end += cc["end_to_end_correct"]
@@ -679,6 +737,7 @@ def _context(
 ):
     snapshot, best = checkpoint_snapshot(checkpoint)
     _, last = checkpoint_snapshot(last_checkpoint)
+    canonical_before = _canonical_metadata(manifest)
     data, groups = data_identity(manifest, best)
     config = UnifiedConfig(**best["config"])
     protocol = inference_protocol(best, threshold=threshold, tile_size=tile_size, overlap=overlap)
@@ -737,10 +796,15 @@ def _context(
         Path(training_summary).read_bytes(),
         groups["train"],
     )
+    _finish_canonical_read(manifest, best["prepared_content_sha256"], canonical_before)
     require(
         {**evaluation_source_identity(), "training_source_sha256": best["training_source_sha256"]}
         == source,
         "Source/runtime changed while checking selection evidence",
+    )
+    require(
+        _canonical_metadata(manifest) == canonical_before,
+        "Canonical data changed during selection verification",
     )
     checkpoint_identity = {
         **identity,
