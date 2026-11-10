@@ -42,3 +42,9 @@ The current profile is therefore **not certified bitwise MATLAB parity**, and hi
 | HRF25 | 0.00132072 | 3.36e-7 / 0.000664234 | 0.000257850 | 0 / 0 / 0 | 0 / 115420 vessel pixels |
 
 Per-logit-channel errors, input mean errors, probabilities, vessel hashes and source references are retained in the JSON. `compare_model_forward.py` reproduces the gate with external goldens and original archives, without changing either. The two measured vessel-gated classifications are identical; logits are not identical. These results do not certify arbitrary images, automatic FOV calibration, historical checkpoint preprocessing provenance, or standalone raw prediction quality. Production activation remains a separate reviewed decision.
+
+The generic provided-mask center/radius stage is now available as a separate
+explicit [experimental calibration helper](MATLAB_FOV_CALIBRATION.md). It does not
+change the explicit-diameter API or CLI defaults. The complete raw golden and
+intermediate-stage generation procedure is preserved in
+[REPRODUCING.md](../reports/legacy/matlab-av-profile/REPRODUCING.md).
