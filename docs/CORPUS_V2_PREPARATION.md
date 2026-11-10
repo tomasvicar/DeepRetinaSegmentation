@@ -1,0 +1,54 @@
+# Proposed corpus v2 preparation
+
+This producer appends the newly audited native annotations to an independent
+copy of frozen v1. It does not change v1, source3157/HPO, old cache4e39, or models.
+No training or model TEST evaluation is part of preparation. The original27
+IDRiD TEST masks are mechanically converted and audited under their original TEST
+partition after the palette convention was validated on TRAIN.
+
+```bash
+uv sync --frozen
+uv run python scripts/prepare_corpus_v2.py \
+  --parent /path/to/corpus-v1 \
+  --data-root /path/to/ownCloud/fundus_databases \
+  --geometry-policy reports/data/corpus-v2-geometry-policy/policy.json \
+  --biomisa-label-policy named_cup_is_disc_named_disc_is_cup \
+  --output /path/to/new-corpus-v2
+```
+
+Use a NEW output directory. GNU cp uses reflink where supported, or ordinary
+copy, with no writable inode shared with the parent. Parent image/mask/FOV bytes,
+all original rows and split memberships are checked before/after. Original metadata
+is retained under`parent-v1-metadata`; current manifest/photos/composition/integrity
+are regenerated for the combined corpus. New raw resource bytes are SHA-pinned
+without hashing irrelevant large OCT archives. Output`preparation.json` pins the
+producer modules/runtime, parent identity, raw resources and policy.
+
+The [root-reviewed nominal geometry policy](CORPUS_V2_GEOMETRY_POLICY.md) is exact
+SHA2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d:
+DRIONS30° research assumption, GAMMA Topcon-native1934×1956 at30° and KOWA-native
+2000×2992 at45° dataset-specific inference, BIOMISA45° device-nominal, IDRiD50°
+dataset-reported. No per-image measured angular calibration is claimed. Every
+new row records rule/status/sources, nominal flags, native dimensions and policy
+hash. The unchanged legacy25_raw contract uses original max(H,W) as scale anchor
+before automatic FOV crop. Its bbox, resize factor and explicit absence of a
+measured FOV-circle diameter are recorded; RGB and masks/validity share the same
+geometry, with nearest categorical interpolation. No GT-based camera/crop tuning.
+
+The [BIOMISA fixed file-role correction](BIOMISA_FIXED_EXPORT_ROLES.md) requires
+its explicit argument; native API default remains quarantine. Missing cup and
+unknown labels remain invalid. DRIONS observers and GAMMA duplicate-photo
+annotations remain variants on one photo identity. New unknown-patient sources
+stay TRAIN-only; known paired-eye directory groups remain together.
+
+Existing v1 holdout aliases never become training. New training annotations that
+alias a protected heldout photo/group are quarantined, with provenance retained.
+A new official holdout conflicting with frozen parent TRAIN fails preparation;
+it cannot silently reassign old rows. Exact hashes do not exclude re-encoding or
+unknown cross-dataset patients; those limits remain explicit.
+
+The combined manifest uses the same legacy25_raw25px/degree RGB/255−0.5 and schema2
+as generic frozen3157 training. A NEW training plan/content pin is required; the
+old v1 plan/cache cannot be reused. Validation stays the unchanged v1 set unless
+an explicit quarantined alias conflict requires review. Mechanical GT geometry
+counts are not model quality results, threshold selection, or TEST evaluation.
