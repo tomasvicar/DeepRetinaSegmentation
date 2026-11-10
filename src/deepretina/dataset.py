@@ -18,12 +18,20 @@ def read_manifest(manifest: Path, task: str, split: str) -> list[dict]:
     if isinstance(rows, dict):
         rows = rows["records"]
     groups = {}
+    image_splits = {}
     for row in rows:
+        if row["image"] in image_splits and image_splits[row["image"]] != row["split"]:
+            raise ValueError(f"Photograph {row['image']!r} appears in multiple splits")
+        image_splits[row["image"]] = row["split"]
         group = row.get("source_id", row["image"])
         if group in groups and groups[group] != row["split"]:
             raise ValueError(f"Source image {group!r} appears in multiple splits")
         groups[group] = row["split"]
-    selected = [r for r in rows if r["task"] == task and r["split"] == split]
+    selected = [
+        r
+        for r in rows
+        if r["task"] == task and r["split"] == split and r.get("usable_for_training", True)
+    ]
     if not selected:
         raise ValueError(f"No {task} records in split {split!r} of {manifest}")
     return selected

@@ -39,6 +39,11 @@ def load_checkpoint(checkpoint: Path, device: str = "auto"):
     model.train_view = config.get("train_view", "patch")
     model.view_size = config.get("view_size", 512)
     model.load_state_dict(saved["model"])
+    model.supervised_channels = saved.get(
+        "supervised_channels", [True] * len(CHANNELS[config["task"]])
+    )
+    if len(model.supervised_channels) != len(CHANNELS[config["task"]]):
+        raise ValueError("Invalid checkpoint channel support metadata")
     return model.to(device).eval(), saved, device
 
 
@@ -146,10 +151,15 @@ def predict(
         )[0].numpy()
     task = saved["config"]["task"]
     masks = binary_masks(probability, task, threshold)
+    supported = np.asarray(model.supervised_channels, dtype=bool)
+    masks[~supported] = False
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(
-        output / "probabilities.npz", probability=probability, channels=np.asarray(CHANNELS[task])
+        output / "probabilities.npz",
+        probability=probability,
+        channels=np.asarray(CHANNELS[task]),
+        supervised_channels=supported,
     )
     color = np.zeros_like(image)
     palette = {
@@ -171,6 +181,11 @@ def predict(
     metadata = {
         "task": task,
         "channels": CHANNELS[task],
+        "supervised_channels": supported.tolist(),
+        "unsupported_channels": [
+            name for name, keep in zip(CHANNELS[task], supported, strict=True) if not keep
+        ],
+        "unsupported_mask_policy": "all-zero mask placeholders; raw probabilities untrained and invalid for interpretation",
         "image": str(image_path),
         "checkpoint": str(checkpoint),
         "threshold": threshold,

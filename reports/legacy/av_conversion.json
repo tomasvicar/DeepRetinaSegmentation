@@ -1,0 +1,141 @@
+{
+  "source_filename": "net_v0_0_9.pt",
+  "source_sha256": "75c5048aed6adb9f783f8fabb056185c4eb81c23be45b3a152794f59dc8cb1c0",
+  "source_bytes": 8159748,
+  "converted_model": "models/legacy-av-v9.pt",
+  "converted_sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+  "converted_bytes": 8152192,
+  "family": "legacy_av",
+  "architecture": {
+    "encoder_channels": [
+      4,
+      32,
+      64,
+      128,
+      256
+    ],
+    "decoder_channels": [
+      256,
+      128,
+      64,
+      32
+    ],
+    "head_channels": 128,
+    "num_classes": 3
+  },
+  "parameters": 2030379,
+  "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+  "reference_source_path": "tests/reference/av/Network.py",
+  "reference_source_sha256": "8f99b450f38a3d01dbeb75a110f81ae13a39c0eeb1d4a8f785b38a33eaf8d7a9",
+  "environment": {
+    "torch": "2.6.0+cu124",
+    "python": "3.12.13",
+    "device": "cpu",
+    "threads": 2
+  },
+  "saved_state_tensors_identical": true,
+  "saved_state_tensor_count": 75,
+  "forward_cases": [
+    {
+      "input_shape": [
+        1,
+        4,
+        31,
+        35
+      ],
+      "input_dtype": "torch.float32",
+      "input_seed": 20261110,
+      "input_sha256": "c689a100afb1b0ff42026025c94b8330beed2bedc09eb66cf3244932b2f421aa",
+      "output_shape": [
+        1,
+        3,
+        31,
+        35
+      ],
+      "reference_logits_sha256": "53eca94f70848057d4e11d5b50a3cc634cad59011725f49bf9a5c3f29cf02c0b",
+      "ported_logits_sha256": "53eca94f70848057d4e11d5b50a3cc634cad59011725f49bf9a5c3f29cf02c0b",
+      "max_abs_error": 0.0
+    },
+    {
+      "input_shape": [
+        1,
+        4,
+        63,
+        77
+      ],
+      "input_dtype": "torch.float32",
+      "input_seed": 20261110,
+      "input_sha256": "144f6e6d551d5e061284e18087a2f3286145189d2335d351ea45a5702df3b99c",
+      "output_shape": [
+        1,
+        3,
+        63,
+        77
+      ],
+      "reference_logits_sha256": "c76134e7b29794395f742fe7dea1b44631f6b2ad60e86ad797b51c56f395125f",
+      "ported_logits_sha256": "c76134e7b29794395f742fe7dea1b44631f6b2ad60e86ad797b51c56f395125f",
+      "max_abs_error": 0.0
+    },
+    {
+      "input_shape": [
+        1,
+        4,
+        64,
+        80
+      ],
+      "input_dtype": "torch.float32",
+      "input_seed": 20261110,
+      "input_sha256": "c9b3e1ab79642ee2e179dea3cc348e117b5226fe1f57cd48c0b072cfefc98392",
+      "output_shape": [
+        1,
+        3,
+        64,
+        80
+      ],
+      "reference_logits_sha256": "96895e5dc23da06f153468a6ae1daf2614144ac5bd896488aa7fbd81e04e7026",
+      "ported_logits_sha256": "96895e5dc23da06f153468a6ae1daf2614144ac5bd896488aa7fbd81e04e7026",
+      "max_abs_error": 0.0
+    },
+    {
+      "input_shape": [
+        1,
+        4,
+        129,
+        173
+      ],
+      "input_dtype": "torch.float32",
+      "input_seed": 20261110,
+      "input_sha256": "11825f358a11fe046473848c6f9b54393c7a4a0a7de487110ac4c55fe91ec9dd",
+      "output_shape": [
+        1,
+        3,
+        129,
+        173
+      ],
+      "reference_logits_sha256": "607cfb9e5a9a868cabecfd3f9c7eb67a4acb159e1c499e6b481f78915c672638",
+      "ported_logits_sha256": "607cfb9e5a9a868cabecfd3f9c7eb67a4acb159e1c499e6b481f78915c672638",
+      "max_abs_error": 0.0
+    }
+  ],
+  "rgb_rescale_without_quantization": {
+    "factor": 16,
+    "vessel_channel_unchanged": true,
+    "max_abs_error": 0.0
+  },
+  "pickle_safety": "Original source read with torch.load(weights_only=True) and explicit Network/layer alias allowlist only; output is primitive metadata+state_dict",
+  "preprocessing_scope": "Model/tensor path verified; raw MATLAB CLAHE/resampling not certified because original preprocessed DICOM goldens unavailable. Prepared DICOM input stacking preserves stored values.",
+  "center_crop_reference": "Independent test fixture adapter, additionally checked against actual torchvision0.21 in a temporary uv reference environment; see documentation.",
+  "torchvision_validation": {
+    "torch": "2.6.0+cu124",
+    "torchvision": "0.21.0+cu124",
+    "center_crop_source_sha256": "fc1e04cda9e231a1fb72036f6b3d6e9a3ae6dd494842b9036e70471fbf83ca0a",
+    "crop_adapter_cases": 25,
+    "model_forward_max_abs_errors": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "dependency_scope": "temporary uv --with torchvision==0.21.0 verification environment; no runtime dependency added"
+  }
+}

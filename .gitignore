@@ -140,3 +140,17 @@ dmypy.json
 
 # Real source photographs and diagnostic overlays remain local.
 /reports/**/*.png
+
+# Explicitly distributed, small, selected inference checkpoints
+!src/deepretina/pretrained/*.pt
+
+# Local read-only clones of historical setup repositories
+/references/
+/models/
+
+# MetaCentrum operational notes live in the separate private repository
+/docs/METACENTRUM.md
+/docs/METACENTRUM_TEST_PLAN.md
+/reports/metacentrum/
+/scripts/metacentrum_connect.py
+/reports/legacy/*.png

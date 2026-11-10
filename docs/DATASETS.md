@@ -4,7 +4,8 @@
 `deepretina.prepare.prepare(data_root, output, datasets, max_size=1024, seed=42)`.
 Data remain outside Git. ZIP members are decoded directly: no MATLAB, HDF5
 conversion, large intermediate extraction, pretraining database or network access
-is required. Names of datasets passed to Python are lowercase as below.
+is required. Dataset selectors are lowercase. All 31 historical selectors are implemented; use
+`uv run deepretina datasets` for the packaged coverage inventory.
 
 ## Implemented adapters
 
@@ -17,7 +18,7 @@ is required. Names of datasets passed to Python are lowercase as below.
 | `refuge` | REFUGE.zip | disc and cup | 1200 | Official 400/400/400 train/validation/test |
 | `drishti` | Drishti-GS.zip | disc and cup | 101 | Official 51 test; 40 train / 10 validation |
 | `chasedb1` | CHASEDB1.zip | vessels | 28 | Both eyes of each of 14 children stay together; 60/20/20 groups |
-| `iostar` | IOSTAR.zip | vessels and AV | 30 | Deterministic 60/20/20 image groups |
+| `iostar` | IOSTAR.zip | vessels, AV and disc (cup unannotated) | 30 | Deterministic 60/20/20 image groups |
 
 Counts describe the local archive inventory, not a promise that other upstream
 archive layouts are identical. Fractional split sizes are rounded at group level.
@@ -106,30 +107,75 @@ that were already smaller. It allows inference to apply the same scale policy.
 identities: absolute path, size, modification time and ZIP member names, sizes and
 CRC32 values. These support provenance checks but are not cryptographic hashes.
 
-## Legacy MATLAB adapter disposition
+## Completed legacy adapter coverage
 
-The historical branches remain available through Git. The supported Python adapters
-above replace the training-relevant paths `load_drive`, `load_drive_VA`, `load_hrf`,
-`load_hrf_VA`, `load_drhagis`, `load_drhagis_VA`, `load_drishtigs`, `load_refuge`,
-`load_chasedb1`, `load_iostar`, and `load_iostar_VA`.
-The new generic ZIP pairing, RGB decoding and manifest writer replace the runtime
-need for `MAIN`, `MAIN_VA`, `image_adjustment`, `imwrite_single*`,
-`folder_creation`, `subdir`, `average_size`, `souradnice`, and `hysthresh`.
-These replacements are functionally targeted and do not claim pixel-for-pixel
-parity with every legacy heuristic.
+Every historical dataset loader now has a Python selector: 35 MATLAB `load_*` paths
+and 14 Python loader paths across the archived branches map to these 31 datasets.
+The packaged `adapters/coverage.json` inventory and coverage regression test check
+this mapping. Generic ZIP/TAR/directory reading replaces transport/extraction helpers;
+large-corpus autoencoder pretraining remains intentionally excluded as requested.
 
-The following historical adapters are **not ported** and are not accepted by the
-new `prepare` command: ARIA, AVRDB, DiaRetDB0, DiaRetDB1, E-Ophtha, Erlangen, FIRE,
-G1020, HEI-MED, IDRiD, INSPIRE-AVR, MESSIDOR, ONHSD, RC-RGB-MA, REVIEW, RIDB,
-RIGA, RIM-ONE, ROC, STARE, UoA-DR, VICAVR, and internal UBMI. Some supply only
-unlabelled photographs, point measurements or lesion labels; AVRDB has inconsistent
-filenames/line annotations, and RIGA requires recovering outlines from annotated
-photographs. They require dedicated validation before use. The large image-only
-pretraining path (`resave_pretrainig`) is intentionally outside this pipeline.
-Legacy exploratory `tmp` code is not a supported data conversion interface.
+| Additional selectors | Resource type and meaning |
+| --- | --- |
+| `aria`, `avrdb`, `g1020`, `onhsd`, `riga`, `rimone`, `stare`, `uoadr` | Dense or explicitly sparse vessel/disc annotations; individual annotators preserved |
+| `erlangen` | Corrected vessel masks when present, other images retained without invented masks |
+| `diaretdb0`, `diaretdb1`, `eophtha`, `heimed`, `rcrgbma`, `roc` | Original images with lesion resources/marks retained as auxiliary annotations |
+| `fire` | Registration pairs and control points; not vessel segmentation ground truth |
+| `idrid` | Legacy localization images and disc/fovea center coordinates; center points are not contours |
+| `inspireavr`, `vicavr`, `review` | Observer AVR, sparse class/caliber points or vessel-width edges; no fabricated dense labels |
+| `messidor` | Images and XLS disease grades; nested archive exports are not double-counted |
+| `ridb` | Recognition identity groups; repeated photographs stay in one split |
+| `ubmi` | External private inference layout and existing prediction resources; not verified manual training labels |
 
-See the repository experiment notes for executed preparation checks and model
-results. Supported data loading does not itself establish segmentation accuracy.
+Detailed semantics, actual counts and regression evidence are in
+[ADAPTERS_SEGMENTATION.md](ADAPTERS_SEGMENTATION.md),
+[ADAPTERS_AUXILIARY.md](ADAPTERS_AUXILIARY.md) and
+[ADAPTER_MIGRATION_AUDIT.md](ADAPTER_MIGRATION_AUDIT.md).
+UBMI's complete private data are not available here: its adapter is implemented and
+synthetically tested, with an explicit missing-source error and `--source` override.
+This is a data-availability limitation, not an unimplemented loader.
+
+The original core adapters now also retain DRIVE's second observer on 20 test images,
+CHASEDB1's second observer on all 28 images and all 30 IOSTAR disc masks. These
+annotations share their original source groups across tasks/observers; they cannot
+create independent train/test samples. Counts of annotation records can therefore
+exceed counts of source photographs. The original model-pilot manifests are preserved
+unchanged in `reports/2026-11-10`; reproducing those exact scores requires that snapshot,
+not a newly expanded multi-observer manifest.
+
+### Annotation validity and portability
+
+New rows include `usable_for_training` and per-output `supervised_channels` flags.
+Incomplete/invalid original annotations are retained with quality metadata and raw
+resources; all-invalid rows are excluded by the training loader. A missing cup annotation
+has a false cup-validity channel, never a background target. Checkpoints record channels
+that received supervision; inference masks for unsupported channels are zero placeholders
+and explicitly labeled as unsupported in JSON/NPZ output. Their raw probabilities are
+untrained and must not be interpreted.
+
+Image-only records use `task="images"`, omit `mask`, and contain a prepared FOV path.
+Losses do not consume them. Their metadata retains original coordinates and annotation
+resources: small tables and auxiliary masks are copied under `annotations/`; dense raster
+references identify their decoded target/valid arrays instead of duplicating every full-size
+marked photograph. `preserve=true` keeps auxiliary rasters such as UoA optic-disc-center
+markers even when the same row also has a dense disc target.
+
+**UoA-DR label correction:** the bundled dataset paper describes `.3.jpg` as the optic
+**disc center**, not the cup. Both historical branches mislabeled it. The migrated adapter
+preserves center markers/coordinates and leaves cup validity false. See the supervised
+adapter notes for the primary-source evidence and the image 72 annotation swap.
+
+AVRDB draws sparse vessel/class lines on white. Validity is limited to supplied reference
+lines; unmarked pixels cannot become negatives. Precision on positive-only vessel support
+cannot measure background specificity. Report per-dataset counts/scores and do not compare
+a pooled complete-plus-sparse Dice with complete-FOV benchmarks. RIGA includes MESSIDOR
+source photographs; source names do not resolve every possible cross-archive duplicate.
+Do not report the two as independent cohorts without a verified cross-source identity map.
+
+`--limit N` prepares a preview of at most N source groups per requested dataset, retaining
+all included annotators/eyes/tasks. Both rows and preparation provenance identify previews.
+Use a fresh directory without `--limit` for complete preparation. Root locations can be
+overridden explicitly, for example `--source ubmi=/path/to/private/data`.
 
 ## Executed adapter checks (2026-11-10)
 

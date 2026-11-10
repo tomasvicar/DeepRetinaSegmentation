@@ -119,3 +119,14 @@ Checkpoint hashes match the retained local models; the backup is approximately 6
 
 Example outputs are under `predictions/{vessels,av,disc_cup}`. Existing archive/model
 folders were not modified. Prepared images, outputs and weights are ignored by Git.
+
+## Shareable repository release
+
+The three selected pilot checkpoints are now also versioned under
+`src/deepretina/pretrained/`, with a SHA256-checked registry. `predict --model av`
+(and `vessels` / `disc_cup`) works without external checkpoint paths or ownCloud access.
+The team can use shared ownCloud `fundus_databases` archives for retraining.
+No source ZIP is produced; handoff is through the repository branch. Hyperparameter,
+architecture and augmentation work is isolated on `experiments/leipzig-hpo`.
+The expanded adapter set does not retroactively change the saved 181-record pilot
+manifest or model scores above. New preparations include additional annotators/tasks.

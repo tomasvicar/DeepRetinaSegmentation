@@ -1,0 +1,290 @@
+{
+  "format_version": 1,
+  "description": "Original trained models with verified ports, plus explicitly named preliminary pilot models. Preprocessing provenance and quality evidence are separate.",
+  "models": {
+    "pilot-vessels": {
+      "filename": "vessels.pt",
+      "sha256": "38a4125d213b49526c6cf1fbd6dfde1e19394a1969d3724be0737b7bffda4544",
+      "task": "vessels",
+      "dataset": "DRIVE",
+      "channels": [
+        "vessel"
+      ],
+      "selected_epoch": 30,
+      "inference_max_size": 1024,
+      "test_dice": {
+        "vessel": 0.7987553153911077
+      },
+      "av_conditional_accuracy": null,
+      "av_end_to_end_accuracy": null,
+      "source_implementation_commit": "959fde4",
+      "limitations": "Single-seed pilot. AV class metrics use labeled reference vessel pixels. Disc/cup can produce bright-border false positives.",
+      "family": "pilot_unet",
+      "status": "single-dataset functionality pilot, not the final new unified model"
+    },
+    "pilot-av": {
+      "filename": "av.pt",
+      "sha256": "0a8c85dd4888a4aab1ffded7a9e2ac4b254745a15c03a465ff2106e34a1c0eb7",
+      "task": "av",
+      "dataset": "RITE",
+      "channels": [
+        "vessel",
+        "artery",
+        "vein"
+      ],
+      "selected_epoch": 30,
+      "inference_max_size": 1024,
+      "test_dice": {
+        "vessel": 0.8071275069970805,
+        "artery": 0.6356809408384954,
+        "vein": 0.6828075273566331
+      },
+      "av_conditional_accuracy": 0.7218893613775481,
+      "av_end_to_end_accuracy": 0.5854884536908145,
+      "source_implementation_commit": "959fde4",
+      "limitations": "Single-seed pilot. AV class metrics use labeled reference vessel pixels. Disc/cup can produce bright-border false positives.",
+      "family": "pilot_unet",
+      "status": "single-dataset functionality pilot, not the final new unified model"
+    },
+    "legacy-universal": {
+      "filename": "legacy-single-net-universal.pt",
+      "sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "family": "legacy_single_net",
+      "status": "original trained weights, numerically verified architecture port",
+      "channels": [
+        "vessel",
+        "disc",
+        "cup"
+      ],
+      "preprocessing": {
+        "profile": "single_net",
+        "normalization": "RGB/255-0.5",
+        "pixels_per_degree": 25,
+        "normalized": false,
+        "normalization_status": "source-inferred: Config.dataset_fname=data_25.hdf5; inherited value was not serialized, raw/normalized history is not independently verified"
+      },
+      "tiling": {
+        "crop_size": 288,
+        "border": 36,
+        "blend": "logits",
+        "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+      },
+      "parameters": 1304355,
+      "source_sha256": "71f2519d0b8be3b3c1ea7d3a9c0fee0557a16c891b45fcd5ae428689fffa815a",
+      "source_ref": "7a152c31c2947ddf760716dfa8a6dfc4d2b881c9",
+      "indexed_images": 3803,
+      "saved_splits": {
+        "train": 1921,
+        "valid": 917,
+        "test": 965
+      },
+      "dataset_counts": {
+        "aria": 143,
+        "avrdb": 100,
+        "chasedb1": 28,
+        "drhagis": 40,
+        "drishtigs": 101,
+        "drive": 40,
+        "g1020": 1020,
+        "hrf": 45,
+        "iostar": 30,
+        "onhsd": 87,
+        "refuge": 1200,
+        "riga": 749,
+        "stare": 20,
+        "uoadr": 200
+      },
+      "numeric_port_max_logit_error": 0.0,
+      "historical_quality_reproduced": false
+    },
+    "legacy-vessels": {
+      "filename": "legacy-single-net-vessels.pt",
+      "sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+      "family": "legacy_single_net",
+      "status": "original trained weights, numerically verified architecture port",
+      "channels": [
+        "vessel"
+      ],
+      "preprocessing": {
+        "profile": "single_net",
+        "normalization": "RGB/255-0.5",
+        "pixels_per_degree": 25,
+        "normalized": false,
+        "normalization_status": "source-inferred: Config.dataset_fname=data_25.hdf5; inherited value was not serialized, raw/normalized history is not independently verified"
+      },
+      "tiling": {
+        "crop_size": 320,
+        "border": 40,
+        "blend": "logits",
+        "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+      },
+      "parameters": 1304289,
+      "source_sha256": "5e88d2a08732c741f6d3e7543d3e40e1e7733d9046ba272a1084832e674df97f",
+      "source_ref": "7a152c31c2947ddf760716dfa8a6dfc4d2b881c9",
+      "indexed_images": 646,
+      "saved_splits": {
+        "train": 387,
+        "valid": 117,
+        "test": 142
+      },
+      "dataset_counts": {
+        "aria": 143,
+        "avrdb": 100,
+        "chasedb1": 28,
+        "drhagis": 40,
+        "drive": 40,
+        "hrf": 45,
+        "iostar": 30,
+        "stare": 20,
+        "uoadr": 200
+      },
+      "numeric_port_max_logit_error": 0.0,
+      "historical_quality_reproduced": false
+    },
+    "legacy-disc-0": {
+      "filename": "legacy-single-net-disc-0.pt",
+      "sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+      "family": "legacy_single_net",
+      "status": "original trained weights, numerically verified architecture port",
+      "channels": [
+        "disc"
+      ],
+      "preprocessing": {
+        "profile": "single_net",
+        "normalization": "RGB/255-0.5",
+        "pixels_per_degree": 25,
+        "normalized": false,
+        "normalization_status": "source-inferred: Config.dataset_fname=data_25.hdf5; inherited value was not serialized, raw/normalized history is not independently verified"
+      },
+      "tiling": {
+        "crop_size": 192,
+        "border": 24,
+        "blend": "logits",
+        "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+      },
+      "parameters": 1304289,
+      "source_sha256": "02cdc404f75a0ac4327059588f752b0b24067c49b28af10c42e36911eeb99d09",
+      "source_ref": "7a152c31c2947ddf760716dfa8a6dfc4d2b881c9",
+      "indexed_images": 3506,
+      "saved_splits": {
+        "test": 893,
+        "valid": 867,
+        "train": 1746
+      },
+      "dataset_counts": {
+        "aria": 120,
+        "drishtigs": 101,
+        "g1020": 1019,
+        "iostar": 30,
+        "onhsd": 87,
+        "refuge": 1200,
+        "riga": 749,
+        "uoadr": 200
+      },
+      "numeric_port_max_logit_error": 0.0,
+      "historical_quality_reproduced": false
+    },
+    "legacy-disc-1": {
+      "filename": "legacy-single-net-disc-1.pt",
+      "sha256": "8ebf60971813bbaecc9602663034d75cfe7f5c3c9587b7b2a27d056c1cae3605",
+      "family": "legacy_single_net",
+      "status": "original trained weights, numerically verified architecture port",
+      "channels": [
+        "disc"
+      ],
+      "preprocessing": {
+        "profile": "single_net",
+        "normalization": "RGB/255-0.5",
+        "pixels_per_degree": 25,
+        "normalized": false,
+        "normalization_status": "source-inferred: Config.dataset_fname=data_25.hdf5; inherited value was not serialized, raw/normalized history is not independently verified"
+      },
+      "tiling": {
+        "crop_size": 256,
+        "border": 32,
+        "blend": "logits",
+        "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+      },
+      "parameters": 1304289,
+      "source_sha256": "adaa2afb431ff5ea65ae68d596012246cb2514470373664c303562c0f5a4df38",
+      "source_ref": "7a152c31c2947ddf760716dfa8a6dfc4d2b881c9",
+      "indexed_images": 3506,
+      "saved_splits": {
+        "test": 893,
+        "valid": 867,
+        "train": 1746
+      },
+      "dataset_counts": {
+        "aria": 120,
+        "drishtigs": 101,
+        "g1020": 1019,
+        "iostar": 30,
+        "onhsd": 87,
+        "refuge": 1200,
+        "riga": 749,
+        "uoadr": 200
+      },
+      "numeric_port_max_logit_error": 0.0,
+      "historical_quality_reproduced": false
+    },
+    "legacy-av": {
+      "filename": "legacy-av-v9.pt",
+      "sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+      "family": "legacy_av",
+      "status": "original trained weights, numerically verified architecture port",
+      "channels": [
+        "background_logit_unused_for_classification",
+        "artery",
+        "vein"
+      ],
+      "preprocessing": {
+        "profile": "ves_class",
+        "pixels_per_degree": 25,
+        "normalization": "internal per-image/channel torch.mean and sample torch.std(correction1); no epsilon",
+        "expects_preprocessed_input": true,
+        "input_values": "stored preprocessed RGB and binary vessel channel, castfloat32 without offset/scale",
+        "rgb_preprocessing": "MATLAB local_contrast_and_clahe on25px/degree frame; exact raw reproduction requires original DICOM or independent preprocessing goldens",
+        "raw_matlab_pipeline_certified": false
+      },
+      "tiling": {
+        "mode": "full_image",
+        "reason": "original normalization/context are full-image; tiling changes predictions"
+      },
+      "parameters": 2030379,
+      "source_sha256": "75c5048aed6adb9f783f8fabb056185c4eb81c23be45b3a152794f59dc8cb1c0",
+      "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+      "indexed_images": null,
+      "saved_splits": null,
+      "dataset_counts": null,
+      "numeric_port_max_logit_error": 0.0,
+      "historical_quality_reproduced": false
+    },
+    "pilot-disc-cup": {
+      "filename": "disc_cup.pt",
+      "sha256": "36f72fd4817d432d6e953bbec39604374d40b25c0a0ffad7723b0b28ca55e22a",
+      "task": "disc_cup",
+      "dataset": "Drishti-GS",
+      "channels": [
+        "disc",
+        "cup"
+      ],
+      "selected_epoch": 28,
+      "inference_max_size": 1024,
+      "test_dice": {
+        "disc": 0.879784936980366,
+        "cup": 0.7648417440348905
+      },
+      "av_conditional_accuracy": null,
+      "av_end_to_end_accuracy": null,
+      "source_implementation_commit": "959fde4",
+      "limitations": "Single-seed pilot. AV class metrics use labeled reference vessel pixels. Disc/cup can produce bright-border false positives.",
+      "family": "pilot_unet",
+      "status": "single-dataset functionality pilot, not the final new unified model"
+    }
+  },
+  "aliases": {
+    "vessels": "legacy-vessels",
+    "disc_cup": "legacy-universal",
+    "av": "legacy-av"
+  }
+}

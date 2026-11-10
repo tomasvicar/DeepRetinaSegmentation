@@ -1,0 +1,51 @@
+{
+  "case": "DRIVEtraining21",
+  "shape": [
+    4,
+    1226,
+    1186
+  ],
+  "rgb_storage_dtype": "uint16",
+  "rgb_range": [
+    0,
+    4096
+  ],
+  "vessel_values": [
+    0.0,
+    1.0
+  ],
+  "finite": true,
+  "geometry": {
+    "original_shape": [
+      584,
+      565
+    ],
+    "crop_position": [
+      0,
+      583,
+      0,
+      564
+    ],
+    "rescale_factor": 2.0988805970149254,
+    "prepared_shape": [
+      1226,
+      1186
+    ]
+  },
+  "profile": {
+    "name": "vesclass_raw_python_proxy",
+    "matlab_parity_certified": false,
+    "geometry": "full frame; no FOV crop; ceil-sized output",
+    "fov_source": "provided original-frame FOV",
+    "fov_diameter_pixels": 536.0,
+    "diameter_source": "maximum FOV bbox extent heuristic; not MATLAB edge/radius estimator",
+    "pixels_per_degree": 25.0,
+    "field_of_view_degrees": 45.0,
+    "photometric": "original Python local-contrast/HSV-CLAHE in float before storage quantization",
+    "rgb_resampling": "Python linear/antialiasing proxy, not certified MATLAB bicubic",
+    "mask_resampling": "nearest neighbour",
+    "storage": "dicom12",
+    "output_restore": "original AV full-frame INTER_NEAREST resize, not single_net crop restoration"
+  },
+  "accuracy_claim": false
+}

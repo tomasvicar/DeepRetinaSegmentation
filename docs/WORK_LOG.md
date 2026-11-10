@@ -81,3 +81,49 @@ or historical models were removed. Future outputs stay in the local repository d
 The user subsequently explicitly authorized keeping model backups in ownCloud. Restored
 the three selected checkpoints and metadata to the same new backup directory; hashes
 verified against local checkpoints. The previous removal remains recorded as history.
+
+## Completed adapter implementation and shareable model release
+
+- Mapped all 35 historical MATLAB loader paths and 14 Python loader paths to 31
+  Python dataset selectors; preserved dense, sparse, point, grading and image-only
+  semantics. All 22 newly added locally available selectors passed integrated
+  three-source-group preparation checks; UBMI is implemented with synthetic
+  external-layout tests because its private data are absent.
+- All 14 auxiliary archives were fully decoded. Seven of eight added segmentation
+  adapters completed full real conversion; RIGA full conversion continues with
+  bounded preview/decoder checks already passing. The live full-pass results are
+  recorded in ADAPTERS_SEGMENTATION.md as they finish.
+- Corrected a source-label error: the bundled UoA paper identifies .3.jpg as an
+  optic-disc CENTER, not cup. All 200 center markers are preserved; cup is invalid.
+- Restored DRIVE/CHASE secondary observers and IOSTAR disc masks; added photograph
+  split checks and consistent source IDs across observers/tasks. Verified all 206
+  annotation records for these three datasets after the shared-group correction.
+- Added Source readers for ZIP/TAR/directories, identity-checked duplicate aliases,
+  portable auxiliary references, source overrides and explicitly marked previews.
+- Training excludes quarantined annotations; channel supervision is saved in
+  checkpoints and unsupported cup outputs are suppressed with explicit metadata.
+- Included the three original validation-selected pilot weights (approximately
+  6 MB total) in the repository/package, with SHA256 checks and --model selection.
+  Original pilot weights/splits/scores remain unchanged. Shared ownCloud supplies
+  retraining data and the authorized model backup. No source ZIP is created.
+- Current release checks: 75 tests passed; lint and format checks passed; wheel
+  contents include all adapters, coverage inventory and all three checkpoints.
+- HPO is isolated in the experiments/leipzig-hpo worktree. LR trials are running
+  across Ada/Pascal/old; architecture, augmentation and longer-budget comparisons
+  are being added there. Unverified results do not replace bundled pilot models.
+
+## 2026-11-10 — Original models and separate private HPC notebook
+
+Converted four original single_net checkpoints and the original Ves_Class v9
+classifier into safe state-dictionary payloads, bundled with SHA256 verification.
+Original forward outputs and single_net tiled logits match pinned source code
+exactly on the recorded prepared-input checks. CLI distinguishes original models
+from single-dataset pilots and requires an explicit flag for the uncertified raw
+A/V preprocessing proxy. Historical raw/normalized ambiguity remains documented.
+All 119 tests pass; Ruff checks and formatting pass.
+
+MetaCentrum operational notes and scripts are maintained separately in the private
+`metacentrum-workflows` repository. SSH/SFTP and a bounded CPU PBS diagnostic
+have passed; environment bootstrap and GPU probe remain drafts.
+Unified-model development remains on the experimental branch; its short CUDA
+functionality check is not evidence of segmentation quality.

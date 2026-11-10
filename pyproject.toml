@@ -13,10 +13,10 @@ dependencies = [
   "numpy>=1.26,<3",
   "pillow>=10.4",
   "scipy>=1.13",
-  "scikit-image>=0.24",
-  "opencv-python-headless>=4.10,<5",
-  "h5py>=3.11",
   "xlrd>=2.0.1",
+  "opencv-python-headless>=4.10,<5",
+  "scikit-image>=0.24,<0.28",
+  "h5py>=3.11",
   "pydicom>=3.0",
 ]
 
@@ -28,7 +28,7 @@ dev = ["pytest>=8", "ruff>=0.9"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "/src/deepretina/**/*.py", "/src/deepretina/adapters/*.json", "/configs/*.toml", "/docs/*.md", "/scripts/*.py",
+  "/src/deepretina/**/*.py", "/src/deepretina/adapters/*.json", "/src/deepretina/pretrained/*", "/configs/*.toml", "/docs/*.md", "/scripts/*.py",
   "/tests/*.py", "/reports/**/*.json", "/reports/**/*.csv", "/reports/**/*.md",
   "/README.md", "/pyproject.toml", "/uv.lock", "/.python-version",
 ]
@@ -50,3 +50,4 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+extend-exclude = ["tests/reference"]

@@ -1,0 +1,356 @@
+{
+  "source_commit": "7a152c31c2947ddf760716dfa8a6dfc4d2b881c9",
+  "source_file_sha256": {
+    "datasets_loaders/LoaderGeneric.py": "ec74fd73a9d3e72ec64abed5e2e5a127db1039d69846322e8bcde0ebb9ef5a48",
+    "utils/image_utils.py": "cd5931456abca7d502e3b76303b4d4eb5c1e50a73bf6d67b700e8c1f32a6cbc0",
+    "utils/local_contrast_and_clahe.py": "f15cf31b6da3ca91bb15002c581d070c9f8cbf81caf584899893fdcb8b44eaaf"
+  },
+  "runtime": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit_image": "0.26.0",
+    "opencv": "4.14.0",
+    "h5py": "3.16.0",
+    "torch": "2.6.0+cu124"
+  },
+  "reference_method": "Executed original LoaderGeneric.preprocess and original local_contrast_and_clahe functions; only source I/O/HDF5 sink replaced",
+  "records": [
+    {
+      "case": "fixture",
+      "normalized": false,
+      "pixels_per_degree": 2,
+      "field_of_view_degrees": 45,
+      "input_shape": [
+        96,
+        128,
+        3
+      ],
+      "prepared_shape": [
+        51,
+        74,
+        3
+      ],
+      "crop_position": [
+        12,
+        84,
+        12,
+        116
+      ],
+      "rescale_factor": 0.703125,
+      "rgb_sha256": "b3105bdcf384d777e9e6bdb8c09c321e930d92cf94286a3651b0ea3b8e65e5c1",
+      "fov_sha256": "0e5e8fe6d3e30a64c81c7c4876245bbfd61203b82e05394856366f57c968aa58",
+      "tensor_sha256": "e92764d0e2d1a316afab979500c12126aff13a9a8f329554c0311368816879ee",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "fixture",
+      "normalized": true,
+      "pixels_per_degree": 2,
+      "field_of_view_degrees": 45,
+      "input_shape": [
+        96,
+        128,
+        3
+      ],
+      "prepared_shape": [
+        51,
+        74,
+        3
+      ],
+      "crop_position": [
+        12,
+        84,
+        12,
+        116
+      ],
+      "rescale_factor": 0.703125,
+      "rgb_sha256": "402c8b988f2370a3ea407e670d714a7adc7da7a48d6f04198b08ac1570ee797e",
+      "fov_sha256": "0e5e8fe6d3e30a64c81c7c4876245bbfd61203b82e05394856366f57c968aa58",
+      "tensor_sha256": "b78287aabc0f641d319b0a3c76e32fb28bd3b5da32ed8adafd299c1bd5b24459",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "drive:training/images/21_training.bmp",
+      "normalized": false,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 45,
+      "input_shape": [
+        584,
+        565,
+        3
+      ],
+      "prepared_shape": [
+        1031,
+        1033,
+        3
+      ],
+      "crop_position": [
+        32,
+        566,
+        10,
+        545
+      ],
+      "rescale_factor": 1.9263698630136987,
+      "rgb_sha256": "9c531d24c98eee479572f97c28dccd28df70625ff6f53825c86525dbff3f9e39",
+      "fov_sha256": "e011ffcc6b92fcd87afd48e12dbd097d47d7acb85b52c51b24aaf2e81eedaf7a",
+      "tensor_sha256": "ea5df7cdc1ba5180602b4853c3062922b27b0ddbea85d3d39394d14f0c79a5f1",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "drive:training/images/21_training.bmp",
+      "normalized": true,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 45,
+      "input_shape": [
+        584,
+        565,
+        3
+      ],
+      "prepared_shape": [
+        1031,
+        1033,
+        3
+      ],
+      "crop_position": [
+        32,
+        566,
+        10,
+        545
+      ],
+      "rescale_factor": 1.9263698630136987,
+      "rgb_sha256": "cfcd9acd5ea76b85f6e1c3afb1705d14a5ef670e52a0a10f2ea0d3c7c9dc9ba9",
+      "fov_sha256": "e011ffcc6b92fcd87afd48e12dbd097d47d7acb85b52c51b24aaf2e81eedaf7a",
+      "tensor_sha256": "12c380db7b5cbd9063c520f6696b07d600feea69905d1f067de27ea123b2ac74",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "hrf:images/01_g.JPG",
+      "normalized": false,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 60,
+      "input_shape": [
+        2336,
+        3504,
+        3
+      ],
+      "prepared_shape": [
+        1000,
+        1397,
+        3
+      ],
+      "crop_position": [
+        0,
+        2335,
+        129,
+        3391
+      ],
+      "rescale_factor": 0.4280821917808219,
+      "rgb_sha256": "c42f4af68c5c6801771be16b9fdae6d2f4df26d95bdec668535f26bec14dc186",
+      "fov_sha256": "faf69715c93a005d1e1575b5096c3f1d1cf0cd958337a9cf59d1af2c00357e77",
+      "tensor_sha256": "197aa4465bb9084a97f0a18c7b257ba95fa77f8f9c7d45b83d1c8806e7bbed36",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "hrf:images/01_g.JPG",
+      "normalized": true,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 60,
+      "input_shape": [
+        2336,
+        3504,
+        3
+      ],
+      "prepared_shape": [
+        1000,
+        1397,
+        3
+      ],
+      "crop_position": [
+        0,
+        2335,
+        129,
+        3391
+      ],
+      "rescale_factor": 0.4280821917808219,
+      "rgb_sha256": "6595513bbd208931c759d574e42c16db4fd02d874cd382d888b52d6156f2089f",
+      "fov_sha256": "faf69715c93a005d1e1575b5096c3f1d1cf0cd958337a9cf59d1af2c00357e77",
+      "tensor_sha256": "5e819773fb50baa8d2e5c2da9277a846a8c90ef6cee472d39978ace951afe291",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "stare:all-images/im0001.ppm",
+      "normalized": false,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 35,
+      "input_shape": [
+        605,
+        700,
+        3
+      ],
+      "prepared_shape": [
+        686,
+        796,
+        3
+      ],
+      "crop_position": [
+        24,
+        572,
+        35,
+        671
+      ],
+      "rescale_factor": 1.25,
+      "rgb_sha256": "afa9f9aec0f92b2e96ab6b0dc80306ceb2bc05cfcdec0db846a4e6f40e46dddb",
+      "fov_sha256": "3d0bebd7ef0152b268874717469fa544b6881de43f01a81d2268dcc54d48cd8c",
+      "tensor_sha256": "e3ebcdb9c6a8f32e0b4462d3ece1dc0ea8f3fc7c331575774ae0be152c66c716",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "stare:all-images/im0001.ppm",
+      "normalized": true,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 35,
+      "input_shape": [
+        605,
+        700,
+        3
+      ],
+      "prepared_shape": [
+        686,
+        796,
+        3
+      ],
+      "crop_position": [
+        24,
+        572,
+        35,
+        671
+      ],
+      "rescale_factor": 1.25,
+      "rgb_sha256": "2a3d19bb673606af08c0c4beb91fb82225016da738fb93172beb353980c8bdcb",
+      "fov_sha256": "3d0bebd7ef0152b268874717469fa544b6881de43f01a81d2268dcc54d48cd8c",
+      "tensor_sha256": "798f43ed91be9c9632bbb89d1d962dd660d0f985d388435f5bbf3891584943c6",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "drishti:Training/Images/drishtiGS_002.png",
+      "normalized": false,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 30,
+      "input_shape": [
+        1752,
+        2045,
+        3
+      ],
+      "prepared_shape": [
+        643,
+        750,
+        3
+      ],
+      "crop_position": [
+        0,
+        1751,
+        0,
+        2044
+      ],
+      "rescale_factor": 0.36674816625916873,
+      "rgb_sha256": "65b5242b7952994be063f0e3049fb59a6c5c832880cf6c5640d6562398235513",
+      "fov_sha256": "555aba7a3bd315d9ddfcf7775e1fcf5294f9be93ae1a9ba50e8fa413f7047eeb",
+      "tensor_sha256": "b1f4d9edc9934804b6cd7c42928eb5a02d69321ef955fb622cfe8b2d22cfdf35",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "drishti:Training/Images/drishtiGS_002.png",
+      "normalized": true,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 30,
+      "input_shape": [
+        1752,
+        2045,
+        3
+      ],
+      "prepared_shape": [
+        643,
+        750,
+        3
+      ],
+      "crop_position": [
+        0,
+        1751,
+        0,
+        2044
+      ],
+      "rescale_factor": 0.36674816625916873,
+      "rgb_sha256": "4d307dfd75aba43a7302d052bf2d6ddd6dcee9e55db6e703bf79b8cea67b5c5c",
+      "fov_sha256": "555aba7a3bd315d9ddfcf7775e1fcf5294f9be93ae1a9ba50e8fa413f7047eeb",
+      "tensor_sha256": "f565f20167df3d1f7c281a7a6107a63e73f48c0b8478b1fd98d3ce67412625d1",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "uoadr:1/1.jpg",
+      "normalized": false,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 45,
+      "input_shape": [
+        2056,
+        2124,
+        3
+      ],
+      "prepared_shape": [
+        1089,
+        1125,
+        3
+      ],
+      "crop_position": [
+        0,
+        2055,
+        0,
+        2123
+      ],
+      "rescale_factor": 0.5296610169491526,
+      "rgb_sha256": "045c02e799f0f56de97cca91847d768cb1b4289d24888e36266fff63e539820f",
+      "fov_sha256": "f641d9e8e6ec7789ab728ad0f18ff7a3cff08a9de6a9da9d9c1f5a8370094fa7",
+      "tensor_sha256": "10f4415b27811b48acd9fabfedc21602de7884c8266f45eab53c4f2890e9cfaa",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    },
+    {
+      "case": "uoadr:1/1.jpg",
+      "normalized": true,
+      "pixels_per_degree": 25,
+      "field_of_view_degrees": 45,
+      "input_shape": [
+        2056,
+        2124,
+        3
+      ],
+      "prepared_shape": [
+        1089,
+        1125,
+        3
+      ],
+      "crop_position": [
+        0,
+        2055,
+        0,
+        2123
+      ],
+      "rescale_factor": 0.5296610169491526,
+      "rgb_sha256": "eafee7ebf5a5bb5467699aa2a89048ce6724d86d29b3c3412ee6ff59d2edb7bc",
+      "fov_sha256": "f641d9e8e6ec7789ab728ad0f18ff7a3cff08a9de6a9da9d9c1f5a8370094fa7",
+      "tensor_sha256": "715b63e9bc1aae769d959dce88d49a2fa58cc0ca19bb6add5dd4ffabea86428d",
+      "bitwise_equal": true,
+      "max_abs_rgb_difference": 0
+    }
+  ],
+  "limit": "Source-code parity under current locked libraries; no historical HDF5/DICOM inputs available to certify2023-library or MATLAB pixel parity."
+}

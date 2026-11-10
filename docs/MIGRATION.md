@@ -65,11 +65,12 @@ partial files; use a fresh directory for retry. Manifest reads also reject
 source identities assigned to multiple splits across tasks. These checks
 resolve the integration findings recorded in [REVIEW.md](REVIEW.md).
 
-Do not describe unsupported historical loaders as translated merely because the
-new workflow is all Python. Some archived datasets contain only pretraining
-images or sparse annotations; RIGA contour recovery, stereo RIM-ONE handling and
-video processing need separate verified adapters if they are later required.
-The current adapter list and excluded datasets belong in `DATASETS.md`.
+All historical dataset adapters now have Python implementations, including contour
+recovery, stereo RIM-ONE and sparse/auxiliary collections. The coverage inventory
+maps every historical loader path and records actual validation scope. UBMI requires
+external private data for a complete real-source test; its external-data interface is
+implemented and tested with representative synthetic layouts. Generic pretraining and
+video pipelines remain outside the requested three segmentation tasks.
 
 ## Correctness checks
 
