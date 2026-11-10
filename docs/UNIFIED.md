@@ -221,3 +221,12 @@ vessel, so conditional correctness can exceed end-to-end correctness. Per-photo
 correct/scored sums reconstruct header `av_conditional_accuracy`, while
 end-to-end/eligible reconstructs `av_accuracy`. These counts support paired
 uncertainty analysis without changing decoding or training objectives.
+
+## Optional residual conditional A/V capacity
+
+`architecture="compact_unet_av_residual"` is a separate scratch-only experiment
+with the compact backbone and a zero-initialized two-logit residual A/V head.
+It changes no defaults, loss, decoding, external inputs or existing checkpoint
+keys. See [UNIFIED_AV_RESIDUAL.md](UNIFIED_AV_RESIDUAL.md) for exact initialization
+contracts, parameter counts and the controlled validation-only protocol. No
+quality improvement is established and no GPU trial has been launched.
