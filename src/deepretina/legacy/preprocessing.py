@@ -63,8 +63,10 @@ def get_fov_auto(image, t1=7, t2=15):
     image = _rgb(image)
     average_rgb = np.mean(image, axis=2)
     mask = apply_hysteresis_threshold(average_rgb, t1, t2)
-    mask = binary_closing(mask, disk(10))
-    mask = sk_binary_erosion(mask, disk(6))
+    # Cross decompositions reconstruct these exact historical disks while
+    # avoiding a full large-footprint scan on every raw fundus pixel.
+    mask = binary_closing(mask, disk(10, decomposition="crosses"))
+    mask = sk_binary_erosion(mask, disk(6, decomposition="crosses"))
     labelled = label(mask)
     areas = np.bincount(labelled.ravel())[1:]
     if not len(areas):
