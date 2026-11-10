@@ -1,0 +1,549 @@
+{
+  "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+  "caller_path": "matlab_preprocessing/souradnice.m",
+  "caller_lines": {
+    "N4": 11,
+    "N5": 13,
+    "N3": 15,
+    "N5_half": 17,
+    "consume_low_mask": 29,
+    "histogram_fallback_replacement": 74
+  },
+  "input_double_caller": {
+    "path": "matlab_preprocessing/image_adjustment.m",
+    "lines": [
+      2,
+      3
+    ]
+  },
+  "source_helper_sha256": "6f47763d8c1b1821d0f6613bc5c823b910577d668857bf617f54d01dcb1fcf9b",
+  "batches": [
+    {
+      "name": "a",
+      "seed": 11827,
+      "cases": 600,
+      "first_float_bitwise_exact": 600,
+      "max_first_absolute_error": 0.0,
+      "threshold_decision_disagreements": 0,
+      "oracle_sha256": "46a171afeeb410851e6cb4fc58a098ef93bf31b1219caf0d2043f56bed312856"
+    },
+    {
+      "name": "b",
+      "seed": 90173,
+      "cases": 720,
+      "first_float_bitwise_exact": 720,
+      "max_first_absolute_error": 0.0,
+      "threshold_decision_disagreements": 0,
+      "oracle_sha256": "6556badaaa2b80dda99c37d168e8f12f47bf70421ca07a15bf0ad7aa87242bf5"
+    }
+  ],
+  "synthetic_fov_cases": [
+    {
+      "name": "shape1-bg0-stare",
+      "dataset": "stare",
+      "initial_low": 0.0716324538284675,
+      "final_low": 0.0,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 64,
+        "center_col_one_based": 80,
+        "radius_pixels": 55,
+        "edge_pixels": 319
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape1-bg0-diaretdb",
+      "dataset": "diaretdb",
+      "initial_low": 0.010744868074270128,
+      "final_low": 0.0,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 64,
+        "center_col_one_based": 80,
+        "radius_pixels": 55,
+        "edge_pixels": 319
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape1-bg0-drishtigs",
+      "dataset": "drishtigs",
+      "initial_low": 0.08954056728558438,
+      "final_low": 0.0,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 64,
+        "center_col_one_based": 80,
+        "radius_pixels": 55,
+        "edge_pixels": 319
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape1-bg1-stare",
+      "dataset": "stare",
+      "initial_low": 0.08967135387658146,
+      "final_low": 0.002,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections",
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape1-bg1-diaretdb",
+      "dataset": "diaretdb",
+      "initial_low": 0.011058593564466207,
+      "final_low": 0.002,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections",
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape1-bg1-drishtigs",
+      "dataset": "drishtigs",
+      "initial_low": 0.09280854114179353,
+      "final_low": 0.002,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections",
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape2-bg0-stare",
+      "dataset": "stare",
+      "initial_low": 0.08715780869239338,
+      "final_low": 0.0,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 64,
+        "center_col_one_based": 80,
+        "radius_pixels": 59,
+        "edge_pixels": 387
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape2-bg0-diaretdb",
+      "dataset": "diaretdb",
+      "initial_low": 0.011112620608280159,
+      "final_low": 0.0,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 64,
+        "center_col_one_based": 80,
+        "radius_pixels": 59,
+        "edge_pixels": 387
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape2-bg0-drishtigs",
+      "dataset": "drishtigs",
+      "initial_low": 0.09260517173566797,
+      "final_low": 0.0,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 64,
+        "center_col_one_based": 80,
+        "radius_pixels": 59,
+        "edge_pixels": 387
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape2-bg1-stare",
+      "dataset": "stare",
+      "initial_low": 0.0926277958166621,
+      "final_low": 0.002,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections",
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape2-bg1-diaretdb",
+      "dataset": "diaretdb",
+      "initial_low": 0.011426346098476238,
+      "final_low": 0.002,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections",
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape2-bg1-drishtigs",
+      "dataset": "drishtigs",
+      "initial_low": 0.09587314559187712,
+      "final_low": 0.002,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections",
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape3-bg0-stare",
+      "dataset": "stare",
+      "initial_low": 0.10954048395545643,
+      "final_low": 0.10954048395545643,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 65,
+        "center_col_one_based": 81,
+        "radius_pixels": 75,
+        "edge_pixels": 508
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape3-bg0-diaretdb",
+      "dataset": "diaretdb",
+      "initial_low": 0.005238892710913134,
+      "final_low": 0.005238892710913134,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 65,
+        "center_col_one_based": 81,
+        "radius_pixels": 75,
+        "edge_pixels": 508
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape3-bg0-drishtigs",
+      "dataset": "drishtigs",
+      "initial_low": 0.10120588191536735,
+      "final_low": 0.0,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 65,
+        "center_col_one_based": 81,
+        "radius_pixels": 75,
+        "edge_pixels": 508
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape3-bg1-stare",
+      "dataset": "stare",
+      "initial_low": 0.11512056852801333,
+      "final_low": 0.11512056852801333,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "calibration": {
+        "center_row_one_based": 65,
+        "center_col_one_based": 81,
+        "radius_pixels": 75,
+        "edge_pixels": 508
+      },
+      "boundary_disagreements": 0,
+      "processing_disagreements": 0,
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape3-bg1-diaretdb",
+      "dataset": "diaretdb",
+      "initial_low": 0.0025214994140324624,
+      "final_low": 0.002,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections",
+      "initial_low_absolute_error": 0.0
+    },
+    {
+      "name": "shape3-bg1-drishtigs",
+      "dataset": "drishtigs",
+      "initial_low": 0.1044738557715765,
+      "final_low": 0.002,
+      "stage_disagreements": {
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections",
+      "initial_low_absolute_error": 0.0
+    }
+  ],
+  "real_fov": {
+    "cases": [
+      {
+        "dataset": "stare",
+        "shape": [
+          605,
+          700,
+          3
+        ],
+        "source_first_threshold": 0.1794240601097486,
+        "candidate_first_threshold": 0.1794240601097486,
+        "first_threshold_abs_error": 0.0,
+        "initial_low_abs_error": 0.0,
+        "final_low_abs_error": 0.0,
+        "fallback_matches": true,
+        "stage_disagreements": {
+          "initial_closed": 0,
+          "closed": 0,
+          "filled": 0
+        },
+        "boundary_disagreements": 0,
+        "processing_fov_disagreements": 0,
+        "calibration": {
+          "center_row_one_based": 290,
+          "center_col_one_based": 345,
+          "radius_pixels": 325,
+          "edge_pixels": 1951
+        },
+        "source_calibration": [
+          290,
+          345,
+          325
+        ],
+        "source_full_threshold_vector": [
+          0.1794240601097486,
+          0.35276594869035316,
+          0.4896148080960936
+        ],
+        "candidate_full_threshold_vector": [
+          0.1794240601097486,
+          0.35276594869035316,
+          0.4896148080960936
+        ]
+      },
+      {
+        "dataset": "drishtigs",
+        "shape": [
+          1752,
+          2045,
+          3
+        ],
+        "source_first_threshold": 0.04292673054336907,
+        "candidate_first_threshold": 0.04292673054336907,
+        "first_threshold_abs_error": 0.0,
+        "initial_low_abs_error": 0.0,
+        "final_low_abs_error": 0.0,
+        "fallback_matches": true,
+        "stage_disagreements": {
+          "initial_closed": 0,
+          "closed": 0,
+          "filled": 0
+        },
+        "boundary_disagreements": 0,
+        "processing_fov_disagreements": 0,
+        "calibration": {
+          "center_row_one_based": 879,
+          "center_col_one_based": 1025,
+          "radius_pixels": 1025,
+          "edge_pixels": 6172
+        },
+        "source_calibration": [
+          879,
+          1025,
+          1025
+        ],
+        "source_full_threshold_vector": [
+          0.04292673054336907,
+          0.08009637156794165,
+          0.14027579036963062,
+          0.26594457669080457,
+          0.35267373908147387
+        ],
+        "candidate_full_threshold_vector": [
+          0.04292673054336907,
+          0.08009637156794165,
+          0.14027579036963062,
+          0.26594457669080457,
+          0.35267373908147387
+        ]
+      },
+      {
+        "dataset": "diaretdb",
+        "shape": [
+          1152,
+          1500,
+          3
+        ],
+        "source_first_threshold": 0.08302464274564182,
+        "candidate_first_threshold": 0.08302464274564182,
+        "first_threshold_abs_error": 0.0,
+        "initial_low_abs_error": 0.0,
+        "final_low_abs_error": 0.0,
+        "fallback_matches": true,
+        "stage_disagreements": {
+          "initial_closed": 0,
+          "closed": 0,
+          "filled": 0
+        },
+        "boundary_disagreements": 0,
+        "processing_fov_disagreements": 0,
+        "calibration": {
+          "center_row_one_based": 556,
+          "center_col_one_based": 743,
+          "radius_pixels": 717,
+          "edge_pixels": 2755
+        },
+        "source_calibration": [
+          556,
+          743,
+          717
+        ],
+        "source_full_threshold_vector": [
+          0.08302464274564182,
+          0.20419574296901097,
+          0.27824474866106985,
+          0.3522937543531288
+        ],
+        "candidate_full_threshold_vector": [
+          0.08302464274564182,
+          0.20419574296901097,
+          0.27824474866106985,
+          0.3522937543531288
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "dataset": "stare",
+        "archive": "STARE.zip",
+        "resource": "all-images/im0002.ppm",
+        "source_file_sha256": "a1d19e5b2b0a3dd652bade1fe0ff44256f7f974a1df598b887de8d3c641d45ac",
+        "decoded_rgb_sha256": "8629cb7d62a563ca34c434b6c5c0e44a2c69023a7c1216f677dc8b5be2cc06d6",
+        "shape": [
+          605,
+          700,
+          3
+        ],
+        "partition_scope": "train canonical metadata",
+        "scratch_file": "firstcut_real_stare.png"
+      },
+      {
+        "dataset": "drishtigs",
+        "archive": "Drishti-GS.zip",
+        "resource": "Training/Images/drishtiGS_002.png",
+        "source_file_sha256": "de21c3a7f14668e47da9df261f98b1a49b06d875ac4b4a9910e97074325373ca",
+        "decoded_rgb_sha256": "a51dac5f72b7ef471104870cabe1b3d880c52b12e7ce44d434641a0c4a15f8f5",
+        "shape": [
+          1752,
+          2045,
+          3
+        ],
+        "partition_scope": "official train",
+        "scratch_file": "firstcut_real_drishtigs.png"
+      },
+      {
+        "dataset": "diaretdb",
+        "archive": "DiaRetDB0.zip",
+        "resource": "diaretdb0_v_1_1/resources/images/diaretdb0_fundus_images/image001.png",
+        "source_file_sha256": "8f2a80ae6712dec6cb85f7ee7b6cda8948715aec9ddb5d9170affc5c89778ceb",
+        "decoded_rgb_sha256": "ec2ce9460af698abea0151b21b15f3be3236c00eb8ae0767e6430cd9bc0057ad",
+        "shape": [
+          1152,
+          1500,
+          3
+        ],
+        "partition_scope": "image-only dataset, no GT/split quality evaluation",
+        "scratch_file": "firstcut_real_diaretdb.png"
+      }
+    ]
+  },
+  "scope": "First cutoff only; opt-in optional FOV backend, no full multithresh or universal equivalence certification",
+  "public_defaults_changed": false,
+  "frozen_sources_changed": false,
+  "prior_measurement_correction": {
+    "problem": "Rounded bin coordinates hid fractional failed-search cutoffs",
+    "first_batch_float_mismatches_before_fix": 22,
+    "threshold_decision_differences_before_fix": 14,
+    "fix": "Return continuous uniform initial coordinates on failed search, no integer rounding"
+  },
+  "degenerate_arbitrary_threshold_policy": "unsupported, fails closed",
+  "automatic_loader_lines": {
+    "load_stare.m": 30,
+    "load_diaretdb0.m": 10,
+    "load_drishtigs.m_training": 12
+  }
+}

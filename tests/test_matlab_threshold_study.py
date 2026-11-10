@@ -44,12 +44,14 @@ def test_local_candidate_keeps_measured_remaining_gap(images, case):
     result = CANDIDATE.candidate_multithresh(image, case["n"])
     assert result["matlab_parity_certified"] is False
     lo, hi = image.min(), image.max()
-    expected = np.rint((np.asarray(case["thresholds"]) - lo) / (hi - lo) * 255).astype(int)
+    expected = (np.asarray(case["thresholds"]) - lo) / (hi - lo) * 255
     if case["name"] == "range_ramp" and case["n"] == 5:
-        np.testing.assert_array_equal(result["threshold_indices"] - expected, [0, 1, 1, 0, 0])
+        np.testing.assert_allclose(
+            result["threshold_indices"] - expected, [0, 1, 1, 0, 0], atol=1e-12, rtol=0
+        )
     else:
-        np.testing.assert_array_equal(result["threshold_indices"], expected)
-    assert result["threshold_indices"][0] == expected[0]
+        np.testing.assert_allclose(result["threshold_indices"], expected, atol=1e-12, rtol=0)
+    assert result["thresholds"][0] == case["thresholds"][0]
     assert result["effectiveness_status"] == case["effectiveness_status"]
     if result["effectiveness"] is not None and not (
         case["name"] == "range_ramp" and case["n"] == 5

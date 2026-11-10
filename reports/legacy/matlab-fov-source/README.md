@@ -99,3 +99,31 @@ or a global Otsu substitute. No proprietary toolbox source was inspected.
 
 `global_otsu_counterexample.py --oracle-dir SCRATCH` independently recomputes the
 reported three-mode global-DP objective contrast; it is not a runtime replacement.
+
+First-cutoff follow-up (current optional contract):
+
+1. Run `generate_firstcut_holdout.m` and `generate_firstcut_holdout2.m` in MATLAB
+   with CPU1/nice10/CUDA hidden. They preserve independent seeds11827/90173 and
+   checkpoint generated MAT files every25 synthetic inputs.
+2. `prepare_firstcut_real.py --data-root OWNED_DATABASES --output SCRATCH` extracts
+   only three raw calibration images. Output must be outside owned databases;
+   source metadata names train STARE/Drishti frames and an image-only DiaRetDB0
+   input. It never reads annotations. Use the verified7bb souradnice helper in
+   scratch, then run `generate_firstcut_real.m` and
+   `generate_firstcut_synthetic.m`. These are FOV stages only, never model inference.
+3. `compare_firstcut_real.py --oracle-dir SCRATCH --report
+   SCRATCH/firstcut_real_native_comparison.json` compares the explicit native
+   backend with actual source stages. Reports refuse overwrite.
+4. `package_firstcut_followup.py --oracle-dir SCRATCH --fixture-dir NEW_DIRECTORY
+   --report NEW_REPORT.json` creates the numerical contract report plus compact
+   histogram-count/synthetic-spatial fixtures. Real photos never enter fixtures.
+   The old threshold-study report used rounded coordinates; the follow-up
+   explicitly corrects its fractional failed-search interpretation.
+
+See [MATLAB_FIRST_CUTOFF.md](../../../docs/MATLAB_FIRST_CUTOFF.md) for the actual
+source caller lines and opt-in API. Full threshold-vector parity remains
+unclaimed, and the default oracle guard/public profiles remain unchanged.
+
+`firstcut-verification.json` and`firstcut-tests.log` preserve the focused1869-pass
+component run, observed Python/NumPy/SciPy versions and actual module/log hashes.
+They do not attest a complete model-evaluation runtime or claim model quality.

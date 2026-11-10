@@ -1,0 +1,26 @@
+{
+  "kind": "optional_source_first_cutoff_component_verification",
+  "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+  "module_sha256": {
+    "src/deepretina/legacy/matlab_firstcut.py": "10d3909f2a1ad6d9b48805cfb08849ccf48cc7f3b16ba44ecff96f8529eace6a",
+    "src/deepretina/legacy/matlab_fov_source.py": "71c45ab447a51214cfc53c38468ff32fc0652bc6b3d3b5edfdb6c0e9ce654297",
+    "src/deepretina/legacy/matlab_fov.py": "36fea266aee638a600e19f11b51c006806a51ea0322eff0f5420750cecdf1afc"
+  },
+  "runtime_observed": {
+    "python": "3.12.13 (main, Jul 23 2026, 14:43:28) [Clang 22.1.3 ]",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1"
+  },
+  "test_command": "CUDA_VISIBLE_DEVICES=\"\" OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src nice -n10 python -m pytest tests/test_matlab_fov_source.py tests/test_matlab_fov_automatic.py tests/test_matlab_threshold_study.py tests/test_matlab_firstcut.py -q -p no:cacheprovider",
+  "tests_passed": 1869,
+  "test_seconds": 5.05,
+  "test_log_sha256": "f3cb368f4bda7bd13fe6c0d77edb01dc7b7151991d54a4ece69f2ced68ec416c",
+  "contract_report_sha256": "f6a67719a35083f6fba216a853ccd6abf0ccebe3af1f2b50b3cfd56194e0ff43",
+  "scope": "Component hashes and synthetic/source-FOV checks only; not full checkout/runtime attestation or historical exporter certification",
+  "no_model_forward": true,
+  "no_actual_heldout_quality_evaluation": true,
+  "no_gpu": true,
+  "public_defaults_changed": false,
+  "frozen_evaluation3779_changed": false,
+  "training3157_changed": false
+}
