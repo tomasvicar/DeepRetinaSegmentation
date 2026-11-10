@@ -26,6 +26,7 @@ from torch.utils.data import DataLoader, Sampler
 
 from .dataset import letterbox_geometry, whole_view
 from .derived_cache import VerifiedCache
+from .geometry_policy import capture_geometry_policy, prediction_geometry, validate_geometry_policy
 from .inference import resolve_device, tile_starts
 from .integrity import verify_prepared_content
 from .model import UNet
@@ -931,6 +932,8 @@ def load_unified(path, device="auto"):
     if payload.get("normalization") != "RGB/255-0.5":
         raise ValueError("Unified normalization contract mismatch")
     config = UnifiedConfig(**payload["config"])
+    if "geometry_policy" in payload:
+        validate_geometry_policy(payload["geometry_policy"])
     model = build_unified(config, initialize=False)
     model.lineage = payload.get("lineage", model.lineage)
     model.load_state_dict(payload["state_dict"], strict=True)
@@ -984,11 +987,14 @@ def predict_unified(
     config = inference_config(payload, tile_size=tile_size, overlap=overlap)
     if not 0 < threshold < 1:
         raise ValueError("Unified threshold must be in (0,1)")
+    effective_angle, geometry_provenance = prediction_geometry(
+        payload.get("geometry_policy"), dataset, original.shape[:2], field_of_view_degrees
+    )
     prepared = prepare_single_net(
         original,
         dataset=dataset,
         fov=fov,
-        field_of_view_degrees=field_of_view_degrees,
+        field_of_view_degrees=effective_angle,
         pixels_per_degree=config.pixels_per_degree,
         normalized=False,
     )
@@ -1050,6 +1056,7 @@ def predict_unified(
             "normalization": "RGB/255-0.5",
             "fov_source": prepared.fov_source,
             "geometry": prepared.geometry.as_dict(),
+            **({"geometry_policy": geometry_provenance} if geometry_provenance is not None else {}),
         },
         "probability_semantics": [
             "P(vessel|RGB)",
@@ -1113,6 +1120,7 @@ def _training_source_sha256():
     result = hashlib.sha256()
     for name in (
         "unified.py",
+        "geometry_policy.py",
         "unified_legacy.py",
         "unified_av.py",
         "model.py",
@@ -1149,6 +1157,7 @@ def _reconcile_resume_outputs(output, saved, config, fields):
         or _normalized_config(best_payload["config"]) != _normalized_config(config)
         or best_payload.get("training_source_sha256") != saved.get("training_source_sha256")
         or best_payload.get("derived_cache") != saved.get("derived_cache")
+        or best_payload.get("geometry_policy") != saved.get("geometry_policy")
         or best_payload.get("lineage") != saved.get("lineage")
     ):
         raise ValueError("Resume best checkpoint provenance differs from committed last.pt")
@@ -1254,7 +1263,9 @@ def train_unified(
     elif expected_cache_fingerprint is not None:
         raise ValueError("A cache fingerprint requires an explicit runtime cache directory")
     cache_identity = derived_cache.identity if derived_cache is not None else None
-    digest = hashlib.sha256(manifest.read_bytes()).hexdigest()
+    manifest_snapshot = manifest.read_bytes()
+    digest = hashlib.sha256(manifest_snapshot).hexdigest()
+    geometry_policy = capture_geometry_policy(manifest.parent, json.loads(manifest_snapshot))
     training_source_sha256 = _training_source_sha256()
     random.seed(config.seed)
     np.random.seed(config.seed)
@@ -1339,6 +1350,8 @@ def train_unified(
             raise ValueError("Resume manifest changed")
         if saved.get("prepared_content_sha256") != prepared_content_sha256:
             raise ValueError("Resume prepared image/annotation content changed")
+        if saved.get("geometry_policy") != geometry_policy:
+            raise ValueError("Resume preparation geometry policy changed")
         if saved.get("derived_cache") != cache_identity:
             raise ValueError("Resume derived-cache identity changed; runtime paths may relocate")
         if saved.get("training_source_sha256", training_source_sha256) != training_source_sha256:
@@ -1380,6 +1393,7 @@ def train_unified(
                 "manifest_sha256": digest,
                 "prepared_content_sha256": prepared_content_sha256,
                 "derived_cache": cache_identity,
+                **({"geometry_policy": geometry_policy} if geometry_policy is not None else {}),
                 "training_source_sha256": training_source_sha256,
                 "normalization": "RGB/255-0.5",
                 "preprocessing": {
@@ -1521,6 +1535,7 @@ def train_unified(
                 "manifest_sha256": digest,
                 "prepared_content_sha256": prepared_content_sha256,
                 "derived_cache": cache_identity,
+                **({"geometry_policy": geometry_policy} if geometry_policy is not None else {}),
                 "training_source_sha256": training_source_sha256,
                 "supervised_channels": flags,
                 "inference_max_size": inference_max_size,
