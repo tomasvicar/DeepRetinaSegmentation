@@ -1,4 +1,4 @@
-"""Integration checks using the user's converted originals when locally available."""
+"""Integration checks using original checkpoints distributed with the package."""
 
 import json
 from pathlib import Path
@@ -12,7 +12,7 @@ from deepretina.legacy.av import load_av, predict_av_input
 from deepretina.legacy.inference import predict_legacy
 from deepretina.legacy.preprocessing import stack_vesclass_inputs
 
-MODELS = Path(__file__).resolve().parents[1] / "models"
+MODELS = Path(__file__).resolve().parents[1] / "src/deepretina/pretrained"
 
 
 @pytest.fixture(autouse=True)
@@ -25,8 +25,7 @@ def bounded_threads():
 
 def checkpoint(name):
     path = MODELS / name
-    if not path.is_file():
-        pytest.skip(f"Optional local converted model absent: {path.name}")
+    assert path.is_file(), f"Required bundled original checkpoint absent: {path.name}"
     return path
 
 
