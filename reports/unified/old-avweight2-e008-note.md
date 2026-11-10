@@ -30,6 +30,29 @@ The original checkpoint format intentionally omits optimizer/RNG state from
 | Pooled cup Dice | 0.791965 | 0.800265 |
 | Conditional AV accuracy | 0.652636 | 0.661485 |
 
+| Source macro Dice | AV weight 1 E8 | AV weight 2 E8 |
+|---|---:|---:|
+| Vessel | 0.748667 | 0.736253 |
+| Artery | 0.542104 | 0.562302 |
+| Vein | 0.615946 | 0.619420 |
+| Disc | 0.856720 | 0.869492 |
+| Cup | 0.781242 | 0.785278 |
+
+`old-avweight2-e008-comparison.json` contains full per-source TP/FP/FN/valid
+counts, supported-photo counts, pooled and source-macro changes, conditional and
+end-to-end AV accuracy. The saved `old-avweight2-e008-counts.json` comes directly
+from the verified checkpoint's validation metadata; no forward was performed.
+All 770 photo IDs, selected annotation IDs, channel-source assignments, valid
+pixel counts and GT-positive counts match the weight-1 control exactly.
+
+Fourteen annotation sources contribute validation support: REFUGE (400 disc/cup),
+G1020 (204 disc/170 cup), AVRDB (20 vessel/AV), RIM-ONE (32 disc/cup), Erlangen
+(22 vessel), HRF (9 vessel/AV), ARIA (28 vessel/22 disc), STARE (4 vessel), ONHSD
+(17 disc), CHASE (6 vessel), DRHAGIS (8 vessel/3 AV), Drishti (10 disc/cup), IOSTAR
+(6 vessel/AV/disc) and RITE (4 vessel/AV). These are supported photo counts per
+head, not mutually exclusive whole-photo source totals. RIGA and UoA remain
+training-only; DRIVE/RITE shared photos retain their selected annotation source.
+
 These are one-seed eight-epoch validation screens, not final models. The weight-2
 screen improves artery/vein point metrics relative to its weight-1 control while
 vessel Dice declines. It still trails the calibrated original AV reference's
