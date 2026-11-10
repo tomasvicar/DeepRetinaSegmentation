@@ -4,6 +4,28 @@ Výslovné zadání uživatele: **mít oboje** — původní ověřené modely a
 nové jednodušší jednotné řešení s prokazatelně lepšími výsledky. Přístup do
 repozitáře a ke sdíleným datům v ownCloudu mají i kolegové. Zdrojový ZIP nevytvářet.
 
+## Aktuální stav: 10. 11. 2026, 22:50 UTC
+
+Předatelná větev zachovává pět původních modelů, tři označené piloty a úplný
+baseline **korpusu V1 se 17 zdroji**. Instalovaný balíček i skutečná Python
+source AV predikce jsou ověřené; přetrvávající rozdíly proti MATLABu jsou
+zdokumentované. Cíl obou variant a prokázaného zlepšení zůstává nedokončený.
+
+Na experimentální větvi je už skutečně připravený neměnný **korpus V2**:
+2 529 TRAIN fotografií / 5 700 anotovaných variant z 21 zdrojů, 770 VAL a
+856 TEST fotografií. Přibyly DRIONS, GAMMA, nativní IDRiD disc a BIOMISA
+s explicitní auditovanou exportní politikou. Původní VAL soubory jsou byte
+přesně zachované; geometrické předpoklady jsou přiznané a uložené v politice.
+Detailní důkazy jsou na `experiments/leipzig-hpo`, zejména
+`docs/CONTINUATION_2026-11-10_2250.md`. OwnCloud originály se nemění.
+
+V 22:47 UTC byla spuštěná nová kontrolovaná Optuna studie na V2: nově učený
+control0 a šest přesně vymezených variant ztráty, geometrie a augmentací,
+se skutečnými etapami 3/9/27/60. Spuštění není dokončený model ani důkaz
+zlepšení; výsledky se budou dokládat skutečnými epochami a párovým VAL.
+Starší V1 studie je oddělená a její výstupy zůstávají zachované. Žádný nový
+model zatím nebyl skórován na TEST. Následující časové aktualizace jsou historie.
+
 ## 1. Původní modely jako použitelná reference
 
 - Zachovat původní architektury a dostupné natrénované váhy pro cévy, A/V a disk/cup.
