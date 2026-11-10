@@ -15,6 +15,7 @@ alone does not prove provenance of every historical training file.
 
 ```python
 from deepretina.legacy.matlab_clahe import av_matlab_clahe_v
+
 v_after = av_matlab_clahe_v(v_before)  # normalized double-valued V plane
 ```
 

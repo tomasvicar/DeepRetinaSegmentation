@@ -1,12 +1,21 @@
 # Calibrated MATLAB AV preprocessing (experimental)
 
-`prepare_vesclass_matlab_calibrated` is a separate Python profile. It requires the original-frame FOV and an explicitly measured FOV diameter; it does not substitute a bounding-box radius. Existing U-Net Python normalization, existing AV routes, and running training jobs are unchanged. This profile is not activated in the CLI.
+`prepare_vesclass_matlab_calibrated` is a separate Python profile, available through
+the explicit `predict --av-raw-matlab` CLI option. It requires the original-frame
+FOV and an explicitly measured FOV diameter. Existing U-Net Python normalization,
+prepared AV routes and default profiles remain available. Runtime uses Python/uv;
+MATLAB is used to generate numerical test references.
 
 ```python
 from deepretina.legacy.matlab_av import prepare_vesclass_matlab_calibrated
+
 prepared = prepare_vesclass_matlab_calibrated(
-    rgb_uint8, binary_vessels, fov=original_fov,
-    fov_diameter_pixels=538, dataset="drive", pixels_per_degree=25,
+    rgb_uint8,
+    binary_vessels,
+    fov=original_fov,
+    fov_diameter_pixels=538,
+    dataset="drive",
+    pixels_per_degree=25,
 )
 # prepared.image: HWC uint16 stored12; prepared.vessel: matching binary mask
 # prepared.inputs(): four stored-value input planes for the original AV model
@@ -30,7 +39,7 @@ All 24 synthetic bicubic cases agree within 6e-15; nearest masks are bitwise ide
 
 A deliberately retained smooth full-frame synthetic image is a counterexample: stored12 MAE 2.2523, maximum 37, despite only floating-point-scale Gaussian differences near a histogram boundary. MATLAB's automatic Gaussian domain equals its explicit spatial domain in this probe; its frequency result differs by up to 1.55e-15. Thus the observed issue is not explained by an auto-domain switch. CLAHE histogram quantization can amplify roundoff in nearly flat regions. No ad-hoc epsilon or bin snapping is applied. The circular-FOV counterpart has MAE 0.00716/max37; a constant-image case is stored12 exact.
 
-The current profile is therefore **not certified bitwise MATLAB parity**, and historical training-file provenance is not verified. The training source points to 25N; later 35 exports do not establish what a particular saved checkpoint saw. A separate actual-model sensitivity gate must precede any production activation. Fixed synthetic correctness tolerances in tests do not weaken these limitations.
+The current profile is therefore **not certified bitwise MATLAB parity**, and historical training-file provenance is not verified. The training source points to 25N; later 35 exports do not establish what a particular saved checkpoint saw. The actual-model sensitivity gate below was completed before adding the explicit CLI route. Fixed synthetic correctness tolerances in tests do not weaken these limitations.
 
 ## Actual saved-model sensitivity gate
 
@@ -41,4 +50,4 @@ The current profile is therefore **not certified bitwise MATLAB parity**, and hi
 | DRIVE25 | 0.0257933 | 9.05e-6 / 0.0120920 | 0.00602061 | 4 / 3 / 0 | 0 / 108109 vessel pixels |
 | HRF25 | 0.00132072 | 3.36e-7 / 0.000664234 | 0.000257850 | 0 / 0 / 0 | 0 / 115420 vessel pixels |
 
-Per-logit-channel errors, input mean errors, probabilities, vessel hashes and source references are retained in the JSON. `compare_model_forward.py` reproduces the gate with external goldens and original archives, without changing either. The two measured vessel-gated classifications are identical; logits are not identical. These results do not certify arbitrary images, automatic FOV calibration, historical checkpoint preprocessing provenance, or standalone raw prediction quality. Production activation remains a separate reviewed decision.
+Per-logit-channel errors, input mean errors, probabilities, vessel hashes and source references are retained in the JSON. `compare_model_forward.py` reproduces the gate with external goldens and original archives, without changing either. The two measured vessel-gated classifications are identical; logits are not identical. These results do not certify arbitrary images, automatic FOV calibration, historical checkpoint preprocessing provenance, or standalone raw prediction quality. See the [CLI example](../README.md) and [AV input contracts](LEGACY_AV.md) for usage. The CLI also has an actual bundled-model test covering calibrated preparation, native output dimensions and profile metadata.
