@@ -189,9 +189,10 @@ def read_unified_sample(root: Path, row: dict):
         target = labels["target"].astype(np.float32)
         valid = labels["valid"].astype(bool)
         if "fov" in labels:
-            if labels["fov"].shape != image.shape[:2]:
+            fov = labels["fov"].astype(bool)
+            if fov.shape != image.shape[:2]:
                 raise ValueError("FOV/image geometry mismatch")
-            valid &= labels["fov"][None].astype(bool)
+            valid &= fov[None]
     if target.shape[-2:] != image.shape[:2]:
         raise ValueError(f"Image/annotation geometry mismatch: {row['id']}")
     mapped, support = map_record_targets(row, target, valid)
@@ -352,15 +353,18 @@ class UnifiedDataset(torch.utils.data.Dataset):
                 raw = data["target"].astype(np.float32)
                 support = data["valid"].astype(bool)
                 if "fov" in data:
-                    if data["fov"].shape != (h, w):
+                    fov = data["fov"].astype(bool)
+                    if fov.shape != (h, w):
                         raise ValueError("FOV/photo geometry mismatch")
-                    support &= data["fov"][None].astype(bool)
+                    support &= fov[None]
             mapped, support = map_record_targets(row, raw, support)
             if mapped.shape[-2:] != (h, w):
                 raise ValueError("Annotations assigned to one photo have different geometry")
             mapped = torch.from_numpy(mapped)
             support = torch.from_numpy(support)
-            target[support] = mapped[support]
+            # Dense selection avoids constructing two variable-length index arrays.
+            # Keep unsupported values unchanged, including soft annotation values.
+            torch.where(support, mapped, target, out=target)
             valid |= support
         result = (image, target, valid)
         return (*result, trace) if return_trace else result
