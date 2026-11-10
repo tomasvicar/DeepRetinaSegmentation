@@ -77,3 +77,7 @@ The user clarified that ownCloud has limited space. Removed only the newly added
 `models/for_Leipzig_2026-11-10` backup (15 files, 6,005,545 bytes). The three checkpoint
 copies in local `runs/` were checked byte-identical before deletion. No existing datasets
 or historical models were removed. Future outputs stay in the local repository directory.
+
+The user subsequently explicitly authorized keeping model backups in ownCloud. Restored
+the three selected checkpoints and metadata to the same new backup directory; hashes
+verified against local checkpoints. The previous removal remains recorded as history.
