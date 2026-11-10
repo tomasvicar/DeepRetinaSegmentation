@@ -1,0 +1,47 @@
+{
+  "scope": "Review branch only: optional source AV CLI and measured source preprocessing APIs, no default promotion",
+  "base_commit": "2d07be5",
+  "integrated_original_commits": [
+    "cb57257",
+    "85f4d8c",
+    "44983fb",
+    "4b36d2c",
+    "08190d8",
+    "67fc303"
+  ],
+  "required_dependencies": [
+    "numpy",
+    "scipy",
+    "scikit-image",
+    "pillow",
+    "torch (unchanged model path)"
+  ],
+  "new_package_dependencies": [],
+  "tests": {
+    "passed": 2171,
+    "warnings": 8,
+    "warning_scope": "existing skimage binary morphology deprecations",
+    "seconds": 35.07,
+    "cpu_threads": 1,
+    "nice": 10,
+    "cuda_visible_devices": "",
+    "command": "PYTHONPATH=src python -m pytest tests/test_matlab_source_cli.py tests/test_matlab_source_auto.py tests/test_matlab_firstcut.py tests/test_matlab_threshold_study.py tests/test_matlab_fov_automatic.py tests/test_matlab_fov_source.py tests/test_matlab_fov.py tests/test_matlab_clahe.py tests/test_matlab_av.py tests/test_legacy_cli.py tests/test_unified_cli.py -q"
+  },
+  "source_sha256": {
+    "src/deepretina/legacy/matlab_source_auto.py": "f9c95c98f76f05547cc399920f43e8b534f32e9539eaa594790c7f2d6a45873a",
+    "src/deepretina/legacy/matlab_fov_source.py": "71c45ab447a51214cfc53c38468ff32fc0652bc6b3d3b5edfdb6c0e9ce654297",
+    "src/deepretina/legacy/matlab_firstcut.py": "2bf485f8deb58fb814ea26755a342f3c9aad585a948e9d48f0490758259b7efb",
+    "src/deepretina/legacy/raw_proxy.py": "0a797a24d6c22b4cde4bcad0d64c352ecb9229d9643cca22db4c2ed3818d32f3",
+    "src/deepretina/cli.py": "11d4ffe577855e13b9e43d25fe7c121292f8fdad270462593a413ed04ee00dad",
+    "src/deepretina/unified_cli.py": "5990d178329bd7e81d81c3ad30361e4585dca75b9701f33d5970cfbdabdd7d26",
+    "tests/test_matlab_source_cli.py": "50af2762ac02e4342d4da4b916950d2fdab06538a2da9c0be897297000411644"
+  },
+  "test_log_sha256": "27e6d4b7edd889bbf6fedd48b1c8b7f3daab62797cfce4bafba5cbe32f421cdf",
+  "new_real_image_forwards": 0,
+  "new_training_jobs": 0,
+  "test_partition_evaluation": false,
+  "frozen_3157_8c_changed": false,
+  "public_defaults_changed": false,
+  "matlab_parity_certified": false,
+  "runtime_matlab_required": false
+}

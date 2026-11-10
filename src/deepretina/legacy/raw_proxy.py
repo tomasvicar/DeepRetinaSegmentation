@@ -38,8 +38,8 @@ def predict_raw_av(
     threshold=0.5,
     preprocessing_profile="proxy",
 ):
-    if preprocessing_profile not in {"proxy", "matlab"}:
-        raise ValueError("Choose raw A/V preprocessing_profile=proxy or matlab")
+    if preprocessing_profile not in {"proxy", "matlab", "matlab_source"}:
+        raise ValueError("Choose raw A/V preprocessing_profile=proxy, matlab or matlab_source")
     if preprocessing_profile == "matlab":
         if fov_path is None:
             raise ValueError("--av-raw-matlab requires provided --fov")
@@ -79,6 +79,19 @@ def predict_raw_av(
             raise ValueError(
                 "Calibrated MATLAB AV image is too small for the source CLAHE tile grid"
             )
+    source_prepared = None
+    if preprocessing_profile == "matlab_source":
+        from .matlab_source_auto import prepare_vesclass_matlab_source
+
+        source_prepared = prepare_vesclass_matlab_source(
+            rgb,
+            np.zeros(rgb.shape[:2], bool),
+            dataset=dataset,
+            fov=fov,
+            field_of_view_degrees=field_of_view_degrees,
+            fov_diameter_pixels=fov_diameter_pixels,
+            pixels_per_degree=pixels_per_degree,
+        )
     vessel_metadata = None
     if vessel_mask_path:
         with Image.open(vessel_mask_path) as image:
@@ -117,15 +130,25 @@ def predict_raw_av(
         from .matlab_av import prepare_vesclass_matlab_calibrated
 
         prepare = prepare_vesclass_matlab_calibrated
-    prepared = prepare(
-        rgb,
-        vessel,
-        dataset=dataset,
-        fov=fov,
-        field_of_view_degrees=field_of_view_degrees,
-        fov_diameter_pixels=fov_diameter_pixels,
-        pixels_per_degree=pixels_per_degree,
-    )
+    if source_prepared is None:
+        prepared = prepare(
+            rgb,
+            vessel,
+            dataset=dataset,
+            fov=fov,
+            field_of_view_degrees=field_of_view_degrees,
+            fov_diameter_pixels=fov_diameter_pixels,
+            pixels_per_degree=pixels_per_degree,
+        )
+    else:
+        from dataclasses import replace
+
+        from .matlab_resize import imresize_nearest_mask
+
+        prepared = replace(
+            source_prepared,
+            vessel=imresize_nearest_mask(vessel, source_prepared.image.shape[:2]),
+        )
     paths = predict_legacy(
         checkpoint,
         image_path,

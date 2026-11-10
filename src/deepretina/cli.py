@@ -148,6 +148,11 @@ def parser() -> argparse.ArgumentParser:
         action="store_true",
         help="MATLAB-style AV profile with provided --fov; optional explicit diameter overrides calibration",
     )
+    raw_av_mode.add_argument(
+        "--av-raw-matlab-source",
+        action="store_true",
+        help="Opt-in Python source FOV/photometry profile; optional --fov, numerical parity not certified",
+    )
     predict.add_argument(
         "--vessel-checkpoint", type=Path, help="Override automatic legacy-vessels model for raw A/V"
     )
@@ -289,7 +294,9 @@ def _apply_model(args, checkpoint: Path):
         return apply_unified(args, checkpoint)
     if family in {"legacy_single_net", "legacy_av"}:
         return _apply_legacy(args, checkpoint, family)
-    if args.command == "predict" and (args.av_raw_proxy or args.av_raw_matlab):
+    if args.command == "predict" and (
+        args.av_raw_proxy or args.av_raw_matlab or args.av_raw_matlab_source
+    ):
         raise ValueError("Raw A/V profiles require the original A/V model")
     if args.command == "predict" and args.input is None:
         raise ValueError("--input is required for pilot model prediction")
@@ -329,12 +336,16 @@ def _apply_legacy(args, checkpoint: Path, family: str):
     if args.input is None and args.dicoms is None and args.prepared_array is None:
         raise ValueError("Supply --input, --dicoms, or --prepared-array")
     if args.prepared_array and (
-        args.dicoms or args.prepared or args.av_raw_proxy or args.av_raw_matlab
+        args.dicoms
+        or args.prepared
+        or args.av_raw_proxy
+        or args.av_raw_matlab
+        or args.av_raw_matlab_source
     ):
         raise ValueError("Choose a single prepared A/V input mode")
 
     def one(image_path, output):
-        if args.av_raw_proxy or args.av_raw_matlab:
+        if args.av_raw_proxy or args.av_raw_matlab or args.av_raw_matlab_source:
             if family != "legacy_av" or image_path is None:
                 raise ValueError(
                     "Raw A/V profiles require the original A/V model and a raw RGB input"
@@ -357,7 +368,9 @@ def _apply_legacy(args, checkpoint: Path, family: str):
                 fov_diameter_pixels=args.fov_diameter_pixels,
                 pixels_per_degree=args.pixels_per_degree,
                 threshold=args.threshold,
-                preprocessing_profile="matlab" if args.av_raw_matlab else "proxy",
+                preprocessing_profile="matlab_source"
+                if args.av_raw_matlab_source
+                else ("matlab" if args.av_raw_matlab else "proxy"),
             )
         inputs = None
         if args.prepared_array:

@@ -79,6 +79,7 @@ def apply_unified(args, checkpoint):
         "dicoms",
         "av_raw_proxy",
         "av_raw_matlab",
+        "av_raw_matlab_source",
         "vessel_mask",
         "vessel_checkpoint",
         "vessel_normalized",
