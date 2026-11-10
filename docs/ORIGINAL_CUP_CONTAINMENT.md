@@ -106,6 +106,38 @@ cup counts from the same forwards, log differences from historical cached counts
 separately, and retain the untouched historical references. A new reviewed plan is
 required before continuation.
 
+## Proposed fresh paired continuation — not started
+
+`fresh-paired-continuation-proposal.json` proposes retaining the untouched
+historical reports and comparing **fresh native cup** against **fresh cup AND
+fresh dedicated disc**, generated from the same three forwards per photo.
+Historical-vs-fresh native count differences would be logged separately for cup,
+disc0 and disc1. They would not be accepted as exact reproduction or attributed
+to postprocessing. GT valid support and positive counts, source/annotation identity,
+geometry and source/checkpoint bytes would still be hard exact gates.
+
+The 157 successful b413 prefix records can be reused explicitly: they already
+contain fresh native cup/disc counts and both intersections from the same forwards.
+The proposal pins their byte SHA and aborted-run proof, requires the exact sorted
+157-photo eligible prefix and all original exact/native/subset checks, and records
+which results were reused. A separately reviewed/pinned helper would continue at
+photo158 in a **fresh** output directory. This is reuse of scientific prediction
+counts, not training checkpoint migration. The failed original run stays unchanged.
+
+The remaining455 photos are estimated at59 minutes, approximately68 with margin.
+The proposed continuation bound is80 minutes/CPU2/nice10/2GiB, subject to parent
+review. No continuation, helper execution or full restart has been authorized by
+this proposal or launched.
+
+Fresh-native and clipped composites would each retain all770 photos and copy
+vascular/disc counts and AV accuracy from the corresponding untouched strong
+reference. Only their cup components would be replaced. This keeps the paired
+postprocessing delta limited to cup; fresh standalone disc drift is recorded
+separately. All5 pooled/source-macro metrics, per-source TP removal/FP reduction,
+and historical native drift would be published. The exact old baseline remains
+available alongside the separately labelled fresh native control. No historical
+numeric drift is folded into a claimed cup-postprocessing gain.
+
 ## Reproduction
 
 Use a fresh output directory and the matching frozen dependencies via uv:
