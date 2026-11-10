@@ -197,3 +197,68 @@ def test_v2_cache_requires_explicit_valid_corpus_pin(tmp_path, protocol, profile
     else: protocol["profiles"]["ada"]["cache"] = False
     with pytest.raises(ValueError):
         Coordinator(tmp_path / "db", protocol, profiles, clock=lambda: NOW)
+
+
+class InjectedCrash(RuntimeError):
+    pass
+
+
+def crash_at(coordinator, wanted):
+    def crash(point):
+        if point == wanted:
+            raise InjectedCrash(point)
+    coordinator._transition_point = crash
+
+
+@pytest.mark.parametrize('point', ['issued_journal', 'issued_running', 'issued_origin', 'issued_meta', 'issued_pending'])
+def test_issuance_journal_recovers_real_control_after_each_crash(tmp_path, protocol, profiles, point):
+    path = tmp_path / 'db'
+    with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
+        crash_at(c, point)
+        with pytest.raises(InjectedCrash):
+            c.ask('ada', 'GPU-test')
+        journal = copy.deepcopy(c.study.user_attrs['finite_transition'])
+    with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
+        task = c.ask('ada', 'GPU-test')
+        assert task['trial_number'] == 0 and task['is_control'] is True
+        assert task['lease'] == journal['meta']['lease'] + '-e003'
+        assert c.study.user_attrs['finite_transition'] is None
+        assert len(c._trials()) == 7
+        assert c.ask('ada', 'GPU-test') == task
+        assert c.report(actual(task))['action'] == 'continue'
+
+
+@pytest.mark.parametrize('point', ['reported_journal', 'reported_pending', 'reported_receipt', 'reported_decision'])
+def test_promotion_journal_replays_original_receipt_after_each_crash(tmp_path, protocol, profiles, point):
+    path = tmp_path / 'db'
+    with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
+        task = c.ask('ada', 'GPU-test')
+        result = actual(task)
+        crash_at(c, point)
+        with pytest.raises(InjectedCrash):
+            c.report(result)
+        expected = copy.deepcopy(c.study.user_attrs['finite_transition']['decision'])
+    with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
+        assert c.report(result) == expected
+        assert c.ask('ada', 'GPU-test') == expected['next_task']
+        assert c.study.user_attrs['finite_transition'] is None
+        assert len(c._trials()) == 7
+
+
+@pytest.mark.parametrize('point', ['reported_journal', 'reported_receipt', 'reported_decision', 'reported_told'])
+def test_terminal_journal_recovers_exact_decision_after_each_crash(tmp_path, protocol, profiles, point):
+    path = tmp_path / 'db'
+    with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
+        task = c.ask('ada', 'GPU-test')
+        for _ in range(3):
+            task = c.report(actual(task))['next_task']
+        result = actual(task)
+        crash_at(c, point)
+        with pytest.raises(InjectedCrash):
+            c.report(result)
+        expected = copy.deepcopy(c.study.user_attrs['finite_transition']['decision'])
+    with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
+        assert c.report(result) == expected
+        assert c._trials()[0].state.name == 'COMPLETE'
+        assert c._trials()[0].value == 0.5
+        assert c.study.user_attrs['finite_transition'] is None
