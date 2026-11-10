@@ -41,13 +41,24 @@ repozitáře a ke sdíleným datům v ownCloudu mají i kolegové. Zdrojový ZIP
   Zálohy nových modelů do ownCloudu jsou uživatelem povolené.
 - Dostupné GPU: Ada, Pascal a old. Úlohy rozdělovat mezi subagenty a GPU.
 
-## Aktuální stav při upřesnění cíle
+## Stav k 10. 11. 2026
 
-Migrace 31 datových adaptérů je implementovaná a otestovaná. Dříve vydané tři malé
-modely jsou pouze 30epochové piloty: každý byl učen na jediné databázi. **Nejsou
-finálním novým řešením a nenahrazují původní modely.** Výrok „hotovo“ byl předčasný.
+Na `for_Leipzig` jsou nyní přibalené čtyři původní single_net checkpointy a
+původní A/V v9 model. Převod zachovává váhy i architektury; připnuté referenční
+implementace dávají na zaznamenaných shodných připravených vstupech stejné logity.
+Prošlo 119 testů a kontrola balíčku s osmi checkpointy (pět původních a tři pilotní).
 
-Původní váhy jsou dostupné v ownCloudu; tři subagenti právě portují univerzální
-model, A/V model a jejich přesný preprocessing. Proběhlé pilotní/HPO výsledky
-zůstávají zaznamenané, ale dalšímu vývoji musí předcházet použitelná původní reference.
-Cíl bude splněn až po dokončení obou částí a doloženém porovnání.
+Historická volba raw/normalizovaného vstupu single_net není průkazně doložená.
+Raw A/V Python preprocessing je výslovně označený jako aproximace MATLABu;
+nativní připravený A/V vstup zachovává původní numerický kontrakt. Tyto nejistoty
+nejsou považovány za nově ověřenou kvalitu na skutečných fotografiích.
+
+Migrace 31 datových adaptérů je implementovaná. Dříve vydané malé modely jsou
+pouze 30epochové piloty z jednotlivých databází, nikoli finální náhrada originálů.
+Nový pětivýstupový model prošel krátkou funkční CUDA kontrolou; probíhá příprava
+plného korpusu ze 17 vhodných anotovaných zdrojů a práce na vyhodnocení. Plný
+trénink, optimalizace a doložené porovnání jsou stále nedokončené.
+
+Provozní MetaCentrum poznámky, PBS skripty a evidence testů jsou vedené samostatně
+v soukromém repozitáři `metacentrum-workflows`. Cíl zůstává aktivní, dokud nejsou
+dokončené obě části a doložené jejich porovnání.
