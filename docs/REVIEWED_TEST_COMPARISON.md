@@ -13,7 +13,7 @@ its existing stage1 selection gate and explicit stage2 execution. Neither produc
 nor existing VAL/TEST gate is changed by this helper.
 
 ```bash
-PYTHONPATH=src python scripts/compare_reviewed_test.py \
+uv run python scripts/compare_reviewed_test.py \
   --original-report /reviewed/original-test.json \
   --original-policy /reviewed/original-policy.json \
   --trusted-original-policy-sha256 EXTERNALLY_REVIEWED_POLICY_FILE_SHA256 \

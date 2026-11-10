@@ -20,7 +20,7 @@ Separately, the coordinator decision must bind the canonical JSON receipt digest
 this digest can differ from the original pretty-printed receipt file hash.
 
 ```bash
-PYTHONPATH=src python scripts/adapt_pool_completion_qa.py \
+uv run python scripts/adapt_pool_completion_qa.py \
   --receipt /reviewed/e060-receipt.json \
   --trusted-receipt-sha256 ORIGINAL_RECEIPT_BYTES_SHA256 \
   --task /reviewed/e060-task.json \
