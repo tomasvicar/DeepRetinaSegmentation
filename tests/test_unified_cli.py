@@ -12,6 +12,7 @@ import torch
 from PIL import Image
 
 from deepretina.cli import main
+from deepretina.derived_cache import build_cache
 from deepretina.integrity import prepared_content_fingerprint
 from deepretina.unified import UnifiedConfig
 
@@ -540,3 +541,89 @@ def test_prediction_hash_and_weights_use_same_snapshot_when_checkpoint_path_repl
     assert hashlib.sha256(checkpoint.read_bytes()).hexdigest() != expected_sha
     with np.load(before["probabilities"]) as a, np.load(after["probabilities"]) as b:
         np.testing.assert_array_equal(a["probability"], b["probability"])
+
+
+def test_public_cached_training_matches_canonical_and_resumes_after_cache_relocation(
+    tmp_path, capsys
+):
+    manifest, pin = corpus(tmp_path / "canonical")
+    report = build_cache(manifest, tmp_path / "cache")
+    settings = tmp_path / "config.json"
+    write_config(settings, tiny_config())
+    common = [
+        "train-unified",
+        "--manifest",
+        str(manifest),
+        "--config",
+        str(settings),
+        "--expected-content-sha256",
+        pin,
+        "--device",
+        "cpu",
+    ]
+    main(common + ["--output", str(tmp_path / "uncached")])
+    capsys.readouterr()
+    main(
+        common
+        + [
+            "--output",
+            str(tmp_path / "cached"),
+            "--stop-after-epoch",
+            "1",
+            "--derived-cache",
+            report["root"],
+            "--expected-cache-fingerprint",
+            report["cache_fingerprint"],
+        ]
+    )
+    capsys.readouterr()
+    moved = tmp_path / "relocated-cache"
+    shutil.move(report["root"], moved)
+    checkpoint = tmp_path / "cached/last.pt"
+    # The checkpoint restores both content pins; the runtime path is explicit.
+    main(
+        [
+            "train-unified",
+            "--manifest",
+            str(manifest),
+            "--output",
+            str(tmp_path / "cached"),
+            "--resume",
+            str(checkpoint),
+            "--derived-cache",
+            str(moved),
+            "--device",
+            "cpu",
+        ]
+    )
+    capsys.readouterr()
+    canonical = torch.load(tmp_path / "uncached/last.pt", weights_only=True)
+    cached = torch.load(checkpoint, weights_only=True)
+    assert cached["epoch"] == 2
+    assert cached["derived_cache"]["fingerprint"] == report["cache_fingerprint"]
+    assert str(moved) not in json.dumps(cached["config"])
+    for key, value in canonical["state_dict"].items():
+        assert torch.equal(value, cached["state_dict"][key])
+
+
+def test_public_cache_requires_external_pins_without_creating_output(tmp_path):
+    manifest, pin = corpus(tmp_path / "canonical")
+    report = build_cache(manifest, tmp_path / "cache")
+    output = tmp_path / "output"
+    with pytest.raises(SystemExit) as exc:
+        main(
+            [
+                "train-unified",
+                "--manifest",
+                str(manifest),
+                "--output",
+                str(output),
+                "--expected-content-sha256",
+                pin,
+                "--derived-cache",
+                report["root"],
+                "--device",
+                "cpu",
+            ]
+        )
+    assert exc.value.code == 2 and not output.exists()

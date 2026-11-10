@@ -83,6 +83,12 @@ def parser() -> argparse.ArgumentParser:
     joint.add_argument("--device")
     joint.add_argument("--stop-after-epoch", type=int)
     joint.add_argument("--expected-content-sha256", help="Optional externally pinned corpus hash")
+    joint.add_argument(
+        "--derived-cache", type=Path, help="Explicit verified train/val cache directory"
+    )
+    joint.add_argument(
+        "--expected-cache-fingerprint", help="Externally pinned derived cache identity"
+    )
     joint.add_argument("--purpose", choices=["functionality", "full_data"])
     for name in ("epochs", "epoch_samples", "max_steps"):
         joint.add_argument("--" + name.replace("_", "-"), type=int)

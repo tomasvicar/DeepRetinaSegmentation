@@ -70,7 +70,30 @@ fails. No automatic cache discovery, old-plan migration or relaxed source guard 
 provided. Inference checkpoints contain cache identity as provenance, not a path
 needed for prediction.
 
+The public experimental training CLI accepts the same explicit pins:
+
+```bash
+uv run deepretina train-unified --manifest data/unified25/manifest.json \
+  --purpose full_data --epochs 60 --epoch-samples 8192 \
+  --expected-content-sha256 CANONICAL_FP \
+  --derived-cache /path/to/CANONICAL_FP/v1-train-val \
+  --expected-cache-fingerprint CACHE_FP --output runs/new-cached-run \
+  --stop-after-epoch 1
+uv run deepretina train-unified --manifest data/unified25/manifest.json \
+  --resume runs/new-cached-run/last.pt --output runs/new-cached-run \
+  --derived-cache /relocated/path/to/CANONICAL_FP/v1-train-val
+```
+
+For full-data model selection, put the reviewed hyperparameters and
+`selection_metric = "macro_dataset_mean_dice"` in a flat TOML/JSON `--config`.
+On resume, the checkpoint supplies both trusted pins; the relocated runtime cache
+path is still explicit. A fresh cached run requires both external pins. Exact
+public CLI tests compare canonical training with cached training resumed after
+cache relocation, including all saved model weights.
+
 CPU throughput measurements belong in `reports/unified/derived-cache/`; they do
 not establish GPU epoch acceleration or model-quality improvement. A complete cache
-build is deliberately deferred until the 64-photo tensor/RNG/workers gate and
-capacity estimate have been reviewed.
+build followed the 64-photo tensor/RNG/workers gate and capacity review. The
+verified complete train/val cache contains 2991 photos and 6274 annotation variants,
+uses 8.17GB allocated disk and took 4m34s to build on Ada. Its exact pins and
+resource observations are in [HANDOFF_DERIVED_CACHE.md](HANDOFF_DERIVED_CACHE.md).

@@ -27,6 +27,7 @@ from .unified import (
 def train_from_args(args):
     settings = {}
     content_pin = args.expected_content_sha256
+    cache_pin = args.expected_cache_fingerprint
     if args.resume:
         saved = torch.load(args.resume, map_location="cpu", weights_only=True)
         if saved.get("family") != "unified" or "training_state" not in saved:
@@ -34,6 +35,8 @@ def train_from_args(args):
         settings.update(saved["config"])
         if content_pin is None:
             content_pin = saved.get("prepared_content_sha256")
+        if cache_pin is None and saved.get("derived_cache"):
+            cache_pin = saved["derived_cache"]["fingerprint"]
     if args.config:
         data = (
             json.loads(args.config.read_text())
@@ -60,6 +63,8 @@ def train_from_args(args):
             resume=args.resume,
             stop_after_epoch=args.stop_after_epoch,
             expected_content_sha256=content_pin,
+            derived_cache_root=args.derived_cache,
+            expected_cache_fingerprint=cache_pin,
         )
     return {"checkpoint": str(path), "purpose": config.purpose, "experimental": True}
 
