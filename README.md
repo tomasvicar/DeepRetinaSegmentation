@@ -167,6 +167,10 @@ cup, using partial labels and all suitable annotated sources. New full-data mode
 selection is still in progress; the bundled original models remain available.
 See the [complete unified quickstart](docs/UNIFIED_QUICKSTART.md) for canonical
 data preparation, patient/photograph split audit, training, resume and prediction.
+A colleague can rebuild all 21 training sources directly from shared RAW archives with
+`scripts/prepare_training_data.py`; no author-prepared parent is needed. See the
+[retraining scope](docs/RETRAINING.md) for the original-topology option and native
+architecture limitations.
 The public entry point is `uv run deepretina train-unified`; a starting preset is
 `configs/unified.toml`. Validate a checkpoint with `deepretina evaluate --split val`
 and predict with `deepretina predict --checkpoint ...`. Experimental unified

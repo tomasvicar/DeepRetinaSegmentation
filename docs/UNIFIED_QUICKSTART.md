@@ -28,35 +28,58 @@ source-macro Dice0.800123. It has **no held-out TEST results yet**; HPO and meas
 comparison continue. [Training CSV and terminal QA](../reports/release/control60-baseline/)
 document provenance. Original models and their aliases remain available.
 
-## Prepare the full suitable annotated corpus
+## Prepare all 21 annotated training sources from RAW
+
+A colleague needs this repository and the shared `fundus_databases` directory.
+No author-prepared corpus, old HDF5, or pretraining database is required. From the
+repository root, choose **two new sibling output directories**:
 
 ```bash
-uv run python scripts/prepare_unified_data.py \
-  --data-root /path/to/ownCloud/fundus_databases --output data/unified25
-uv run python scripts/prepare_unified_data.py \
-  --data-root /path/to/ownCloud/fundus_databases --output data/unified25 \
-  --regroup-patients --train-only-datasets riga uoadr
-uv run python scripts/prepare_unified_data.py \
-  --output data/unified25 --audit-existing
-uv run python -m deepretina.unified inspect data/unified25/manifest.json
+uv run python scripts/prepare_training_data.py \
+  --data-root /path/to/ownCloud/fundus_databases \
+  --parent-output data/rebuilt-parent17 \
+  --output data/rebuilt-training21 \
+  --biomisa-label-policy named_cup_is_disc_named_disc_is_cup
+uv run python -m deepretina.unified inspect data/rebuilt-training21/manifest.json
 ```
 
-The default preparation includes17 suitable supervised sources and preserves the
-original physical25-pixel/degree raw geometry, without a modern maximum-size cap.
-The metadata regrouping step checks known G1020 patients, ARIA identity prefixes
-and shared photograph aliases before training. RIGA and UoA-DR stay train-only
-without a verified patient crosswalk. Opaque source IDs are not proof of patient
-independence. Read [data rules](UNIFIED_DATA.md) and the
-[patient split audit](PATIENT_SPLIT_AUDIT.md). A `--limit` preparation is a marked
-preview and is rejected for full-data training. Exact inventories may vary with
-archive versions; retain the generated inventory and integrity reports.
+The command prepares all 17 base sources, repairs known patient identities,
+keeps RIGA/UoA-DR training-only, audits the actual new parent, and appends DRIONS,
+GAMMA, IDRiD disc, and the explicitly corrected BIOMISA export. It preserves the
+new parent's holdouts and official IDRiD TEST membership. TEST labels undergo
+mechanical conversion; this command performs no model evaluation.
+
+Keep the supplied RAW archive names/layout (including the extracted RIGA
+folder). See [source inventory](DATASETS.md) and
+[native additions](CORPUS_V2_PREPARATION.md). The reviewed nominal-camera policy
+is bundled and checked by SHA256. DRIONS, GAMMA and BIOMISA angles include
+documented assumptions; this is research calibration, not a measured acquisition
+angle for every photograph.
+
+The intermediate parent remains available for diagnosis and occupies additional
+space. On Linux, the append step uses GNU `cp --reflink=auto`; without CoW it
+makes an independent ordinary copy. Budget roughly 10 GB of output space plus
+RAW archives and the uv environment. CPU preparation may take hours, especially
+RIGA. Interrupted/failed builds are not resumed or overwritten: inspect the
+error, retain the failed artifacts if needed, and choose new output paths.
+
+`raw-workflow.json`, `integrity.json`, `composition.json`, and
+`parent-preservation.json` record actual identities and support counts.
+Archive versions, software versions and source changes can change the output.
+**This workflow does not promise historical corpus fingerprints or counts.**
+The historical verified V2 had 2,529 training photos across 21 sources; inspect
+your own generated manifest and its per-head support before training.
+
+The older 17-source-only workflow and the guarded historical append procedure
+remain documented in [UNIFIED_DATA.md](UNIFIED_DATA.md) and
+[CORPUS_V2_PREPARATION.md](CORPUS_V2_PREPARATION.md).
 
 ## Train, check the first epoch, then resume
 
 ```bash
-uv run deepretina train-unified --manifest data/unified25/manifest.json \
+uv run deepretina train-unified --manifest data/rebuilt-training21/manifest.json \
   --config configs/unified.toml --output runs/unified --stop-after-epoch 1
-uv run deepretina train-unified --manifest data/unified25/manifest.json \
+uv run deepretina train-unified --manifest data/rebuilt-training21/manifest.json \
   --output runs/unified --resume runs/unified/last.pt
 ```
 
@@ -64,7 +87,7 @@ The preset is a reproducible starting point, not a selected optimum. It keeps a
 60-epoch cosine horizon even when an invocation stops after one epoch. Check
 `coverage.json`, `validation.json` and `metrics.csv` before continuing. Every
 training photo must contribute a supervised crop in a full epoch, followed by
-source/task-balanced extra crops. The8192-sample preset fits the current2221-photo
+source/task-balanced extra crops. The8192-sample preset covers the historical2,529-photo V2
 training corpus; increase `epoch_samples` to at least the number of eligible
 photos for a larger corpus. One epoch need not select every alternative observer.
 
@@ -75,11 +98,17 @@ code checkout used for training until it finishes; use another checkout for code
 updates. `--device cpu` is available; GPU time varies considerably by hardware.
 `--max-steps` is a functionality check and is not a complete training budget.
 
+For the original universal backbone topology trained from scratch, use
+`configs/unified_legacy_topology.toml` with a new run directory. This is a
+five-output extension using the modern objective, not a replay of the historical
+three-output training. Native single-net and four-input VesClass retraining are
+not yet exposed. See the explicit [retraining scope](RETRAINING.md).
+
 ## Validate and predict
 
 ```bash
 uv run deepretina evaluate --checkpoint runs/unified/best.pt \
-  --manifest data/unified25/manifest.json --split val \
+  --manifest data/rebuilt-training21/manifest.json --split val \
   --output runs/unified/validation-selected.json
 uv run deepretina predict --checkpoint runs/unified/best.pt \
   --input /path/to/fundus.jpg --dataset drive --fov /path/to/fov.png \

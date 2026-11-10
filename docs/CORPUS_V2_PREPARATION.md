@@ -68,3 +68,20 @@ explicit in metadata. A conflicting requested angle fails before annotation
 emission rather than pretending the new angle was applied. Copies of read-only
 parent directories become owner-writable only inside the independent child.
 The original parent and the completed00d9… artifact are not rewritten or migrated.
+
+## Rebuild without the authors' frozen parent
+
+The command above is a historical append/review route. Its default expected
+parent is fingerprint `61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e`;
+it cannot consume an arbitrary newly generated parent under that identity.
+For a colleague with only RAW archives, use the complete
+[RAW-to-training workflow](UNIFIED_QUICKSTART.md#prepare-all-21-annotated-training-sources-from-raw).
+It builds and audits a new 17-source parent, then explicitly passes its actual
+content fingerprint to the append API. It makes no historical byte-reproduction
+claim and does not need the original prepared directories.
+
+For a separately audited existing parent, the append CLI also accepts
+`--expected-parent-fingerprint SHA256`. Obtain that value from a successful
+`prepare_unified_data.py --output PATH --audit-existing` run; passing an unverified
+or historical fingerprint does not bypass the content check. Both routes retain
+independent parent copies and preserve the selected parent's partitions exactly.
