@@ -56,7 +56,16 @@ def _counts(value):
     return np.asarray(numbers, dtype=np.int64)
 
 
-def compare_reports(reference_path, candidate_path, manifest_path, *, repeats=2000, seed=42):
+def compare_reports(
+    reference_path,
+    candidate_path,
+    manifest_path,
+    *,
+    repeats=2000,
+    seed=42,
+    include_sources=False,
+    include_av=False,
+):
     """Compare identical photo/GT support with source-stratified group bootstrap.
 
     Split groups preserve recoverable patient and photograph aliases. Groups with
@@ -131,7 +140,12 @@ def compare_reports(reference_path, candidate_path, manifest_path, *, repeats=20
     group_ids = sorted(groups)
     grouped = np.zeros((2, len(group_ids), len(sources), 5, 3), dtype=np.int64)
     totals = np.zeros((2, 5, 4), dtype=np.int64)
+    av_grouped = (
+        np.zeros((2, len(group_ids), len(sources), 4), dtype=np.int64) if include_av else None
+    )
     strata = defaultdict(list)
+    source_totals = np.zeros((2, len(sources), 5, 4), dtype=np.int64)
+    source_support = defaultdict(lambda: {"photos": set(), "groups": set()})
     for group_index, group_id in enumerate(group_ids):
         signature = tuple(
             sorted({aligned[0][photo_id]["dataset"] for photo_id in groups[group_id]})
@@ -147,6 +161,44 @@ def compare_reports(reference_path, candidate_path, manifest_path, *, repeats=20
                 or left["dataset"] != right["dataset"]
             ):
                 raise ValueError("Paired source attribution differs")
+            if include_av:
+                av_pair = []
+                for entry in (left, right):
+                    a, v = [_counts(entry["channels"][name]) for name in ("artery", "vein")]
+                    eligible = int(a[0] + a[2] + v[0] + v[2])
+                    raw = entry.get("av_conditional_counts", {})
+                    values = [
+                        raw.get(k, 0)
+                        for k in (
+                            "correct",
+                            "scored_pixels",
+                            "eligible_pixels",
+                            "end_to_end_correct",
+                        )
+                    ]
+                    if any(type(value) is not int or value < 0 for value in values):
+                        raise ValueError("Invalid conditional AV integer counts")
+                    correct, scored, known, end = values
+                    if (
+                        known != eligible
+                        or not 0 <= end <= correct <= scored <= known
+                        or end != int(a[0] + v[0])
+                        or correct > known - int(a[1] + v[1])
+                        or a[0] + v[1] > a[0] + a[2]
+                        or v[0] + a[1] > v[0] + v[2]
+                    ):
+                        raise ValueError(
+                            "Conditional AV counts contradict exclusive decoder/GT support"
+                        )
+                    av_pair.append(values)
+                if av_pair[0][1:3] != av_pair[1][1:3]:
+                    raise ValueError("Paired AV scored/eligible GT domains differ")
+                if av_pair[0][2]:
+                    source = left["channel_datasets"].get("artery")
+                    if source is None or source != left["channel_datasets"].get("vein"):
+                        raise ValueError("AV conditional source attribution differs")
+                    for model in range(2):
+                        av_grouped[model, group_index, source_indices[source]] += av_pair[model]
             for channel, name in enumerate(CHANNELS):
                 counts = [_counts(entry["channels"][name]) for entry in (left, right)]
                 totals[:, channel] += counts
@@ -162,7 +214,25 @@ def compare_reports(reference_path, candidate_path, manifest_path, *, repeats=20
                             "Supported output is missing annotation source attribution"
                         )
                     continue
+                if include_sources and counts[0][3]:
+                    source_support[source, name]["photos"].add(photo_id)
+                    source_support[source, name]["groups"].add(group_id)
+                    compatible = {
+                        "vessel": {"vessels", "av"},
+                        "artery": {"av"},
+                        "vein": {"av"},
+                        "disc": {"disc_cup"},
+                        "cup": {"disc_cup"},
+                    }
+                    if not any(
+                        row["dataset"] == source and row["task"] in compatible[name]
+                        for row in metadata[photo_id]
+                    ):
+                        raise ValueError(
+                            "Source/head attribution is not eligible for this manifest photo"
+                        )
                 for model in range(2):
+                    source_totals[model, source_indices[source], channel] += counts[model]
                     grouped[model, group_index, source_indices[source], channel] += counts[model][
                         :3
                     ]
@@ -181,14 +251,42 @@ def compare_reports(reference_path, candidate_path, manifest_path, *, repeats=20
             for channel, name in enumerate(CHANNELS):
                 if not np.array_equal(_counts(report["channels"][name]), totals[model, channel]):
                     raise ValueError("Reported pooled counts disagree with per-photo counts")
+    source_differences = (
+        np.empty((repeats, len(sources), 5), dtype=np.float64) if include_sources else None
+    )
+    av_differences = (
+        np.empty((repeats, len(sources) + 1, 2), dtype=np.float64) if include_av else None
+    )
+
+    def av_rates(counts):
+        merged = np.concatenate([counts.sum(axis=1, keepdims=True), counts], axis=1)
+        numerator = merged[..., [0, 3]].astype(np.float64)
+        denominator = merged[..., [1, 2]]
+        return np.divide(
+            numerator, denominator, out=np.full(numerator.shape, np.nan), where=denominator != 0
+        )
+
     rng = np.random.default_rng(seed)
     differences = np.empty((repeats, 11), dtype=np.float64)
     for repeat in range(repeats):
         draw = np.concatenate(
             [rng.choice(indices, size=len(indices), replace=True) for indices in strata.values()]
         )
-        score = _score(grouped[:, draw].sum(axis=1))
+        drawn = grouped[:, draw].sum(axis=1)
+        score = _score(drawn)
         differences[repeat] = score[1] - score[0]
+        if include_av:
+            rates = av_rates(av_grouped[:, draw].sum(axis=1))
+            av_differences[repeat] = rates[1] - rates[0]
+        if include_sources:
+            denominator = 2 * drawn[..., 0] + drawn[..., 1] + drawn[..., 2]
+            dice = np.divide(
+                2 * drawn[..., 0],
+                denominator,
+                out=np.full(denominator.shape, np.nan),
+                where=denominator != 0,
+            )
+            source_differences[repeat] = dice[1] - dice[0]
 
     def result(index):
         values = differences[:, index]
@@ -205,7 +303,7 @@ def compare_reports(reference_path, candidate_path, manifest_path, *, repeats=20
             "defined_bootstrap_draws": len(values),
         }
 
-    return {
+    report = {
         "schema_version": 1,
         "comparison_code_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "split": split,
@@ -231,10 +329,123 @@ def compare_reports(reference_path, candidate_path, manifest_path, *, repeats=20
         "independent_quality_improvement_claim": False,
         "qualifications": [
             "Validation results used for tuning are exploratory, including their confidence intervals",
-            "Historical original-model exposure and raw MATLAB proxy limitations remain unresolved",
+            "Historical original-model exposure and documented preprocessing/backend differences remain qualifications",
             "Split groups preserve known patients/aliases; opaque patient IDs are not proven independent",
             "Identical input hashes and valid/positive counts support pairing; this script does not rerun mask inference",
             "Percentile intervals are conditional on these checkpoints and do not measure training-seed uncertainty",
             "Aggregate gains cannot establish improvement of each individual task",
         ],
     }
+
+    if include_sources:
+
+        def details(counts):
+            tp, fp, fn, valid = map(int, counts)
+
+            def ratio(numerator, denominator):
+                return numerator / denominator if denominator else None
+
+            return {
+                "tp": tp,
+                "fp": fp,
+                "fn": fn,
+                "valid_pixels": valid,
+                "dice": ratio(2 * tp, 2 * tp + fp + fn),
+                "iou": ratio(tp, tp + fp + fn),
+                "precision": ratio(tp, tp + fp),
+                "recall": ratio(tp, tp + fn),
+            }
+
+        report["by_dataset"] = {}
+        for si, source in enumerate(sources):
+            channels = {}
+            for ci, name in enumerate(CHANNELS):
+                left, right = [details(source_totals[model, si, ci]) for model in range(2)]
+                values = source_differences[:, si, ci]
+                values = values[np.isfinite(values)]
+                support = source_support[source, name]
+                channels[name] = {
+                    "reference": left,
+                    "candidate": right,
+                    "candidate_minus_reference": {
+                        key: right[key] - left[key]
+                        if left[key] is not None and right[key] is not None
+                        else None
+                        for key in left
+                    },
+                    "paired_dice_percentile_95ci": np.quantile(values, [0.025, 0.975]).tolist()
+                    if len(values)
+                    else None,
+                    "defined_bootstrap_draws": len(values),
+                    "supported_photos": len(support["photos"]),
+                    "supported_split_groups": len(support["groups"]),
+                }
+            report["by_dataset"][source] = channels
+        report["pooled_counts"] = {}
+        for ci, name in enumerate(CHANNELS):
+            left, right = [details(totals[model, ci]) for model in range(2)]
+            report["pooled_counts"][name] = {
+                "reference": left,
+                "candidate": right,
+                "candidate_minus_reference": {
+                    key: right[key] - left[key]
+                    if left[key] is not None and right[key] is not None
+                    else None
+                    for key in left
+                },
+            }
+        report["source_intervals_qualification"] = (
+            "Same paired source-stratified split-group draws as primary metric; descriptive simultaneous collection, no multiplicity correction or unknown-patient independence claim"
+        )
+    if include_av:
+        counts = av_grouped.sum(axis=1)
+        rates = av_rates(counts)
+
+        def av_result(source_index):
+            values = {}
+            for metric_index, name in enumerate(("conditional_accuracy", "end_to_end_accuracy")):
+                finite = av_differences[:, source_index, metric_index]
+                finite = finite[np.isfinite(finite)]
+                point = rates[:, source_index, metric_index]
+                values[name] = {
+                    "reference": float(point[0]) if np.isfinite(point[0]) else None,
+                    "candidate": float(point[1]) if np.isfinite(point[1]) else None,
+                    "candidate_minus_reference": float(point[1] - point[0])
+                    if np.isfinite(point).all()
+                    else None,
+                    "paired_percentile_95ci": np.quantile(finite, [0.025, 0.975]).tolist()
+                    if len(finite)
+                    else None,
+                    "defined_bootstrap_draws": len(finite),
+                }
+            pooled = counts.sum(axis=1) if source_index == 0 else counts[:, source_index - 1]
+            values["counts"] = {
+                name: dict(
+                    zip(
+                        ("correct", "scored_pixels", "eligible_pixels", "end_to_end_correct"),
+                        map(int, pooled[model]),
+                        strict=True,
+                    )
+                )
+                for model, name in enumerate(("reference", "candidate"))
+            }
+            return values
+
+        report["av_accuracy"] = {
+            **av_result(0),
+            "by_dataset": {source: av_result(index + 1) for index, source in enumerate(sources)},
+        }
+        for model, original in enumerate(reports):
+            for metric_index, keys in enumerate(
+                (("av_conditional_accuracy",), ("av_end_to_end_accuracy", "av_accuracy"))
+            ):
+                for key in keys:
+                    if (
+                        key in original
+                        and original[key] is not None
+                        and not np.isclose(
+                            original[key], rates[model, 0, metric_index], rtol=0, atol=1e-12
+                        )
+                    ):
+                        raise ValueError("Declared AV accuracy contradicts paired per-photo counts")
+    return report

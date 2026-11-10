@@ -1,0 +1,33 @@
+{
+  "returncode": 0,
+  "phase": "final_metadata_only_execution",
+  "command": [
+    "nice",
+    "-n",
+    "10",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python",
+    "-"
+  ],
+  "pythonpath": "src",
+  "driver": "CPU-affinity1 stdin calls compare_completed_val.compare twice with savedJSON+manifestmetadata; producerCLI reproduced in README",
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "details": {
+    "status": "PASS",
+    "seconds": 4.4615722459275275,
+    "location": "Pascal bounded metadata-only CPU1/nice10; no inference",
+    "affinity": [
+      11
+    ],
+    "torch_imported": false,
+    "draws": 2000,
+    "seed": 42,
+    "GT_or_image_or_checkpoint_files_opened": false,
+    "comparison_code_sha256": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e",
+    "producer_code_sha256": "c207e83bbe71eddf4a35cc308a03b14247989714f79b22ee9b4e17ed4b61bd43"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "ada",
+    "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 nice -n 10 /var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python -"
+  ],
+  "bootstrap_sha256": "aa03276e40ce737b8c9182f901eb34c217c52701106441b85497b6d1a024f524",
+  "returncode": 1,
+  "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 11, in <module>\n  File \"/tmp/paired-counts-2gys4igh/scripts/compare_completed_val.py\", line 93, in compare\nValueError: Require completed strongest calibrated disc0/cup-clipped VAL reference\n",
+  "qualification": "Prepublication family-guard diagnostic: real completed report uses optional_fresh_paired_cup_experiment; corrected before final accepted analysis. No model/GT/forward or produced result from this failed guard pass."
+}
