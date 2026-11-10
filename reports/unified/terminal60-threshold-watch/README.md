@@ -63,3 +63,26 @@ with E56 completed, macro0.800123; no actual terminal QA or GPU VAL was started.
 Live files are `~/code/DeepRetinaSegmentation_terminal60_watch_20261110/watcher.log`
 and `result/events.jsonl`. The existing cup continuation PID1303824 is independent
 and is neither restarted nor signalled by this watcher.
+
+## Actual terminal outcome
+
+Training terminated normally. The watcher observed this at19:18:30 UTC and the
+reviewed terminal verifier passed at19:18:33 UTC. All122880 optimizer steps,
+491520 delivered samples,2221 photos/minimum60 visits, finite states, scheduler60,
+CSV selection and source/data/cache pins passed. Best is **epoch56**, score
+0.8001230874055754. Independent best SHA is
+`bfe957460dfed168f2344b1b84ef99b7f502e9dbc8ce1fd4d68632c3234708b1`;
+last60 SHA is `60f6d66845a0f453d78b50679815a1123a874a2725fd3897b0eb62fa09d77796`.
+`e060-verified.json` has SHA
+`f4ebab64f77fc574a112bcd487950cfd8d7df4c3f607363010e3bfa722cfcf20`.
+Milestone copies were made0444, directory0555. No original checkpoint changed.
+
+At19:18:34 the controller stopped before **any** GPU forward: the GPU safety query
+listed the established desktop's GNOME remote desktop/portal, terminal, file
+manager and Chrome as C+G contexts. The initial guard treated every entry from
+`query-compute-apps` as blocking. The full process table confirms these are the
+known desktop clients; no Python/MATLAB/ML task remains, with observed idle1–4%
+GPU/912MiB. No process was killed and no automatic retry occurred. Source8c and
+actual locked dependency checks had already passed. A separately reviewed narrow
+desktop-context classification is needed before continuing the authorized six
+VAL calls; the E60 QA/milestone must not be repeated or overwritten.
