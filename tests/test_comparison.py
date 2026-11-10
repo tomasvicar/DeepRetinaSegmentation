@@ -133,6 +133,7 @@ def test_no_supported_output_has_explicitly_undefined_scores(tmp_path):
     paths = fixture_reports(tmp_path)
     for path in paths[:2]:
         obj = json.loads(path.read_text())
+        obj["macro_dataset_mean_dice"] = None
         for row in obj["per_photo"]:
             row["channel_datasets"] = {}
             row["channels"] = {
@@ -143,3 +144,33 @@ def test_no_supported_output_has_explicitly_undefined_scores(tmp_path):
     assert result["macro_dataset_mean_dice"]["candidate_minus_reference"] is None
     assert result["macro_dataset_mean_dice"]["paired_percentile_95ci"] is None
     assert result["macro_dataset_mean_dice"]["defined_bootstrap_draws"] == 0
+
+
+def test_two_eyes_of_one_patient_are_resampled_together(tmp_path):
+    paths = fixture_reports(tmp_path)
+    rows = json.loads(paths[2].read_text())
+    for row in rows:
+        row["dataset"] = "a"
+    paths[2].write_text(json.dumps(rows))
+    digest = hashlib.sha256(paths[2].read_bytes()).hexdigest()
+    for model, path in enumerate(paths[:2]):
+        obj = json.loads(path.read_text())
+        obj["manifest_sha256"] = digest
+        for index, photo in enumerate(obj["per_photo"]):
+            photo["dataset"] = "a"
+            photo["channel_datasets"] = dict.fromkeys(CHANNELS, "a")
+            tp = [10, 10, 0, 5][index] if model else 5
+            photo["channels"]["vessel"] = {
+                "tp": tp,
+                "fp": 10 - tp,
+                "fn": 10 - tp,
+                "valid_pixels": 20,
+            }
+        path.write_text(json.dumps(obj))
+    report = compare_reports(*paths, repeats=2000, seed=42)
+    # Three patient draws have probability1/27 of all-positive/all-negative
+    # patients: both tails exceed2.5%. Four independent photo draws would give
+    # only1/256 probability of all-negative photos and a different lower bound.
+    assert report["channels"]["vessel"]["pooled_dice"]["paired_percentile_95ci"] == pytest.approx(
+        [-0.5, 0.5]
+    )
