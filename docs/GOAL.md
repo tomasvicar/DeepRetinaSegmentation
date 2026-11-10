@@ -41,6 +41,17 @@ repozitáře a ke sdíleným datům v ownCloudu mají i kolegové. Zdrojový ZIP
   Zálohy nových modelů do ownCloudu jsou uživatelem povolené.
 - Dostupné GPU: Ada, Pascal a old. Úlohy rozdělovat mezi subagenty a GPU.
 
+## Rozsah korpusu: aktualizace 10. 11. 2026,21:02UTC
+
+Širší kontrola archivů našla dosud nezaregistrované DRIONS-DB (110 fotografií,
+220 expertních obrysů disku) a GAMMA (100 trénovacích fundus fotografií/masek
+disk/cup). Plný dokončený baseline i noční HPO jsou na **korpusu v1 se17 zdroji**,
+nikoli na všech potenciálně použitelných anotovaných archivech. Tato hranice
+je nyní explicitně zaznamenaná i v katalogu modelů. Adaptéry, geometrie,
+patient/photo kontrola a korpusv2 se připravují odděleně; běžící zdroje/data se
+nepřepisují. Cíl všech vhodných dostupných trénovacích dat proto vyžaduje také
+dokončení této širší kontroly a následné doplnění finálního tréninku.
+
 ## Aktualizace 10. 11. 2026, večer
 
 `for_Leipzig` nyní obsahuje vedle pěti původních modelů a tří označených pilotů
