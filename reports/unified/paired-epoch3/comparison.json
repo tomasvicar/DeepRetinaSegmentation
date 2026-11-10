@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "split": "val",
+  "photos": 770,
+  "split_groups": 612,
+  "strata": {
+    "refuge": 400,
+    "g1020": 86,
+    "avrdb": 20,
+    "rimone": 32,
+    "onhsd": 9,
+    "aria": 16,
+    "erlangen": 11,
+    "drhagis": 8,
+    "stare": 4,
+    "drive": 4,
+    "iostar": 6,
+    "drishti": 10,
+    "hrf": 3,
+    "chasedb1": 3
+  },
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "reference_report_sha256": "be51ebd051621be9fbe3cd7aa47837fcd464971da898bbb97dc943bfc052a93e",
+  "candidate_report_sha256": "415bf60e52f82ba9eb603b3eae7e49c89e9bdc3fae4dddb91d9d00eb0bb04012",
+  "reference_checkpoint_sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+  "candidate_checkpoint_sha256": "858a0eab3ec2c6b3a3b3b2344f0fe1b53eff49d8138e30465d5ff5b18f23c21d",
+  "bootstrap": {
+    "draws": 2000,
+    "seed": 42,
+    "unit": "reviewed split_group_id",
+    "stratification": "signature of canonical datasets in the whole group"
+  },
+  "macro_dataset_mean_dice": {
+    "reference": 0.6103511509435944,
+    "candidate": 0.6410927363768916,
+    "candidate_minus_reference": 0.03074158543329719,
+    "paired_percentile_95ci": [
+      0.01355406895019973,
+      0.04510231434752463
+    ],
+    "defined_bootstrap_draws": 2000
+  },
+  "channels": {
+    "vessel": {
+      "pooled_dice": {
+        "reference": 0.7701233997938133,
+        "candidate": 0.689615186586376,
+        "candidate_minus_reference": -0.08050821320743728,
+        "paired_percentile_95ci": [
+          -0.09436232265455828,
+          -0.06827030402110017
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.786656606945927,
+        "candidate": 0.7141749315794059,
+        "candidate_minus_reference": -0.07248167536652106,
+        "paired_percentile_95ci": [
+          -0.08246408584694771,
+          -0.06453095545723622
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "artery": {
+      "pooled_dice": {
+        "reference": 0.6508632158631901,
+        "candidate": 0.42943625069791935,
+        "candidate_minus_reference": -0.22142696516527072,
+        "paired_percentile_95ci": [
+          -0.24364220595447736,
+          -0.19947288067469304
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.6469199492175649,
+        "candidate": 0.4259727719128847,
+        "candidate_minus_reference": -0.22094717730468022,
+        "paired_percentile_95ci": [
+          -0.2486660960246633,
+          -0.1956196147824409
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "vein": {
+      "pooled_dice": {
+        "reference": 0.664795166440944,
+        "candidate": 0.5975831855250155,
+        "candidate_minus_reference": -0.0672119809159285,
+        "paired_percentile_95ci": [
+          -0.08185743299625124,
+          -0.05324390512838866
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.6632648825435925,
+        "candidate": 0.589172985205416,
+        "candidate_minus_reference": -0.07409189733817645,
+        "paired_percentile_95ci": [
+          -0.12571250662712813,
+          -0.05624853367895034
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "disc": {
+      "pooled_dice": {
+        "reference": 0.8071550141063151,
+        "candidate": 0.8422321166021198,
+        "candidate_minus_reference": 0.03507710249580476,
+        "paired_percentile_95ci": [
+          0.0056222842566972416,
+          0.06065839100344997
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.5790292844374824,
+        "candidate": 0.7814628775025584,
+        "candidate_minus_reference": 0.20243359306507602,
+        "paired_percentile_95ci": [
+          0.1677545226749414,
+          0.23616953352764794
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "cup": {
+      "pooled_dice": {
+        "reference": 0.4010565824296773,
+        "candidate": 0.6963725482359366,
+        "candidate_minus_reference": 0.29531596580625935,
+        "paired_percentile_95ci": [
+          0.26433189209079466,
+          0.31892297521575763
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.3758850315734052,
+        "candidate": 0.6946801156841924,
+        "candidate_minus_reference": 0.3187950841107872,
+        "paired_percentile_95ci": [
+          0.2813423839622561,
+          0.359148518631014
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    }
+  },
+  "independent_quality_improvement_claim": false,
+  "qualifications": [
+    "Validation results used for tuning are exploratory, including their confidence intervals",
+    "Historical original-model exposure and raw MATLAB proxy limitations remain unresolved",
+    "Split groups preserve known patients/aliases; opaque patient IDs are not proven independent",
+    "Identical input hashes and valid/positive counts support pairing; this script does not rerun mask inference",
+    "Percentile intervals are conditional on these checkpoints and do not measure training-seed uncertainty",
+    "Aggregate gains cannot establish improvement of each individual task"
+  ]
+}
