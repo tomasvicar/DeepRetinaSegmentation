@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "accuracy_claim": false,
+  "scope": "single real photograph; complete CPU preprocessing + GPU/CPU inference + original-frame restoration; excludes file IO and model loading",
+  "input_sha256": "818772ce5ff0e6580257f360d23b99231fecdfae206ae744dccdc51d858c1419",
+  "input_shape": [
+    584,
+    565,
+    3
+  ],
+  "dataset": "drive",
+  "field_of_view_degrees": null,
+  "fov_sha256": "a3c397f5953683c0b11eb59238b8d9cde3b73ad9c67211e3ba7dc469effca4cf",
+  "device": "cuda",
+  "device_name": "NVIDIA GeForce GTX 1070",
+  "torch": "2.6.0+cu124",
+  "cpu_threads": 2,
+  "original": {
+    "checkpoint_sha256": [
+      "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b"
+    ],
+    "parameters": 3334734,
+    "checkpoint_bytes": 13954297,
+    "single_net_profile": "source-inferred raw legacy25",
+    "av_matlab_preprocessing_parity_certified": false,
+    "timing": {
+      "seconds": [
+        3.3198718880303204,
+        3.610459317918867,
+        3.573452285025269
+      ],
+      "median_seconds": 3.573452285025269,
+      "baseline_allocated_bytes": 13395968,
+      "peak_allocated_bytes": 1895474688,
+      "peak_working_bytes": 1882078720,
+      "warmup_calls": 1,
+      "measured_calls": 3
+    }
+  },
+  "unified": {
+    "checkpoint_sha256": "fd4d6ebd6ce7980bb9d00aa7ef84e19cf8d271a7a8672fcad613140c61015f1a",
+    "parameters": 1106597,
+    "checkpoint_bytes": 4476402,
+    "purpose": "functionality",
+    "timing": {
+      "seconds": [
+        0.5370260770432651,
+        0.5285685078706592,
+        0.5238894519861788
+      ],
+      "median_seconds": 0.5285685078706592,
+      "baseline_allocated_bytes": 4476928,
+      "peak_allocated_bytes": 101246464,
+      "peak_working_bytes": 96769536,
+      "warmup_calls": 1,
+      "measured_calls": 3
+    }
+  },
+  "limitations": [
+    "One photograph cannot establish general speed or model quality",
+    "Original A/V raw preprocessing is an uncertified proxy",
+    "Original raw/normalized training profile remains historically uncertain",
+    "CPU preprocessing included in latency; other system load may affect results",
+    "CUDA peak reports Torch allocation, not total process or device memory"
+  ]
+}

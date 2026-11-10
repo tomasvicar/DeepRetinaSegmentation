@@ -1,0 +1,234 @@
+{
+  "task": "av",
+  "split": "val",
+  "threshold": 0.5,
+  "images": 4,
+  "channels": {
+    "vessel": {
+      "dice": 0.7717959665238928,
+      "iou": 0.6283939357693917,
+      "precision": 0.8323250126246373,
+      "recall": 0.7194737833165004,
+      "tp": 84059,
+      "fp": 16934,
+      "fn": 32775,
+      "valid_pixels": 939064
+    },
+    "artery": {
+      "dice": 0.5788310958313181,
+      "iou": 0.4072922607111978,
+      "precision": 0.7854684783765565,
+      "recall": 0.4582712369597616,
+      "tp": 22140,
+      "fp": 6047,
+      "fn": 26172,
+      "valid_pixels": 108702
+    },
+    "vein": {
+      "dice": 0.7528402377619835,
+      "iou": 0.6036437837049993,
+      "precision": 0.8343943911677009,
+      "recall": 0.6858089087597284,
+      "tp": 41416,
+      "fp": 8220,
+      "fn": 18974,
+      "valid_pixels": 108702
+    }
+  },
+  "metric_support": {
+    "vessel": "valid_field_of_view",
+    "artery": "reference_class_labeled_vessel_pixels",
+    "vein": "reference_class_labeled_vessel_pixels"
+  },
+  "aggregation": "pool pixel confusion counts per channel, then average defined channel Dice",
+  "by_dataset": {
+    "rite": {
+      "images": 4,
+      "channels": {
+        "vessel": {
+          "dice": 0.7717959665238928,
+          "iou": 0.6283939357693917,
+          "precision": 0.8323250126246373,
+          "recall": 0.7194737833165004,
+          "tp": 84059,
+          "fp": 16934,
+          "fn": 32775,
+          "valid_pixels": 939064
+        },
+        "artery": {
+          "dice": 0.5788310958313181,
+          "iou": 0.4072922607111978,
+          "precision": 0.7854684783765565,
+          "recall": 0.4582712369597616,
+          "tp": 22140,
+          "fp": 6047,
+          "fn": 26172,
+          "valid_pixels": 108702
+        },
+        "vein": {
+          "dice": 0.7528402377619835,
+          "iou": 0.6036437837049993,
+          "precision": 0.8343943911677009,
+          "recall": 0.6858089087597284,
+          "tp": 41416,
+          "fp": 8220,
+          "fn": 18974,
+          "valid_pixels": 108702
+        }
+      },
+      "mean_dice": 0.7011557667057314
+    }
+  },
+  "mean_dice": 0.7011557667057314,
+  "av_accuracy": 0.5846810546264098,
+  "av_conditional_accuracy": 0.7695810564663024,
+  "av_accuracy_description": "End-to-end fraction correct on reference class-labeled vessel pixels; requires vessel and class thresholds plus probability-based class conflict resolution. Missed vessel detections count as errors; reference-background false positives are outside this accuracy support.",
+  "av_conditional_accuracy_description": "Artery-versus-vein argmax accuracy on reference class-labeled vessel pixels, independent of predicted vessel membership and class thresholds. Equal class probabilities choose artery.",
+  "av_labeled_pixels": 108702,
+  "per_image": [
+    {
+      "id": "rite_27_training_av",
+      "dataset": "rite",
+      "channels": {
+        "vessel": {
+          "dice": 0.7836658028835284,
+          "iou": 0.6442849380880208,
+          "precision": 0.7921105368632001,
+          "recall": 0.7753992290748899,
+          "tp": 22530,
+          "fp": 5913,
+          "fn": 6526,
+          "valid_pixels": 238159
+        },
+        "artery": {
+          "dice": 0.6759976446075101,
+          "iou": 0.5105713308244954,
+          "precision": 0.7174310162484376,
+          "recall": 0.6390887290167866,
+          "tp": 7462,
+          "fp": 2939,
+          "fn": 4214,
+          "valid_pixels": 26495
+        },
+        "vein": {
+          "dice": 0.7450278440731901,
+          "iou": 0.5936608557844691,
+          "precision": 0.907373316539095,
+          "recall": 0.6319589715905257,
+          "tp": 9365,
+          "fp": 956,
+          "fn": 5454,
+          "valid_pixels": 26495
+        }
+      }
+    },
+    {
+      "id": "rite_28_training_av",
+      "dataset": "rite",
+      "channels": {
+        "vessel": {
+          "dice": 0.7839201152975087,
+          "iou": 0.644628798781004,
+          "precision": 0.87619376366356,
+          "recall": 0.709229766228928,
+          "tp": 22845,
+          "fp": 3228,
+          "fn": 9366,
+          "valid_pixels": 233282
+        },
+        "artery": {
+          "dice": 0.4815170156329364,
+          "iou": 0.3171039916747194,
+          "precision": 0.7879571481344662,
+          "recall": 0.34668833807395366,
+          "tp": 4266,
+          "fp": 1148,
+          "fn": 8039,
+          "valid_pixels": 29819
+        },
+        "vein": {
+          "dice": 0.7282889596730573,
+          "iou": 0.5726843100189036,
+          "precision": 0.768713524486171,
+          "recall": 0.6919036199611739,
+          "tp": 12118,
+          "fp": 3646,
+          "fn": 5396,
+          "valid_pixels": 29819
+        }
+      }
+    },
+    {
+      "id": "rite_32_training_av",
+      "dataset": "rite",
+      "channels": {
+        "vessel": {
+          "dice": 0.763395773193704,
+          "iou": 0.6173323336968375,
+          "precision": 0.8840466546288615,
+          "recall": 0.6717220409374073,
+          "tp": 18115,
+          "fp": 2376,
+          "fn": 8853,
+          "valid_pixels": 234265
+        },
+        "artery": {
+          "dice": 0.5788518266394372,
+          "iou": 0.40731278939805204,
+          "precision": 0.9099340110576065,
+          "recall": 0.4244239247982697,
+          "tp": 5102,
+          "fp": 505,
+          "fn": 6919,
+          "valid_pixels": 25021
+        },
+        "vein": {
+          "dice": 0.7909576242909576,
+          "iou": 0.654201738650476,
+          "precision": 0.8638848396501457,
+          "recall": 0.7293846153846154,
+          "tp": 9482,
+          "fp": 1494,
+          "fn": 3518,
+          "valid_pixels": 25021
+        }
+      }
+    },
+    {
+      "id": "rite_38_training_av",
+      "dataset": "rite",
+      "channels": {
+        "vessel": {
+          "dice": 0.7536502702207566,
+          "iou": 0.6046860301034808,
+          "precision": 0.7915415993227122,
+          "recall": 0.7192209517815308,
+          "tp": 20569,
+          "fp": 5417,
+          "fn": 8030,
+          "valid_pixels": 233358
+        },
+        "artery": {
+          "dice": 0.5567496723460026,
+          "iou": 0.3857609880130766,
+          "precision": 0.7849223946784922,
+          "recall": 0.43135662063363117,
+          "tp": 5310,
+          "fp": 1455,
+          "fn": 7000,
+          "valid_pixels": 27367
+        },
+        "vein": {
+          "dice": 0.7564418066010423,
+          "iou": 0.6082882253652291,
+          "precision": 0.8310934393638171,
+          "recall": 0.694095769409577,
+          "tp": 10451,
+          "fp": 2124,
+          "fn": 4606,
+          "valid_pixels": 27367
+        }
+      }
+    }
+  ]
+}

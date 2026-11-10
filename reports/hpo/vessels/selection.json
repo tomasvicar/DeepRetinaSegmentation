@@ -1,0 +1,73 @@
+{
+  "task": "vessels",
+  "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+  "selection_split": "val",
+  "test_access_during_search": false,
+  "baseline": {
+    "phase": "baseline",
+    "lr": 0.001,
+    "epochs": 30,
+    "validation_mean_dice": 0.7983567754362612,
+    "best_epoch": 30,
+    "steps": 960,
+    "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice",
+    "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice/best.pt",
+    "reused_baseline": true
+  },
+  "promoted_learning_rates": [
+    0.0003,
+    0.003
+  ],
+  "eligible_finalists": [
+    {
+      "phase": "baseline",
+      "lr": 0.001,
+      "epochs": 30,
+      "validation_mean_dice": 0.7983567754362612,
+      "best_epoch": 30,
+      "steps": 960,
+      "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice",
+      "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice/best.pt",
+      "reused_baseline": true
+    },
+    {
+      "phase": "final",
+      "lr": 0.0003,
+      "epochs": 30,
+      "validation_mean_dice": 0.8038415766800311,
+      "best_epoch": 30,
+      "steps": 960,
+      "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003",
+      "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003/best.pt",
+      "reused_baseline": false
+    },
+    {
+      "phase": "final",
+      "lr": 0.003,
+      "epochs": 30,
+      "validation_mean_dice": 0.7726208940977799,
+      "best_epoch": 27,
+      "steps": 864,
+      "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.003",
+      "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.003/best.pt",
+      "reused_baseline": false
+    }
+  ],
+  "winner": {
+    "phase": "final",
+    "lr": 0.0003,
+    "epochs": 30,
+    "validation_mean_dice": 0.8038415766800311,
+    "best_epoch": 30,
+    "steps": 960,
+    "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003",
+    "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003/best.pt",
+    "reused_baseline": false
+  },
+  "validation_delta_vs_baseline": 0.005484801243769932,
+  "threshold": 0.5,
+  "tile_size": 512,
+  "overlap": 64,
+  "completed_utc": "2026-11-10T07:51:00.769548+00:00",
+  "caveat": "Single seed and original pilot split; validation selection is not proof of generalization. This test split was already reported in the original pilot."
+}

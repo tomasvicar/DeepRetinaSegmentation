@@ -1,0 +1,73 @@
+{
+  "task": "av",
+  "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+  "selection_split": "val",
+  "test_access_during_search": false,
+  "baseline": {
+    "phase": "baseline",
+    "lr": 0.001,
+    "epochs": 30,
+    "validation_mean_dice": 0.7182781744042513,
+    "best_epoch": 30,
+    "steps": 960,
+    "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce",
+    "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce/best.pt",
+    "reused_baseline": true
+  },
+  "promoted_learning_rates": [
+    0.0003,
+    0.003
+  ],
+  "eligible_finalists": [
+    {
+      "phase": "baseline",
+      "lr": 0.001,
+      "epochs": 30,
+      "validation_mean_dice": 0.7182781744042513,
+      "best_epoch": 30,
+      "steps": 960,
+      "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce",
+      "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce/best.pt",
+      "reused_baseline": true
+    },
+    {
+      "phase": "final",
+      "lr": 0.0003,
+      "epochs": 30,
+      "validation_mean_dice": 0.7011557667057314,
+      "best_epoch": 30,
+      "steps": 960,
+      "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/av/final_lr_0.0003",
+      "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/av/final_lr_0.0003/best.pt",
+      "reused_baseline": false
+    },
+    {
+      "phase": "final",
+      "lr": 0.003,
+      "epochs": 30,
+      "validation_mean_dice": 0.5883977808799555,
+      "best_epoch": 27,
+      "steps": 864,
+      "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/av/final_lr_0.003",
+      "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/av/final_lr_0.003/best.pt",
+      "reused_baseline": false
+    }
+  ],
+  "winner": {
+    "phase": "baseline",
+    "lr": 0.001,
+    "epochs": 30,
+    "validation_mean_dice": 0.7182781744042513,
+    "best_epoch": 30,
+    "steps": 960,
+    "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce",
+    "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce/best.pt",
+    "reused_baseline": true
+  },
+  "validation_delta_vs_baseline": 0.0,
+  "threshold": 0.5,
+  "tile_size": 512,
+  "overlap": 64,
+  "completed_utc": "2026-11-10T07:48:48.399231+00:00",
+  "caveat": "Single seed and original pilot split; validation selection is not proof of generalization. This test split was already reported in the original pilot."
+}

@@ -51,18 +51,61 @@ def read_sample(root: Path, row: dict) -> tuple[torch.Tensor, torch.Tensor, torc
     )
 
 
+def letterbox_geometry(height: int, width: int, size: int) -> tuple[int, int, int, int]:
+    """Rounded aspect-preserving geometry shared by training and inference."""
+    if min(height, width) < 1 or size < 8:
+        raise ValueError("Image dimensions must be positive and letterbox size >=8")
+    scale = min(size / height, size / width)
+    resized_h, resized_w = max(1, round(height * scale)), max(1, round(width * scale))
+    return resized_h, resized_w, (size - resized_h) // 2, (size - resized_w) // 2
+
+
+def whole_view(image, target=None, valid=None, size=512):
+    """Symmetric zero letterbox; labels/validity use nearest, padded validity false."""
+    height, width = image.shape[-2:]
+    nh, nw, top, left = letterbox_geometry(height, width, size)
+    padding = (left, size - nw - left, top, size - nh - top)
+    image = F.interpolate(image[None], size=(nh, nw), mode="bilinear", align_corners=False)[0]
+    image = F.pad(image, padding, value=0)
+    if target is not None:
+        target = F.interpolate(target[None].float(), size=(nh, nw), mode="nearest")[0]
+        target = F.pad(target, padding, value=0)
+    if valid is not None:
+        valid = F.interpolate(valid[None].float(), size=(nh, nw), mode="nearest")[0] > 0.5
+        valid = F.pad(valid, padding, value=False)
+    return image, target, valid
+
+
 class CropDataset(Dataset):
-    def __init__(self, manifest: Path, task: str, patch_size: int, samples_per_image: int = 16):
+    def __init__(
+        self,
+        manifest: Path,
+        task: str,
+        patch_size: int,
+        samples_per_image: int = 16,
+        *,
+        train_view="patch",
+        view_size=512,
+        foreground_probability=0.0,
+        augmentation="basic",
+    ):
         self.root = Path(manifest).parent
         self.rows = read_manifest(manifest, task, "train")
         if patch_size < 8 or samples_per_image < 1:
             raise ValueError("patch_size must be >=8 and samples_per_image positive")
+        if train_view not in {"patch", "whole"} or augmentation not in {"basic", "mild", "strong"}:
+            raise ValueError("Unsupported view or augmentation profile")
+        if not 0 <= foreground_probability <= 1 or view_size < 32:
+            raise ValueError("Invalid foreground probability or whole view size")
+        self.train_view, self.view_size = train_view, view_size
+        self.foreground_probability, self.augmentation = foreground_probability, augmentation
         self.patch_size = patch_size
         self.samples_per_image = samples_per_image
         # Bounded independently per DataLoader worker; tensors are never modified in place.
         self._cache = OrderedDict()
         self._cache_bytes = 0
         self._cache_limit = 128 * 1024**2
+        self._augmentation_generator = None
 
     def __len__(self):
         return len(self.rows) * self.samples_per_image
@@ -82,17 +125,43 @@ class CropDataset(Dataset):
                 self._cache[row_index] = sample
                 self._cache_bytes += sample_bytes
         image, target, valid = sample
-        size = self.patch_size
-        h, w = image.shape[-2:]
-        padding = (0, max(0, size - w), 0, max(0, size - h))
-        image = F.pad(image, padding, mode="replicate")
-        target = F.pad(target, padding)
-        valid = F.pad(valid, padding, value=False)
-        h, w = image.shape[-2:]
-        y, x = int(torch.randint(h - size + 1, (1,))), int(torch.randint(w - size + 1, (1,)))
-        items = [a[..., y : y + size, x : x + size] for a in (image, target, valid)]
+        if self.train_view == "whole":
+            image, target, valid = whole_view(image, target, valid, self.view_size)
+            items = [image, target, valid]
+        else:
+            size = self.patch_size
+            h, w = image.shape[-2:]
+            padding = (0, max(0, size - w), 0, max(0, size - h))
+            image = F.pad(image, padding, mode="replicate")
+            target = F.pad(target, padding)
+            valid = F.pad(valid, padding, value=False)
+            h, w = image.shape[-2:]
+            foreground = None
+            if self.foreground_probability > 0 and torch.rand(()) < self.foreground_probability:
+                foreground = torch.nonzero(((target >= 0.5) & valid).any(dim=0))
+            if foreground is not None and len(foreground):
+                center = foreground[int(torch.randint(len(foreground), (1,)))]
+                y = max(0, min(h - size, int(center[0]) - int(torch.randint(size, (1,)))))
+                x = max(0, min(w - size, int(center[1]) - int(torch.randint(size, (1,)))))
+            else:
+                # Preserve the original two RNG draws when foreground_probability=0.
+                y, x = (
+                    int(torch.randint(h - size + 1, (1,))),
+                    int(torch.randint(w - size + 1, (1,))),
+                )
+            items = [a[..., y : y + size, x : x + size] for a in (image, target, valid)]
         k = int(torch.randint(4, (1,)))
         items = [torch.rot90(a, k, (-2, -1)) for a in items]
         if bool(torch.randint(2, (1,))):
             items = [a.flip(-1) for a in items]
+        if self.augmentation != "basic":
+            from .augment import augment
+
+            if self._augmentation_generator is None:
+                self._augmentation_generator = torch.Generator().manual_seed(
+                    (torch.initial_seed() + 104729) % (2**63 - 1)
+                )
+            items = list(
+                augment(*items, level=self.augmentation, generator=self._augmentation_generator)
+            )
         return tuple(items)

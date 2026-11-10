@@ -1,0 +1,112 @@
+{
+  "task": "vessels",
+  "split": "val",
+  "threshold": 0.5,
+  "images": 4,
+  "channels": {
+    "vessel": {
+      "dice": 0.7726208940977799,
+      "iou": 0.6294883873958754,
+      "precision": 0.8318166098512919,
+      "recall": 0.7212906874127132,
+      "tp": 84184,
+      "fp": 17021,
+      "fn": 32529,
+      "valid_pixels": 906321
+    }
+  },
+  "metric_support": {
+    "vessel": "valid_field_of_view"
+  },
+  "aggregation": "pool pixel confusion counts per channel, then average defined channel Dice",
+  "by_dataset": {
+    "drive": {
+      "images": 4,
+      "channels": {
+        "vessel": {
+          "dice": 0.7726208940977799,
+          "iou": 0.6294883873958754,
+          "precision": 0.8318166098512919,
+          "recall": 0.7212906874127132,
+          "tp": 84184,
+          "fp": 17021,
+          "fn": 32529,
+          "valid_pixels": 906321
+        }
+      },
+      "mean_dice": 0.7726208940977799
+    }
+  },
+  "mean_dice": 0.7726208940977799,
+  "av_accuracy": null,
+  "av_conditional_accuracy": null,
+  "av_accuracy_description": null,
+  "av_conditional_accuracy_description": null,
+  "av_labeled_pixels": 0,
+  "per_image": [
+    {
+      "id": "drive_27_training_vessels",
+      "dataset": "drive",
+      "channels": {
+        "vessel": {
+          "dice": 0.7811438177331091,
+          "iou": 0.640882680908504,
+          "precision": 0.8134987149402167,
+          "recall": 0.7512641464001927,
+          "tp": 21840,
+          "fp": 5007,
+          "fn": 7231,
+          "valid_pixels": 227826
+        }
+      }
+    },
+    {
+      "id": "drive_28_training_vessels",
+      "dataset": "drive",
+      "channels": {
+        "vessel": {
+          "dice": 0.7780298985584624,
+          "iou": 0.6367012561441835,
+          "precision": 0.8409131893100588,
+          "recall": 0.7238970474091092,
+          "tp": 23316,
+          "fp": 4411,
+          "fn": 8893,
+          "valid_pixels": 227327
+        }
+      }
+    },
+    {
+      "id": "drive_32_training_vessels",
+      "dataset": "drive",
+      "channels": {
+        "vessel": {
+          "dice": 0.7835477020475218,
+          "iou": 0.6441253005698475,
+          "precision": 0.8517728025089294,
+          "recall": 0.7254414601572934,
+          "tp": 19555,
+          "fp": 3403,
+          "fn": 7401,
+          "valid_pixels": 224944
+        }
+      }
+    },
+    {
+      "id": "drive_38_training_vessels",
+      "dataset": "drive",
+      "channels": {
+        "vessel": {
+          "dice": 0.7468072866730585,
+          "iou": 0.5959237384092787,
+          "precision": 0.822582689139526,
+          "recall": 0.6838150086034344,
+          "tp": 19473,
+          "fp": 4200,
+          "fn": 9004,
+          "valid_pixels": 226224
+        }
+      }
+    }
+  ]
+}

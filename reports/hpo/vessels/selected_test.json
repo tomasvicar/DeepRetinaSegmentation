@@ -1,0 +1,383 @@
+{
+  "selection_sha256": "e194fee759958cafaaa0284a31bcca1134bbbd85fdfd51a742aa984a8a38b901",
+  "selection": {
+    "phase": "final",
+    "lr": 0.0003,
+    "epochs": 30,
+    "validation_mean_dice": 0.8038415766800311,
+    "best_epoch": 30,
+    "steps": 960,
+    "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003",
+    "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003/best.pt",
+    "reused_baseline": false
+  },
+  "test_previously_reported_in_original_pilot": true,
+  "metrics": {
+    "task": "vessels",
+    "split": "test",
+    "threshold": 0.5,
+    "images": 20,
+    "channels": {
+      "vessel": {
+        "dice": 0.8020790533687001,
+        "iou": 0.6695592523231557,
+        "precision": 0.8228455417781905,
+        "recall": 0.7823349473469183,
+        "tp": 451915,
+        "fp": 97295,
+        "fn": 125734,
+        "valid_pixels": 4538143
+      }
+    },
+    "metric_support": {
+      "vessel": "valid_field_of_view"
+    },
+    "aggregation": "pool pixel confusion counts per channel, then average defined channel Dice",
+    "by_dataset": {
+      "drive": {
+        "images": 20,
+        "channels": {
+          "vessel": {
+            "dice": 0.8020790533687001,
+            "iou": 0.6695592523231557,
+            "precision": 0.8228455417781905,
+            "recall": 0.7823349473469183,
+            "tp": 451915,
+            "fp": 97295,
+            "fn": 125734,
+            "valid_pixels": 4538143
+          }
+        },
+        "mean_dice": 0.8020790533687001
+      }
+    },
+    "mean_dice": 0.8020790533687001,
+    "av_accuracy": null,
+    "av_conditional_accuracy": null,
+    "av_accuracy_description": null,
+    "av_conditional_accuracy_description": null,
+    "av_labeled_pixels": 0,
+    "per_image": [
+      {
+        "id": "drive_01_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.8171271261429555,
+            "iou": 0.6907987698445682,
+            "precision": 0.7886695767697856,
+            "recall": 0.8477152182782538,
+            "tp": 24933,
+            "fp": 6681,
+            "fn": 4479,
+            "valid_pixels": 224377
+          }
+        }
+      },
+      {
+        "id": "drive_02_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.8405478112007826,
+            "iou": 0.724952541657878,
+            "precision": 0.8673543421343175,
+            "recall": 0.8153485751564215,
+            "tp": 27496,
+            "fp": 4205,
+            "fn": 6227,
+            "valid_pixels": 225087
+          }
+        }
+      },
+      {
+        "id": "drive_03_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7800561191452623,
+            "iou": 0.6394196744515216,
+            "precision": 0.8591229930878104,
+            "recall": 0.7143161223620994,
+            "tp": 23491,
+            "fp": 3852,
+            "fn": 9395,
+            "valid_pixels": 225727
+          }
+        }
+      },
+      {
+        "id": "drive_04_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.812426146969671,
+            "iou": 0.6841057883655871,
+            "precision": 0.845632798573975,
+            "recall": 0.7817288995814521,
+            "tp": 23720,
+            "fp": 4330,
+            "fn": 6623,
+            "valid_pixels": 227577
+          }
+        }
+      },
+      {
+        "id": "drive_05_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.802054105564085,
+            "iou": 0.6695244829414885,
+            "precision": 0.881873569017036,
+            "recall": 0.7354844973784711,
+            "tp": 22725,
+            "fp": 3044,
+            "fn": 8173,
+            "valid_pixels": 227693
+          }
+        }
+      },
+      {
+        "id": "drive_06_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7763341228925735,
+            "iou": 0.6344330894702382,
+            "precision": 0.8805262534076094,
+            "recall": 0.6941909359912786,
+            "tp": 22287,
+            "fp": 3024,
+            "fn": 9818,
+            "valid_pixels": 227499
+          }
+        }
+      },
+      {
+        "id": "drive_07_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.8072648603381196,
+            "iou": 0.676818208413785,
+            "precision": 0.8513966069259927,
+            "recall": 0.7674827494692145,
+            "tp": 23135,
+            "fp": 4038,
+            "fn": 7009,
+            "valid_pixels": 227675
+          }
+        }
+      },
+      {
+        "id": "drive_08_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7819382017189175,
+            "iou": 0.6419528162055336,
+            "precision": 0.8361756898077387,
+            "recall": 0.7343082194200135,
+            "tp": 20789,
+            "fp": 4073,
+            "fn": 7522,
+            "valid_pixels": 225248
+          }
+        }
+      },
+      {
+        "id": "drive_09_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7771452145214521,
+            "iou": 0.635517171580865,
+            "precision": 0.8665133394664214,
+            "recall": 0.7044876589379208,
+            "tp": 18838,
+            "fp": 2902,
+            "fn": 7902,
+            "valid_pixels": 227660
+          }
+        }
+      },
+      {
+        "id": "drive_10_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7988765096901039,
+            "iou": 0.6651077230068906,
+            "precision": 0.8125547556469737,
+            "recall": 0.7856511490866235,
+            "tp": 21332,
+            "fp": 4921,
+            "fn": 5820,
+            "valid_pixels": 227332
+          }
+        }
+      },
+      {
+        "id": "drive_11_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7932914046121593,
+            "iou": 0.6574009728978457,
+            "precision": 0.7859231689485577,
+            "recall": 0.8007991060847188,
+            "tp": 23650,
+            "fp": 6442,
+            "fn": 5883,
+            "valid_pixels": 227814
+          }
+        }
+      },
+      {
+        "id": "drive_12_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.8099309668150121,
+            "iou": 0.6805747769500309,
+            "precision": 0.8085992163448082,
+            "recall": 0.8112671112671113,
+            "tp": 23113,
+            "fp": 5471,
+            "fn": 5377,
+            "valid_pixels": 227605
+          }
+        }
+      },
+      {
+        "id": "drive_13_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.80119226008209,
+            "iou": 0.6683242303198282,
+            "precision": 0.8439129838045567,
+            "recall": 0.7625883666129232,
+            "tp": 24595,
+            "fp": 4549,
+            "fn": 7657,
+            "valid_pixels": 227500
+          }
+        }
+      },
+      {
+        "id": "drive_14_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7981604309428707,
+            "iou": 0.6641156203311278,
+            "precision": 0.779368089598168,
+            "recall": 0.8178814163944276,
+            "tp": 21781,
+            "fp": 6166,
+            "fn": 4850,
+            "valid_pixels": 225854
+          }
+        }
+      },
+      {
+        "id": "drive_15_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7977516812205159,
+            "iou": 0.6635498413758557,
+            "precision": 0.758310117162157,
+            "recall": 0.84152126037608,
+            "tp": 19870,
+            "fp": 6333,
+            "fn": 3742,
+            "valid_pixels": 227394
+          }
+        }
+      },
+      {
+        "id": "drive_16_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.8160294602998142,
+            "iou": 0.689231220657277,
+            "precision": 0.8455972352221183,
+            "recall": 0.7884596018931892,
+            "tp": 23489,
+            "fp": 4289,
+            "fn": 6302,
+            "valid_pixels": 227694
+          }
+        }
+      },
+      {
+        "id": "drive_17_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7787863571400981,
+            "iou": 0.63771508097166,
+            "precision": 0.8426463827475237,
+            "recall": 0.7239237370291911,
+            "tp": 20162,
+            "fp": 3765,
+            "fn": 7689,
+            "valid_pixels": 225884
+          }
+        }
+      },
+      {
+        "id": "drive_18_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.796536957045661,
+            "iou": 0.661870725244932,
+            "precision": 0.7728531855955678,
+            "recall": 0.82171817625459,
+            "tp": 21483,
+            "fp": 6314,
+            "fn": 4661,
+            "valid_pixels": 227612
+          }
+        }
+      },
+      {
+        "id": "drive_19_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.842223839728259,
+            "iou": 0.72744963027273,
+            "precision": 0.8010219218724246,
+            "recall": 0.887894179120839,
+            "tp": 24299,
+            "fp": 6036,
+            "fn": 3068,
+            "valid_pixels": 227388
+          }
+        }
+      },
+      {
+        "id": "drive_20_test_vessels",
+        "dataset": "drive",
+        "channels": {
+          "vessel": {
+            "dice": 0.7994831343657789,
+            "iou": 0.665949106798612,
+            "precision": 0.7513321492007105,
+            "recall": 0.8542284866468842,
+            "tp": 20727,
+            "fp": 6860,
+            "fn": 3537,
+            "valid_pixels": 227523
+          }
+        }
+      }
+    ]
+  }
+}

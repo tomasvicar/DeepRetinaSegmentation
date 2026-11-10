@@ -1,0 +1,55 @@
+{
+  "task": "av",
+  "stage_epochs": 12,
+  "final_epochs": 60,
+  "top_k": 2,
+  "candidate_lr_policy": "Use the frozen previous LR winner; matched-budget baseline keeps original LR. No test-derived choices.",
+  "candidates": {
+    "mild_aug": {
+      "augmentation": "mild",
+      "foreground_probability": 0.25
+    },
+    "cosine": {
+      "augmentation": "mild",
+      "foreground_probability": 0.25,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05
+    },
+    "compact": {
+      "augmentation": "mild",
+      "foreground_probability": 0.25,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05,
+      "base_channels": 8
+    },
+    "wider": {
+      "augmentation": "mild",
+      "foreground_probability": 0.25,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05,
+      "base_channels": 24
+    },
+    "large_context": {
+      "augmentation": "mild",
+      "foreground_probability": 0.25,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05,
+      "patch_size": 384
+    },
+    "whole_context": {
+      "augmentation": "mild",
+      "foreground_probability": 0.0,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05,
+      "train_view": "whole",
+      "view_size": 512
+    },
+    "batch_norm": {
+      "augmentation": "mild",
+      "foreground_probability": 0.25,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05,
+      "norm": "batch"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "config": {
+    "task": "disc_cup",
+    "lrs": [
+      0.0003,
+      0.001,
+      0.003
+    ],
+    "stage_epochs": 8,
+    "final_epochs": 30,
+    "top_k": 2,
+    "seed": 42,
+    "batch_size": 4,
+    "patch_size": 256,
+    "base_channels": 16,
+    "depth": 3,
+    "samples_per_image": 8,
+    "workers": 2,
+    "loss": "bce_dice",
+    "device": "cuda",
+    "tile_size": 512,
+    "overlap": 64,
+    "cpu_threads": 4
+  },
+  "manifest": "/var/home/tom/code/DeepRetinaSegmentation_clean/data/leipzig/manifest.json",
+  "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+  "baseline_run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drishti_bce_dice",
+  "selection_split": "val",
+  "test_access_during_search": false
+}

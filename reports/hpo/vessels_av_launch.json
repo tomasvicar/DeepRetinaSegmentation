@@ -1,0 +1,261 @@
+{
+  "branch": "experiments/leipzig-hpo",
+  "source_revision": "320e0846826975f5b00a35e6714bab01e4087a7c",
+  "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+  "manifest_records": 181,
+  "search": {
+    "learning_rates": [
+      0.0003,
+      0.001,
+      0.003
+    ],
+    "screening_epochs": 8,
+    "final_epochs": 30,
+    "seed": 42,
+    "batch_size": 4,
+    "patch_size": 256,
+    "base_channels": 16,
+    "depth": 3,
+    "workers": 2,
+    "samples_per_image": 8,
+    "tile_size": 512,
+    "overlap": 64,
+    "OMP_NUM_THREADS": 4,
+    "MKL_NUM_THREADS": 4
+  },
+  "tasks": {
+    "vessels": {
+      "host": "old",
+      "gpu": "NVIDIA GeForce GTX 1060 6GB",
+      "baseline_run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice",
+      "loss": "bce_dice",
+      "baseline_validation_mean_dice": 0.7983568,
+      "command": [
+        "uv",
+        "run",
+        "python",
+        "scripts/hpo.py",
+        "--task",
+        "vessels",
+        "--manifest",
+        "data/leipzig/manifest.json",
+        "--output",
+        "runs/hpo/vessels",
+        "--baseline-run",
+        "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice",
+        "--loss",
+        "bce_dice",
+        "--device",
+        "cuda",
+        "--cpu-threads",
+        "4"
+      ],
+      "pid_at_launch": 278432,
+      "log": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels.log",
+      "baseline_checkpoint_sha256": "38a4125d213b49526c6cf1fbd6dfde1e19394a1969d3724be0737b7bffda4544",
+      "gpu_uuid": "GPU-b60687ab-4376-2130-f328-bb5a7c308a00",
+      "frozen_selection": {
+        "task": "vessels",
+        "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+        "selection_split": "val",
+        "test_access_during_search": false,
+        "baseline": {
+          "phase": "baseline",
+          "lr": 0.001,
+          "epochs": 30,
+          "validation_mean_dice": 0.7983567754362612,
+          "best_epoch": 30,
+          "steps": 960,
+          "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice",
+          "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice/best.pt",
+          "reused_baseline": true
+        },
+        "promoted_learning_rates": [
+          0.0003,
+          0.003
+        ],
+        "eligible_finalists": [
+          {
+            "phase": "baseline",
+            "lr": 0.001,
+            "epochs": 30,
+            "validation_mean_dice": 0.7983567754362612,
+            "best_epoch": 30,
+            "steps": 960,
+            "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice",
+            "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/drive_bce_dice/best.pt",
+            "reused_baseline": true
+          },
+          {
+            "phase": "final",
+            "lr": 0.0003,
+            "epochs": 30,
+            "validation_mean_dice": 0.8038415766800311,
+            "best_epoch": 30,
+            "steps": 960,
+            "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003",
+            "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003/best.pt",
+            "reused_baseline": false
+          },
+          {
+            "phase": "final",
+            "lr": 0.003,
+            "epochs": 30,
+            "validation_mean_dice": 0.7726208940977799,
+            "best_epoch": 27,
+            "steps": 864,
+            "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.003",
+            "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.003/best.pt",
+            "reused_baseline": false
+          }
+        ],
+        "winner": {
+          "phase": "final",
+          "lr": 0.0003,
+          "epochs": 30,
+          "validation_mean_dice": 0.8038415766800311,
+          "best_epoch": 30,
+          "steps": 960,
+          "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003",
+          "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/vessels/final_lr_0.0003/best.pt",
+          "reused_baseline": false
+        },
+        "validation_delta_vs_baseline": 0.005484801243769932,
+        "threshold": 0.5,
+        "tile_size": 512,
+        "overlap": 64,
+        "completed_utc": "2026-11-10T07:51:00.769548+00:00",
+        "caveat": "Single seed and original pilot split; validation selection is not proof of generalization. This test split was already reported in the original pilot."
+      },
+      "selected_test_mean_dice": 0.8020790533687001
+    },
+    "av": {
+      "host": "pascal",
+      "gpu": "NVIDIA GeForce GTX 1070 8GB",
+      "gpu_uuid": "GPU-3fcefb45-3c90-4606-2e83-eab875df3cc4",
+      "baseline_run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce",
+      "loss": "bce",
+      "baseline_validation_mean_dice": 0.7182782,
+      "command": [
+        "uv",
+        "run",
+        "python",
+        "scripts/hpo.py",
+        "--task",
+        "av",
+        "--manifest",
+        "data/leipzig/manifest.json",
+        "--output",
+        "runs/hpo/av",
+        "--baseline-run",
+        "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce",
+        "--loss",
+        "bce",
+        "--device",
+        "cuda",
+        "--cpu-threads",
+        "4"
+      ],
+      "pid_at_launch": 3824094,
+      "log": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/av.log",
+      "baseline_checkpoint_sha256": "0a8c85dd4888a4aab1ffded7a9e2ac4b254745a15c03a465ff2106e34a1c0eb7",
+      "frozen_selection": {
+        "task": "av",
+        "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+        "selection_split": "val",
+        "test_access_during_search": false,
+        "baseline": {
+          "phase": "baseline",
+          "lr": 0.001,
+          "epochs": 30,
+          "validation_mean_dice": 0.7182781744042513,
+          "best_epoch": 30,
+          "steps": 960,
+          "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce",
+          "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce/best.pt",
+          "reused_baseline": true
+        },
+        "promoted_learning_rates": [
+          0.0003,
+          0.003
+        ],
+        "eligible_finalists": [
+          {
+            "phase": "baseline",
+            "lr": 0.001,
+            "epochs": 30,
+            "validation_mean_dice": 0.7182781744042513,
+            "best_epoch": 30,
+            "steps": 960,
+            "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce",
+            "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce/best.pt",
+            "reused_baseline": true
+          },
+          {
+            "phase": "final",
+            "lr": 0.0003,
+            "epochs": 30,
+            "validation_mean_dice": 0.7011557667057314,
+            "best_epoch": 30,
+            "steps": 960,
+            "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/av/final_lr_0.0003",
+            "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/av/final_lr_0.0003/best.pt",
+            "reused_baseline": false
+          },
+          {
+            "phase": "final",
+            "lr": 0.003,
+            "epochs": 30,
+            "validation_mean_dice": 0.5883977808799555,
+            "best_epoch": 27,
+            "steps": 864,
+            "run": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/av/final_lr_0.003",
+            "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_hpo/runs/hpo/av/final_lr_0.003/best.pt",
+            "reused_baseline": false
+          }
+        ],
+        "winner": {
+          "phase": "baseline",
+          "lr": 0.001,
+          "epochs": 30,
+          "validation_mean_dice": 0.7182781744042513,
+          "best_epoch": 30,
+          "steps": 960,
+          "run": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce",
+          "checkpoint": "/var/home/tom/code/DeepRetinaSegmentation_clean/runs/rite_bce/best.pt",
+          "reused_baseline": true
+        },
+        "validation_delta_vs_baseline": 0.0,
+        "threshold": 0.5,
+        "tile_size": 512,
+        "overlap": 64,
+        "completed_utc": "2026-11-10T07:48:48.399231+00:00",
+        "caveat": "Single seed and original pilot split; validation selection is not proof of generalization. This test split was already reported in the original pilot."
+      },
+      "selected_test_mean_dice": 0.708538658397403
+    }
+  },
+  "selection_policy": "Validation only. The matching original30-epoch baseline remains eligible. Refine shortlisted learning rates to30epochs; evaluate test only after final selection. No improvement claimed before completed comparisons.",
+  "status": "initial LR search and selected-model pilot evaluation complete; extended search preparation underway",
+  "launch_recorded_utc": "2026-11-10T07:39:33.882212+00:00",
+  "runner_sha256": "acdb78f7c1728a759c247c859cd57670dd9e9ed9ba822b214cf139b8fca4176b",
+  "screening_results": {
+    "av": [
+      {
+        "lr": "0.0003",
+        "validation_mean_dice": "0.3507690043936605",
+        "best_epoch": "8"
+      },
+      {
+        "lr": "0.001",
+        "validation_mean_dice": "0.44455362414451666",
+        "best_epoch": "8"
+      },
+      {
+        "lr": "0.003",
+        "validation_mean_dice": "0.3470808125481792",
+        "best_epoch": "8"
+      }
+    ]
+  }
+}
