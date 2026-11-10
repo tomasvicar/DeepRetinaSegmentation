@@ -157,3 +157,41 @@ fresh producer evaluations, not eight or repeated attempts. The20:00 cutoff and
 all snapshot/GUI/source pins remain unchanged. Files under
 `remaining-four-continuation/` record the semantic diagnosis, new addendum and
 initial actual events. No selection artifact or TEST evaluation is produced.
+
+## Six reports complete, 19:47:45 UTC
+
+All six existing-producer reports are preserved under `complete-six/`, with
+summary SHA `f65f89971309d2a76ae6c7c80c50dd7e9db5306ee7a06e844d4e87e620f6b3b6`.
+The two earlier complete reports were copied byte-identically and four additional
+producer calls completed. Exactly six actual forward passes over the full770-photo
+VAL set occurred; no repeat, TEST evaluation, threshold extension or selection
+artifact was produced. All source/data/GT/observer/geometry/runtime pins and every
+per-photo **ungated** conditional counter match exactly. Conditional AV accuracy
+is0.7986622924253431 for all six thresholds.
+
+| Threshold | Five-head source macro | Delta versus0.50 |
+|---|---:|---:|
+| .35 | .8049553712 | +.0048325598 |
+| .40 | .8036630081 | +.0035401967 |
+| .45 | .8020697246 | +.0019469132 |
+| .50 | .8001228114 | reference |
+| .55 | .7977689907 | −.0023538207 |
+| .60 | .7950178236 | −.0051049878 |
+
+The highest observed predeclared primary score is0.35; this is descriptive
+validation ranking, not an automatic model/threshold selection or final claim.
+Compared with0.50,0.35 changes pooled vessel/artery/vein/disc/cup Dice from
+`.760819/.698608/.769099/.937701/.874385` to
+`.760989/.715390/.780908/.939165/.872534`.
+Vessel **source-macro** decreases from.777935 to.774767 and cup source-macro
+from.871717 to.870410. The global all-five score therefore hides some head/source
+tradeoffs. End-to-end AV accuracy increases from.670809 to.696432 because the
+vessel gate changes; unchanged conditional counters prove this is not improved
+artery-versus-vein discrimination. No better-all-tasks claim is justified.
+
+Every full report, original runtime observations, per-source precision/recall/counts
+and the two reused-report phase labels remain available. The next Optuna search
+must import the manual baseline's original fixed0.5 training-CSV objective,
+**not** this threshold-tuned0.35 score; threshold tuning is a separate VAL choice
+before any eventual TEST freeze. GPU background remains the explicitly allowed
+established desktop, so these calls are not a clean latency benchmark.

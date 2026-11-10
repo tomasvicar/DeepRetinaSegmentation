@@ -1,0 +1,87 @@
+{
+  "command": [
+    "nice",
+    "-n",
+    "10",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python",
+    "/var/home/tom/code/DeepRetinaSegmentation_evaluation_8c56594/scripts/unified_validation.py",
+    "--checkpoint",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_3157bb9/milestones/lr_0003-control-cached-seed42/epoch-060/best.pt",
+    "--manifest",
+    "/var/home/tom/code/DeepRetinaSegmentation_for_Leipzig/data/unified25/manifest.json",
+    "--output",
+    "/var/home/tom/code/DeepRetinaSegmentation_e060_VAL_remaining_20261110/result/threshold-055.json",
+    "--device",
+    "cuda:0",
+    "--cpu-threads",
+    "2",
+    "--threshold",
+    "0.55"
+  ],
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "GPU-d0675605-e6c2-1c85-9799-08b279aab0ff",
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2",
+    "OPENBLAS_NUM_THREADS": "2",
+    "PYTHONPATH": "/var/home/tom/code/DeepRetinaSegmentation_evaluation_8c56594/src",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+  },
+  "readiness": {
+    "uuid": "GPU-d0675605-e6c2-1c85-9799-08b279aab0ff",
+    "driver": "615.78.08",
+    "gpu_rows": [
+      [
+        "GPU-d0675605-e6c2-1c85-9799-08b279aab0ff",
+        " NVIDIA GeForce RTX 4070 Ti SUPER",
+        " 615.78.08"
+      ]
+    ],
+    "compute_rows": [],
+    "verified_established_desktop_CplusG": [
+      {
+        "pid": 6311,
+        "uid": 1000,
+        "exe": "/usr/libexec/gnome-remote-desktop-daemon",
+        "starttime_ticks": 2473
+      },
+      {
+        "pid": 6997,
+        "uid": 1000,
+        "exe": "/usr/libexec/xdg-desktop-portal-gnome",
+        "starttime_ticks": 2565
+      },
+      {
+        "pid": 10772,
+        "uid": 1000,
+        "exe": "/usr/bin/ptyxis",
+        "starttime_ticks": 3808
+      },
+      {
+        "pid": 40681,
+        "uid": 1000,
+        "exe": "/usr/bin/nautilus",
+        "starttime_ticks": 920545
+      },
+      {
+        "pid": 1062075,
+        "uid": 1000,
+        "exe": "/app/extra/chrome",
+        "starttime_ticks": 45267071
+      },
+      {
+        "pid": 1229083,
+        "uid": 1000,
+        "exe": "/usr/bin/ptyxis",
+        "starttime_ticks": 45651036
+      },
+      {
+        "pid": 2074739,
+        "uid": 1000,
+        "exe": "/usr/bin/ptyxis",
+        "starttime_ticks": 42365065
+      }
+    ],
+    "no_unknown_compute": true,
+    "background_scope": "Established UI contexts stayalive; not background-free andnot a latencybenchmark"
+  }
+}
