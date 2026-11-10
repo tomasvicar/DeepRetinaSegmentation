@@ -21,6 +21,7 @@ uv run python scripts/benchmark_strong_pipeline.py \
   --input /ABS/fundus.png --fov /ABS/fov.png --dataset drive \
   --vessel src/deepretina/pretrained/legacy-single-net-vessels.pt \
   --disc src/deepretina/pretrained/legacy-single-net-disc-0.pt \
+  --original-disc-variant disc0/raw \
   --universal src/deepretina/pretrained/legacy-single-net-universal.pt \
   --av src/deepretina/pretrained/legacy-av-v9.pt \
   --unified /ABS/immutable-selected-best.pt \
@@ -42,7 +43,7 @@ synchronized, all samples and warmups are retained, and peak Torch allocation
 is reported separately from persistent model allocation. This excludes memory
 outside Torch. Report CPU thread count and other system load when comparing.
 Unified inference uses checkpoint-configured tile/whole geometry, vessel gating
-and cup containment. The original chain adds no cup containment. Input/FOV,
+and cup containment. The original chain defaults to native cup decoding; optional containment must be selected explicitly as described below. Input/FOV,
 selected-reference and checkpoint hashes, model parameters, checkpoint bytes,
 config and checkpoint epoch are recorded. Checkpoint/reference changes during
 the measurement abort it. Timing reads no labels and makes no accuracy claim.
@@ -68,3 +69,14 @@ Paletted single-channel FOVs are converted to luminance before thresholding,
 matching public prediction: palette index zero can legitimately represent white
 foreground. Color visualizations remain rejected. No tiling, photometric profile,
 model choice or measurement scope is changed by these input-reader fixes.
+
+
+## Explicit original cup policy
+
+`--original-cup-policy native` is the default. `--original-disc-variant disc0/raw|disc1/raw` is required explicitly and must match both the reference variant and actual dedicated disc checkpoint SHA. To time the stronger optional postprocessing reference, add `--original-cup-policy inside-disc` and pass the corresponding complete paired quality report, for example `reports/cup-containment-20261110/complete/fresh-cup-clipped-by-disc0-in-disc0-reference-val.json` from the completed b5804c7 study. Use disc1 and its corresponding report for that separate alternative. A native quality report cannot accompany clipped timed decoding, or vice versa; mismatched policy/context/disc variants are rejected.
+
+The exact optional rule is `(universal_raw_cup_logit > 0) & (same_forward_selected_raw_disc_logit > 0)` in the shared prepared frame, followed by nearest restoration. No probability threshold, morphology, GT clipping or universal disc substitute is added. Every other original head retains its decoding; the original weights/defaults are untouched. The benchmark records `original.cup_policy`, selected disc variant, checkpoint hashes and quality-reference hash, and executes that same policy inside every timed warmup/repetition. It reads no GT and makes no new quality claim.
+
+The completed paired VAL study covered all612 cup-supported photos and reported disc0-reference macro0.654498→0.667032, with80,891 true-positive cup pixels lost and1,450,920 false positives removed. Those changes describe an exploratory postprocessing tradeoff, not uniform improvement: consult source-level counts and the separately logged native numerical drift in the study report. Do not combine clipped quality with a native-only speed claim, or conceal reduced sensitivity. The final selected pipeline policy must be frozen before independent evaluation.
+
+Focused synthetic tests check strict-zero semantics, canonical-frame clipping before restoration, unchanged other heads/logits, both dedicated disc variants, policy/reference rejection, and policy propagation through timed callbacks and report metadata. They do not run actual networks or read GT.
