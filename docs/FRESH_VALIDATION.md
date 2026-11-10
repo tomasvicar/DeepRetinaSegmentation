@@ -64,5 +64,5 @@ operator controlling the runtime, or make cross-hardware bitwise promises.
 
 After this fresh evaluation is reviewed, the existing separate create/check
 workflow can bind it to a proposed final decision. The public test CLI remains
-blocked pending an independently reviewed dispatcher consuming the checked byte
-snapshot.
+blocked. The separate explicit [reviewed stage2 route](REVIEWED_HELDOUT.md) consumes
+the checked byte snapshot; freeze its source before generating final VAL evidence.

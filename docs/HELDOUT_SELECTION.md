@@ -4,8 +4,8 @@ This is a CPU-only creation/verification workflow for a future held-out evaluati
 **The public unified CLI still rejects every `--split test` request**, even with a
 valid selection artifact. No test evaluator integration or actual held-out result
 is added here. A separate [fresh VAL producer](FRESH_VALIDATION.md) evaluates validation only.
-The final test dispatcher requires separate review. Running inference/prediction
-is not part of these metadata scripts.
+The separate explicit [stage2 dispatcher](REVIEWED_HELDOUT.md) consumes a checked
+receipt; running inference/prediction is not part of these metadata scripts.
 
 ## What is bound
 
@@ -134,8 +134,9 @@ identity snapshots. A future reviewed test dispatcher must consume **those exact
 bytes**, not validate one file and reopen its pathname later. Replacing a same-name
 checkpoint after checking cannot change the returned snapshot. Actual canonical
 inputs must remain immutable during any future evaluation, and source/protocol
-must be verified before the test reader is entered. No such dispatcher is enabled
-in stage1; the lower-level research evaluator remains callable Python code.
+must be verified before the test reader is entered. Stage1 itself enables no dispatcher. The separate explicit
+[reviewed stage2 route](REVIEWED_HELDOUT.md) preserves the receipt's false flag and
+records a distinct execution request; the general public test CLI stays blocked.
 
 This is a reproducibility/process gate, **not an access-control or cryptographic
 attestation system**. An operator with source/data access can manually inspect
@@ -156,3 +157,7 @@ runtime/protocol; see [FRESH_VALIDATION.md](FRESH_VALIDATION.md). Existing thin
 historical reports must not be retroactively given invented provenance. Stage1
 still enables no test entrypoint and its metadata scripts perform no network
 forward.
+
+The separate stage2 implementation and synthetic-only verification are documented
+in [REVIEWED_HELDOUT.md](REVIEWED_HELDOUT.md). Freeze that final source before
+generating fresh VAL evidence/selection; this metadata module remains forward-free.
