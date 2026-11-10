@@ -133,6 +133,8 @@ def apply_unified(args, checkpoint):
 
 
 def _evaluate(args, checkpoint):
+    if args.output.exists():
+        raise FileExistsError(f"Existing evaluation report is preserved: {args.output}")
     if args.split != "val":
         raise ValueError(
             "Public unified evaluation permits --split val only; test requires a reviewed frozen-selection record schema"
@@ -154,6 +156,7 @@ def _evaluate(args, checkpoint):
     metrics.update(
         {
             "checkpoint": str(checkpoint),
+            "checkpoint_sha256": payload["checkpoint_sha256"],
             "manifest_sha256": manifest_sha,
             "prepared_content_sha256": verified,
             "experimental": True,
@@ -173,5 +176,6 @@ def _evaluate(args, checkpoint):
         }
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(metrics, indent=2, allow_nan=False) + "\n")
+    with args.output.open("x") as report:
+        report.write(json.dumps(metrics, indent=2, allow_nan=False) + "\n")
     return metrics
