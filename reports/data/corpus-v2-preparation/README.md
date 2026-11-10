@@ -54,3 +54,12 @@ Final [integrity](complete/integrity.json), [composition](complete/composition.j
 Nominal degree choices remain explicitly qualified, not measured calibration.
 Frozen v1 training/HPO/cache4e39 and all models/defaults remain unchanged; v2 needs
 a new plan/cache fingerprint before any future training.
+
+
+After all checks, the proposed artifact's files were set0444 and directories0555.
+[Freeze receipt](complete/artifact-freeze.json) records the count/storage view.
+This is a read-only research data artifact, not promotion of a trained model.
+The freeze changes no bytes, schema fingerprint, parent file modes or current
+model/training jobs. Use read-only integrity verification; a new preparation must
+write a new directory. Full model inference/checkpoint geometry capture is being
+integrated separately; existing models and frozen3157 execution remain unchanged.
