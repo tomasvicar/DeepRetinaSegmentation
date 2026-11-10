@@ -122,14 +122,16 @@ def parser() -> argparse.ArgumentParser:
     raw_av_mode.add_argument(
         "--av-raw-matlab",
         action="store_true",
-        help="Calibrated MATLAB-style AV profile; requires --fov and --fov-diameter-pixels",
+        help="MATLAB-style AV profile with provided --fov; optional explicit diameter overrides calibration",
     )
     predict.add_argument(
         "--vessel-checkpoint", type=Path, help="Override automatic legacy-vessels model for raw A/V"
     )
     predict.add_argument("--vessel-normalized", action="store_true")
     predict.add_argument(
-        "--fov-diameter-pixels", type=float, help="Calibrated raw A/V FOV diameter"
+        "--fov-diameter-pixels",
+        type=float,
+        help="Explicit raw A/V FOV diameter; overrides generic provided-mask calibration",
     )
     inspect = commands.add_parser("inspect", help="Summarize a prepared manifest")
     inspect.add_argument("manifest", type=Path)

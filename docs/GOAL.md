@@ -70,10 +70,15 @@ A/V preprocessingu. Samostatný Python CLAHE krok odpovídá 80 syntetickým tes
 a oběma skutečným V rovinám DRIVE/HRF do maximální absolutní chyby 4,45e-16.
 Vývoj je na `experiments/matlab-clahe-parity`; celý raw řetězec se ještě ověřuje
 a jeho kalibrovaná varianta je nyní dostupná přes explicitní `--av-raw-matlab`.
-Vyžaduje původní FOV a změřený průměr. Na DRIVE/HRF daly skutečné A/V váhy se
+Vyžaduje původní FOV; pro obecnou větev se střed/poloměr odhadne přesně podle
+ověřeného `souradnice`, ručně zadaný průměr má přednost. Speciální datasetové
+větve a degenerované masky bez kalibrace skončí chybou před spuštěním sítě.
+Hrany, středy a poloměry souhlasí s MATLABem na DRIVE/HRF i 73 syntetických
+maskách; metadata rozlišují automatický odhad a explicitní hodnotu.
+Na DRIVE/HRF daly skutečné A/V váhy se
 stejnými ručními cévními maskami stejné výsledné třídy uvnitř cév. Zbývající
 numerická rezidua a syntetický protipříklad jsou v `MATLAB_AV_PROFILE.md`;
-obecnou bitovou shodu netvrdíme. Celá předatelná větev prošla 283 testy.
+obecnou bitovou shodu netvrdíme. Navazující varianta s kalibrací dodané FOV prošla 374 testy.
 MATLAB není závislostí výsledného balíčku.
 
 Na `experiments/unified-loader-fast` je oddělená optimalizace načítání anotací.

@@ -63,21 +63,26 @@ uv run deepretina predict --model legacy-av --av-raw-proxy \
 ```
 
 For the separately calibrated MATLAB-style Python profile, provide the original
-FOV mask and its measured diameter. A known `--dataset` or explicit positive
+FOV mask. Its generic center/radius calibration is computed in Python. A known
+`--dataset` or explicit positive
 `--field-of-view-degrees` is required:
 
 ```bash
 uv run deepretina predict --model legacy-av --av-raw-matlab \
   --input /path/to/fundus.jpg --fov /path/to/fov.png \
-  --fov-diameter-pixels YOUR_MEASURED_DIAMETER --dataset drive \
+  --dataset drive \
   --output predictions/av --device cpu
 ```
 
-`YOUR_MEASURED_DIAMETER` must be replaced with a positive pixel measurement for
-that photograph. Add `--vessel-mask /path/to/vessels.png` to classify supplied
-original-frame vessels; otherwise the original vessel model runs first. The two
-raw profile flags are mutually exclusive. Missing calibration is rejected before
-vessel inference or output creation. Runtime remains entirely Python/uv; MATLAB
+An optional `--fov-diameter-pixels 538` supplies an explicit measured diameter
+and takes priority over estimation (538 belongs only to the measured DRIVE
+reference photograph). Add `--vessel-mask /path/to/vessels.png` to classify
+supplied original-frame vessels; otherwise the original vessel model runs first.
+The two raw profile flags are mutually exclusive. Empty/full or unusable FOVs
+fail closed when estimating; RIM-ONE, Erlangen, ROC and RIGA require explicit
+calibration because their original source uses special branches. These errors
+are rejected before vessel inference or output creation. See the
+[provided-FOV calibration scope](docs/MATLAB_FOV_CALIBRATION.md). Runtime remains entirely Python/uv; MATLAB
 scripts in the repository only generate test references.
 
 [The calibrated profile evidence](docs/MATLAB_AV_PROFILE.md) records numerical

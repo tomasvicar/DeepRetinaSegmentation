@@ -1,6 +1,6 @@
 # Provided-FOV calibration against MATLAB
 
-The experimental `legacy.matlab_fov` module reproduces the **generic provided-mask** branch of the user's original `souradnice.m` at `7bb0539b90dfce2ed6eaeef1de812072be1155d0`. It performs no image thresholding, morphology-based FOV discovery, bounding-box diameter substitution, or production default change. It can supply a diameter to the separately calibrated AV preprocessing API:
+The experimental `legacy.matlab_fov` module reproduces the **generic provided-mask** branch of the user's original `souradnice.m` at `7bb0539b90dfce2ed6eaeef1de812072be1155d0`. It performs no image thresholding, morphology-based FOV discovery, bounding-box diameter substitution, or image-based FOV extraction. It supplies the default calibration only inside the explicitly selected MATLAB-style AV profile when no diameter is given:
 
 ```python
 from deepretina.legacy.matlab_fov import calibrate_provided_fov
@@ -8,12 +8,16 @@ from deepretina.legacy.matlab_av import prepare_vesclass_matlab_calibrated
 
 calibration = calibrate_provided_fov(original_binary_fov, dataset="drive")
 prepared = prepare_vesclass_matlab_calibrated(
-    raw_rgb_uint8, original_binary_vessels, fov=original_binary_fov,
-    dataset="drive", fov_diameter_pixels=calibration.diameter_pixels,
+    raw_rgb_uint8,
+    original_binary_vessels,
+    fov=original_binary_fov,
+    dataset="drive",  # Omitting diameter uses the same provided-mask calibration.
 )
 ```
 
-This is an explicit experimental choice. A measured/supplied calibration retains priority: callers that already have one should pass it directly and need not run this estimator. CLI defaults and the existing explicit-diameter contract are unchanged on this branch. The returned center uses MATLAB one-based row/column coordinates. The original variable `prumer` means **radius** despite its name; the Python `diameter_pixels` property returns twice that value.
+The MATLAB-style AV profile remains an explicit choice (`--av-raw-matlab`), with the same numerical qualifications. A measured/supplied calibration retains priority: callers that already have one should pass it directly and the estimator is bypassed. Other preprocessing routes and defaults remain unchanged. CLI example: `uv run deepretina predict --model legacy-av --av-raw-matlab --input fundus.png --fov fov.png --dataset drive --output prediction`. Optional `--fov-diameter-pixels` overrides the estimate. Calibration errors are checked before vessel inference or output mutation. Metadata records the actual method and one-based center/radius for automatic estimates, or the explicit source and no inferred center for overrides.
+
+The returned center uses MATLAB one-based row/column coordinates. The original variable `prumer` means **radius** despite its name; the Python `diameter_pixels` property returns twice that value.
 
 The source first applies default Sobel `edge` to the provided FOV. Center coordinates are positive-half-up rounded modes of midpoint coordinates from rows/columns containing at least two edge pixels; tied modes use their smallest value. Radius is one plus the rounded modal edge distance from that center. This is faithful to the source, not a robust circle/ellipse fit. For example, our clipped circle with generating radius35 yields source radius20; the elliptical case yields radius23. Such masks can be physically unsuitable even when numerical replication is exact.
 

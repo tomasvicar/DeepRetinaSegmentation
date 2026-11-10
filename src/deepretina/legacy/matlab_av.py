@@ -8,12 +8,14 @@ remaining precision differences are recorded in docs/MATLAB_AV_PROFILE.md.
 from __future__ import annotations
 
 import math
+from dataclasses import asdict
 
 import numpy as np
 from scipy.ndimage import binary_erosion, distance_transform_edt, gaussian_filter, map_coordinates
 from skimage.color import hsv2rgb, rgb2hsv
 
 from .matlab_clahe import av_matlab_clahe_v
+from .matlab_fov import calibrate_provided_fov
 from .matlab_resize import imresize_bicubic, imresize_nearest_mask
 from .preprocessing import (
     DATASET_FOV_DEGREES,
@@ -109,16 +111,17 @@ def prepare_vesclass_matlab_calibrated(
     vessel_mask,
     *,
     fov,
-    fov_diameter_pixels,
+    fov_diameter_pixels=None,
     dataset=None,
     field_of_view_degrees=None,
     pixels_per_degree=25.0,
     storage="dicom12",
 ):
-    """Prepare a raw RGB photo with supplied original FOV and diameter calibration.
+    """Prepare raw RGB with provided FOV and explicit or generic source calibration.
 
-    No bbox-radius substitute or automatic-threshold FOV is silently introduced.
-    Calibration must come from a documented measurement/reference; full historical
+    An explicit diameter takes priority; otherwise the verified generic provided-
+    mask souradnice estimator is used. Special source branches fail closed. No
+    automatic-threshold FOV or bbox-radius substitute is introduced. Historical
     training-file provenance and arbitrary raw images are not certified here.
     """
     image = _rgb(image)
@@ -133,6 +136,24 @@ def prepare_vesclass_matlab_calibrated(
         if dataset is None or dataset.lower() not in DATASET_FOV_DEGREES:
             raise ValueError("Supply a known dataset or explicit field_of_view_degrees")
         field_of_view_degrees = DATASET_FOV_DEGREES[dataset.lower()]
+    if fov_diameter_pixels is None:
+        calibration = calibrate_provided_fov(fov, dataset=dataset)
+        fov_diameter_pixels = calibration.diameter_pixels
+        calibration_info = {
+            "mode": "estimated_from_provided_fov",
+            "method": "souradnice_generic_binary_sobel",
+            **asdict(calibration),
+        }
+        diameter_source = "provided FOV generic souradnice estimate"
+    else:
+        calibration_info = {
+            "mode": "explicit_diameter",
+            "method": "caller_supplied_diameter",
+            "center_row_one_based": None,
+            "center_col_one_based": None,
+            "radius_pixels": float(fov_diameter_pixels) / 2,
+        }
+        diameter_source = "explicit supplied calibration; no heuristic substitute"
     if not all(
         math.isfinite(v) and v > 0
         for v in (pixels_per_degree, field_of_view_degrees, fov_diameter_pixels)
@@ -150,14 +171,15 @@ def prepare_vesclass_matlab_calibrated(
         "name": "vesclass_matlab_provided_fov_calibrated",
         "matlab_parity_certified": False,
         "reference_runtime": "R2026b Update1",
-        "scope": "provided FOV and explicit diameter; measured numerical residuals remain",
+        "scope": "provided FOV with explicit or verified generic calibration; numerical residuals remain",
         "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
         "pixels_per_degree": float(pixels_per_degree),
         "photometry_pixels_per_degree": 25.0,
         "field_of_view_degrees": float(field_of_view_degrees),
         "fov_diameter_pixels": float(fov_diameter_pixels),
         "fov_source": "provided original-frame FOV",
-        "diameter_source": "explicit supplied calibration; no heuristic substitute",
+        "diameter_source": diameter_source,
+        "fov_calibration": calibration_info,
         "mask_resampling": "nearest to explicit resized image dimensions",
         "storage": storage,
         "historical_training_file_provenance_verified": False,

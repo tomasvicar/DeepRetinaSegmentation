@@ -183,6 +183,7 @@ def test_cli_matlab_profile_bundled_av_canary(tmp_path, capsys):
     assert info["raw_av_geometry"]["prepared_shape"] == [192, 224]
     assert "raw_av_proxy" not in info
     assert info["vessel_prediction"] is None
+    assert profile["fov_calibration"]["mode"] == "explicit_diameter"
     for name in ["artery", "vein", "classes", "vessel", "overlay"]:
         assert Image.open(outputs[name]).size == (112, 96)
 
@@ -191,7 +192,6 @@ def test_cli_matlab_profile_bundled_av_canary(tmp_path, capsys):
     ("remove", "extra", "message"),
     [
         ("--fov", [], "provided --fov"),
-        ("--fov-diameter-pixels", [], "positive finite --fov-diameter-pixels"),
         ("--field-of-view-degrees", [], "known --dataset"),
         ("--fov-diameter-pixels", ["--fov-diameter-pixels", "-1"], "positive finite"),
         ("--fov-diameter-pixels", ["--fov-diameter-pixels", "nan"], "positive finite"),
@@ -286,3 +286,51 @@ def test_cli_matlab_geometry_guard_before_vessel_model(tmp_path, monkeypatch, ca
     assert {"shape": "dimensions differ", "empty": "foreground", "tiny": "too small"}[
         invalid
     ] in capsys.readouterr().err
+
+
+def test_cli_matlab_bundled_av_automatic_fov_calibration(tmp_path, capsys):
+    args = matlab_cli_args(tmp_path)
+    i = args.index("--fov-diameter-pixels")
+    del args[i : i + 2]
+    main(args)
+    outputs = json.loads(capsys.readouterr().out)
+    info = json.loads(Path(outputs["metadata"]).read_text())
+    profile = info["raw_av_preprocessing"]
+    calibration = profile["fov_calibration"]
+    assert calibration["mode"] == "estimated_from_provided_fov"
+    assert calibration["method"] == "souradnice_generic_binary_sobel"
+    assert calibration["center_row_one_based"] > 0
+    assert calibration["center_col_one_based"] > 0
+    assert profile["fov_diameter_pixels"] == 2 * calibration["radius_pixels"]
+    assert info["shape"] == [96, 112]
+    assert Image.open(outputs["classes"]).size == (112, 96)
+    assert not profile["matlab_parity_certified"]
+    assert not profile["historical_training_file_provenance_verified"]
+
+
+@pytest.mark.parametrize("invalid", ["empty", "full", "special"])
+def test_cli_matlab_auto_calibration_fails_closed_before_vessel_model(
+    tmp_path, monkeypatch, capsys, invalid
+):
+    import deepretina.legacy.raw_proxy as raw
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("Unusable FOV or unsupported source reached model inference")
+
+    monkeypatch.setattr(raw, "predict_legacy", forbidden)
+    args = matlab_cli_args(tmp_path)
+    for flag in ["--fov-diameter-pixels", "--vessel-mask"]:
+        i = args.index(flag)
+        del args[i : i + 2]
+    if invalid == "special":
+        args += ["--dataset", "riga"]
+    else:
+        Image.fromarray(np.full((96, 112), 255 if invalid == "full" else 0, np.uint8)).save(
+            tmp_path / "fov.png"
+        )
+    with pytest.raises(SystemExit) as exc:
+        main(args)
+    assert exc.value.code == 2
+    expected = {"empty": "foreground", "full": "paired edge", "special": "special souradnice"}
+    assert expected[invalid] in capsys.readouterr().err
+    assert not (tmp_path / "out").exists()

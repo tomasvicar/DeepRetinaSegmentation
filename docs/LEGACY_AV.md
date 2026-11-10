@@ -122,8 +122,11 @@ must be labeled accordingly.
 ## Explicit calibrated raw CLI profile
 
 `uv run deepretina predict --model legacy-av --av-raw-matlab` selects the
-separate calibrated Python profile. Supply `--input`, `--fov`, a positive
-`--fov-diameter-pixels`, `--dataset` (or `--field-of-view-degrees`), and `--output`.
+separate calibrated Python profile. Supply `--input`, `--fov`, `--dataset`
+(or `--field-of-view-degrees`), and `--output`. The generic provided-mask center
+and radius are estimated unless a positive `--fov-diameter-pixels` overrides
+them. Empty/full masks and special source branches fail closed without an explicit
+calibration; see [provided-mask scope](MATLAB_FOV_CALIBRATION.md).
 An optional original-frame `--vessel-mask` bypasses automatic original vessel
 prediction. The raw mode cannot be combined with prepared arrays, DICOMs,
 `--prepared`, or `--av-raw-proxy`. See the complete [README command](../README.md)

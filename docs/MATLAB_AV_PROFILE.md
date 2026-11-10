@@ -2,7 +2,9 @@
 
 `prepare_vesclass_matlab_calibrated` is a separate Python profile, available through
 the explicit `predict --av-raw-matlab` CLI option. It requires the original-frame
-FOV and an explicitly measured FOV diameter. Existing U-Net Python normalization,
+FOV. A supplied diameter overrides the verified generic provided-mask calibration;
+without one, Python estimates the source center/radius from that mask.
+Existing U-Net Python normalization,
 prepared AV routes and default profiles remain available. Runtime uses Python/uv;
 MATLAB is used to generate numerical test references.
 
@@ -13,7 +15,7 @@ prepared = prepare_vesclass_matlab_calibrated(
     rgb_uint8,
     binary_vessels,
     fov=original_fov,
-    fov_diameter_pixels=538,
+    # Optional explicit fov_diameter_pixels=538 overrides generic calibration.
     dataset="drive",
     pixels_per_degree=25,
 )
@@ -21,7 +23,7 @@ prepared = prepare_vesclass_matlab_calibrated(
 # prepared.inputs(): four stored-value input planes for the original AV model
 ```
 
-The diameter above belongs only to the measured DRIVE reference photograph. It is not a dataset-wide calibration. Masks must match the original RGB grid. Floating vessel probabilities must be thresholded explicitly. Unknown dataset angles need `field_of_view_degrees`. Dataset-specific automatic FOV/radius estimation, including special stereoscopic cases, remains outside the verified scope.
+The optional diameter 538 belongs only to the measured DRIVE reference photograph; it is not a dataset-wide calibration. Masks must match the original RGB grid. Floating vessel probabilities must be thresholded explicitly. Unknown dataset angles need `field_of_view_degrees`. Image-based FOV extraction and special dataset branches, including stereoscopic cases, remain outside the verified scope. Automatic radius estimation uses only the supplied mask and fails closed for special datasets without an explicit diameter.
 
 The implementation follows user-owned `image_adjustment.m` and `local_contrast_and_clahe.m`: full-frame scalar bicubic resize with antialiasing and ceil output dimensions, nearest masks to the output shape, eroded provided FOV, float32 distance/Sobel extrapolation, replicate Gaussian background subtraction, HSV CLAHE, and uint16 rounding of normalized RGB ×4096. Photometric constants stay at the source's 25-pixel/degree setting even when an explicit outer geometry uses 35. No MATLAB toolbox source was inspected or copied. Public references are [imresize](https://www.mathworks.com/help/matlab/ref/imresize.html), [imgaussfilt](https://www.mathworks.com/help/images/ref/imgaussfilt.html), and [adapthisteq](https://www.mathworks.com/help/images/ref/adapthisteq.html). CLAHE details and separate tests are in [MATLAB_CLAHE.md](MATLAB_CLAHE.md).
 
@@ -50,9 +52,16 @@ The current profile is therefore **not certified bitwise MATLAB parity**, and hi
 | DRIVE25 | 0.0257933 | 9.05e-6 / 0.0120920 | 0.00602061 | 4 / 3 / 0 | 0 / 108109 vessel pixels |
 | HRF25 | 0.00132072 | 3.36e-7 / 0.000664234 | 0.000257850 | 0 / 0 / 0 | 0 / 115420 vessel pixels |
 
-Per-logit-channel errors, input mean errors, probabilities, vessel hashes and source references are retained in the JSON. `compare_model_forward.py` reproduces the gate with external goldens and original archives, without changing either. The two measured vessel-gated classifications are identical; logits are not identical. These results do not certify arbitrary images, automatic FOV calibration, historical checkpoint preprocessing provenance, or standalone raw prediction quality. See the [CLI example](../README.md) and [AV input contracts](LEGACY_AV.md) for usage. The CLI also has an actual bundled-model test covering calibrated preparation, native output dimensions and profile metadata.
+Per-logit-channel errors, input mean errors, probabilities, vessel hashes and source references are retained in the JSON. `compare_model_forward.py` reproduces the gate with external goldens and original archives, without changing either. The two measured vessel-gated classifications are identical; logits are not identical. These results do not certify arbitrary images, image-based FOV extraction, historical checkpoint preprocessing provenance, or standalone raw prediction quality. See the [CLI example](../README.md) and [AV input contracts](LEGACY_AV.md) for usage. The CLI also has an actual bundled-model test covering calibrated preparation, native output dimensions and profile metadata.
 
 The generic provided-mask center/radius stage is available as a separate
 [calibration helper](MATLAB_FOV_CALIBRATION.md). The complete raw golden and
 intermediate-stage generation procedure is preserved in
 [REPRODUCING.md](../reports/legacy/matlab-av-profile/REPRODUCING.md).
+
+Output `raw_av_preprocessing.fov_calibration` distinguishes
+`estimated_from_provided_fov` from `explicit_diameter`. The former stores
+`method=souradnice_generic_binary_sobel`, one-based center coordinates, radius
+and edge count. An explicit diameter stores `method=caller_supplied_diameter`,
+its half-radius, and null center coordinates; no automatic estimate is implied.
+The same metadata is returned by the library profile.
