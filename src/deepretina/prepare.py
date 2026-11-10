@@ -34,6 +34,8 @@ __all__ = [
 Archive = Source
 
 ARCHIVES = {
+    "drions": "DRIONS-DB.zip",
+    "gamma": "GAMMA.zip",
     "drive": "DRIVE.zip",
     "rite": "RITE.zip",
     "hrf": "HRF.zip",
@@ -57,6 +59,7 @@ ARCHIVES = {
     "fire": "FIRE.zip",
     "heimed": "HEI-MED.zip",
     "idrid": "IDRiD.zip",
+    "idrid_disc": "IDRiD.zip",
     "inspireavr": "INSPIRE-AVR.zip",
     "messidor": "MESSIDOR.zip",
     "rcrgbma": "RC-RGB-MA.zip",
@@ -388,10 +391,11 @@ def prepare(
                     save(_dataset, *args, **kwargs)
 
                 if d not in CORE_DATASETS:
+                    from .adapters.additional import ADAPTERS as additional
                     from .adapters.auxiliary import ADAPTERS as auxiliary
                     from .adapters.segmentation import ADAPTERS as segmentation
 
-                    {**auxiliary, **segmentation}[d](z, emit)
+                    {**auxiliary, **segmentation, **additional}[d](z, emit)
                 else:
                     from .adapters.core import decode_core
 
