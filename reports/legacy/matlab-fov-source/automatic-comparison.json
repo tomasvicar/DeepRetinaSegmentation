@@ -1,0 +1,161 @@
+{
+  "scope": "Optional source-stage study, no public activation/full automatic certification",
+  "automatic_port_complete": false,
+  "public_route_changed": false,
+  "unresolved": [
+    "multithresh N3/4/5 local optimizer",
+    "histcounts250 implicit edge placement"
+  ],
+  "oracle_thresholds_are_not_native_python": true,
+  "cases": [
+    {
+      "name": "drive_circle",
+      "dataset": "drive",
+      "stage_disagreements": {
+        "gray": 0,
+        "selected": 0,
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "fallback_used": false,
+      "low_threshold": 0.0,
+      "source_error": "",
+      "histogram_backend": "not_required",
+      "calibration": [
+        64,
+        80,
+        55
+      ],
+      "processing_fov_disagreements": 0
+    },
+    {
+      "name": "drive_nonzero_background",
+      "dataset": "drive",
+      "stage_disagreements": {
+        "gray": 0,
+        "selected": 0,
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "fallback_used": false,
+      "low_threshold": 0.0,
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "histogram_backend": "not_required",
+      "python_error": "Source FOV has no usable paired boundary intersections"
+    },
+    {
+      "name": "drive_large_hole",
+      "dataset": "drive",
+      "stage_disagreements": {
+        "gray": 0,
+        "selected": 0,
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "fallback_used": false,
+      "low_threshold": 0.0,
+      "source_error": "",
+      "histogram_backend": "not_required",
+      "calibration": [
+        65,
+        81,
+        20
+      ],
+      "processing_fov_disagreements": 0
+    },
+    {
+      "name": "g1020_noise_fallback",
+      "dataset": "g1020",
+      "stage_disagreements": {
+        "gray": 0,
+        "selected": 0,
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "fallback_used": true,
+      "low_threshold": 0.002,
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "histogram_backend": "supplied_oracle_edges",
+      "python_error": "Source FOV has no usable paired boundary intersections"
+    },
+    {
+      "name": "g1020_dark_fallback",
+      "dataset": "g1020",
+      "stage_disagreements": {
+        "gray": 0,
+        "selected": 0,
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "fallback_used": true,
+      "low_threshold": 0.0,
+      "source_error": "",
+      "histogram_backend": "supplied_oracle_edges",
+      "calibration": [
+        64,
+        80,
+        55
+      ],
+      "processing_fov_disagreements": 0
+    },
+    {
+      "name": "erlangen_auto",
+      "dataset": "erlangen",
+      "stage_disagreements": {
+        "gray": 0,
+        "selected": 0,
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "fallback_used": false,
+      "low_threshold": 0.0,
+      "source_error": "",
+      "histogram_backend": "not_required",
+      "calibration": [
+        65,
+        81,
+        85
+      ],
+      "processing_fov_disagreements": 0
+    },
+    {
+      "name": "rimone_auto",
+      "dataset": "rimone",
+      "stage_disagreements": {
+        "gray": 0,
+        "selected": 0,
+        "initial_closed": 0,
+        "closed": 0,
+        "filled": 0
+      },
+      "fallback_used": false,
+      "low_threshold": 0.0,
+      "source_error": "",
+      "histogram_backend": "not_required",
+      "calibration": [
+        64,
+        80,
+        34
+      ],
+      "processing_fov_disagreements": 0
+    }
+  ],
+  "primitive_cases": {
+    "rgb": 3,
+    "morphology": 5,
+    "components": 2,
+    "histograms": 5
+  },
+  "known_rejected_histogram_guess": {
+    "synthetic_case": "g1020_noise_fallback",
+    "matlab_low": 0.002,
+    "guessed_python_low": 0.00392156862745098,
+    "mask_disagreements": 11339
+  }
+}

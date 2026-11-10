@@ -8,7 +8,7 @@ silently substituting a robust circle fit or the single_net Python loader.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 
@@ -22,12 +22,15 @@ class MatlabSourceFOV:
     calibration: FOVCalibration
     source_branch: str
     closed_mask: np.ndarray
+    diagnostics: dict = field(default_factory=dict)
 
 
 def _binary(mask):
     values = np.asarray(mask)
     if values.ndim != 2 or min(values.shape) < 2 or max(values.shape) <= 5:
-        raise ValueError("Source provided-mask branch requires a 2D mask with max dimension >5")
+        raise ValueError(
+            "Source provided-mask branch requires a 2D mask with max dimension >5"
+        )
     if not np.isfinite(values).all():
         raise ValueError("Provide a finite binary source FOV")
     levels = np.unique(values)
@@ -55,7 +58,9 @@ def _calibration(boundary):
     col = math.floor(float(_mode(midpoints(boundary))) + 0.5)
     row = math.floor(float(_mode(midpoints(boundary.T))) + 0.5)
     y, x = np.where(boundary)
-    distance = np.sqrt((x.astype(float) + 1 - col) ** 2 + (y.astype(float) + 1 - row) ** 2)
+    distance = np.sqrt(
+        (x.astype(float) + 1 - col) ** 2 + (y.astype(float) + 1 - row) ** 2
+    )
     radius = math.floor(float(_mode(distance)) + 0.5) + 1
     return FOVCalibration(row, col, radius, int(boundary.sum()))
 
@@ -108,3 +113,228 @@ def provided_fov_source(mask, *, dataset="generic"):
         boundary = binary_sobel_edges(source)
         branch = "provided_generic"
     return MatlabSourceFOV(boundary, processing, _calibration(boundary), branch, source)
+
+
+def source_rgb2gray(image):
+    """Measured MATLAB double RGB weights after im2double(uint8RGB)."""
+    values = np.asarray(image)
+    if values.dtype != np.uint8 or values.ndim != 3 or values.shape[-1] != 3:
+        raise ValueError("Source automatic FOV currently requires raw RGB uint8")
+    values = values.astype(np.float64) / 255
+    return (
+        values[:, :, 0] * 0.298936021293776
+        + values[:, :, 1] * 0.587043074451121
+        + values[:, :, 2] * 0.114020904255103
+    )
+
+
+def source_disk10():
+    """Public getnhood(strel('disk',10)) oracle, default four-line approximation."""
+    widths = (
+        11,
+        13,
+        15,
+        17,
+        19,
+        19,
+        19,
+        19,
+        19,
+        19,
+        19,
+        19,
+        19,
+        19,
+        19,
+        17,
+        15,
+        13,
+        11,
+    )
+    result = np.zeros((19, 19), bool)
+    for row, width in enumerate(widths):
+        start = (19 - width) // 2
+        result[row, start : start + width] = True
+    return result
+
+
+def source_close(mask):
+    """Close with the source approximation and explicit unbounded-background pad."""
+    from scipy.ndimage import binary_closing
+
+    padded = np.pad(np.asarray(mask, bool), 9, mode="constant")
+    return binary_closing(padded, structure=source_disk10())[9:-9, 9:-9]
+
+
+def source_histcounts250(values, *, oracle_edges=None):
+    """Count explicit oracle bins; automatic MATLAB edge selection is unresolved.
+
+    MATLAB's public documentation specifies coverage and bin count but not the
+    floating edge placement. A guessed nice-number rule failed a measured case.
+    The optional study API therefore requires the actual measured edges.
+    """
+    data = np.asarray(values, np.float64)
+    if not data.size or not np.isfinite(data).all():
+        raise ValueError("Histogram requires finite nonempty source grayscale")
+    if oracle_edges is None:
+        raise NotImplementedError(
+            "Source histcounts250 automatic edges are unresolved; provide measured oracle edges explicitly for study"
+        )
+    edges = np.asarray(oracle_edges, np.float64)
+    if (
+        edges.shape != (251,)
+        or not np.isfinite(edges).all()
+        or not (np.diff(edges) > 0).all()
+    ):
+        raise ValueError("Provide exactly 251 finite strictly increasing oracle edges")
+    if edges[0] > data.min() or edges[-1] < data.max():
+        raise ValueError("Oracle edges must cover all source grayscale values")
+    return np.histogram(data, bins=edges)[0], edges.copy()
+
+
+def source_seed_components(mask, seeds):
+    """Source 8-connected membership, including background label if seeded."""
+    from scipy.ndimage import label
+
+    mask, seeds = np.asarray(mask, bool), np.asarray(seeds, bool)
+    if mask.ndim != 2 or seeds.shape != mask.shape:
+        raise ValueError("Component mask and seed field must share a 2D shape")
+    labels, _ = label(mask, structure=np.ones((3, 3), bool))
+    return np.isin(labels, np.unique(labels[seeds]))
+
+
+def automatic_fov_stages(
+    image, *, dataset="generic", multithresh_values=None, histogram_edges=None
+):
+    """Source threshold/components/close/fill stages, without inventing a radius.
+
+    For N3/4/5 profiles, the undocumented local search is not silently replaced
+    with global multi-Otsu. An explicit measured threshold vector may be supplied
+    for controlled oracle studies; this is recorded rather than called native.
+    """
+    from scipy.ndimage import binary_fill_holes
+
+    gray = source_rgb2gray(image)
+    if min(gray.shape) < 2 or max(gray.shape) <= 5:
+        raise ValueError(
+            "Source FOV study requires image dimensions matching its provided-stage domain"
+        )
+    name = str(dataset).lower().replace("-", "").replace("_", "")
+    name = {
+        "drishti": "drishtigs",
+        "diaretdb0": "diaretdb",
+        "diaretdb1": "diaretdb",
+    }.get(name, name)
+    n, factor = 0, 1.0
+    if name in {"diaretdb", "review"}:
+        n, factor = 4, 0.1
+    elif name in {"drishtigs", "idrid", "messidor", "riga", "roc", "vicavr", "avrdb"}:
+        n = 5
+    elif name == "stare":
+        n = 3
+    elif name in {"eophtha", "ridb"}:
+        n, factor = 5, 0.5
+    if n:
+        if multithresh_values is None:
+            raise NotImplementedError(
+                f"Source multithresh N={n} local-search port is unresolved; supply measured thresholds explicitly for study"
+            )
+        thresholds = np.asarray(multithresh_values, np.float64)
+        if thresholds.shape != (n,) or not np.isfinite(thresholds).all():
+            raise ValueError(f"Provide exactly {n} finite source multithresh values")
+        low = float(thresholds.min()) * factor
+    else:
+        if multithresh_values is not None:
+            raise ValueError("This source profile does not use multithresh")
+        low = 0.0
+    high = float(gray.max()) * (0.4 if name == "inspireavr" else 0.8)
+
+    def components(cutoff):
+        return source_seed_components(gray > cutoff, gray > high)
+
+    selected = components(low)
+    initial_closed = source_close(selected)
+    white = float(initial_closed.sum() / initial_closed.size)
+    expected_black = 1 - white
+    tolerance = 0.1
+    if name in {"aria", "g1020"}:
+        expected_black = 0.1343
+    elif name == "diaretdb":
+        expected_black = 0.1634
+    elif name == "stare":
+        expected_black = 0.269
+    elif name == "drishtigs":
+        expected_black = 0.2929 if gray.shape[1] > 2200 else 0.1568
+        tolerance = 0.05
+    elif name == "eophtha":
+        expected_black = 0.45
+        tolerance = 0.15
+    fallback = white > (1 - expected_black + tolerance) or white < (
+        1 - expected_black - tolerance
+    )
+    closed = initial_closed
+    if fallback:
+        counts, edges = source_histcounts250(gray, oracle_edges=histogram_edges)
+        index = int(
+            np.searchsorted(np.cumsum(counts), expected_black * gray.size, side="right")
+        )
+        low = float(edges[index])
+        high = float(gray.max()) * 0.8
+        selected = components(low)
+        closed = source_close(selected)
+    filled = binary_fill_holes(
+        closed, structure=np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]], bool)
+    )
+    return {
+        "gray": gray,
+        "selected": selected,
+        "initial_closed": initial_closed,
+        "closed": closed,
+        "filled": filled,
+        "dataset": name,
+        "low_threshold": low,
+        "high_threshold": high,
+        "fallback_used": bool(fallback),
+        "multithresh_backend": "supplied_oracle_vector" if n else "not_required",
+        "histogram_backend": "supplied_oracle_edges" if fallback else "not_required",
+        "initial_white_fraction": white,
+        "expected_black_fraction": expected_black,
+    }
+
+
+def automatic_fov_source(
+    image, *, dataset="generic", multithresh_values=None, histogram_edges=None
+):
+    """Optional source automatic FOV for measured primitive/profile subsets only."""
+    from dataclasses import replace
+
+    stages = automatic_fov_stages(
+        image,
+        dataset=dataset,
+        multithresh_values=multithresh_values,
+        histogram_edges=histogram_edges,
+    )
+    name = stages["dataset"]
+    # Source RIM uses fov AFTER fill as its boundary; generic/ROI uses final_closed.
+    boundary_input = stages["filled"] if name in {"rim", "rimone"} else stages["closed"]
+    result = provided_fov_source(boundary_input, dataset=name)
+    processing = (
+        np.ones_like(stages["filled"])
+        if name in {"rim", "rimone"}
+        else stages["filled"]
+    )
+    branch = (
+        "automatic_rimone_filled_boundary"
+        if name in {"rim", "rimone"}
+        else result.source_branch.replace("provided_", "automatic_", 1)
+    )
+    diagnostics = {
+        key: value for key, value in stages.items() if not isinstance(value, np.ndarray)
+    }
+    return replace(
+        result,
+        processing_fov=processing,
+        closed_mask=stages["closed"],
+        source_branch=branch,
+        diagnostics=diagnostics,
+    )
