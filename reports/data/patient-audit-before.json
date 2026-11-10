@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-11-10",
+  "stage": "before_patient_group_corrections",
+  "scope": "Read-only original-resource and primary-publication audit; not final-manifest certification",
+  "seed": 42,
+  "g1020": {
+    "crosswalk_resource": "G1020.zip!/G1020/G1020.csv",
+    "crosswalk_sha256": "faf663e197880b38ed085f7fb361b3acbc8f1592693aa7163de26e114402ac5f",
+    "crosswalk_bytes": 347206,
+    "images": 1020,
+    "patients": 432,
+    "missing_patient_ids": 0,
+    "max_images_per_patient": 12,
+    "before_image_id_partition_counts": {
+      "train": 612,
+      "val": 204,
+      "test": 204
+    },
+    "patients_spanning_any_partitions": 228,
+    "patients_train_val": 119,
+    "patients_train_test": 111,
+    "overlap_counts_additive": false,
+    "same_patient_same_eye_counterexample": [
+      {
+        "image": "image_0.jpg",
+        "split": "train",
+        "eye": "Right"
+      },
+      {
+        "image": "image_1.jpg",
+        "split": "test",
+        "eye": "Right"
+      }
+    ],
+    "approved_action": "Regroup supplied CSV patientID, retain all suitable arrays unchanged, regenerate manifest and integrity",
+    "primary_source": "https://www-live.dfki.de/fileadmin/user_upload/import/10840_G1020_A_Benchmark_Retinal_Fundus_Image_Dataset_for_Computer-Aided_Glaucoma_Detection.pdf",
+    "count_population": "All1020CSVimages under pre-correction image-ID grouping; before annotation-validity filtering and final full-manifest audit"
+  },
+  "aria": {
+    "evidence": "Shared filename base identity; clinical patient mapping not independently verified",
+    "decoded_rgb_hashes_differ_in_all_four_pairs": true,
+    "counterexamples": [
+      {
+        "base": "aria_d_26",
+        "files": [
+          "(0001)aria_d_26.tif",
+          "(0018)aria_d_26.tif"
+        ],
+        "before_splits": [
+          "test",
+          "train"
+        ]
+      },
+      {
+        "base": "aria_d_27",
+        "files": [
+          "(0001)aria_d_27.tif",
+          "(0026)aria_d_27.tif"
+        ],
+        "before_splits": [
+          "test",
+          "train"
+        ]
+      },
+      {
+        "base": "aria_d_28",
+        "files": [
+          "(0004)aria_d_28.tif",
+          "(0007)aria_d_28.tif"
+        ],
+        "before_splits": [
+          "val",
+          "train"
+        ]
+      },
+      {
+        "base": "aria_d_29",
+        "files": [
+          "(0003)aria_d_29.tif",
+          "aria_d_29.tif"
+        ],
+        "before_splits": [
+          "train",
+          "val"
+        ]
+      }
+    ],
+    "recommended_action": "Conservative regex cohort/base normalization ignoring leading counters and trailing view tokens"
+  },
+  "riga": {
+    "resources": 5550,
+    "sidecar_crosswalk_found": false,
+    "paired_eyes_primary_evidence": true,
+    "source_components_images": {
+      "MESSIDOR": 460,
+      "BinRushed": 195,
+      "Magrabi": 95
+    },
+    "folders": 7,
+    "approved_policy": "whole_source_training_only_until_verified_patient_crosswalk",
+    "primary_source": "https://uwspace.uwaterloo.ca/bitstreams/29ac8bdf-6c5a-4b1f-ae6e-95d8e60dd510/download",
+    "primary_source_location": "section3.2; printedpage54; PDFpage71"
+  },
+  "uoadr": {
+    "patient_crosswalk_recovered": false,
+    "approved_policy": "whole_source_training_only"
+  },
+  "erlangen": {
+    "raw_photos": 146,
+    "study_patient_prefixes": 73,
+    "photos_per_prefix": 2,
+    "multiple_visits_in_fundus_images": 0,
+    "existing_grouping_retains_known_pairs": true,
+    "shared_cohort_with_g1020_evidence_found": false
+  },
+  "sources_with_official_partitions_retained": [
+    "drive",
+    "rite",
+    "refuge",
+    "drishti"
+  ],
+  "sources_with_recoverable_subject_base_conventions": [
+    "chasedb1",
+    "onhsd",
+    "rimone",
+    "erlangen"
+  ],
+  "sources_with_unproven_clinical_identity_no_additional_concrete_leak_recovered": [
+    "hrf",
+    "drhagis",
+    "iostar",
+    "avrdb",
+    "stare"
+  ],
+  "known_exact_photo_reuse": [
+    "DRIVE/RITE annotations",
+    "DRHAGIS24/32"
+  ],
+  "limitations": [
+    "Counts reproduce pre-correction image-based grouping, not repaired final splits",
+    "Filename conventions, official protocols and verified patient crosswalks are different evidence levels",
+    "No full crosswalk, clinical diagnosis rows, primary paper copies or photographs included",
+    "Whole-source training-only must not move evidenced official heldout aliases into training"
+  ]
+}
