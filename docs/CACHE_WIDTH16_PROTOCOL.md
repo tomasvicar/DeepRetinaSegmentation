@@ -45,3 +45,29 @@ historical counts were not recorded. No old checkpoint was resumed.
 [Launch metadata](../reports/unified/width16-cached-e1.launch.json) records the
 exact command, source, plan/cache/canonical pins and GPU UUID. A successful launch
 is not a completed gate or a final-quality claim.
+
+## Completed E1 gate and continuation
+
+The real first-epoch gate PASSED: all model tensors/buffers, optimizer/scheduler,
+RNG, successful annotation coverage, shared validation counts and training loss
+compare exactly. Source/cache provenance intentionally differs. Both runs used
+all 2221 training photos,2048 successful updates,8192 samples and the60-epoch
+scheduler. The cached E1 milestone is independently copied and checksum-verified.
+
+Observed train/validation times were164.826/65.539s versus421.653/193.456s.
+Combined3m50s versus10m15s is an operational observation; different background CPU
+reference work prevents assigning the full ratio causally to caching alone.
+The earlier paired worker benchmarks give separate controlled CPU evidence.
+
+[Full preservation report](../reports/unified/width16-cached-e1-preservation.json)
+and [checkpoint QA](../reports/unified/width16-cached-e1-verification.json) retain
+all hashes and exceptions. The same new cached run resumed to E8 at15:02:54UTC,
+PID1074202, with no source/plan/config/checkpoint migration.
+[Resume command](../reports/unified/width16-cached-resume-e008.launch.json).
+
+Pascal width8 was separately SIGSTOP-protected at15:03:51UTC because its local
+Btrfs failed checkpoint-sized atomic replacements. Its state remains live in
+RAM; it was not cancelled or restarted. Resume requires repeated filesystem
+write/replace and Git index checks after administrator repair. Its paused epoch
+must not enter speed comparisons. Other hosts' trials continue.
+[Pause record](../reports/unified/width8-storage-pause.json).

@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "epoch": 1,
+  "preservation_equal": true,
+  "strict_tensor_equal": true,
+  "issues": [],
+  "sections": {
+    "state_dict": {
+      "equal": true,
+      "strict_tensor_equal": true,
+      "tensors": 128,
+      "differences": [],
+      "nonfinite": []
+    },
+    "training_state": {
+      "equal": true,
+      "strict_tensor_equal": true,
+      "tensors": 225,
+      "differences": [],
+      "nonfinite": []
+    },
+    "coverage": {
+      "equal": true,
+      "strict_tensor_equal": true,
+      "tensors": 0,
+      "differences": [],
+      "nonfinite": []
+    },
+    "config_except_device": {
+      "equal": true,
+      "strict_tensor_equal": true,
+      "tensors": 0,
+      "differences": [],
+      "nonfinite": []
+    },
+    "checkpoint_metadata": {
+      "equal": true,
+      "strict_tensor_equal": true,
+      "tensors": 0,
+      "differences": [],
+      "nonfinite": []
+    },
+    "validation": {
+      "equal": true,
+      "strict_tensor_equal": true,
+      "tensors": 0,
+      "differences": [],
+      "nonfinite": []
+    },
+    "csv_loss_steps": {
+      "equal": true,
+      "strict_tensor_equal": true,
+      "tensors": 0,
+      "differences": [],
+      "nonfinite": []
+    }
+  },
+  "provenance": {
+    "training_source_sha256": {
+      "old_present": true,
+      "new_present": true,
+      "old": "45e9254a6ca31737adba36dd360dc935309c8e4d524f3ea3af818844a7cfa37d",
+      "new": "abc52fbe48943fab4bf3639f9497cb6c8f0212e819981697e2d545b4af1224bb"
+    },
+    "derived_cache": {
+      "old_present": false,
+      "new_present": true,
+      "old": null,
+      "new": {
+        "schema": 1,
+        "fingerprint": "4e39e40def03d0f2859dd147107a3736a62b4fc0249dd440a1280a9803aa8591",
+        "canonical_fingerprint": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+        "allow_canonical_fallback": false
+      }
+    },
+    "manifest_sha256": {
+      "old_present": true,
+      "new_present": true,
+      "old": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+      "new": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69"
+    },
+    "prepared_content_sha256": {
+      "old_present": true,
+      "new_present": true,
+      "old": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+      "new": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e"
+    },
+    "config_device": {
+      "old": "cuda:0",
+      "new": "cuda:0"
+    }
+  },
+  "inputs": {
+    "old_checkpoint": {
+      "path": "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_87cf045/runs/width_16-seed42/last.pt",
+      "sha256": "33ea51e1d0fa34066532290d5408d64fd54c394ccf6cbb2fd0277c1cfe33d22f",
+      "bytes": 24507440
+    },
+    "new_checkpoint": {
+      "path": "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_d83f17a/runs/width_16-cached-seed42/last.pt",
+      "sha256": "4e09904793cff474adc6c164f6b02cf03b6100343d8415aa496530a075e51fce",
+      "bytes": 24539696
+    },
+    "old_metrics_csv": {
+      "path": "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_87cf045/runs/width_16-seed42/metrics.csv",
+      "sha256": "1793f6d381aaeacded16500af0c37ab7073ee16c9cd30411a954325cdb3fbb74"
+    },
+    "new_metrics_csv": {
+      "path": "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_d83f17a/runs/width_16-cached-seed42/metrics.csv",
+      "sha256": "748d61ff6114a15b2b5f8aeb5ab13f6e57f1cb9d3c6bdb6eacb004ffdcb0e586"
+    }
+  },
+  "timing": {
+    "old_csv": {
+      "train_loss": 0.8627997474541189,
+      "train_seconds": 421.65340738301165,
+      "validation_seconds": 193.45561864197953,
+      "epoch": 1,
+      "steps": 2048
+    },
+    "new_csv": {
+      "train_loss": 0.8627997474541189,
+      "train_seconds": 164.8256105170003,
+      "validation_seconds": 65.53875238797627,
+      "epoch": 1,
+      "steps": 2048
+    },
+    "train_speedup": 2.5581789508343538,
+    "train_plus_validation_speedup": 2.6701570428179404,
+    "scope": "CSV times exclude startup/support scan/cache verification; not end-to-end wall time"
+  },
+  "documented_differences": [
+    "Executable source fingerprint and optional derived-cache identity intentionally differ and are retained above; canonical data identity must remain equal",
+    "Config device is provenance only; all other config keys compare strictly",
+    "Per-photo validation compares photo IDs and channel confusion counts only; new av_conditional_counts and derived per-photo metric ratios do not enter this old/new gate"
+  ],
+  "limitation": "One paired snapshot comparison is not universal bitwise/determinism proof; CUDA warn_only may permit nondeterministic kernels. Every finite/missing/tensor difference remains reported."
+}
