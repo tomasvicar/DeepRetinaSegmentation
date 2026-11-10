@@ -55,8 +55,9 @@ backend and cutoff metadata. Mixing supplied oracle thresholds with this backend
 is rejected. Degenerate arbitrary-threshold policies fail closed.
 
 The existing default`threshold_backend="oracle"` remains guarded for N3/4/5
-without explicitly supplied measured thresholds. No public CLI/default, shipping
-profile, frozen evaluation3779, training3157 or canonical corpus was changed.
+without explicitly supplied measured thresholds. The first-cutoff study changed no public default, frozen evaluation3779,
+training3157 or canonical corpus. A later explicit opt-in CLI is documented in
+[MATLAB_SOURCE_AUTO.md](MATLAB_SOURCE_AUTO.md); it does not promote this backend to a default.
 The method's`full_multithresh_clone` and`matlab_parity_certified` stay false:
 finite measurements do not prove equivalence for every possible input/runtime.
 

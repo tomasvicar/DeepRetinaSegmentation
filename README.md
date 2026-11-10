@@ -147,6 +147,14 @@ per-channel labels and which pixels are actually annotated; unknown A/V labels a
 Use a new or empty output directory for each preparation; the manifest contains exactly the
 requested datasets. Existing prepared data are never overwritten.
 
+## Optional source FOV for raw original A/V
+
+`--av-raw-matlab-source` explicitly enables the Python source FOV/photometry
+profile with automatic FOV or a supplied source-compatible `--fov`. It accepts the
+existing raw A/V vessel/camera options. Numerical photometry residuals and measured
+counterexamples remain; it is not certified MATLAB parity and changes no default.
+See [scope, examples and limitations](docs/MATLAB_SOURCE_AUTO.md).
+
 ## Train and use one unified model
 
 The Python pipeline can train one RGB network for vessel, artery/vein, disc and

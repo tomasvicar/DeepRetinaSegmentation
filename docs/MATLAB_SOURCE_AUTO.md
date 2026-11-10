@@ -2,8 +2,8 @@
 
 `prepare_vesclass_matlab_source_auto` composes the measured automatic FOV
 first-cutoff backend with the existing calibrated resize/photometry preparer.
-It is an explicit Python API; public CLI/defaults and frozen evaluation/training
-sources are unchanged. No MATLAB installation is required at runtime.
+It is an explicit Python API and optional CLI profile. Existing defaults and frozen
+evaluation/training sources are unchanged. No MATLAB installation is required at runtime.
 
 ```python
 from deepretina.legacy.matlab_source_auto import prepare_vesclass_matlab_source_auto
@@ -108,3 +108,50 @@ Verification:1890 focused CPU tests passed (5.25seconds), including the four
 half-factor cases, two stored-RGB synthetic chains, default source angles and
 no-second-calibration spy. Ruff/format are clean. Component/report/test-log hashes
 are in [verification.json](../reports/legacy/matlab-source-auto/verification.json).
+
+
+## Explicit CLI integration (separate review branch)
+
+```bash
+# Automatic source FOV; vessel channel from the unchanged original vessel model.
+uv run deepretina predict --model legacy-av --av-raw-matlab-source \
+  --input fundus.png --dataset stare --output predictions/source-av --device cpu
+
+# Provided source FOV policy and provided binary vessel channel.
+uv run deepretina predict --model legacy-av --av-raw-matlab-source \
+  --input fundus.png --dataset drive --fov fov.png --vessel-mask vessel.png \
+  --output predictions/source-av --device cpu
+```
+
+This flag is mutually exclusive with `--av-raw-matlab` and `--av-raw-proxy`.
+The existing `--av-raw-matlab` retains its provided-FOV calibration behavior.
+Prepared planes/DICOM input modes, pilot models and unified models reject the
+new raw source flag. No model aliases, checkpoint weights or default threshold
+change. `--vessel-checkpoint` and `--vessel-normalized` continue to control only
+the optional original vessel-model call. A supplied original-frame vessel mask
+avoids that call. Vessel inference itself retains the existing single_net profile;
+the source FOV/photometry profile prepares the four-channel A/V input.
+
+The new general Python API `prepare_vesclass_matlab_source(..., fov=None,
+fov_diameter_pixels=None)` selects automatic source first-cutoff FOV without a
+mask, or `provided_fov_source` with a supplied mask. The automatic-only
+`prepare_vesclass_matlab_source_auto` API is preserved. Supplied FOV shape,
+foreground and finite values are validated. RIM-ONE requires its actual source
+wireframe mask; Erlangen uses its source rails calibration; ROC/RIGA retain their
+source inset policy. An arbitrary guessed mask is not a substitute for these
+source contracts. RIM/Erlangen automatic mode remains rejected. Explicit field
+angle is required for conditional/unknown source angles, and the profile requires
+exactly25px/degree. A positive finite `--fov-diameter-pixels` overrides the measured
+diameter, with both source estimate and actual used diameter recorded. This does
+not bypass source mask/branch validity checks.
+
+Source FOV and RGB are computed once before any optional vessel-model call, so
+invalid geometry fails before model inference. The final binary vessel channel
+uses the same nearest-center categorical resize as the direct API. Metadata
+records `vesclass_matlab_source_auto` or `vesclass_matlab_source_provided`, source
+branch, masks' hashes, explicit override policy and
+`matlab_parity_certified=false`. JSON provenance is never presented as a new
+accuracy result. Source Sobel/photometry counterexamples and the continuous-output
+differences above remain unresolved; the CLI option does not certify numerical
+parity, clinical equivalence or unseen-image quality. MATLAB `.m` files under
+reports are retained oracle reproduction generators only, never runtime code.

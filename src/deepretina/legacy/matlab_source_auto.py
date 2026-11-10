@@ -12,7 +12,7 @@ from dataclasses import asdict, dataclass
 import numpy as np
 
 from .matlab_av import prepare_vesclass_matlab_calibrated
-from .matlab_fov_source import MatlabSourceFOV, automatic_fov_source
+from .matlab_fov_source import MatlabSourceFOV, automatic_fov_source, provided_fov_source
 from .preprocessing import PreparedVesClassProxy, _rgb
 
 # Literal unambiguous degree parameters from user-owned7bb source load_*.m.
@@ -54,16 +54,18 @@ class PreparedMatlabSourceAuto(PreparedVesClassProxy):
     source_fov: MatlabSourceFOV
 
 
-def prepare_vesclass_matlab_source_auto(
+def prepare_vesclass_matlab_source(
     image,
     vessel_mask,
     *,
     dataset,
+    fov=None,
+    fov_diameter_pixels=None,
     field_of_view_degrees=None,
     pixels_per_degree=25.0,
     storage="dicom12",
 ):
-    """Prepare raw RGB using the explicit automatic souradnice(fov=0) branch.
+    """Prepare raw RGB using explicit source automatic or provided FOV policies.
 
     Requires a binary original-frame vessel mask; no network/GT reader is called.
     Histogram edges/threshold overrides are deliberately absent. This profile
@@ -86,7 +88,7 @@ def prepare_vesclass_matlab_source_auto(
     name = {"drishti": "drishtigs", "diaretdb0": "diaretdb", "diaretdb1": "diaretdb"}.get(
         name, name
     )
-    if name in {"rim", "rimone", "erlangen", "erlangenvideodata"}:
+    if fov is None and name in {"rim", "rimone", "erlangen", "erlangenvideodata"}:
         raise ValueError(
             "This source loader uses a provided special FOV; automatic composition does not replay that policy"
         )
@@ -104,12 +106,29 @@ def prepare_vesclass_matlab_source_auto(
         angle_source = "explicit supplied field angle"
     if not math.isfinite(angle) or angle <= 0:
         raise ValueError("Field angle must be positive and finite")
-    source = automatic_fov_source(image, dataset=name, threshold_backend="source_first_cutoff")
+    if fov_diameter_pixels is not None and (
+        isinstance(fov_diameter_pixels, (bool, np.bool_))
+        or not math.isfinite(float(fov_diameter_pixels))
+        or float(fov_diameter_pixels) <= 0
+    ):
+        raise ValueError("FOV diameter must be positive and finite")
+    if fov is None:
+        source = automatic_fov_source(image, dataset=name, threshold_backend="source_first_cutoff")
+    else:
+        mask = np.asarray(fov)
+        if mask.shape != image.shape[:2] or not np.isfinite(mask).all() or not (mask > 0).any():
+            raise ValueError("Provide a finite nonempty original-frame FOV matching RGB")
+        source = provided_fov_source(mask, dataset=name)
+    diameter = (
+        source.calibration.diameter_pixels
+        if fov_diameter_pixels is None
+        else float(fov_diameter_pixels)
+    )
     prepared = prepare_vesclass_matlab_calibrated(
         image,
         vessel,
         fov=source.processing_fov,
-        fov_diameter_pixels=source.calibration.diameter_pixels,
+        fov_diameter_pixels=diameter,
         dataset=name,
         field_of_view_degrees=angle,
         pixels_per_degree=25.0,
@@ -117,19 +136,28 @@ def prepare_vesclass_matlab_source_auto(
     )
     profile = {
         **prepared.profile,
-        "name": "vesclass_matlab_source_auto",
-        "scope": "explicit source fov=0 min-only automatic branch; resize/photometric residuals and historical provenance qualifications remain",
+        "name": "vesclass_matlab_source_auto" if fov is None else "vesclass_matlab_source_provided",
+        "scope": "explicit source FOV branch; resize/photometric residuals and historical provenance qualifications remain",
         "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
         "dataset": name,
         "field_angle_source": angle_source,
-        "fov_source": "automatic source souradnice with scalar-zero FOV argument",
-        "diameter_source": "automatic source boundary calibration; explicitly transferred without second calibration",
+        "fov_source": "automatic source souradnice with scalar-zero FOV argument"
+        if fov is None
+        else "caller-provided mask with explicit source branch",
+        "diameter_source": "explicit supplied override"
+        if fov_diameter_pixels is not None
+        else "source boundary calibration; explicitly transferred without second calibration",
         "fov_calibration": {
-            "mode": "estimated_from_source_automatic_fov",
+            "mode": "estimated_from_source_automatic_fov"
+            if fov is None
+            else "estimated_from_source_provided_fov",
             "method": source.source_branch,
             **asdict(source.calibration),
         },
-        "calibration_boundary_policy": "final_closed before hole filling; source-special rules remain separate",
+        "calibration_boundary_policy": "final_closed before hole filling; source-special rules remain separate"
+        if fov is None
+        else source.source_branch,
+        "used_diameter_pixels": diameter,
         "processing_fov_policy": "source returned processing FOV, distinct from calibration boundary",
         "source_fov_diagnostics": source.diagnostics,
         "generic_recalibration_performed": False,
@@ -145,4 +173,24 @@ def prepare_vesclass_matlab_source_auto(
     ).hexdigest()
     return PreparedMatlabSourceAuto(
         prepared.image, prepared.vessel, prepared.fov, prepared.geometry, profile, source
+    )
+
+
+def prepare_vesclass_matlab_source_auto(
+    image,
+    vessel_mask,
+    *,
+    dataset,
+    field_of_view_degrees=None,
+    pixels_per_degree=25.0,
+    storage="dicom12",
+):
+    """Preserved explicit automatic-only API; never supplies an oracle override."""
+    return prepare_vesclass_matlab_source(
+        image,
+        vessel_mask,
+        dataset=dataset,
+        field_of_view_degrees=field_of_view_degrees,
+        pixels_per_degree=pixels_per_degree,
+        storage=storage,
     )
