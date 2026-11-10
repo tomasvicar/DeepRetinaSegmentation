@@ -40,7 +40,8 @@ class UNet(nn.Module):
         self.head = nn.Conv2d(widths[0], out_channels, 1)
         self.divisor = 2**depth
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward_features(self, x: torch.Tensor):
+        """Decode the padded frame; callers must apply their head before cropping."""
         h, w = x.shape[-2:]
         x = F.pad(x, (0, (-w) % self.divisor, 0, (-h) % self.divisor), mode="replicate")
         skips = []
@@ -61,4 +62,8 @@ class UNet(nn.Module):
                     dim=1,
                 )
             )
-        return self.head(x)[..., :h, :w]
+        return x, (h, w)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        features, (h, w) = self.forward_features(x)
+        return self.head(features)[..., :h, :w]

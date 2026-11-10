@@ -73,7 +73,11 @@ class UnifiedConfig:
     max_steps: int | None = None
 
     def validate(self):
-        if self.architecture not in {"compact_unet", "legacy_universal"}:
+        if self.architecture not in {
+            "compact_unet",
+            "compact_unet_av_residual",
+            "legacy_universal",
+        }:
             raise ValueError("Unsupported unified architecture")
         if self.legacy_initialization is not None:
             if self.architecture != "legacy_universal":
@@ -608,6 +612,10 @@ def build_unified(config: UnifiedConfig, *, initialize=True):
             }
             if initialize:
                 lineage = initialize_legacy_universal(model, config.legacy_initialization)
+    elif config.architecture == "compact_unet_av_residual":
+        from .unified_av import AVResidualUNet
+
+        model = AVResidualUNet(config.base_channels, config.depth, config.norm)
     else:
         model = UNet(5, config.base_channels, config.depth, config.norm)
     model.lineage = lineage
@@ -629,6 +637,17 @@ def build_unified(config: UnifiedConfig, *, initialize=True):
             "outputs": 5,
         }
     )
+    if config.architecture == "compact_unet_av_residual":
+        model.architecture_spec.update(
+            name="compact_unet_av_residual",
+            av_residual={
+                "hidden_channels": model.av_hidden_channels,
+                "convolutions": "3x3, 3x3, zero-initialized1x1",
+                "normalization": "group1",
+                "inputs": "decoded features, centered RGB, detached internal vessel probability",
+                "outputs": "additive correction to conditional AV logits only",
+            },
+        )
     model.unified_config = asdict(config)
     return model
 
@@ -1054,6 +1073,7 @@ def _training_source_sha256():
     for name in (
         "unified.py",
         "unified_legacy.py",
+        "unified_av.py",
         "model.py",
         "dataset.py",
         "augment.py",
