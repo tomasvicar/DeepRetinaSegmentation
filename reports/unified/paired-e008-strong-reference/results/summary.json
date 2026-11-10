@@ -1,0 +1,459 @@
+{
+  "performed_utc": "2026-11-10T15:30:52.726184+00:00",
+  "seconds": 11.38569885212928,
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "protocol_sha256": "18ba62efb52df23cf103cb8245ea35125472017fe631bdbca58fa91e2be4db74",
+  "comparison_module_sha256": "10cbf98db427be2d2e841b59af7b3fd6777ef1835ec30148a2eca3430a392086",
+  "comparison_module_source_commit": "fb11844ccab7f578e5075708dc44cbe27f6ebbc5",
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "reference_commit": "84f899b",
+  "bootstrap_draws": 2000,
+  "seed": 42,
+  "unit": "source-stratified reviewed split_group_id; not proven independent patients",
+  "photos": 770,
+  "split_groups": 612,
+  "common_ground_truth_support": {
+    "vessel": {
+      "valid_pixels": 60922737,
+      "reference_positive_pixels": 6489999,
+      "supported_photos": 107
+    },
+    "artery": {
+      "valid_pixels": 2626284,
+      "reference_positive_pixels": 1196224,
+      "supported_photos": 42
+    },
+    "vein": {
+      "valid_pixels": 2626284,
+      "reference_positive_pixels": 1430060,
+      "supported_photos": 42
+    },
+    "disc": {
+      "valid_pixels": 583880677,
+      "reference_positive_pixels": 13478446,
+      "supported_photos": 691
+    },
+    "cup": {
+      "valid_pixels": 517984979,
+      "reference_positive_pixels": 3004212,
+      "supported_photos": 612
+    }
+  },
+  "new_model_inference": false,
+  "test_evaluation": false,
+  "missing_reports": [],
+  "missing_metric_counts": [
+    "Per-photo ungated conditional AV correct/scored counts; conditional accuracy gets point differences only, no paired CI."
+  ],
+  "results": [
+    {
+      "candidate": "lr0003",
+      "reference": "disc0/raw",
+      "comparison_report": "lr0003-e008-vs-disc0-raw.json",
+      "comparison_sha256": "76a9e5b995276b6fae9edac47ac8f69f78ba3c0c7ca3496e1e3df98e2305f0ba",
+      "macro": {
+        "reference": 0.654498284790506,
+        "candidate": 0.7089359721670758,
+        "candidate_minus_reference": 0.05443768737656984,
+        "paired_percentile_95ci": [
+          0.0416329290227164,
+          0.06684381161275849
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "pooled_channels": {
+        "vessel": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7225126056559076,
+          "candidate_minus_reference": -0.0476107941379057,
+          "paired_percentile_95ci": [
+            -0.05793849324357973,
+            -0.03813838066319444
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "artery": {
+          "reference": 0.6895286744885823,
+          "candidate": 0.561067960064821,
+          "candidate_minus_reference": -0.1284607144237614,
+          "paired_percentile_95ci": [
+            -0.14379130704998855,
+            -0.11273521196545232
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "vein": {
+          "reference": 0.6972977561799012,
+          "candidate": 0.6153719773876203,
+          "candidate_minus_reference": -0.08192577879228091,
+          "paired_percentile_95ci": [
+            -0.09600031337135831,
+            -0.06833152837780916
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "disc": {
+          "reference": 0.8948079084718797,
+          "candidate": 0.8491087882022444,
+          "candidate_minus_reference": -0.045699120269635296,
+          "paired_percentile_95ci": [
+            -0.06238280247461547,
+            -0.02938877027849112
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "cup": {
+          "reference": 0.4010565824296773,
+          "candidate": 0.791965465326172,
+          "candidate_minus_reference": 0.39090888289649467,
+          "paired_percentile_95ci": [
+            0.3497106326012282,
+            0.424755782177329
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      }
+    },
+    {
+      "candidate": "lr0003",
+      "reference": "disc1/raw",
+      "comparison_report": "lr0003-e008-vs-disc1-raw.json",
+      "comparison_sha256": "2211a62bc0cd7449c4207ec746a9d7d687f15a3483b98cf5356aed8ce3c4358c",
+      "macro": {
+        "reference": 0.6539961176170499,
+        "candidate": 0.7089359721670758,
+        "candidate_minus_reference": 0.054939854550025924,
+        "paired_percentile_95ci": [
+          0.0420904205018563,
+          0.06840486199564504
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "pooled_channels": {
+        "vessel": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7225126056559076,
+          "candidate_minus_reference": -0.0476107941379057,
+          "paired_percentile_95ci": [
+            -0.05793849324357973,
+            -0.03813838066319444
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "artery": {
+          "reference": 0.6895286744885823,
+          "candidate": 0.561067960064821,
+          "candidate_minus_reference": -0.1284607144237614,
+          "paired_percentile_95ci": [
+            -0.14379130704998855,
+            -0.11273521196545232
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "vein": {
+          "reference": 0.6972977561799012,
+          "candidate": 0.6153719773876203,
+          "candidate_minus_reference": -0.08192577879228091,
+          "paired_percentile_95ci": [
+            -0.09600031337135831,
+            -0.06833152837780916
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "disc": {
+          "reference": 0.9184820165997346,
+          "candidate": 0.8491087882022444,
+          "candidate_minus_reference": -0.06937322839749016,
+          "paired_percentile_95ci": [
+            -0.08884890572065236,
+            -0.05044900820669317
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "cup": {
+          "reference": 0.4010565824296773,
+          "candidate": 0.791965465326172,
+          "candidate_minus_reference": 0.39090888289649467,
+          "paired_percentile_95ci": [
+            0.3497106326012282,
+            0.424755782177329
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      }
+    },
+    {
+      "candidate": "baseline",
+      "reference": "disc0/raw",
+      "comparison_report": "baseline-e008-vs-disc0-raw.json",
+      "comparison_sha256": "ccbf3f14b6ece7ebf221c8218636eca98d768640e53d6b6f532b8d9e1f2efb78",
+      "macro": {
+        "reference": 0.654498284790506,
+        "candidate": 0.6793587872880197,
+        "candidate_minus_reference": 0.024860502497513703,
+        "paired_percentile_95ci": [
+          0.010647401721901945,
+          0.03745155492562562
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "pooled_channels": {
+        "vessel": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7067071869044375,
+          "candidate_minus_reference": -0.06341621288937582,
+          "paired_percentile_95ci": [
+            -0.07339688657163979,
+            -0.05376718609737758
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "artery": {
+          "reference": 0.6895286744885823,
+          "candidate": 0.5661010479984083,
+          "candidate_minus_reference": -0.12342762649017402,
+          "paired_percentile_95ci": [
+            -0.13616906749777014,
+            -0.11052296530412391
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "vein": {
+          "reference": 0.6972977561799012,
+          "candidate": 0.5188272382886924,
+          "candidate_minus_reference": -0.17847051789120882,
+          "paired_percentile_95ci": [
+            -0.19672858574169416,
+            -0.15930899529659323
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "disc": {
+          "reference": 0.8948079084718797,
+          "candidate": 0.7860057987242857,
+          "candidate_minus_reference": -0.10880210974759408,
+          "paired_percentile_95ci": [
+            -0.12925769212298927,
+            -0.08898841059724834
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "cup": {
+          "reference": 0.4010565824296773,
+          "candidate": 0.7850214355678204,
+          "candidate_minus_reference": 0.38396485313814316,
+          "paired_percentile_95ci": [
+            0.35295632249741843,
+            0.4092203177403409
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      }
+    },
+    {
+      "candidate": "baseline",
+      "reference": "disc1/raw",
+      "comparison_report": "baseline-e008-vs-disc1-raw.json",
+      "comparison_sha256": "c80f20d76d70972c6667c7d034d1fc65bab56ed0cfbc4e10bc7e145ab9a00e14",
+      "macro": {
+        "reference": 0.6539961176170499,
+        "candidate": 0.6793587872880197,
+        "candidate_minus_reference": 0.025362669670969784,
+        "paired_percentile_95ci": [
+          0.010465421498084307,
+          0.039074242086199446
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "pooled_channels": {
+        "vessel": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7067071869044375,
+          "candidate_minus_reference": -0.06341621288937582,
+          "paired_percentile_95ci": [
+            -0.07339688657163979,
+            -0.05376718609737758
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "artery": {
+          "reference": 0.6895286744885823,
+          "candidate": 0.5661010479984083,
+          "candidate_minus_reference": -0.12342762649017402,
+          "paired_percentile_95ci": [
+            -0.13616906749777014,
+            -0.11052296530412391
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "vein": {
+          "reference": 0.6972977561799012,
+          "candidate": 0.5188272382886924,
+          "candidate_minus_reference": -0.17847051789120882,
+          "paired_percentile_95ci": [
+            -0.19672858574169416,
+            -0.15930899529659323
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "disc": {
+          "reference": 0.9184820165997346,
+          "candidate": 0.7860057987242857,
+          "candidate_minus_reference": -0.13247621787544894,
+          "paired_percentile_95ci": [
+            -0.15478010820532667,
+            -0.11058767383847512
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "cup": {
+          "reference": 0.4010565824296773,
+          "candidate": 0.7850214355678204,
+          "candidate_minus_reference": 0.38396485313814316,
+          "paired_percentile_95ci": [
+            0.35295632249741843,
+            0.4092203177403409
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      }
+    },
+    {
+      "candidate": "strong",
+      "reference": "disc0/raw",
+      "comparison_report": "strong-e008-vs-disc0-raw.json",
+      "comparison_sha256": "c78ef2206d2adddadfd9ac093000105f2f40b30ee44f308ae5311e7890a921c0",
+      "macro": {
+        "reference": 0.654498284790506,
+        "candidate": 0.6794273484768596,
+        "candidate_minus_reference": 0.024929063686353614,
+        "paired_percentile_95ci": [
+          0.013048595543246309,
+          0.0368371392221667
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "pooled_channels": {
+        "vessel": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7118993705924894,
+          "candidate_minus_reference": -0.05822402920132386,
+          "paired_percentile_95ci": [
+            -0.0682636103588506,
+            -0.048609966601141974
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "artery": {
+          "reference": 0.6895286744885823,
+          "candidate": 0.5781967917313015,
+          "candidate_minus_reference": -0.1113318827572809,
+          "paired_percentile_95ci": [
+            -0.12707720535834072,
+            -0.09399029739129333
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "vein": {
+          "reference": 0.6972977561799012,
+          "candidate": 0.4963716328183133,
+          "candidate_minus_reference": -0.20092612336158788,
+          "paired_percentile_95ci": [
+            -0.22457184959369506,
+            -0.17822247239360736
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "disc": {
+          "reference": 0.8948079084718797,
+          "candidate": 0.7827099293768128,
+          "candidate_minus_reference": -0.11209797909506691,
+          "paired_percentile_95ci": [
+            -0.13053025454495845,
+            -0.09392789420654155
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "cup": {
+          "reference": 0.4010565824296773,
+          "candidate": 0.7864052045064589,
+          "candidate_minus_reference": 0.3853486220767816,
+          "paired_percentile_95ci": [
+            0.35438609115912223,
+            0.4102732988677248
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      }
+    },
+    {
+      "candidate": "strong",
+      "reference": "disc1/raw",
+      "comparison_report": "strong-e008-vs-disc1-raw.json",
+      "comparison_sha256": "c2ac580e1100aecd34b054631724f8f0d66f7338c1742cfc3d88f70a511577d4",
+      "macro": {
+        "reference": 0.6539961176170499,
+        "candidate": 0.6794273484768596,
+        "candidate_minus_reference": 0.025431230859809695,
+        "paired_percentile_95ci": [
+          0.012482919190310483,
+          0.0385810341967221
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "pooled_channels": {
+        "vessel": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7118993705924894,
+          "candidate_minus_reference": -0.05822402920132386,
+          "paired_percentile_95ci": [
+            -0.0682636103588506,
+            -0.048609966601141974
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "artery": {
+          "reference": 0.6895286744885823,
+          "candidate": 0.5781967917313015,
+          "candidate_minus_reference": -0.1113318827572809,
+          "paired_percentile_95ci": [
+            -0.12707720535834072,
+            -0.09399029739129333
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "vein": {
+          "reference": 0.6972977561799012,
+          "candidate": 0.4963716328183133,
+          "candidate_minus_reference": -0.20092612336158788,
+          "paired_percentile_95ci": [
+            -0.22457184959369506,
+            -0.17822247239360736
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "disc": {
+          "reference": 0.9184820165997346,
+          "candidate": 0.7827099293768128,
+          "candidate_minus_reference": -0.13577208722292178,
+          "paired_percentile_95ci": [
+            -0.15655881754278486,
+            -0.1153399815373347
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "cup": {
+          "reference": 0.4010565824296773,
+          "candidate": 0.7864052045064589,
+          "candidate_minus_reference": 0.3853486220767816,
+          "paired_percentile_95ci": [
+            0.35438609115912223,
+            0.4102732988677248
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      }
+    }
+  ]
+}
