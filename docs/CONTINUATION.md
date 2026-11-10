@@ -1,5 +1,11 @@
 # Aktuální předání: 10. 11. 2026, 20:38 UTC
 
+Doplnění20:43UTC: volitelný `--av-raw-matlab-source` nyní zpřístupňuje source
+FOV/preprocessing v Pythonu; úplná numerická shoda se netvrdí, rozdíly jsou
+v [MATLAB_SOURCE_AUTO.md](MATLAB_SOURCE_AUTO.md). Po integraci prošla celá
+sestava2 440 CPU testy; důkaz je v `reports/release/source-cli-integration/`.
+Původní výchozí profily zůstávají zachované.
+
 Cíl z [GOAL.md](GOAL.md) zůstává aktivní. `for_Leipzig` od `2d07be5`
 obsahuje původních pět ověřených modelů, tři výslovně předběžné piloty a nově
 `unified-full-data-baseline`: dokončených60 epoch na všech2 221 vhodných TRAIN
