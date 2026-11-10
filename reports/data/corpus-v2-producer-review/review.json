@@ -1,0 +1,42 @@
+{
+  "reviewed_producer_commit": "fa1cf0336410676020bd4f05eb8e6d545ad3ce88",
+  "status": "no_confirmed_current_corpus_blocker_pending_actual_terminal_QA",
+  "source_sha256": {
+    "scripts/prepare_corpus_v2.py": "8a745d3bddff4e94b31e855e7b8e6b10bc6562444992c78ac5243872cf5837e0",
+    "scripts/prepare_unified_data.py": "06d3c189ada10cbccab6888e8173021548f2878e284a271f1416719294b7a04b",
+    "src/deepretina/adapters/additional.py": "e6eaec2d7e449bf09c3174f94c690e2afcd1c7dad0638d83a99b57ba3e50d743",
+    "src/deepretina/adapters/biomisa.py": "652ad6319e1cce682da97eb78d787e2a60cd8c7680eeb3b8159495fddcffca1a",
+    "src/deepretina/legacy/preprocessing.py": "28068cbd23ebd76d36f7d12339d9ffa8d84e8816876646fa7725998e1d00e015",
+    "src/deepretina/integrity.py": "6b8c338f3e40628bdabb528ec80c29f7f013f38fdd2e8bb76928007efb29281d"
+  },
+  "frozen3157_reader_ast_compatibility": {
+    "read_unified_manifest": true,
+    "map_record_targets": true,
+    "read_unified_sample": true,
+    "UnifiedDataset.__init__": true,
+    "UnifiedDataset._image": true,
+    "UnifiedDataset.sample": true,
+    "UnifiedDataset.support_summary": true
+  },
+  "synthetic_parent_train_alias_repro": {
+    "old_group": "sha256:parent-frozen-group",
+    "new_group": "sha256:f365cf99b8b727adf72fea3f8c891bc8a7076fd01a329a40a2812a5da1df1543",
+    "groups_equal": false,
+    "same_photo": true,
+    "quarantined": false,
+    "qualification": "P2 edge only; native TRAIN audit reports no actual parent aliases, so no current-corpus occurrence established"
+  },
+  "raw_image_or_GT_reads": false,
+  "model_or_GPU_forward": false,
+  "producer_or_running_conversion_modified": false,
+  "full_test_suite_rerun": false,
+  "test_scope": "Read existing producer/unit fixtures; executed only pure AST compatibility and toy partition metadata counterexample",
+  "required_terminal_checks": [
+    "Actual schema2 audit success",
+    "v1 parent hash and rows unchanged",
+    "all copied old input bytes exact/distinct parent inodes",
+    "new officialIDRiDTEST27 remain test",
+    "actual aliases checked and protected heldouts quarantined",
+    "new valid unknown heads masked; geometry and provenance recorded"
+  ]
+}
