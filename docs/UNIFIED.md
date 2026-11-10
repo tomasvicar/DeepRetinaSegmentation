@@ -116,3 +116,45 @@ explicitly select `macro_dataset_mean_dice`, giving each supported dataset equal
 weight within an output. Checkpoints/CSV retain both scores and the selection
 score. Resume requires the same declared metric. See [UNIFIED_HPO.md](UNIFIED_HPO.md)
 for audited17-source planning, fixed scheduler budgets and commands.
+
+## Controlled original-topology alternative
+
+`architecture="legacy_universal"` selects the original universal linear-width
+UNet (32/64/96/128, depth4, BatchNorm, no dropout), expanded to five outputs:
+1,304,421 parameters. Its widths/depth/norm are fixed; the compact architecture's
+`base_channels`, `depth`, and `norm` settings do not change this alternative.
+Actual architecture metadata is exported separately from the requested config.
+From-scratch initialization uses no historical weights and remains eligible for
+an independently partitioned new-model experiment. It has not been GPU trained
+or demonstrated to improve accuracy.
+
+Optional historical initialization is deliberately separate and exploratory:
+
+```toml
+architecture = "legacy_universal"
+legacy_initialization = "src/deepretina/pretrained/legacy-single-net-universal.pt"
+allow_historical_exposure = true
+```
+
+This accepts only the safe converted original universal checkpoint. Its vessel,
+disc and cup head parameters are copied exactly to outputs0,3,4; conditional
+artery/vein weights and biases start at zero (uniform conditional probability).
+The original backbone and BatchNorm state are copied without alteration. Tests
+compare the actual distributed checkpoint's three initial logits bit for bit on a divisible rectangular input and its original288×288 tile. Very small padded inputs can differ by floating-point rounding because the final convolution has five rather than three output channels; tests enforce close agreement there.
+
+Historical teacher exposure to current splits is **unknown**. Such descendants
+are marked `independent_model_eligible=false`, carry `accuracy_claim=false`, and
+may be evaluated only on train/validation for exploratory analysis; the unified
+evaluator refuses their test evaluation. Explicit authorization acknowledges
+this limitation and does not make the initialization eligible for the final
+independent model. Keep it outside the main unified HPO candidate plan. Lineage
+includes original source provenance, converted-checkpoint SHA256, training-index
+hash/count and the output mapping. Original labels may also contain known
+historical defects, including UOA cup semantics; ancestry is no quality proof.
+
+Student checkpoints remain self-contained: inference and epoch-boundary resume
+restore all five heads plus lineage and never reopen/download the historical
+checkpoint. The original checkpoint path is provenance, not a runtime dependency.
+For the new student only, an input wrapper fixes height/width padding for odd,
+rectangular and very small images before delegating to the unchanged original
+forward. The historical reference implementation and golden behavior stay intact.

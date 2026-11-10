@@ -538,3 +538,42 @@ def test_best_checkpoint_uses_declared_selection_metric(tmp_path, metric, expect
     validation = json.loads((path.parent / "validation.json").read_text())
     assert validation["selection_metric"] == metric
     assert validation["selection_score"] == saved["val_selection_score"]
+
+
+def test_historical_resume_is_exact_without_original_checkpoint(tmp_path):
+    import shutil
+    from pathlib import Path
+
+    manifest = make_manifest(tmp_path)
+    teacher = tmp_path / "teacher.pt"
+    shutil.copyfile(
+        Path(__file__).parents[1] / "src/deepretina/pretrained/legacy-single-net-universal.pt",
+        teacher,
+    )
+    cfg = UnifiedConfig(
+        architecture="legacy_universal",
+        legacy_initialization=str(teacher),
+        allow_historical_exposure=True,
+        epochs=2,
+        epoch_samples=2,
+        batch_size=2,
+        patch_size=32,
+        workers=0,
+        device="cpu",
+        augmentation="basic",
+        tile_size=32,
+        overlap=8,
+    )
+    train_unified(manifest, tmp_path / "full", cfg)
+    train_unified(manifest, tmp_path / "resumed", cfg, stop_after_epoch=1)
+    teacher.unlink()
+    train_unified(manifest, tmp_path / "resumed", cfg, resume=tmp_path / "resumed/last.pt")
+    expected = torch.load(tmp_path / "full/last.pt", weights_only=True)
+    actual = torch.load(tmp_path / "resumed/last.pt", weights_only=True)
+    assert all(
+        torch.equal(value, actual["state_dict"][key])
+        for key, value in expected["state_dict"].items()
+    )
+    assert actual["lineage"] == expected["lineage"]
+    assert actual["accuracy_claim"] is False
+    assert actual["coverage"] == expected["coverage"]

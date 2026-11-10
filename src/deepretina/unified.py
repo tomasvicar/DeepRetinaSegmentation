@@ -34,6 +34,9 @@ SOURCE_CHANNELS = {"vessels": (0,), "av": (0, 1, 2), "disc_cup": (3, 4)}
 
 @dataclass
 class UnifiedConfig:
+    architecture: str = "compact_unet"
+    legacy_initialization: str | None = None
+    allow_historical_exposure: bool = False
     preprocessing_profile: str = "legacy25_raw"
     pixels_per_degree: float = 25.0
     epochs: int = 60
@@ -67,6 +70,15 @@ class UnifiedConfig:
     max_steps: int | None = None
 
     def validate(self):
+        if self.architecture not in {"compact_unet", "legacy_universal"}:
+            raise ValueError("Unsupported unified architecture")
+        if self.legacy_initialization is not None:
+            if self.architecture != "legacy_universal":
+                raise ValueError("Legacy initialization requires legacy_universal architecture")
+            if not self.allow_historical_exposure:
+                raise ValueError(
+                    "Legacy initialization requires explicit allow_historical_exposure=true; teacher exposure is unknown"
+                )
         if self.preprocessing_profile != "legacy25_raw" or self.pixels_per_degree != 25:
             raise ValueError(
                 "Unified training uses canonical legacy25_raw RGB geometry at25pixels/degree"
@@ -538,9 +550,49 @@ def unified_loss(logits, target, valid, *, bce_weight=1.0, dice_weight=1.0, av_w
     return (sum(weighted) / sum(weights) if weighted else logits.sum() * 0), components
 
 
-def build_unified(config: UnifiedConfig):
+def build_unified(config: UnifiedConfig, *, initialize=True):
     config.validate()
-    model = UNet(5, config.base_channels, config.depth, config.norm)
+    lineage = {
+        "initialization": "scratch",
+        "historical_exposure": False,
+        "independent_model_eligible": True,
+    }
+    if config.architecture == "legacy_universal":
+        from .unified_legacy import LegacyUniversalStudent, initialize_legacy_universal
+
+        model = LegacyUniversalStudent()
+        if config.legacy_initialization is not None:
+            # An inference/resume checkpoint is self-contained: never reopen the teacher.
+            lineage = {
+                "initialization": "original_universal_three_to_five",
+                "historical_exposure": "unknown",
+                "independent_model_eligible": False,
+                "accuracy_claim": False,
+                "allowed_evaluation_splits": ["train", "val"],
+            }
+            if initialize:
+                lineage = initialize_legacy_universal(model, config.legacy_initialization)
+    else:
+        model = UNet(5, config.base_channels, config.depth, config.norm)
+    model.lineage = lineage
+    model.architecture_spec = (
+        {
+            "name": "legacy_universal",
+            "filters": 32,
+            "depth": 4,
+            "dropout": 0,
+            "normalization": "batch",
+            "outputs": 5,
+        }
+        if config.architecture == "legacy_universal"
+        else {
+            "name": "compact_unet",
+            "base_channels": config.base_channels,
+            "depth": config.depth,
+            "normalization": config.norm,
+            "outputs": 5,
+        }
+    )
     model.unified_config = asdict(config)
     return model
 
@@ -657,6 +709,14 @@ def evaluate_unified_model(model, manifest, split="val", device="cpu", config=No
         if isinstance(config, dict)
         else config or UnifiedConfig(**getattr(model, "unified_config", {}))
     )
+    historical = (
+        cfg.legacy_initialization is not None
+        or getattr(model, "lineage", {}).get("historical_exposure") == "unknown"
+    )
+    if historical and split not in {"train", "val"}:
+        raise ValueError(
+            "Historical initialization has unknown teacher exposure; exploratory train/val evaluation only"
+        )
     dataset = UnifiedDataset(manifest, split, cfg)
     counts = np.zeros((5, 4), np.int64)
     by_dataset = {}
@@ -722,7 +782,10 @@ def evaluate_unified_model(model, manifest, split="val", device="cpu", config=No
     return {
         "family": "unified",
         "purpose": cfg.purpose,
-        "accuracy_claim": False if cfg.purpose == "functionality" else "requires fair benchmark",
+        "accuracy_claim": False
+        if cfg.purpose == "functionality" or historical
+        else "requires fair benchmark",
+        "lineage": getattr(model, "lineage", {}),
         "split": split,
         "photos": len(dataset),
         "records": len(dataset.rows),
@@ -758,7 +821,8 @@ def load_unified(path: Path, device="auto"):
     if payload.get("normalization") != "RGB/255-0.5":
         raise ValueError("Unified normalization contract mismatch")
     config = UnifiedConfig(**payload["config"])
-    model = build_unified(config)
+    model = build_unified(config, initialize=False)
+    model.lineage = payload.get("lineage", model.lineage)
     model.load_state_dict(payload["state_dict"], strict=True)
     model.supervised_channels = payload.get("supervised_channels", [True] * 5)
     if len(model.supervised_channels) != 5:
@@ -839,6 +903,9 @@ def predict_unified(
     metadata = {
         "family": "unified",
         "checkpoint": str(checkpoint),
+        "lineage": model.lineage,
+        "architecture": model.architecture_spec,
+        "accuracy_claim": payload.get("accuracy_claim", False),
         "image": str(image_path),
         "channels": list(CHANNELS),
         "supervised_channels": payload["supervised_channels"],
@@ -962,7 +1029,7 @@ def train_unified(
         num_workers=config.workers,
         generator=generator,
     )
-    model = build_unified(config).to(device)
+    model = build_unified(config, initialize=resume is None).to(device)
     model.supervised_channels = flags
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=config.lr, weight_decay=config.weight_decay
@@ -985,13 +1052,14 @@ def train_unified(
             raise ValueError("Resume requires unified last.pt with training state")
         if saved["manifest_sha256"] != digest:
             raise ValueError("Resume manifest changed")
-        original = dict(saved["config"])
+        original = asdict(UnifiedConfig(**saved["config"]))
         current = asdict(config)
         original.pop("device")
         current.pop("device")
         if original != current:
             raise ValueError("Resume training configuration changed")
         model.load_state_dict(saved["state_dict"])
+        model.lineage = saved.get("lineage", model.lineage)
         state = saved["training_state"]
         photo_visits.update(state.get("coverage", {}).get("photo_visits", {}))
         annotation_visits.update(state.get("coverage", {}).get("annotation_visits", {}))
@@ -1014,6 +1082,8 @@ def train_unified(
             output / "run.json",
             {
                 "family": "unified",
+                "lineage": model.lineage,
+                "architecture": model.architecture_spec,
                 "config": asdict(config),
                 "manifest": str(manifest.resolve()),
                 "manifest_sha256": digest,
@@ -1038,7 +1108,7 @@ def train_unified(
                 "inference_max_size": inference_max_size,
                 "purpose": config.purpose,
                 "accuracy_claim": False
-                if config.purpose == "functionality"
+                if config.purpose == "functionality" or config.legacy_initialization is not None
                 else "requires independent benchmark",
             },
         )
@@ -1133,6 +1203,11 @@ def train_unified(
             payload = {
                 "format_version": 1,
                 "family": "unified",
+                "lineage": model.lineage,
+                "architecture": model.architecture_spec,
+                "accuracy_claim": False
+                if config.legacy_initialization is not None or config.purpose == "functionality"
+                else "requires independent benchmark",
                 "channels": list(CHANNELS),
                 "config": asdict(config),
                 "state_dict": model.state_dict(),
