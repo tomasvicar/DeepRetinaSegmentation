@@ -17,6 +17,11 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+from deepretina.adapters.segmentation import (
+    TRAIN_ONLY_PATIENT_POLICY,
+    aria_source_group,
+    g1020_patient_crosswalk,
+)
 from deepretina.integrity import FINGERPRINT_SCHEMA, prepared_content_fingerprint
 from deepretina.legacy.preprocessing import (
     DATASET_FOV_DEGREES,
@@ -24,7 +29,7 @@ from deepretina.legacy.preprocessing import (
     ImageGeometry,
     prepare_single_net,
 )
-from deepretina.prepare import prepare
+from deepretina.prepare import ARCHIVES, prepare
 from deepretina.sources import Source
 
 DEFAULT_DATASETS = (
@@ -48,6 +53,10 @@ DEFAULT_DATASETS = (
 )
 FIELDS = {**DATASET_FOV_DEGREES, "rimone": 20.0, "erlangen": 20.0}
 TASK_CHANNELS = {"vessels": 1, "av": 3, "disc_cup": 2}
+TRAIN_ONLY_EVIDENCE = {
+    dataset: policy["split_policy_evidence"]
+    for dataset, policy in TRAIN_ONLY_PATIENT_POLICY.items()
+}
 
 
 def pixel_sha256(image):
@@ -64,8 +73,17 @@ def _json(path, value):
     temporary.replace(path)
 
 
-def safe_splits(rows, seed=42):
+def safe_splits(rows, seed=42, train_only_datasets=()):
     """Union patient groups with exact photograph aliases before any partition."""
+    train_only_datasets = set(train_only_datasets) | {
+        row["dataset"]
+        for row in rows
+        if row["metadata"].get("split_policy") == "train_only_without_patient_crosswalk"
+    }
+    for row in rows:
+        if row["dataset"] in train_only_datasets:
+            row["metadata"]["split_policy"] = "train_only_without_patient_crosswalk"
+            row["metadata"]["split_policy_evidence"] = TRAIN_ONLY_EVIDENCE.get(row["dataset"])
     parent = {}
 
     def find(key):
@@ -102,6 +120,10 @@ def safe_splits(rows, seed=42):
                 }
             )
         fixed = "test" if "test" in official else "val" if "val" in official else None
+        if any(row["dataset"] in train_only_datasets for row in items):
+            if official & {"test", "val"}:
+                raise ValueError("Train-only source aliases an official held-out photograph")
+            fixed = "train"
         for row in items:
             row["split_group_id"] = "sha256:" + hashlib.sha256(key.encode()).hexdigest()
         if fixed:
@@ -383,7 +405,8 @@ class UnifiedWriter:
         return row
 
     def finalize(self, seed=42):
-        conflicts = safe_splits(self.rows, seed)
+        train_only = sorted(set(TRAIN_ONLY_EVIDENCE) & {row["dataset"] for row in self.rows})
+        conflicts = safe_splits(self.rows, seed, train_only)
         self.rows.sort(key=lambda r: r["id"])
         by_id = {row["id"]: row for row in self.rows}
         photos = []
@@ -395,6 +418,10 @@ class UnifiedWriter:
             assert len(states) == 1
             photo["split"] = states.pop()
             photo["source_ids"] = sorted({r["source_id"] for r in variants})
+            for reference in photo["sources"]:
+                if reference["dataset"] in train_only:
+                    reference["split_policy"] = "train_only_without_patient_crosswalk"
+                    reference["split_policy_evidence"] = TRAIN_ONLY_EVIDENCE[reference["dataset"]]
             photo["annotations"] = [
                 {
                     "id": r["id"],
@@ -433,6 +460,8 @@ class UnifiedWriter:
             "annotations_portable": True,
             "raw_auxiliary_resources_copied": False,
             "source_records_are_variants": True,
+            "train_only_datasets": train_only,
+            "train_only_evidence": {key: TRAIN_ONLY_EVIDENCE[key] for key in train_only},
         }
         provenance_path = self.output / "preparation.json"
         if provenance_path.exists():
@@ -471,6 +500,170 @@ def prepare_unified_data(
     return writer.finalize(seed)
 
 
+def regroup_patients(output, data_root, *, seed=42, train_only_datasets=()):
+    """Explicit metadata-only repair before auditing an existing preparation."""
+    output, data_root = Path(output), Path(data_root)
+    manifest_path = output / "manifest.json"
+    before_manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    if (output / "_SUCCESS").read_text().strip() != before_manifest_sha:
+        raise ValueError("Patient regrouping requires a completed, unchanged manifest")
+    rows = json.loads(manifest_path.read_text())
+    photos = json.loads((output / "photos.json").read_text())
+    composition = json.loads((output / "composition.json").read_text())
+    train_only_datasets = sorted(
+        set(train_only_datasets) | (set(TRAIN_ONLY_EVIDENCE) & {row["dataset"] for row in rows})
+    )
+    mappings = {}
+    crosswalk = None
+    if any(row["dataset"] == "g1020" for row in rows):
+        with Source(data_root / ARCHIVES["g1020"]) as source:
+            mappings = g1020_patient_crosswalk(source)
+        crosswalk = next(iter(mappings.values()))["patient_crosswalk"]
+    report_path = output / "patient-regrouping.json"
+    if report_path.exists():
+        previous = json.loads(report_path.read_text())
+        if (
+            previous.get("regroup_schema") == 2
+            and previous["after_manifest_sha256"] == before_manifest_sha
+            and previous["crosswalk"] == crosswalk
+            and previous["train_only_datasets"] == train_only_datasets
+            and previous["seed"] == seed
+        ):
+            return previous
+
+    def split_snapshot(items):
+        return sorted({(row["photo_id"], row["split"]) for row in items})
+
+    def split_sha(snapshot):
+        return hashlib.sha256(json.dumps(snapshot).encode()).hexdigest()
+
+    def counts(items):
+        totals = Counter((row["dataset"], row["split"]) for row in items)
+        return [
+            {
+                "dataset": key[0],
+                "split": key[1],
+                "annotations": count,
+                "photos": len(
+                    {row["photo_id"] for row in items if (row["dataset"], row["split"]) == key}
+                ),
+            }
+            for key, count in sorted(totals.items())
+        ]
+
+    before_splits, before_counts = split_snapshot(rows), counts(rows)
+    for row in rows:
+        metadata = row["metadata"]
+        if row["dataset"] == "g1020":
+            image_id = Path(metadata["source_image"]).name
+            if image_id not in mappings:
+                raise ValueError(f"G1020 image missing its patient mapping: {image_id}")
+            metadata.setdefault("original_source_id", row["source_id"])
+            metadata.update(mappings[image_id])
+            row["source_id"] = metadata["patient_group_id"]
+        if row["dataset"] == "aria":
+            metadata.setdefault("original_source_id", row["source_id"])
+            row["source_id"] = aria_source_group(metadata["source_image"])
+            metadata["source_group_basis"] = (
+                "conservative ARIA cohort/number base; transport counter and view tokens ignored"
+            )
+        if row["dataset"] in train_only_datasets:
+            metadata["split_policy"] = "train_only_without_patient_crosswalk"
+            metadata["split_policy_evidence"] = TRAIN_ONLY_EVIDENCE.get(
+                row["dataset"], {"reason": "Explicit train-only source policy"}
+            )
+    conflicts = safe_splits(rows, seed, train_only_datasets)
+    by_id = {row["id"]: row for row in rows}
+    for photo in photos:
+        variants = [by_id[item["id"]] for item in photo["annotations"]]
+        states = {row["split"] for row in variants}
+        if len(states) != 1:
+            raise ValueError("Patient regrouping split a photograph's annotation variants")
+        photo["split"] = states.pop()
+        photo["source_ids"] = sorted({row["source_id"] for row in variants})
+        for reference in photo["sources"]:
+            if reference["dataset"] == "g1020":
+                identity = mappings[Path(reference["resource"]).name]
+                reference.setdefault("original_source_id", reference["source_id"])
+                reference.update(identity)
+                reference["source_id"] = identity["patient_group_id"]
+            if reference["dataset"] == "aria":
+                reference.setdefault("original_source_id", reference["source_id"])
+                reference["source_id"] = aria_source_group(reference["resource"])
+            if reference["dataset"] in train_only_datasets:
+                reference["split_policy"] = "train_only_without_patient_crosswalk"
+                reference["split_policy_evidence"] = TRAIN_ONLY_EVIDENCE.get(reference["dataset"])
+        photo["source_patient_ids"] = {
+            dataset: sorted(
+                {
+                    row["metadata"]["patient_id"]
+                    for row in variants
+                    if row["dataset"] == dataset and "patient_id" in row["metadata"]
+                }
+            )
+            for dataset in sorted(
+                {row["dataset"] for row in variants if "patient_id" in row["metadata"]}
+            )
+        }
+    after_splits = split_snapshot(rows)
+    old_states = dict(before_splits)
+    moved = [
+        {"photo_id": photo, "before": old_states[photo], "after": split}
+        for photo, split in after_splits
+        if old_states[photo] != split
+    ]
+    composition["counts"] = [
+        {"dataset": key[0], "task": key[1], "split": key[2], "annotations": count}
+        for key, count in sorted(
+            Counter((row["dataset"], row["task"], row["split"]) for row in rows).items()
+        )
+    ]
+    composition["official_alias_conflicts"] = conflicts
+    composition["train_only_datasets"] = train_only_datasets
+    composition["patient_grouping"] = (
+        "G1020 CSV patientID; ARIA conservative cohort/number; known groups and exact-photo union"
+    )
+    report = {
+        "regroup_schema": 2,
+        "operation": "explicit metadata/split regrouping; image and NPZ bytes unchanged",
+        "seed": seed,
+        "crosswalk": crosswalk,
+        "crosswalk_images": len(mappings),
+        "crosswalk_patients": len({item["patient_id"] for item in mappings.values()}),
+        "train_only_datasets": train_only_datasets,
+        "train_only_evidence": {key: TRAIN_ONLY_EVIDENCE.get(key) for key in train_only_datasets},
+        "before_manifest_sha256": before_manifest_sha,
+        "before_split_sha256": split_sha(before_splits),
+        "after_split_sha256": split_sha(after_splits),
+        "before_counts": before_counts,
+        "after_counts": counts(rows),
+        "moved_photos": moved,
+        "moved_photos_count": len(moved),
+    }
+    backup = output / "patient-regrouping-history" / before_manifest_sha
+    backup.mkdir(parents=True, exist_ok=True)
+    for name in [
+        "manifest.json",
+        "photos.json",
+        "composition.json",
+        "_SUCCESS",
+        "integrity.json",
+        "patient-regrouping.json",
+    ]:
+        if (output / name).exists() and not (backup / name).exists():
+            os.link(output / name, backup / name)
+    report["before_metadata_backup"] = backup.relative_to(output).as_posix()
+    (output / "_SUCCESS").unlink()
+    (output / "integrity.json").unlink(missing_ok=True)
+    _json(manifest_path, rows)
+    _json(output / "photos.json", photos)
+    _json(output / "composition.json", composition)
+    report["after_manifest_sha256"] = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    _json(report_path, report)
+    (output / "_SUCCESS").write_text(report["after_manifest_sha256"] + "\n")
+    return report
+
+
 def audit_prepared(output):
     """Check completed portable data and count actual valid support per head.
 
@@ -501,6 +694,28 @@ def audit_prepared(output):
         if row["id"] in ids:
             raise ValueError(f"Duplicate annotation: {row['id']}")
         ids.add(row["id"])
+        if row["dataset"] == "g1020":
+            patient = row["metadata"].get("patient_id")
+            if not patient or row["source_id"] != "g1020:patient:" + patient:
+                raise ValueError(
+                    "G1020 requires explicit patient-crosswalk regrouping before audit"
+                )
+        if row["dataset"] == "aria" and row["source_id"] != aria_source_group(
+            row["metadata"]["source_image"]
+        ):
+            raise ValueError("ARIA requires conservative cohort/number regrouping before audit")
+        if (
+            row["dataset"] in TRAIN_ONLY_EVIDENCE
+            and row["metadata"].get("split_policy") != "train_only_without_patient_crosswalk"
+        ):
+            raise ValueError(
+                "Source without patient identities requires explicit train-only policy"
+            )
+        if (
+            row["metadata"].get("split_policy") == "train_only_without_patient_crosswalk"
+            and row["split"] != "train"
+        ):
+            raise ValueError("Source without a patient crosswalk violated its train-only policy")
         photo = photo_index[row["photo_id"]]
         if (
             photo["split"] != row["split"]
@@ -514,6 +729,10 @@ def audit_prepared(output):
             group = (key, row[key])
             if partitions.setdefault(group, row["split"]) != row["split"]:
                 raise ValueError(f"Cross-partition {key}: {row[key]}")
+        if "patient_id" in row["metadata"]:
+            patient_key = ("patient", row["dataset"], row["metadata"]["patient_id"])
+            if partitions.setdefault(patient_key, row["split"]) != row["split"]:
+                raise ValueError(f"Known patient crosses partitions: {patient_key}")
         official = row["metadata"].get("official_split")
         if official == "test" and row["split"] != "test":
             raise ValueError(f"Official test moved: {row['id']}")
@@ -607,6 +826,12 @@ def main():
     parser.add_argument("--data-root", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
+        "--regroup-patients",
+        action="store_true",
+        help="Explicitly repair known patient identities and resplit metadata, retaining pixels",
+    )
+    parser.add_argument("--train-only-datasets", nargs="*", choices=DEFAULT_DATASETS, default=[])
+    parser.add_argument(
         "--audit-existing",
         action="store_true",
         help="Verify every retained NPZ and count per-head support",
@@ -619,6 +844,21 @@ def main():
         help="Functionality preview groups per dataset; never a full-data result",
     )
     args = parser.parse_args()
+    if args.regroup_patients:
+        if args.data_root is None:
+            parser.error("--data-root is required for patient regrouping")
+        print(
+            json.dumps(
+                regroup_patients(
+                    args.output,
+                    args.data_root,
+                    seed=args.seed,
+                    train_only_datasets=args.train_only_datasets,
+                ),
+                indent=2,
+            )
+        )
+        return
     if args.audit_existing:
         print(json.dumps(audit_prepared(args.output), indent=2))
         return

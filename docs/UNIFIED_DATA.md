@@ -10,6 +10,14 @@ uv sync --frozen
 uv run python scripts/prepare_unified_data.py \
   --data-root /var/home/tom/ownCloud/fundus_databases \
   --output data/unified25
+
+# Explicit repair/provenance step for preparations made before the patient audit:
+uv run python scripts/prepare_unified_data.py \
+  --data-root /var/home/tom/ownCloud/fundus_databases \
+  --output data/unified25 --regroup-patients --train-only-datasets riga uoadr
+
+uv run python scripts/prepare_unified_data.py \
+  --output data/unified25 --audit-existing
 ```
 
 Use a new output directory. Preparation refuses an existing nonempty directory.
@@ -45,6 +53,12 @@ RIM-ONE release 3 retains the full stereo frame for the scale calculation, crops
 to the left annotated eye, and ignores the right eye. Its angular calibration is
 explicitly experimental: it was not established by the original 14-dataset
 Python pipeline. Do not present its physical scale as independently verified.
+Raw unified inference on these additional sources requires an explicit
+`--field-of-view-degrees 20`. RIM-ONE additionally requires `--fov` pointing to an
+original-frame mask that selects the left half; automatic detection of both
+stereo views would produce a different crop. Erlangen uses an explicit full-frame
+FOV in preparation. Original official FOV masks should also be supplied for the
+datasets that provide them.
 
 ## Sources and annotation meaning
 
@@ -85,16 +99,43 @@ timestamp changes. Exact aliases such as DRIVE/RITE share the first canonical
 photograph frame. `source_id` retains patient/source grouping; it is not assumed
 to identify a single photograph, because paired eyes may share a patient.
 The split operation unions both constraints before assigning any partition.
+G1020 uses the explicit `G1020.csv` crosswalk: 1,020 images from 432 patient IDs.
+Repeated photographs of the same eye stay with that patient. ARIA conservatively
+unions its cohort/number base across parenthesized transport counters and view
+tokens; this is a grouping rule rather than independent patient proof.
 
 Official test partitions remain test. Official validation remains validation;
 official training derives a deterministic 20% validation subset unless that
 dataset already has official validation. Sources without official partitions
-use deterministic grouped 60/20/20 train/validation/test partitions. Conflicting
+use deterministic grouped 60/20/20 train/validation/test partitions, subject to
+the training-only source exceptions below. Conflicting
 official aliases choose the most restrictive partition, test then validation
 then training, and are reported. A source group and an exact photograph can
 never cross partitions. All annotation variants follow their photograph.
 
-These partitions prevent new-model leakage. They do not prove independence from
+Patient separation is limited by the source metadata. The bundled UoA paper
+explicitly says the images were de-identified and no patient information is
+available; its spreadsheets contain diagnosis and landmark coordinates, not a
+patient crosswalk. UoA image numbers therefore identify source photographs,
+without proving that different numbers belong to different patients. The split
+does not guess missing patient identities or certify patient independence where
+those identities are unavailable. Consequently **all RIGA and UoA-DR records are
+training-only**. RIGA's source thesis documents paired right/left eyes, but no
+defensible crosswalk was recovered from its seven folders. These datasets have
+no new validation/test partition and contribute no independent held-out metrics.
+An alias of known official held-out data causes a failure instead of being forced
+into training.
+
+`--regroup-patients` explicitly repairs earlier output metadata, then reruns the
+group split. It does not regenerate images or masks. It saves the original
+metadata, original source/image identities, CSV SHA256, before/after manifest and
+split hashes, per-source counts and moved photographs in
+`patient-regrouping.json` and `patient-regrouping-history/`. Repeating the same
+repair is idempotent. Auditing alone does not mutate patient identities or splits;
+it rejects old G1020/ARIA identities and missing training-only policies.
+
+These partitions prevent leakage of known groups and exact photographs. They do
+not prove independence from
 historical checkpoints: old image counters came from unsorted file enumeration,
 and exact training-image mappings are unavailable for many legacy datasets.
 Original-model scores must retain the benchmark helper's exposure qualification.
@@ -128,6 +169,13 @@ pixel totals. Pixel totals include annotation variants; photograph totals count
 an eye once per source, partition and channel. The audit checks binary labels,
 RGB/mask geometry, false validity outside FOV, paired conditional A/V labels,
 cup containment, identical RGB aliases and patient/photograph partition integrity.
+
+Fingerprint schema 2 hashes the manifest, photograph index and geometry, every
+referenced RGB/NPZ file, canonical photograph RGB and standalone FOV images.
+Hardlink identity is only a read cache: file paths and bytes determine the hash.
+The all-17-source preview was checked locally and after copying to Ada without
+preserving hardlinks. Its earlier fingerprint was superseded by the explicit
+patient regrouping; use the current output's `integrity.json`.
 
 ## Checking unexpectedly weak historical predictions
 

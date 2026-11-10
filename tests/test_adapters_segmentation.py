@@ -4,7 +4,41 @@ import numpy as np
 import pytest
 from PIL import Image, ImageDraw
 
-from deepretina.adapters.segmentation import ADAPTERS, decode_g1020, decode_onhsd, recover_riga
+from deepretina.adapters.segmentation import (
+    ADAPTERS,
+    aria_source_group,
+    decode_g1020,
+    decode_onhsd,
+    g1020_patient_crosswalk,
+    recover_riga,
+)
+
+
+def test_aria_transport_counters_and_views_join_without_merging_cohorts():
+    assert aria_source_group("(0001)aria_d_26_1.tif") == aria_source_group("(0018)aria_d_26.tif")
+    assert aria_source_group("aria_d_26_2.tif") == "aria:d:26"
+    assert aria_source_group("aria_a_26.tif") != aria_source_group("aria_d_26.tif")
+
+
+def test_g1020_requires_unique_complete_patient_crosswalk():
+    class Table:
+        def find(self, _name):
+            return "G1020/G1020.csv"
+
+        def bytes(self, _name):
+            return self.payload
+
+    table = Table()
+    table.payload = b"patientID,imageID,Left/Right,imageName\np1,image_0.jpg,Right,a.jpg\np1,image_1.jpg,Right,b.jpg\n"
+    mapping = g1020_patient_crosswalk(table)
+    assert mapping["image_0.jpg"]["patient_group_id"] == mapping["image_1.jpg"]["patient_group_id"]
+    assert mapping["image_0.jpg"]["laterality"] == "Right"
+    table.payload += b"p2,image_1.jpg,Left,c.jpg\n"
+    with pytest.raises(ValueError, match="duplicate"):
+        g1020_patient_crosswalk(table)
+    table.payload = b"patientID,imageID,Left/Right,imageName\n,image_0.jpg,Right,a.jpg\n"
+    with pytest.raises(ValueError, match="missing"):
+        g1020_patient_crosswalk(table)
 
 
 def test_g1020_missing_cup_is_not_background_supervision():

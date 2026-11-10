@@ -1,5 +1,6 @@
 """Canonical physical frames, multi-annotator identity and split-safety regressions."""
 
+import hashlib
 import importlib.util
 import io
 import json
@@ -207,3 +208,128 @@ def test_raw_reader_hook_prepares_portable_paired_core_manifest_without_cap(tmp_
             assert labels["valid"].shape == labels["target"].shape
             assert labels["target"].dtype == np.float32 and labels["valid"].dtype == bool
         assert row["metadata"]["official_split"] == "train"
+
+
+def test_explicit_patient_regroup_preserves_pixels_and_joins_same_eye_captures(tmp_path):
+    w = writer(tmp_path)
+    target = np.zeros((2, 40, 60), np.float32)
+    target[0, 10:30, 20:40] = 1
+    valid = np.ones_like(target, bool)
+    valid[1] = False
+    for index in range(6):
+        w.emit(
+            dataset="g1020",
+            stem=f"image_{index}",
+            split="unsplit",
+            image=photo() + index,
+            target=target,
+            valid=valid,
+            source_id=f"g1020:image_{index}",
+            task="disc_cup",
+            metadata={"source_image": f"G1020/image_{index}.jpg"},
+        )
+    for index, stem in enumerate(["(0001)aria_d_26", "(0018)aria_d_26", "aria_a_26"]):
+        w.emit(
+            dataset="aria",
+            stem=stem,
+            split="unsplit",
+            image=photo() + index + 10,
+            target=target,
+            valid=valid,
+            source_id=f"aria:old:{index}",
+            task="disc_cup",
+            metadata={"source_image": stem + ".tif"},
+        )
+    for index, dataset in enumerate(["riga", "uoadr"]):
+        w.emit(
+            dataset=dataset,
+            stem="case",
+            split="unsplit",
+            image=photo() + index + 20,
+            target=target,
+            valid=valid,
+            source_id=dataset + ":case",
+            task="disc_cup",
+            metadata={"source_image": "case.jpg"},
+        )
+    w.finalize()
+    csv = "patientID,imageID,Left/Right,imageName\n" + "".join(
+        f"p{max(0, index - 1)},image_{index}.jpg,Right,original{index}.jpg\n" for index in range(6)
+    )
+    with zipfile.ZipFile(tmp_path / "G1020.zip", "w") as archive:
+        archive.writestr("G1020/G1020.csv", csv)
+    # Reproduce the actual old output: different captures of the same patient
+    # may be in different partitions, and unknown-patient donors had holdouts.
+    old_rows = json.loads((w.output / "manifest.json").read_text())
+    for row in old_rows:
+        if row["metadata"]["source_image"].endswith("image_0.jpg"):
+            row["split"] = "train"
+        elif row["metadata"]["source_image"].endswith("image_1.jpg"):
+            row["split"] = "test"
+        elif row["dataset"] in {"riga", "uoadr"}:
+            row["split"] = "val"
+            row["metadata"].pop("split_policy", None)
+    old_photos = json.loads((w.output / "photos.json").read_text())
+    for old_photo in old_photos:
+        old_photo["split"] = next(
+            row["split"] for row in old_rows if row["photo_id"] == old_photo["photo_id"]
+        )
+    prep._json(w.output / "manifest.json", old_rows)
+    prep._json(w.output / "photos.json", old_photos)
+    (w.output / "_SUCCESS").write_text(
+        hashlib.sha256((w.output / "manifest.json").read_bytes()).hexdigest() + "\n"
+    )
+    before = {
+        path.relative_to(w.output).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+        for folder in ["images", "masks", "fovs"]
+        for path in (w.output / folder).iterdir()
+    }
+    report = prep.regroup_patients(w.output, tmp_path)
+    assert report["crosswalk_images"] == 6 and report["crosswalk_patients"] == 5
+    assert report["moved_photos_count"] >= 3
+    rows = json.loads((w.output / "manifest.json").read_text())
+    same_eye = [r for r in rows if r["dataset"] == "g1020" and r["metadata"]["patient_id"] == "p0"]
+    assert len(same_eye) == 2 and len({r["split"] for r in same_eye}) == 1
+    assert {r["source_id"] for r in same_eye} == {"g1020:patient:p0"}
+    assert all(r["metadata"]["laterality"] == "Right" for r in same_eye)
+    aria = [r for r in rows if r["dataset"] == "aria"]
+    assert len({r["split"] for r in aria if r["source_id"] == "aria:d:26"}) == 1
+    assert {r["source_id"] for r in aria} == {"aria:d:26", "aria:a:26"}
+    assert all(r["split"] == "train" for r in rows if r["dataset"] in {"riga", "uoadr"})
+    assert report["crosswalk"]["sha256"] == hashlib.sha256(csv.encode()).hexdigest()
+    assert before == {
+        name: hashlib.sha256((w.output / name).read_bytes()).hexdigest() for name in before
+    }
+    prep.audit_prepared(w.output)
+    manifest_before = (w.output / "manifest.json").read_bytes()
+    assert prep.regroup_patients(w.output, tmp_path) == report
+    assert (w.output / "manifest.json").read_bytes() == manifest_before
+    row = next(r for r in rows if r["dataset"] == "riga")
+    row["split"] = "val"
+    prep._json(w.output / "manifest.json", rows)
+    (w.output / "_SUCCESS").write_text(
+        hashlib.sha256((w.output / "manifest.json").read_bytes()).hexdigest() + "\n"
+    )
+    with pytest.raises(ValueError, match="train-only"):
+        prep.audit_prepared(w.output)
+
+
+def test_train_only_source_cannot_pull_an_official_heldout_alias_into_training():
+    rows = [
+        {
+            "dataset": "drive",
+            "source_id": "drive:01",
+            "photo_id": "same",
+            "split": "test",
+            "metadata": {"official_split": "test"},
+        },
+        {
+            "dataset": "riga",
+            "source_id": "riga:unknown",
+            "photo_id": "same",
+            "split": "unsplit",
+            "metadata": {},
+        },
+    ]
+    with pytest.raises(ValueError, match="official held-out"):
+        prep.safe_splits(rows, train_only_datasets=["riga"])

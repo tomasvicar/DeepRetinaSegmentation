@@ -6,6 +6,8 @@ validity/FOV intersection, provenance and image-group splits.
 
 from __future__ import annotations
 
+import csv
+import hashlib
 import io
 import json
 import re
@@ -14,6 +16,24 @@ import numpy as np
 from PIL import Image, ImageDraw
 from scipy import ndimage as ndi
 from scipy.io import loadmat
+
+TRAIN_ONLY_PATIENT_POLICY = {
+    "riga": {
+        "split_policy": "train_only_without_patient_crosswalk",
+        "split_policy_evidence": {
+            "reason": "Paired eyes are documented, but the seven image folders supply no patient crosswalk",
+            "source": "https://uwspace.uwaterloo.ca/bitstreams/29ac8bdf-6c5a-4b1f-ae6e-95d8e60dd510/download",
+            "location": "Ahmed Almazroa thesis section3.2, PDFpage71",
+        },
+    },
+    "uoadr": {
+        "split_policy": "train_only_without_patient_crosswalk",
+        "split_policy_evidence": {
+            "reason": "The source paper states that patient information is unavailable after de-identification",
+            "source": "UoA_DR.zip/Comparative Analysis of University of Auckland DR Database.pdf",
+        },
+    },
+}
 
 
 def _base(path):
@@ -69,11 +89,27 @@ def _close_disk(mask, radius):
     return ndi.binary_closing(mask, structure=(x * x + y * y <= radius * radius))
 
 
+def aria_source_group(name):
+    """Conservatively join cohort/number views despite transport counters."""
+    match = re.search(r"aria_([acd])_(\d+)(?=[_.]|$)", _base(name), re.IGNORECASE)
+    if match is None:
+        raise ValueError(f"Cannot recover the ARIA cohort/number source group: {name}")
+    return f"aria:{match[1].lower()}:{int(match[2])}"
+
+
 def aria(source, emit):
     for name in _paths(source, r"aria_[acd]_markups/aria_[acd]_markups/[^/]+\.tif$"):
         stem = _base(name).rsplit(".", 1)[0]
         image = source.read(name, "RGB")
-        group = ":".join(stem.split("_")[:3])
+        group = aria_source_group(name)
+        old_group = ":".join(stem.split("_")[:3])
+        identity = {
+            "source_image_stem": stem,
+            "original_source_id": old_group
+            if old_group.startswith("aria:")
+            else "aria:" + old_group,
+            "source_group_basis": "conservative ARIA cohort/number base; transport counter and view tokens ignored",
+        }
         for observer in ("BDP", "BSS"):
             mask_name = (
                 name.replace("_markups", "_markup_vessel").rsplit(".", 1)[0] + f"_{observer}.tif"
@@ -89,9 +125,10 @@ def aria(source, emit):
                     "source_image": name,
                     "annotator": observer,
                     "source_annotation": mask_name,
+                    **identity,
                 },
             )
-        if stem.startswith("aria_a_"):
+        if group.split(":")[1] == "a":
             continue
         base = name.replace("_markups", "_markupdiscfovea").rsplit(".", 1)[0]
         candidates = [base + suffix for suffix in ("_dfs.tif", ".tif", "_dfd.tif")]
@@ -116,6 +153,7 @@ def aria(source, emit):
                 "source_image": name,
                 "annotation": "disc-fovea outline: disk21 closing, hole-fill, largest component",
                 "source_annotation": mask_name,
+                **identity,
             },
         )
 
@@ -205,9 +243,42 @@ def decode_g1020(annotation, shape):
     return target, valid, corrections
 
 
+def g1020_patient_crosswalk(source):
+    """Require the bundled patient/eye table; image numbers are not patients."""
+    resource = source.find("G1020.csv")
+    payload = source.bytes(resource)
+    reader = csv.DictReader(io.StringIO(payload.decode("utf-8-sig")))
+    required = {"patientID", "imageID", "Left/Right", "imageName"}
+    if not required.issubset(reader.fieldnames or []):
+        raise ValueError("G1020.csv is missing required patient/image/eye columns")
+    mapping = {}
+    for row in reader:
+        image_id, patient = row["imageID"].strip(), row["patientID"].strip()
+        if not image_id or not patient or image_id in mapping:
+            raise ValueError("G1020.csv contains missing or duplicate patient/image identities")
+        mapping[image_id] = {
+            "patient_id": patient,
+            "patient_group_id": "g1020:patient:" + patient,
+            "source_image_id": image_id,
+            "source_image_name": row["imageName"].strip(),
+            "laterality": row["Left/Right"].strip(),
+            "patient_crosswalk": {
+                "resource": resource,
+                "sha256": hashlib.sha256(payload).hexdigest(),
+            },
+        }
+    if not mapping:
+        raise ValueError("G1020.csv has no patient identities")
+    return mapping
+
+
 def g1020(source, emit):
+    patients = g1020_patient_crosswalk(source)
     for name in _paths(source, r"image_\d+\.jpg$"):
         stem = _base(name).rsplit(".", 1)[0]
+        if _base(name) not in patients:
+            raise ValueError(f"G1020 image is absent from its patient crosswalk: {name}")
+        identity = patients[_base(name)]
         image = source.read(name, "RGB")
         annotation_name = name.rsplit(".", 1)[0] + ".json"
         target, valid, corrections = decode_g1020(
@@ -219,13 +290,15 @@ def g1020(source, emit):
             image,
             target,
             valid=valid,
-            source_id=stem,
+            source_id=identity["patient_group_id"],
             task="disc_cup",
             metadata={
                 "source_image": name,
                 "source_annotation": annotation_name,
                 "corrections": corrections,
                 "coordinates": "LabelMe image x,y; zero based; Pillow polygon rasterization",
+                "original_source_id": "g1020:" + stem,
+                **identity,
             },
         )
 
@@ -286,6 +359,7 @@ def onhsd(source, emit):
                     "source_annotation": annotation_name,
                     "center_annotation": base + "_C.mat",
                     "quality": quality,
+                    **TRAIN_ONLY_PATIENT_POLICY["riga"],
                 },
             )
 
@@ -513,6 +587,7 @@ def uoadr(source, emit):
                 "source_image": name,
                 "source_annotation": base + f".{vessel_num}.jpg",
                 "annotation72_swap": int(stem) == 72,
+                **TRAIN_ONLY_PATIENT_POLICY["uoadr"],
             },
         )
         # The bundled dataset paper identifies .3.jpg as an optic-disc center
@@ -539,6 +614,7 @@ def uoadr(source, emit):
                     {"path": base + ".3.jpg", "kind": "optic_disc_center", "preserve": True},
                 ],
                 "annotation72_swap": int(stem) == 72,
+                **TRAIN_ONLY_PATIENT_POLICY["uoadr"],
             },
         )
 

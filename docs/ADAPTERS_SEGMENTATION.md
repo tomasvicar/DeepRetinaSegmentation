@@ -31,6 +31,20 @@ names the original `source_image` so observer variants share one prepared RGB fi
 before splitting. Filename-derived patient grouping is conservative; it does not
 establish patient independence when the source lacks patient identifiers.
 
+G1020 requires its bundled `G1020.csv`: all 1,020 images map to 432 explicit
+patient IDs, including repeated captures of the same eye. Image numbers are not
+used as patient identities. ARIA conservatively groups the `aria_<cohort>_<number>`
+base, ignoring transport counters such as `(0001)` and trailing view tokens;
+different cohorts remain separate. Original stems/resources remain metadata.
+
+RIGA and UoA-DR are training-only sources until a patient crosswalk is supplied.
+RIGA's creator documents paired eyes, while its seven image folders supply no
+patient mapping. UoA's bundled paper explicitly states that patient information
+is unavailable after de-identification. Their adapters emit a source-policy flag;
+the shared `assign_splits` honors it and rejects aliases of official validation or
+test data. No invented official split or odd/even pairing is used. These sources
+provide supervised training data without independent held-out quality claims.
+
 For disc-only annotations, `task=disc_cup` still has two channels, but cup validity
 is entirely false. Missing or unusable labels never become supervised all-background
 examples. Failed source annotations retain an explicit quality description and
@@ -202,9 +216,11 @@ usable; **1,813 are explicitly quarantined**, with all-false validity and their
 original marked rasters preserved for review. Unrecoverable line annotations are
 not reported as successfully reconstructed segmentation masks.
 
-Usable RIGA records split into 1,673 training, 508 validation and 500 test observations;
-quarantined records split into 1,021/392/400. Every original photograph and all its
-observers stay in one split. Among successful reconstructions, 2,422 required no
+The earlier decoder-integrity run used 1,673/508/500 usable observations in its
+training/validation/test partitions and 1,021/392/400 quarantined observations.
+These historical image-group partitions are superseded by the training-only
+patient policy above and must not support independent quality claims. Every
+original photograph and all its observers stayed together. Among successful reconstructions, 2,422 required no
 closing, 111 used radius 1, 109 radius 2 and 39 radius 3. All 4,494 records passed shape,
 dtype/range and source-group integrity checks. Every usable record retained both
 nonempty disc and cup at the deliberately small smoke resolution; every rejected
