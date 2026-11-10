@@ -1,0 +1,388 @@
+{
+  "scope": "Optional provided-special source FOV stages only; no automatic/photometric certification or public activation",
+  "runtime": "MATLAB R2026b singleCompThread CPU nice10 CUDA hidden",
+  "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+  "helper_sha256": "6f47763d8c1b1821d0f6613bc5c823b910577d668857bf617f54d01dcb1fcf9b",
+  "real_sources": {
+    "erlangen": {
+      "archive": "Erlangen.zip",
+      "resource": "content/drive/Shareddrives/Retina GAC\u030cR/Data/databases/Erlangen/FundusImages/Study_02_00007_01_L_reg.png",
+      "file_sha256": "2dabe96edcfcc9ee1f56b3867009af29e41fcac00941689a6566a565f36c9ae2",
+      "shape": [
+        770,
+        1000
+      ]
+    },
+    "rimone": {
+      "archive": "RIM-ONE.zip",
+      "resource": "RIM-ONE r3/Glaucoma and suspects/Stereo Images/G-1-L.jpg",
+      "file_sha256": "205d5293f856d05d8455fb3a170786921033c79342987ea628d5391f3797fc18",
+      "shape": [
+        1424,
+        2144
+      ]
+    }
+  },
+  "cases": [
+    {
+      "name": "rim_loader",
+      "dataset": "rimone",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "dabb555d24d8b48a68bb8f9ca836a3e3050b12c34b327ac401b0de5418f6d38f",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 26,
+        "radius_pixels": 40,
+        "edge_pixels": 254
+      },
+      "diameter_pixels": 80,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_rimone_wireframe",
+      "reference_calibration": {
+        "row": 40,
+        "col": 26,
+        "radius": 40
+      }
+    },
+    {
+      "name": "rim_clipped_wire",
+      "dataset": "rimone",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "b7847317642c0271dd582c77559e7dcd619e08c00e219f66f79c1c85715faa90",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 41,
+        "center_col_one_based": 26,
+        "radius_pixels": 36,
+        "edge_pixels": 204
+      },
+      "diameter_pixels": 72,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_rimone_wireframe",
+      "reference_calibration": {
+        "row": 41,
+        "col": 26,
+        "radius": 36
+      }
+    },
+    {
+      "name": "rim_dense_source_behavior",
+      "dataset": "rimone",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "636152ff5d11720fe6ddaf70a9eeedb343b2d4e64bc2fda576ef458f76a1841b",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 26,
+        "radius_pixels": 19,
+        "edge_pixels": 3950
+      },
+      "diameter_pixels": 38,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_rimone_wireframe",
+      "reference_calibration": {
+        "row": 40,
+        "col": 26,
+        "radius": 19
+      }
+    },
+    {
+      "name": "rim_full_source_behavior",
+      "dataset": "rimone",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "6597e85cf0b35af740ef1e909c778c8d3b5d224006b630aa8cd328065c2c8f28",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 51,
+        "radius_pixels": 34,
+        "edge_pixels": 7900
+      },
+      "diameter_pixels": 68,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_rimone_wireframe",
+      "reference_calibration": {
+        "row": 40,
+        "col": 51,
+        "radius": 34
+      }
+    },
+    {
+      "name": "rim_empty",
+      "dataset": "rimone",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "ddc91f30c7db9b0e023de201a2c626de75e7c2cceec056ab4d58ba97067934f0",
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections"
+    },
+    {
+      "name": "erlangen_full",
+      "dataset": "erlangen",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "6597e85cf0b35af740ef1e909c778c8d3b5d224006b630aa8cd328065c2c8f28",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 51,
+        "radius_pixels": 51,
+        "edge_pixels": 158
+      },
+      "diameter_pixels": 102,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_erlangen_rails",
+      "reference_calibration": {
+        "row": 40,
+        "col": 51,
+        "radius": 51
+      }
+    },
+    {
+      "name": "erlangen_empty_source_behavior",
+      "dataset": "erlangen",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "ddc91f30c7db9b0e023de201a2c626de75e7c2cceec056ab4d58ba97067934f0",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 51,
+        "radius_pixels": 51,
+        "edge_pixels": 158
+      },
+      "diameter_pixels": 102,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_erlangen_rails",
+      "reference_calibration": {
+        "row": 40,
+        "col": 51,
+        "radius": 51
+      }
+    },
+    {
+      "name": "erlangen_holes",
+      "dataset": "erlangen",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "8bc33c0bc4f91ed2801d054de1605cb3fe96610d912f4ef1bcec5f1869398b9a",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 51,
+        "radius_pixels": 51,
+        "edge_pixels": 158
+      },
+      "diameter_pixels": 102,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_erlangen_rails",
+      "reference_calibration": {
+        "row": 40,
+        "col": 51,
+        "radius": 51
+      }
+    },
+    {
+      "name": "erlangen_video_odd",
+      "dataset": "erlangen_videodata",
+      "shape": [
+        80,
+        101
+      ],
+      "mask_sha256": "5f233956b1c2b097e8ab4883e85d93f4ffe5328a0a5584ee0b3b3d191de9f956",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 41,
+        "center_col_one_based": 51,
+        "radius_pixels": 51,
+        "edge_pixels": 160
+      },
+      "diameter_pixels": 102,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_erlangen_rails",
+      "reference_calibration": {
+        "row": 41,
+        "col": 51,
+        "radius": 51
+      }
+    },
+    {
+      "name": "roc_circle",
+      "dataset": "roc",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "bd9428d370ea0492e956679f3e15235ac5b56c136a3bbd6e3ec3405b5a734b03",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 51,
+        "radius_pixels": 30,
+        "edge_pixels": 80
+      },
+      "diameter_pixels": 60,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_roc_riga_inset",
+      "reference_calibration": {
+        "row": 40,
+        "col": 51,
+        "radius": 30
+      }
+    },
+    {
+      "name": "roc_clipped",
+      "dataset": "roc",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "b6c20627095b6dd65b788b7d480108c2af231e858b9361169251b95e5fd8b681",
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections"
+    },
+    {
+      "name": "riga_holes",
+      "dataset": "riga",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "8bc33c0bc4f91ed2801d054de1605cb3fe96610d912f4ef1bcec5f1869398b9a",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 51,
+        "radius_pixels": 30,
+        "edge_pixels": 130
+      },
+      "diameter_pixels": 60,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_roc_riga_inset",
+      "reference_calibration": {
+        "row": 40,
+        "col": 51,
+        "radius": 30
+      }
+    },
+    {
+      "name": "generic_holes",
+      "dataset": "drive",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "8bc33c0bc4f91ed2801d054de1605cb3fe96610d912f4ef1bcec5f1869398b9a",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 50,
+        "radius_pixels": 31,
+        "edge_pixels": 225
+      },
+      "diameter_pixels": 62,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_generic",
+      "reference_calibration": {
+        "row": 40,
+        "col": 50,
+        "radius": 31
+      }
+    },
+    {
+      "name": "roc_empty",
+      "dataset": "roc",
+      "shape": [
+        79,
+        100
+      ],
+      "mask_sha256": "ddc91f30c7db9b0e023de201a2c626de75e7c2cceec056ab4d58ba97067934f0",
+      "source_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Source FOV has no usable paired boundary intersections"
+    },
+    {
+      "name": "real_erlangen_source_shape",
+      "dataset": "erlangen",
+      "shape": [
+        770,
+        1000
+      ],
+      "mask_sha256": "9fe6b134c8e22af818f4fa0d6344ee27f9704d8c3515d4cdb1690a74a31f4a12",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 386,
+        "center_col_one_based": 501,
+        "radius_pixels": 501,
+        "edge_pixels": 1540
+      },
+      "diameter_pixels": 1002,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_erlangen_rails",
+      "reference_calibration": {
+        "row": 386,
+        "col": 501,
+        "radius": 501
+      }
+    },
+    {
+      "name": "real_rimone_loader_frame",
+      "dataset": "rimone",
+      "shape": [
+        1424,
+        2144
+      ],
+      "mask_sha256": "120be463b60b6ec7a57246f9f40a86e58ef3cb7d85284910ac4cf1e1fd738c49",
+      "source_error": "",
+      "calibration": {
+        "center_row_one_based": 713,
+        "center_col_one_based": 537,
+        "radius_pixels": 537,
+        "edge_pixels": 4988
+      },
+      "diameter_pixels": 1074,
+      "boundary_disagreements": 0,
+      "processing_fov_disagreements": 0,
+      "source_branch": "provided_rimone_wireframe",
+      "reference_calibration": {
+        "row": 713,
+        "col": 537,
+        "radius": 537
+      }
+    }
+  ],
+  "public_route_changed": false,
+  "automatic_port_complete": false
+}
