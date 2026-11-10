@@ -568,3 +568,43 @@ def test_artifact_cannot_claim_it_enables_test_execution(case, tmp_path):
     updated = hashlib.sha256(path.read_bytes()).hexdigest()
     with pytest.raises(s.SelectionError, match="stage1 boundary"):
         check(case, path, updated)
+
+
+def test_optional_runtime_module_addition_and_change_affect_source_identity(tmp_path, monkeypatch):
+    project = tmp_path / "source"
+    package = project / "src/deepretina"
+    package.mkdir(parents=True)
+    (project / "pyproject.toml").write_text("project metadata")
+    (project / "uv.lock").write_text("frozen dependencies")
+    fake_entry = package / "selection.py"
+    fake_entry.write_text("base runtime source")
+    monkeypatch.setattr(s, "__file__", str(fake_entry))
+    original = s.evaluation_source_identity()
+    optional = package / "optional_runtime.py"
+    optional.write_text("FORWARD_MODE = 1\n")
+    added = s.evaluation_source_identity()
+    assert original["evaluation_source_sha256"] != added["evaluation_source_sha256"]
+    assert "src/deepretina/optional_runtime.py" in added["source_files"]
+    optional.write_text("FORWARD_MODE = 2\n")
+    changed = s.evaluation_source_identity()
+    assert added["evaluation_source_sha256"] != changed["evaluation_source_sha256"]
+    compiled = package / "__pycache__"
+    compiled.mkdir()
+    (compiled / "optional_runtime.cpython-312.pyc").write_bytes(b"compiled cache only")
+    assert (
+        s.evaluation_source_identity()["evaluation_source_sha256"]
+        == changed["evaluation_source_sha256"]
+    )
+    versions = changed["runtime"]["installed_distributions"]
+    assert set(versions) == {
+        "torch",
+        "numpy",
+        "Pillow",
+        "scipy",
+        "scikit-image",
+        "opencv-python",
+        "opencv-python-headless",
+        "h5py",
+        "pydicom",
+    }
+    assert "not queried" in changed["hardware_status"]

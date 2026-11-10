@@ -24,7 +24,10 @@ Version1 `unified_heldout_selection` records contain these mandatory objects:
 Unknown/missing top-level fields, duplicate JSON keys and nonfinite JSON fail.
 Device choice is omitted only from the normalized training configuration; the
 checkpoint byte SHA still binds its original complete serialized contents.
-Threshold/tiling changes cannot reuse a frozen record. Actual float32 weights,
+Threshold/tiling changes cannot reuse a frozen record. The source digest covers **every actual `src/deepretina/**/*.py` file**, sorted
+by its relative path, including added optional/residual modules; `.pyc` files are
+excluded. `pyproject.toml` and `uv.lock` are also hashed. A source/runtime identity
+check is repeated before the checked snapshot is returned. Actual float32 weights,
 no active autocast, source/runtime/backend identity and checked inference settings
 must agree. Source identity uses the actual files and uv.lock from a pinned source
 checkout, independently of its location; an unreviewed package without that source
@@ -98,6 +101,16 @@ uv run python scripts/unified_selection.py check \
 Both commands remain metadata-only. `test_evaluation_enabled` is always false.
 Creation refuses overwrite. Scripts use CPU `weights_only=True` loading through
 the public immutable-snapshot loader; no unsafe pickle fallback is introduced.
+
+The runtime identity includes installed distribution versions via
+`importlib.metadata` for Torch/NumPy, Pillow, SciPy, scikit-image, both OpenCV
+package variants, h5py and pydicom (explicit null if a variant is absent), plus
+precision/backend settings. These are installed-version observations, not a
+claim that lockfile contents prove which binaries ran. The CPU checker does not
+query/attest GPU hardware or driver state. The future fresh validation/test
+producer must log actual devices/drivers separately; cross-hardware bitwise
+equivalence is not implied. Source-byte hashes do not attest arbitrary runtime
+monkeypatching or third-party binary contents.
 
 ## Future integration boundary
 

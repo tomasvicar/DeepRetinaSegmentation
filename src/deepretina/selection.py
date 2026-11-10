@@ -15,6 +15,7 @@ import pickle
 import platform
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
+from importlib import metadata
 from pathlib import Path
 
 import numpy as np
@@ -119,20 +120,17 @@ def evaluation_source_identity():
     """Hash actual evaluation/gate implementation, not only a Git ref or filename."""
     root = Path(__file__).parent
     result = hashlib.sha256()
-    for name in (
-        "selection.py",
-        "unified.py",
-        "unified_cli.py",
-        "unified_legacy.py",
-        "model.py",
-        "inference.py",
-        "dataset.py",
-        "derived_cache.py",
-        "integrity.py",
-        "legacy/single_net.py",
-        "legacy/preprocessing.py",
-    ):
-        result.update(name.encode() + b"\0" + (root / name).read_bytes())
+    files = sorted(root.rglob("*.py"), key=lambda path: path.relative_to(root).as_posix())
+    for path in root.rglob("*"):
+        require(
+            not (path.is_symlink() and path.is_dir()),
+            "Symlinked runtime directories cannot be frozen completely",
+        )
+    source_files = []
+    for path in files:
+        relative = "src/deepretina/" + path.relative_to(root).as_posix()
+        result.update(relative.encode() + b"\0" + path.read_bytes())
+        source_files.append(relative)
     project = root.parents[1]
     require(
         (project / "uv.lock").is_file() and (project / "pyproject.toml").is_file(),
@@ -140,9 +138,29 @@ def evaluation_source_identity():
     )
     for name in ("pyproject.toml", "uv.lock"):
         result.update(name.encode() + b"\0" + (project / name).read_bytes())
+    distributions = {}
+    for name in (
+        "torch",
+        "numpy",
+        "Pillow",
+        "scipy",
+        "scikit-image",
+        "opencv-python",
+        "opencv-python-headless",
+        "h5py",
+        "pydicom",
+    ):
+        try:
+            distributions[name] = metadata.version(name)
+        except metadata.PackageNotFoundError:
+            distributions[name] = None
     return {
         "evaluation_source_sha256": result.hexdigest(),
+        "source_files": source_files + ["pyproject.toml", "uv.lock"],
+        "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation",
+        "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
         "runtime": {
+            "installed_distributions": distributions,
             "python": platform.python_version(),
             "torch": str(torch.__version__),
             "numpy": np.__version__,
@@ -718,6 +736,11 @@ def _context(
         Path(metrics_csv).read_bytes(),
         Path(training_summary).read_bytes(),
         groups["train"],
+    )
+    require(
+        {**evaluation_source_identity(), "training_source_sha256": best["training_source_sha256"]}
+        == source,
+        "Source/runtime changed while checking selection evidence",
     )
     checkpoint_identity = {
         **identity,
