@@ -142,7 +142,9 @@ source inset policy. An arbitrary guessed mask is not a substitute for these
 source contracts. RIM/Erlangen automatic mode remains rejected. Explicit field
 angle is required for conditional/unknown source angles, and the profile requires
 exactly25px/degree. A positive finite `--fov-diameter-pixels` overrides the measured
-diameter, with both source estimate and actual used diameter recorded. This does
+diameter. `fov_calibration.mode=explicit_override` then describes the actual
+used radius, while `source_fov_calibration` separately preserves the source
+estimate and `used_diameter_pixels` records the actual diameter. This does
 not bypass source mask/branch validity checks.
 
 Source FOV and RGB are computed once before any optional vessel-model call, so
