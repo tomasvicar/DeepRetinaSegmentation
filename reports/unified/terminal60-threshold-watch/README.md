@@ -86,3 +86,39 @@ GPU/912MiB. No process was killed and no automatic retry occurred. Source8c and
 actual locked dependency checks had already passed. A separately reviewed narrow
 desktop-context classification is needed before continuing the authorized six
 VAL calls; the E60 QA/milestone must not be repeated or overwritten.
+
+## Explicitly authorized GUI-aware continuation
+
+Root independently confirmed the same established desktop clients and explicitly
+authorized their narrow identity-pinned allowance. New control program
+`scripts/resume_six_e060_validation.py`, SHA
+`000e582514c2b755a62ff0f181e785778ddd5f496cc366b0475db297150b1d12`,
+uses the unchanged6681 reviewed helper functions and the unchanged824bab existing
+VAL producer. It does **not** rerun checkpoint QA, migrate anything, overwrite the
+stopped watcher's evidence or modify training/evaluation packages.
+
+Seven existing C+G desktop contexts are pinned by PID, UID, actual `/proc/exe`
+and kernel start-time ticks. The approved identity artifact has SHA
+`90dd9b3a43d439193adc85f3be6d953d6bb391e28fd67369c53efde87c78c21a`.
+Before every producer call, physical UUID/driver and current XML process types
+are checked. New/unknown compute or changed UID/executable/start time is refused;
+known desktop entries must remain C+G. Pure graphics entries do not claim compute
+exclusivity. Full Chrome or other command lines are deliberately not recorded.
+Desktop activity remains present, so this is **not a background-free latency
+benchmark**. No process is killed or GPU memory explicitly cleaned up.
+
+Seven new tiny synthetic tests passed in0.01s: known GUI accepted, unknown PID,
+UID/executable/start-time/type changes rejected, target-GPU XML parsing excludes
+process command lines. Existing17 report/timeout fixtures still apply to reused
+helper functions. No real model operation occurred during these tests.
+
+The continuation started at19:29:14 UTC, controller PID1321793, with threshold0.50
+as the first actual fresh GPU forward. Path:
+`~/code/DeepRetinaSegmentation_e060_VAL_gui_20261110/{continuation.log,result/}`.
+The original QA reportf4ebab, immutable bestbfe957/last60f6d, source3157, clean8c,
+package3779, producer824, actual dependency lock and0444/0555 permissions were
+rechecked. `gui-aware-continuation/threshold-addendum.json` records those actual
+pins, selected epoch56, geometry metadata and qualified GUI background. Exact
+executed argv/environment/readiness for the first call are retained beside it.
+The same20:00 UTC deadline applies, six calls maximum, no retry/tuning/TEST or
+selection artifact. Completion and cross-threshold evidence checks are pending.
