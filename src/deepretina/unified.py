@@ -962,6 +962,111 @@ def _restore_rng(state, device, dataset, generator):
         torch.cuda.set_rng_state(state["cuda"], device)
 
 
+def _training_source_sha256():
+    """Identity of executable model/data/training sources, independent of checkout path."""
+    root = Path(__file__).parent
+    result = hashlib.sha256()
+    for name in (
+        "unified.py",
+        "unified_legacy.py",
+        "model.py",
+        "dataset.py",
+        "augment.py",
+        "inference.py",
+        "legacy/single_net.py",
+        "legacy/preprocessing.py",
+    ):
+        path = root / name
+        result.update(name.encode() + b"\0" + path.read_bytes())
+    return result.hexdigest()
+
+
+def _normalized_config(config):
+    result = asdict(config if isinstance(config, UnifiedConfig) else UnifiedConfig(**config))
+    result.pop("device")
+    return result
+
+
+def _reconcile_resume_outputs(output, saved, config, fields):
+    """last.pt commits training progress; best.pt may safely lead by one epoch.
+
+    A kill after publishing an improved model must not permit a weaker replay to
+    overwrite it. Validation is embedded in best.pt so its sidecar is repairable.
+    """
+    best_payload = torch.load(output / "best.pt", map_location="cpu", weights_only=True)
+    if (
+        best_payload.get("family") != "unified"
+        or best_payload.get("manifest_sha256") != saved["manifest_sha256"]
+        or _normalized_config(best_payload["config"]) != _normalized_config(config)
+        or best_payload.get("training_source_sha256") != saved.get("training_source_sha256")
+        or best_payload.get("lineage") != saved.get("lineage")
+    ):
+        raise ValueError("Resume best checkpoint provenance differs from committed last.pt")
+    best_score = best_payload.get("val_selection_score", best_payload["val_mean_dice"])
+    committed_best = saved["training_state"].get(
+        "best_validation_score",
+        saved["training_state"].get("best_validation_mean_dice", -float("inf")),
+    )
+    if (
+        not math.isfinite(best_score)
+        or best_score < committed_best
+        or not 1 <= best_payload["epoch"] <= saved["epoch"] + 1
+    ):
+        raise ValueError("Resume best checkpoint score/epoch contradicts committed training state")
+    validation = best_payload.get("validation_metrics")
+    if validation is None:
+        validation = json.loads((output / "validation.json").read_text())
+        if (
+            validation.get("selection_score") != best_score
+            or validation.get("selection_metric") != config.selection_metric
+        ):
+            raise ValueError("Old best checkpoint lacks recoverable matching validation metadata")
+    if (
+        validation.get("selection_score") != best_score
+        or validation.get("selection_metric") != config.selection_metric
+    ):
+        raise ValueError("Embedded best validation does not match checkpoint selection score")
+    with (output / "metrics.csv").open(newline="") as handle:
+        reader = csv.DictReader(handle)
+        if reader.fieldnames != fields:
+            raise ValueError("Resume metrics.csv columns differ from training schema")
+        rows = list(reader)
+    committed = []
+    for row in rows:
+        try:
+            epoch = int(row["epoch"])
+        except (TypeError, ValueError):
+            if len(committed) < saved["epoch"]:
+                raise ValueError("Resume metrics.csv lost committed epoch rows") from None
+            continue  # A process may have been interrupted during a trailing row write.
+        if epoch <= saved["epoch"]:
+            if any(row.get(field) in (None, "") for field in fields):
+                raise ValueError("Resume metrics.csv has incomplete committed epoch rows")
+            committed.append(row)
+    if [int(row["epoch"]) for row in committed] != list(range(1, saved["epoch"] + 1)):
+        raise ValueError("Resume metrics.csv does not contain exactly the committed epochs")
+    temporary = output / "metrics.csv.tmp"
+    with temporary.open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(committed)
+    temporary.replace(output / "metrics.csv")
+    _write_json(output / "validation.json", validation)
+    _write_json(output / "coverage.json", saved["training_state"].get("coverage", {}))
+    _write_json(
+        output / "resume_recovery.json",
+        {
+            "committed_epoch": saved["epoch"],
+            "discarded_csv_rows": len(rows) - len(committed),
+            "retained_best_epoch": best_payload["epoch"],
+            "retained_best_score": best_score,
+            "best_ahead_of_committed_epoch": best_payload["epoch"] > saved["epoch"],
+            "training_source_sha256": saved.get("training_source_sha256"),
+        },
+    )
+    return best_score
+
+
 def train_unified(
     manifest: Path,
     output: Path,
@@ -980,6 +1085,7 @@ def train_unified(
     manifest = Path(manifest)
     output = Path(output)
     digest = hashlib.sha256(manifest.read_bytes()).hexdigest()
+    training_source_sha256 = _training_source_sha256()
     random.seed(config.seed)
     np.random.seed(config.seed)
     torch.manual_seed(config.seed)
@@ -1052,6 +1158,8 @@ def train_unified(
             raise ValueError("Resume requires unified last.pt with training state")
         if saved["manifest_sha256"] != digest:
             raise ValueError("Resume manifest changed")
+        if saved.get("training_source_sha256", training_source_sha256) != training_source_sha256:
+            raise ValueError("Resume executable training sources changed")
         original = asdict(UnifiedConfig(**saved["config"]))
         current = asdict(config)
         original.pop("device")
@@ -1087,6 +1195,7 @@ def train_unified(
                 "config": asdict(config),
                 "manifest": str(manifest.resolve()),
                 "manifest_sha256": digest,
+                "training_source_sha256": training_source_sha256,
                 "normalization": "RGB/255-0.5",
                 "preprocessing": {
                     "profile": config.preprocessing_profile,
@@ -1123,6 +1232,8 @@ def train_unified(
         "train_seconds",
         "validation_seconds",
     ]
+    if resume is not None:
+        best = _reconcile_resume_outputs(output, saved, config, fields)
     started = time.perf_counter()
     completed_epoch = first_epoch - 1
     with (output / "metrics.csv").open("a" if resume else "w", newline="") as handle:
@@ -1212,6 +1323,7 @@ def train_unified(
                 "config": asdict(config),
                 "state_dict": model.state_dict(),
                 "manifest_sha256": digest,
+                "training_source_sha256": training_source_sha256,
                 "supervised_channels": flags,
                 "inference_max_size": inference_max_size,
                 "normalization": "RGB/255-0.5",
@@ -1228,6 +1340,7 @@ def train_unified(
                 "val_mean_dice": metrics["mean_dice"],
                 "val_macro_dataset_mean_dice": metrics.get("macro_dataset_mean_dice"),
                 "val_selection_score": score,
+                "validation_metrics": metrics,
             }
             if score > best:
                 best = score

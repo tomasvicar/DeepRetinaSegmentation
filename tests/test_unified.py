@@ -577,3 +577,126 @@ def test_historical_resume_is_exact_without_original_checkpoint(tmp_path):
     assert actual["lineage"] == expected["lineage"]
     assert actual["accuracy_claim"] is False
     assert actual["coverage"] == expected["coverage"]
+
+
+def test_resume_recovers_interrupted_best_csv_and_preserves_stronger_selection(
+    tmp_path, monkeypatch
+):
+    """Kill between CSV/best publication and last.pt commit, then replay safely."""
+    import csv
+
+    from deepretina import unified
+
+    manifest = make_manifest(tmp_path)
+    cfg = UnifiedConfig(
+        epochs=3,
+        epoch_samples=2,
+        batch_size=2,
+        patch_size=32,
+        base_channels=2,
+        depth=1,
+        norm="group",
+        workers=0,
+        device="cpu",
+        augmentation="mild",
+        tile_size=32,
+        overlap=8,
+    )
+
+    def validator(scores):
+        values = iter(scores)
+
+        def evaluate(*args, **kwargs):
+            value = next(values)
+            return {
+                "mean_dice": value,
+                "macro_dataset_mean_dice": value,
+                "marker": f"validation-{value}",
+            }
+
+        return evaluate
+
+    train_unified(manifest, tmp_path / "full", cfg, validation_fn=validator([0.7, 0.8, 0.6]))
+    original_save = unified.torch.save
+
+    def interrupt(payload, path, *args, **kwargs):
+        if str(path).endswith("last.pt.tmp") and payload["epoch"] == 2:
+            raise RuntimeError("simulated process termination before last commit")
+        return original_save(payload, path, *args, **kwargs)
+
+    with monkeypatch.context() as patch:
+        patch.setattr(unified.torch, "save", interrupt)
+        with pytest.raises(RuntimeError, match="simulated process termination"):
+            train_unified(manifest, tmp_path / "resumed", cfg, validation_fn=validator([0.7, 0.8]))
+    committed = torch.load(tmp_path / "resumed/last.pt", weights_only=True)
+    assert committed["epoch"] == 1
+    best_before = torch.load(tmp_path / "resumed/best.pt", weights_only=True)
+    assert best_before["epoch"] == 2 and best_before["val_selection_score"] == 0.8
+    # Also cover a kill between best.pt publication and its JSON sidecar write.
+    (tmp_path / "resumed/validation.json").write_text('{"selection_score":0.7}')
+    with (tmp_path / "resumed/metrics.csv").open("a") as handle:
+        handle.write("2,partial")
+    train_unified(
+        manifest,
+        tmp_path / "resumed",
+        cfg,
+        resume=tmp_path / "resumed/last.pt",
+        validation_fn=validator([0.75, 0.6]),
+    )
+    expected = torch.load(tmp_path / "full/last.pt", weights_only=True)
+    actual = torch.load(tmp_path / "resumed/last.pt", weights_only=True)
+    assert all(
+        torch.equal(value, actual["state_dict"][key])
+        for key, value in expected["state_dict"].items()
+    )
+    assert expected["coverage"] == actual["coverage"]
+    assert actual["training_state"]["best_validation_score"] == 0.8
+    retained = torch.load(tmp_path / "resumed/best.pt", weights_only=True)
+    assert retained["val_selection_score"] == 0.8
+    assert all(
+        torch.equal(value, retained["state_dict"][key])
+        for key, value in best_before["state_dict"].items()
+    )
+    assert (
+        json.loads((tmp_path / "resumed/validation.json").read_text())
+        == retained["validation_metrics"]
+    )
+    with (tmp_path / "resumed/metrics.csv").open() as handle:
+        rows = list(csv.DictReader(handle))
+    assert [int(row["epoch"]) for row in rows] == [1, 2, 3]
+    assert float(rows[1]["val_selection_score"]) == 0.75
+    recovery = json.loads((tmp_path / "resumed/resume_recovery.json").read_text())
+    assert recovery["best_ahead_of_committed_epoch"]
+    assert recovery["discarded_csv_rows"] == 2
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("manifest_sha256", "unrelated-data"),
+        ("training_source_sha256", "unrelated-code"),
+        ("lineage", {"initialization": "unrelated-source"}),
+    ],
+)
+def test_resume_rejects_unrelated_best_checkpoint(tmp_path, field, value):
+    manifest = make_manifest(tmp_path)
+    cfg = UnifiedConfig(
+        epochs=1,
+        epoch_samples=2,
+        batch_size=2,
+        patch_size=32,
+        base_channels=2,
+        depth=1,
+        norm="group",
+        workers=0,
+        device="cpu",
+        augmentation="basic",
+        tile_size=32,
+        overlap=8,
+    )
+    train_unified(manifest, tmp_path / "run", cfg)
+    best = torch.load(tmp_path / "run/best.pt", weights_only=True)
+    best[field] = value
+    torch.save(best, tmp_path / "run/best.pt")
+    with pytest.raises(ValueError, match="best checkpoint provenance"):
+        train_unified(manifest, tmp_path / "run", cfg, resume=tmp_path / "run/last.pt")
