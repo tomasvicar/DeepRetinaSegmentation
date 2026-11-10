@@ -1,8 +1,9 @@
 # DeepRetinaSegmentation · Leipzig
 
-**Status:** the three currently bundled models are single-dataset pilots, not the
-final Leipzig models. Original trained-model ports and the new unified-model
-comparison are in progress. The agreed deliverable is recorded in [GOAL.md](docs/GOAL.md).
+**Status:** original trained models are bundled with verified prepared-input
+inference. Three additional single-dataset pilots remain explicitly preliminary.
+Full unified-model training and comparison are still in progress.
+The agreed deliverable is recorded in [GOAL.md](docs/GOAL.md).
 
 A Python package for retinal **vessel segmentation**, **artery/vein classification**,
 and **optic disc/cup segmentation**, with one workflow from dataset ZIPs to predictions.
