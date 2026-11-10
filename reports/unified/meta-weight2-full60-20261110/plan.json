@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "derived_cache": {
+    "schema": 1,
+    "fingerprint": "4e39e40def03d0f2859dd147107a3736a62b4fc0249dd440a1280a9803aa8591",
+    "canonical_fingerprint": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+    "allow_canonical_fallback": false
+  },
+  "training_photos": 2221,
+  "datasets": [
+    "aria",
+    "avrdb",
+    "chasedb1",
+    "drhagis",
+    "drishti",
+    "drive",
+    "erlangen",
+    "g1020",
+    "hrf",
+    "iostar",
+    "onhsd",
+    "refuge",
+    "riga",
+    "rimone",
+    "rite",
+    "stare",
+    "uoadr"
+  ],
+  "purpose": "full_data_validation_search",
+  "source_commit": "3157bb957fcf6e6f632a5c49d6df2c8a78ea3747",
+  "execution_code_sha256": "8e0481fff8ef53beca760acf074e96b5b73305e3adea2849e79805fb961cb30b",
+  "training_source_sha256": "dd69012a1741000ae5841634094094397c690a2371c9a91aa411344a436f1136",
+  "manifest": "/data/manifest.json",
+  "screen_epochs": 1,
+  "total_epochs": 60,
+  "candidates": {
+    "av_weight_2_lr0003_cached_workers8": {
+      "architecture": "compact_unet",
+      "legacy_initialization": null,
+      "allow_historical_exposure": false,
+      "preprocessing_profile": "legacy25_raw",
+      "pixels_per_degree": 25.0,
+      "epochs": 60,
+      "epoch_samples": 8192,
+      "coverage_first": true,
+      "batch_size": 4,
+      "patch_size": 384,
+      "base_channels": 12,
+      "depth": 4,
+      "norm": "batch",
+      "lr": 0.0003,
+      "weight_decay": 1e-05,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05,
+      "seed": 42,
+      "workers": 8,
+      "device": "cuda:0",
+      "sampling": "dataset_task_balanced",
+      "train_view": "patch",
+      "view_size": 512,
+      "foreground_probability": 0.5,
+      "augmentation": "mild",
+      "bce_weight": 1.0,
+      "dice_weight": 1.0,
+      "av_weight": 2.0,
+      "tile_size": 512,
+      "overlap": 64,
+      "require_all_heads": true,
+      "selection_metric": "macro_dataset_mean_dice",
+      "purpose": "full_data",
+      "max_steps": null
+    }
+  },
+  "status": "PROPOSED_ONLY_NOT_SUBMITTED",
+  "created_utc": "2026-11-10T18:50:16.348144+00:00",
+  "parent_ada_control_plan_sha256": "6be48b57fc85e8ffba7772058562aa5a8bf855f9cb445c5180484111ffba5778",
+  "configuration_changes_vs_parent_control": {
+    "av_weight": [
+      1.0,
+      2.0
+    ],
+    "workers": [
+      2,
+      8
+    ]
+  },
+  "runtime": {
+    "torch_intra_threads": 8,
+    "torch_interop_threads": 1,
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "PYTHONHASHSEED": "42",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "device": "cuda:0 within exactlyone schedulerassignedGPU",
+    "derived_cache_root": "/cache",
+    "source_root": "/code",
+    "runtime_policy": "existing pinnedSIF+uv-frozenPython; no build/install, no source modification"
+  },
+  "resource_proposal": {
+    "select": "1:ncpus=16:mem=32gb:ngpus=1:gpu_mem=10gb:gpu_cap=sm_80:scratch_local=20gb",
+    "walltime": "04:00:00",
+    "maximum_wall_seconds": 14400,
+    "array": false,
+    "single_trial": true,
+    "single_allocation": true,
+    "gpu_timing_for_this_exact_configuration": "UNMEASURED"
+  },
+  "epoch1_guard": {
+    "first_command": "run --trial av_weight_2_lr0003_cached_workers8 --stop-after-epoch 1",
+    "QA": "finitebest/last+optimizer,RNG/scheduler60,2048steps/8192samples/all2221photo coverage, exactsource/plan/canonical/cache/config pins; snapshotE1 beforedecision",
+    "actual_elapsed_scope": "fromallocatedjobstart through staging,E1 andQA; recordinitialstartup separately",
+    "projection_formula": "elapsed_after_E1_QA + 1.2 * 59 * (actual_E1_train_seconds + actual_E1_validation_seconds) + 300",
+    "maximum_projected_total_seconds": 14400,
+    "if_pass": "sameoutput unchangedconfig/source/cache/UUID resume --final to60; no checkpointmigration",
+    "if_too_slow_or_QA_fails": "saveE1artifacts+projection andhalt; no autoresubmit/configfallback or partial60claim",
+    "qualification": "20%remaining margin must also cover repeated resume startup/checkpointing; actualtiming unknownuntilE1"
+  },
+  "scratch_budget": {
+    "capacity_bytes_conservative": 20000000000,
+    "canonical_prepared_max_bytes": 3500000000,
+    "cache_allocated_bytes_verified": 8172400640,
+    "source_budget_bytes": 100000000,
+    "outputs_budget_bytes": 1000000000,
+    "runtime_tmp_budget_bytes": 2000000000,
+    "free_reserve_bytes": 2000000000,
+    "planned_sum_bytes_including_reserve": 16772400640,
+    "persistent_archives": "streamuntar directlyinto scratch; never copy8.159GB cachetar alongside extractedcache",
+    "SIF": "persistentread-onlybind, not copiedinto scratch",
+    "raw_archives_or_ownCloud": "not transferred"
+  },
+  "feasibility": {
+    "storage": "planned16.77GB including2GBreserve belowconservative20GB; preflightactualfree bytes/inodes required",
+    "RAM": "32GBproposed for8workerlocalcaches+prefetch+main; actualpeakunknown andmustrecord, no measured32GBclaim",
+    "VRAM": "base12/patch384/batch4 priorrunsfit6GBclassGPU; minimum10GBfilter proposed, actualE1allocation/peak/OOMmustrecord",
+    "walltime": "not established; E1guard prevents unreviewed4h overrun; haltifprojectionfails"
+  },
+  "E8_selection_context": {
+    "comparison_report_url": "https://github.com/tomasvicar/DeepRetinaSegmentation/blob/cfcc0ab/reports/unified/paired-avweight-e008/result.json",
+    "macro_delta": 0.0056130324309737745,
+    "macro_paired95ci": [
+      -0.001368189071005485,
+      0.011723071307500077
+    ],
+    "vessel_pooled_delta": -0.008120128461219789,
+    "vessel_pooled_paired95ci": [
+      -0.010448710838024766,
+      -0.005621332749146979
+    ],
+    "conditional_AV_point_delta": 0.008849385671922727,
+    "conditional_AV_CI": null,
+    "multiplicity": "selectedamongmultipleE8/one-seedVALpilots; notadjusted andnotfinal superiority"
+  },
+  "limitations": [
+    "Standalonefollow-up, NOTpairedarchitecturetest andNOTcausalAVweightcomparisonwithAda",
+    "workers2to8 changescrop/augmentation RNGassignment despitefixedseed42; hardware/runtime/CUDA differencesalso confound crossrun comparisons",
+    "Cachebytes preserveinputs butdo notprove trainingoutcomes invariantacross workers/hardware",
+    "No TEST evaluation or clinicalclaim; finalselectionrequires freshVAL evidence afteractual60completion",
+    "No submission/upload/install/CPUorGPUtraining performed bythisproposal"
+  ],
+  "submission_authorized": false,
+  "test_evaluation": false
+}
