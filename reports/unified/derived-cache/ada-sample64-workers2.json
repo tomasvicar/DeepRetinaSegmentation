@@ -1,0 +1,401 @@
+{
+  "scope": "CPU DataLoader delivery only; no model/GPU/epoch speed claim",
+  "protocol_sha256": "4d26b9d9d9c92dbd562fce8ff43f0ce4610cd6d6bd8cefbe7328f0f111339761",
+  "reference_module_sha256": "b3e14ca009072531dcfd15aaa9f803593020814d88f759fbea47dc8970940dfa",
+  "candidate_module_sha256": "256c83df97fe2015ae760aa2c73bf5c8d1339935117685a89b3da391e7f9eed8",
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "frozen_plan_sha256": "907713f6c4a94c7281e2a5e226777fb02a5cdf613b0d79c20e0fe14831cf5e14",
+  "runtime": {
+    "torch": "2.6.0+cu124",
+    "parent_threads": 2,
+    "workers": 2,
+    "batch_size": 4,
+    "worker_threads": 1,
+    "prefetch_factor": 2,
+    "pin_memory": false,
+    "persistent_workers": false
+  },
+  "training_config": {
+    "architecture": "compact_unet",
+    "legacy_initialization": null,
+    "allow_historical_exposure": false,
+    "preprocessing_profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "epochs": 60,
+    "epoch_samples": 8192,
+    "coverage_first": true,
+    "batch_size": 4,
+    "patch_size": 384,
+    "base_channels": 12,
+    "depth": 4,
+    "norm": "batch",
+    "lr": 0.001,
+    "weight_decay": 1e-05,
+    "scheduler": "cosine",
+    "min_lr_ratio": 0.05,
+    "seed": 42,
+    "workers": 2,
+    "device": "cpu",
+    "sampling": "dataset_task_balanced",
+    "train_view": "patch",
+    "view_size": 512,
+    "foreground_probability": 0.5,
+    "augmentation": "mild",
+    "bce_weight": 1.0,
+    "dice_weight": 1.0,
+    "av_weight": 1.0,
+    "tile_size": 512,
+    "overlap": 64,
+    "require_all_heads": true,
+    "selection_metric": "macro_dataset_mean_dice",
+    "purpose": "full_data",
+    "max_steps": null
+  },
+  "derived_cache": {
+    "schema": 1,
+    "fingerprint": "d73bb541ea0eb3ee422095b5a12f071906ff6f03e0f667c3f36ce65dae196d9a",
+    "canonical_fingerprint": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+    "allow_canonical_fallback": true
+  },
+  "cache_coverage": {
+    "kind": "subset",
+    "photo_ids": [
+      "sha256:0035e00d0724573f2741f3b34af36c85c273c9f95a18c80cff3a392825245d91",
+      "sha256:075398542353eeed2c1c7d37998ac8499a2308aef6670d34865d7c5c05b0bc32",
+      "sha256:0aa7bc08b22bb39e1e1e3cda4f7b57b86e19b180ac435e16ab73ebd5d7925c9c",
+      "sha256:11bfa495366972fbf1aa213d8495a6dbaffb465edfb9bd96f187262abb9000a8",
+      "sha256:16db955c7f7bbe6b21e68a94e22e4d6f587ba86e03e25ea7d8a264a981b4a6b4",
+      "sha256:220060a2d0ffca850c1b5c455582275666069e8ec95819bb387370578b77c319",
+      "sha256:2468a30b41626e6b3d00abc44873d439ecb6337f1e4dedb043c8b7d45415c176",
+      "sha256:29e70d1d5e5e2faf90fdd6433e429504bc0ab6d2bfc991ec887c1bd1130851f0",
+      "sha256:2e4b8058e6c523783b6f24564269a9f346fcca0f791b939614dd6cce0ecb9423",
+      "sha256:31445a4cb5f8f8e7509c630a9b8e1652d59a4ed256230ad234b30cf9e5b6278d",
+      "sha256:33bcd18bda741e41b6860b6b5b6be72b03d26971e9a771aef3e512c845866eaa",
+      "sha256:33d0170e09531c3b42d88ba9585079fb8a5f2c1c30a4d6068771a52225cced92",
+      "sha256:34273f1d576b2c13c74981c1ec50f88651629d03bb8c3f6529fb7936b1496dcd",
+      "sha256:36150b98fc6671675aba4358adc644c6e54c30e4e8871a0d1de370b94d3f26e1",
+      "sha256:37f765930b58dd0eabb06c87b43c520b365a95398820cbfef672e504f78846b3",
+      "sha256:3f87936a436f2b6c9031122fafc38cd356db86e4c574df8c4ffde2001602a7f6",
+      "sha256:413aa6a26485a8c52d19d20eeb9a42b6230a568545a04cd25690a010100595ea",
+      "sha256:41819f79945e918d302bd59a8983c7ca5d820789b524a0575322b85ae69f103f",
+      "sha256:424389539b9669d6920ea3500bfead074696876c589286eab313bcfae4d3fdcf",
+      "sha256:430f99f99552d5e4813c777bad9023ccf4472a3bf2850a87d90af6484bb350b0",
+      "sha256:49fb5d331c735a82d1303c36992ea29a03d015ec29040c025331e04de4311618",
+      "sha256:4aa58c625894a1271cf8a5e853d82ab3264d81d38e88d502de731ad86d3351f1",
+      "sha256:5283d4f0d62b7bf9e2aa2bf36371adc0d6e34f72f9efdac340dce40d670bde06",
+      "sha256:54d1cd764690efd26df72cea205da1526a6f8bc9aca683b55a6d641545dd0ca4",
+      "sha256:55510c2a0f7fa028cbd02c3ad8f8525ca232078f2f06677e19c29f3eceacc0b8",
+      "sha256:5c51d46ff308cf8dc24e5371245a2d5fead3e8c46a1a603b7d659e4f4fb3736b",
+      "sha256:5e80300bf389693419e05ea4bdfb2906d12ddcfee9a942e95cb88613f2c2c9a5",
+      "sha256:5f7d06f3ba3d510cfbcdf60b97004f037a592a583c5ee952978d813e39a82bcb",
+      "sha256:6298ab9021fe3222f724220a41f1f9637e08074987b8c28c9b4f398712e74fa5",
+      "sha256:64cbeaf89422909107e6ad1e2126fd1e0a39bb94e5e1266250999cba95ff76d5",
+      "sha256:6a5694b66f898c79e416aee21cff5d00acae2545754004d9255355fd4d1e15c4",
+      "sha256:6c6d4ce526cd58981e7776beabfca53f25c3a1df6173212fc00962d21c904542",
+      "sha256:6d75e615df6f2e007221acccb9ca2414d5087b86a515b46f729a051866d37034",
+      "sha256:6e28ff59a069ceda7041a1f2bf47d1ad0a7d467db623ed49ec600589aaa19a15",
+      "sha256:76febf41fa618cf52346e62ecbcc36e1f41d6c9f9d61b6846203fdf2053e268c",
+      "sha256:77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925",
+      "sha256:7bf56299bce95877c2b47eaf358bc67273f8afbaf8b08c9411efe3edde28abde",
+      "sha256:7f002e24bfc90349fcf41f675a0f7265eef9e4351b3e084bf0a50ba06598af38",
+      "sha256:88240a434293417912a65d15dedf0031bf4dfcd9257a6b76e8de65200c513249",
+      "sha256:88e23285e5f3a16f63e091d6014686ebd0be669716c22165e3e586323c2bf79c",
+      "sha256:8c405f00e1763b001b6d5c4c736aecc78a6659ecf1f20cad624b14aa73886ea2",
+      "sha256:985453041cfefa545e68bb591fb2a072587916983f3dbbd7cfcca93a233990a9",
+      "sha256:9fe26b84835217dc9b29988953c7addae320856400d513ba801f32233d0e22a7",
+      "sha256:abab5c503f5a7f0c35f39638bde393ce43ef162c6c98482046a0e28457c34181",
+      "sha256:aca9630b17e756b79f80aa1935e3c8b947ae5a36436b1bf8857af97093e35325",
+      "sha256:b09e9bff769985035566b9a27dc155f1145fb8c96f5623437f36715aae389a7b",
+      "sha256:b1d9d36530488118e2e220195ed0ba5700c8622aad8113aca87ddc11b6fb36e6",
+      "sha256:b460b711d04f755826b7d1f6b6793f71e0eaca50f60ab0702610268fd81bef9b",
+      "sha256:be474c1a45cf19dbddd7f2eaedd0e7161f34682997bbfc0d2f0daad04062a74b",
+      "sha256:c049d4e88d60618914aa0a5bc966468dc21a9f1ee633e967faf1acd031a6dda7",
+      "sha256:c0bd30793d93f98ef345319dc06dc199a4bc581ad79e780c73a86bc7beeed072",
+      "sha256:c0e0abe674f3b6b0d31d24f990fd21838d848c665d28cc1b7d3ff03915990036",
+      "sha256:c38ecb891e767dc53eed0bb5aa714d22adc16795a839e536b5c00b1850a73744",
+      "sha256:ce78e0a4721aebb0240c3445a6dc6edd5af47f92d1c12653fea9f88d0bbbeeef",
+      "sha256:cf109c6e133535d31f972d2ee7a90bd79722769fe41f2521a058f50e0961001d",
+      "sha256:cf43340bdb7897c3fedd88f488f644b3cffc82dc2c57ade29dfd37d9ff0323b9",
+      "sha256:de6aaef51c8af3abab4330388edf0d27c8d6a478f2dea1e5a0cb705b537b6f98",
+      "sha256:e48597a5c5b7122ee184039bb2300014b7ca3beb52bd83ddde81ddbedf25ab63",
+      "sha256:e5d3cc961c6108d8dabf21646b0de0b7e59ea03dc898928b08bc38101509d082",
+      "sha256:ee2499039c5e21a6b38306efd3605a45563874bdd35c3a86af17fb7d12874487",
+      "sha256:f1f4eb3d5ea631d68962ea9a79bb64986ac75c764a00ff0ecf84dbe064925041",
+      "sha256:f90b549685906a3b1d7c21a331e87f7e77cbdb329769b5348a750c611aaff6a4",
+      "sha256:fad411ea10aeeee32489533a7e1052da1c1c0431dbc0eb608a82e739932e631c",
+      "sha256:fc7353b767359aa323a1ebe2742bd323e1469dc670a45d36574d0933c9651d0d"
+    ],
+    "photos": 64,
+    "records": 140,
+    "splits": [
+      "train"
+    ]
+  },
+  "startup_seconds_excluded": {
+    "reference": 80.09440964303212,
+    "candidate": 79.69216213998152
+  },
+  "gate_sources": [
+    "aria",
+    "avrdb",
+    "chasedb1",
+    "drhagis",
+    "drishti",
+    "drive",
+    "erlangen",
+    "g1020",
+    "hrf",
+    "iostar",
+    "onhsd",
+    "refuge",
+    "riga",
+    "rimone",
+    "rite",
+    "stare",
+    "uoadr"
+  ],
+  "gate_photos": 64,
+  "gates": [
+    {
+      "augmentation": "basic",
+      "view": "patch",
+      "paired_samples": 64,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "mild",
+      "view": "patch",
+      "paired_samples": 64,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "strong",
+      "view": "patch",
+      "paired_samples": 64,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "basic",
+      "view": "whole",
+      "paired_samples": 64,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "mild",
+      "view": "whole",
+      "paired_samples": 64,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    },
+    {
+      "augmentation": "strong",
+      "view": "whole",
+      "paired_samples": 64,
+      "tensors_traces_worker_rng_parent_rng_equal": true
+    }
+  ],
+  "warmup_batches": 8,
+  "measured_batches": 64,
+  "timing": [
+    {
+      "repeat": 0,
+      "execution_order": [
+        "reference",
+        "candidate"
+      ],
+      "reference": {
+        "iterator_and_warmup_seconds": 1.3876897870213725,
+        "measured_seconds": 9.19741687597707,
+        "samples_per_second": 27.83390200227326
+      },
+      "candidate": {
+        "iterator_and_warmup_seconds": 0.8957689760136418,
+        "measured_seconds": 5.490911707980558,
+        "samples_per_second": 46.62249433512589
+      },
+      "throughput_ratio": 1.6750254538985632,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 56,
+      "sources": [
+        "aria",
+        "avrdb",
+        "chasedb1",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "iostar",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "stare",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    },
+    {
+      "repeat": 1,
+      "execution_order": [
+        "candidate",
+        "reference"
+      ],
+      "candidate": {
+        "iterator_and_warmup_seconds": 0.6292989030480385,
+        "measured_seconds": 5.227435638953466,
+        "samples_per_second": 48.972386784134805
+      },
+      "reference": {
+        "iterator_and_warmup_seconds": 0.930507300014142,
+        "measured_seconds": 7.3995234679896384,
+        "samples_per_second": 34.59682249910508
+      },
+      "throughput_ratio": 1.4155168956744966,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 55,
+      "sources": [
+        "aria",
+        "avrdb",
+        "chasedb1",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "iostar",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "stare",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    },
+    {
+      "repeat": 2,
+      "execution_order": [
+        "reference",
+        "candidate"
+      ],
+      "reference": {
+        "iterator_and_warmup_seconds": 0.9959921410190873,
+        "measured_seconds": 7.299653224996291,
+        "samples_per_second": 35.070159103363444
+      },
+      "candidate": {
+        "iterator_and_warmup_seconds": 0.6359247560030781,
+        "measured_seconds": 5.278018685989082,
+        "samples_per_second": 48.50304919904362
+      },
+      "throughput_ratio": 1.3830290605779396,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 57,
+      "sources": [
+        "aria",
+        "avrdb",
+        "chasedb1",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "iostar",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "stare",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    },
+    {
+      "repeat": 3,
+      "execution_order": [
+        "reference",
+        "candidate"
+      ],
+      "reference": {
+        "iterator_and_warmup_seconds": 1.0423765099840239,
+        "measured_seconds": 7.395254019997083,
+        "samples_per_second": 34.61679602996261
+      },
+      "candidate": {
+        "iterator_and_warmup_seconds": 0.8334792880341411,
+        "measured_seconds": 5.621431412000675,
+        "samples_per_second": 45.540002401076926
+      },
+      "throughput_ratio": 1.31554642901266,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 59,
+      "sources": [
+        "aria",
+        "avrdb",
+        "chasedb1",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "iostar",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "stare",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    },
+    {
+      "repeat": 4,
+      "execution_order": [
+        "reference",
+        "candidate"
+      ],
+      "reference": {
+        "iterator_and_warmup_seconds": 1.0774759599589743,
+        "measured_seconds": 7.592284634010866,
+        "samples_per_second": 33.71844080412984
+      },
+      "candidate": {
+        "iterator_and_warmup_seconds": 0.6845009520184249,
+        "measured_seconds": 5.524085035955068,
+        "samples_per_second": 46.342516151317675
+      },
+      "throughput_ratio": 1.3743967706134748,
+      "measured_batches_and_traces_exact": true,
+      "distinct_photos": 54,
+      "sources": [
+        "aria",
+        "avrdb",
+        "chasedb1",
+        "drhagis",
+        "drishti",
+        "drive",
+        "erlangen",
+        "g1020",
+        "hrf",
+        "iostar",
+        "onhsd",
+        "refuge",
+        "riga",
+        "rimone",
+        "rite",
+        "stare",
+        "uoadr"
+      ],
+      "retained_tensor_bytes": 2793410560
+    }
+  ],
+  "max_parent_rss_kib": 3246912
+}
