@@ -125,7 +125,11 @@ def test_train_save_reload_evaluate_predict(tmp_path, task):
     assert metrics["by_dataset"]["synthetic"]["channels"] == metrics["channels"]
     assert metrics["metric_support"][
         "artery" if task == "av" else next(iter(metrics["channels"]))
-    ] == ("reference_class_labeled_vessel_pixels" if task == "av" else "valid_field_of_view")
+    ] == (
+        "reference_class_labeled_vessel_pixels"
+        if task == "av"
+        else "annotated_valid_pixels_within_field_of_view"
+    )
     assert bool(metrics["av_accuracy_description"]) == (task == "av")
     assert bool(metrics["av_conditional_accuracy_description"]) == (task == "av")
     paths = predict(

@@ -55,9 +55,10 @@ RGB is normalized to `[-1,1]`. Preparation caps image dimensions rather than
 reproducing camera-angle scaling, MATLAB FOV heuristics or historical contrast
 normalization. Python-only execution therefore means a supported functional
 rewrite, not bitwise MATLAB conversion or reproduction of historical scores.
-The exact adapter support and excluded historical loaders are listed in
-[DATASETS.md](DATASETS.md). ARIA, AVRDB, G1020, RIGA and other excluded adapters
-must not be described as translated. Old source remains retrievable through Git.
+All historical dataset adapters are now mapped and implemented; exact annotation
+semantics and validation scopes are in [DATASETS.md](DATASETS.md) and the migration
+audit. UBMI still requires its private source for real-data verification. Old source
+remains retrievable through Git.
 
 ## Remaining limits and follow-up opportunities
 

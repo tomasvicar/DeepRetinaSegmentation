@@ -12,6 +12,8 @@ dependencies = [
   "torch==2.6.0",
   "numpy>=1.26,<3",
   "pillow>=10.4",
+  "scipy>=1.13",
+  "xlrd>=2.0.1",
 ]
 
 [project.scripts]
@@ -22,7 +24,7 @@ dev = ["pytest>=8", "ruff>=0.9"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "/src/deepretina/*.py", "/configs/*.toml", "/docs/*.md", "/scripts/*.py",
+  "/src/deepretina/**/*.py", "/src/deepretina/adapters/*.json", "/src/deepretina/pretrained/*", "/configs/*.toml", "/docs/*.md", "/scripts/*.py",
   "/tests/*.py", "/reports/**/*.json", "/reports/**/*.csv", "/reports/**/*.md",
   "/README.md", "/pyproject.toml", "/uv.lock", "/.python-version",
 ]

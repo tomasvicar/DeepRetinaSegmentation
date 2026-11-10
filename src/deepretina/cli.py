@@ -21,10 +21,28 @@ def parser() -> argparse.ArgumentParser:
         "--datasets",
         nargs="+",
         required=True,
-        help="drive rite hrf drhagis chasedb1 iostar refuge drishti",
+        help="Dataset selectors; run deepretina datasets for the complete list",
     )
     prepare.add_argument("--max-size", type=int, default=1024)
     prepare.add_argument("--seed", type=int, default=42)
+    prepare.add_argument(
+        "--limit",
+        type=int,
+        help="Preview at most N source groups per dataset; not a benchmark dataset",
+    )
+    prepare.add_argument(
+        "--source",
+        action="append",
+        default=[],
+        metavar="DATASET=PATH",
+        help="Override a dataset archive/directory, e.g. ubmi=/path/to/images",
+    )
+    catalog = commands.add_parser(
+        "datasets", help="List all migrated dataset selectors and source layouts"
+    )
+    catalog.add_argument(
+        "--json", action="store_true", help="Full machine-readable coverage inventory"
+    )
 
     train = commands.add_parser("train", help="Train from scratch and select best validation model")
     train.add_argument("--manifest", type=Path, required=True)
@@ -62,7 +80,13 @@ def parser() -> argparse.ArgumentParser:
     predict.add_argument("--input", type=Path, required=True)
     predict.add_argument("--output", type=Path, required=True)
     for cmd in (evaluate, predict):
-        cmd.add_argument("--checkpoint", type=Path, required=True)
+        model_source = cmd.add_mutually_exclusive_group(required=True)
+        model_source.add_argument("--checkpoint", type=Path, help="A custom trained checkpoint")
+        model_source.add_argument(
+            "--model",
+            choices=["vessels", "av", "disc_cup"],
+            help="Use a model bundled with this package",
+        )
         cmd.add_argument("--device", default="auto")
         cmd.add_argument("--tile-size", type=int, default=512)
         cmd.add_argument("--overlap", type=int, default=64)
@@ -70,6 +94,7 @@ def parser() -> argparse.ArgumentParser:
     inspect = commands.add_parser("inspect", help="Summarize a prepared manifest")
     inspect.add_argument("manifest", type=Path)
     commands.add_parser("doctor", help="Check Python, PyTorch and CUDA")
+    commands.add_parser("models", help="List bundled models, quality metrics and checksums")
     return p
 
 
@@ -81,14 +106,44 @@ def main(argv: list[str] | None = None) -> None:
     except (ValueError, FileNotFoundError, FileExistsError, KeyError) as exc:
         p.exit(2, f"deepretina: {exc}\n")
     if result is not None:
-        print(json.dumps(result, indent=2, allow_nan=False))
+        print(result if isinstance(result, str) else json.dumps(result, indent=2, allow_nan=False))
 
 
 def dispatch(args: argparse.Namespace):
+    if args.command == "datasets":
+        import importlib.resources
+
+        inventory = importlib.resources.files("deepretina.adapters").joinpath("coverage.json")
+        details = json.loads(inventory.read_text())
+        if args.json:
+            return details
+        lines = [f"{'SELECTOR':<13} {'TASKS':<23} SOURCE"]
+        for entry in details["entries"]:
+            tasks = ",".join(entry["supported_tasks"])
+            lines.append(
+                f"{entry['selector']:<13} {tasks:<23} {', '.join(entry['required_resources'])}"
+            )
+        return "\n".join(lines)
     if args.command == "prepare":
         from .prepare import prepare
 
-        manifest = prepare(args.data_root, args.output, args.datasets, args.max_size, args.seed)
+        overrides = {}
+        for value in args.source:
+            dataset, separator, path = value.partition("=")
+            if not separator or not path:
+                raise ValueError("--source must be DATASET=PATH")
+            if dataset in overrides:
+                raise ValueError(f"Duplicate source override for {dataset}")
+            overrides[dataset] = Path(path)
+        manifest = prepare(
+            args.data_root,
+            args.output,
+            args.datasets,
+            args.max_size,
+            args.seed,
+            limit=args.limit,
+            source_overrides=overrides,
+        )
         return {"manifest": str(manifest)}
     if args.command == "train":
         from .engine import TrainConfig, train
@@ -109,34 +164,17 @@ def dispatch(args: argparse.Namespace):
         config = TrainConfig(**settings)
         print(json.dumps(asdict(config), indent=2), flush=True)
         return {"checkpoint": str(train(args.manifest, args.output, config))}
-    if args.command in ("evaluate", "predict"):
-        from .engine import evaluate
-        from .inference import predict
+    if args.command == "models":
+        from .bundled import model_catalog
 
-        options = {
-            "device": args.device,
-            "tile_size": args.tile_size,
-            "overlap": args.overlap,
-            "threshold": args.threshold,
-        }
-        if args.command == "evaluate":
-            result = evaluate(args.checkpoint, args.manifest, split=args.split, **options)
-            args.output.parent.mkdir(parents=True, exist_ok=True)
-            args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
-            return result
-        if args.input.is_dir():
-            images = sorted(
-                path
-                for path in args.input.iterdir()
-                if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".gif"}
-            )
-            if not images:
-                raise ValueError(f"No supported images in {args.input}")
-            return [
-                predict(args.checkpoint, path, args.output / path.name, **options)
-                for path in images
-            ]
-        return predict(args.checkpoint, args.input, args.output, **options)
+        return model_catalog()
+    if args.command in ("evaluate", "predict"):
+        if args.model:
+            from .bundled import bundled_checkpoint
+
+            with bundled_checkpoint(args.model) as checkpoint:
+                return _apply_model(args, checkpoint)
+        return _apply_model(args, args.checkpoint)
     if args.command == "inspect":
         from collections import Counter
 
@@ -169,3 +207,30 @@ def dispatch(args: argparse.Namespace):
                 for i in range(torch.cuda.device_count())
             ],
         }
+
+
+def _apply_model(args, checkpoint: Path):
+    from .engine import evaluate
+    from .inference import predict
+
+    options = {
+        "device": args.device,
+        "tile_size": args.tile_size,
+        "overlap": args.overlap,
+        "threshold": args.threshold,
+    }
+    if args.command == "evaluate":
+        result = evaluate(checkpoint, args.manifest, split=args.split, **options)
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
+        return result
+    if args.input.is_dir():
+        images = sorted(
+            path
+            for path in args.input.iterdir()
+            if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".gif"}
+        )
+        if not images:
+            raise ValueError(f"No supported images in {args.input}")
+        return [predict(checkpoint, path, args.output / path.name, **options) for path in images]
+    return predict(checkpoint, args.input, args.output, **options)

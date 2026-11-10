@@ -1,0 +1,1832 @@
+{
+  "schema_version": 1,
+  "inventory_date": "2026-11-10",
+  "entries": [
+    {
+      "selector": "aria",
+      "legacy_paths": [
+        "datasets_loaders/LoaderAria.py",
+        "matlab_preprocessing/load_aria.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "ARIA.zip"
+      ],
+      "legacy_outputs": [
+        "vessels",
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "vessels",
+        "disc_cup"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Two vessel annotators plus disc outlines when present; fovea point must not become part of disc."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "aria_a_10_10_BDP",
+            "task": "vessels",
+            "shape": [
+              576,
+              768
+            ],
+            "target_pixels": [
+              19297
+            ],
+            "valid_pixels": null,
+            "annotation_resources": 1
+          },
+          {
+            "stem": "aria_a_10_10_BSS",
+            "task": "vessels",
+            "shape": [
+              576,
+              768
+            ],
+            "target_pixels": [
+              14581
+            ],
+            "valid_pixels": null,
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/aria",
+          "rows": 12,
+          "source_groups": 3,
+          "dense_records": 12,
+          "invalid_records": 0,
+          "copied_reference_uses": 0,
+          "decoded_reference_uses": 12
+        }
+      }
+    },
+    {
+      "selector": "avrdb",
+      "legacy_paths": [
+        "datasets_loaders/LoaderAvrdb.py",
+        "matlab_preprocessing/load_avrdb.m",
+        "matlab_preprocessing/load_avrdb_VA.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "AVRDB.zip"
+      ],
+      "legacy_outputs": [
+        "vessels",
+        "av"
+      ],
+      "supported_tasks": [
+        "vessels",
+        "av"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Sparse line annotations: white unannotated pixels are not complete negative vessel reference."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "IM000001",
+            "task": "vessels",
+            "shape": [
+              1000,
+              1504
+            ],
+            "target_pixels": [
+              144590
+            ],
+            "valid_pixels": [
+              144590
+            ],
+            "annotation_resources": 1
+          },
+          {
+            "stem": "IM000001_av",
+            "task": "av",
+            "shape": [
+              1000,
+              1504
+            ],
+            "target_pixels": [
+              144590,
+              70021,
+              70704
+            ],
+            "valid_pixels": [
+              144590,
+              140725,
+              140725
+            ],
+            "annotation_resources": 2
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/avrdb",
+          "rows": 6,
+          "source_groups": 3,
+          "dense_records": 6,
+          "invalid_records": 0,
+          "copied_reference_uses": 0,
+          "decoded_reference_uses": 9
+        }
+      }
+    },
+    {
+      "selector": "chasedb1",
+      "legacy_paths": [
+        "datasets_loaders/LoaderChasedb1.py",
+        "matlab_preprocessing/load_chasedb1.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "CHASEDB1.zip"
+      ],
+      "legacy_outputs": [
+        "vessels"
+      ],
+      "supported_tasks": [
+        "vessels"
+      ],
+      "status": "implemented",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": false,
+        "notes": []
+      }
+    },
+    {
+      "selector": "diaretdb0",
+      "legacy_paths": [
+        "matlab_preprocessing/load_diaretdb0.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "DiaRetDB0.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "image001",
+            "task": "images",
+            "shape": [
+              1152,
+              1500
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          },
+          {
+            "stem": "image002",
+            "task": "images",
+            "shape": [
+              1152,
+              1500
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/diaretdb0",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 3,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "diaretdb1",
+      "legacy_paths": [
+        "matlab_preprocessing/load_diaretdb1.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "DiaRetDB1.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "image001",
+            "task": "images",
+            "shape": [
+              1152,
+              1500
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 4
+          },
+          {
+            "stem": "image002",
+            "task": "images",
+            "shape": [
+              1152,
+              1500
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 4
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/diaretdb1",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 12,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "drhagis",
+      "legacy_paths": [
+        "datasets_loaders/LoaderDrhagis.py",
+        "matlab_preprocessing/load_drhagis.m",
+        "matlab_preprocessing/load_drhagis_VA.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "DRHAGIS.zip",
+        "drive-download-20261019T122612Z-1-001.zip (optional new RGB AV)"
+      ],
+      "legacy_outputs": [
+        "vessels",
+        "av"
+      ],
+      "supported_tasks": [
+        "vessels",
+        "av"
+      ],
+      "status": "implemented",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": false,
+        "notes": []
+      }
+    },
+    {
+      "selector": "drishti",
+      "legacy_paths": [
+        "datasets_loaders/LoaderDrishtigs.py",
+        "matlab_preprocessing/load_drishtigs.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "Drishti-GS.zip"
+      ],
+      "legacy_outputs": [
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "disc_cup"
+      ],
+      "status": "implemented",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": false,
+        "notes": []
+      }
+    },
+    {
+      "selector": "drive",
+      "legacy_paths": [
+        "datasets_loaders/LoaderDrive.py",
+        "matlab_preprocessing/load_drive.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "DRIVE.zip"
+      ],
+      "legacy_outputs": [
+        "vessels"
+      ],
+      "supported_tasks": [
+        "vessels"
+      ],
+      "status": "implemented",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": false,
+        "notes": []
+      }
+    },
+    {
+      "selector": "eophtha",
+      "legacy_paths": [
+        "matlab_preprocessing/load_eophtha.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "E-Ophtha.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "C0021833",
+            "task": "images",
+            "shape": [
+              1360,
+              2048
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 2
+          },
+          {
+            "stem": "C0021834",
+            "task": "images",
+            "shape": [
+              1360,
+              2048
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/eophtha",
+          "rows": 6,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 9,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "erlangen",
+      "legacy_paths": [
+        "matlab_preprocessing/load_erlangen.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "Erlangen.zip"
+      ],
+      "legacy_outputs": [
+        "vessels"
+      ],
+      "supported_tasks": [
+        "vessels",
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Real FundusImages are PNG, corrected masks RGB TIFF green channel; legacy JPG glob incompatible with supplied archive."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "Study_02_00007_01_L_reg",
+            "task": "vessels",
+            "shape": [
+              770,
+              1000
+            ],
+            "target_pixels": [
+              95228
+            ],
+            "valid_pixels": [
+              770000
+            ],
+            "annotation_resources": 1
+          },
+          {
+            "stem": "Study_02_00007_01_R_reg",
+            "task": "images",
+            "shape": [
+              770,
+              1000
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 0
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/erlangen",
+          "rows": 6,
+          "source_groups": 3,
+          "dense_records": 5,
+          "invalid_records": 0,
+          "copied_reference_uses": 0,
+          "decoded_reference_uses": 5
+        }
+      }
+    },
+    {
+      "selector": "fire",
+      "legacy_paths": [
+        "matlab_preprocessing/load_fire.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "FIRE.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "A01_1",
+            "task": "images",
+            "shape": [
+              2912,
+              2912
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 2
+          },
+          {
+            "stem": "A01_2",
+            "task": "images",
+            "shape": [
+              2912,
+              2912
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 2
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/fire",
+          "rows": 6,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 6,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "g1020",
+      "legacy_paths": [
+        "datasets_loaders/LoaderG1020.py",
+        "matlab_preprocessing/load_g1020.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "G1020.zip"
+      ],
+      "legacy_outputs": [
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "disc_cup"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "image_0",
+            "task": "disc_cup",
+            "shape": [
+              2423,
+              3004
+            ],
+            "target_pixels": [
+              162440,
+              20266
+            ],
+            "valid_pixels": [
+              7278692,
+              7278692
+            ],
+            "annotation_resources": 1
+          },
+          {
+            "stem": "image_1",
+            "task": "disc_cup",
+            "shape": [
+              2424,
+              3005
+            ],
+            "target_pixels": [
+              168075,
+              47857
+            ],
+            "valid_pixels": [
+              7284120,
+              7284120
+            ],
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/g1020",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 3,
+          "invalid_records": 0,
+          "copied_reference_uses": 3,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "heimed",
+      "legacy_paths": [
+        "matlab_preprocessing/load_heimed.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "HEI-MED.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "(00000003)",
+            "task": "images",
+            "shape": [
+              1958,
+              2196
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 4
+          },
+          {
+            "stem": "(00000052)",
+            "task": "images",
+            "shape": [
+              1958,
+              2196
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 4
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/heimed",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 12,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "hrf",
+      "legacy_paths": [
+        "datasets_loaders/LoaderHrf.py",
+        "matlab_preprocessing/load_hrf.m",
+        "matlab_preprocessing/load_hrf_VA.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "HRF.zip",
+        "drive-download-20261019T122612Z-1-001.zip (optional new RGB AV)"
+      ],
+      "legacy_outputs": [
+        "vessels",
+        "av"
+      ],
+      "supported_tasks": [
+        "vessels",
+        "av"
+      ],
+      "status": "implemented",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": false,
+        "notes": []
+      }
+    },
+    {
+      "selector": "idrid",
+      "legacy_paths": [
+        "matlab_preprocessing/load_idrid.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "IDRiD.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Legacy loader exported C.Localization photos only; archive additionally contains lesion masks and localization CSV."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "IDRiD_104",
+            "task": "images",
+            "shape": [
+              2848,
+              4288
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 2
+          },
+          {
+            "stem": "IDRiD_105",
+            "task": "images",
+            "shape": [
+              2848,
+              4288
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 2
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/idrid",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 6,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "inspireavr",
+      "legacy_paths": [
+        "matlab_preprocessing/load_inspireavr.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "INSPIRE-AVR.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "image1",
+            "task": "images",
+            "shape": [
+              2048,
+              2392
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          },
+          {
+            "stem": "image10",
+            "task": "images",
+            "shape": [
+              2048,
+              2392
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/inspireavr",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 3,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "iostar",
+      "legacy_paths": [
+        "datasets_loaders/LoaderIostar.py",
+        "matlab_preprocessing/load_iostar.m",
+        "matlab_preprocessing/load_iostar_VA.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "IOSTAR.zip"
+      ],
+      "legacy_outputs": [
+        "vessels",
+        "disc",
+        "images",
+        "fov",
+        "av"
+      ],
+      "supported_tasks": [
+        "vessels",
+        "av",
+        "disc_cup"
+      ],
+      "status": "implemented",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": false,
+        "notes": [
+          "All30 OD masks inspected: inverse8-connected components with border labels removed yield exactly1disc each,22667..32648original pixels;29 masks2inversecomponents,1mask3. Cup not supplied.",
+          "All30ODmasks validated: invert, remove every border-connected component; one interior disc each. Cup validity false."
+        ]
+      }
+    },
+    {
+      "selector": "messidor",
+      "legacy_paths": [
+        "matlab_preprocessing/load_messidor.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "MESSIDOR.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "20051019_38557_0100_PP",
+            "task": "images",
+            "shape": [
+              1488,
+              2240
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          },
+          {
+            "stem": "20051020_43808_0100_PP",
+            "task": "images",
+            "shape": [
+              1488,
+              2240
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/messidor",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 3,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "onhsd",
+      "legacy_paths": [
+        "datasets_loaders/LoaderOnhsd.py",
+        "matlab_preprocessing/load_onhsd.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "Onhsd.zip"
+      ],
+      "legacy_outputs": [
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "disc_cup"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "D01187-L_AnsuONH",
+            "task": "disc_cup",
+            "shape": [
+              570,
+              760
+            ],
+            "target_pixels": [
+              5137,
+              0
+            ],
+            "valid_pixels": [
+              433200,
+              0
+            ],
+            "annotation_resources": 2
+          },
+          {
+            "stem": "D01187-L_Bob",
+            "task": "disc_cup",
+            "shape": [
+              570,
+              760
+            ],
+            "target_pixels": [
+              5236,
+              0
+            ],
+            "valid_pixels": [
+              433200,
+              0
+            ],
+            "annotation_resources": 2
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/onhsd",
+          "rows": 24,
+          "source_groups": 3,
+          "dense_records": 24,
+          "invalid_records": 0,
+          "copied_reference_uses": 48,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "rcrgbma",
+      "legacy_paths": [
+        "matlab_preprocessing/load_rcrgbma.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "RC-RGB-MA.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "img-original (1)",
+            "task": "images",
+            "shape": [
+              1944,
+              2592
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 2
+          },
+          {
+            "stem": "img-original (10)",
+            "task": "images",
+            "shape": [
+              1944,
+              2592
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 2
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/rcrgbma",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 6,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "refuge",
+      "legacy_paths": [
+        "datasets_loaders/LoaderRefuge.py",
+        "matlab_preprocessing/load_refuge.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "REFUGE.zip"
+      ],
+      "legacy_outputs": [
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "disc_cup"
+      ],
+      "status": "implemented",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": false,
+        "notes": []
+      }
+    },
+    {
+      "selector": "review",
+      "legacy_paths": [
+        "matlab_preprocessing/load_review.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "Review.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Sparse observer edge/width coordinates in TXT; legacy exporter used images only."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "CLRIS001",
+            "task": "images",
+            "shape": [
+              1440,
+              2160
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          },
+          {
+            "stem": "CLRIS002",
+            "task": "images",
+            "shape": [
+              1440,
+              2160
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/review",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 3,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "ridb",
+      "legacy_paths": [
+        "matlab_preprocessing/load_ridb.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "RIDB.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "IM000001_1",
+            "task": "images",
+            "shape": [
+              1000,
+              1504
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 0
+          },
+          {
+            "stem": "IM000001_10",
+            "task": "images",
+            "shape": [
+              1000,
+              1504
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 0
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/ridb",
+          "rows": 60,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 0,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "riga",
+      "legacy_paths": [
+        "datasets_loaders/LoaderRiga.py",
+        "matlab_preprocessing/load_riga.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "RIGA/"
+      ],
+      "legacy_outputs": [
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "disc_cup"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "749 prime photographs, six annotated variants each expected; source is extracted tree here, no nested archives observed."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "BinRushed1-Corrected_image10_observer1",
+            "task": "disc_cup",
+            "shape": [
+              1584,
+              2376
+            ],
+            "target_pixels": [
+              48423,
+              18542
+            ],
+            "valid_pixels": [
+              3763584,
+              3763584
+            ],
+            "annotation_resources": 1
+          },
+          {
+            "stem": "BinRushed1-Corrected_image10_observer2",
+            "task": "disc_cup",
+            "shape": [
+              1584,
+              2376
+            ],
+            "target_pixels": [
+              47572,
+              20076
+            ],
+            "valid_pixels": [
+              3763584,
+              3763584
+            ],
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/riga",
+          "rows": 18,
+          "source_groups": 3,
+          "dense_records": 18,
+          "invalid_records": 0,
+          "copied_reference_uses": 0,
+          "decoded_reference_uses": 18
+        }
+      }
+    },
+    {
+      "selector": "rimone",
+      "legacy_paths": [
+        "matlab_preprocessing/load_rimone.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "RIM-ONE.zip"
+      ],
+      "legacy_outputs": [
+        "cup",
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "disc_cup"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Legacy MATLAB only cup; archive also contains disc masks. Stereo frame must remain aligned."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "G-1-L_average",
+            "task": "disc_cup",
+            "shape": [
+              1424,
+              2144
+            ],
+            "target_pixels": [
+              64251,
+              27981
+            ],
+            "valid_pixels": [
+              3053056,
+              3053056
+            ],
+            "annotation_resources": 0
+          },
+          {
+            "stem": "G-1-L_expert1",
+            "task": "disc_cup",
+            "shape": [
+              1424,
+              2144
+            ],
+            "target_pixels": [
+              66759,
+              12541
+            ],
+            "valid_pixels": [
+              3053056,
+              3053056
+            ],
+            "annotation_resources": 0
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/rimone",
+          "rows": 9,
+          "source_groups": 3,
+          "dense_records": 9,
+          "invalid_records": 0,
+          "copied_reference_uses": 0,
+          "decoded_reference_uses": 18
+        }
+      }
+    },
+    {
+      "selector": "rite",
+      "legacy_paths": [
+        "matlab_preprocessing/load_drive_VA.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class"
+      ],
+      "required_resources": [
+        "RITE.zip"
+      ],
+      "legacy_outputs": [
+        "av"
+      ],
+      "supported_tasks": [
+        "av"
+      ],
+      "status": "implemented",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": false,
+        "notes": []
+      }
+    },
+    {
+      "selector": "roc",
+      "legacy_paths": [
+        "matlab_preprocessing/load_roc.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "ROC.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Microaneurysm XML points; legacy exporter used images only; not vessel GT."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "image0_training",
+            "task": "images",
+            "shape": [
+              576,
+              768
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          },
+          {
+            "stem": "image10_training",
+            "task": "images",
+            "shape": [
+              576,
+              768
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/roc",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 3,
+          "decoded_reference_uses": 0
+        }
+      }
+    },
+    {
+      "selector": "stare",
+      "legacy_paths": [
+        "datasets_loaders/LoaderStare.py",
+        "matlab_preprocessing/load_stare.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "STARE.zip"
+      ],
+      "legacy_outputs": [
+        "vessels"
+      ],
+      "supported_tasks": [
+        "vessels",
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Supplied ZIP PPM already expanded, labels-ah/labels-vk; support gz upstream variants if accepted by adapter."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "im0001_ah",
+            "task": "vessels",
+            "shape": [
+              605,
+              700
+            ],
+            "target_pixels": [
+              33799
+            ],
+            "valid_pixels": null,
+            "annotation_resources": 1
+          },
+          {
+            "stem": "im0001_vk",
+            "task": "vessels",
+            "shape": [
+              605,
+              700
+            ],
+            "target_pixels": [
+              39171
+            ],
+            "valid_pixels": null,
+            "annotation_resources": 1
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/stare",
+          "rows": 6,
+          "source_groups": 3,
+          "dense_records": 6,
+          "invalid_records": 0,
+          "copied_reference_uses": 0,
+          "decoded_reference_uses": 6
+        }
+      }
+    },
+    {
+      "selector": "ubmi",
+      "legacy_paths": [
+        "matlab_preprocessing/load_ubmi_VA.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class"
+      ],
+      "required_resources": [
+        "UBMI/ or Sada_01/ (external)"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "requires_external_data",
+      "verification": {
+        "archive_inventory": false,
+        "real_sample": false,
+        "notes": [
+          "No complete legacy Sada_01 source supplied; local five-image annotation-input sample exists, without AV GT.",
+          "Optional existing vessel segmentation is retained only as inference resource; no verified dense training GT inferred."
+        ]
+      }
+    },
+    {
+      "selector": "uoadr",
+      "legacy_paths": [
+        "datasets_loaders/LoaderUoa_dr.py",
+        "matlab_preprocessing/load_uoadr.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02",
+        "origin/single_net"
+      ],
+      "required_resources": [
+        "UoA_DR.zip"
+      ],
+      "legacy_outputs": [
+        "vessels",
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "vessels",
+        "disc_cup"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Primary bundled dataset paper identifies .3.jpg as optic disc CENTER, not cup. Legacy cup interpretation is corrected: cup validity false, center marker and centroid retained. Image72 vessel/disc swap retained."
+        ],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "1",
+            "task": "vessels",
+            "shape": [
+              2056,
+              2124
+            ],
+            "target_pixels": [
+              220476
+            ],
+            "valid_pixels": null,
+            "annotation_resources": 1
+          },
+          {
+            "stem": "1_disc_cup",
+            "task": "disc_cup",
+            "shape": [
+              2056,
+              2124
+            ],
+            "target_pixels": [
+              82548,
+              11226
+            ],
+            "valid_pixels": [
+              4366944,
+              4366944
+            ],
+            "annotation_resources": 0
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/uoadr",
+          "rows": 6,
+          "source_groups": 3,
+          "dense_records": 6,
+          "invalid_records": 0,
+          "copied_reference_uses": 0,
+          "decoded_reference_uses": 9
+        }
+      }
+    },
+    {
+      "selector": "vicavr",
+      "legacy_paths": [
+        "matlab_preprocessing/load_vicavr.m"
+      ],
+      "legacy_refs": [
+        "origin/artery_vein_class",
+        "origin/master",
+        "origin/seg_videa",
+        "origin/segment_sada01",
+        "origin/segment_sada02"
+      ],
+      "required_resources": [
+        "VICAVR.zip"
+      ],
+      "legacy_outputs": [
+        "images",
+        "fov"
+      ],
+      "supported_tasks": [
+        "images"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [],
+        "sample_count": 2,
+        "sample_checks": "image/target shape and finite target in[0,1]; source decoder only; first two records, not a full export",
+        "sample_records": [
+          {
+            "stem": "Image1",
+            "task": "images",
+            "shape": [
+              576,
+              768
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 3
+          },
+          {
+            "stem": "Image34",
+            "task": "images",
+            "shape": [
+              576,
+              768
+            ],
+            "target_pixels": null,
+            "valid_pixels": null,
+            "annotation_resources": 3
+          }
+        ],
+        "integration_preview": {
+          "scope": "3 source groups; max_size64; written files, mask geometry/validity and auxiliary-reference resolution checked",
+          "output_directory": "/tmp/deepretina-integration-_4cvceet/vicavr",
+          "rows": 3,
+          "source_groups": 3,
+          "dense_records": 0,
+          "invalid_records": 0,
+          "copied_reference_uses": 9,
+          "decoded_reference_uses": 0
+        }
+      }
+    }
+  ]
+}

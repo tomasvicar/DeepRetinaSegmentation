@@ -1,0 +1,66 @@
+{
+  "format_version": 1,
+  "description": "Validation-selected random-initialized 30-epoch pilot UNets; no dataset photographs included.",
+  "models": {
+    "vessels": {
+      "filename": "vessels.pt",
+      "sha256": "38a4125d213b49526c6cf1fbd6dfde1e19394a1969d3724be0737b7bffda4544",
+      "task": "vessels",
+      "dataset": "DRIVE",
+      "channels": [
+        "vessel"
+      ],
+      "selected_epoch": 30,
+      "inference_max_size": 1024,
+      "test_dice": {
+        "vessel": 0.7987553153911077
+      },
+      "av_conditional_accuracy": null,
+      "av_end_to_end_accuracy": null,
+      "source_implementation_commit": "959fde4",
+      "limitations": "Single-seed pilot. AV class metrics use labeled reference vessel pixels. Disc/cup can produce bright-border false positives."
+    },
+    "av": {
+      "filename": "av.pt",
+      "sha256": "0a8c85dd4888a4aab1ffded7a9e2ac4b254745a15c03a465ff2106e34a1c0eb7",
+      "task": "av",
+      "dataset": "RITE",
+      "channels": [
+        "vessel",
+        "artery",
+        "vein"
+      ],
+      "selected_epoch": 30,
+      "inference_max_size": 1024,
+      "test_dice": {
+        "vessel": 0.8071275069970805,
+        "artery": 0.6356809408384954,
+        "vein": 0.6828075273566331
+      },
+      "av_conditional_accuracy": 0.7218893613775481,
+      "av_end_to_end_accuracy": 0.5854884536908145,
+      "source_implementation_commit": "959fde4",
+      "limitations": "Single-seed pilot. AV class metrics use labeled reference vessel pixels. Disc/cup can produce bright-border false positives."
+    },
+    "disc_cup": {
+      "filename": "disc_cup.pt",
+      "sha256": "36f72fd4817d432d6e953bbec39604374d40b25c0a0ffad7723b0b28ca55e22a",
+      "task": "disc_cup",
+      "dataset": "Drishti-GS",
+      "channels": [
+        "disc",
+        "cup"
+      ],
+      "selected_epoch": 28,
+      "inference_max_size": 1024,
+      "test_dice": {
+        "disc": 0.879784936980366,
+        "cup": 0.7648417440348905
+      },
+      "av_conditional_accuracy": null,
+      "av_end_to_end_accuracy": null,
+      "source_implementation_commit": "959fde4",
+      "limitations": "Single-seed pilot. AV class metrics use labeled reference vessel pixels. Disc/cup can produce bright-border false positives."
+    }
+  }
+}

@@ -74,6 +74,9 @@ def score_model(
     model, manifest: Path, task: str, split: str, device, tile_size=512, overlap=64, threshold=0.5
 ):
     rows = read_manifest(manifest, task, split)
+    supported = np.asarray(
+        getattr(model, "supervised_channels", [True] * len(CHANNELS[task])), dtype=bool
+    )
     counts = np.zeros((len(CHANNELS[task]), 4), np.int64)
     per_image = []
     dataset_counts = {}
@@ -84,6 +87,8 @@ def score_model(
         probability = tiled_probabilities(model, image, device, tile_size, overlap)
         predicted = binary_masks(probability, task, threshold)
         target, valid = target_t.numpy() >= 0.5, valid_t.numpy()
+        valid[~supported] = False
+        predicted[~supported] = False
         sample_metrics = {}
         dataset_name = row["dataset"]
         if dataset_name not in dataset_counts:
@@ -126,7 +131,7 @@ def score_model(
     metric_support = {
         name: "reference_class_labeled_vessel_pixels"
         if task == "av" and name in {"artery", "vein"}
-        else "valid_field_of_view"
+        else "annotated_valid_pixels_within_field_of_view"
         for name in CHANNELS[task]
     }
     return {
@@ -136,6 +141,7 @@ def score_model(
         "images": len(rows),
         "channels": channels,
         "metric_support": metric_support,
+        "supervised_channels": supported.tolist(),
         "aggregation": "pool pixel confusion counts per channel, then average defined channel Dice",
         "by_dataset": by_dataset,
         "mean_dice": float(np.mean(dices)) if dices else None,
@@ -198,6 +204,20 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
     torch.use_deterministic_algorithms(True, warn_only=True)
     device = resolve_device(config.device)
     dataset = CropDataset(manifest, config.task, config.patch_size, config.samples_per_image)
+    supervised_channels = np.zeros(len(CHANNELS[config.task]), dtype=bool)
+    for row in dataset.rows:
+        support = row.get("supervised_channels")
+        if support is None:
+            with np.load(Path(manifest).parent / row["mask"], allow_pickle=False) as labels:
+                validity = labels["valid"].astype(bool)
+                if "fov" in labels:
+                    validity &= labels["fov"][None].astype(bool)
+                support = validity.any(axis=(1, 2))
+        if np.asarray(support).shape != supervised_channels.shape:
+            raise ValueError(f"Invalid supervised_channels for {row['id']}")
+        supervised_channels |= np.asarray(support, dtype=bool)
+    if not supervised_channels.any():
+        raise ValueError("Training split has no supervised channels")
     validation_rows = read_manifest(manifest, config.task, "val")
     preparation_sizes = {r.get("preparation_max_size") for r in dataset.rows + validation_rows}
     if len(preparation_sizes) != 1:
@@ -216,6 +236,7 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
         generator=generator,
     )
     model = UNet(len(CHANNELS[config.task]), config.base_channels, config.depth).to(device)
+    model.supervised_channels = supervised_channels.tolist()
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.lr)
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
@@ -230,6 +251,7 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
         "device": str(device),
         "normalization": "RGB uint8 / 255, then (x - 0.5) / 0.5",
         "channels": CHANNELS[config.task],
+        "supervised_channels": supervised_channels.tolist(),
         "initialization": "random; no pretraining",
         "inference_max_size": inference_max_size,
         "determinism": "seeded; unsupported deterministic operators warn",
@@ -274,6 +296,7 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
                 "steps": steps,
                 "val_mean_dice": score,
                 "channels": CHANNELS[config.task],
+                "supervised_channels": supervised_channels.tolist(),
                 "normalization": metadata["normalization"],
                 "manifest_sha256": manifest_hash,
                 "inference_max_size": inference_max_size,
