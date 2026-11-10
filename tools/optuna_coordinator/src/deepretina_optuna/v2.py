@@ -119,10 +119,21 @@ def validate_protocol(protocol):
         and plan["training_annotation_records"] == 5700,
         "Finite v2 corpus support counts differ",
     )
-    require(
-        plan.get("derived_cache") is None,
-        "Initial finite v2 protocol requires canonical inputs, no v1 cache",
-    )
+    cache = plan.get("derived_cache")
+    uses_cache = any(profile["cache"] for profile in protocol["profiles"].values())
+    require(all(type(profile["cache"]) is bool for profile in protocol["profiles"].values()),
+            "Profile cache flags must be boolean")
+    require((cache is not None) is uses_cache, "Declare cache exactly when a profile uses it")
+    if cache is not None:
+        require(
+            set(cache) == {"schema", "canonical_fingerprint", "fingerprint", "allow_canonical_fallback"}
+            and cache["schema"] == 1
+            and cache["canonical_fingerprint"] == CONTENT
+            and isinstance(cache["fingerprint"], str)
+            and bool(re.fullmatch("[0-9a-f]{64}", cache["fingerprint"]))
+            and cache["allow_canonical_fallback"] is False,
+            "V2 cache must be strictly pinned to actual v2 canonical content",
+        )
     require(
         bool(re.fullmatch("[0-9a-f]{40}", plan["source_commit"]))
         and all(
@@ -134,10 +145,6 @@ def validate_protocol(protocol):
     require(
         len(plan["datasets"]) == 21 and len(set(plan["datasets"])) == 21,
         "Expected21 v2 source names",
-    )
-    require(
-        all(not p["cache"] for p in protocol["profiles"].values()),
-        "No unprepared v2 cache may be implied by a worker profile",
     )
 
 

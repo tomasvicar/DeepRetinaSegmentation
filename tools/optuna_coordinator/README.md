@@ -79,7 +79,11 @@ All seven use TRAIN2529 photos/5700 annotation records across21 datasets; covera
 QA derives counts from the pinned plan and verifies the embedded geometry policy.
 VAL770 is used for exploratory selection; TEST856 remains excluded.
 
-The initial v2 protocol uses canonical inputs and no derived cache. Regenerate a
+The checked-in initial v2 protocol uses canonical inputs and no derived cache. A final
+protocol may declare a schema1 cache with its verified fingerprint, exact v2 canonical
+fingerprint, and allow_canonical_fallback=false; enable cache only on prepared worker
+profiles. Other profiles receive canonical plans. Finalize these pins before DB creation.
+Regenerate a
 protocol with `python -m deepretina_optuna.v2 --source-commit ...
 --execution-code-sha256 ... --training-source-sha256 ... --output ...` when freezing
 new source. Use new database, state, queue, envelope, and output roots; never attach

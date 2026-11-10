@@ -161,3 +161,39 @@ def test_v2_inventory_cannot_be_extended_or_reuse_v1_baseline(
     protocol[field] = value
     with pytest.raises(ValueError):
         Coordinator(tmp_path / "db", protocol, profiles, clock=lambda: NOW)
+
+
+def with_cache(protocol):
+    from deepretina_optuna.v2 import CONTENT
+    value = copy.deepcopy(protocol)
+    value["plan_template"]["derived_cache"] = {
+        "schema": 1, "canonical_fingerprint": CONTENT, "fingerprint": "c" * 64,
+        "allow_canonical_fallback": False,
+    }
+    value["profiles"]["ada"]["cache"] = True
+    return value
+
+
+def test_cached_v2_control_and_canonical_worker_keep_rung_identity(tmp_path, protocol, profiles):
+    protocol = with_cache(protocol)
+    with Coordinator(tmp_path / "db", protocol, profiles, clock=lambda: NOW) as c:
+        control = c.ask("ada", "GPU-test")
+        assert control["cache_sha256"] == "c" * 64
+        other = c.ask("other", "GPU-other")
+        assert other["cache_sha256"] is None and other["plan"]["derived_cache"] is None
+        promoted = c.report(actual(control))["next_task"]
+        for key in ("plan_sha256", "config_sha256", "cache_sha256", "profile_sha256"):
+            assert promoted[key] == control[key]
+
+
+@pytest.mark.parametrize("mutation", ["canonical", "fallback", "fingerprint", "missing", "unused"])
+def test_v2_cache_requires_explicit_valid_corpus_pin(tmp_path, protocol, profiles, mutation):
+    protocol = with_cache(protocol)
+    cache = protocol["plan_template"]["derived_cache"]
+    if mutation == "canonical": cache["canonical_fingerprint"] = "0" * 64
+    elif mutation == "fallback": cache["allow_canonical_fallback"] = True
+    elif mutation == "fingerprint": cache["fingerprint"] = "unverified"
+    elif mutation == "missing": protocol["plan_template"]["derived_cache"] = None
+    else: protocol["profiles"]["ada"]["cache"] = False
+    with pytest.raises(ValueError):
+        Coordinator(tmp_path / "db", protocol, profiles, clock=lambda: NOW)
