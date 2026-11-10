@@ -31,3 +31,14 @@ All 24 synthetic bicubic cases agree within 6e-15; nearest masks are bitwise ide
 A deliberately retained smooth full-frame synthetic image is a counterexample: stored12 MAE 2.2523, maximum 37, despite only floating-point-scale Gaussian differences near a histogram boundary. MATLAB's automatic Gaussian domain equals its explicit spatial domain in this probe; its frequency result differs by up to 1.55e-15. Thus the observed issue is not explained by an auto-domain switch. CLAHE histogram quantization can amplify roundoff in nearly flat regions. No ad-hoc epsilon or bin snapping is applied. The circular-FOV counterpart has MAE 0.00716/max37; a constant-image case is stored12 exact.
 
 The current profile is therefore **not certified bitwise MATLAB parity**, and historical training-file provenance is not verified. The training source points to 25N; later 35 exports do not establish what a particular saved checkpoint saw. A separate actual-model sensitivity gate must precede any production activation. Fixed synthetic correctness tolerances in tests do not weaken these limitations.
+
+## Actual saved-model sensitivity gate
+
+[model-forward.json](../reports/legacy/matlab-av-profile/model-forward.json) compares the actual safe-converted legacy V9 checkpoint (`82428903…f270b`) on MATLAB stored RGB versus Python stored RGB. Each pair receives the **same nonconstant real manual vessel mask**, nearest-resized to the common prepared grid: DRIVE 21_manual1 and HRF 01_g. This isolates preprocessing differences; manual vessels are an input, not a segmentation-quality benchmark. The checkpoint hash is unchanged after inference. The immutable source87 AV port ran on Ada CPU only, nice5, four threads, CUDA hidden; two pairs took approximately 18 seconds total.
+
+| Reference | Standardized input max error | All-logit MAE / max | Conditional probability max error | Conditional argmax differences (all / FOV / vessels) | Gated class differences |
+|---|---:|---:|---:|---:|---:|
+| DRIVE25 | 0.0257933 | 9.05e-6 / 0.0120920 | 0.00602061 | 4 / 3 / 0 | 0 / 108109 vessel pixels |
+| HRF25 | 0.00132072 | 3.36e-7 / 0.000664234 | 0.000257850 | 0 / 0 / 0 | 0 / 115420 vessel pixels |
+
+Per-logit-channel errors, input mean errors, probabilities, vessel hashes and source references are retained in the JSON. `compare_model_forward.py` reproduces the gate with external goldens and original archives, without changing either. The two measured vessel-gated classifications are identical; logits are not identical. These results do not certify arbitrary images, automatic FOV calibration, historical checkpoint preprocessing provenance, or standalone raw prediction quality. Production activation remains a separate reviewed decision.
