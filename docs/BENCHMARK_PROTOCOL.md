@@ -166,3 +166,14 @@ The v2 raw preview report adds macro dataset scores and attributes each channel
 to its selected annotation's source (for example, RITE A/V on a shared DRIVE
 photo). Its pooled confusion counts match the initial raw report exactly.
 Earlier reports remain immutable evidence of the original measurement version.
+
+For a stronger original reference, `evaluate_original.py --vessel` can select the
+original dedicated vessel network and `--disc` either original dedicated disc
+network. These override only their named heads; the universal network still
+supplies cup and any heads without an override. The supplied vessel result also
+feeds the original A/V chain. Every selected checkpoint hash is recorded. Compare
+these choices on validation, then freeze them before test, so the new model is
+not compared only against a conveniently weaker universal head. Original cup
+outputs remain independent when disc is replaced; no new hierarchy rule is
+silently imposed on the historical reference. The compact latency diagnostic
+above specifically measures universal plus A/V, not this larger optional chain.

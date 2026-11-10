@@ -74,6 +74,24 @@ def raw_photo(photo, data_root, sources, stack):
     return image
 
 
+def segmentation_masks(image, universal, device, *, vessel=None, disc=None):
+    """Keep original independent heads, with optional task-specific originals."""
+    result = np.zeros((5, *image.shape[-2:]), dtype=bool)
+    for item, destination in ((universal, [0, 3, 4]), (vessel, [0]), (disc, [3])):
+        if item is None:
+            continue
+        model, payload = item
+        logits = tiled_logits(
+            model,
+            image - 0.5,
+            device=device,
+            crop_size=payload["tiling"]["crop_size"],
+            border=payload["tiling"]["border"],
+        )
+        result[destination] = logits.numpy() > 0
+    return result
+
+
 @torch.inference_mode()
 def evaluate(
     manifest,
@@ -85,6 +103,8 @@ def evaluate(
     av_path=None,
     data_root=None,
     normalized=False,
+    vessel_path=None,
+    disc_path=None,
 ):
     manifest = Path(manifest)
     device = resolve_device(device)
@@ -92,6 +112,11 @@ def evaluate(
     model, payload = load_single_net(universal_path, device)
     if payload["channels"] != ["vessel", "disc", "cup"]:
         raise ValueError("Expected original universal vessel/disc/cup model")
+    vessel = load_single_net(vessel_path, device) if vessel_path else None
+    disc = load_single_net(disc_path, device) if disc_path else None
+    for override, expected in ((vessel, ["vessel"]), (disc, ["disc"])):
+        if override is not None and override[1]["channels"] != expected:
+            raise ValueError(f"Original override checkpoint must have channels {expected}")
     if av_path and data_root is None:
         raise ValueError("Raw A/V proxy requires original data root")
     av = load_av(av_path, device)[0] if av_path else None
@@ -120,15 +145,7 @@ def evaluate(
                 rgb = (image.numpy().transpose(1, 2, 0) * 255).round().astype(np.uint8)
                 rgb = local_contrast_and_clahe(rgb, fov, pixels_per_degree=25)
                 image = torch.from_numpy(rgb.transpose(2, 0, 1).copy()).float() / 255
-            logits = tiled_logits(
-                model,
-                image - 0.5,
-                device=device,
-                crop_size=payload["tiling"]["crop_size"],
-                border=payload["tiling"]["border"],
-            )
-            masks = np.zeros_like(target, dtype=bool)
-            masks[[0, 3, 4]] = logits.numpy() > 0
+            masks = segmentation_masks(image, (model, payload), device, vessel=vessel, disc=disc)
             photo_id = dataset.photo_ids[index]
             known = valid[1] & valid[2] & (target[1] ^ target[2])
             if av is None:
@@ -137,13 +154,13 @@ def evaluate(
                 photo = photos[photo_id]
                 transform = geometry(photo)
                 rgb = raw_photo(photo, Path(data_root), sources, stack)
-                vessel = transform.restore(masks[0], order=0)
-                if vessel.any() and not vessel.all():
+                vessel_mask = transform.restore(masks[0], order=0)
+                if vessel_mask.any() and not vessel_mask.all():
                     with Image.open(manifest.parent / photo["fov"]) as im:
                         fov = transform.restore(np.asarray(im) > 0, order=0)
                     proxy = prepare_vesclass_raw_proxy(
                         rgb,
-                        vessel,
+                        vessel_mask,
                         dataset=photo["canonical_dataset"],
                         fov=fov,
                         field_of_view_degrees=photo["field_of_view_degrees"],
@@ -214,6 +231,8 @@ def evaluate(
         "manifest_sha256": sha256(manifest),
         "checkpoint_sha256": sha256(universal_path),
         "av_checkpoint_sha256": sha256(av_path) if av_path else None,
+        "vessel_checkpoint_sha256": sha256(vessel_path) if vessel_path else None,
+        "disc_checkpoint_sha256": sha256(disc_path) if disc_path else None,
         "single_net_normalized": normalized,
         "photos": len(results),
         "preview_only": limit is not None
@@ -247,6 +266,8 @@ def main():
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--universal", type=Path, required=True)
     parser.add_argument("--av-raw-proxy", type=Path)
+    parser.add_argument("--vessel", type=Path, help="Optional original dedicated vessel checkpoint")
+    parser.add_argument("--disc", type=Path, help="Optional original dedicated disc checkpoint")
     parser.add_argument("--data-root", type=Path)
     parser.add_argument(
         "--normalized",
@@ -278,6 +299,8 @@ def main():
         av_path=args.av_raw_proxy,
         data_root=args.data_root,
         normalized=args.normalized,
+        vessel_path=args.vessel,
+        disc_path=args.disc,
     )
     result["selection_record_sha256"] = (
         sha256(args.selection_record) if args.selection_record else None

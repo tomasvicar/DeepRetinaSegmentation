@@ -39,3 +39,33 @@ def test_missed_vessels_count_as_end_to_end_av_false_negatives():
     counts = module.confusion(prediction, target, valid)
     assert counts[1].tolist() == [0, 0, 1, 2]
     assert counts[2].tolist() == [0, 0, 1, 2]
+
+
+def test_task_specific_originals_override_only_their_own_heads():
+    import torch
+
+    helper = reference_module()
+
+    class Constant(torch.nn.Module):
+        def __init__(self, values):
+            super().__init__()
+            self.values = values
+
+        def forward(self, image):
+            value = image.new_tensor(self.values).view(1, -1, 1, 1)
+            return value.expand(image.shape[0], -1, *image.shape[-2:])
+
+    def original(values):
+        return Constant(values), {"tiling": {"crop_size": 8, "border": 1}}
+
+    masks = helper.segmentation_masks(
+        torch.zeros(3, 12, 14),
+        original([-2, 2, 2]),
+        "cpu",
+        vessel=original([2]),
+        disc=original([-2]),
+    )
+    assert masks[0].all()
+    assert not masks[3].any()
+    assert masks[4].all()  # Original independent cup is not clipped to another disc model.
+    assert not masks[1:3].any()
