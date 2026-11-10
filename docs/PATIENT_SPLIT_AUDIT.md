@@ -4,7 +4,7 @@ Audit date:2026-11-10. This records defects in the **pre-correction** partitioni
 not a certification of the eventual training manifest. Preparation, policy and
 post-correction integrity results belong in [UNIFIED_DATA.md](UNIFIED_DATA.md).
 The compact evidence inventory is
-[patient-audit-before.json](../reports/data/patient-audit-before.json).
+[patient-audit-before.json](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/d83f17a83e873f840751493b1e0457b4c386a07d/reports/data/patient-audit-before.json).
 No raw clinical records, full patient crosswalk or photographs are copied here.
 
 ## G1020: recoverable patient mapping, confirmed partition leakage

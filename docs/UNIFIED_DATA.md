@@ -252,7 +252,7 @@ Valid output-channel support, counted in annotation variants:
 These channel counts include observers and parallel vessel/A-V labels; they are
 not independent photograph counts. Per-source distinct supported photographs,
 positive photographs and valid/positive pixel totals are in the
-[complete integrity report](../reports/data/unified25/integrity.json).
+[complete integrity report](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/d83f17a83e873f840751493b1e0457b4c386a07d/reports/data/unified25/integrity.json).
 
 Excluded records comprise 1,813 unrecoverable RIGA outlines, 53 invalid ONHSD
 radial annotations, one ambiguous G1020 JSON, 377 unlabelled STARE photographs and
@@ -269,10 +269,10 @@ source-policy checks. Its frozen identifiers are:
 
 Prepared data live on Ada at
 `~/code/DeepRetinaSegmentation_for_Leipzig/data/unified25`. The repository contains
-the [compact summary](../reports/data/unified25/summary.json),
-[composition](../reports/data/unified25/composition.json),
-[patient repair](../reports/data/unified25/patient-regrouping.json) and
-[compact source provenance](../reports/data/unified25/source-provenance.json).
+the [compact summary](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/d83f17a83e873f840751493b1e0457b4c386a07d/reports/data/unified25/summary.json),
+[composition](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/d83f17a83e873f840751493b1e0457b4c386a07d/reports/data/unified25/composition.json),
+[patient repair](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/d83f17a83e873f840751493b1e0457b4c386a07d/reports/data/unified25/patient-regrouping.json) and
+[compact source provenance](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/d83f17a83e873f840751493b1e0457b4c386a07d/reports/data/unified25/source-provenance.json).
 The complete archive-member metadata remain in the prepared output; the compact
 report records their SHA256 and per-archive member counts.
 This establishes a completed, checked training input. Model-quality conclusions

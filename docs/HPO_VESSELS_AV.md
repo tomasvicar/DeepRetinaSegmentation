@@ -10,7 +10,7 @@ Vessels run on old's GTX 1060 6GB; artery/vein runs on Pascal's GTX 1070 8GB,
 selected by GPU UUID rather than assuming device order. Both use separate HPO
 source directories and `uv sync --frozen --dev` environments. Environment details,
 fixed configurations and baseline identities are in
-[`vessels_av_launch.json`](../reports/hpo/vessels_av_launch.json).
+[`vessels_av_launch.json`](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/d83f17a83e873f840751493b1e0457b4c386a07d/reports/hpo/vessels_av_launch.json).
 
 The search screens learning rates 0.0003, 0.001 and 0.003 for 8 epochs using seed 42,
 base 16/depth 3 U-Net, patch 256, batch 4, 8 samples per image, 2 workers and
@@ -65,7 +65,7 @@ this branch. Seven candidates receive 12 screening epochs each: mild photometric
 augmentation plus foreground-biased crops; the same with cosine LR; widths 8 and
 24; larger 384-pixel patches; 128-pixel vessel patches or whole-image 512-pixel
 A/V context; and BatchNorm. Exact overrides are recorded in
-[`extended_plans`](../reports/hpo/extended_plans). Candidate learning rate comes
+[`extended_plans`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/d83f17a83e873f840751493b1e0457b4c386a07d/reports/hpo/extended_plans). Candidate learning rate comes
 from the frozen preceding LR selection, not from test results.
 
 The top two screening candidates train from scratch for 60 epochs. A matching
@@ -98,7 +98,7 @@ All candidates below received 30 epochs from random initialization, except that
 the original matching baseline was reused. Models were chosen on validation
 before the selected-model pilot test evaluation. Trial histories, primitive
 configs, validation reports, final selections and selected test reports are saved
-under [`reports/hpo`](../reports/hpo).
+under [`reports/hpo`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/d83f17a83e873f840751493b1e0457b4c386a07d/reports/hpo).
 
 | Task | Learning rate | Validation mean Dice | Best epoch | Selected |
 | --- | ---: | ---: | ---: | --- |
@@ -115,7 +115,7 @@ the subsequent DRIVE pilot test improved from 0.798755 to 0.802079 (delta
 of the same 20 images, gave a percentile 95% interval [+0.000049, +0.007045].
 This describes image variability for this one trained pair, not training-seed
 variability or external-data generalization. See the
-[paired comparison](../reports/hpo/vessels_lr_test_comparison.json).
+[paired comparison](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/d83f17a83e873f840751493b1e0457b4c386a07d/reports/hpo/vessels_lr_test_comparison.json).
 
 A/V retained its original LR 0.001 model: validation mean Dice 0.718278,
 pilot test mean Dice 0.708539. No LR-only gain was found for A/V. Its selected

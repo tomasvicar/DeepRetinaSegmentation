@@ -96,4 +96,4 @@ not establish GPU epoch acceleration or model-quality improvement. A complete ca
 build followed the 64-photo tensor/RNG/workers gate and capacity review. The
 verified complete train/val cache contains 2991 photos and 6274 annotation variants,
 uses 8.17GB allocated disk and took 4m34s to build on Ada. Its exact pins and
-resource observations are in [HANDOFF_DERIVED_CACHE.md](HANDOFF_DERIVED_CACHE.md).
+resource observations are in [HANDOFF_DERIVED_CACHE.md](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/d83f17a83e873f840751493b1e0457b4c386a07d/docs/HANDOFF_DERIVED_CACHE.md).

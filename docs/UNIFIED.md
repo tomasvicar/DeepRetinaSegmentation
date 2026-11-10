@@ -68,8 +68,9 @@ replacement extras; a smaller budget or disabled coverage pass is rejected.
 Task balancing derives actual supported objectives from masks. Dataset grouping
 can be explicitly overridden by `sampling_group`. The recommended first run is
 60epochs, batch4, patch384, foreground sampling0.5, mild paired augmentation,
-AdamW0.001, cosine schedule. Measure epoch1 time before forecasting the full
-budget. This is a starting configuration, not a validated optimum.
+AdamW and cosine schedule. The supplied configs/unified.toml uses LR0.0003,
+a promising screened starting point; the historical default is0.001. Measure
+epoch1 time before forecasting the full budget. Neither is a validated final optimum.
 
 `coverage.json` records actual supervised samples delivered to successful
 optimizer updates, unique photos, contributing annotation IDs, and per-dataset
