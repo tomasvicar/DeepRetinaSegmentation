@@ -65,6 +65,8 @@ class UnifiedConfig:
     bce_weight: float = 1.0
     dice_weight: float = 1.0
     av_weight: float = 1.0
+    vessel_loss_weight: float = 1.0
+    vessel_pos_weight: float = 1.0
     tile_size: int = 512
     overlap: int = 64
     require_all_heads: bool = True
@@ -114,6 +116,7 @@ class UnifiedConfig:
             raise ValueError(
                 "Learning rate and loss/decay weights must be finite and nonnegative; lr positive"
             )
+        _validate_vessel_loss_weights(self.vessel_loss_weight, self.vessel_pos_weight)
         if self.bce_weight + self.dice_weight == 0 or self.av_weight == 0:
             raise ValueError("Segmentation and conditional A/V objectives must both be enabled")
         if self.tile_size < 32 or not 0 <= self.overlap < self.tile_size:
@@ -558,8 +561,36 @@ class UnifiedDataset(torch.utils.data.Dataset):
         return image, target, valid
 
 
-def unified_loss(logits, target, valid, *, bce_weight=1.0, dice_weight=1.0, av_weight=1.0):
-    """Equal task means over actually annotated heads; zero gradient for unknown GT."""
+def _validate_vessel_loss_weights(vessel_loss_weight, vessel_pos_weight):
+    for value in (vessel_loss_weight, vessel_pos_weight):
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(value)
+            or value <= 0
+        ):
+            raise ValueError("Vessel loss and positive BCE weights must be finite and positive")
+
+
+def unified_loss(
+    logits,
+    target,
+    valid,
+    *,
+    bce_weight=1.0,
+    dice_weight=1.0,
+    av_weight=1.0,
+    vessel_loss_weight=1.0,
+    vessel_pos_weight=1.0,
+):
+    """Masked task means, with optional vessel-only loss/positive-BCE emphasis.
+
+    Vessel loss emphasis multiplies its numerator, leaving the legacy denominator
+    unchanged so it also acts on vessel-only batches. Positive weight acts only
+    on the vessel BCE positive term, including fractional positive targets.
+    Default1 retains the original operations and unknown-GT zero gradients.
+    """
+    _validate_vessel_loss_weights(vessel_loss_weight, vessel_pos_weight)
     if logits.shape != target.shape or valid.shape != target.shape or logits.shape[1] != 5:
         raise ValueError("Expected matching B,5,H,W logits/targets/validity")
     components = {}
@@ -571,14 +602,24 @@ def unified_loss(logits, target, valid, *, bce_weight=1.0, dice_weight=1.0, av_w
             continue
         z, t = logits[:, channel], target[:, channel]
         w = support.to(z.dtype)
-        bce = (F.binary_cross_entropy_with_logits(z, t, reduction="none") * w).sum() / w.sum()
+        if channel == 0 and vessel_pos_weight != 1.0:
+            elementwise = F.binary_cross_entropy_with_logits(
+                z, t, pos_weight=z.new_tensor(vessel_pos_weight), reduction="none"
+            )
+            bce = (elementwise * w).sum() / w.sum()
+        else:
+            bce = (F.binary_cross_entropy_with_logits(z, t, reduction="none") * w).sum() / w.sum()
         probability = z.sigmoid()
         intersection = (probability * t * w).sum()
         denominator = ((probability + t) * w).sum()
         dice = 1 - (2 * intersection + 1e-6) / (denominator + 1e-6)
         component = bce_weight * bce + dice_weight * dice
         components[CHANNELS[channel]] = component
-        weighted.append(component)
+        weighted.append(
+            vessel_loss_weight * component
+            if channel == 0 and vessel_loss_weight != 1.0
+            else component
+        )
         weights.append(1.0)
     known = valid[:, 1] & valid[:, 2] & ((target[:, 1] >= 0.5) ^ (target[:, 2] >= 0.5))
     if known.any():
@@ -1401,6 +1442,8 @@ def train_unified(
                     bce_weight=config.bce_weight,
                     dice_weight=config.dice_weight,
                     av_weight=config.av_weight,
+                    vessel_loss_weight=config.vessel_loss_weight,
+                    vessel_pos_weight=config.vessel_pos_weight,
                 )
                 if not components:
                     continue
