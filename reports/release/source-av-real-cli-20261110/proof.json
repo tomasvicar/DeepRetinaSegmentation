@@ -1,0 +1,254 @@
+{
+  "scope": "Actual public CLI source automatic FOV plus automatic original vessel prediction on canonical TRAIN image; functionality only",
+  "source_commit": "8835f76fd29d8e6bd4ef7d31ab7cd6b972efadde",
+  "source_sha256": {
+    "src/deepretina/cli.py": "11d4ffe577855e13b9e43d25fe7c121292f8fdad270462593a413ed04ee00dad",
+    "src/deepretina/legacy/raw_proxy.py": "0a797a24d6c22b4cde4bcad0d64c352ecb9229d9643cca22db4c2ed3818d32f3",
+    "src/deepretina/legacy/matlab_source_auto.py": "655d1a4331c82b02bd97a6b07502a63e2d420b13c2cb7617cf5087f8e03a2f06",
+    "src/deepretina/legacy/matlab_fov_source.py": "71c45ab447a51214cfc53c38468ff32fc0652bc6b3d3b5edfdb6c0e9ce654297",
+    "src/deepretina/legacy/matlab_firstcut.py": "2bf485f8deb58fb814ea26755a342f3c9aad585a948e9d48f0490758259b7efb",
+    "src/deepretina/legacy/matlab_av.py": "7cd3e537ffffe21404ba0ec1f09cefbe4aeaae70384eb2733b9e1891582b2a11",
+    "src/deepretina/legacy/inference.py": "049d9ed1ea9b01a441aeebd9be53d3b03b11b39c8ebc3ac73cd543dce7c66e10"
+  },
+  "input": {
+    "source": "STARE.zip",
+    "resource": "all-images/im0002.ppm",
+    "raw_file_sha256": "a1d19e5b2b0a3dd652bade1fe0ff44256f7f974a1df598b887de8d3c641d45ac",
+    "raw_rgb_sha256": "d8594f18a7c58b6559c686493a7788456a4079cf0c3522a127a80580a55b536e",
+    "shape": [
+      605,
+      700,
+      3
+    ],
+    "canonical_manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+    "canonical_photo_id": "sha256:d8594f18a7c58b6559c686493a7788456a4079cf0c3522a127a80580a55b536e",
+    "matched_record_ids": [
+      "stare_im0002_ah_vessels",
+      "stare_im0002_vk_vessels"
+    ],
+    "all_matching_records_split": "train",
+    "ground_truth_masks_opened": false
+  },
+  "models": {
+    "legacy-av": {
+      "filename": "legacy-av-v9.pt",
+      "sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+      "bytes": 8152192
+    },
+    "legacy-vessels": {
+      "filename": "legacy-single-net-vessels.pt",
+      "sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+      "bytes": 5346739
+    }
+  },
+  "launch": {
+    "command": [
+      "/var/home/tom/code/DeepRetinaSegmentation_clean/.venv/bin/deepretina",
+      "predict",
+      "--model",
+      "legacy-av",
+      "--av-raw-matlab-source",
+      "--input",
+      "/tmp/deepretina-source-av-release-20261110-2052/im0002.ppm",
+      "--dataset",
+      "stare",
+      "--output",
+      "/tmp/deepretina-source-av-release-20261110-2052/outputs",
+      "--device",
+      "cpu"
+    ],
+    "pid": 4064384,
+    "started_utc": "2026-11-10T20:53:09.900172+00:00",
+    "source_commit": "8835f76fd29d8e6bd4ef7d31ab7cd6b972efadde",
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "CUDA_VISIBLE_DEVICES": "",
+      "PYTHONPATH": "/var/home/tom/code/DeepRetinaSegmentation_source_av_release/src"
+    },
+    "nice": 10,
+    "wall_limit_seconds": 180,
+    "rss_limit_bytes": 6442450944,
+    "watchdog_sha256": "ec390cc4cb49df894e1d8d59e6e9f08e301d1dfee06199c7cf06e56e5ed6bc70",
+    "observed_child_nice": 19,
+    "nice_note": "Monitor inherited nice10; child additionally requested +10 and kernel clamps to19. Actual child is lower priority than requested10."
+  },
+  "terminal": {
+    "returncode": 0,
+    "stopped_reason": null,
+    "wall_seconds": 30.67741595604457,
+    "peak_sampled_rss_bytes": 1872637952,
+    "kernel_child_maxrss_bytes": 1877573632,
+    "completed_utc": "2026-11-10T20:53:40.577651+00:00"
+  },
+  "runtime": {
+    "python": "3.12.13",
+    "numpy": "2.5.4",
+    "cpu_only": true,
+    "matlab_runtime_used": false,
+    "oracle_overrides_used": false
+  },
+  "profile": {
+    "name": "vesclass_matlab_source_auto",
+    "matlab_parity_certified": false,
+    "reference_runtime": "R2026b Update1",
+    "scope": "explicit source FOV branch; resize/photometric residuals and historical provenance qualifications remain",
+    "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+    "pixels_per_degree": 25.0,
+    "photometry_pixels_per_degree": 25.0,
+    "field_of_view_degrees": 35.0,
+    "fov_diameter_pixels": 650.0,
+    "fov_source": "automatic source souradnice with scalar-zero FOV argument",
+    "diameter_source": "source boundary calibration; explicitly transferred without second calibration",
+    "fov_calibration": {
+      "mode": "estimated_from_source_automatic_fov",
+      "method": "automatic_generic",
+      "center_row_one_based": 290,
+      "center_col_one_based": 345,
+      "radius_pixels": 325,
+      "edge_pixels": 1951
+    },
+    "mask_resampling": "nearest to explicit resized image dimensions",
+    "storage": "dicom12",
+    "historical_training_file_provenance_verified": false,
+    "original_single_net_python_profile_changed": false,
+    "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+    "dataset": "stare",
+    "field_angle_source": "literal unambiguous source loader degree parameter",
+    "source_fov_calibration": {
+      "mode": "estimated_from_source_automatic_fov",
+      "method": "automatic_generic",
+      "center_row_one_based": 290,
+      "center_col_one_based": 345,
+      "radius_pixels": 325,
+      "edge_pixels": 1951
+    },
+    "calibration_boundary_policy": "final_closed before hole filling; source-special rules remain separate",
+    "used_diameter_pixels": 650,
+    "processing_fov_policy": "source returned processing FOV, distinct from calibration boundary",
+    "source_fov_diagnostics": {
+      "dataset": "stare",
+      "low_threshold": 0.1794240601097486,
+      "high_threshold": 0.6203814959726901,
+      "fallback_used": false,
+      "multithresh_backend": "source_first_cutoff",
+      "first_cutoff": {
+        "value": 0.1794240601097486,
+        "bin_coordinate": 59.0,
+        "threshold_count": 3,
+        "effectiveness_status": "finite",
+        "method": "source_first_cutoff_stable_nelder_mead_r2026b_measured",
+        "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+        "reference_runtime": "MATLAB R2026b",
+        "full_multithresh_clone": false,
+        "matlab_parity_certified": false
+      },
+      "histogram_backend": "not_required",
+      "initial_white_fraction": 0.7298394332939787,
+      "expected_black_fraction": 0.269
+    },
+    "generic_recalibration_performed": false,
+    "histogram_oracle_override_used": false,
+    "source_calibration_boundary_sha256": "e2d988aab07d618e80233e54817c54af035aa2b4996a19991404cae00c0aa2dc",
+    "source_processing_fov_sha256": "dbf5b2d58c2c7ef4846597a29a5981aff0d2c292ab1fd1b4bc9c6355575e1a6e"
+  },
+  "av_geometry": {
+    "original_shape": [
+      605,
+      700
+    ],
+    "crop_position": [
+      0,
+      604,
+      0,
+      699
+    ],
+    "rescale_factor": 1.3461538461538463,
+    "prepared_shape": [
+      815,
+      943
+    ]
+  },
+  "vessel_geometry": {
+    "original_shape": [
+      605,
+      700
+    ],
+    "crop_position": [
+      17,
+      559,
+      26,
+      661
+    ],
+    "rescale_factor": 1.25,
+    "prepared_shape": [
+      679,
+      795
+    ]
+  },
+  "exports": {
+    "probabilities": {
+      "path": "/tmp/deepretina-source-av-release-20261110-2052/outputs/probabilities.npz",
+      "sha256": "a071d75e7d1fbf8ffcefee84cb3269b78cabd806a6abe33dbe18c272ad624715",
+      "bytes": 2796500
+    },
+    "artery": {
+      "path": "/tmp/deepretina-source-av-release-20261110-2052/outputs/artery.png",
+      "sha256": "05cf9668c78e1a4bd7f7dae246fe1cbc9097ecb13c79bd29dd694cd4835eb0bf",
+      "bytes": 6593
+    },
+    "vein": {
+      "path": "/tmp/deepretina-source-av-release-20261110-2052/outputs/vein.png",
+      "sha256": "55c032ed38bd9ba04c7a968f3873618121462c3a4d3c9d4ec710eb7f3f6ba3fc",
+      "bytes": 6109
+    },
+    "classes": {
+      "path": "/tmp/deepretina-source-av-release-20261110-2052/outputs/classes.png",
+      "sha256": "bd2d13f789573ccae9c885763280748e86fb8c96feeeef7d464420578d14a83d",
+      "bytes": 9585
+    },
+    "overlay": {
+      "path": "/tmp/deepretina-source-av-release-20261110-2052/outputs/overlay.png",
+      "sha256": "5fce3533f9b5c478285cb8c69a671f6cbc0540212acaee487f74c2e6af2adb30",
+      "bytes": 554606
+    },
+    "metadata": {
+      "path": "/tmp/deepretina-source-av-release-20261110-2052/outputs/prediction.json",
+      "sha256": "1b7810ff97e43f11056c0c4eed44a76800d135395864d51ded2bd1c63f6cb75d",
+      "bytes": 9597
+    },
+    "vessel": {
+      "path": "/tmp/deepretina-source-av-release-20261110-2052/outputs/vessel.png",
+      "sha256": "1988b6912470fc1e4c6e8e1836bcfedb9aeb44f3ecd35849de2968aa3ea685c8",
+      "bytes": 10727
+    }
+  },
+  "checks": {
+    "all_outputs_original_frame": true,
+    "shape": [
+      605,
+      700
+    ],
+    "all_declared_output_paths_exist": true,
+    "nested_vessel_output_path_exists": true,
+    "no_deleted_temporary_output_paths": true,
+    "finite_probabilities": true,
+    "probability_range_0_1": true,
+    "conditional_probabilities_sum_to_one": true,
+    "gated_probability_exactly_conditional_times_support": true,
+    "av_masks_exclusive": true,
+    "av_masks_subset_of_npz_vessel_support": true,
+    "masks_match_class_encoding": true,
+    "av_vessel_support_pixels": 27860,
+    "artery_pixels": 14360,
+    "vein_pixels": 13500,
+    "saved_input_vessel_pixels": 27976,
+    "saved_input_vessel_vs_restored_support_disagreements": 6838
+  },
+  "support_note": "vessel.png retains original input vessel prediction. NPZ vessel_support is the exact nearest-resized-and-restored support used by AV; these need not be pixelwise equal. Subset assertions use NPZ support.",
+  "ground_truth_scoring": false,
+  "test_evaluation_performed": false,
+  "matlab_parity_certified": false,
+  "accuracy_or_clinical_claim": false
+}
