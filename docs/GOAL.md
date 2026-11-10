@@ -41,6 +41,27 @@ repozitáře a ke sdíleným datům v ownCloudu mají i kolegové. Zdrojový ZIP
   Zálohy nových modelů do ownCloudu jsou uživatelem povolené.
 - Dostupné GPU: Ada, Pascal a old. Úlohy rozdělovat mezi subagenty a GPU.
 
+## Aktualizace 10. 11. 2026, večer
+
+`for_Leipzig` nyní obsahuje vedle pěti původních modelů a tří označených pilotů
+použitelný `unified-full-data-baseline`. Trénink dokončil60 epoch a doloženě
+použil všech2 221 vhodných TRAIN fotografií i všech5 281 variant anotací ze17
+zdrojů. Váhy E56 byly vybrané validací; TEST se zatím neotevřel. Přibalené váhy,
+celé CSV a E60 kontrola jsou v `reports/release/control60-baseline/`.
+Po začlenění explicitní Python source FOV/AV cesty prošlo všech2 440 CPU testů.
+Původní profily/defaulty zůstávají a zdokumentované fotometrické rozdíly vůči
+MATLABu se nevydávají za úplnou shodu.
+
+Následuje Optuna na experimentální větvi: nejvýše48 nových pokusů, rungs3/9/27/60,
+pevná validační volba prahu0.5 a cílem jsou kvalitnější jednodušší modely.
+Povoleno je až5 Meta GPU a3 vlastní GPU přes noc; provozní přístupy, skutečné
+joby a jejich spotřeba se zapisují pouze do soukromého provozního repozitáře.
+Každý kandidát při pokračování zachovává konfiguraci/GPU/cache a plán60epochového
+scheduleru. Plné nezávislé porovnání kvality, rychlosti/velikosti a výběr finálního
+nového modelu ještě zbývají. **Celkový cíl proto není dokončený.**
+
+Níže je zachovaný dřívější průběžný stav, který tato aktualizace doplňuje.
+
 ## Stav k 10. 11. 2026
 
 Na `for_Leipzig` jsou nyní přibalené čtyři původní single_net checkpointy a
