@@ -62,6 +62,50 @@ Remote output is outside ownCloud at
 The canary estimate gives approximately 19:04–19:16 UTC completion; the hard
 deadline is 19:24:59 UTC. This launch note does not establish full completion.
 
+## Full run aborted at the historical reproduction gate
+
+The run stopped at 18:05:09 UTC after 1210 seconds, having completed 157 of 612
+photos. Peak observed RSS was 965652 KiB (943 MiB). Photo158 is G1020
+`g1020_image_532_disc_cup`, ID
+`sha256:402f3347e4c847e0beade05125d2c98d73751d2ddd0e8352da5d2002afec23b2`.
+Fresh native cup counts were TP4125/FP19778/FN0 versus historical
+TP4125/FP19777/FN0, with identical valid885195 and GT positives4125. The exact
+count gate refused the one-FP difference. No complete composite/summary exists;
+157 partial records and terminal evidence are retained under `full/`. The
+post-success watcher correctly skipped composition. No full restart occurred.
+
+### Bounded one-photo diagnosis
+
+The historical universal cup was produced from source87 with CPU8/nice5; later
+dedicated disc references used CPU4. Fresh CPU1/2/4/8 forwards on the failed photo
+all gave FP19778. CPU2/4/8 logits are bitwise identical. CPU1's logits differ by
+up to6.87e-5 but its valid binary mask is identical. Float64 and float32 strict
+sigmoid thresholds also give the same counts as strict logit>0 on this photo.
+An additional replay of the **actual original87** `segmentation_masks` wrapper,
+loading the original universal, dedicated vessel and AV-v9 models, CPU8 and
+default interop20, also gives FP19778 and identical logits to CPU2/4/8.
+
+The image input tensor, selected cup GT and validity bytes match between current
+b413 and original87 loaders; the legacy forward source is unchanged. Thus the
+simple CPU2-versus8 and sigmoid-rounding explanations are **not supported** by
+these bounded tests. The underlying historical numerical-state difference remains
+unresolved. Native reference counts and all previous files remain untouched.
+
+The exact historical mismatching coordinate cannot be recovered from aggregate
+counts because historical logits/masks were not saved. This limitation is explicit
+in `forensic/evidence.json`. The nearest-zero current valid pixel is (y0,x855),
+GT-negative, with CPU2/4/8/original-wrapper logit+5.95598672e-6 and sigmoid
+0.500001488997; CPU1 gives+2.55783290e-6. This is a diagnostic candidate, **not an
+identified historical mismatch**. Per-thread full logits stay on Ada; only compact
+evidence/hashes are committed. Four thread probes and the original-wrapper replay
+took seconds per photo; there was no GPU or test inference.
+
+This gate failure does not establish model incorrectness or a postprocessing
+benefit. A scientifically useful follow-up must compare fresh native and clipped
+cup counts from the same forwards, log differences from historical cached counts
+separately, and retain the untouched historical references. A new reviewed plan is
+required before continuation.
+
 ## Reproduction
 
 Use a fresh output directory and the matching frozen dependencies via uv:
