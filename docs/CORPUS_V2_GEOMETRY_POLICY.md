@@ -1,0 +1,36 @@
+# Corpus v2: declared nominal and reported field-angle policy
+
+Use **`corpusv2_nominal_fov_20261110_v1`** for the new proposed additions. The [machine-readable policy](../reports/data/corpus-v2-geometry-policy/policy.json) is frozen as SHA256 **`2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d`**. These choices make research preparation usable while retaining the missing acquisition information. They do not certify physical angular calibration, improve a model by themselves, or change immutable corpusv1, source3157, current HPO or VAL770.
+
+| Source / native shape H×W | Angle used | Basis and uncertainty | Priority alternatives |
+|---|---:|---|---|
+| DRIONS |30°|Explicit research nominal; original analog camera/model/field angle unknown|25°,45°|
+| GAMMA1934×1956 |30°|Published dataset-specific inference for TopconTRC-NW400; original capture/EXIF not verified|45°|
+| GAMMA2000×2992 |45°|Published dataset-specific inference for unspecified KOWA model; setting not verified|30°,50°|
+| GAMMA unseen shape |45°|Explicit unknown-camera nominal fallback, flagged separately|30°,50°|
+| BIOMISA composite export |45°|Topcon3DOCT2000 manufacturer nominal; exact export/crop unverified|35°,50°|
+| IDRiD disc |50°|Original dataset acquisition report; eye-specific magnification not measured|45° sensitivity only|
+
+All rules mark `per_image_angle_measured=false`. IDRiD has dataset-reported acquisition evidence; the others remain assumptions or inferences. The builder must retain the policy ID, exact file SHA, chosen rule/status/angle, sources, native dimensions, camera-attribution method and the actual FOV diameter/estimator in every new record. A source name alone must not imply certified25px/degree calibration.
+
+## Evidence and practical decisions
+
+**DRIONS.** The [creator description](https://www.ia.uned.es/~ejcarmona/DRIONS-DB_2.html) identifies ONH-centered analog photographs digitized from slides at600×400. It does not identify a camera model or angle. We choose30° as a research convention for the focused low-resolution source, with less enlargement than45°; this is our heuristic, not a recovered acquisition fact. No angle is estimated from annotated disc size, fitted contours or assumed normal anatomy.30° and45° must remain explicit sensitivity alternatives rather than conflicting claims of measured geometry.
+
+**GAMMA.** The [organizer paper §2.1](https://arxiv.org/html/2202.06511) associates the two native resolutions with TopconTRC-NW400 and KOWA, without specifying their fundus angles. The [GONet primary study TableI](https://arxiv.org/html/2502.19514v1) explicitly pairs the same GAMMA camera/resolution rows with30° and45°, respectively. This dataset-specific published characterization is a stronger inference basis than choosing a generic default, while still lacking creator/per-image confirmation. The [Topcon manufacturer specification, PDFpage5](https://topconhealthcare.eu/uploads/media/63d9164559502/tc-trc-nw400-brochure-emea-rev4-31012023-lrs-spreads.pdf) permits45° and30° digital zoom; it cannot identify the setting of a particular GAMMA photograph. An initial unpublished45° Topcon proposal was superseded by30° before policy freeze;45° remains the primary alternative.
+
+Routing uses **native array height×width before any resize or rotation**. The existing TRAIN metadata audit records six1934×1956 and94 of2000×2992 annotation records, with one duplicated photograph among the100 records; no raw images or masks were opened for this geometry review. Resolution-based camera attribution is an inference, not recovered EXIF. Do not infer camera model from an already prepared image or silently transpose dimensions. Unseen shapes use the explicit low-confidence fallback and flag it. The paper's OCT3×3mm scan field is a different modality and cannot calibrate fundus images. IDRiD's KOWA model/angle cannot be transferred to GAMMA's unspecified KOWA.
+
+**BIOMISA.** Use the [authors' composite release trghs22fpg/4](https://data.mendeley.com/datasets/trghs22fpg/4), not another collection sharing the BIOMISA name. Its [2022 dataset paper abstract](https://repository.adu.ac.ae/items/5005dc3f-8011-49ef-88de-54b103156e1e) identifies Topcon3DOCT2000 acquisition. The [manufacturer brochure, PDFpage8](https://topconhealthcare.com/wp-content/uploads/sites/8/2020/07/3DOCT-2000.pdf) specifies45° for the integrated fundus camera. We use that device nominal without claiming the supplied image export retained its full field. OCT scan widths in millimetres are not the color-fundus angle. Geometry does not resolve the separately reviewed filename-role inversion: the explicit BIOMISA label policy is still required.
+
+**IDRiD.** [The original dataset paper §3.2](https://www.mdpi.com/2306-5729/3/3/25) reports KowaVX-10α acquisition at50° after mydriasis. Retain50° as dataset-reported. This is stronger acquisition evidence than a generic camera specification, but it is not a per-eye magnification measurement. Official TEST membership remains held out; conversion is not scoring or permission to train on those labels.
+
+## Producer contract and sensitivity
+
+The JSON schema is `policies.drions`, `policies.biomisa`, `policies.idrid_disc` plus `policies.gamma.per_shape` and an explicit GAMMA default. Each rule carries `field_of_view_degrees`, `status`, `sources`, evidence IDs, confidence, alternatives and flags. Match exact native H×W first. Reject a wholly unlisted dataset instead of inventing a45° fallback. Copy the exact policy bytes into the new corpus provenance and hash those bytes; do not include a self-referential hash inside the policy object.
+
+Continue the established shared geometry implementation for RGB, GT and validity. With estimated FOV diameterD pixels, the nominal scale is `25 * angle / D`: a30° to45° change enlarges linear size by1.5 and area by2.25. Nominal target FOV diameters are750px at30°,1125px at45°, and1250px at50°. These are pipeline coordinates, not proof of true camera coverage. Scanner cropping, incomplete visible circles, digital zoom and export transformations can invalidate an apparent physical interpretation; retain the FOV estimator and derived scale. Never select an angle or crop using GT disc/cup size.
+
+No sensitivity experiment has been run here. First perform TRAIN-only finite/shape/FOV and label-alignment checks. Then prioritize controlled GAMMA-Topcon30° versus45° and DRIONS30° versus45° ablations; use modest BIOMISA scale alternatives afterward if warranted. Freeze the remaining training configuration, budgets, seeds and sampling/source counts, and assess source/head regressions on the unchanged v1VAL. Do not use official TEST labels or move old heldouts into training. A changed angle requires a new policy version, prepared content fingerprint and derived cache; it cannot silently replace this artifact or a v1 file.
+
+Any eventual v2 validation gain measures a pipeline with declared research geometry assumptions. It cannot establish correct physical calibration or independent clinical generalization on these newly added sources. The angle policy supplies no patient crosswalk and does not relax alias/heldout quarantine rules.
