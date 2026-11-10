@@ -85,7 +85,10 @@ def reference_cup_policy(reference):
 def validate_reference(reference, paths, *, cup_policy="native", disc_variant=None):
     """Require precisely the calibrated four-component validation reference."""
     if (
-        reference.get("family") != "original_reference"
+        reference.get("family")
+        not in {"original_reference", "optional_fresh_paired_cup_experiment"}
+        or reference.get("family") == "optional_fresh_paired_cup_experiment"
+        and not reference.get("fresh_paired_cup_component")
         or reference.get("split") != "val"
         or reference.get("preview_only") is not False
         or reference.get("av_preprocessing_profile") != "vesclass_matlab_provided_fov_calibrated"
@@ -101,6 +104,16 @@ def validate_reference(reference, paths, *, cup_policy="native", disc_variant=No
         raise ValueError("Inside-disc requires an explicit selected disc variant")
     if reference_cup_policy(reference) != cup_policy:
         raise ValueError("Quality reference cup policy differs from timed decoding")
+    for key in ("manifest_sha256", "prepared_content_sha256"):
+        value = reference.get(key)
+        if (
+            not isinstance(value, str)
+            or len(value) != 64
+            or any(c not in "0123456789abcdef" for c in value)
+        ):
+            raise ValueError("Require exact reference manifest/canonical SHA256 metadata")
+    if not isinstance(reference.get("policy"), str) or not reference["policy"]:
+        raise ValueError("Require declared quality reference GT/decoding policy")
     keys = {
         "vessel": "vessel_checkpoint_sha256",
         "disc": "disc_checkpoint_sha256",
@@ -234,6 +247,9 @@ def benchmark(args):
         "original": {
             "checkpoint_sha256": {key: before[key] for key in paths},
             "reference_sha256": before["reference"],
+            "reference_manifest_sha256": reference["manifest_sha256"],
+            "reference_prepared_content_sha256": reference["prepared_content_sha256"],
+            "quality_reference_gt_policy": reference["policy"],
             "disc_variant": reference["disc_reference_variant"],
             "cup_policy": cup_policy,
             "cup_decoding": "native universal/raw strictlogit>0"
