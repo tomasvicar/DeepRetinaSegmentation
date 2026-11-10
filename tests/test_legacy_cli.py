@@ -238,6 +238,7 @@ def test_cli_matlab_auto_vessel_path_preserves_original_model(tmp_path, monkeypa
     actual = raw.predict_legacy
     calls = []
     args = matlab_cli_args(tmp_path)
+    args.extend(["--dataset", "drive"])
     i = args.index("--vessel-mask")
     vessel = args[i + 1]
     del args[i : i + 2]
@@ -248,7 +249,14 @@ def test_cli_matlab_auto_vessel_path_preserves_original_model(tmp_path, monkeypa
             return actual(checkpoint, image, output, **kwargs)
         # Segmentation result contract only; the A/V forward still uses bundled weights.
         metadata = output / "metadata.json"
-        metadata.write_text(json.dumps({"family": "legacy_single_net"}))
+        metadata.write_text(
+            json.dumps(
+                {
+                    "family": "legacy_single_net",
+                    "outputs": {"metadata": str(metadata), "vessel": vessel},
+                }
+            )
+        )
         return {"vessel": vessel, "metadata": str(metadata)}
 
     monkeypatch.setattr(raw, "predict_legacy", segmentation_then_actual_av)
@@ -259,6 +267,9 @@ def test_cli_matlab_auto_vessel_path_preserves_original_model(tmp_path, monkeypa
     assert calls[0]["normalized"] is False
     assert calls[0]["fov_path"] == tmp_path / "fov.png"
     assert info["vessel_prediction"]["family"] == "legacy_single_net"
+    assert info["dataset"] == "drive"
+    assert info["vessel_prediction"]["outputs"] == {"vessel": outputs["vessel"]}
+    assert all(Path(path).is_file() for path in info["vessel_prediction"]["outputs"].values())
     assert info["raw_av_preprocessing"]["name"] == "vesclass_matlab_provided_fov_calibrated"
 
 

@@ -139,6 +139,7 @@ def predict_raw_av(
     paths["vessel"] = str(vessel_path)
     metadata_path = Path(paths["metadata"])
     metadata = json.loads(metadata_path.read_text())
+    metadata["dataset"] = dataset
     metadata["raw_av_preprocessing"] = prepared.metadata
     metadata["raw_av_geometry"] = asdict(prepared.geometry)
     metadata["preprocessing"]["raw_profile"] = prepared.metadata["name"]
@@ -148,6 +149,10 @@ def predict_raw_av(
     metadata["vessel_source"] = (
         str(vessel_mask_path) if vessel_mask_path else "original single_net vessel checkpoint"
     )
+    if vessel_metadata is not None:
+        # Other segmentation exports belonged to the deleted temporary directory.
+        # Only the vessel mask is retained in the final A/V prediction directory.
+        vessel_metadata["outputs"] = {"vessel": str(vessel_path)}
     metadata["vessel_prediction"] = vessel_metadata
     metadata["outputs"] = paths
     metadata_path.write_text(json.dumps(metadata, indent=2, allow_nan=False) + "\n")
