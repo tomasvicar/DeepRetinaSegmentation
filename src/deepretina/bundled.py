@@ -1,4 +1,4 @@
-"""Portable, checksum-verified pilot checkpoints distributed with the package."""
+"""Portable, checksum-verified original and explicitly named pilot checkpoints."""
 
 import hashlib
 import json
@@ -14,7 +14,9 @@ def model_catalog() -> dict:
 
 @contextmanager
 def bundled_checkpoint(name: str):
-    catalog = model_catalog()["models"]
+    registry = model_catalog()
+    name = registry.get("aliases", {}).get(name, name)
+    catalog = registry["models"]
     if name not in catalog:
         raise ValueError(f"Unknown bundled model {name!r}; choose {', '.join(catalog)}")
     model = catalog[name]

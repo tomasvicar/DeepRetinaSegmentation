@@ -11,6 +11,10 @@ from pathlib import Path
 
 
 def parser() -> argparse.ArgumentParser:
+    from .bundled import model_catalog
+
+    registry = model_catalog()
+    model_names = sorted(set(registry["models"]) | set(registry.get("aliases", {})))
     p = argparse.ArgumentParser(description="Train and apply retinal segmentation models.")
     p.add_argument("--version", action="version", version="deepretina 0.1.0")
     commands = p.add_subparsers(dest="command", required=True)
@@ -77,20 +81,50 @@ def parser() -> argparse.ArgumentParser:
     predict = commands.add_parser(
         "predict", help="Predict an image or directory at original resolution"
     )
-    predict.add_argument("--input", type=Path, required=True)
+    predict.add_argument("--input", type=Path)
     predict.add_argument("--output", type=Path, required=True)
     for cmd in (evaluate, predict):
         model_source = cmd.add_mutually_exclusive_group(required=True)
         model_source.add_argument("--checkpoint", type=Path, help="A custom trained checkpoint")
         model_source.add_argument(
             "--model",
-            choices=["vessels", "av", "disc_cup"],
+            choices=model_names,
             help="Use a model bundled with this package",
         )
         cmd.add_argument("--device", default="auto")
         cmd.add_argument("--tile-size", type=int, default=512)
         cmd.add_argument("--overlap", type=int, default=64)
         cmd.add_argument("--threshold", type=float, default=0.5)
+    predict.add_argument("--dataset", help="Camera/dataset profile, e.g. drive, hrf, drishti")
+    predict.add_argument(
+        "--fov", type=Path, help="Original-frame FOV mask (official mask preferred)"
+    )
+    predict.add_argument("--field-of-view-degrees", type=float)
+    predict.add_argument("--pixels-per-degree", type=float, default=25)
+    predict.add_argument(
+        "--normalized", action="store_true", help="Use original single_net contrast profile"
+    )
+    predict.add_argument(
+        "--prepared", action="store_true", help="A/V RGB already has historical preprocessing"
+    )
+    predict.add_argument(
+        "--prepared-array", type=Path, help="Four stored A/V planes in NPY/NPZ (key input)"
+    )
+    predict.add_argument("--dicoms", type=Path, nargs=4, metavar=("R", "G", "B", "VESSEL"))
+    predict.add_argument("--vessel-mask", type=Path, help="Binary vessel mask for original A/V")
+    predict.add_argument("--original-size", type=int, nargs=2, metavar=("HEIGHT", "WIDTH"))
+    predict.add_argument(
+        "--av-raw-proxy",
+        action="store_true",
+        help="Explicit approximate Python preprocessing for raw A/V photographs",
+    )
+    predict.add_argument(
+        "--vessel-checkpoint", type=Path, help="Override automatic legacy-vessels model for raw A/V"
+    )
+    predict.add_argument("--vessel-normalized", action="store_true")
+    predict.add_argument(
+        "--fov-diameter-pixels", type=float, help="Calibrated raw A/V FOV diameter"
+    )
     inspect = commands.add_parser("inspect", help="Summarize a prepared manifest")
     inspect.add_argument("manifest", type=Path)
     commands.add_parser("doctor", help="Check Python, PyTorch and CUDA")
@@ -210,6 +244,13 @@ def dispatch(args: argparse.Namespace):
 
 
 def _apply_model(args, checkpoint: Path):
+    import torch
+
+    family = torch.load(checkpoint, map_location="cpu", weights_only=True).get("family")
+    if family in {"legacy_single_net", "legacy_av"}:
+        return _apply_legacy(args, checkpoint, family)
+    if args.command == "predict" and args.input is None:
+        raise ValueError("--input is required for pilot model prediction")
     from .engine import evaluate
     from .inference import predict
 
@@ -234,3 +275,84 @@ def _apply_model(args, checkpoint: Path):
             raise ValueError(f"No supported images in {args.input}")
         return [predict(checkpoint, path, args.output / path.name, **options) for path in images]
     return predict(checkpoint, args.input, args.output, **options)
+
+
+def _apply_legacy(args, checkpoint: Path, family: str):
+    if args.command != "predict":
+        raise ValueError(
+            "Original models require raw-input evaluation with their own geometry; the capped pilot manifest is not interchangeable"
+        )
+    from .legacy.inference import predict_legacy
+
+    if args.input is None and args.dicoms is None and args.prepared_array is None:
+        raise ValueError("Supply --input, --dicoms, or --prepared-array")
+    if args.prepared_array and (args.dicoms or args.prepared or args.av_raw_proxy):
+        raise ValueError("Choose a single prepared A/V input mode")
+
+    def one(image_path, output):
+        if args.av_raw_proxy:
+            if family != "legacy_av" or image_path is None:
+                raise ValueError(
+                    "--av-raw-proxy requires the original A/V model and a raw RGB input"
+                )
+            if args.prepared or args.dicoms or args.prepared_array:
+                raise ValueError("Raw A/V proxy cannot be combined with prepared input modes")
+            from .legacy.raw_proxy import predict_raw_av
+
+            return predict_raw_av(
+                checkpoint,
+                image_path,
+                output,
+                device=args.device,
+                dataset=args.dataset,
+                fov_path=args.fov,
+                field_of_view_degrees=args.field_of_view_degrees,
+                vessel_mask_path=args.vessel_mask,
+                vessel_checkpoint=args.vessel_checkpoint,
+                vessel_normalized=args.vessel_normalized,
+                fov_diameter_pixels=args.fov_diameter_pixels,
+                pixels_per_degree=args.pixels_per_degree,
+                threshold=args.threshold,
+            )
+        inputs = None
+        if args.prepared_array:
+            import numpy as np
+
+            loaded = np.load(args.prepared_array, allow_pickle=False)
+            if isinstance(loaded, np.lib.npyio.NpzFile):
+                with loaded:
+                    inputs = loaded["input"].copy()
+            else:
+                inputs = loaded
+        return predict_legacy(
+            checkpoint,
+            image_path,
+            output,
+            device=args.device,
+            dataset=args.dataset,
+            fov_path=args.fov,
+            field_of_view_degrees=args.field_of_view_degrees,
+            normalized=args.normalized,
+            threshold=args.threshold,
+            vessel_mask_path=args.vessel_mask,
+            dicom_paths=args.dicoms,
+            prepared=args.prepared,
+            prepared_inputs=inputs,
+            original_size=tuple(args.original_size) if args.original_size else None,
+            pixels_per_degree=args.pixels_per_degree,
+        )
+
+    if args.input is not None and args.input.is_dir():
+        if args.dicoms or args.prepared_array or args.vessel_mask or args.fov:
+            raise ValueError(
+                "Batch mode uses automatic masks; supplied per-image masks/planes require individual calls"
+            )
+        images = sorted(
+            p
+            for p in args.input.iterdir()
+            if p.suffix.lower() in {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".gif"}
+        )
+        if not images:
+            raise ValueError(f"No supported images in {args.input}")
+        return [one(image, args.output / image.name) for image in images]
+    return one(args.input, args.output)

@@ -2,9 +2,12 @@
 
 A Python package for retinal **vessel segmentation**, **artery/vein classification**,
 and **optic disc/cup segmentation**, with one workflow from dataset ZIPs to predictions.
-The `for_Leipzig` branch includes three ready-to-use pilot checkpoints and trains
-a compact RGB U-Net from scratch. It needs neither MATLAB
-nor the unavailable pretraining corpus. Historical implementations remain in Git history.
+The branch preserves five original trained checkpoints and three explicitly named
+pilot checkpoints. Original architectures, weights and prepared-input inference
+have been checked numerically against the historical implementations. The newer
+pilots are small single-dataset experiments; they are not replacements for the
+original models. A new unified model is being developed separately.
+See [the project goal and completion criteria](docs/GOAL.md).
 
 ## Install
 
@@ -28,25 +31,54 @@ access to the author's ownCloud, training data or checkpoint directories:
 
 ```bash
 uv run deepretina models
-uv run deepretina predict --model av --input /path/to/fundus.jpg --output predictions/av
-uv run deepretina predict --model vessels --input /path/to/fundus.jpg --output predictions/vessels
-uv run deepretina predict --model disc_cup --input /path/to/fundus.jpg --output predictions/disc_cup
+uv run deepretina predict --model legacy-vessels --input /path/to/fundus.jpg --output predictions/vessels
+uv run deepretina predict --model legacy-universal --input /path/to/fundus.jpg --output predictions/disc_cup
 ```
 
-Add `--device cpu` to work without a GPU. Input can also be a directory of images.
-Model files are checked against their SHA256 before loading. Output contains original-size
-PNG masks, probabilities, a colour overlay and metadata. Custom checkpoints remain supported
-with `--checkpoint path/to/best.pt` in place of `--model`.
+Add `--device cpu` to work without a GPU and `--dataset drive` (or the correct
+source name) to select source-specific geometry. For an unknown source, supply
+`--field-of-view-degrees` explicitly. The original single-net default uses the
+source-inferred raw profile; `--normalized` selects its original local-contrast
+profile. The historical training choice is not recoverable from the weights.
 
-| Included model | Training source | Held-out pilot result |
-| --- | --- | --- |
-| `vessels` | DRIVE | vessel Dice 0.7988 |
-| `av` | RITE | vessel Dice 0.8071; class accuracy 0.7219 on labeled reference vessels |
-| `disc_cup` | Drishti-GS | disc Dice 0.8798; cup Dice 0.7648 |
+The original A/V network classifies an existing vessel segmentation. With the
+original prepared four-plane NumPy input:
 
-These are 30-epoch single-seed pilots. The disc/cup model can produce false positives on
-bright boundaries. Full definitions and per-channel test results are in
-[EXPERIMENTS.md](docs/EXPERIMENTS.md). Photos and ground-truth masks are not distributed.
+```bash
+uv run deepretina predict --model legacy-av --prepared-array input.npz --output predictions/av
+```
+
+For a raw photograph, explicitly opt into the Python approximation of the old
+MATLAB preprocessing. Without `--vessel-mask`, this runs the original vessel model
+first:
+
+```bash
+uv run deepretina predict --model legacy-av --av-raw-proxy \
+  --input /path/to/fundus.jpg --dataset drive --output predictions/av
+```
+
+This raw A/V mode is functional but **not certified pixel-equivalent to MATLAB**.
+Prepared-input model arithmetic is verified separately. See
+[original model details](docs/LEGACY_MODELS.md), [A/V input contracts](docs/LEGACY_AV.md)
+and [preprocessing evidence](docs/LEGACY_PREPROCESSING.md).
+
+| Included model | Provenance / outputs |
+| --- | --- |
+| `legacy-universal` | Original trained single_net: vessel, disc, cup |
+| `legacy-vessels` | Original trained vessel network |
+| `legacy-disc-0`, `legacy-disc-1` | Two original trained disc networks |
+| `legacy-av` | Original trained A/V classifier; requires vessel support |
+| `pilot-vessels` | New DRIVE-only pilot; test vessel Dice 0.7988 |
+| `pilot-av` | New RITE-only pilot; labeled-vessel class accuracy 0.7219 |
+| `pilot-disc-cup` | New Drishti-only pilot; disc/cup Dice 0.8798/0.7648 |
+
+Aliases `vessels`, `disc_cup` and `av` select the corresponding original models.
+Files are included in the package and checked against SHA256 before loading.
+Custom checkpoints use `--checkpoint path/to/best.pt`. Outputs include masks,
+probabilities, overlay and provenance metadata at the input photograph geometry.
+The pilot metrics are not a controlled comparison with the original models;
+[EXPERIMENTS.md](docs/EXPERIMENTS.md) records their limited scope. Dataset photographs
+and ground-truth masks are not distributed.
 
 ## Prepare data
 
@@ -81,7 +113,7 @@ per-channel labels and which pixels are actually annotated; unknown A/V labels a
 Use a new or empty output directory for each preparation; the manifest contains exactly the
 requested datasets. Existing prepared data are never overwritten.
 
-## Train
+## Train the pilot architecture
 
 Use a new output directory for each run:
 
@@ -104,7 +136,7 @@ Training uses aligned random crops, rotations and flips. Validation uses complet
 with overlapping tiles and a fixed threshold of 0.5. `best.pt` is selected using validation
 mean Dice; `last.pt` records the last epoch. `run.json`, `metrics.csv` and `validation.json`
 record settings, manifest hash and scores. Checkpoints store state dictionaries and primitive
-metadata, and load with `weights_only=True`. Historical pickled models are a different format. Unrecoverable source annotations remain
+metadata, and load with `weights_only=True`. Original weights are distributed in a separate safe, converted format. Unrecoverable source annotations remain
 in the manifest with quality notes and `usable_for_training=false`; training excludes them.
 Disc-only sources never train the absent cup. Channel-supervision flags travel with the
 checkpoint; unsupported binary channels are all-zero placeholders explicitly marked in
@@ -122,7 +154,7 @@ Presets use validation-selected losses from the pilot: BCE for A/V and BCE+Dice 
 vessels and disc/cup. `--loss` allows controlled comparisons.
 Select losses and settings on validation; evaluate the final selected configuration on test.
 
-## Evaluate and predict
+## Evaluate and predict pilot checkpoints
 
 ```bash
 uv run deepretina evaluate --checkpoint runs/av/best.pt \
@@ -161,10 +193,12 @@ uv run ruff format --check src tests scripts
 - [Experiments](docs/EXPERIMENTS.md): real runs, machines and measured results.
 - [Work log](docs/WORK_LOG.md): investigation and implementation decisions.
 
-This cleanup changes architecture and preprocessing; it does not establish superiority over
-published or legacy checkpoints. A runnable smoke test demonstrates functionality, while
-claims about model quality require controlled held-out comparisons. Dataset photographs and ground-truth masks are not committed. Three selected pilot
-checkpoints are explicitly included under `src/deepretina/pretrained/`.
+The original model ports preserve historical architecture and inference. Their
+prepared-input numerical checks do not establish new quality scores or resolve
+all historical preprocessing uncertainty. Pilot and unified-model quality claims
+require controlled comparisons. Generic `evaluate` currently handles pilot
+checkpoints; original-model evaluation needs the matching geometry and annotation
+protocol and is not silently routed through pilot preprocessing.
 
-Hyperparameter optimization is isolated on `experiments/leipzig-hpo`; unverified experiments
-do not replace the three bundled models on `for_Leipzig`.
+Hyperparameter optimization and the new unified model are isolated on
+`experiments/leipzig-hpo`. Unverified experiments do not replace bundled originals.

@@ -111,3 +111,19 @@ verified against local checkpoints. The previous removal remains recorded as his
 - HPO is isolated in the experiments/leipzig-hpo worktree. LR trials are running
   across Ada/Pascal/old; architecture, augmentation and longer-budget comparisons
   are being added there. Unverified results do not replace bundled pilot models.
+
+## 2026-11-10 — Original models and separate private HPC notebook
+
+Converted four original single_net checkpoints and the original Ves_Class v9
+classifier into safe state-dictionary payloads, bundled with SHA256 verification.
+Original forward outputs and single_net tiled logits match pinned source code
+exactly on the recorded prepared-input checks. CLI distinguishes original models
+from single-dataset pilots and requires an explicit flag for the uncertified raw
+A/V preprocessing proxy. Historical raw/normalized ambiguity remains documented.
+All 119 tests pass; Ruff checks and formatting pass.
+
+MetaCentrum operational notes and scripts are maintained separately in the private
+`metacentrum-workflows` repository. SSH/SFTP and a bounded CPU PBS diagnostic
+have passed; environment bootstrap and GPU probe remain drafts.
+Unified-model development remains on the experimental branch; its short CUDA
+functionality check is not evidence of segmentation quality.

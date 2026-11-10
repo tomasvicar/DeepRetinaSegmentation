@@ -11,13 +11,26 @@ from deepretina.bundled import bundled_checkpoint, model_catalog
 from deepretina.cli import main
 
 
-def test_all_three_bundled_models_exist_and_match_checksums():
+def test_original_and_explicit_pilot_models_exist_and_match_checksums():
     catalog = model_catalog()["models"]
-    assert set(catalog) == {"vessels", "av", "disc_cup"}
+    assert set(catalog) == {
+        "legacy-vessels",
+        "legacy-universal",
+        "legacy-disc-0",
+        "legacy-disc-1",
+        "legacy-av",
+        "pilot-vessels",
+        "pilot-av",
+        "pilot-disc-cup",
+    }
     for name, info in catalog.items():
         with bundled_checkpoint(name) as checkpoint:
             saved = torch.load(checkpoint, map_location="cpu", weights_only=True)
-        assert saved["config"]["task"] == name
+        if name.startswith("pilot-"):
+            assert saved["config"]["task"] == info["task"]
+        else:
+            assert saved["family"] == info["family"]
+            assert "state_dict" in saved
         assert saved["channels"] == info["channels"]
 
 
@@ -31,7 +44,7 @@ def test_cli_predicts_without_dataset_or_external_checkpoint(tmp_path, capsys):
             [
                 "predict",
                 "--model",
-                "av",
+                "pilot-av",
                 "--input",
                 str(image),
                 "--output",
