@@ -1,4 +1,8 @@
-# Proposed corpus v2 preparation
+# Corpus v2 preparation
+
+The first corpus-v2 artifact is complete and independently verified: TRAIN2529
+photos across21sources, VAL770 and TEST856. See the [completed conversion evidence](../reports/data/corpus-v2-preparation/README.md). The current producer includes
+subsequent hardening for future inputs; it does not rewrite that completed artifact.
 
 This producer appends the newly audited native annotations to an independent
 copy of frozen v1. It does not change v1, source3157/HPO, old cache4e39, or models.

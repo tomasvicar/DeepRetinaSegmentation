@@ -1,0 +1,28 @@
+{
+  "base_commit": "0b8c74ccf6824057100fffc9b4328e5b6fc9c61e",
+  "integrated_cherry_head": "1c30d78ff8599c12ea14e5c70ae5e15722a4e7ba",
+  "python": "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python",
+  "command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=/tmp/deepretina-release-cpu-guard:src nice -n 10 taskset -c 0 python -m pytest -q",
+  "cpu_affinity": [
+    0
+  ],
+  "nice": 10,
+  "torch_intra_threads": 1,
+  "torch_interop_threads": 1,
+  "cuda_devices_hidden": true,
+  "cuda_init_and_lazy_init": "raise RuntimeError via recorded guard",
+  "result": {
+    "passed": 2517,
+    "warnings": 79,
+    "duration_seconds": 51.61,
+    "exit_code": 0
+  },
+  "tests_log_sha256": "d3c31db531da2bb864b0a54ea536c2e0981e55ccd88593bdbcbe34df18965119",
+  "protected_files_receipt": "preservation.json",
+  "orphan_removed": "tools/optuna_coordinator/tests/test_baseline_rung_reference.py from016f193; stable has no Optuna package/dependency, native ASHA proof retained in reports/v2-loss/asha-reference-proof.json and source HPO proof",
+  "qualifications": [
+    "No training/data/GPU runtime changed",
+    "No new weights or quality improvement claimed",
+    "Existing frozen-source training resumes require their original source hash; integration is for fresh training and portable checkpoint inference"
+  ]
+}
