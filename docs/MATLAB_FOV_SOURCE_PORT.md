@@ -126,7 +126,9 @@ the filled processing mask would change the answer. This is why both arrays are
 retained. `MatlabSourceFOV.diagnostics` identifies supplied oracle edges and
 thresholds explicitly.
 
-Two algorithms remain unresolved and fail closed:
+The first bounded phase (85f4d8c) left two algorithms unresolved. The fixed250
+histogram guard is superseded by the native calibrated implementation below;
+N3/4/5 remains guarded:
 
 - Source multithresh N3/4/5 profiles require a measured threshold vector for
   studies. MATLAB documents a search-based locally optimal algorithm for N>2;
@@ -191,3 +193,70 @@ Full numerical output and exact source-helper hashes:
 [`adjustment-comparison.json`](../reports/legacy/matlab-fov-source/adjustment-comparison.json).
 Only hashes, dimensions and numerical errors are committed; source photos and
 large intermediate arrays remain external scratch artifacts.
+
+## Bounded threshold follow-up: native histogram, qualified local search
+
+A later30-minute study measured public APIs only, CPU1/nice10/CUDA hidden.
+**No shipping, frozen evaluation3779 or training3157 source was changed.**
+
+`source_histcounts250` now supports implicit edges for finite double grayscale
+in[0,1], with an explicitly separate measured-edge override. Native edges and
+counts match407 checked ranges/constant cases/synthetic distributions and two
+subsampled real source images. CI stores scalar extrema and full-edge SHA256
+references, rather than photos or large arrays. The native fallback also removes
+the earlier G1020 synthetic cutoff mismatch: `.002` now agrees without supplying
+oracle edges. No epsilon, per-image branch or global optimizer was substituted.
+
+The recovered fixed250 rule uses a one-significant-digit lower grid, then the
+coarsest self-consistent decimal width whose width/250 reaches that decimal unit.
+Each decimal power is recomputed, rather than repeatedly divided by10. Constants
+have separately measured half-unit limits from `floor(2*x-.5)/2` and
+`ceil(2*x+.5)/2`; quarter-unit constants therefore legitimately use a half-wide
+interval. Adjacent doubles are deliberately preserved: `[.4,.65]` gives final
+edge`.65025`, whereas `[.4,nextafter(.65,0)]` gives`.65`. Unrepresentable float
+ranges fail closed; this is a fixed250 grayscale port, **not** a general clone for
+arbitrary bin counts/types or extreme numeric domains. Development probes using
+other bin counts retained mismatches, so no broader claim is made.
+
+The local threshold study identifies a256-bin nearest-center histogram over
+actual min/max, recovering MATLAB effectiveness to approximately5e−15 on the
+initial nondegenerate cases. A clean-room Nelder–Mead implementation with stable
+simplex ordering is stored only as an analysis candidate. It uses no proprietary
+toolbox implementation. Plain SciPy Nelder–Mead disagreed on an additional
+multimodal case while the stable-order candidate matched public MATLAB fminsearch on the
+independently authored objective. Tie handling is a measured hypothesis, not an
+assertion that every optimizer detail has been identified.
+
+Across54 nondegenerate N3/4/5 cases, including six threshold tests from two real
+subsampled frames, the candidate matches53 complete threshold vectors and all54
+first thresholds. The original FOV helper uses only the first threshold, but
+this finite agreement is **not proof of a faithful general search port**. The
+remaining N5 ramp returns candidate indices`[43,86,128,170,212]` versus source
+`[43,85,127,170,212]`. The precise remaining question is source optimizer setup,
+termination or objective arithmetic on that quantized landscape. Nine arbitrary
+degenerate-threshold policies remain explicitly unported.
+
+The source also returns negative-infinity effectiveness for some nondegenerate
+multimodal inputs whose initial search has empty classes. The report retains
+that status; it does not turn it into a finite score. A uniform initial-threshold
+fallback hypothesis explains those observed vectors, including distinct final
+rounding, without patching a particular image. The candidate is not used by
+`automatic_fov_stages`: N3/4/5 still requires explicit measured thresholds.
+
+A global dynamic-programming Otsu replacement would be scientifically different:
+for the measured three-mode N5 case source effectiveness is`.9901741362563441`,
+whereas global DP attains`.992556770078339` and changes the first cutoff from32
+to31. A better objective is not source parity. No model-quality inference or
+actual held-out metric was run during this calibration.
+
+Detailed thresholds, status/differences, oracle-file hashes and histogram counts:
+[`threshold-study-report.json`](../reports/legacy/matlab-fov-source/threshold-study-report.json).
+Remaining work is an independently expanded local-search oracle and stage-level
+FOV comparisons before any automatic-profile activation, not a blanket parity
+certification. Public mathematical reference:
+[fminsearch](https://www.mathworks.com/help/matlab/ref/fminsearch.html).
+
+Follow-up verification:519 focused CPU tests passed on Ada (nice10, one thread,
+CUDA hidden,0.62seconds), including407 bitwise native histogram edge receipts,
+synthetic local-search vectors, preserved known disagreement and the adjacent-
+double/no-epsilon counterexample. Ruff/format checks passed remotely.

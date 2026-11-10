@@ -31,9 +31,7 @@ def arrays():
 
 @pytest.mark.parametrize("case", META["rgb"])
 def test_rgb_double_exact(arrays, case):
-    np.testing.assert_array_equal(
-        source_rgb2gray(arrays[case["rgb"]]), arrays[case["gray"]]
-    )
+    np.testing.assert_array_equal(source_rgb2gray(arrays[case["rgb"]]), arrays[case["gray"]])
 
 
 @pytest.mark.parametrize("case", META["morphology"])
@@ -55,8 +53,9 @@ def test_seed_membership_retains_background_label(arrays, case):
 @pytest.mark.parametrize("case", META["histograms"])
 def test_oracle_edges_only_histogram_counts(arrays, case):
     values = arrays[case["values"]]
-    with pytest.raises(NotImplementedError, match="automatic edges"):
-        source_histcounts250(values)
+    native_counts, native_edges = source_histcounts250(values)
+    np.testing.assert_array_equal(native_counts, arrays[case["counts"]])
+    np.testing.assert_array_equal(native_edges, arrays[case["edges"]])
     counts, edges = source_histcounts250(values, oracle_edges=arrays[case["edges"]])
     np.testing.assert_array_equal(counts, arrays[case["counts"]])
     np.testing.assert_array_equal(edges, arrays[case["edges"]])
@@ -84,20 +83,15 @@ def test_automatic_source_stages_and_calibration(arrays, case):
             result.calibration.center_col_one_based,
             result.calibration.radius_pixels,
         ] == case["calibration"]
-        np.testing.assert_array_equal(
-            result.processing_fov, arrays[case["processing_fov"]]
-        )
+        np.testing.assert_array_equal(result.processing_fov, arrays[case["processing_fov"]])
         np.testing.assert_array_equal(result.closed_mask, arrays[case["closed"]])
         assert result.diagnostics["histogram_backend"] == stages["histogram_backend"]
         assert result.diagnostics["multithresh_backend"] == "not_required"
-    if stages["fallback_used"]:
-        with pytest.raises(NotImplementedError, match="histcounts250"):
-            automatic_fov_stages(rgb, dataset=case["dataset"])
-    else:
-        np.testing.assert_array_equal(
-            automatic_fov_stages(rgb, dataset=case["dataset"])["closed"],
-            stages["closed"],
-        )
+    native = automatic_fov_stages(rgb, dataset=case["dataset"])
+    np.testing.assert_array_equal(native["closed"], stages["closed"])
+    assert native["histogram_backend"] == (
+        "python_source_histcounts250" if stages["fallback_used"] else "not_required"
+    )
 
 
 def test_pre_holefill_boundary_changes_source_radius(arrays):
