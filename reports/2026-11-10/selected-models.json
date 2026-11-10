@@ -1,0 +1,158 @@
+{
+  "vessels": {
+    "run": "drive_bce_dice",
+    "checkpoint": "runs/drive_bce_dice/best.pt",
+    "shared_checkpoint": "/var/home/tom/ownCloud/fundus_databases/models/for_Leipzig_2026-11-10/vessels/best.pt",
+    "checkpoint_sha256": "38a4125d213b49526c6cf1fbd6dfde1e19394a1969d3724be0737b7bffda4544",
+    "selected_epoch": 30,
+    "steps_at_selected_epoch": 960,
+    "validation_mean_dice": 0.7983567754362612,
+    "test_mean_dice": 0.7987553153911077,
+    "test_channels": {
+      "vessel": {
+        "dice": 0.7987553153911077,
+        "iou": 0.6649397292868526,
+        "precision": 0.8306556843801526,
+        "recall": 0.7692145230061854,
+        "tp": 444336,
+        "fp": 90586,
+        "fn": 133313,
+        "valid_pixels": 4538143
+      }
+    },
+    "av_accuracy": null,
+    "av_conditional_accuracy": null,
+    "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+    "config": {
+      "task": "vessels",
+      "epochs": 30,
+      "batch_size": 4,
+      "patch_size": 256,
+      "base_channels": 16,
+      "depth": 3,
+      "seed": 42,
+      "lr": 0.001,
+      "loss": "bce_dice",
+      "device": "auto",
+      "workers": 2,
+      "samples_per_image": 8,
+      "max_steps": null,
+      "tile_size": 512,
+      "overlap": 64
+    }
+  },
+  "av": {
+    "run": "rite_bce",
+    "checkpoint": "runs/rite_bce/best.pt",
+    "shared_checkpoint": "/var/home/tom/ownCloud/fundus_databases/models/for_Leipzig_2026-11-10/av/best.pt",
+    "checkpoint_sha256": "0a8c85dd4888a4aab1ffded7a9e2ac4b254745a15c03a465ff2106e34a1c0eb7",
+    "selected_epoch": 30,
+    "steps_at_selected_epoch": 960,
+    "validation_mean_dice": 0.7182781744042513,
+    "test_mean_dice": 0.708538658397403,
+    "test_channels": {
+      "vessel": {
+        "dice": 0.8071275069970805,
+        "iou": 0.6766251311279965,
+        "precision": 0.8334908671903309,
+        "recall": 0.7823807621289508,
+        "tp": 434733,
+        "fp": 86848,
+        "fn": 120921,
+        "valid_pixels": 4697292
+      },
+      "artery": {
+        "dice": 0.6356809408384954,
+        "iou": 0.4659327571288038,
+        "precision": 0.6777035498597858,
+        "recall": 0.5985654750331793,
+        "tp": 141617,
+        "fp": 67349,
+        "fn": 94977,
+        "valid_pixels": 524410
+      },
+      "vein": {
+        "dice": 0.6828075273566331,
+        "iou": 0.518380981927692,
+        "precision": 0.8409282700421941,
+        "recall": 0.574738721961253,
+        "tp": 165419,
+        "fp": 31291,
+        "fn": 122397,
+        "valid_pixels": 524410
+      }
+    },
+    "av_accuracy": 0.5854884536908145,
+    "av_conditional_accuracy": 0.7218893613775481,
+    "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+    "config": {
+      "task": "av",
+      "epochs": 30,
+      "batch_size": 4,
+      "patch_size": 256,
+      "base_channels": 16,
+      "depth": 3,
+      "seed": 42,
+      "lr": 0.001,
+      "loss": "bce",
+      "device": "auto",
+      "workers": 2,
+      "samples_per_image": 8,
+      "max_steps": null,
+      "tile_size": 512,
+      "overlap": 64
+    }
+  },
+  "disc_cup": {
+    "run": "drishti_bce_dice",
+    "checkpoint": "runs/drishti_bce_dice/best.pt",
+    "shared_checkpoint": "/var/home/tom/ownCloud/fundus_databases/models/for_Leipzig_2026-11-10/disc_cup/best.pt",
+    "checkpoint_sha256": "36f72fd4817d432d6e953bbec39604374d40b25c0a0ffad7723b0b28ca55e22a",
+    "selected_epoch": 28,
+    "steps_at_selected_epoch": 2240,
+    "validation_mean_dice": 0.7927560092389919,
+    "test_mean_dice": 0.8223133405076282,
+    "test_channels": {
+      "disc": {
+        "dice": 0.879784936980366,
+        "iou": 0.7853714576992311,
+        "precision": 0.918225644273841,
+        "recall": 0.8444334738623587,
+        "tp": 1226429,
+        "fp": 109222,
+        "fn": 225940,
+        "valid_pixels": 38549396
+      },
+      "cup": {
+        "dice": 0.7648417440348905,
+        "iou": 0.6192257067797923,
+        "precision": 0.6930365844319679,
+        "recall": 0.8532461313636803,
+        "tp": 687800,
+        "fp": 304644,
+        "fn": 118298,
+        "valid_pixels": 38549396
+      }
+    },
+    "av_accuracy": null,
+    "av_conditional_accuracy": null,
+    "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+    "config": {
+      "task": "disc_cup",
+      "epochs": 30,
+      "batch_size": 4,
+      "patch_size": 256,
+      "base_channels": 16,
+      "depth": 3,
+      "seed": 42,
+      "lr": 0.001,
+      "loss": "bce_dice",
+      "device": "auto",
+      "workers": 2,
+      "samples_per_image": 8,
+      "max_steps": null,
+      "tile_size": 512,
+      "overlap": 64
+    }
+  }
+}

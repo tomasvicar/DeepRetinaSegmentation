@@ -1,0 +1,31 @@
+{
+  "config": {
+    "task": "disc_cup",
+    "epochs": 30,
+    "batch_size": 4,
+    "patch_size": 256,
+    "base_channels": 16,
+    "depth": 3,
+    "seed": 42,
+    "lr": 0.001,
+    "loss": "bce_dice",
+    "device": "auto",
+    "workers": 2,
+    "samples_per_image": 8,
+    "max_steps": null,
+    "tile_size": 512,
+    "overlap": 64
+  },
+  "manifest": "/var/home/tom/code/DeepRetinaSegmentation_clean/data/leipzig/manifest.json",
+  "manifest_sha256": "9d2d0b349a3b1e37eb159a7b26272e6931b141f8b6ba078b68997d3115f29993",
+  "torch_version": "2.6.0+cu124",
+  "device": "cuda",
+  "normalization": "RGB uint8 / 255, then (x - 0.5) / 0.5",
+  "channels": [
+    "disc",
+    "cup"
+  ],
+  "initialization": "random; no pretraining",
+  "inference_max_size": 1024,
+  "determinism": "seeded; unsupported deterministic operators warn"
+}
