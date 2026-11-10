@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "preview_only": true,
+  "split": "val",
+  "calibrated_photo_results": [
+    {
+      "photo_id": "sha256:02470903d3930e07bdb92b82e68d1b1ea5955c9fa2aaf913c9bdd8b4ca2e7146",
+      "channels": {
+        "artery": {
+          "dice": 0.6856880171621208,
+          "iou": 0.5217087161311383,
+          "precision": 0.8318709101725164,
+          "recall": 0.5832030028151391,
+          "tp": 11187,
+          "fp": 2261,
+          "fn": 7995,
+          "valid_pixels": 40461
+        },
+        "vein": {
+          "dice": 0.7702445522885146,
+          "iou": 0.6263396138816884,
+          "precision": 0.7799296622826034,
+          "recall": 0.7607970299356173,
+          "tp": 16189,
+          "fp": 4568,
+          "fn": 5090,
+          "valid_pixels": 40461
+        }
+      },
+      "conditional_counts": {
+        "correct": 31535,
+        "scored_pixels": 40461,
+        "eligible_pixels": 40461,
+        "end_to_end_correct": 27376
+      },
+      "calibration": {
+        "center_row_one_based": 521,
+        "center_col_one_based": 729,
+        "radius_pixels": 524,
+        "edge_pixels": 3020,
+        "diameter_pixels": 1048,
+        "raw_fov_sha256": "e97ba9799a26aae3fb713ae68d1d150d1cfd621a827d1f7ab66563a919e49bac",
+        "source": "canonical legacy25 FOV restored to original frame; generic souradnice Python estimator"
+      }
+    },
+    {
+      "photo_id": "sha256:02d7e2e9df2aa3256838ce1f81b0439fea921919443d1d42233a1fdb3fae565e",
+      "channels": {
+        "artery": {
+          "dice": 0.6981924411174001,
+          "iou": 0.5363253856942497,
+          "precision": 0.8481756681823223,
+          "recall": 0.5932821348227445,
+          "tp": 7648,
+          "fp": 1369,
+          "fn": 5243,
+          "valid_pixels": 24588
+        },
+        "vein": {
+          "dice": 0.7679546138307474,
+          "iou": 0.6233168213214261,
+          "precision": 0.7721694036300778,
+          "recall": 0.7637855860477045,
+          "tp": 8934,
+          "fp": 2636,
+          "fn": 2763,
+          "valid_pixels": 24588
+        }
+      },
+      "conditional_counts": {
+        "correct": 19243,
+        "scored_pixels": 24588,
+        "eligible_pixels": 24588,
+        "end_to_end_correct": 16582
+      },
+      "calibration": {
+        "center_row_one_based": 521,
+        "center_col_one_based": 728,
+        "radius_pixels": 524,
+        "edge_pixels": 3024,
+        "diameter_pixels": 1048,
+        "raw_fov_sha256": "f71ccf33ac47801d6d7931509677be98d8216a88b8b4f5b59b02bfc9e76f9a1a",
+        "source": "canonical legacy25 FOV restored to original frame; generic souradnice Python estimator"
+      }
+    }
+  ],
+  "baseline_report_sha256": "be51ebd051621be9fbe3cd7aa47837fcd464971da898bbb97dc943bfc052a93e",
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "av_preprocessing_profile": "vesclass_matlab_provided_fov_calibrated",
+  "av_refresh_photos": 2,
+  "refresh_seconds": 10.675911712984089,
+  "refresh_threads": 4,
+  "refresh_device": "cpu",
+  "refresh_script_sha256": "8b4aa3124646f3a6d536e5b0dcdcf0650f87838f358d366552d90d9707864845",
+  "independent_quality_improvement_claim": false,
+  "refresh_qualifications": [
+    "Non-AV predictions preserved; original vessel confusion counts reproduced exactly on every refreshed photo",
+    "Provided FOV is restored from canonical preparation, not recovered historical native FOV",
+    "Generic calibration matches MATLAB oracle; raw photometry retains documented numerical residuals",
+    "Historical training exposure and file preprocessing provenance remain unresolved",
+    "Validation only; this does not establish independent test improvement"
+  ]
+}
