@@ -53,3 +53,10 @@ then report timing alongside the independently evaluated quality comparison.
 Nine focused CPU tests protect selected reference SHA/profile checks, native
 dedicated heads, strict zero threshold, calibrated AV vessel input, nonfinite
 failure and unified configured geometry/domain/containment.
+
+Input provenance uses one byte snapshot of each RGB/FOV file before decoding;
+reported hashes identify those exact timed inputs even if a path changes later.
+Paletted single-channel FOVs are converted to luminance before thresholding,
+matching public prediction: palette index zero can legitimately represent white
+foreground. Color visualizations remain rejected. No tiling, photometric profile,
+model choice or measurement scope is changed by these input-reader fixes.

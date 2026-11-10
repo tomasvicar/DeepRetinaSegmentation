@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import gc
 import hashlib
+import io
 import json
 import platform
 from pathlib import Path
@@ -35,6 +36,26 @@ from deepretina.unified import (
 
 def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def input_snapshots(image_path, fov_path):
+    """Decode and identify exactly one byte snapshot of each input resource."""
+    image_bytes = Path(image_path).read_bytes()
+    fov_bytes = Path(fov_path).read_bytes()
+    with Image.open(io.BytesIO(image_bytes)) as source:
+        rgb = np.asarray(source.convert("RGB")).copy()
+    with Image.open(io.BytesIO(fov_bytes)) as source:
+        if source.mode not in {"1", "L", "I", "I;16", "P"}:
+            raise ValueError("Require a single-channel FOV")
+        # Palette indices are not intensities; match the public prediction route.
+        fov = np.asarray(source.convert("L")) > 0
+    if fov.shape != rgb.shape[:2] or not fov.any():
+        raise ValueError("Require a nonempty original-frame FOV matching RGB")
+    identity = {
+        "input_sha256": hashlib.sha256(image_bytes).hexdigest(),
+        "fov_sha256": hashlib.sha256(fov_bytes).hexdigest(),
+    }
+    return rgb, fov, identity
 
 
 def validate_reference(reference, paths):
@@ -101,14 +122,7 @@ def benchmark(args):
     before = {key: sha256(path) for key, path in all_paths.items()}
     reference = json.loads(args.reference_report.read_text())
     validate_reference(reference, paths)
-    with Image.open(args.input) as source:
-        rgb = np.asarray(source.convert("RGB")).copy()
-    with Image.open(args.fov) as source:
-        if source.mode not in {"1", "L", "I", "I;16", "P"}:
-            raise ValueError("Require a single-channel FOV")
-        fov = np.asarray(source) > 0
-    if fov.shape != rgb.shape[:2] or not fov.any():
-        raise ValueError("Require a nonempty original-frame FOV matching RGB")
+    rgb, fov, input_identity = input_snapshots(args.input, args.fov)
     kwargs = {"dataset": args.dataset, "field_of_view_degrees": args.field_of_view_degrees}
     models = {
         name: load_single_net(paths[name], device) for name in ("vessel", "disc", "universal")
@@ -158,8 +172,8 @@ def benchmark(args):
         "accuracy_claim": False,
         "scope": "one raw photo, CPU preprocessing + model inference + original-frame mask restoration; excludes file IO/model loading",
         "script_sha256": sha256(__file__),
-        "input_sha256": sha256(args.input),
-        "fov_sha256": sha256(args.fov),
+        "input_sha256": input_identity["input_sha256"],
+        "fov_sha256": input_identity["fov_sha256"],
         "input_shape": list(rgb.shape),
         "dataset": args.dataset,
         "field_of_view_degrees": args.field_of_view_degrees,
