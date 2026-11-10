@@ -174,3 +174,87 @@ def test_two_eyes_of_one_patient_are_resampled_together(tmp_path):
     assert report["channels"]["vessel"]["pooled_dice"]["paired_percentile_95ci"] == pytest.approx(
         [-0.5, 0.5]
     )
+
+
+def test_source_details_share_draws_and_preserve_all_regressions(tmp_path):
+    paths = fixture_reports(tmp_path)
+    rows = json.loads(paths[2].read_text())
+    additions = [{**row, "id": row["id"] + "-dc", "task": "disc_cup"} for row in rows]
+    paths[2].write_text(json.dumps(rows + additions))
+    for path in paths[:2]:
+        value = json.loads(path.read_text())
+        value["manifest_sha256"] = hashlib.sha256(paths[2].read_bytes()).hexdigest()
+        for entry in value["per_photo"]:
+            entry["record_ids"].append(entry["photo_id"] + "-dc")
+        path.write_text(json.dumps(value))
+    result = compare_reports(*paths, repeats=100, include_sources=True)
+    artery = result["by_dataset"]["a"]["artery"]
+    assert artery["supported_photos"] == 2 and artery["supported_split_groups"] == 1
+    assert artery["reference"]["tp"] == 16 and artery["candidate"]["tp"] == 8
+    assert artery["candidate_minus_reference"]["dice"] == pytest.approx(-0.4)
+    assert artery["paired_dice_percentile_95ci"] == pytest.approx([-0.4, -0.4])
+    assert (
+        result["macro_dataset_mean_dice"]
+        == compare_reports(*paths, repeats=100)["macro_dataset_mean_dice"]
+    )
+
+
+def test_source_head_must_be_eligible_in_manifest(tmp_path):
+    paths = fixture_reports(tmp_path)
+    # Fixture rows only annotate AV; disc/cup attribution is intentionally impossible.
+    with pytest.raises(ValueError, match="eligible"):
+        compare_reports(*paths, repeats=100, include_sources=True)
+
+
+def with_conditional_counts(paths):
+    for index, path in enumerate(paths[:2]):
+        report = json.loads(path.read_text())
+        for entry in report["per_photo"]:
+            correct = 16 if index == 0 else 8
+            entry["av_conditional_counts"] = {
+                "correct": correct,
+                "scored_pixels": 20,
+                "eligible_pixels": 20,
+                "end_to_end_correct": correct,
+            }
+        path.write_text(json.dumps(report))
+
+
+def test_conditional_av_uses_identical_stratified_group_draws_and_counts(tmp_path):
+    paths = fixture_reports(tmp_path)
+    with_conditional_counts(paths)
+    report = compare_reports(*paths, repeats=100, include_av=True)
+    conditional = report["av_accuracy"]["conditional_accuracy"]
+    assert conditional["reference"] == 0.8 and conditional["candidate"] == 0.4
+    assert conditional["paired_percentile_95ci"] == pytest.approx([-0.4, -0.4])
+    assert report["av_accuracy"]["counts"]["reference"]["eligible_pixels"] == 80
+    assert report["av_accuracy"]["by_dataset"]["b"]["counts"]["candidate"]["scored_pixels"] == 40
+    assert (
+        report["macro_dataset_mean_dice"]
+        == compare_reports(*paths, repeats=100)["macro_dataset_mean_dice"]
+    )
+
+
+@pytest.mark.parametrize("defect", ["eligible", "scored", "correct", "end", "exclusive", "header"])
+def test_invalid_or_different_conditional_av_domain_is_rejected(tmp_path, defect):
+    paths = fixture_reports(tmp_path)
+    with_conditional_counts(paths)
+    v = json.loads(paths[1].read_text())
+    entry = v["per_photo"][0]
+    if defect == "eligible":
+        entry["av_conditional_counts"]["eligible_pixels"] = 19
+    if defect == "scored":
+        entry["av_conditional_counts"]["scored_pixels"] = 19
+    if defect == "correct":
+        entry["av_conditional_counts"]["correct"] = 9
+    if defect == "end":
+        entry["av_conditional_counts"]["end_to_end_correct"] = 7
+    if defect == "exclusive":
+        entry["channels"]["artery"].update(tp=10, fp=5, fn=0)
+        entry["channels"]["vein"].update(tp=10, fp=5, fn=0)
+        entry["av_conditional_counts"].update(correct=20, end_to_end_correct=20)
+    if defect == "header":
+        v["av_conditional_accuracy"] = 0.9
+    paths[1].write_text(json.dumps(v))
+    with pytest.raises(ValueError, match="AV|decoder"):
+        compare_reports(*paths, repeats=100, include_av=True)
