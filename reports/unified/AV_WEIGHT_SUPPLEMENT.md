@@ -36,3 +36,27 @@ independent generalization. No test evaluation or changed heldout partition.
 After the guard passes, use only the idle old GTX1060 with its explicit UUID and a
 fresh output outside immutable source. No overlap, restart or `--final`. Separately,
 Pascal may start original-plan `width_8` after its baseline terminal E8 QA/milestone.
+
+## E8 launch gate passed, 2026-11-10
+
+The old LR.0003 control finished E8 (also its selected best), macro validation Dice
+.708936. Both model files and optimizer tensors are finite; all2221 photographs
+were delivered across65536 samples/16384 updates. Source87 execution8172, checkpoint
+training-source45e9254a, canonical6103, manifest529 and original plan9077 were verified
+separately; the unchanged scheduler has T_max60 and last_epoch8. Independent copied
+metadata/hardlinked checkpoints live in `milestones/lr_0003-seed42/epoch-008` under
+the old trial directory. Best SHA is
+`199078734346d0e298564edba37f18e822a631545aa3f419ef767f4df721d783`.
+
+| Validation metric | LR.0003 E8 | Calibrated original | Difference |
+|---|---:|---:|---:|
+| Artery pooled Dice | .561068 | .689529 | −.128461 |
+| Vein pooled Dice | .615372 | .697298 | −.081926 |
+| Conditional A/V accuracy | .652636 | .748573 | −.095937 |
+
+Other E8 pooled Dice: vessel.722513, disc.849109, cup.791965; end-to-end A/V
+accuracy.523737. All three specified A/V metrics remain lower, so the approved
+controlled-weight experiment remains motivated. These are validation comparisons
+against a historically exposed reference, not an independent superiority claim.
+The E8 opinion was sent to root before the supplementary launch. No test scores
+were opened.
