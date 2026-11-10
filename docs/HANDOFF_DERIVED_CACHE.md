@@ -1,122 +1,83 @@
-# Derived-cache handoff — 2026-11-10, 14:00 UTC
+# Derived-cache handoff — complete, 2026-11-10 14:09 UTC
 
-This is agent data's compact continuation note. Do not edit HPO staging or any
-running immutable87 checkout. No training restart or old-plan migration is needed.
+Agent data's task is complete. No existing training process or immutable87 file was
+changed. Do not edit HPO staging or silently activate this cache in an old run.
 
-## Source and contract
+## Source and documentation
 
-- Local worktree: `/var/home/tom/code/DeepRetinaSegmentation_derived_cache`.
-- Branch: `experiments/unified-derived-cache`, based on `15672d6`.
-- Cache implementation: `ef5413b`; subsequent gate/capacity commit adds reports,
-  estimator and one extra test without changing the benchmarked production code.
-- Ada isolated clone: `~/code/DeepRetinaSegmentation_derived_cache`.
-- Read `docs/DERIVED_CACHE.md`, `src/deepretina/derived_cache.py`, and
-  `reports/unified/derived-cache/README.md` for implementation/protocol details.
-- Runtime requires explicit canonical AND cache fingerprint pins. Portable relative
-  references, exact decoded-byte SHA checks on every derivative disk read, no cache
-  autodiscovery. Cache path stays outside UnifiedConfig; checkpoint/resume identity
-  includes cache fingerprint, never host path. Canonical fallback is explicit and
-  only used by the partial-cache benchmark; full training requires all train+val
-  image/annotation references and disables fallback.
-- Exactly binary target arrays become compressed bool NPZ; soft and negative-zero
-  floats remain unchanged. RGB is uint8 NPY. Missing FOV/unknown validity/extras
-  preserve current loader semantics. Canonical bytes are never written.
+- Worktree `/var/home/tom/code/DeepRetinaSegmentation_derived_cache`, branch
+  `experiments/unified-derived-cache`, based on `15672d6`.
+- Implementation `ef5413b`; reviewed gate/capacity + actual full-build source
+  `c141493a778a25158e2334eb3dfea5c40766af33`. Later commits only add notes/reports.
+- Ada clone `~/code/DeepRetinaSegmentation_derived_cache` stays at build source c141.
+- Read `docs/DERIVED_CACHE.md` and `reports/unified/derived-cache/README.md`.
+- 240 full tests PASS, Ruff PASS, independent read-only engine audit found no blocker.
 
-## Pins and completed gates
+## Full artifact — verified ready for a future explicit plan
 
 Canonical manifest on Ada:
 `~/code/DeepRetinaSegmentation_for_Leipzig/data/unified25/manifest.json`.
 
-- Canonical schema2 FP:
+Full cache on Ada:
+`~/code/DeepRetinaSegmentation_derived_storage/full/61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e/v1-train-val`.
+
+- Canonical schema2 fingerprint:
   `61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e`.
 - Manifest SHA:
   `529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69`.
-- Immutable87 source `87cf045ab89425c4994df577fd510d210a1a0eab` remains clean,
+- **Full cache fingerprint**:
+  `4e39e40def03d0f2859dd147107a3736a62b4fc0249dd440a1280a9803aa8591`.
+- Immutable87 source `87cf045ab89425c4994df577fd510d210a1a0eab`, tracked clean,
   execution SHA `8172e06bfa2c61497d3a34d443027f2f0193834090e95530322e3a6f795254fe`.
-- Sample cache is a SUBSET: 64 train photos /140 annotation variants, all17 sources,
-  all24 dataset/task pairs, 151,949,829 bytes. All construction arrays exact.
-- Sample root on Ada:
-  `~/code/DeepRetinaSegmentation_derived_storage/sample64/61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e/v1-subset-b64aa6882dd89fe6`.
-- Sample cache FP:
-  `d73bb541ea0eb3ee422095b5a12f071906ff6f03e0f667c3f36ce65dae196d9a`.
-- 240 full tests PASS; Ruff PASS. Read-only engine review: no semantic blocker.
-  Caveats: double canonical startup scan; explicit partial fallback canonical bytes
-  checked at opening, not every fallback read. Canonical stays read-only.
-- Actual workers2/batch4 gates:384 paired samples (64×six view/augmentation modes),
-  exact tensors/observer traces/worker global+private RNG/parent RNG. Timed1280
-  additional paired samples exactly matched tensors/traces/parent RNG.
-- Incremental CPU delivery vs optimized503:38.8841→27.1419 seconds, aggregate1.433×,
-  median1.383×, all five repeats positive. This is a reused64-photo working set,
-  warm OS caches, four reference-first/one candidate-first randomized pairs. No GPU
-  epoch or model-quality claim. Benchmark PID1049448 and builder1048941 completed.
+- Complete train+val: 2991 photos /6274 annotation variants /all 17 sources. No test
+  arrays decoded. All 3019 source RGB references and 6274 target/valid/FOV bundles
+  exactly checked during construction; all full targets binary, encoded bool NPZ.
+- Actual files: 2991 RGB NPY +6268 label NPZ (byte-identical sources deduplicated;
+  all variant mappings retained). Pinned reopening rehashed all derived files and
+  canonical content, then `require_coverage` verified every train+val reference.
+- Sample's204 source mappings and encoded-file hashes match the full cache exactly.
+- Files 8,147,071,511B; directory logical 8,152,309,238B; allocated 8,172,400,640B.
+  Disk output only grows, so final allocation is its peak excluding tiny reports.
+- Build 14:03:02UTC, nice 5/max 2 CPU/CUDAhidden; completed exit 0, wall 4:34.45,
+  user 257.68s/system 10.86s, maxRSS 177440 KiB (~173MiB), no swaps.
+- Historical Python PID 1053957/time-wrapper1053955 are TERMINAL. No build job remains.
+- Reports: `ada-full-build-launch.json`, `ada-full-build-summary.json`,
+  `ada-full-build-resource.txt` under `reports/unified/derived-cache/`.
+  Full raw result (including photo list) remains only on Ada as `ada-full-build.json`.
 
-## Authorized full cache build
+## Equality/performance gate and limits
 
-Parent authorized the full TRAIN+VAL build after committed gates and capacity
-recheck. Default builder excludes test decoding. Expected coverage:2991 unique
-photos /6274 annotation variants; image aliases3019 references before dedup.
-Estimated full output8.202GB (~7.64GiB), suggested free space10.663GB. Exact RGB
-sizing before source-byte dedup, label ratio estimated per dataset/task. At14:00:29
-UTC Ada had1,023,318,482,944 bytes free and the fresh full output did not exist.
+Sample: 64 train photos/140 variants/all 17 sources/all 24 dataset-task pairs, 152 MB,
+explicit SUBSET; sample FP `d73bb541ea0eb3ee422095b5a12f071906ff6f03e0f667c3f36ce65dae196d9a`
+is NOT the full-cache identity. Source mappings retain every annotator variant.
 
-Target base: `~/code/DeepRetinaSegmentation_derived_storage/full` on Ada, outside all
-canonical/raw trees. Exact output will be `<base>/<canonicalFP>/v1-train-val`.
-Launch only nice5/max2CPU with CUDA hidden. Use `/usr/bin/time -v` for wall/CPU/RSS;
-record wrapper+actual Python PIDs, command, source commit, result/log/resource paths.
-**Full build is now RUNNING:** Python PID1053957, `/usr/bin/time` wrapper
-PID1053955, launched2026-11-10T14:03:02.159464Z from committed source
-`c141493a778a25158e2334eb3dfea5c40766af33`. See the committed launch JSON. Scheduling budget10–30minutes, not a measured
-promise. A monitor may only read progress, never launch or restart training.
+Actual workers 2/batch 4:384 paired samples across six basic/mild/strong × patch/whole
+settings, exact tensors/observer traces/worker global+private RNG/parent RNG.
+Additional 1280 timed paired samples matched tensors/traces/parent RNG. Incremental
+CPU delivery vs optimized 503: 38.8841→27.1419s, aggregate 1.433×, median 1.383×. Reused
+64-photo warm working set, randomized four reference-first/one candidate-first
+pair; no GPU epoch or quality claim. Details/provenance are in the report README.
 
-After launch/completion:
+## Exact next steps
 
-1. PIDs are saved here and sent to root. Continue with read-only build monitoring.
-2. Inspect own build PID/log periodically; leave all87 training processes alone.
-3. On terminal completion require a complete JSON result and `_SUCCESS`; inspect
-   `/usr/bin/time` exit status, wall/CPU/maxRSS and final logical/allocated disk usage.
-   Builder writes only final derivative files (no disk staging), so output growth is
-   monotonic; final disk consumption is its peak, apart from small report files.
-4. Open full `VerifiedCache` with both returned pins and `allow_canonical_fallback=False`;
-   call `require_coverage` on every train+val row, verify2991 photos/6274 variants,
-   construction equality counts and actual indexed-file SHA checks. Recheck canonical
-   and immutable87 source pins. Record full cache FP and byte counts in reports/docs.
-5. Commit only this isolated branch's code/reports/notes. Send root the SHA, exact
-   full cache path/pins/coverage/resources. Do not silently merge into existing plans.
-6. A future final60 plan requires reviewed NEW immutable source/plan and starts from
-   scratch after HPO selection. Root chooses architecture/hyperparameters. No87
-   source-guard weakening, checkpoint migration, new GPU launch or test evaluation.
+1. Root reviews/merges this isolated branch when ready; do not mutate old87 sources.
+2. Future final60 training intentionally starts from scratch AFTER HPO selection
+   with a NEW immutable source and NEW frozen plan. Root chooses model/settings.
+3. Explicitly provide cache directory + external cache pin when creating/running
+   the new plan; canonical pin is separately frozen. Full training must verify all
+   train+val image/mask references and disable canonical fallback. No autodiscovery.
+4. Runtime cache path is outside UnifiedConfig. It may relocate; cache/content/source
+   identity and all training settings must remain identical on resume. Never migrate
+   an old87 checkpoint/plan or weaken its source guard to adopt the cache.
+5. Data remain outside Git and ownCloud; transfer portable derived directory only
+   when root schedules the future job. No new GPU trial or test evaluation here.
+6. Canonical fallback is only explicit for the partial benchmark. Canonical files
+   are checked at open rather than each fallback read; keep them read-only. Full
+   training has no fallback. Current training startup rehashes canonical twice.
 
-## Running training, read-only snapshot around14:00 UTC
-
-- Pascal baseline: PID3910854, E7 macro validation Dice .6739773048, still running.
-- old LR.0003: PID287975, E7 macro .7063917974, still running.
-- Ada augmentation_strong: PID1041876, E4 macro .5844663763; one Ada training GPU job.
-  Source87/original plan9077/data6103; screen8 only,60-epoch scheduler. Do not overlap
-  another GPU trial. Its run is in
-  `~/code/DeepRetinaSegmentation_unified_trials_87cf045/runs/augmentation_strong-seed42`.
-- Ada GroupNorm completed E8: last .5980181932, best E6 .6279426914, all2221 coverage;
-  milestone `.../milestones/group_norm-seed42/epoch-008`, best checkpoint SHA
-  `96502b9584a974df507e70c2277fccb277137e13d961c619d20c31a4c1aa3586`.
-- Width16 paused at E1 by design. Do not resume without root's scheduling decision.
-- Original normalized CPU-reference PID1023129 has ended (not killed by us).
-- These are unfinished validation screens. Do not claim final superiority across
-  tasks; original A/V raw preprocessing comparison remains an uncertified proxy.
-
-## Actual full-build launch, 14:03 UTC
-
-- Python PID: **1053957**, time-wrapper PID: **1053955** on Ada.
-- Exact source: `c141493a778a25158e2334eb3dfea5c40766af33`, tracked-clean at launch.
-- CUDA hidden, nice5, OMP/MKL/OpenBLAS2; no GPU and no training restart.
-- Canonical6103 reverified immediately before launch; free disk1,023,329,628,160B.
-- Actual command and runtime provenance:
-  `reports/unified/derived-cache/ada-full-build-launch.json`.
-- Completion result on Ada clone:
-  `reports/unified/derived-cache/ada-full-build.json`.
-- stderr: same directory `ada-full-build.log`; resource report:
-  `ada-full-build-resource.txt` (time wall/CPU/maxRSS and exit status).
-- Fresh output:
-  `~/code/DeepRetinaSegmentation_derived_storage/full/61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e/v1-train-val`.
-- No full cache fingerprint yet: derive only after successful terminal output and
-  pinned reopening/full-reference coverage checks. Never present the partial sample
-  fingerprint as the full cache identity.
-- Later handoff/report commits do not update the active Ada checkout or source files.
+Read-only training snapshot around 14:00UTC (root monitors newer progress): Pascal
+baseline PID 3910854 E7 macro .6739773048; old LR.0003 PID 287975 E7 macro .7063917974;
+Ada augmentation_strong PID1041876 E4 macro .5844663763. GN finished E8 (best E6
+.6279426914), width16 paused E1. Do not restart, overlap or extend these runs.
+These unfinished validation screens do not establish superiority across all heads;
+original A/V raw preprocessing reference remains an uncertified MATLAB proxy.

@@ -66,3 +66,31 @@ Raw machine reports, launch commands and the post-gate proof are alongside this
 note. The capacity estimator is reproducible with
 `scripts/estimate_derived_cache.py`; the worker protocol is
 `scripts/benchmark_unified_workers.py` at `ef5413b`.
+
+## Authorized full build completed
+
+The parent approved the full train+validation build after the committed gates and
+capacity recheck. It ran on Ada from tracked-clean `c141493`, nice 5/max 2 threads,
+CUDA hidden, outside canonical and ownCloud trees. No GPU training was changed.
+
+Full cache fingerprint:
+`4e39e40def03d0f2859dd147107a3736a62b4fc0249dd440a1280a9803aa8591`.
+Coverage is 2991 photos/6274 variants/all 17 sources, train+val only. Construction
+exactly compared 3019 source RGB references and 6274 target/valid/FOV arrays. The
+encoded storage contains 2991 unique RGB files and6268 label files; mappings preserve
+all variants. All actual full targets were binary; no soft array was quantized.
+Pinned reopening rehashed canonical content and every derived file, required every
+train+val source reference with fallback disabled, and confirmed all 204 sample
+source mappings/encoded file hashes identical. Test arrays were not decoded.
+
+Measured build wall time 4:34.45, user 257.68s/system 10.86s, maxRSS 177440 KiB (~173MiB),
+exit 0/no swaps. Final file payload 8,147,071,511B; total directory logical 8,152,309,238B,
+allocated 8,172,400,640B. Construction has no temporary disk staging and output grows
+monotonically, so final disk allocation is its peak excluding small reports. This
+is within the earlier 8.202 GB estimate/10.663 GB reserve. Canonical/source87 pins stayed
+unchanged and tracked-clean after the full build.
+
+See `ada-full-build-{launch,summary}.json` and `ada-full-build-resource.txt`; the full
+raw result with 2991 photo IDs remains on Ada outside Git. The full cache is ready
+only for a future explicit new-source/new-plan run; existing 87 plans/checkpoints
+are not changed or migrated. Full-corpus GPU epoch speed remains unmeasured.
