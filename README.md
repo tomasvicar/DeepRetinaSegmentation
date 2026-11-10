@@ -119,6 +119,32 @@ The pilot metrics are not a controlled comparison with the original models;
 [EXPERIMENTS.md](docs/EXPERIMENTS.md) records their limited scope. Dataset photographs
 and ground-truth masks are not distributed.
 
+## Experimental unified model CLI
+
+The five-output model is still being trained and compared; current quality is
+not final and no unified checkpoint is selected by a bundled model alias.
+Use your explicit unified checkpoint with the same public prediction command:
+
+```bash
+uv run deepretina predict --checkpoint runs/unified/best.pt \
+  --input fundus.png --dataset drive --output predictions/unified
+uv run deepretina train-unified --manifest data/unified25/manifest.json \
+  --config /path/to/settings.toml --output runs/unified --device cpu
+uv run deepretina train-unified --manifest data/unified25/manifest.json \
+  --resume runs/unified/last.pt --output runs/unified --device cpu
+uv run deepretina evaluate --checkpoint runs/unified/best.pt \
+  --manifest data/unified25/manifest.json --split val --output metrics/unified-val.json
+```
+
+Unified training consumes the audited **legacy25_raw** physical-geometry corpus;
+the capped pilot preparation below is a different protocol. Flat JSON and TOML
+configs are accepted. Prediction accepts a single RGB photo or a folder, restores
+native dimensions and uses checkpoint tiling defaults; explicit `--tile-size` /
+`--overlap` overrides are applied and recorded for patch-view checkpoints.
+Validation requires checkpoint-pinned manifest and corpus content. Public test
+evaluation remains blocked until a reviewed frozen-selection protocol exists.
+See [UNIFIED.md](docs/UNIFIED.md) for config, partial labels, geometry and limitations.
+
 ## Prepare data
 
 The team shares the `fundus_databases` folder through ownCloud. Set `--data-root` to
