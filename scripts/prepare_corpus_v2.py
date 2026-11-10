@@ -494,6 +494,11 @@ def main():
     for name in ("parent", "output", "data-root", "geometry-policy"):
         p.add_argument("--" + name, type=Path, required=True)
     p.add_argument("--biomisa-label-policy", choices=[FIXED_POLICY], required=True)
+    p.add_argument(
+        "--expected-parent-fingerprint",
+        default=PARENT_FINGERPRINT,
+        help="Explicit audited parent content SHA256; default preserves the historical freeze",
+    )
     p.add_argument("--expected-geometry-policy-sha256", default=GEOMETRY_POLICY_SHA256)
     a = p.parse_args()
     result = append(
@@ -502,6 +507,7 @@ def main():
         a.data_root,
         a.geometry_policy,
         biomisa_policy=a.biomisa_label_policy,
+        expected_parent=a.expected_parent_fingerprint,
         expected_policy=a.expected_geometry_policy_sha256,
     )
     print(json.dumps(result), flush=True)
