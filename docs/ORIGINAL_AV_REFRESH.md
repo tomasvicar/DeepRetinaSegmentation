@@ -36,5 +36,10 @@ are disclosed as unscored conditional cases while counting end-to-end misses.
 
 Six focused tests verify exact preservation of other heads, source aggregation,
 conditional versus end-to-end accounting, and rejection of missing/duplicate or
-mismatched A/V ground truth. A real-data canary and full run still have to pass
-before this new profile supplies a completed reference score.
+mismatched A/V ground truth. The actual two-photo CPU canary passed in 10.67s,
+including exact reproduction of original vessel counts. Its
+[report](../reports/unified/original-calibrated-av-canary.json) retains geometry
+and A/V confusion counts. The full refresh started on Ada CPU at 13:50:58 UTC;
+[launch provenance](../reports/unified/original-calibrated-av-val.launch.json)
+records the immutable source, command and pins. It must complete before this
+profile supplies a full reference score.
