@@ -1,11 +1,30 @@
-# Fresh paired cup continuation — ready for review, NOT launched
+# Fresh paired cup continuation — authorized, running
 
 Prepared helper: `scripts/continue_cup_containment.py`.
 SHA256: `0379fdfc146a693b26f0623986e5cb8593356cd5289c4929a87caf8696334c47`.
 Original proposal stays unchanged, SHA256
 `3f82e625b62f089bc7a3a36a9cfb3072e8367821147fba48e1f9831826d5f4ee`.
-Root approved implementing the proposal; actual model forwards remain pending
-review of this helper/pin and separate execution authorization.
+Root review passed in commit `1002a00`,
+[`continuation-root-review.json`](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/1002a00/reports/cup-containment-20261110/continuation-root-review.json).
+One bounded continuation was authorized and started18:36:58 UTC on2026-11-10.
+Child PID/process group1303824, external supervisor1303822. Staged helper/proposal
+and root review are read-only outside immutable b413. Original prefix/reference
+files remain unchanged. Launch artifacts and the review copy are in `continuation/`.
+
+Actual Ada output:
+`~/code/DeepRetinaSegmentation_cup_containment_runs/fresh-paired-20261110T183601Z/`.
+`continuation.log` is the live log, `result/per-photo.jsonl` holds paired counts,
+and `terminal.json` will record the external supervisor result. Its fixed wall
+deadline is19:56:58 UTC. Expected completion is approximately19:36–19:45 UTC.
+The supervisor checks child RSS every2s and signals only its own isolated process
+group on4800s/2GiB limits; no automatic retry. Original training/other jobs are
+untouched.
+
+First actual progress:157 reused records plus2 new records. Photo158 truthfully
+logs cup FP+1 versus historical counts with `exact_counts=false`; both dedicated
+disc counts remain exact. GT/source/input pins passed and fresh cup/clips come
+from the same arrays. RSS796MiB after42s. This is startup/progress proof, not a
+completed validation result.
 
 ## Preserved earlier work and timing
 
@@ -83,14 +102,16 @@ coupling under simulated historical1FP drift, preservation of non-cup fields,
 empty/ignored support handling and no overwrite/protected-tree/failure-sidecar
 writes. A wrong frozen source is rejected before data/model operations.
 
-No actual continuation has been launched. No original failure gate was relaxed
-in place. The new experiment is a separately labelled fresh paired comparison.
+Actual continuation is running under the separately recorded root approval.
+No original failure gate was relaxed in place. The new experiment is a separately
+labelled fresh paired comparison. A complete report is still pending.
 
-## Planned command after explicit root execution approval
+## Reviewed command contract
 
 Use the existing uv-frozen Python; no installation is required. Keep b413
 immutable and deploy this reviewed helper outside it. Set `HELPER`, `PLAN` and
-fresh `OUTPUT` to reviewed artifact paths. This command is documentation only.
+fresh `OUTPUT` to reviewed artifact paths. The exact executed expansion is saved
+in `continuation/external-launch.json`; this template is documentation only.
 
 ```bash
 SOURCE="$HOME/code/DeepRetinaSegmentation_cup_containment"
