@@ -148,7 +148,12 @@ def predict_legacy(
         # Classify before nearest restoration, retaining the original decisions.
         # Restore probabilities AFTER sigmoid: empty canvas pixels must stay zero.
         probability = np.stack([geometry.restore(p, order=1) for p in prepared_probability])
-        masks = np.stack([geometry.restore(p > threshold) for p in prepared_probability])
+        # Preserve strict original logit decisions at the default threshold:
+        # float32 sigmoid(+1e-8) rounds to exactly0.5 and would erase positives.
+        prepared_masks = (
+            logits.numpy() > 0 if threshold == 0.5 else prepared_probability > threshold
+        )
+        masks = np.stack([geometry.restore(p, order=0) for p in prepared_masks])
         channels = payload["channels"]
         metadata.update(
             channels=channels,
@@ -171,6 +176,9 @@ def predict_legacy(
             },
             tiling=tiling,
             probability_semantics="independent sigmoid after weighted logit blending",
+            mask_decision="strict_logit_gt_zero"
+            if threshold == 0.5
+            else "strict_probability_gt_threshold",
             mask_policy="independent original heads; no cup/disc containment postprocessing",
             resampling="nearest prepared binary masks; linear sigmoid probabilities; zero outside crop",
         )

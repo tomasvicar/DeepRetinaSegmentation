@@ -171,3 +171,68 @@ def test_av_stored_dicom_planes_preserve_values_and_decoder(tmp_path):
         np.testing.assert_array_equal(
             saved["conditional_probability"], expected["prepared_conditional_probabilities"]
         )
+
+
+@pytest.mark.parametrize("threshold", [0.5, 0.3, 0.7])
+@pytest.mark.parametrize(("dtype", "tiny"), [(torch.float32, 1e-8), (torch.float64, 1e-16)])
+def test_single_net_default_strict_logits_and_arbitrary_probability_thresholds(
+    tmp_path, monkeypatch, threshold, dtype, tiny
+):
+    from types import SimpleNamespace
+
+    from deepretina.legacy import inference
+    from deepretina.legacy.preprocessing import ImageGeometry
+
+    image_path, rgb = photograph(tmp_path, shape=(9, 11))
+    geometry = ImageGeometry((9, 11), (1, 7, 2, 9), 0.6, (4, 5))
+    prepared = SimpleNamespace(
+        geometry=geometry,
+        tensor=lambda: torch.zeros(3, 4, 5),
+        image=np.zeros((4, 5, 3), np.uint8),
+        field_of_view_degrees=45,
+        pixels_per_degree=25,
+        fov_source="synthetic provided mask",
+    )
+    payload = {
+        "family": "legacy_single_net",
+        "channels": ["vessel"],
+        "tiling": {"crop_size": 288, "border": 36},
+    }
+    path = tmp_path / "functionality.pt"
+    torch.save(payload, path)
+    z = torch.tensor(
+        [
+            [
+                [-tiny, 0, tiny, -2, 2],
+                [-1, 0.1, -0.1, 0.9, -0.9],
+                [0.5, -0.5, 0, tiny, -tiny],
+                [2, -2, 0.9, -0.9, 0],
+            ]
+        ],
+        dtype=dtype,
+    )
+    assert z.sigmoid()[0, 0, 2] == 0.5 and z[0, 0, 2] > 0
+    monkeypatch.setattr(inference, "prepare_single_net", lambda *args, **kwargs: prepared)
+    monkeypatch.setattr(inference, "load_single_net", lambda *args, **kwargs: (None, payload))
+    monkeypatch.setattr(inference, "tiled_logits", lambda *args, **kwargs: z)
+    paths = inference.predict_legacy(
+        path, image_path, tmp_path / "out", device="cpu", threshold=threshold
+    )
+    probabilities = z.sigmoid().numpy()
+    expected = z.numpy() > 0 if threshold == 0.5 else probabilities > threshold
+    expected = geometry.restore(expected[0], order=0)
+    actual = np.asarray(Image.open(paths["vessel"])) > 0
+    np.testing.assert_array_equal(actual, expected)
+    if threshold == 0.5:
+        erased = geometry.restore(probabilities[0] > 0.5, order=0)
+        assert (actual & ~erased).any()
+    with np.load(paths["probabilities"]) as stored:
+        np.testing.assert_array_equal(
+            stored["probability"][0], geometry.restore(probabilities[0], order=1).astype(np.float32)
+        )
+        assert not stored["probability"][:, 0].any()
+    assert actual.shape == rgb.shape[:2] and not actual[0].any()
+    metadata = json.loads(Path(paths["metadata"]).read_text())
+    assert metadata["mask_decision"] == (
+        "strict_logit_gt_zero" if threshold == 0.5 else "strict_probability_gt_threshold"
+    )
