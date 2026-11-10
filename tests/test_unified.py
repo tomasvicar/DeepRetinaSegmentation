@@ -258,7 +258,10 @@ def test_checkpoint_roundtrip_and_functionality_label_cover_all_heads(tmp_path):
 
 
 @pytest.mark.parametrize("augmentation", ["basic", "mild"])
-def test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly(tmp_path, augmentation):
+@pytest.mark.parametrize("workers", [0, 2])
+def test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly(
+    tmp_path, augmentation, workers
+):
     path = make_manifest(tmp_path)
     cfg = UnifiedConfig(
         epochs=2,
@@ -268,7 +271,7 @@ def test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly(tmp_
         base_channels=2,
         depth=1,
         norm="group",
-        workers=0,
+        workers=workers,
         device="cpu",
         augmentation=augmentation,
         foreground_probability=0.5,
