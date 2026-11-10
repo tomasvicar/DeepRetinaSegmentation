@@ -93,6 +93,18 @@ def assign_splits(records: list[dict], seed: int) -> None:
         pools = defaultdict(list)
         for source, items in groups.items():
             official = {r["split"] for r in items}
+            train_only = any(
+                row.get("metadata", {}).get("split_policy")
+                == "train_only_without_patient_crosswalk"
+                for row in items
+            )
+            if train_only:
+                declared = {row.get("metadata", {}).get("official_split") for row in items}
+                if (official | declared) & {"val", "test"}:
+                    raise ValueError(f"Train-only source aliases official held-out data: {source}")
+                for row in items:
+                    row["split"] = "train"
+                continue
             if len(official) != 1:
                 raise ValueError(f"Conflicting official splits for {source}: {official}")
             pools[official.pop()].append(source)

@@ -45,6 +45,34 @@ def test_sources_and_eye_pairs_cannot_leak_between_splits():
     assert records == again
 
 
+def test_train_only_patient_policy_is_honored_without_forging_an_official_split():
+    records = [
+        {
+            "source_id": f"riga:image{i}",
+            "split": "unsplit",
+            "metadata": {"split_policy": "train_only_without_patient_crosswalk"},
+        }
+        for i in range(20)
+    ]
+    assign_splits(records, 42)
+    assert {row["split"] for row in records} == {"train"}
+    assert all("official_split" not in row["metadata"] for row in records)
+
+
+@pytest.mark.parametrize("heldout", ["val", "test"])
+def test_train_only_policy_cannot_override_a_known_official_alias(heldout):
+    records = [
+        {
+            "source_id": "shared:photo",
+            "split": "unsplit",
+            "metadata": {"split_policy": "train_only_without_patient_crosswalk"},
+        },
+        {"source_id": "shared:photo", "split": heldout, "metadata": {}},
+    ]
+    with pytest.raises(ValueError, match="official held-out"):
+        assign_splits(records, 42)
+
+
 def _png(array):
     stream = io.BytesIO()
     Image.fromarray(array).save(stream, format="PNG")
