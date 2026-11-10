@@ -35,9 +35,9 @@ fixed positions in the canonical photo ordering without inspecting results.
 Elapsed time was 34.72 seconds, maximum RSS 838120 KiB (818 MiB). The full-data
 tile-weighted inference/data estimate is 4752 seconds (79.2 minutes), or 5465
 seconds (91.1 minutes) with a 15% margin. This exceeds the authorized autonomous
-approximately-one-hour budget. **The full evaluation has not been launched**;
-an explicit budget decision is required. There are no complete composite scores
-or overall quality claims from this five-photo canary.
+approximately-one-hour initial budget. The parent subsequently approved a bounded
+100-minute full validation run. There are no complete composite scores or overall
+quality claims from this five-photo canary.
 
 All canary Dice values increased after intersection, but true positives were
 also removed on RIM-ONE with disc-0 (129 to 88) and Drishti with disc-0 (10293 to
@@ -46,6 +46,21 @@ postprocessing policy. Original historical-exposure and calibrated-AV caveats
 remain applicable. Detailed counts, hashes, parameter counts, tile counts,
 runtime and policies are saved in
 `reports/cup-containment-20261110/canary/report.json` and `per-photo.jsonl`.
+
+## Full validation launch
+
+Started 2026-11-10 17:44:59 UTC on Ada, child PID `1278841`, supervisor PID
+`1278838`. Execution remains immutable `b413416`; the full launch command and
+environment are recorded in `reports/cup-containment-20261110/full/launch.json`.
+The isolated supervisor enforces 6000 seconds wall time and a 2097152 KiB RSS
+limit, sampled every five seconds. It can signal only its newly created child
+process group. The original training process is unaffected. Partial count JSONL
+is preserved on timeout, memory violation or count-gate failure.
+
+Remote output is outside ownCloud at
+`~/code/DeepRetinaSegmentation_cup_containment_runs/full-20261110T174434Z/`.
+The canary estimate gives approximately 19:04–19:16 UTC completion; the hard
+deadline is 19:24:59 UTC. This launch note does not establish full completion.
 
 ## Reproduction
 
