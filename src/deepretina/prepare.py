@@ -26,6 +26,7 @@ __all__ = [
     "decode_av",
     "decode_iostar_disc",
     "decode_refuge",
+    "decoded_photo_id",
     "prepare",
 ]
 
@@ -81,49 +82,93 @@ def _resize(a: np.ndarray, size: tuple[int, int], *, image: bool = False) -> np.
     )
 
 
+def decoded_photo_id(image: np.ndarray) -> str:
+    """SHA256 of original RGB uint8 dimensions and pixels, before any resizing."""
+    image = np.ascontiguousarray(image)
+    if image.dtype != np.uint8 or image.ndim != 3 or image.shape[-1] != 3:
+        raise ValueError("Photo identity requires RGB uint8")
+    digest = hashlib.sha256()
+    digest.update(np.asarray(image.shape, dtype="<i8").tobytes())
+    digest.update(image.tobytes())
+    return "sha256:" + digest.hexdigest()
+
+
 def assign_splits(records: list[dict], seed: int) -> None:
-    """Group shared source images and patient eyes before making any split."""
-    families = defaultdict(list)
-    for record in records:
-        families[record["source_id"].split(":")[0]].append(record)
-    for rows in families.values():
-        groups = defaultdict(list)
-        for row in rows:
-            groups[row["source_id"]].append(row)
-        pools = defaultdict(list)
-        for source, items in groups.items():
-            official = {r["split"] for r in items}
-            train_only = any(
-                row.get("metadata", {}).get("split_policy")
-                == "train_only_without_patient_crosswalk"
-                for row in items
-            )
-            if train_only:
-                declared = {row.get("metadata", {}).get("official_split") for row in items}
-                if (official | declared) & {"val", "test"}:
-                    raise ValueError(f"Train-only source aliases official held-out data: {source}")
-                for row in items:
-                    row["split"] = "train"
-                continue
-            if len(official) != 1:
-                raise ValueError(f"Conflicting official splits for {source}: {official}")
-            pools[official.pop()].append(source)
-        for pool in ("train", "unsplit"):
-            ordered = sorted(
-                pools[pool], key=lambda x: hashlib.sha256(f"{seed}:{x}".encode()).hexdigest()
-            )
-            n = len(ordered)
-            if not n:
-                continue
-            n_val = max(1, round(n * 0.2)) if n >= 3 else 0
-            n_test = max(1, round(n * 0.2)) if pool == "unsplit" and n >= 3 else 0
-            # Official REFUGE validation is already available.
-            if pool == "train" and pools["val"]:
-                n_val = 0
-            for i, source in enumerate(ordered):
-                split = "val" if i < n_val else "test" if i < n_val + n_test else "train"
-                for row in groups[source]:
-                    row["split"] = split
+    """Union patient/source groups and exact photos globally before partitioning.
+
+    Photo identity controls the split, not image storage: distinct photographs
+    of the same patient remain separate records and image resources.
+    """
+    parent = {}
+
+    def find(key):
+        parent.setdefault(key, key)
+        if parent[key] != key:
+            parent[key] = find(parent[key])
+        return parent[key]
+
+    def union(a, b):
+        a, b = find(a), find(b)
+        if a != b:
+            parent[max(a, b)] = min(a, b)
+
+    for row in records:
+        source = ("source", row["source_id"])
+        find(source)
+        if row.get("photo_id"):
+            union(source, ("photo", row["photo_id"]))
+        if row.get("image"):
+            union(source, ("image", row["image"]))
+    groups = defaultdict(list)
+    for row in records:
+        groups[find(("source", row["source_id"]))].append(row)
+    pools = defaultdict(list)
+    official_validation_families = {
+        row["source_id"].split(":")[0]
+        for row in records
+        if row["split"] == "val" or row.get("metadata", {}).get("official_split") == "val"
+    }
+    for items in groups.values():
+        sources = sorted({row["source_id"] for row in items})
+        key = "|".join(sources)
+        splits = {row["split"] for row in items}
+        if splits - {"train", "val", "test", "unsplit"}:
+            raise ValueError(f"Unsupported splits for {key}: {splits}")
+        declared = {row.get("metadata", {}).get("official_split") for row in items}
+        heldout = (splits | declared) & {"val", "test"}
+        train_only = any(
+            row.get("metadata", {}).get("split_policy") == "train_only_without_patient_crosswalk"
+            for row in items
+        )
+        if train_only and heldout:
+            raise ValueError(f"Train-only source aliases official held-out data: {key}")
+        group_id = "sha256:" + hashlib.sha256(key.encode()).hexdigest()
+        for row in items:
+            row["split_group_id"] = group_id
+        if train_only or heldout:
+            # Any known heldout alias protects the entire connected patient/photo
+            # component. Test is the stricter partition if official aliases disagree.
+            fixed = "test" if "test" in heldout else "val" if heldout else "train"
+            for row in items:
+                row["split"] = fixed
+            continue
+        families = {source.split(":")[0] for source in sources}
+        family = next(iter(families)) if len(families) == 1 else "cross_dataset"
+        pool = "train" if "train" in splits or "train" in declared else "unsplit"
+        pools[(family, pool)].append((key, items))
+    for (family, pool), entries in pools.items():
+        ordered = sorted(
+            entries, key=lambda entry: hashlib.sha256(f"{seed}:{entry[0]}".encode()).hexdigest()
+        )
+        n = len(ordered)
+        n_val = max(1, round(n * 0.2)) if n >= 3 else 0
+        n_test = max(1, round(n * 0.2)) if pool == "unsplit" and n >= 3 else 0
+        if pool == "train" and family in official_validation_families:
+            n_val = 0
+        for i, (_, items) in enumerate(ordered):
+            split = "val" if i < n_val else "test" if i < n_val + n_test else "train"
+            for row in items:
+                row["split"] = split
 
 
 def prepare(
@@ -170,6 +215,7 @@ def prepare(
     preview_groups = defaultdict(set)
     copied_annotations = {}
     image_resources = {}
+    photo_resources = {}
     active_source = None
 
     def save(
@@ -233,6 +279,10 @@ def prepare(
         details = dict(metadata or {})
         resource_key = details.get("source_image") or details.get("original_resource")
         image_key = (d, resource_key or stem)
+        photo_id = photo_resources.get(image_key)
+        if photo_id is None:
+            photo_id = decoded_photo_id(image)
+            photo_resources[image_key] = photo_id
         ip = image_resources.get(image_key)
         if ip is None:
             ip = f"images/{d}_{stem}.png"
@@ -245,6 +295,7 @@ def prepare(
             "image": ip,
             "task": task,
             "source_id": source_id,
+            "photo_id": photo_id,
             "original_size": [height, width],
             "preparation_max_size": max_size,
             "preparation_preview": limit is not None,
@@ -354,12 +405,6 @@ def prepare(
             extra.close()
     if not records:
         raise ValueError("No annotated images matched the requested archives")
-    image_groups = {}
-    for record in records:
-        image_path = record["image"]
-        if image_path in image_groups and image_groups[image_path] != record["source_id"]:
-            raise ValueError(f"One photograph has conflicting source groups: {image_path}")
-        image_groups[image_path] = record["source_id"]
     assign_splits(records, seed)
     records.sort(key=lambda r: r["id"])
     manifest = output / "manifest.json"
@@ -376,7 +421,8 @@ def prepare(
         "seed": seed,
         "preview_limit_per_dataset": limit,
         "preview_only": limit is not None,
-        "split_policy": "source groups; official splits retained; SHA256 ranked 20% validation, 20% test for unsplit sources",
+        "split_policy": "global patient/source and original RGB-photo union; official heldout test>val; train-only conflicts rejected; SHA256 ranked20%validation/20%test for unsplit sources",
+        "photo_identity": "sha256(original RGB uint8 shape as little-endian int64, then contiguous decoded pixels); computed before resizing and cached per original resource",
         "archive_identity_note": "Size, mtime and ZIP member CRCs are recorded; this is not a cryptographic content hash.",
         "archives": [],
     }

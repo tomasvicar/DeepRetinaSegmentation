@@ -93,9 +93,15 @@ The manifest is a JSON **list**. Paths are relative to the manifest's directory:
 }
 ```
 
-Splits are determined by SHA256 of seed plus source group and ranked within source
-family. Official test sets never become training or validation data. Existing
-REFUGE validation stays intact. Preparation requires a **new or empty output directory** and refuses to modify
+Original decoded RGB dimensions and pixels define `photo_id`, independently of
+filenames, annotation task, FOV mask and resize cap. Patient/source IDs and exact
+photo aliases are joined globally before SHA256 seed ranking within source families.
+`split_group_id` records that connected component. Distinct photographs of one
+patient keep separate image resources while sharing a partition. Known heldout
+aliases protect the whole component: test takes precedence over validation, and a
+train-only source aliasing heldout data is rejected. See
+[PHOTO_SPLIT_GROUPING.md](PHOTO_SPLIT_GROUPING.md) for identity details and checks.
+Existing REFUGE validation remains protected from training. Preparation requires a **new or empty output directory** and refuses to modify
 any nonempty destination. Use a new path for a new dataset list, resolution or seed.
 This prevents a failed conversion from corrupting files referenced by a previous
 experiment manifest. A failed initial preparation can leave partial files; inspect
