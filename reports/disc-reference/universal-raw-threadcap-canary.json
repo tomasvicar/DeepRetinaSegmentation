@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "split": "val",
+  "device": "cpu",
+  "threads": 4,
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "profiles": [
+    "raw"
+  ],
+  "validation_photos": 770,
+  "disc_photos": 3,
+  "skipped_no_disc_task": 0,
+  "skipped_no_valid_disc": 0,
+  "preview_only": true,
+  "variants": {
+    "universal/raw": {
+      "checkpoint_sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "checkpoint_path": "/var/home/tom/code/DeepRetinaSegmentation_disc_reference_0d6d908/src/deepretina/pretrained/legacy-single-net-universal.pt",
+      "architecture": {
+        "filters": 32,
+        "in_size": 3,
+        "out_size": 3,
+        "do": 0.0,
+        "depth": 4
+      },
+      "tiling": {
+        "crop_size": 288,
+        "border": 36,
+        "blend": "logits",
+        "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+      },
+      "profile": "raw",
+      "head": 1,
+      "per_photo": [
+        {
+          "photo_id": "sha256:007a3d2357ab7cbcf68a7c4ee81f5d5914df0790f894239c4d389dc6a2d97afd",
+          "dataset": "refuge",
+          "channel_dataset": "refuge",
+          "record_ids": [
+            "refuge_V0010_disc_cup"
+          ],
+          "selected_disc_record_id": "refuge_V0010_disc_cup",
+          "disc": {
+            "dice": 0.9403914342351397,
+            "iou": 0.887489460370995,
+            "precision": 0.9895992478552121,
+            "recall": 0.895845523698069,
+            "tp": 16841,
+            "fp": 177,
+            "fn": 1958,
+            "valid_pixels": 900037
+          }
+        },
+        {
+          "photo_id": "sha256:00c0e8bd86d3cfe8645e29b0e040a3c61b396c1666e636132729e15b087a9bef",
+          "dataset": "g1020",
+          "channel_dataset": "g1020",
+          "record_ids": [
+            "g1020_image_1892_disc_cup"
+          ],
+          "selected_disc_record_id": "g1020_image_1892_disc_cup",
+          "disc": {
+            "dice": 0.930726332056709,
+            "iou": 0.8704285534749278,
+            "precision": 0.8783024052077609,
+            "recall": 0.9898056402439024,
+            "tp": 20778,
+            "fp": 2879,
+            "fn": 214,
+            "valid_pixels": 880740
+          }
+        },
+        {
+          "photo_id": "sha256:017e9e095e2bcb077c80ae5d40e9e07fecdde934e0854da7b2bd53e440e95114",
+          "dataset": "g1020",
+          "channel_dataset": "g1020",
+          "record_ids": [
+            "g1020_image_580_disc_cup"
+          ],
+          "selected_disc_record_id": "g1020_image_580_disc_cup",
+          "disc": {
+            "dice": 0.8856689395720668,
+            "iou": 0.7947987550772802,
+            "precision": 0.9678186022610483,
+            "recall": 0.8163740788903338,
+            "tp": 15067,
+            "fp": 501,
+            "fn": 3389,
+            "valid_pixels": 882924
+          }
+        }
+      ],
+      "all_weights_and_logits_finite": true,
+      "inference_seconds": 9.699206540943123,
+      "disc": {
+        "dice": 0.9203598567560486,
+        "iou": 0.8524690958514012,
+        "precision": 0.93675657415145,
+        "recall": 0.9045272717908218,
+        "tp": 52686,
+        "fp": 3557,
+        "fn": 5561,
+        "valid_pixels": 2663701
+      },
+      "by_dataset": {
+        "refuge": {
+          "dice": 0.9403914342351397,
+          "iou": 0.887489460370995,
+          "precision": 0.9895992478552121,
+          "recall": 0.895845523698069,
+          "tp": 16841,
+          "fp": 177,
+          "fn": 1958,
+          "valid_pixels": 900037
+        },
+        "g1020": {
+          "dice": 0.9112401967638198,
+          "iou": 0.836952461006818,
+          "precision": 0.9138304652644997,
+          "recall": 0.9086645710809167,
+          "tp": 35845,
+          "fp": 3380,
+          "fn": 3603,
+          "valid_pixels": 1763664
+        }
+      },
+      "macro_dataset_disc_dice": 0.9258158154994798
+    }
+  },
+  "seconds": 12.880532962968573,
+  "python": "3.12.13",
+  "torch": "2.6.0+cu124",
+  "script_sha256": "d04bd20a5742bbe4281ff9b8a184200cac9153c23b00515c8e678eed568818e1",
+  "source_commit": "0d6d9087a92f0f07cf75fd1083c590e8af6bb18a",
+  "command": [
+    "/var/home/tom/code/DeepRetinaSegmentation_disc_reference_0d6d908/scripts/evaluate_legacy_disc.py",
+    "--manifest",
+    "/var/home/tom/code/DeepRetinaSegmentation_for_Leipzig/data/unified25/manifest.json",
+    "--checkpoint",
+    "universal=/var/home/tom/code/DeepRetinaSegmentation_disc_reference_0d6d908/src/deepretina/pretrained/legacy-single-net-universal.pt",
+    "--profiles",
+    "raw",
+    "--threads",
+    "4",
+    "--limit",
+    "3",
+    "--reference-report",
+    "/var/home/tom/code/DeepRetinaSegmentation_reference_87cf045/original-strong-raw-val.json",
+    "--output",
+    "/var/home/tom/code/DeepRetinaSegmentation_disc_reference_0d6d908/reports/disc-reference/universal-raw-threadcap-canary.json"
+  ],
+  "cuda_visible_devices": "",
+  "policy": "Same UnifiedDataset val primary GT/FOV support and source attribution as evaluate_original; independent strictlogit>0 head only; no hierarchy, no vascular forward; no test evaluation",
+  "independent_quality_claim": false,
+  "limitations": [
+    "Original photograph training exposure unresolved",
+    "Original training raw/normalized profile unresolved; variants selected on val only",
+    "Common prepared geometry, not publication-coordinate metrics"
+  ],
+  "canary": {
+    "exact_per_photo_counts_match": true,
+    "photos": [
+      "sha256:007a3d2357ab7cbcf68a7c4ee81f5d5914df0790f894239c4d389dc6a2d97afd",
+      "sha256:00c0e8bd86d3cfe8645e29b0e040a3c61b396c1666e636132729e15b087a9bef",
+      "sha256:017e9e095e2bcb077c80ae5d40e9e07fecdde934e0854da7b2bd53e440e95114"
+    ],
+    "reference_report_sha256": "be51ebd051621be9fbe3cd7aa47837fcd464971da898bbb97dc943bfc052a93e"
+  }
+}

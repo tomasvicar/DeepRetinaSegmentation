@@ -1,0 +1,39 @@
+{
+  "status": "finished_exit0_full4variants_and_count_only_composites_verified",
+  "reason": "Wait for existing normalized reference PID1023129 to complete; avoid training contention",
+  "base_source_commit": "0d6d9087a92f0f07cf75fd1083c590e8af6bb18a",
+  "script_sha256": "d04bd20a5742bbe4281ff9b8a184200cac9153c23b00515c8e678eed568818e1",
+  "niceness": 5,
+  "threads": 4,
+  "device": "cpu",
+  "cuda_visible_devices": "",
+  "split": "val",
+  "test_evaluation_performed": false,
+  "profiles": [
+    "raw",
+    "normalized"
+  ],
+  "checkpoint_sha256": {
+    "legacy-single-net-disc-0.pt": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+    "legacy-single-net-disc-1.pt": "8ebf60971813bbaecc9602663034d75cfe7f5c3c9587b7b2a27d056c1cae3605"
+  },
+  "canary_passed": true,
+  "full_result_available": true,
+  "waiter_pid": 1035760,
+  "resource_gates": [
+    "Normalized reference1023129 exited and complete matching val770 report",
+    "load1 <= cpu_count-8",
+    "MemAvailable>=10GiB",
+    "no HOLD file"
+  ],
+  "thread_cap": "torch4, interop1, OpenCV4; OMP/MKL/OPENBLAS4 in launch environment",
+  "final_canary_report": "universal-raw-threadcap-canary.json",
+  "initial_waiter_sha_note": "deferred-launch.json script_sha256 was captured at waiter creation before explicit OpenCV cap; final evaluation self-records actual runtime script SHA",
+  "returncode": 0,
+  "disc_photos": 691,
+  "full_runtime_seconds": 3950.6382047639927,
+  "selected_primary_reference": "disc0/raw",
+  "pooled_winner_alternative": "disc1/raw",
+  "comparison_report": "comparison.json",
+  "composition_report": "composition-verification.json"
+}
