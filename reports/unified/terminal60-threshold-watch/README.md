@@ -55,6 +55,11 @@ cross-threshold source/weights/geometry/GT/conditional/runtime/inventory drift,
 and timeout signals restricted to an owned isolated child instead of training.
 The controller was tested separately from the immutable e88 verifier.
 
-Actual watcher PID, staged program hashes, launch command and subsequent events
-will be recorded beside this note after launch. The existing cup continuation
-PID1303824 is independent and is neither restarted nor signalled by this watcher.
+Watcher started19:04:00 UTC, PID1312198, niceness10 and approximately22MiB RSS.
+Staged source SHA6681f0fced6097516aef9eaa1f2127ea2b992bf8c9ecf805d4e2236f53a9770b,
+verifier e88 and threshold planbf238040 were checked before launch and staged0444.
+The exact command/hashes are in `launch.json`. At launch training was still alive
+with E56 completed, macro0.800123; no actual terminal QA or GPU VAL was started.
+Live files are `~/code/DeepRetinaSegmentation_terminal60_watch_20261110/watcher.log`
+and `result/events.jsonl`. The existing cup continuation PID1303824 is independent
+and is neither restarted nor signalled by this watcher.
