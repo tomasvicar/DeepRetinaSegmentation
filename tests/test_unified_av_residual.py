@@ -6,9 +6,10 @@ from pathlib import Path
 
 import pytest
 import torch
+from torch.nn import functional as F
+
 from deepretina.model import UNet
 from deepretina.unified import CHANNELS, UnifiedConfig, build_unified, load_unified, unified_loss
-from torch.nn import functional as F
 
 
 @pytest.fixture(autouse=True)
@@ -220,3 +221,73 @@ def test_parameter_overhead_is_bounded_for_trial_baseline():
     extra = sum(p.numel() for p in residual.av_residual.parameters())
     assert extra == 3122 and extra / n < 0.01
     assert sum(p.numel() for p in residual.parameters()) == n + extra
+
+
+def test_public_training_config_accepts_residual_architecture(tmp_path, monkeypatch, capsys):
+    import json
+
+    import deepretina.unified_cli as public
+    from deepretina.cli import main
+
+    settings = tmp_path / "residual.json"
+    settings.write_text(json.dumps(asdict(config())))
+    calls = []
+
+    def capture(manifest, output, cfg, **kwargs):
+        calls.append(build_unified(cfg).architecture_spec["name"])
+        return output / "best.pt"
+
+    monkeypatch.setattr(public, "train_unified", capture)
+    main(
+        [
+            "train-unified",
+            "--manifest",
+            "functionality-only.json",
+            "--config",
+            str(settings),
+            "--output",
+            str(tmp_path / "mock-output"),
+            "--device",
+            "cpu",
+        ]
+    )
+    result = json.loads(capsys.readouterr().out)
+    assert calls == ["compact_unet_av_residual"]
+    assert result["experimental"] is True
+
+
+def test_reviewed_hpo_candidate_accepts_residual_without_new_default_plan(tmp_path, monkeypatch):
+    import importlib.util
+    import json
+
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "residual_hpo_transport", root / "scripts/unified_hpo.py"
+    )
+    helper = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(helper)
+    manifest = tmp_path / "functionality-only.json"
+    manifest.write_text("[]")
+    plan = {
+        "schema_version": 1,
+        "purpose": "full_data_validation_search",
+        "execution_code_sha256": helper.code_digest(root),
+        "manifest": str(manifest),
+        "manifest_sha256": helper.digest(manifest),
+        "prepared_content_sha256": "unit-test-only",
+        "screen_epochs": 8,
+        "total_epochs": 60,
+        "candidates": {"residual": asdict(config())},
+    }
+    path = tmp_path / "mock-plan.json"
+    path.write_text(json.dumps(plan))
+    calls = []
+
+    def capture(manifest, output, cfg, **kwargs):
+        calls.append((build_unified(cfg).architecture_spec["name"], kwargs["stop_after_epoch"]))
+        return output / "best.pt"
+
+    monkeypatch.setattr(helper, "train_unified", capture)
+    result = helper.run_trial(path, "residual", tmp_path / "mock-output", device="cpu")
+    assert calls == [("compact_unet_av_residual", 8)]
+    assert result["test_evaluation_performed"] is False

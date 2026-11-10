@@ -96,3 +96,21 @@ first-step zero-head learning; safe checkpoint roundtrip; scratch lineage and
 source fingerprint inclusion. Existing engine/unified regression tests are run
 with the experimental source via PYTHONPATH, CPU-only. Temporary synthetic
 checkpoints are functionality fixtures, not trained quality artifacts.
+
+## Independent full-suite and interface review
+
+The complete d83 repository tree plus the six architecture experiment paths was
+populated under /tmp, including its original test resources. With experimental
+PYTHONPATH, CUDA hidden, CPU thread limits and pytest cacheprovider disabled, the
+full suite passed **561 tests** (58 existing morphology/fork warnings). Outputs
+were confined to /tmp. No HPO/immutable training checkout was modified.
+
+Public train-unified accepts the architecture through flat UnifiedConfig settings.
+HPO run_trial uses the same validator and accepts it only when explicitly present
+in a reviewed new plan. Mocked CPU interface tests exercise both transports without
+performing a real trial. No additional architecture-rejecting allowlist was found;
+no production transport code needed changing. The default HPO candidate list is
+intentionally unchanged, so the option is not silently added to existing searches.
+The architecture-specific set also passes33 CPU cases including the two additional
+public CLI/HPO transport checks. Both transport trainers are mocked; no training
+was started by those interface checks and no actual search plan was launched.
