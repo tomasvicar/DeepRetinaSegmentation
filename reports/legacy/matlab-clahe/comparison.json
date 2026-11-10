@@ -1,0 +1,184 @@
+{
+  "matlab_reference": "R2026b Update1, singleCompThread, CUDA hidden",
+  "scope": "uniform full-range double V-plane CLAHE; full-chain residuals remain explicitly scoped",
+  "no_proprietary_source_read": true,
+  "single_net_python_profile_changed": false,
+  "production_route_activated": false,
+  "full_raw_pipeline_certified": false,
+  "goldens": [
+    {
+      "dataset": "drive",
+      "golden_sha256": "5869305d9f6ba9a4afe3ef644b96bed591a5f4d547adb04c651a05818c2a0016",
+      "stage_sha256": "1e20d601e41a754e8e8b4bd3b07b66df342638a5b6198a7d3a4bbae3770ecdca",
+      "shape": [
+        1222,
+        1182
+      ],
+      "v_identical_input_allpixels": {
+        "mae": 6.451258197995849e-17,
+        "p95": 2.220446049250313e-16,
+        "max": 4.440892098500626e-16,
+        "equal_fraction": 0.38098274443992125,
+        "within_1e_12_fraction": 1.0
+      },
+      "v_identical_input_fov": {
+        "mae": 6.458516714395003e-17,
+        "p95": 2.220446049250313e-16,
+        "max": 4.440892098500626e-16,
+        "equal_fraction": 0.38015679491905074,
+        "within_1e_12_fraction": 1.0
+      },
+      "identical_corrected_rgb": {
+        "mae": 6.266906237293939e-17,
+        "p95": 1.6653345369377348e-16,
+        "max": 7.771561172376096e-16,
+        "equal_fraction": 0.39209193558622235,
+        "within_1e_12_fraction": 1.0
+      },
+      "identical_corrected_stored12": {
+        "mae": 5.063127068287408e-06,
+        "p95": 0.0,
+        "max": 1.0,
+        "equal_fraction": 0.9999949368729317,
+        "within_1e_12_fraction": 0.9999949368729317
+      },
+      "existing_python_photo_with_new_clahe_stored12": {
+        "mae": 16.53546450477892,
+        "p95": 49.0,
+        "max": 189.0,
+        "equal_fraction": 0.04775473942447772,
+        "within_1e_12_fraction": 0.04775473942447772
+      },
+      "existing_raw_proxy_with_new_clahe_stored12": {
+        "mae": 58.59543386948474,
+        "p95": 165.0,
+        "max": 1120.0,
+        "equal_fraction": 0.008919204643495098,
+        "within_1e_12_fraction": 0.008919204643495098
+      },
+      "provided_resized_candidate_stored12": {
+        "mae": 0.0005444549307431725,
+        "p95": 0.0,
+        "max": 36.0,
+        "equal_fraction": 0.9994882866242984,
+        "within_1e_12_fraction": 0.9994882866242984
+      },
+      "candidate_extrapolated_allpixels": {
+        "mae": 5.575703965599479e-07,
+        "p95": 2.9142257958969508e-06,
+        "max": 0.0004957635858980347,
+        "equal_fraction": 0.7371541018533134,
+        "within_1e_12_fraction": 0.7713984453103149
+      },
+      "candidate_corrected_fov": {
+        "mae": 8.221509151695315e-10,
+        "p95": 1.9186973398976903e-09,
+        "max": 3.6509678502660847e-07,
+        "equal_fraction": 0.1119015215034382,
+        "within_1e_12_fraction": 0.7209103097418615
+      },
+      "gaussian_same_extrapolated_documented_support": {
+        "mae": 1.6053528638867233e-16,
+        "p95": 4.440892098500626e-16,
+        "max": 1.5543122344752192e-15,
+        "equal_fraction": 0.15338439665752604,
+        "within_1e_12_fraction": 1.0
+      },
+      "candidate_v_bin_disagreements_fov": 1,
+      "candidate_v_bin_disagreement_max_input_delta": 2.1645429892913626e-07,
+      "raw_proxy_fov_disagreements": 0,
+      "identical_corrected_quantization_residual": {
+        "changed_rgb_values": 15,
+        "maximum_reference_distance_from_half_integer": 4.547473508864641e-13,
+        "all_changes_at_rounding_boundary": true
+      }
+    },
+    {
+      "dataset": "hrf",
+      "golden_sha256": "ccfc06162ca1abd9f2e28daad749a3076fad82851bdce3ce1aaea75b09323536",
+      "stage_sha256": "526bcc5130c8876f85297755948c1bb3f29cbcdf4ddeb2096b81a69d170cbeff",
+      "shape": [
+        1073,
+        1610
+      ],
+      "v_identical_input_allpixels": {
+        "mae": 4.7940780622172535e-17,
+        "p95": 1.1102230246251565e-16,
+        "max": 4.440892098500626e-16,
+        "equal_fraction": 0.47548812466353696,
+        "within_1e_12_fraction": 1.0
+      },
+      "v_identical_input_fov": {
+        "mae": 4.714026435703678e-17,
+        "p95": 1.1102230246251565e-16,
+        "max": 4.440892098500626e-16,
+        "equal_fraction": 0.4822211471385949,
+        "within_1e_12_fraction": 1.0
+      },
+      "identical_corrected_rgb": {
+        "mae": 4.672650542937019e-17,
+        "p95": 1.1102230246251565e-16,
+        "max": 7.771561172376096e-16,
+        "equal_fraction": 0.486246771893903,
+        "within_1e_12_fraction": 1.0
+      },
+      "identical_corrected_stored12": {
+        "mae": 0.0,
+        "p95": 0.0,
+        "max": 0.0,
+        "equal_fraction": 1.0,
+        "within_1e_12_fraction": 1.0
+      },
+      "existing_python_photo_with_new_clahe_stored12": {
+        "mae": 17.25498326387166,
+        "p95": 45.0,
+        "max": 1841.0,
+        "equal_fraction": 0.032637163387280906,
+        "within_1e_12_fraction": 0.032637163387280906
+      },
+      "existing_raw_proxy_with_new_clahe_stored12": {
+        "mae": 67.86649631311795,
+        "p95": 204.0,
+        "max": 3316.0,
+        "equal_fraction": 0.008564959796288404,
+        "within_1e_12_fraction": 0.008564959796288404
+      },
+      "provided_resized_candidate_stored12": {
+        "mae": 0.0012636039574650624,
+        "p95": 0.0,
+        "max": 37.0,
+        "equal_fraction": 0.9988024086137041,
+        "within_1e_12_fraction": 0.9988024086137041
+      },
+      "candidate_extrapolated_allpixels": {
+        "mae": 1.3799788774750502e-07,
+        "p95": 5.553583886111486e-07,
+        "max": 0.0009029168172001167,
+        "equal_fraction": 0.872762074561175,
+        "within_1e_12_fraction": 0.8910857312656413
+      },
+      "candidate_corrected_fov": {
+        "mae": 6.333477179882084e-10,
+        "p95": 1.038884694937175e-09,
+        "max": 6.00129359651369e-07,
+        "equal_fraction": 0.13048949349399286,
+        "within_1e_12_fraction": 0.863326110781429
+      },
+      "gaussian_same_extrapolated_documented_support": {
+        "mae": 1.1400245398652072e-16,
+        "p95": 4.440892098500626e-16,
+        "max": 1.5543122344752192e-15,
+        "equal_fraction": 0.1527110609202381,
+        "within_1e_12_fraction": 1.0
+      },
+      "candidate_v_bin_disagreements_fov": 3,
+      "candidate_v_bin_disagreement_max_input_delta": 4.1589088906057725e-07,
+      "raw_proxy_fov_disagreements": 0,
+      "identical_corrected_quantization_residual": {
+        "changed_rgb_values": 0,
+        "maximum_reference_distance_from_half_integer": 0,
+        "all_changes_at_rounding_boundary": true
+      }
+    }
+  ]
+}
