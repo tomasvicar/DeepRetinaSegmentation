@@ -101,7 +101,7 @@ def original_operation(rgb, fov, models, av, device, kwargs):
     )
 
 
-def unified_operation(rgb, fov, model, config, device, kwargs):
+def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5):
     prepared = prepare_single_net(rgb, fov=fov, normalized=False, **kwargs)
     image = torch.from_numpy(prepared.image.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(
@@ -112,10 +112,12 @@ def unified_operation(rgb, fov, model, config, device, kwargs):
     domain = prepared.geometry.restore(prepared.fov.astype(np.uint8), order=0) > 0
     restored[[0, 3, 4]] *= domain[None]
     restored[1:3, ~domain] = 0.5
-    return decode_probabilities(restored, supported=model.supervised_channels)
+    return decode_probabilities(restored, threshold=threshold, supported=model.supervised_channels)
 
 
 def benchmark(args):
+    if not np.isfinite(args.unified_threshold) or not 0 < args.unified_threshold < 1:
+        raise ValueError("Unified threshold must be finite and strictly between0 and1")
     device = resolve_device(args.device)
     paths = {name: getattr(args, name) for name in ("vessel", "disc", "universal", "av")}
     all_paths = {**paths, "unified": args.unified, "reference": args.reference_report}
@@ -160,7 +162,9 @@ def benchmark(args):
         raise ValueError("Benchmark requires the declared raw legacy25 unified profile")
     with torch.inference_mode():
         unified_timing = measure(
-            lambda: unified_operation(rgb, fov, model, config, device, kwargs),
+            lambda: unified_operation(
+                rgb, fov, model, config, device, kwargs, threshold=args.unified_threshold
+            ),
             device,
             warmup=args.warmup,
             repeats=args.repeats,
@@ -193,6 +197,7 @@ def benchmark(args):
             "timing": original_timing,
         },
         "unified": {
+            "threshold": args.unified_threshold,
             "checkpoint_sha256": before["unified"],
             "parameters": sum(p.numel() for p in model.parameters()),
             "checkpoint_bytes": args.unified.stat().st_size,
@@ -230,6 +235,9 @@ def main():
     parser.add_argument("--dataset", required=True)
     parser.add_argument("--field-of-view-degrees", type=float)
     parser.add_argument("--device", default="auto")
+    parser.add_argument(
+        "--unified-threshold", type=float, default=0.5, help="Frozen selected VAL threshold"
+    )
     parser.add_argument("--warmup", type=int, default=1)
     parser.add_argument("--repeats", type=int, default=3)
     args = parser.parse_args()

@@ -47,12 +47,20 @@ selected-reference and checkpoint hashes, model parameters, checkpoint bytes,
 config and checkpoint epoch are recorded. Checkpoint/reference changes during
 the measurement abort it. Timing reads no labels and makes no accuracy claim.
 
+If VAL selected a threshold other than0.5, supply that exact frozen value with
+`--unified-threshold`; the measured mask decoding and report retain it. Default
+is0.5. This changes the common vessel/disc/cup threshold and A/V vessel gate,
+not the original model thresholds or conditional A/V class decision. Benchmarking
+does not select or tune a threshold; complete VAL selection first.
+
 One image, an E8 screen, or a parameter count does not establish final improvement.
 Repeat after final validation selection on representative raw image geometries,
 then report timing alongside the independently evaluated quality comparison.
-Nine focused CPU tests protect selected reference SHA/profile checks, native
+Eighteen focused CPU tests protect selected reference SHA/profile checks, native
 dedicated heads, strict zero threshold, calibrated AV vessel input, nonfinite
-failure and unified configured geometry/domain/containment.
+failure and unified configured geometry/domain/containment, including selected
+threshold propagation into timed decoding and report output. All18 passed on
+Ada CPU1/nice10 with CUDA hidden (0.85s, 2026-11-10); Ruff/format passed.
 
 Input provenance uses one byte snapshot of each RGB/FOV file before decoding;
 reported hashes identify those exact timed inputs even if a path changes later.

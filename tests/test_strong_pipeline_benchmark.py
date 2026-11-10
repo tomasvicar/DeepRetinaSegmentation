@@ -169,6 +169,40 @@ def test_unified_uses_checkpoint_geometry_and_masks_original_frame(benchmark_mod
     assert result[4, 1, 0]
 
 
+def test_selected_threshold_controls_vessel_gate_and_disc_cup(benchmark_module, monkeypatch):
+    m = benchmark_module
+    fov = np.ones((2, 3), dtype=bool)
+    geometry = SimpleNamespace(restore=lambda value, order: value)
+    prepared = SimpleNamespace(image=np.zeros((2, 3, 3), np.uint8), fov=fov, geometry=geometry)
+    monkeypatch.setattr(m, "prepare_single_net", lambda *a, **kw: prepared)
+    monkeypatch.setattr(m, "restore_probabilities", lambda p, g: p)
+    probability = np.full((5, 2, 3), 0.4, np.float32)
+    probability[1] = 0.7
+    probability[2] = 0.3
+    probability[3, 0, 0] = 0.2
+    monkeypatch.setattr(m, "predict_probabilities", lambda *a: probability.copy())
+    model = SimpleNamespace(supervised_channels=[True] * 5)
+    config = SimpleNamespace(tile_size=96, overlap=16)
+    baseline = m.unified_operation(None, fov, model, config, "cpu", {})
+    selected = m.unified_operation(None, fov, model, config, "cpu", {}, threshold=0.35)
+    assert not baseline.any()
+    assert selected[0].all() and selected[1].all() and not selected[2].any()
+    assert not selected[3, 0, 0] and not selected[4, 0, 0]
+    assert selected[3, 1, 1] and selected[4, 1, 1]
+
+
+@pytest.mark.parametrize("threshold", [float("nan"), float("inf"), 0, 1, -0.2])
+def test_invalid_selected_threshold_rejected_before_device_initialization(
+    benchmark_module, monkeypatch, threshold
+):
+    def forbidden(*a):
+        pytest.fail("Device resolution must not precede threshold validation")
+
+    monkeypatch.setattr(benchmark_module, "resolve_device", forbidden)
+    with pytest.raises(ValueError, match="Unified threshold"):
+        benchmark_module.benchmark(SimpleNamespace(unified_threshold=threshold))
+
+
 def test_palette_fov_uses_displayed_intensity_not_indices(tmp_path, benchmark_module):
     from PIL import Image
 
@@ -268,8 +302,9 @@ def test_benchmark_report_retains_timed_input_snapshot_hashes(
         calls.append("original")
         return np.zeros((5, 2, 3), bool)
 
-    def inspect_unified(rgb, mask, *args):
+    def inspect_unified(rgb, mask, *args, threshold):
         assert (rgb == 80).all() and mask.all()
+        assert threshold == 0.35
         calls.append("unified")
         return np.zeros((5, 2, 3), bool)
 
@@ -292,9 +327,11 @@ def test_benchmark_report_retains_timed_input_snapshot_hashes(
         dataset="drive",
         field_of_view_degrees=None,
         device="cpu",
+        unified_threshold=0.35,
         warmup=0,
         repeats=1,
     )
     report = m.benchmark(args)
+    assert report["unified"]["threshold"] == 0.35
     assert calls == ["original", "unified"]
     assert {key: report[key] for key in snapshots} == snapshots
