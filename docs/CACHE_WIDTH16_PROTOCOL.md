@@ -32,3 +32,16 @@ cache benchmark. The paired CPU loader gates provide separate bounded evidence.
 Only after this gate may this new cached run continue to its eight-epoch screen.
 No final model quality, test score or universal epoch speedup is established by
 the plan. All old source87 trials and original ownCloud files remain unchanged.
+
+## Actual launch
+
+The preceding strong-augmentation screen completed E8 and passed CPU QA with an
+independent milestone. The new cached run started on Ada at 14:48:35 UTC,
+Python PID1067139, only the known desktop GPU processes present. It stops after
+E1 for the preservation gate. The launcher inherits the original no-OMP/MKL
+override policy; current Torch parent thread/inter-op counts are20/20, whereas
+historical counts were not recorded. No old checkpoint was resumed.
+
+[Launch metadata](../reports/unified/width16-cached-e1.launch.json) records the
+exact command, source, plan/cache/canonical pins and GPU UUID. A successful launch
+is not a completed gate or a final-quality claim.
