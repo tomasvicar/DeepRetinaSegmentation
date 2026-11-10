@@ -1,0 +1,64 @@
+........................................................................ [  2%]
+........................................................................ [  5%]
+........................................................................ [  8%]
+........................................................................ [ 11%]
+........................................................................ [ 14%]
+........................................................................ [ 17%]
+........................................................................ [ 20%]
+........................................................................ [ 22%]
+........................................................................ [ 25%]
+........................................................................ [ 28%]
+........................................................................ [ 31%]
+........................................................................ [ 34%]
+........................................................................ [ 37%]
+........................................................................ [ 40%]
+........................................................................ [ 42%]
+........................................................................ [ 45%]
+........................................................................ [ 48%]
+........................................................................ [ 51%]
+........................................................................ [ 54%]
+........................................................................ [ 57%]
+........................................................................ [ 60%]
+........................................................................ [ 62%]
+........................................................................ [ 65%]
+........................................................................ [ 68%]
+........................................................................ [ 71%]
+........................................................................ [ 74%]
+........................................................................ [ 77%]
+........................................................................ [ 80%]
+........................................................................ [ 82%]
+........................................................................ [ 85%]
+........................................................................ [ 88%]
+........................................................................ [ 91%]
+........................................................................ [ 94%]
+........................................................................ [ 97%]
+.....................................................................    [100%]
+=============================== warnings summary ===============================
+tests/test_legacy_cli.py: 2 warnings
+tests/test_legacy_preprocessing.py: 1 warning
+tests/test_prepare_corpus_v2.py: 9 warnings
+tests/test_prepare_unified_data.py: 15 warnings
+tests/test_unified_cli.py: 2 warnings
+  /var/home/tom/code/DeepRetinaSegmentation_v2_release_integration/src/deepretina/legacy/preprocessing.py:68: FutureWarning: `binary_closing` is deprecated since version 0.26 and will be removed in version 0.28. Use `skimage.morphology.closing` instead.
+    mask = binary_closing(mask, disk(10, decomposition="crosses"))
+
+tests/test_legacy_cli.py: 2 warnings
+tests/test_legacy_preprocessing.py: 1 warning
+tests/test_prepare_corpus_v2.py: 9 warnings
+tests/test_prepare_unified_data.py: 15 warnings
+tests/test_unified_cli.py: 2 warnings
+  /var/home/tom/code/DeepRetinaSegmentation_v2_release_integration/src/deepretina/legacy/preprocessing.py:69: FutureWarning: `binary_erosion` is deprecated since version 0.26 and will be removed in version 0.28. Use `skimage.morphology.erosion` instead. Note the pixel shift by 1 for even-sized footprints (see docstring notes).
+    mask = sk_binary_erosion(mask, disk(6, decomposition="crosses"))
+
+tests/test_unified.py::test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly[2-basic]
+tests/test_unified.py::test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly[2-mild]
+tests/test_unified.py::test_prefetched_samples_do_not_count_as_delivered_coverage
+  /var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py:624: UserWarning: This DataLoader will create 2 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+    warnings.warn(
+
+tests/test_unified.py: 18 warnings
+  /var/home/tom/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=4101493) is multi-threaded, use of fork() may lead to deadlocks in the child.
+    self.pid = os.fork()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2517 passed, 79 warnings in 51.61s
