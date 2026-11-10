@@ -37,6 +37,9 @@ def reference_files(tmp_path, benchmark_module):
         "single_net_normalized": False,
         "av_preprocessing_profile": "vesclass_matlab_provided_fov_calibrated",
         "disc_reference_variant": "disc0/raw",
+        "manifest_sha256": "a" * 64,
+        "prepared_content_sha256": "b" * 64,
+        "policy": "Synthetic selected quality domain",
     }
     for name, key in keys.items():
         path = tmp_path / (name + ".pt")
@@ -269,6 +272,7 @@ def test_benchmark_report_retains_timed_input_snapshot_hashes(
     paths, reference = reference_files
     selected_policy = cup_policy
     if selected_policy == "inside-disc":
+        reference["family"] = "optional_fresh_paired_cup_experiment"
         reference["fresh_paired_cup_component"] = {
             "cup_variant": "disc0",
             "reference_context": "disc0",
@@ -357,6 +361,7 @@ def test_explicit_cup_policy_binds_completed_quality_reference(
     m = benchmark_module
     paths, report = reference_files
     report["disc_reference_variant"] = variant
+    report["family"] = "optional_fresh_paired_cup_experiment"
     disc = variant.split("/")[0]
     report["fresh_paired_cup_component"] = {
         "cup_variant": disc,
@@ -414,3 +419,30 @@ def test_cup_clip_exact_strict_source_semantics_before_restoration(benchmark_mod
     assert not clipped[4, 0, 0] and not clipped[4, 1, 2]  # zero logits remain background.
     assert baseline[4].sum() == 5 and clipped[4].sum() == 2
     assert torch.count_nonzero(native["universal"][2]) == 5  # weights/logits unchanged.
+
+
+@pytest.mark.parametrize("policy", ["native", "inside-disc"])
+def test_structurally_exact_completed_reference_metadata(benchmark_module, monkeypatch, policy):
+    import json
+
+    m = benchmark_module
+    path = Path(__file__).parent / "reference/completed_cup_policy" / (policy + ".json")
+    report = json.loads(path.read_text())
+    assert report["family"] == "optional_fresh_paired_cup_experiment"
+    assert (
+        report["prepared_content_sha256"]
+        == "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e"
+    )
+    keys = {
+        "vessel": "vessel_checkpoint_sha256",
+        "disc": "disc_checkpoint_sha256",
+        "universal": "checkpoint_sha256",
+        "av": "av_checkpoint_sha256",
+    }
+    paths = {key: Path(key + ".pt") for key in keys}
+    # Actual model files are never opened: retain the real metadata hash contract.
+    monkeypatch.setattr(m, "sha256", lambda path: report[keys[path.stem]])
+    m.validate_reference(report, paths, cup_policy=policy, disc_variant="disc0/raw")
+    report["prepared_content_sha256"] = "missing"
+    with pytest.raises(ValueError, match="canonical"):
+        m.validate_reference(report, paths, cup_policy=policy, disc_variant="disc0/raw")

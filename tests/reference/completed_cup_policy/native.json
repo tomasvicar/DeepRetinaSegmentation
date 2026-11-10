@@ -1,0 +1,33 @@
+{
+  "family": "optional_fresh_paired_cup_experiment",
+  "split": "val",
+  "photos": 770,
+  "preview_only": false,
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "checkpoint_sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+  "av_checkpoint_sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+  "vessel_checkpoint_sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+  "disc_checkpoint_sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+  "single_net_normalized": false,
+  "av_preprocessing_profile": "vesclass_matlab_provided_fov_calibrated",
+  "disc_reference_variant": "disc0/raw",
+  "policy": "Untouched historical non-cup components; separately labelled fresh-native or same-forward clipped cup; historical native numeric drift logged separately",
+  "fresh_paired_cup_component": {
+    "cup_variant": "native",
+    "reference_context": "disc0",
+    "noncup_components": "Exact historical vascular/disc counts and AVaccuracy; fresh standalone disc only used for clipping and drift diagnostics",
+    "policy": "Fresh native cup strictlogit>0 vs cup intersect SAMEforward fresh dedicated disc strictlogit>0; no GTused for clipping",
+    "historical_cup_numeric_drift": "Logged separately; baseline for postprocessing is fresh native cup, NOT historical cup",
+    "reused_prefix_photos": 157,
+    "new_photos": 455,
+    "no_test_evaluation": true,
+    "no_independent_quality_claim": true
+  },
+  "_fixture_provenance": {
+    "source_commit": "b5804c76d5e24992cf6d684807122589ad30c19d",
+    "source_report_sha256": "add542622b2ba2e71487ac3ae6ec256cf350a0d6c2e9bfdba9ebd42288860205",
+    "per_photo_counts_removed": true,
+    "metadata_values_unchanged": true
+  }
+}
