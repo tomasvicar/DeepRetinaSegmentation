@@ -64,3 +64,24 @@ Seven CPU/SQLite fixture tests pass in2.07s, including native ASHA peer pruning,
 all four rungs, rejection of facade completion, bounds, affinity, config cap,
 writer locking and restart/idempotence. No production study or GPU work was
 started by these tests. Actual baseline fixtures are metadata only.
+
+## Finite corpus v2 study
+
+`protocol_v2.json` is a separate finite study on frozen source `6b3dfad`;
+`protocol.json` and existing v1 study behavior remain unchanged. The seven queued
+candidates are control, vessel loss2, vessel positive2, Dice balance, patch256/batch8,
+basic augmentation, and strong augmentation. Trial0 is the actual measured control
+on Ada. It reports real native ASHA rungs3/9/27/60 and overrides pruning until60,
+unless failed or past deadline. Other candidates follow native pruning. No imported
+v1 baseline, synthetic control score, or extra random candidate is permitted.
+
+All seven use TRAIN2529 photos/5700 annotation records across21 datasets; coverage
+QA derives counts from the pinned plan and verifies the embedded geometry policy.
+VAL770 is used for exploratory selection; TEST856 remains excluded.
+
+The initial v2 protocol uses canonical inputs and no derived cache. Regenerate a
+protocol with `python -m deepretina_optuna.v2 --source-commit ...
+--execution-code-sha256 ... --training-source-sha256 ... --output ...` when freezing
+new source. Use new database, state, queue, envelope, and output roots; never attach
+v2 to a v1 database or queues. Freeze all protocol/profile hashes before first DB
+creation. The protocol alone launches no worker or job.

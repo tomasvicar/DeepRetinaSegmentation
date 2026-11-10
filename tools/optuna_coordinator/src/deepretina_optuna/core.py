@@ -21,6 +21,9 @@ from pathlib import Path
 import optuna
 from optuna.trial import TrialState
 
+from .v2 import NAMES, is_finite
+from .v2 import validate_protocol as validate_v2_protocol
+
 RUNGS = (3, 9, 27, 60)
 
 
@@ -61,7 +64,9 @@ def local_filesystem(path):
         kind in {"btrfs", "ext4", "xfs", "tmpfs", "overlay", "zfs"},
         "SQLite must be LOCAL filesystem, not NFS/network: " + kind,
     )
-    require("owncloud" not in str(path).lower(), "No database in synchronized ownCloud tree")
+    require(
+        "owncloud" not in str(path).lower(), "No database in synchronized ownCloud tree"
+    )
     return kind
 
 
@@ -86,11 +91,16 @@ def validate_params(params, p):
 def config_for(params, profile, p):
     validate_params(params, p)
     require(profile in p["profiles"], "Unknown profile kind")
-    config = copy.deepcopy(p["config_template"])
-    for name, value in params.items():
-        if name != "geometry":
-            config[name] = value
-    config["patch_size"], config["batch_size"] = map(int, params["geometry"].split("x"))
+    if is_finite(p):
+        config = copy.deepcopy(p["candidate_configs"][params["candidate"]])
+    else:
+        config = copy.deepcopy(p["config_template"])
+        for name, value in params.items():
+            if name != "geometry":
+                config[name] = value
+        config["patch_size"], config["batch_size"] = map(
+            int, params["geometry"].split("x")
+        )
     config["workers"] = p["profiles"][profile]["workers"]
     config["device"] = "cuda:0"
     require(
@@ -104,13 +114,19 @@ def csv_scores(text, epoch, config):
     require(isinstance(text, str), "CSV text required")
     rows = list(csv.DictReader(io.StringIO(text)))
     require(
-        len(rows) == epoch and [int(r["epoch"]) for r in rows] == list(range(1, epoch + 1)),
+        len(rows) == epoch
+        and [int(r["epoch"]) for r in rows] == list(range(1, epoch + 1)),
         "CSV not contiguous through actual epoch",
     )
     values = []
     for i, row in enumerate(rows, 1):
-        require(all(math.isfinite(float(v)) for v in row.values()), "Nonfinite CSV field")
-        require(int(row["steps"]) == i * 8192 // config["batch_size"], "CSV step budget differs")
+        require(
+            all(math.isfinite(float(v)) for v in row.values()), "Nonfinite CSV field"
+        )
+        require(
+            int(row["steps"]) == i * 8192 // config["batch_size"],
+            "CSV step budget differs",
+        )
         value = float(row["val_selection_score"])
         require(
             0 <= value <= 1 and value == float(row["val_macro_dataset_mean_dice"]),
@@ -129,8 +145,19 @@ class Coordinator:
         self.guard = threading.RLock()
         self.closed = False
         p = self.protocol
+        self.finite = is_finite(p)
         require(
-            p["rungs"] == list(RUNGS) and 1 <= p["max_new_configs"] <= 48, "Invalid study bounds"
+            p.get("schema_version") == (2 if self.finite else 1),
+            "Unsupported coordinator protocol schema",
+        )
+        self.training_photos = p["plan_template"]["training_photos"]
+        require(
+            type(self.training_photos) is int and self.training_photos > 0,
+            "Invalid protocol training photo count",
+        )
+        require(
+            p["rungs"] == list(RUNGS) and 1 <= p["max_new_configs"] <= 48,
+            "Invalid study bounds",
         )
         require(
             p["maximum_meta_gpus"] <= 5 and p["maximum_own_gpus"] <= 3,
@@ -151,33 +178,38 @@ class Coordinator:
             and p["config_template"]["allow_historical_exposure"] is False,
             "Invalid fixed training budget/lineage",
         )
-        require(
-            digest(p["plan_template"])
-            == "3362cfbd178a3f8ffe4c2a725a3a78e654476b06e9c41e01cf4ec3857cf20982",
-            "Approved3157 source/data template changed",
-        )
-        fixed = {
-            k: v
-            for k, v in p["config_template"].items()
-            if k not in {*p["search_space"], "patch_size", "batch_size", "workers"}
-        }
-        require(
-            digest(fixed) == "a54f19799773f336f0e7286400cd33eb604d3c6c9a46b9ecfdbb624ac80197c9",
-            "Fixed nonsearch configuration changed",
-        )
-        for name, low, high in [
-            ("lr", 1e-4, 1e-3),
-            ("weight_decay", 1e-6, 1e-3),
-            ("av_weight", 0.5, 3.0),
-        ]:
+        if self.finite:
+            validate_v2_protocol(p)
+        else:
             require(
-                p["search_space"][name] == {"kind": "float", "low": low, "high": high, "log": True},
-                "Continuous search bounds changed",
+                digest(p["plan_template"])
+                == "3362cfbd178a3f8ffe4c2a725a3a78e654476b06e9c41e01cf4ec3857cf20982",
+                "Approved3157 source/data template changed",
             )
-        require(
-            p["search_space"]["geometry"]["choices"] == ["256x4", "256x8", "384x4"],
-            "Geometry search bounds changed",
-        )
+            fixed = {
+                k: v
+                for k, v in p["config_template"].items()
+                if k not in {*p["search_space"], "patch_size", "batch_size", "workers"}
+            }
+            require(
+                digest(fixed)
+                == "a54f19799773f336f0e7286400cd33eb604d3c6c9a46b9ecfdbb624ac80197c9",
+                "Fixed nonsearch configuration changed",
+            )
+            for name, low, high in [
+                ("lr", 1e-4, 1e-3),
+                ("weight_decay", 1e-6, 1e-3),
+                ("av_weight", 0.5, 3.0),
+            ]:
+                require(
+                    p["search_space"][name]
+                    == {"kind": "float", "low": low, "high": high, "log": True},
+                    "Continuous search bounds changed",
+                )
+            require(
+                p["search_space"]["geometry"]["choices"] == ["256x4", "256x8", "384x4"],
+                "Geometry search bounds changed",
+            )
         self.protocol_sha = digest(p)
         self.search_sha = digest(p["search_space"])
         self.deadline = timestamp(p["deadline_utc"])
@@ -191,9 +223,15 @@ class Coordinator:
             )
             if "config_fixed" in b:
                 require(
-                    b["config_fixed"] == {"workers": p["profiles"][b["profile"]]["workers"]},
+                    b["config_fixed"]
+                    == {"workers": p["profiles"][b["profile"]]["workers"]},
                     "Profile worker count differs",
                 )
+        if self.finite:
+            require(
+                p["control_worker_id"] in self.profiles,
+                "Finite control worker is not approved",
+            )
         path = Path(db_path).absolute()
         path.parent.mkdir(parents=True, exist_ok=True)
         self.filesystem = local_filesystem(path.parent)
@@ -205,7 +243,8 @@ class Coordinator:
                 db.execute("PRAGMA synchronous=FULL")
             path.chmod(0o600)
             self.storage = optuna.storages.RDBStorage(
-                "sqlite:///" + str(path), engine_kwargs={"connect_args": {"timeout": 10}}
+                "sqlite:///" + str(path),
+                engine_kwargs={"connect_args": {"timeout": 10}},
             )
             optuna.logging.set_verbosity(optuna.logging.WARNING)
             self.study = optuna.create_study(
@@ -213,19 +252,28 @@ class Coordinator:
                 storage=self.storage,
                 load_if_exists=True,
                 direction="maximize",
-                sampler=optuna.samplers.TPESampler(seed=42, constant_liar=True, multivariate=True),
+                sampler=optuna.samplers.TPESampler(
+                    seed=42, constant_liar=True, multivariate=True
+                ),
                 pruner=optuna.pruners.SuccessiveHalvingPruner(
-                    min_resource=3, reduction_factor=3, min_early_stopping_rate=0, bootstrap_count=0
+                    min_resource=3,
+                    reduction_factor=3,
+                    min_early_stopping_rate=0,
+                    bootstrap_count=0,
                 ),
             )
             previous = self.study.user_attrs.get("protocol_sha256")
-            require(previous in (None, self.protocol_sha), "Existing study protocol changed")
+            require(
+                previous in (None, self.protocol_sha), "Existing study protocol changed"
+            )
             bindings = digest(self.profiles)
             require(
                 self.study.user_attrs.get("bindings_sha256") in (None, bindings),
                 "Approved worker bindings changed",
             )
             self._restore_sampler_state()
+            if self.finite:
+                self._ensure_finite_queue()
             self.study.set_user_attr("protocol_sha256", self.protocol_sha)
             self.study.set_user_attr("bindings_sha256", bindings)
             self.study.set_user_attr(
@@ -244,10 +292,39 @@ class Coordinator:
             self.close()
             raise
 
+    def _ensure_finite_queue(self):
+        existing = self._trials()
+        require(
+            len(existing) <= len(NAMES), "Finite study already contains extra trials"
+        )
+        for index, trial in enumerate(existing):
+            require(
+                trial.number == index
+                and trial.user_attrs.get("controlled_candidate") == NAMES[index]
+                and trial.user_attrs.get("is_control") is (index == 0)
+                and trial.system_attrs.get("fixed_params")
+                == {"candidate": NAMES[index]},
+                "Existing finite candidate inventory differs",
+            )
+        for index in range(len(existing), len(NAMES)):
+            self.study.enqueue_trial(
+                {"candidate": NAMES[index]},
+                user_attrs={
+                    "controlled_candidate": NAMES[index],
+                    "is_control": index == 0,
+                },
+            )
+        self._persist_sampler_state()
+
     def _rngs(self):
-        require(optuna.__version__ == "5.0.0", "Sampler state requires pinned Optuna5.0.0")
+        require(
+            optuna.__version__ == "5.0.0", "Sampler state requires pinned Optuna5.0.0"
+        )
         sampler = self.study.sampler
-        return {"tpe": sampler._rng.rng, "random_sampler": sampler._random_sampler._rng.rng}
+        return {
+            "tpe": sampler._rng.rng,
+            "random_sampler": sampler._random_sampler._rng.rng,
+        }
 
     def _parameter_history(self):
         # Reporting, promotions and session timestamps do not consume sampler RNG.
@@ -267,7 +344,8 @@ class Coordinator:
     @staticmethod
     def _decode_rng(value):
         require(
-            set(value) == {"algorithm", "keys", "position", "has_gauss", "cached_gaussian"},
+            set(value)
+            == {"algorithm", "keys", "position", "has_gauss", "cached_gaussian"},
             "Sampler RNG field inventory differs",
         )
         require(value["algorithm"] == "MT19937", "Unsupported sampler RNG algorithm")
@@ -287,10 +365,17 @@ class Coordinator:
             "Invalid cached Gaussian flag",
         )
         require(
-            type(value["cached_gaussian"]) is float and math.isfinite(value["cached_gaussian"]),
+            type(value["cached_gaussian"]) is float
+            and math.isfinite(value["cached_gaussian"]),
             "Invalid cached Gaussian value",
         )
-        return ("MT19937", keys, value["position"], value["has_gauss"], value["cached_gaussian"])
+        return (
+            "MT19937",
+            keys,
+            value["position"],
+            value["has_gauss"],
+            value["cached_gaussian"],
+        )
 
     def _persist_sampler_state(self, phase="committed"):
         value = {
@@ -300,7 +385,9 @@ class Coordinator:
             "bindings_sha256": digest(self.profiles),
             "history_sha256": digest(self._parameter_history()),
             "phase": phase,
-            "streams": {name: self._encode_rng(rng) for name, rng in self._rngs().items()},
+            "streams": {
+                name: self._encode_rng(rng) for name, rng in self._rngs().items()
+            },
         }
         value["sha256"] = digest(value)
         # One SQLite-backed JSON attribute commits both streams together.
@@ -326,7 +413,9 @@ class Coordinator:
                 "Sampler state field inventory differs",
             )
             payload = {k: v for k, v in saved.items() if k != "sha256"}
-            require(saved.get("sha256") == digest(payload), "Sampler state checksum differs")
+            require(
+                saved.get("sha256") == digest(payload), "Sampler state checksum differs"
+            )
             require(
                 saved["schema_version"] == 1
                 and saved["optuna_version"] == optuna.__version__
@@ -335,7 +424,9 @@ class Coordinator:
                 and saved["phase"] in {"committed", "before_ask"},
                 "Sampler state pins differ",
             )
-            require(set(saved["streams"]) == set(rngs), "Sampler stream inventory differs")
+            require(
+                set(saved["streams"]) == set(rngs), "Sampler stream inventory differs"
+            )
             decoded = {name: self._decode_rng(saved["streams"][name]) for name in rngs}
             if saved["history_sha256"] == digest(history):
                 for name, rng in rngs.items():
@@ -343,7 +434,10 @@ class Coordinator:
                 self.sampler_restoration = "exact_saved_streams"
                 return
         if not history:
-            require(saved is None, "Unexpected sampler state/history mismatch for empty study")
+            require(
+                saved is None,
+                "Unexpected sampler state/history mismatch for empty study",
+            )
             self.sampler_restoration = "new_study_seed42"
         else:
             # Old versions saved no RNG. An interrupted ask can also leave trial
@@ -360,7 +454,8 @@ class Coordinator:
             }
             context_sha = digest(context)
             seeds = {
-                name: int(digest({"context": context_sha, "stream": name})[:8], 16) for name in rngs
+                name: int(digest({"context": context_sha, "stream": name})[:8], 16)
+                for name in rngs
             }
             for name, rng in rngs.items():
                 if seeds[name] == 42:
@@ -421,6 +516,15 @@ class Coordinator:
             plan["derived_cache"] = None
         task = {
             "schema_version": 1,
+            **(
+                {
+                    "study_kind": "finite_v2_controlled",
+                    "controlled_candidate": t.user_attrs["controlled_candidate"],
+                    "is_control": t.user_attrs["is_control"],
+                }
+                if self.finite
+                else {}
+            ),
             "study_id": p["study_id"],
             "trial_number": t.number,
             "trial": name,
@@ -441,7 +545,9 @@ class Coordinator:
             "source_commit": plan["source_commit"],
             "execution_code_sha256": plan["execution_code_sha256"],
             "canonical_sha256": plan["prepared_content_sha256"],
-            "cache_sha256": plan["derived_cache"]["fingerprint"] if plan["derived_cache"] else None,
+            "cache_sha256": plan["derived_cache"]["fingerprint"]
+            if plan["derived_cache"]
+            else None,
             "deadline_utc": p["deadline_utc"],
             "output": str(Path(meta["output_root"]) / p["study_id"] / name),
             "runtime": copy.deepcopy(p["profiles"][meta["profile"]]),
@@ -463,33 +569,51 @@ class Coordinator:
                     return frozen.user_attrs["pending_task"]
             if self.clock() >= self.deadline:
                 return None
-            require(
-                any(
-                    t.user_attrs.get("origin") == "manual_baseline"
-                    and t.state == TrialState.COMPLETE
-                    for t in self._trials()
-                ),
-                "Import actual reviewed full60 baseline before asking",
-            )
-            new = [t for t in self._trials() if t.user_attrs.get("origin") == "optuna_new"]
+            if not self.finite:
+                require(
+                    any(
+                        t.user_attrs.get("origin") == "manual_baseline"
+                        and t.state == TrialState.COMPLETE
+                        for t in self._trials()
+                    ),
+                    "Import actual reviewed full60 baseline before asking",
+                )
+            new = [
+                t for t in self._trials() if t.user_attrs.get("origin") == "optuna_new"
+            ]
             if len(new) >= self.protocol["max_new_configs"]:
                 return None
+            if self.finite and not any(t.state == TrialState.WAITING for t in self._trials()):
+                return None  # Never sample random extras, including after interrupted asks.
             kind = binding["profile"]
-            meta_count = sum(t.user_attrs.get("meta", {}).get("profile") == "meta" for t in active)
-            own_count = len(active) - meta_count
-            if (kind == "meta" and meta_count >= self.protocol["maximum_meta_gpus"]) or (
-                kind != "meta" and own_count >= self.protocol["maximum_own_gpus"]
+            if (
+                self.finite
+                and not new
+                and worker_id != self.protocol["control_worker_id"]
             ):
+                return None
+            meta_count = sum(
+                t.user_attrs.get("meta", {}).get("profile") == "meta" for t in active
+            )
+            own_count = len(active) - meta_count
+            if (
+                kind == "meta" and meta_count >= self.protocol["maximum_meta_gpus"]
+            ) or (kind != "meta" and own_count >= self.protocol["maximum_own_gpus"]):
                 return None
             if gpu_uuid:
                 require(
                     not any(
-                        t.user_attrs.get("meta", {}).get("gpu_uuid") == gpu_uuid for t in active
+                        t.user_attrs.get("meta", {}).get("gpu_uuid") == gpu_uuid
+                        for t in active
                     ),
                     "Physical GPU already leased",
                 )
             seed_used = any(t.user_attrs.get("seed_candidate") for t in self._trials())
-            if kind == self.protocol["seed_candidate_profile"] and not seed_used:
+            if (
+                not self.finite
+                and kind == self.protocol["seed_candidate_profile"]
+                and not seed_used
+            ):
                 self.study.enqueue_trial(
                     self.protocol["seed_candidate"], user_attrs={"seed_candidate": True}
                 )
@@ -501,7 +625,9 @@ class Coordinator:
                 params[name] = (
                     t.suggest_categorical(name, spec["choices"])
                     if spec["kind"] == "categorical"
-                    else t.suggest_float(name, spec["low"], spec["high"], log=spec["log"])
+                    else t.suggest_float(
+                        name, spec["low"], spec["high"], log=spec["log"]
+                    )
                 )
             validate_params(params, self.protocol)
             meta = {
@@ -537,7 +663,8 @@ class Coordinator:
         ]:
             require(r.get(key) == task[key], "Receipt identity/pin differs: " + key)
         require(
-            isinstance(r.get("gpu_uuid"), str) and bool(r["gpu_uuid"]), "Observed GPU UUID required"
+            isinstance(r.get("gpu_uuid"), str) and bool(r["gpu_uuid"]),
+            "Observed GPU UUID required",
         )
         if task.get("gpu_uuid"):
             require(r["gpu_uuid"] == task["gpu_uuid"], "Physical GPU migration refused")
@@ -564,8 +691,8 @@ class Coordinator:
             "scheduler_last_epoch": epoch,
             "steps": epoch * 8192 // cfg["batch_size"],
             "delivered_samples": epoch * 8192,
-            "eligible_photos": 2221,
-            "seen_photos": 2221,
+            "eligible_photos": self.training_photos,
+            "seen_photos": self.training_photos,
             "completed_budget": epoch == 60,
             "plan_sha256": task["plan_sha256"],
             "config_sha256": task["config_sha256"],
@@ -581,6 +708,12 @@ class Coordinator:
             "output": task["output"],
         }.items():
             require(q.get(key) == value, "CheckpointQA differs: " + key)
+        if self.finite:
+            require(
+                q.get("geometry_policy_sha256")
+                == task["plan"]["geometry_policy_sha256"],
+                "Checkpoint geometry policy differs",
+            )
         require(q["minimum_photo_visits"] >= epoch, "Coverage minimum below epoch")
         for key in ["checkpoint_sha256", "best_checkpoint_sha256", "csv_sha256"]:
             require(hex64(q[key]), "Missing artifact SHA: " + key)
@@ -609,20 +742,26 @@ class Coordinator:
                 if cached["action"] in {"pruned", "finished"}:
                     frozen = self.storage.get_trial(
                         self.storage.get_trial_id_from_study_id_trial_number(
-                            self.storage.get_study_id_from_name(self.protocol["study_id"]), t.number
+                            self.storage.get_study_id_from_name(
+                                self.protocol["study_id"]
+                            ),
+                            t.number,
                         )
                     )
                     if frozen.state == TrialState.RUNNING:
                         self.study.tell(
                             t.number,
-                            cached.get("value") if cached["trial_state"] == "COMPLETE" else None,
+                            cached.get("value")
+                            if cached["trial_state"] == "COMPLETE"
+                            else None,
                             state=TrialState[cached["trial_state"]],
                         )
                 return cached
             require(
                 self.storage.get_trial(
                     self.storage.get_trial_id_from_study_id_trial_number(
-                        self.storage.get_study_id_from_name(self.protocol["study_id"]), t.number
+                        self.storage.get_study_id_from_name(self.protocol["study_id"]),
+                        t.number,
                     )
                 ).state
                 == TrialState.RUNNING,
@@ -635,7 +774,8 @@ class Coordinator:
             t.set_user_attr("meta", meta)
             ended = timestamp(r["completed_utc"])
             require(
-                ended <= self.clock() + datetime.timedelta(minutes=5), "Future worker timestamp"
+                ended <= self.clock() + datetime.timedelta(minutes=5),
+                "Future worker timestamp",
             )
             state = None
             if score is None:
@@ -645,6 +785,8 @@ class Coordinator:
             else:
                 epoch = task["target_epoch"]
                 t.report(score, step=epoch)
+                is_control = self.finite and t.user_attrs.get("is_control") is True
+                native_control_prune = t.should_prune() if is_control else None
                 if epoch == 60 and ended <= self.deadline:
                     action = "finished"
                     state = TrialState.COMPLETE
@@ -653,6 +795,9 @@ class Coordinator:
                     action = "pruned"
                     state = TrialState.PRUNED
                     reason = "deadline_partial_not_final"
+                elif is_control:
+                    action = "continue"
+                    reason = "measured_control_always60; native_rung_registered"
                 elif t.should_prune():
                     action = "pruned"
                     state = TrialState.PRUNED
@@ -671,6 +816,11 @@ class Coordinator:
                 "trial_state": state.name if state else "RUNNING",
                 "value": score,
                 "receipt_sha256": receipt_sha,
+                **(
+                    {"native_pruner_suggested_prune": native_control_prune}
+                    if score is not None and is_control
+                    else {}
+                ),
             }
             if action == "continue":
                 i = RUNGS.index(task["target_epoch"])
@@ -686,14 +836,24 @@ class Coordinator:
             t.set_user_attr("last_decision", decision)
             if state is not None:
                 self.study.tell(
-                    t.number, score if state == TrialState.COMPLETE else None, state=state
+                    t.number,
+                    score if state == TrialState.COMPLETE else None,
+                    state=state,
                 )
             return decision
 
     def import_baseline(self, csv_text, qa, qa_sha256):
         with self.guard:
+            require(
+                not self.finite,
+                "Finite v2 requires an actual measured control trial0, no imported baseline",
+            )
             b = self.protocol["manual_baseline"]
-            payload = (json.dumps(qa, indent=2) + "\n").encode() if isinstance(qa, dict) else qa
+            payload = (
+                (json.dumps(qa, indent=2) + "\n").encode()
+                if isinstance(qa, dict)
+                else qa
+            )
             require(
                 hashlib.sha256(payload).hexdigest() == qa_sha256 == b["qa_sha256"],
                 "Require exact actual full60 QA bytes",
@@ -704,7 +864,7 @@ class Coordinator:
                 and q["last_epoch"] == 60
                 and q["steps"] == 122880
                 and q["delivered_samples"] == 491520
-                and q["eligible_photos"] == 2221
+                and q["eligible_photos"] == self.training_photos
                 and q["minimum_photo_visits"] >= 60
                 and q["finite_best_last_weights_and_last_optimizer"] is True,
                 "Incomplete/manual legacy baseline refused",
@@ -715,17 +875,23 @@ class Coordinator:
                 "Baseline checkpoint pins differ",
             )
             require(
-                hashlib.sha256(csv_text.encode()).hexdigest() == q["sidecar_sha256"]["metrics.csv"],
+                hashlib.sha256(csv_text.encode()).hexdigest()
+                == q["sidecar_sha256"]["metrics.csv"],
                 "Baseline60 CSV bytes differ",
             )
-            values, score, best_epoch = csv_scores(csv_text, 60, self.protocol["config_template"])
+            values, score, best_epoch = csv_scores(
+                csv_text, 60, self.protocol["config_template"]
+            )
             require(
                 score == q["best_score"] and best_epoch == q["best_epoch"],
                 "Baseline objective differs",
             )
             for frozen in self._trials():
                 if frozen.user_attrs.get("origin") == "manual_baseline":
-                    require(frozen.user_attrs["qa_sha256"] == qa_sha256, "Baseline already differs")
+                    require(
+                        frozen.user_attrs["qa_sha256"] == qa_sha256,
+                        "Baseline already differs",
+                    )
                     return frozen.number
             params = {
                 k: self.protocol["config_template"][k]
@@ -737,7 +903,9 @@ class Coordinator:
             distributions = {
                 name: optuna.distributions.CategoricalDistribution(s["choices"])
                 if s["kind"] == "categorical"
-                else optuna.distributions.FloatDistribution(s["low"], s["high"], log=s["log"])
+                else optuna.distributions.FloatDistribution(
+                    s["low"], s["high"], log=s["log"]
+                )
                 for name, s in self.protocol["search_space"].items()
             }
             frozen = optuna.trial.create_trial(
@@ -764,10 +932,21 @@ class Coordinator:
         with self.guard:
             return {
                 "study_id": self.protocol["study_id"],
+                **(
+                    {
+                        "study_kind": "finite_v2_controlled",
+                        "actual_control_trial": 0,
+                        "training_photos": self.training_photos,
+                    }
+                    if self.finite
+                    else {}
+                ),
                 "protocol_sha256": self.protocol_sha,
                 "search_space_sha256": self.search_sha,
                 "deadline_utc": self.protocol["deadline_utc"],
-                "sampler_state_sha256": self.study.user_attrs["sampler_state"]["sha256"],
+                "sampler_state_sha256": self.study.user_attrs["sampler_state"][
+                    "sha256"
+                ],
                 "sampler_state_restoration": self.sampler_restoration,
                 "sampler_state_migrations": self.study.user_attrs.get(
                     "sampler_state_migrations", []
@@ -781,6 +960,16 @@ class Coordinator:
                         "state": t.state.name,
                         "value": t.value,
                         "origin": t.user_attrs.get("origin"),
+                        **(
+                            {
+                                "controlled_candidate": t.user_attrs.get(
+                                    "controlled_candidate"
+                                ),
+                                "is_control": t.user_attrs.get("is_control"),
+                            }
+                            if self.finite
+                            else {}
+                        ),
                         "pending_task": t.user_attrs.get("pending_task")
                         if t.state == TrialState.RUNNING
                         else None,

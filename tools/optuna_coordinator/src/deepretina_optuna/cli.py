@@ -20,6 +20,10 @@ def main():
         a.db, json.loads(a.protocol.read_text()), json.loads(a.profiles.read_text())
     ) as c:
         if a.baseline_csv or a.baseline_qa:
+            if c.finite:
+                p.error(
+                    "Finite v2 uses actual measured control0, not an imported baseline"
+                )
             if not (a.baseline_csv and a.baseline_qa):
                 p.error("Both baseline CSV andQA required")
             c.import_baseline(
@@ -43,7 +47,9 @@ def main():
                 sys.stdout.buffer.flush()
             except (ValueError, KeyError, TypeError) as e:
                 sys.stdout.buffer.write(
-                    canonical_json({"ok": False, "error_type": type(e).__name__, "error": str(e)})
+                    canonical_json(
+                        {"ok": False, "error_type": type(e).__name__, "error": str(e)}
+                    )
                 )
                 sys.stdout.buffer.flush()
 
