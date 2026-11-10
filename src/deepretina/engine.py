@@ -4,16 +4,18 @@ import csv
 import hashlib
 import json
 import random
+import time
+from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
 import numpy as np
 import torch
 from torch.nn import functional as F
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, RandomSampler, WeightedRandomSampler
 
 from .dataset import CropDataset, read_manifest, read_sample
-from .inference import binary_masks, load_checkpoint, resolve_device, tiled_probabilities
+from .inference import binary_masks, load_checkpoint, probabilities_for_config, resolve_device
 from .model import CHANNELS, UNet
 
 
@@ -34,6 +36,32 @@ class TrainConfig:
     max_steps: int | None = None
     tile_size: int = 512
     overlap: int = 64
+    norm: str = "group"
+    train_view: str = "patch"
+    view_size: int = 512
+    foreground_probability: float = 0.0
+    augmentation: str = "basic"
+    scheduler: str = "constant"
+    min_lr_ratio: float = 0.05
+    epoch_samples: int | None = None
+    sampling: str = "uniform"
+
+
+def training_sampler(dataset, config: TrainConfig, generator):
+    """Optional replacement sampling with an explicit, comparable epoch budget."""
+    count = config.epoch_samples if config.epoch_samples is not None else len(dataset)
+    if config.sampling == "dataset_balanced":
+        populations = Counter(row["dataset"] for row in dataset.rows)
+        weights = [
+            1 / populations[dataset.rows[i % len(dataset.rows)]["dataset"]]
+            for i in range(len(dataset))
+        ]
+        return WeightedRandomSampler(
+            weights, num_samples=count, replacement=True, generator=generator
+        )
+    if config.epoch_samples is not None:
+        return RandomSampler(dataset, replacement=True, num_samples=count, generator=generator)
+    return None
 
 
 def segmentation_loss(logits, target, valid, kind="bce_dice"):
@@ -84,7 +112,9 @@ def score_model(
     av_correct = av_conditional_correct = av_count = 0
     for row in rows:
         image, target_t, valid_t = read_sample(Path(manifest).parent, row)
-        probability = tiled_probabilities(model, image, device, tile_size, overlap)
+        probability = probabilities_for_config(
+            model, image, device, tile_size=tile_size, overlap=overlap
+        )
         predicted = binary_masks(probability, task, threshold)
         target, valid = target_t.numpy() >= 0.5, valid_t.numpy()
         valid[~supported] = False
@@ -195,6 +225,22 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
         raise ValueError("max_steps must be positive")
     if config.loss not in {"bce", "bce_dice"}:
         raise ValueError("loss must be bce or bce_dice")
+    if config.norm not in {"group", "batch"} or config.train_view not in {"patch", "whole"}:
+        raise ValueError("norm must be group/batch and train_view patch/whole")
+    if config.view_size < 32 or not 0 <= config.foreground_probability <= 1:
+        raise ValueError("view_size must be >=32 and foreground_probability in [0,1]")
+    if config.train_view == "whole" and config.foreground_probability != 0:
+        raise ValueError("Foreground sampling applies to patch training only")
+    if config.augmentation not in {"basic", "mild", "strong"}:
+        raise ValueError("augmentation must be basic, mild or strong")
+    if config.scheduler not in {"constant", "cosine"} or not 0 <= config.min_lr_ratio <= 1:
+        raise ValueError("scheduler must be constant/cosine and min_lr_ratio in [0,1]")
+    if config.sampling not in {"uniform", "dataset_balanced"}:
+        raise ValueError("sampling must be uniform or dataset_balanced")
+    if config.epoch_samples is not None and (
+        not isinstance(config.epoch_samples, int) or config.epoch_samples < 1
+    ):
+        raise ValueError("epoch_samples must be a positive integer or null")
     random.seed(config.seed)
     np.random.seed(config.seed)
     torch.manual_seed(config.seed)
@@ -203,7 +249,16 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
     torch.backends.cudnn.benchmark = False
     torch.use_deterministic_algorithms(True, warn_only=True)
     device = resolve_device(config.device)
-    dataset = CropDataset(manifest, config.task, config.patch_size, config.samples_per_image)
+    dataset = CropDataset(
+        manifest,
+        config.task,
+        config.patch_size,
+        config.samples_per_image,
+        train_view=config.train_view,
+        view_size=config.view_size,
+        foreground_probability=config.foreground_probability,
+        augmentation=config.augmentation,
+    )
     supervised_channels = np.zeros(len(CHANNELS[config.task]), dtype=bool)
     for row in dataset.rows:
         support = row.get("supervised_channels")
@@ -228,16 +283,29 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
     if inference_max_size is not None and inference_max_size < 8:
         raise ValueError("preparation_max_size must be >=8 or null")
     generator = torch.Generator().manual_seed(config.seed)
+    sampler = training_sampler(dataset, config, generator)
     loader = DataLoader(
         dataset,
         batch_size=config.batch_size,
-        shuffle=True,
+        shuffle=sampler is None,
+        sampler=sampler,
         num_workers=config.workers,
         generator=generator,
     )
-    model = UNet(len(CHANNELS[config.task]), config.base_channels, config.depth).to(device)
+    model = UNet(len(CHANNELS[config.task]), config.base_channels, config.depth, config.norm).to(
+        device
+    )
+    model.train_view = config.train_view
+    model.view_size = config.view_size
     model.supervised_channels = supervised_channels.tolist()
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.lr)
+    scheduler = (
+        torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, T_max=config.epochs, eta_min=config.lr * config.min_lr_ratio
+        )
+        if config.scheduler == "cosine"
+        else None
+    )
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     if (output / "best.pt").exists() or (output / "metrics.csv").exists():
@@ -248,9 +316,13 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
         "manifest": str(Path(manifest).resolve()),
         "manifest_sha256": manifest_hash,
         "torch_version": str(torch.__version__),
+        "parameters": sum(p.numel() for p in model.parameters()),
         "device": str(device),
         "normalization": "RGB uint8 / 255, then (x - 0.5) / 0.5",
         "channels": CHANNELS[config.task],
+        "view_policy": "symmetric zero letterbox; RGB bilinear align_corners=False; target/valid nearest; restore probabilities before threshold"
+        if config.train_view == "whole"
+        else "uniform/foreground random training patches; full-image tiled inference",
         "supervised_channels": supervised_channels.tolist(),
         "initialization": "random; no pretraining",
         "inference_max_size": inference_max_size,
@@ -259,6 +331,7 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
     (output / "run.json").write_text(json.dumps(metadata, indent=2) + "\n")
     best = -float("inf")
     steps = 0
+    training_started = time.perf_counter()
     with (output / "metrics.csv").open("w", newline="") as handle:
         writer = csv.DictWriter(
             handle,
@@ -315,6 +388,24 @@ def train(manifest: Path, output: Path, config: TrainConfig) -> Path:
             writer.writerow(row)
             handle.flush()
             print(json.dumps(row), flush=True)
+            if scheduler is not None:
+                scheduler.step()
             if config.max_steps is not None and steps >= config.max_steps:
                 break
+    (output / "training_summary.json").write_text(
+        json.dumps(
+            {
+                "seconds": time.perf_counter() - training_started,
+                "includes_validation": True,
+                "parameters": sum(p.numel() for p in model.parameters()),
+                "steps": steps,
+                "completed_epochs": epoch,
+                "best_validation_mean_dice": best,
+                "scheduler": config.scheduler,
+                "final_optimizer_lr": optimizer.param_groups[0]["lr"],
+            },
+            indent=2,
+        )
+        + "\n"
+    )
     return output / "best.pt"

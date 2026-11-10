@@ -146,6 +146,18 @@ per-channel labels and which pixels are actually annotated; unknown A/V labels a
 Use a new or empty output directory for each preparation; the manifest contains exactly the
 requested datasets. Existing prepared data are never overwritten.
 
+## Train and use one unified model
+
+The Python pipeline can train one RGB network for vessel, artery/vein, disc and
+cup, using partial labels and all suitable annotated sources. New full-data model
+selection is still in progress; the bundled original models remain available.
+See the [complete unified quickstart](docs/UNIFIED_QUICKSTART.md) for canonical
+data preparation, patient/photograph split audit, training, resume and prediction.
+The public entry point is `uv run deepretina train-unified`; a starting preset is
+`configs/unified.toml`. Validate a checkpoint with `deepretina evaluate --split val`
+and predict with `deepretina predict --checkpoint ...`. Experimental unified
+test evaluation remains blocked until final selection is frozen and reviewed.
+
 ## Train the pilot architecture
 
 Use a new output directory for each run:
@@ -233,5 +245,6 @@ require controlled comparisons. Generic `evaluate` currently handles pilot
 checkpoints; original-model evaluation needs the matching geometry and annotation
 protocol and is not silently routed through pilot preprocessing.
 
-Hyperparameter optimization and the new unified model are isolated on
-`experiments/leipzig-hpo`. Unverified experiments do not replace bundled originals.
+Hyperparameter search runs, candidate results and new-model selection are tracked on
+`experiments/leipzig-hpo`. The verified training/prediction pipeline is included here;
+experimental results do not replace the bundled original models.
