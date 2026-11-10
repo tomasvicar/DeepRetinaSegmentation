@@ -81,9 +81,13 @@ def test_cloned_parent_has_no_shared_writable_inodes(tmp_path, monkeypatch):
         "verify_prepared_content",
         lambda p, expected: verified.append((p, expected)) or expected,
     )
+    parent.chmod(0o555)
     child = tmp_path / "v2"
     v2.clone_parent(parent, child, "fixture")
     assert len(verified) == 2
+    assert child.stat().st_mode & 0o200
+    assert not parent.stat().st_mode & 0o200
+    parent.chmod(0o755)
     assert (parent / "image").stat().st_ino != (child / "image").stat().st_ino
     (child / "image").write_bytes(b"child edits")
     assert (parent / "image").read_bytes() == b"original"
@@ -124,7 +128,10 @@ def test_unsplit_train_only_alias_is_quarantined():
     assert kept == parent and excluded[0]["id"] == "n"
 
 
-def test_tiny_full_append_preserves_parent_bytes_and_prepares_official_test(tmp_path, monkeypatch):
+@pytest.mark.parametrize("alias_parent", [False, True, "conflicting_angle"])
+def test_tiny_full_append_preserves_parent_bytes_and_prepares_official_test(
+    tmp_path, monkeypatch, alias_parent
+):
     import numpy as np
 
     parent = tmp_path / "parent"
@@ -163,6 +170,8 @@ def test_tiny_full_append_preserves_parent_bytes_and_prepares_official_test(tmp_
             for name in ["drions", "gamma", "idrid_disc", "biomisa"]
         },
     }
+    if alias_parent == "conflicting_angle":
+        policy["policies"]["drions"]["field_of_view_degrees"] = 0.9
     policy_path = tmp_path / "policy.json"
     policy_path.write_text(json.dumps(policy))
 
@@ -191,6 +200,8 @@ def test_tiny_full_append_preserves_parent_bytes_and_prepares_official_test(tmp_
         if name == "biomisa":
             assert kwargs["label_policy"] == v2.FIXED_POLICY
         color = {"drions": 110, "gamma": 120, "idrid_disc": 130, "biomisa": 140}[name]
+        if name == "drions" and alias_parent:
+            color = 100
         for split in ["train", "test"] if name == "idrid_disc" else ["train"]:
             image = np.full((16, 20, 3), color + (split == "test"), np.uint8)
             t = np.zeros((2, 16, 20), np.float32)
@@ -224,6 +235,20 @@ def test_tiny_full_append_preserves_parent_bytes_and_prepares_official_test(tmp_
     for name in ["DRIONS-DB.zip", "GAMMA.zip", "IDRiD.zip", "BIOMISA.zip"]:
         (data / name).write_bytes(b"fixture")
     out = tmp_path / "v2"
+    if alias_parent == "conflicting_angle":
+        with pytest.raises(ValueError, match="inherited frozen parent geometry"):
+            v2.append(
+                parent,
+                out,
+                data,
+                policy_path,
+                biomisa_policy=v2.FIXED_POLICY,
+                expected_parent=parent_audit["prepared_content_sha256"],
+                expected_policy=hashlib.sha256(policy_path.read_bytes()).hexdigest(),
+            )
+        assert (parent / "manifest.json").read_bytes() == before
+        assert not (out / "_SUCCESS").exists()
+        return
     result = v2.append(
         parent,
         out,
@@ -238,6 +263,14 @@ def test_tiny_full_append_preserves_parent_bytes_and_prepares_official_test(tmp_
     assert (parent / "manifest.json").read_bytes() == before
     assert len(rows) == 6 and [r["split"] for r in rows].count("test") == 1
     assert result["annotations_checked"] == 6
+    assert result["photos_checked"] == (5 if alias_parent else 6)
+    drions_row = next(r for r in rows if r["dataset"] == "drions")
+    if alias_parent:
+        inherited = drions_row["metadata"]["geometry_inherited_from_parent"]
+        assert inherited["geometry"] == original[0]["metadata"]["original_geometry"]
+        assert drions_row["split_group_id"] == original[0]["split_group_id"]
+    else:
+        assert "geometry_inherited_from_parent" not in drions_row["metadata"]
     assert (out / "geometry-policy.json").read_bytes() == policy_path.read_bytes()
     for r in rows[1:]:
         assert r["metadata"]["physical_calibration"]["nominal_assumption"] is True
@@ -249,3 +282,22 @@ def test_tiny_full_append_preserves_parent_bytes_and_prepares_official_test(tmp_
             assert arrays["valid"][0].all() and not arrays["valid"][1].any()
     with pytest.raises(ValueError, match="new independent"):
         v2.clone_parent(parent, out, expected=parent_audit["prepared_content_sha256"])
+
+
+def test_new_parent_train_alias_reuses_frozen_group_id():
+    parent = [row("p", "old:patient", "same", "train")]
+    parent[0]["split_group_id"] = "sha256:parent-frozen-group"
+    new = row("n", "new:patient", "same", "train")
+    kept, excluded = v2.resolve_partitions(parent, copy.deepcopy(parent) + [new])
+    assert not excluded
+    assert kept[0] == parent[0]
+    assert kept[1]["split_group_id"] == parent[0]["split_group_id"]
+
+
+def test_bridge_of_two_old_training_groups_requires_review():
+    parent = [row("p1", "old:a", "a", "train"), row("p2", "old:b", "b", "train")]
+    parent[0]["split_group_id"] = "frozen-a"
+    parent[1]["split_group_id"] = "frozen-b"
+    new = [row("n1", "new:patient", "a", "train"), row("n2", "new:patient", "b", "train")]
+    with pytest.raises(ValueError, match="multiple frozen parent split groups"):
+        v2.resolve_partitions(parent, copy.deepcopy(parent) + new)
