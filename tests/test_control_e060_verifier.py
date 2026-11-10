@@ -83,7 +83,7 @@ def example():
         "selection_metric": config["selection_metric"],
         "coverage": copy.deepcopy(coverage),
         "optimizer": {
-            "state": {0: {"exp_avg": torch.tensor([0.01])}},
+            "state": {0: {"exp_avg": torch.tensor([0.01]), "step": torch.tensor(122880.0)}},
             "param_groups": [{"lr": 0.000015}],
         },
         "scheduler": {"T_max": 60, "last_epoch": 60},
@@ -169,6 +169,7 @@ def test_terminal_first_maximum_and_parent_augmentation_none(example):
         "nonfinite_optimizer",
         "missing_cuda_rng",
         "wrong_scheduler",
+        "stale_optimizer_step",
         "wrong_cache",
         "wrong_source",
         "low_coverage",
@@ -198,6 +199,8 @@ def test_rejects_broken_evidence(example, broken):
         example["last"]["training_state"]["rng"].pop("cuda")
     elif broken == "wrong_scheduler":
         example["last"]["training_state"]["scheduler"]["T_max"] = 8
+    elif broken == "stale_optimizer_step":
+        example["last"]["training_state"]["optimizer"]["state"][0]["step"] = torch.tensor(16384.0)
     elif broken == "wrong_cache":
         example["best"]["derived_cache"]["fingerprint"] = "wrong"
     elif broken == "wrong_source":

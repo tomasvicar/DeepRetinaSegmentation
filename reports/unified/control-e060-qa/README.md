@@ -12,7 +12,9 @@ Checks include exactly contiguous CSV epochs1–60 with finite metrics/timings,
 2048 steps per epoch, the planned cosine LR sequence, the first strict maximum
 score selecting best.pt, exact plan/config/source/cache identities, finite best
 and last weights and validation metrics, and finite resumable last optimizer/
-training state. The scheduler must retain `T_max=60,last_epoch=60`. All Torch,
+training state. Optimizer step counters must be present and their maximum must
+equal 122880, independently of the top-level steps field. The scheduler must
+retain `T_max=60,last_epoch=60`. All Torch,
 Python, NumPy, sampler, augmentation and CUDA RNG keys must exist; CUDA and core
 RNG values must be present. Parent augmentation state may legitimately be null
 with two worker-local generators. Best.pt intentionally stores no optimizer.
@@ -39,10 +41,10 @@ use a separately reviewed fresh destination rather than overwrite it.
 
 ## Tiny CPU fixtures
 
-2026-11-10: **18 tests passed in0.71s** on Ada, CPU1/nice10/CUDA hidden, existing
+2026-11-10: **19 tests passed in0.67s** on Ada, CPU1/nice10/CUDA hidden, existing
 uv-frozen runtime Torch2.6.0+cu124. Synthetic two-photo metadata and one-element
 tensor fixtures exercise tied best epochs, missing epochs, wrong LR/steps,
-nonfinite best/optimizer state, absent CUDA RNG, altered scheduler/cache/source/
+nonfinite best/optimizer state, stale optimizer counters, absent CUDA RNG, altered scheduler/cache/source/
 plan, incomplete coverage, split leakage, inconsistent sidecars and refusal to
 overwrite milestone copies. No production data/checkpoints were loaded.
 
