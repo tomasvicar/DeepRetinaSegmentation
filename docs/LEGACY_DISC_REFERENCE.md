@@ -26,8 +26,8 @@ report pooled Dice too. The universal model is a candidate, not an assumed winne
 
 ## Completed validation of the helper
 
-Two focused tests pass: strict-zero/unknown-support/finite-output behavior and
-exact canary count/source checks. Ruff passes. On Ada with GPU visibility disabled,
+Three focused tests pass: strict-zero/unknown-support/finite-output behavior and
+exact canary count/source checks, and deferred resource/reference gating. Ruff passes. On Ada with GPU visibility disabled,
 nice5 and four CPU threads, a three-photo universal/raw canary exactly matched
 all per-photo TP/FP/FN/valid-pixel counts and disc annotation source in the full
 strong-raw validation report. Total time 15.09 seconds (forward time 10.37 s).
@@ -67,3 +67,22 @@ universal/normalized on matching per-photo disc support. Historical exposure
 mapping is unresolved, so even the strongest validation result remains an
 exposure-qualified reference, not an independent benchmark. Freeze the selected
 disc reference before any future held-out evaluation. No test results are used.
+
+## Deferred execution status
+
+After the successful canary, a lightweight stdlib waiter was started on Ada as
+PID1035760, niceness5, with a 60-second polling interval. The heavy evaluation
+has **not** started. It requires the existing normalized-reference PID1023129
+to exit, a complete matching val770 normalized report, at least10GiB available
+RAM and load1 no greater than CPU-count minus8. It then runs exactly one CPU4
+full dedicated comparison, never retries a failed run, and keeps stdout plus
+launch/finish metadata beside the result. It does no CUDA work or model import
+while waiting.
+
+The guard is `scripts/launch_disc_reference_when_idle.py`. To keep it deferred
+even after resources become available, create the file
+`reports/disc-reference/HOLD` in the isolated Ada checkout; removing that file
+allows the same guards to be checked again. This changes no existing process.
+The [launch snapshot](../reports/disc-reference/deferred-launch.json) records
+the exact command and currently waiting status. Full results and reference
+selection remain pending, and the canary is not presented as a full evaluation.

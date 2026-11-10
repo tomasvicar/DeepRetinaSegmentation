@@ -1,5 +1,5 @@
 {
-  "status": "prepared_not_launched",
+  "status": "deferred_waiter_started_full_evaluation_not_started",
   "reason": "Wait for existing normalized reference PID1023129 to complete; avoid training contention",
   "base_source_commit": "0d6d9087a92f0f07cf75fd1083c590e8af6bb18a",
   "script_sha256": "6013c41465f92fd1051e8d917ab36b5c2325b1f16191a24bd3460be6edc8deb1",
@@ -18,5 +18,12 @@
     "legacy-single-net-disc-1.pt": "8ebf60971813bbaecc9602663034d75cfe7f5c3c9587b7b2a27d056c1cae3605"
   },
   "canary_passed": true,
-  "full_result_available": false
+  "full_result_available": false,
+  "waiter_pid": 1035760,
+  "resource_gates": [
+    "Normalized reference1023129 exited and complete matching val770 report",
+    "load1 <= cpu_count-8",
+    "MemAvailable>=10GiB",
+    "no HOLD file"
+  ]
 }
