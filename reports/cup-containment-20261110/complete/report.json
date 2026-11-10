@@ -1,0 +1,735 @@
+{
+  "kind": "complete_fresh_paired_cup_validation_study",
+  "split": "val",
+  "complete": true,
+  "photos": 770,
+  "cup_supported_photos": 612,
+  "reused_prefix_photos": 157,
+  "new_forward_photos": 455,
+  "skipped_unsupported_cup_photos": 158,
+  "native_vs_historical_counts_must_not_be_mislabelled_exact": true,
+  "input_and_GT_pins_exact": true,
+  "launch": {
+    "started_utc": "2026-11-10T18:37:17.075836+00:00",
+    "helper_sha256": "0379fdfc146a693b26f0623986e5cb8593356cd5289c4929a87caf8696334c47",
+    "proposal_sha256": "3f82e625b62f089bc7a3a36a9cfb3072e8367821147fba48e1f9831826d5f4ee",
+    "source_commit": "b4134160983b7358be1ffd06a97ff497076ddb5e",
+    "source_package_sha256": "4e24ddf235bd108bebe35437320ad168d332df3274fbd2a8c98567ef07181bfa",
+    "prefix_sha256": "402aa0524f07031babb08b1a4c01c30e38a14050c569205cc8edc9f1244705ca",
+    "prefix_proof_sha256": "9f34b971e1a3becc8a4a3cf001a68ed77b3aa1c814e9ba67e707a7dba2756348",
+    "canonical_fingerprint": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+    "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+    "models": {
+      "universal": {
+        "checkpoint_sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+        "architecture": {
+          "filters": 32,
+          "in_size": 3,
+          "out_size": 3,
+          "do": 0.0,
+          "depth": 4
+        },
+        "tiling": {
+          "crop_size": 288,
+          "border": 36,
+          "blend": "logits",
+          "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+        },
+        "parameters": 1304355
+      },
+      "disc0": {
+        "checkpoint_sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+        "architecture": {
+          "filters": 32,
+          "in_size": 3,
+          "out_size": 1,
+          "do": 0.0,
+          "depth": 4
+        },
+        "tiling": {
+          "crop_size": 192,
+          "border": 24,
+          "blend": "logits",
+          "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+        },
+        "parameters": 1304289
+      },
+      "disc1": {
+        "checkpoint_sha256": "8ebf60971813bbaecc9602663034d75cfe7f5c3c9587b7b2a27d056c1cae3605",
+        "architecture": {
+          "filters": 32,
+          "in_size": 3,
+          "out_size": 1,
+          "do": 0.0,
+          "depth": 4
+        },
+        "tiling": {
+          "crop_size": 256,
+          "border": 32,
+          "blend": "logits",
+          "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+        },
+        "parameters": 1304289
+      }
+    },
+    "threads": 2,
+    "interop_threads": 1,
+    "niceness": 10,
+    "cuda_visible_devices": "",
+    "torch": "2.6.0+cu124",
+    "python": "3.12.13 (main, Jul 23 2026, 14:43:28) [Clang 22.1.3 ]",
+    "python_executable": "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python",
+    "numpy": "2.5.4",
+    "runtime_component_split": {
+      "reused_prefix_photos": 157,
+      "new_photos_planned": 455,
+      "prior_aborted_full_seconds": 1210.0573095410364,
+      "prior_aborted_run_status": "157 successful rows then failed historical exact gate; includes inference attempted on failed158",
+      "prior_prefix_inference_seconds_by_model": null,
+      "prior_prefix_model_timing_status": "Not separately flushed by original failed run; only total aborted wall time is available",
+      "continuation_elapsed_is_NOT_total_study_time": true
+    }
+  },
+  "cup_and_drift_by_source": {
+    "pooled": {
+      "photos": 612,
+      "fresh_native": {
+        "dice": 0.4010565279001083,
+        "iou": 0.2508259578266397,
+        "precision": 0.25199385245201394,
+        "recall": 0.9818578049751482,
+        "tp": 2949709,
+        "fp": 8755771,
+        "fn": 54503,
+        "valid_pixels": 517984979
+      },
+      "clipped": {
+        "disc0": {
+          "counts_and_metrics": {
+            "dice": 0.4353989841007063,
+            "iou": 0.2782811590151307,
+            "precision": 0.2819846016220893,
+            "recall": 0.95493194221979,
+            "tp": 2868818,
+            "fp": 7304851,
+            "fn": 135394,
+            "valid_pixels": 517984979
+          },
+          "TP_removed_vs_fresh": 80891,
+          "FP_removed_vs_fresh": 1450920,
+          "FN_added_vs_fresh": 80891
+        },
+        "disc1": {
+          "counts_and_metrics": {
+            "dice": 0.4345422745967458,
+            "iou": 0.2775816092285788,
+            "precision": 0.2797230764697091,
+            "recall": 0.9731603495359182,
+            "tp": 2923580,
+            "fp": 7528114,
+            "fn": 80632,
+            "valid_pixels": 517984979
+          },
+          "TP_removed_vs_fresh": 26129,
+          "FP_removed_vs_fresh": 1227657,
+          "FN_added_vs_fresh": 26129
+        }
+      },
+      "historical_drift": {
+        "cup": {
+          "photos_with_drift": 2,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc0": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc1": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        }
+      }
+    },
+    "drishti": {
+      "photos": 10,
+      "fresh_native": {
+        "dice": 0.6633622824058203,
+        "iou": 0.4962917577994201,
+        "precision": 0.4962917577994201,
+        "recall": 1.0,
+        "tp": 69661,
+        "fp": 70702,
+        "fn": 0,
+        "valid_pixels": 4105104
+      },
+      "clipped": {
+        "disc0": {
+          "counts_and_metrics": {
+            "dice": 0.6927816285094168,
+            "iou": 0.5299662578330031,
+            "precision": 0.5315768873608031,
+            "recall": 0.9943153270840211,
+            "tp": 69265,
+            "fp": 61036,
+            "fn": 396,
+            "valid_pixels": 4105104
+          },
+          "TP_removed_vs_fresh": 396,
+          "FP_removed_vs_fresh": 9666,
+          "FN_added_vs_fresh": 396
+        },
+        "disc1": {
+          "counts_and_metrics": {
+            "dice": 0.6932294310253884,
+            "iou": 0.5304905447704926,
+            "precision": 0.5305147870857674,
+            "recall": 0.9999138685921821,
+            "tp": 69655,
+            "fp": 61642,
+            "fn": 6,
+            "valid_pixels": 4105104
+          },
+          "TP_removed_vs_fresh": 6,
+          "FP_removed_vs_fresh": 9060,
+          "FN_added_vs_fresh": 6
+        }
+      },
+      "historical_drift": {
+        "cup": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc0": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc1": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        }
+      }
+    },
+    "g1020": {
+      "photos": 170,
+      "fresh_native": {
+        "dice": 0.333951749591369,
+        "iou": 0.20044542498061552,
+        "precision": 0.20106358781272057,
+        "recall": 0.9848935435418974,
+        "tp": 718665,
+        "fp": 2855652,
+        "fn": 11023,
+        "valid_pixels": 151208640
+      },
+      "clipped": {
+        "disc0": {
+          "counts_and_metrics": {
+            "dice": 0.36048548667809155,
+            "iou": 0.219873312342745,
+            "precision": 0.22494095848282758,
+            "recall": 0.9070602778173685,
+            "tp": 661871,
+            "fp": 2280550,
+            "fn": 67817,
+            "valid_pixels": 151208640
+          },
+          "TP_removed_vs_fresh": 56794,
+          "FP_removed_vs_fresh": 575102,
+          "FN_added_vs_fresh": 56794
+        },
+        "disc1": {
+          "counts_and_metrics": {
+            "dice": 0.36665368417226213,
+            "iou": 0.22448006318026406,
+            "precision": 0.22617959977601604,
+            "recall": 0.967610814485095,
+            "tp": 706054,
+            "fp": 2415598,
+            "fn": 23634,
+            "valid_pixels": 151208640
+          },
+          "TP_removed_vs_fresh": 12611,
+          "FP_removed_vs_fresh": 440054,
+          "FN_added_vs_fresh": 12611
+        }
+      },
+      "historical_drift": {
+        "cup": {
+          "photos_with_drift": 1,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc0": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc1": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        }
+      }
+    },
+    "refuge": {
+      "photos": 400,
+      "fresh_native": {
+        "dice": 0.432987110398599,
+        "iou": 0.27631368782725035,
+        "precision": 0.27694214656943655,
+        "recall": 0.9918542109314148,
+        "tp": 2152036,
+        "fp": 5618670,
+        "fn": 17674,
+        "valid_pixels": 360015235
+      },
+      "clipped": {
+        "disc0": {
+          "counts_and_metrics": {
+            "dice": 0.46110585772368684,
+            "iou": 0.29963455253759347,
+            "precision": 0.30135129340023586,
+            "recall": 0.9813422070230584,
+            "tp": 2129228,
+            "fp": 4936373,
+            "fn": 40482,
+            "valid_pixels": 360015235
+          },
+          "TP_removed_vs_fresh": 22808,
+          "FP_removed_vs_fresh": 682297,
+          "FN_added_vs_fresh": 22808
+        },
+        "disc1": {
+          "counts_and_metrics": {
+            "dice": 0.4584132722430083,
+            "iou": 0.29736456858966315,
+            "precision": 0.2984286030053277,
+            "recall": 0.9881518728309313,
+            "tp": 2144003,
+            "fp": 5040305,
+            "fn": 25707,
+            "valid_pixels": 360015235
+          },
+          "TP_removed_vs_fresh": 8033,
+          "FP_removed_vs_fresh": 578365,
+          "FN_added_vs_fresh": 8033
+        }
+      },
+      "historical_drift": {
+        "cup": {
+          "photos_with_drift": 1,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc0": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc1": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        }
+      }
+    },
+    "rimone": {
+      "photos": 32,
+      "fresh_native": {
+        "dice": 0.07323886274863171,
+        "iou": 0.038011386742578285,
+        "precision": 0.042468218124982964,
+        "recall": 0.2658948027195403,
+        "tp": 9347,
+        "fp": 210747,
+        "fn": 25806,
+        "valid_pixels": 2656000
+      },
+      "clipped": {
+        "disc0": {
+          "counts_and_metrics": {
+            "dice": 0.23983318912324997,
+            "iou": 0.13625594326698365,
+            "precision": 0.2391784077406213,
+            "recall": 0.24049156544249423,
+            "tp": 8454,
+            "fp": 26892,
+            "fn": 26699,
+            "valid_pixels": 2656000
+          },
+          "TP_removed_vs_fresh": 893,
+          "FP_removed_vs_fresh": 183855,
+          "FN_added_vs_fresh": 893
+        },
+        "disc1": {
+          "counts_and_metrics": {
+            "dice": 0.15599919338576326,
+            "iou": 0.08459822404969161,
+            "precision": 0.2679226986215973,
+            "recall": 0.11003328307683555,
+            "tp": 3868,
+            "fp": 10569,
+            "fn": 31285,
+            "valid_pixels": 2656000
+          },
+          "TP_removed_vs_fresh": 5479,
+          "FP_removed_vs_fresh": 200178,
+          "FN_added_vs_fresh": 5479
+        }
+      },
+      "historical_drift": {
+        "cup": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc0": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        },
+        "disc1": {
+          "photos_with_drift": 0,
+          "fresh_minus_historical": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "valid_pixels": 0
+          }
+        }
+      }
+    }
+  },
+  "composites": {
+    "fresh-native-cup-in-disc0-reference-val": {
+      "sha256": "add542622b2ba2e71487ac3ae6ec256cf350a0d6c2e9bfdba9ebd42288860205",
+      "five_head_source_macro": 0.654498278733046,
+      "source_macro": {
+        "vessel": 0.786656606945927,
+        "artery": 0.6808725339280364,
+        "vein": 0.6995471609074161,
+        "disc": 0.7295300905977455,
+        "cup": 0.375885001286105
+      },
+      "pooled": {
+        "vessel": {
+          "dice": 0.7701233997938133,
+          "iou": 0.6261794066695012,
+          "precision": 0.7490438922564375,
+          "recall": 0.7924236968295373,
+          "tp": 5142829,
+          "fp": 1723029,
+          "fn": 1347170,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.6895286744885823,
+          "iou": 0.5261684563906734,
+          "precision": 0.7029603046115578,
+          "recall": 0.6766007035471617,
+          "tp": 809366,
+          "fp": 342002,
+          "fn": 386858,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.6972977561799012,
+          "iou": 0.5352702503490867,
+          "precision": 0.8489808492788876,
+          "recall": 0.5915996531614058,
+          "tp": 846023,
+          "fp": 150493,
+          "fn": 584037,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.8948079084718797,
+          "iou": 0.8096401660227701,
+          "precision": 0.9319728388595586,
+          "recall": 0.8604934129646696,
+          "tp": 11598114,
+          "fp": 846577,
+          "fn": 1880332,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.4010565279001083,
+          "iou": 0.2508259578266397,
+          "precision": 0.25199385245201394,
+          "recall": 0.9818578049751482,
+          "tp": 2949709,
+          "fp": 8755771,
+          "fn": 54503,
+          "valid_pixels": 517984979
+        }
+      }
+    },
+    "fresh-cup-clipped-by-disc0-in-disc0-reference-val": {
+      "sha256": "528233fe50876b15f127f8567fc43d7b8a34a8713cfceff54f02956a0a0bfa2c",
+      "five_head_source_macro": 0.6670315865775472,
+      "source_macro": {
+        "vessel": 0.786656606945927,
+        "artery": 0.6808725339280364,
+        "vein": 0.6995471609074161,
+        "disc": 0.7295300905977455,
+        "cup": 0.4385515405086113
+      },
+      "pooled": {
+        "vessel": {
+          "dice": 0.7701233997938133,
+          "iou": 0.6261794066695012,
+          "precision": 0.7490438922564375,
+          "recall": 0.7924236968295373,
+          "tp": 5142829,
+          "fp": 1723029,
+          "fn": 1347170,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.6895286744885823,
+          "iou": 0.5261684563906734,
+          "precision": 0.7029603046115578,
+          "recall": 0.6766007035471617,
+          "tp": 809366,
+          "fp": 342002,
+          "fn": 386858,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.6972977561799012,
+          "iou": 0.5352702503490867,
+          "precision": 0.8489808492788876,
+          "recall": 0.5915996531614058,
+          "tp": 846023,
+          "fp": 150493,
+          "fn": 584037,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.8948079084718797,
+          "iou": 0.8096401660227701,
+          "precision": 0.9319728388595586,
+          "recall": 0.8604934129646696,
+          "tp": 11598114,
+          "fp": 846577,
+          "fn": 1880332,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.4353989841007063,
+          "iou": 0.2782811590151307,
+          "precision": 0.2819846016220893,
+          "recall": 0.95493194221979,
+          "tp": 2868818,
+          "fp": 7304851,
+          "fn": 135394,
+          "valid_pixels": 517984979
+        }
+      }
+    },
+    "fresh-native-cup-in-disc1-reference-val": {
+      "sha256": "04ccbcbd51b2391aa5d29d4b9f8eea6d7eb77ea5fb4e89a520aecc2f8a155262",
+      "five_head_source_macro": 0.6539961115595899,
+      "source_macro": {
+        "vessel": 0.786656606945927,
+        "artery": 0.6808725339280364,
+        "vein": 0.6995471609074161,
+        "disc": 0.7270192547304645,
+        "cup": 0.375885001286105
+      },
+      "pooled": {
+        "vessel": {
+          "dice": 0.7701233997938133,
+          "iou": 0.6261794066695012,
+          "precision": 0.7490438922564375,
+          "recall": 0.7924236968295373,
+          "tp": 5142829,
+          "fp": 1723029,
+          "fn": 1347170,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.6895286744885823,
+          "iou": 0.5261684563906734,
+          "precision": 0.7029603046115578,
+          "recall": 0.6766007035471617,
+          "tp": 809366,
+          "fp": 342002,
+          "fn": 386858,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.6972977561799012,
+          "iou": 0.5352702503490867,
+          "precision": 0.8489808492788876,
+          "recall": 0.5915996531614058,
+          "tp": 846023,
+          "fp": 150493,
+          "fn": 584037,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9184820165997346,
+          "iou": 0.8492526529351369,
+          "precision": 0.9407458973111951,
+          "recall": 0.8972475758703934,
+          "tp": 12093503,
+          "fp": 761725,
+          "fn": 1384943,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.4010565279001083,
+          "iou": 0.2508259578266397,
+          "precision": 0.25199385245201394,
+          "recall": 0.9818578049751482,
+          "tp": 2949709,
+          "fp": 8755771,
+          "fn": 54503,
+          "valid_pixels": 517984979
+        }
+      }
+    },
+    "fresh-cup-clipped-by-disc1-in-disc1-reference-val": {
+      "sha256": "5ab842d95bf2c144f2d74c9f553bf9f6c87a46990f635de7170d541dfad18b3a",
+      "five_head_source_macro": 0.6625338903436899,
+      "source_macro": {
+        "vessel": 0.786656606945927,
+        "artery": 0.6808725339280364,
+        "vein": 0.6995471609074161,
+        "disc": 0.7270192547304645,
+        "cup": 0.4185738952066055
+      },
+      "pooled": {
+        "vessel": {
+          "dice": 0.7701233997938133,
+          "iou": 0.6261794066695012,
+          "precision": 0.7490438922564375,
+          "recall": 0.7924236968295373,
+          "tp": 5142829,
+          "fp": 1723029,
+          "fn": 1347170,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.6895286744885823,
+          "iou": 0.5261684563906734,
+          "precision": 0.7029603046115578,
+          "recall": 0.6766007035471617,
+          "tp": 809366,
+          "fp": 342002,
+          "fn": 386858,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.6972977561799012,
+          "iou": 0.5352702503490867,
+          "precision": 0.8489808492788876,
+          "recall": 0.5915996531614058,
+          "tp": 846023,
+          "fp": 150493,
+          "fn": 584037,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9184820165997346,
+          "iou": 0.8492526529351369,
+          "precision": 0.9407458973111951,
+          "recall": 0.8972475758703934,
+          "tp": 12093503,
+          "fp": 761725,
+          "fn": 1384943,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.4345422745967458,
+          "iou": 0.2775816092285788,
+          "precision": 0.2797230764697091,
+          "recall": 0.9731603495359182,
+          "tp": 2923580,
+          "fp": 7528114,
+          "fn": 80632,
+          "valid_pixels": 517984979
+        }
+      }
+    }
+  },
+  "continuation_seconds": 3454.930892423028,
+  "prior_aborted_full_seconds": 1210.0573095410364,
+  "total_aborted_full_plus_continuation_seconds": 4664.9882019640645,
+  "total_timing_scope": "Includes aborted full run and this continuation, excludes earlier five-photo canary/forensic probes; no claim of fromscratch612-only timing",
+  "new_model_inference_seconds": {
+    "universal": 1351.4541196661303,
+    "disc0": 1050.7478451196803,
+    "disc1": 988.7167949710274
+  },
+  "max_rss_kib": 1066608,
+  "per_photo_sha256": "620996d6fe601270b264d54e2f04e33a77c4d3b671ed208dd740648baf0638bc",
+  "historical_refs_unchanged": true,
+  "original_defaults_changed": false,
+  "no_test": true,
+  "no_gpu": true,
+  "no_independent_quality_claim": true
+}

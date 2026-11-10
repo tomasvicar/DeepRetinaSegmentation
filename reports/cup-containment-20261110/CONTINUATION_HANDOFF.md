@@ -1,4 +1,4 @@
-# Fresh paired cup continuation — authorized, running
+# Fresh paired cup continuation — completed and audited
 
 Prepared helper: `scripts/continue_cup_containment.py`.
 SHA256: `0379fdfc146a693b26f0623986e5cb8593356cd5289c4929a87caf8696334c47`.
@@ -128,3 +128,41 @@ env CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 OPENBLAS_NUM_THR
 ```
 
 No TEST, GPU job, training migration or automatic scheduling is part of this helper.
+
+## Completed result, 2026-11-10 19:34:35 UTC
+
+The bounded supervisor returned0. All612 cup-supported photos (157 explicitly
+reused+455 new) and four770-photo composites are complete. Post-run count/artifact
+audit passed; `complete/artifact-audit.json` verifies byte hashes, exact GT support
+and unchanged non-cup counts/AV accuracy. Original references remain untouched.
+Full report SHA:
+`ccb0ec383488e50966caa5fa1268ad95251f4118909bf09d41d9d1784c0a74f8`.
+
+Continuation wall3454.931s, prior aborted full attempt1210.057s, combined4664.988s
+(77.75min). This sum excludes earlier canary/forensic probes and is not claimed
+as a clean from-scratch runtime. External peak observed RSS1043512KiB (1019MiB).
+
+| Cup Dice, pooled within source | Fresh native | Clip by fresh D0 | Clip by fresh D1 |
+|---|---:|---:|---:|
+| Drishti | .663362 | .692782 | .693229 |
+| G1020 | .333952 | .360485 | .366654 |
+| REFUGE | .432987 | .461106 | .458413 |
+| RIM-ONE | .073239 | .239833 | .155999 |
+| Pooled | .401057 | .435399 | .434542 |
+| Source macro | .375885 | .438552 | .418574 |
+
+D0 removes80891 true positives and1450920 false positives; D1 removes26129 true
+positives and1227657 false positives. GT positive/valid counts stay exact. D0
+cup recall declines from.981858 to.954932; D1 to.973160. No universal benefit is
+claimed; even with higher aggregate Dice, genuine cup pixels are removed.
+RIM-ONE's earlier experimental physical-calibration limitation still applies.
+
+All5 source macro changes from.654498 to.667032 in the unchanged D0 reference
+context and.653996 to.662534 in D1 context. The paired difference comes solely
+from cup containment. Historical native drift is separate: two cup photos have
+one extra FP each (total+2), no TP/FN/support change. Dedicated D0/D1 native
+counts match their historical references exactly on all612 supported photos.
+The two fresh-native controls, both containment variants, all per-photo counts
+and source-level removals/drift remain available under `complete/`. This optional
+VAL postprocessing study changes no public default, model weight or native route,
+and does not establish independent or test performance.
