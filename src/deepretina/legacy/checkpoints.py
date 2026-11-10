@@ -160,6 +160,10 @@ def load_single_net(path: Path, device="cpu"):
     payload = torch.load(path, map_location="cpu", weights_only=True)
     if payload.get("format_version") != 1 or payload.get("family") != "legacy_single_net":
         raise ValueError("Expected converted legacy_single_net format_version1")
+    if payload.get("geometry_policy") is not None:
+        from ..geometry_policy import validate_geometry_policy
+
+        validate_geometry_policy(payload["geometry_policy"])
     model = Unet(**payload["architecture"])
     model.load_state_dict(payload["state_dict"], strict=True)
     if len(payload["channels"]) != model.out_size:

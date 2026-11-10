@@ -11,6 +11,7 @@ import torch
 from PIL import Image
 from torch.nn import functional as F
 
+from ..geometry_policy import prediction_geometry, validate_geometry_policy
 from ..inference import resolve_device
 from .av import load_av, predict_av_input, restore_classes
 from .checkpoints import load_single_net
@@ -83,7 +84,7 @@ def predict_legacy(
     dataset: str | None = None,
     fov_path: Path | None = None,
     field_of_view_degrees: float | None = None,
-    normalized: bool = False,
+    normalized: bool | None = None,
     threshold: float = 0.5,
     vessel_mask_path: Path | None = None,
     dicom_paths=None,
@@ -102,9 +103,11 @@ def predict_legacy(
     """
     if not 0 < threshold < 1:
         raise ValueError("threshold must lie strictly between zero and one")
-    device = resolve_device(device)
     payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
     family = payload.get("family")
+    if payload.get("geometry_policy") is not None:
+        validate_geometry_policy(payload["geometry_policy"])
+    device = resolve_device(device)
     metadata = {
         "family": family,
         "image": str(image_path) if image_path is not None else None,
@@ -126,13 +129,20 @@ def predict_legacy(
         if original_size is not None:
             raise ValueError("single_net restores its original photograph geometry automatically")
         image = _rgb(image_path)
+        saved_normalized = payload.get("preprocessing", {}).get("normalized")
+        if saved_normalized is not None and type(saved_normalized) is not bool:
+            raise ValueError("Saved single_net normalized choice must be boolean or unknown")
+        effective_normalized = bool(saved_normalized) if normalized is None else normalized
+        angle, geometry_provenance = prediction_geometry(
+            payload.get("geometry_policy"), dataset, image.shape[:2], field_of_view_degrees
+        )
         prepared_image = prepare_single_net(
             image,
             dataset=dataset,
             fov=_mask(fov_path) if fov_path is not None else None,
-            field_of_view_degrees=field_of_view_degrees,
+            field_of_view_degrees=angle,
             pixels_per_degree=pixels_per_degree,
-            normalized=normalized,
+            normalized=effective_normalized,
         )
         model, payload = load_single_net(checkpoint, device)
         tiling = payload["tiling"]
@@ -163,9 +173,18 @@ def predict_legacy(
             geometry=asdict(geometry),
             dataset=dataset,
             preprocessing={
-                "profile": "single_net_normalized" if normalized else "single_net_raw",
-                "normalized": bool(normalized),
-                "normalization_verified": False,
+                "profile": "single_net_normalized" if effective_normalized else "single_net_raw",
+                "normalized": bool(effective_normalized),
+                "normalization_verified": bool(
+                    payload.get("preprocessing", {}).get("normalization_verified", False)
+                ),
+                "normalization_selection": "explicit caller override"
+                if normalized is not None
+                else (
+                    "saved checkpoint preprocessing metadata"
+                    if saved_normalized is not None
+                    else "historical source-inferred raw default"
+                ),
                 "historical_profile_status": payload.get("preprocessing", {}).get(
                     "normalization_status", "historical raw/normalized choice not verified"
                 ),
@@ -173,6 +192,11 @@ def predict_legacy(
                 "pixels_per_degree": prepared_image.pixels_per_degree,
                 "fov_source": prepared_image.fov_source,
                 "fov_path": str(fov_path) if fov_path is not None else None,
+                **(
+                    {"geometry_policy": geometry_provenance}
+                    if geometry_provenance is not None
+                    else {}
+                ),
             },
             tiling=tiling,
             probability_semantics="independent sigmoid after weighted logit blending",
@@ -186,6 +210,74 @@ def predict_legacy(
 
     if family != "legacy_av":
         raise ValueError(f"Unsupported legacy checkpoint family: {family!r}")
+    from .canonical_av import PROFILE
+
+    if payload.get("preprocessing", {}).get("profile") == PROFILE:
+        if (
+            prepared
+            or prepared_inputs is not None
+            or dicom_paths is not None
+            or original_size is not None
+        ):
+            raise ValueError(
+                "Canonical raw AV requires raw RGB and an original-frame vessel mask; historical prepared/DICOM modes do not apply"
+            )
+        if normalized:
+            raise ValueError("Canonical raw AV was trained without contrast normalization")
+        if image_path is None or vessel_mask_path is None:
+            raise ValueError(
+                "Canonical raw AV requires --input and --vessel-mask; no historical vessel model is selected implicitly"
+            )
+        from .canonical_av import prepare_raw
+
+        image = _rgb(image_path)
+        prepared_image, inputs, geometry_provenance = prepare_raw(
+            image,
+            _mask(vessel_mask_path),
+            payload,
+            dataset=dataset,
+            fov=_mask(fov_path) if fov_path is not None else None,
+            field_of_view_degrees=field_of_view_degrees,
+            pixels_per_degree=pixels_per_degree,
+        )
+        model, payload = load_av(checkpoint, device)
+        result = predict_av_input(model, inputs, device=device)
+        geometry = prepared_image.geometry
+        classes = geometry.restore(result["prepared_classes"], order=0).astype(np.uint8)
+        prepared_probability = result["prepared_conditional_probabilities"] * (inputs[3] != 0)[None]
+        probability = np.stack([geometry.restore(p, order=1) for p in prepared_probability])
+        support = geometry.restore(inputs[3] != 0, order=0).astype(bool)
+        probability *= support[None]
+        metadata.update(
+            channels=["artery", "vein"],
+            shape=list(image.shape[:2]),
+            inference_shape=result["prepared_shape"],
+            geometry=asdict(geometry),
+            dataset=dataset,
+            preprocessing={
+                "profile": PROFILE,
+                "normalized": False,
+                "pixels_per_degree": 25,
+                "field_of_view_degrees": prepared_image.field_of_view_degrees,
+                "fov_source": prepared_image.fov_source,
+                "vessel_source": "explicit caller-supplied original-frame mask",
+                "geometry_policy": geometry_provenance,
+            },
+            probability_semantics="conditional softmax of original logits1:3, gated by supplied vessel support",
+            mask_decision="strict artery/vein logit comparison; ties0; supplied vessel support",
+            mask_policy="independent canonical AV recipe; no historical MATLAB input claim",
+            accuracy_claim="conditional classification requires independent evaluation; supplied vessel quality is separate",
+        )
+        return _save(
+            output,
+            image,
+            probability,
+            ["artery", "vein"],
+            np.stack([classes == 1, classes == 2]),
+            metadata,
+            arrays={"vessel_support": support},
+            classes=classes,
+        )
     if dicom_paths is None and not prepared and prepared_inputs is None:
         raise ValueError(
             "Legacy A/V requires already-preprocessed RGB with prepared=True and vessel_mask_path, "

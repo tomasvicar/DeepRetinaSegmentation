@@ -259,6 +259,10 @@ def load_av(path: Path, device="cpu"):
     payload = torch.load(path, map_location="cpu", weights_only=True)
     if payload.get("format_version") != 1 or payload.get("family") != "legacy_av":
         raise ValueError("Expected a safe converted legacy_av checkpoint")
+    if payload.get("geometry_policy") is not None:
+        from ..geometry_policy import validate_geometry_policy
+
+        validate_geometry_policy(payload["geometry_policy"])
     model = LegacyAVNet(**payload["architecture"])
     model.load_state_dict(payload["state_dict"], strict=True)
     return model.to(device).eval(), payload

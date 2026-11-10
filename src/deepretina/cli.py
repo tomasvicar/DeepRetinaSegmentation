@@ -126,7 +126,10 @@ def parser() -> argparse.ArgumentParser:
     predict.add_argument("--field-of-view-degrees", type=float)
     predict.add_argument("--pixels-per-degree", type=float, default=25)
     predict.add_argument(
-        "--normalized", action="store_true", help="Use original single_net contrast profile"
+        "--normalized",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Override single_net contrast normalization; otherwise use the saved recipe or historical raw default",
     )
     predict.add_argument(
         "--prepared", action="store_true", help="A/V RGB already has historical preprocessing"
@@ -352,6 +355,18 @@ def _apply_legacy(args, checkpoint: Path, family: str):
                 )
             if args.prepared or args.dicoms or args.prepared_array:
                 raise ValueError("Raw A/V profiles cannot be combined with prepared input modes")
+            import torch
+
+            profile = (
+                torch.load(checkpoint, map_location="cpu", weights_only=True)
+                .get("preprocessing", {})
+                .get("profile")
+            )
+            if profile == "legacy25_raw_av4":
+                raise ValueError(
+                    "This retrained AV model uses canonical raw RGB plus --vessel-mask; "
+                    "historical --av-raw-* preprocessing does not match its saved recipe"
+                )
             from .legacy.raw_proxy import predict_raw_av
 
             return predict_raw_av(
