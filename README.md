@@ -2,8 +2,8 @@
 
 This `experiments/leipzig-hpo` branch adds the [shared five-output network](docs/UNIFIED.md),
 [audited preparation of all supervised sources](docs/UNIFIED_DATA.md) and
-[validation-only hyperparameter search](docs/UNIFIED_HPO.md). Full-data training
-and comparison are still pending. Original models below remain available here;
+[validation-only hyperparameter search](docs/UNIFIED_HPO.md). Full-data training and validation search are running;
+no final quality improvement comparison is established yet. Original models below remain available here;
 the handover branch is [`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig).
 
 **Status:** original trained models are bundled with verified prepared-input

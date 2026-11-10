@@ -1,0 +1,997 @@
+{
+  "purpose": "validation-only causal BN probe, no quality/generalization claim",
+  "source_commit": "87cf045",
+  "checkpoint_sha256": "45b73b4476303499560b467b00eff97f89fd7d7a2b22895c01a37358ed1533e3",
+  "checkpoint_unchanged": true,
+  "original_bn_buffers_unchanged": true,
+  "bn_layers": 18,
+  "gpu_seconds": 3.2947191648483276,
+  "gpu": "NVIDIA GeForce GTX 1070",
+  "selection_policy": {
+    "refuge": 2,
+    "g1020": 2,
+    "drishti": 1,
+    "rimone": 1,
+    "onhsd": 1,
+    "rite": 1,
+    "hrf": 1,
+    "iostar": 1,
+    "aria": 1,
+    "avrdb": 1
+  },
+  "actual_validation_photos": 12,
+  "normalization": "RGB/255-0.5",
+  "tiling": [
+    512,
+    64
+  ],
+  "probe": "deep copy; BatchNorm eval with running_mean/var=None and track_running_stats=False; per-tile batch/spatial stats; no parameter updates",
+  "mean_photo_dice": {
+    "running": {
+      "vessel": 0.4469814874466843,
+      "artery": 0.05497071905442468,
+      "vein": 0.5885135792551904,
+      "disc": 0.44957016237901304,
+      "cup": 0.2142832842896425
+    },
+    "tile_batch": {
+      "vessel": 0.6005953251848162,
+      "artery": 0.04884110820308721,
+      "vein": 0.5823458700337729,
+      "disc": 0.4847020227864884,
+      "cup": 0.4206548644783889
+    }
+  },
+  "validation": [
+    {
+      "dataset": "refuge",
+      "photo_id": "sha256:007a3d2357ab7cbcf68a7c4ee81f5d5914df0790f894239c4d389dc6a2d97afd",
+      "record_ids": [
+        "refuge_V0010_disc_cup"
+      ],
+      "shape": [
+        1071,
+        1071
+      ],
+      "running": {
+        "disc": {
+          "dice": 0.18722984682190308,
+          "precision": 0.10328383137468203,
+          "recall": 1.0,
+          "predicted_pixels": 182013,
+          "reference_pixels": 18799,
+          "valid_pixels": 900037
+        },
+        "cup": {
+          "dice": 0.06725503978894935,
+          "precision": 0.03479767955602651,
+          "recall": 1.0,
+          "predicted_pixels": 111358,
+          "reference_pixels": 3875,
+          "valid_pixels": 900037
+        },
+        "av_conditional_accuracy": null
+      },
+      "tile_batch": {
+        "disc": {
+          "dice": 0.42473112199314655,
+          "precision": 0.26970584855796853,
+          "recall": 0.9988829193042184,
+          "predicted_pixels": 69624,
+          "reference_pixels": 18799,
+          "valid_pixels": 900037
+        },
+        "cup": {
+          "dice": 0.28261665812028425,
+          "precision": 0.16468177743629145,
+          "recall": 0.9956129032258064,
+          "predicted_pixels": 23427,
+          "reference_pixels": 3875,
+          "valid_pixels": 900037
+        },
+        "av_conditional_accuracy": null
+      }
+    },
+    {
+      "dataset": "refuge",
+      "photo_id": "sha256:82ce127e8395128f61ac55ef59202b7cd282c6e08cb4a7bcd6c31ee13a6c347d",
+      "record_ids": [
+        "refuge_V0323_disc_cup"
+      ],
+      "shape": [
+        1071,
+        1071
+      ],
+      "running": {
+        "disc": {
+          "dice": 0.832288172670264,
+          "precision": 0.8334225770335394,
+          "recall": 0.8311568522743823,
+          "predicted_pixels": 20543,
+          "reference_pixels": 20599,
+          "valid_pixels": 900037
+        },
+        "cup": {
+          "dice": 0.5461465271170314,
+          "precision": 0.394122493820379,
+          "recall": 0.88909541511772,
+          "predicted_pixels": 7282,
+          "reference_pixels": 3228,
+          "valid_pixels": 900037
+        },
+        "av_conditional_accuracy": null
+      },
+      "tile_batch": {
+        "disc": {
+          "dice": 0.42609018174111163,
+          "precision": 0.2725374833934333,
+          "recall": 0.9759697072673431,
+          "predicted_pixels": 73766,
+          "reference_pixels": 20599,
+          "valid_pixels": 900037
+        },
+        "cup": {
+          "dice": 0.19132857185193966,
+          "precision": 0.1057840406357529,
+          "recall": 1.0,
+          "predicted_pixels": 30515,
+          "reference_pixels": 3228,
+          "valid_pixels": 900037
+        },
+        "av_conditional_accuracy": null
+      }
+    },
+    {
+      "dataset": "g1020",
+      "photo_id": "sha256:00c0e8bd86d3cfe8645e29b0e040a3c61b396c1666e636132729e15b087a9bef",
+      "record_ids": [
+        "g1020_image_1892_disc_cup"
+      ],
+      "shape": [
+        908,
+        1125
+      ],
+      "running": {
+        "disc": {
+          "dice": 0.72713529856387,
+          "precision": 0.6242059968581382,
+          "recall": 0.8707126524390244,
+          "predicted_pixels": 29282,
+          "reference_pixels": 20992,
+          "valid_pixels": 880740
+        },
+        "cup": {
+          "dice": 0.45396163469557965,
+          "precision": 0.3116518751789293,
+          "recall": 0.8354566385264773,
+          "predicted_pixels": 17465,
+          "reference_pixels": 6515,
+          "valid_pixels": 880740
+        },
+        "av_conditional_accuracy": null
+      },
+      "tile_batch": {
+        "disc": {
+          "dice": 0.48119019211570774,
+          "precision": 0.32319366761521606,
+          "recall": 0.94140625,
+          "predicted_pixels": 61146,
+          "reference_pixels": 20992,
+          "valid_pixels": 880740
+        },
+        "cup": {
+          "dice": 0.3768924044477583,
+          "precision": 0.2389035015617294,
+          "recall": 0.8922486569455104,
+          "predicted_pixels": 24332,
+          "reference_pixels": 6515,
+          "valid_pixels": 880740
+        },
+        "av_conditional_accuracy": null
+      }
+    },
+    {
+      "dataset": "g1020",
+      "photo_id": "sha256:7251bf0f0d9373f37cab7efb5e69d8d316426c2264d03d01c43f4399bc120ee0",
+      "record_ids": [
+        "g1020_image_959_disc_cup"
+      ],
+      "shape": [
+        908,
+        1125
+      ],
+      "running": {
+        "disc": {
+          "dice": 0.39055431177831246,
+          "precision": 0.25829401356531995,
+          "recall": 0.8004036096409397,
+          "predicted_pixels": 81384,
+          "reference_pixels": 26263,
+          "valid_pixels": 880985
+        },
+        "cup": {
+          "dice": 0.21833650413629466,
+          "precision": 0.1271695012326004,
+          "recall": 0.7712171549380852,
+          "predicted_pixels": 40159,
+          "reference_pixels": 6622,
+          "valid_pixels": 880985
+        },
+        "av_conditional_accuracy": null
+      },
+      "tile_batch": {
+        "disc": {
+          "dice": 0.33093657817109146,
+          "precision": 0.20333562795723287,
+          "recall": 0.8885123557857061,
+          "predicted_pixels": 114761,
+          "reference_pixels": 26263,
+          "valid_pixels": 880985
+        },
+        "cup": {
+          "dice": 0.20787073049996463,
+          "precision": 0.1177165511993913,
+          "recall": 0.8877982482633645,
+          "predicted_pixels": 49942,
+          "reference_pixels": 6622,
+          "valid_pixels": 880985
+        },
+        "av_conditional_accuracy": null
+      }
+    },
+    {
+      "dataset": "drishti",
+      "photo_id": "sha256:22c77c6634b20eecd9cfe4fe4a5515daa2c92469078d440b4d205ad194ca4fb1",
+      "record_ids": [
+        "drishti_drishtiGS_051_disc_cup"
+      ],
+      "shape": [
+        645,
+        750
+      ],
+      "running": {
+        "disc": {
+          "dice": 0.08377047857315793,
+          "precision": 1.0,
+          "recall": 0.043716307277628035,
+          "predicted_pixels": 519,
+          "reference_pixels": 11872,
+          "valid_pixels": 410322
+        },
+        "cup": {
+          "dice": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "predicted_pixels": 0,
+          "reference_pixels": 7573,
+          "valid_pixels": 410322
+        },
+        "av_conditional_accuracy": null
+      },
+      "tile_batch": {
+        "disc": {
+          "dice": 0.6923572097378277,
+          "precision": 0.5304429698708751,
+          "recall": 0.9965464959568733,
+          "predicted_pixels": 22304,
+          "reference_pixels": 11872,
+          "valid_pixels": 410322
+        },
+        "cup": {
+          "dice": 0.7998716783403732,
+          "precision": 0.6720575022461814,
+          "recall": 0.9877195299088868,
+          "predicted_pixels": 11130,
+          "reference_pixels": 7573,
+          "valid_pixels": 410322
+        },
+        "av_conditional_accuracy": null
+      }
+    },
+    {
+      "dataset": "rimone",
+      "photo_id": "sha256:028061b6a8b1c570d8217ceb124c67629ff1068c7536ff3d1977cb59e3da58cd",
+      "record_ids": [
+        "rimone_G-27-R_average_disc_cup",
+        "rimone_G-27-R_expert1_disc_cup",
+        "rimone_G-27-R_expert2_disc_cup"
+      ],
+      "shape": [
+        332,
+        250
+      ],
+      "running": {
+        "disc": {
+          "dice": 0.20446735395189003,
+          "precision": 1.0,
+          "recall": 0.11387559808612441,
+          "predicted_pixels": 357,
+          "reference_pixels": 3135,
+          "valid_pixels": 83000
+        },
+        "cup": {
+          "dice": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "predicted_pixels": 0,
+          "reference_pixels": 2030,
+          "valid_pixels": 83000
+        },
+        "av_conditional_accuracy": null
+      },
+      "tile_batch": {
+        "disc": {
+          "dice": 0.6200553797468354,
+          "precision": 0.4493335244374373,
+          "recall": 1.0,
+          "predicted_pixels": 6977,
+          "reference_pixels": 3135,
+          "valid_pixels": 83000
+        },
+        "cup": {
+          "dice": 0.6653491436100132,
+          "precision": 0.4997525977238991,
+          "recall": 0.9950738916256158,
+          "predicted_pixels": 4042,
+          "reference_pixels": 2030,
+          "valid_pixels": 83000
+        },
+        "av_conditional_accuracy": null
+      }
+    },
+    {
+      "dataset": "onhsd",
+      "photo_id": "sha256:1edf4eceddef96cdd9a4d3275d2b4e28f1dca461849b368fa80cbe50ad23ba79",
+      "record_ids": [
+        "onhsd_D1240065-L_AnsuONH_disc_cup",
+        "onhsd_D1240065-L_Bob_disc_cup",
+        "onhsd_D1240065-L_David_disc_cup",
+        "onhsd_D1240065-L_Lee_disc_cup"
+      ],
+      "shape": [
+        774,
+        780
+      ],
+      "running": {
+        "disc": {
+          "dice": 0.33527851458885943,
+          "precision": 0.20140216698534097,
+          "recall": 1.0,
+          "predicted_pixels": 61191,
+          "reference_pixels": 12324,
+          "valid_pixels": 475589
+        },
+        "av_conditional_accuracy": null
+      },
+      "tile_batch": {
+        "disc": {
+          "dice": 0.6042657514096592,
+          "precision": 0.43293753952083186,
+          "recall": 1.0,
+          "predicted_pixels": 28466,
+          "reference_pixels": 12324,
+          "valid_pixels": 475589
+        },
+        "av_conditional_accuracy": null
+      }
+    },
+    {
+      "dataset": "rite",
+      "photo_id": "sha256:8cb8127fb0f177621caa0577000f7187a2489b81c77aba17ae71bb2ae0f7dee7",
+      "record_ids": [
+        "drive_32_training_vessels",
+        "rite_32_training_av"
+      ],
+      "shape": [
+        1029,
+        1033
+      ],
+      "running": {
+        "vessel": {
+          "dice": 0.6946814889985701,
+          "precision": 0.8195249367398579,
+          "recall": 0.6028461061185277,
+          "predicted_pixels": 73506,
+          "reference_pixels": 99926,
+          "valid_pixels": 835295
+        },
+        "artery": {
+          "dice": 0.03725622939005482,
+          "precision": 0.6496572734196496,
+          "recall": 0.01917802059445119,
+          "predicted_pixels": 1313,
+          "reference_pixels": 44478,
+          "valid_pixels": 92709
+        },
+        "vein": {
+          "dice": 0.6047523651595464,
+          "precision": 0.5623573873359954,
+          "recall": 0.6540606663763969,
+          "predicted_pixels": 56096,
+          "reference_pixels": 48231,
+          "valid_pixels": 92709
+        },
+        "av_conditional_accuracy": 0.5323862839638007
+      },
+      "tile_batch": {
+        "vessel": {
+          "dice": 0.6707762345440594,
+          "precision": 0.690955386982123,
+          "recall": 0.6517422892940776,
+          "predicted_pixels": 94255,
+          "reference_pixels": 99926,
+          "valid_pixels": 835295
+        },
+        "artery": {
+          "dice": 0.07430055285642487,
+          "precision": 0.5418448381185095,
+          "recall": 0.03988488691038266,
+          "predicted_pixels": 3274,
+          "reference_pixels": 44478,
+          "valid_pixels": 92709
+        },
+        "vein": {
+          "dice": 0.6171623983014224,
+          "precision": 0.5642576145402072,
+          "recall": 0.6810142854180921,
+          "predicted_pixels": 58211,
+          "reference_pixels": 48231,
+          "valid_pixels": 92709
+        },
+        "av_conditional_accuracy": 0.5446936111920094
+      }
+    },
+    {
+      "dataset": "hrf",
+      "photo_id": "sha256:0ab1b68e8e0a0bf937990f741960dd761a5b064162e1401e8af566e6e0ff9606",
+      "record_ids": [
+        "hrf_03_h_av",
+        "hrf_03_h_vessels"
+      ],
+      "shape": [
+        1000,
+        1396
+      ],
+      "running": {
+        "vessel": {
+          "dice": 0.30612743626012456,
+          "precision": 0.18310522136708623,
+          "recall": 0.9329348724777996,
+          "predicted_pixels": 807279,
+          "reference_pixels": 158443,
+          "valid_pixels": 1266315
+        },
+        "artery": {
+          "dice": 0.17401792682638412,
+          "precision": 0.5953556112954123,
+          "recall": 0.10190147769606825,
+          "predicted_pixels": 12359,
+          "reference_pixels": 72207,
+          "valid_pixels": 144715
+        },
+        "vein": {
+          "dice": 0.6524063097562323,
+          "precision": 0.5128255706609647,
+          "recall": 0.8963838472996083,
+          "predicted_pixels": 126739,
+          "reference_pixels": 72508,
+          "valid_pixels": 144715
+        },
+        "av_conditional_accuracy": 0.5202639671077636
+      },
+      "tile_batch": {
+        "vessel": {
+          "dice": 0.6676632403026708,
+          "precision": 0.6524620185298973,
+          "recall": 0.683589682093876,
+          "predicted_pixels": 166002,
+          "reference_pixels": 158443,
+          "valid_pixels": 1266315
+        },
+        "artery": {
+          "dice": 0.043992871771683914,
+          "precision": 0.5537328423167057,
+          "recall": 0.022906366418768264,
+          "predicted_pixels": 2987,
+          "reference_pixels": 72207,
+          "valid_pixels": 144715
+        },
+        "vein": {
+          "dice": 0.6222979733345743,
+          "precision": 0.5381187122736418,
+          "recall": 0.7376979091962266,
+          "predicted_pixels": 99400,
+          "reference_pixels": 72508,
+          "valid_pixels": 144715
+        },
+        "av_conditional_accuracy": 0.5329717030024531
+      }
+    },
+    {
+      "dataset": "iostar",
+      "photo_id": "sha256:779e69830a690ca36d628ff2c86d20a62ad37a5445c07ca41e534d96f1c81426",
+      "record_ids": [
+        "iostar_STAR_28_ODN_av",
+        "iostar_STAR_28_ODN_disc_disc_cup",
+        "iostar_STAR_28_ODN_vessels"
+      ],
+      "shape": [
+        1094,
+        1116
+      ],
+      "running": {
+        "vessel": {
+          "dice": 0.36617161515125674,
+          "precision": 0.2654730463815993,
+          "recall": 0.5899499460202179,
+          "predicted_pixels": 226426,
+          "reference_pixels": 101890,
+          "valid_pixels": 976171
+        },
+        "artery": {
+          "dice": 0.00840032154340836,
+          "precision": 0.35423728813559324,
+          "recall": 0.004250559284116331,
+          "predicted_pixels": 590,
+          "reference_pixels": 49170,
+          "valid_pixels": 97902
+        },
+        "vein": {
+          "dice": 0.5842115617008122,
+          "precision": 0.5374631573504318,
+          "recall": 0.6398670278256587,
+          "predicted_pixels": 58017,
+          "reference_pixels": 48732,
+          "valid_pixels": 97902
+        },
+        "disc": {
+          "dice": 0.6285377358490566,
+          "precision": 0.5564459242120707,
+          "recall": 0.7220900003661528,
+          "predicted_pixels": 35441,
+          "reference_pixels": 27311,
+          "valid_pixels": 976171
+        },
+        "av_conditional_accuracy": 0.5257298114440971
+      },
+      "tile_batch": {
+        "vessel": {
+          "dice": 0.5168844471383129,
+          "precision": 0.4958040003966144,
+          "recall": 0.5398370792030621,
+          "predicted_pixels": 110939,
+          "reference_pixels": 101890,
+          "valid_pixels": 976171
+        },
+        "artery": {
+          "dice": 0.05845535457938559,
+          "precision": 0.49658536585365853,
+          "recall": 0.031055521659548505,
+          "predicted_pixels": 3075,
+          "reference_pixels": 49170,
+          "valid_pixels": 97902
+        },
+        "vein": {
+          "dice": 0.586481613907158,
+          "precision": 0.5759074275541489,
+          "recall": 0.5974513666584585,
+          "predicted_pixels": 50555,
+          "reference_pixels": 48732,
+          "valid_pixels": 97902
+        },
+        "disc": {
+          "dice": 0.4681616247091178,
+          "precision": 0.31744976070315456,
+          "recall": 0.8913258394053678,
+          "predicted_pixels": 76683,
+          "reference_pixels": 27311,
+          "valid_pixels": 976171
+        },
+        "av_conditional_accuracy": 0.5124614410328696
+      }
+    },
+    {
+      "dataset": "aria",
+      "photo_id": "sha256:13aefaf803770de3d213bbf27d106d1a9ddb5ef4a329e9d4f651d2fc0a70b4e5",
+      "record_ids": [
+        "aria_aria_c_4_8_BDP_vessels",
+        "aria_aria_c_4_8_BSS_vessels",
+        "aria_aria_c_4_8_disc_disc_cup"
+      ],
+      "shape": [
+        938,
+        1193
+      ],
+      "running": {
+        "vessel": {
+          "dice": 0.2949792440727607,
+          "precision": 0.1794958657753213,
+          "recall": 0.8271441540040894,
+          "predicted_pixels": 543149,
+          "reference_pixels": 117867,
+          "valid_pixels": 989753
+        },
+        "disc": {
+          "dice": 0.6568697486138041,
+          "precision": 0.9348373353989156,
+          "recall": 0.506319156746552,
+          "predicted_pixels": 10328,
+          "reference_pixels": 19069,
+          "valid_pixels": 989753
+        },
+        "av_conditional_accuracy": null
+      },
+      "tile_batch": {
+        "vessel": {
+          "dice": 0.5824809006490779,
+          "precision": 0.5887404993630132,
+          "recall": 0.5763530080514478,
+          "predicted_pixels": 115387,
+          "reference_pixels": 117867,
+          "valid_pixels": 989753
+        },
+        "disc": {
+          "dice": 0.3145301654538973,
+          "precision": 0.19656641111329534,
+          "recall": 0.7865645812575384,
+          "predicted_pixels": 76305,
+          "reference_pixels": 19069,
+          "valid_pixels": 989753
+        },
+        "av_conditional_accuracy": null
+      }
+    },
+    {
+      "dataset": "avrdb",
+      "photo_id": "sha256:02470903d3930e07bdb92b82e68d1b1ea5955c9fa2aaf913c9bdd8b4ca2e7146",
+      "record_ids": [
+        "avrdb_IM005834_av_av",
+        "avrdb_IM005834_vessels"
+      ],
+      "shape": [
+        443,
+        521
+      ],
+      "running": {
+        "vessel": {
+          "dice": 0.5729476527507095,
+          "precision": 1.0,
+          "recall": 0.4014902843999329,
+          "predicted_pixels": 16757,
+          "reference_pixels": 41737,
+          "valid_pixels": 41737
+        },
+        "artery": {
+          "dice": 0.0002083984578514119,
+          "precision": 0.16666666666666666,
+          "recall": 0.00010426441455531227,
+          "predicted_pixels": 12,
+          "reference_pixels": 19182,
+          "valid_pixels": 40461
+        },
+        "vein": {
+          "dice": 0.5126840804041707,
+          "precision": 0.5986945333584385,
+          "recall": 0.44828234409511725,
+          "predicted_pixels": 15933,
+          "reference_pixels": 21279,
+          "valid_pixels": 40461
+        },
+        "av_conditional_accuracy": 0.525889127802081
+      },
+      "tile_batch": {
+        "vessel": {
+          "dice": 0.56517180328996,
+          "precision": 1.0,
+          "recall": 0.39389510506265424,
+          "predicted_pixels": 16440,
+          "reference_pixels": 41737,
+          "valid_pixels": 41737
+        },
+        "artery": {
+          "dice": 0.018615653604854468,
+          "precision": 0.6856060606060606,
+          "recall": 0.00943592951725576,
+          "predicted_pixels": 264,
+          "reference_pixels": 19182,
+          "valid_pixels": 40461
+        },
+        "vein": {
+          "dice": 0.5034414945919371,
+          "precision": 0.6010565447074936,
+          "recall": 0.43310305935429294,
+          "predicted_pixels": 15333,
+          "reference_pixels": 21279,
+          "valid_pixels": 40461
+        },
+        "av_conditional_accuracy": 0.5648155013469761
+      }
+    }
+  ],
+  "training_patches": [
+    {
+      "dataset": "rite",
+      "photo_id": "sha256:04ddfc23f162d135569b49322c9cceafc0c20a0677280d6e18256b451d0a431c",
+      "record_ids": [
+        "drive_37_training_vessels",
+        "rite_37_training_av"
+      ],
+      "crop": [
+        283,
+        529,
+        384,
+        384
+      ],
+      "running": {
+        "loss": 0.7422090768814087,
+        "components": {
+          "vessel": 0.8125849962234497,
+          "av": 0.6718332171440125
+        },
+        "metrics": {
+          "vessel": {
+            "dice": 0.6154106198536692,
+            "precision": 0.5377247025065406,
+            "recall": 0.7193338978267005,
+            "predicted_pixels": 23698,
+            "reference_pixels": 17715,
+            "valid_pixels": 147456
+          },
+          "artery": {
+            "dice": 0.06452425960932577,
+            "precision": 0.810126582278481,
+            "recall": 0.03360021000131251,
+            "predicted_pixels": 316,
+            "reference_pixels": 7619,
+            "valid_pixels": 14616
+          },
+          "vein": {
+            "dice": 0.6257768484637277,
+            "precision": 0.5271037181996087,
+            "recall": 0.7699013863084179,
+            "predicted_pixels": 10220,
+            "reference_pixels": 6997,
+            "valid_pixels": 14616
+          },
+          "av_conditional_accuracy": 0.5032156540777231
+        }
+      },
+      "tile_batch": {
+        "loss": 0.7201141119003296,
+        "components": {
+          "vessel": 0.7624458074569702,
+          "av": 0.6777824759483337
+        },
+        "metrics": {
+          "vessel": {
+            "dice": 0.612755905511811,
+            "precision": 0.5726269315673289,
+            "recall": 0.6589331075359864,
+            "predicted_pixels": 20385,
+            "reference_pixels": 17715,
+            "valid_pixels": 147456
+          },
+          "artery": {
+            "dice": 0.04987850108709554,
+            "precision": 0.975,
+            "recall": 0.02559390996193726,
+            "predicted_pixels": 200,
+            "reference_pixels": 7619,
+            "valid_pixels": 14616
+          },
+          "vein": {
+            "dice": 0.6123750536579383,
+            "precision": 0.5363050483351235,
+            "recall": 0.7135915392310991,
+            "predicted_pixels": 9310,
+            "reference_pixels": 6997,
+            "valid_pixels": 14616
+          },
+          "av_conditional_accuracy": 0.5487821565407772
+        }
+      }
+    },
+    {
+      "dataset": "refuge",
+      "photo_id": "sha256:0013f974be05defd24f0f6764ee1ea4476b27c568cc93f2cfb7cee4e0cd69e2c",
+      "record_ids": [
+        "refuge_n0286_disc_cup"
+      ],
+      "crop": [
+        347,
+        0,
+        384,
+        384
+      ],
+      "running": {
+        "loss": 0.5798417329788208,
+        "components": {
+          "disc": 0.585669994354248,
+          "cup": 0.5740134119987488
+        },
+        "metrics": {
+          "disc": {
+            "dice": 0.6672416843595188,
+            "precision": 0.567403896787783,
+            "recall": 0.8097155126140634,
+            "predicted_pixels": 26586,
+            "reference_pixels": 18630,
+            "valid_pixels": 142437
+          },
+          "cup": {
+            "dice": 0.6112315698178664,
+            "precision": 0.44012490241998437,
+            "recall": 1.0,
+            "predicted_pixels": 12810,
+            "reference_pixels": 5638,
+            "valid_pixels": 142437
+          },
+          "av_conditional_accuracy": null
+        }
+      },
+      "tile_batch": {
+        "loss": 0.4084068834781647,
+        "components": {
+          "disc": 0.5166143774986267,
+          "cup": 0.30019938945770264
+        },
+        "metrics": {
+          "disc": {
+            "dice": 0.7632994810735093,
+            "precision": 0.9379547766215476,
+            "recall": 0.6434782608695652,
+            "predicted_pixels": 12781,
+            "reference_pixels": 18630,
+            "valid_pixels": 142437
+          },
+          "cup": {
+            "dice": 0.8183797582401081,
+            "precision": 0.7095430282515297,
+            "recall": 0.9666548421426038,
+            "predicted_pixels": 7681,
+            "reference_pixels": 5638,
+            "valid_pixels": 142437
+          },
+          "av_conditional_accuracy": null
+        }
+      }
+    },
+    {
+      "dataset": "riga",
+      "photo_id": "sha256:0171a2913c102fb4b905033093c515d38cab675040c7eac5cfa287398c9111cc",
+      "record_ids": [
+        "riga_MESSIDOR_image174_observer1_disc_cup",
+        "riga_MESSIDOR_image174_observer2_disc_cup",
+        "riga_MESSIDOR_image174_observer3_disc_cup",
+        "riga_MESSIDOR_image174_observer4_disc_cup",
+        "riga_MESSIDOR_image174_observer5_disc_cup",
+        "riga_MESSIDOR_image174_observer6_disc_cup"
+      ],
+      "crop": [
+        116,
+        316,
+        384,
+        384
+      ],
+      "running": {
+        "loss": 0.4165697395801544,
+        "components": {
+          "disc": 0.26146119832992554,
+          "cup": 0.5716782808303833
+        },
+        "metrics": {
+          "disc": {
+            "dice": 0.8404464871963231,
+            "precision": 0.7249912861624259,
+            "recall": 0.9996395530457768,
+            "predicted_pixels": 11476,
+            "reference_pixels": 8323,
+            "valid_pixels": 139300
+          },
+          "cup": {
+            "dice": 0.5333598884684326,
+            "precision": 0.3636610537751222,
+            "recall": 1.0,
+            "predicted_pixels": 7364,
+            "reference_pixels": 2678,
+            "valid_pixels": 139300
+          },
+          "av_conditional_accuracy": null
+        }
+      },
+      "tile_batch": {
+        "loss": 0.3773089051246643,
+        "components": {
+          "disc": 0.2680993676185608,
+          "cup": 0.4865184426307678
+        },
+        "metrics": {
+          "disc": {
+            "dice": 0.8387096774193549,
+            "precision": 0.7224103499175133,
+            "recall": 0.9996395530457768,
+            "predicted_pixels": 11517,
+            "reference_pixels": 8323,
+            "valid_pixels": 139300
+          },
+          "cup": {
+            "dice": 0.6204819277108434,
+            "precision": 0.4497816593886463,
+            "recall": 1.0,
+            "predicted_pixels": 5954,
+            "reference_pixels": 2678,
+            "valid_pixels": 139300
+          },
+          "av_conditional_accuracy": null
+        }
+      }
+    },
+    {
+      "dataset": "uoadr",
+      "photo_id": "sha256:032b428eac5d8fd1cb5fee4897749914d6ee19fb8851e6e0eb54ef20143d0493",
+      "record_ids": [
+        "uoadr_53_disc_cup_disc_cup",
+        "uoadr_53_vessels"
+      ],
+      "crop": [
+        333,
+        46,
+        384,
+        384
+      ],
+      "running": {
+        "loss": 0.6357375383377075,
+        "components": {
+          "vessel": 1.0340605974197388,
+          "disc": 0.23741446435451508
+        },
+        "metrics": {
+          "vessel": {
+            "dice": 0.4182813286361349,
+            "precision": 0.3800948951008975,
+            "recall": 0.46499755227638295,
+            "predicted_pixels": 17493,
+            "reference_pixels": 14299,
+            "valid_pixels": 147456
+          },
+          "disc": {
+            "dice": 0.9025984063856997,
+            "precision": 0.9214921090387375,
+            "recall": 0.884463907020298,
+            "predicted_pixels": 34850,
+            "reference_pixels": 36309,
+            "valid_pixels": 147456
+          },
+          "av_conditional_accuracy": null
+        }
+      },
+      "tile_batch": {
+        "loss": 0.839655876159668,
+        "components": {
+          "vessel": 1.0012497901916504,
+          "disc": 0.6780619621276855
+        },
+        "metrics": {
+          "vessel": {
+            "dice": 0.4218453611166162,
+            "precision": 0.3543906383788412,
+            "recall": 0.5210154556262676,
+            "predicted_pixels": 21022,
+            "reference_pixels": 14299,
+            "valid_pixels": 147456
+          },
+          "disc": {
+            "dice": 0.7340625653173553,
+            "precision": 0.9985310145476947,
+            "recall": 0.5803519788482194,
+            "predicted_pixels": 21103,
+            "reference_pixels": 36309,
+            "valid_pixels": 147456
+          },
+          "av_conditional_accuracy": null
+        }
+      }
+    }
+  ],
+  "no_test_evaluation": true
+}

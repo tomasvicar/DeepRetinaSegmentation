@@ -1,0 +1,52 @@
+{
+  "host": "ada",
+  "pid": 3284548,
+  "launch_utc": "2026-11-10T11:36:57.123254+00:00",
+  "command": [
+    "/usr/bin/nice",
+    "-n",
+    "5",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python",
+    "-u",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/scripts/evaluate_original.py",
+    "--manifest",
+    "/var/home/tom/code/DeepRetinaSegmentation_for_Leipzig/data/unified25/manifest.json",
+    "--universal",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/src/deepretina/pretrained/legacy-single-net-universal.pt",
+    "--vessel",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/src/deepretina/pretrained/legacy-single-net-vessels.pt",
+    "--av-raw-proxy",
+    "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/src/deepretina/pretrained/legacy-av-v9.pt",
+    "--data-root",
+    "/var/home/tom/ownCloud/fundus_databases",
+    "--device",
+    "cpu",
+    "--split",
+    "val",
+    "--output",
+    "/var/home/tom/code/DeepRetinaSegmentation_reference_87cf045/original-strong-raw-val.json"
+  ],
+  "source_commit": "87cf045ab89425c4994df577fd510d210a1a0eab",
+  "execution_code_sha256": "8172e06bfa2c61497d3a34d443027f2f0193834090e95530322e3a6f795254fe",
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "data_verification_seconds": 5.849615669983905,
+  "model_sha256": {
+    "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+    "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+    "av_raw_proxy": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b"
+  },
+  "device": "cpu",
+  "threads": 8,
+  "niceness": 5,
+  "cuda_visible_devices": "",
+  "split": "val",
+  "expected_photos": 770,
+  "output": "/var/home/tom/code/DeepRetinaSegmentation_reference_87cf045/original-strong-raw-val.json",
+  "log": "/var/home/tom/code/DeepRetinaSegmentation_reference_87cf045/original-strong-raw-val.log",
+  "qualifications": [
+    "Historical exposure and training normalization unresolved; no independent quality claim",
+    "Raw A/V preprocessing is an explicitly uncertified MATLAB proxy"
+  ],
+  "test_evaluation_performed": false
+}

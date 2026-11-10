@@ -1,0 +1,160 @@
+{
+  "family": "unified",
+  "lineage": {
+    "initialization": "scratch",
+    "historical_exposure": false,
+    "independent_model_eligible": true
+  },
+  "architecture": {
+    "name": "compact_unet",
+    "base_channels": 12,
+    "depth": 4,
+    "normalization": "batch",
+    "outputs": 5
+  },
+  "config": {
+    "architecture": "compact_unet",
+    "legacy_initialization": null,
+    "allow_historical_exposure": false,
+    "preprocessing_profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "epochs": 60,
+    "epoch_samples": 8192,
+    "coverage_first": true,
+    "batch_size": 4,
+    "patch_size": 384,
+    "base_channels": 12,
+    "depth": 4,
+    "norm": "batch",
+    "lr": 0.001,
+    "weight_decay": 1e-05,
+    "scheduler": "cosine",
+    "min_lr_ratio": 0.05,
+    "seed": 42,
+    "workers": 2,
+    "device": "cuda",
+    "sampling": "dataset_task_balanced",
+    "train_view": "patch",
+    "view_size": 512,
+    "foreground_probability": 0.5,
+    "augmentation": "mild",
+    "bce_weight": 1.0,
+    "dice_weight": 1.0,
+    "av_weight": 1.0,
+    "tile_size": 512,
+    "overlap": 64,
+    "require_all_heads": true,
+    "selection_metric": "macro_dataset_mean_dice",
+    "purpose": "full_data",
+    "max_steps": null
+  },
+  "manifest": "/var/home/tom/code/DeepRetinaSegmentation_hpo/data/unified25/manifest.json",
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "training_source_sha256": "45e9254a6ca31737adba36dd360dc935309c8e4d524f3ea3af818844a7cfa37d",
+  "normalization": "RGB/255-0.5",
+  "preprocessing": {
+    "profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "normalized": false
+  },
+  "channels": [
+    "vessel",
+    "artery",
+    "vein",
+    "disc",
+    "cup"
+  ],
+  "activation": [
+    "sigmoid",
+    "conditional_softmax",
+    "conditional_softmax",
+    "sigmoid",
+    "sigmoid"
+  ],
+  "support": {
+    "supervised_channels": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "annotated_pixels_per_record_sum": [
+      553334558,
+      8045773,
+      8045773,
+      2550249406,
+      2035038586
+    ],
+    "av_reference_class_pixels": {
+      "artery": 3703227,
+      "vein": 4342546
+    },
+    "records": 5281,
+    "photos": 2221,
+    "datasets": {
+      "aria": 247,
+      "avrdb": 120,
+      "chasedb1": 32,
+      "drhagis": 33,
+      "drishti": 40,
+      "drive": 16,
+      "erlangen": 63,
+      "g1020": 609,
+      "hrf": 54,
+      "iostar": 54,
+      "onhsd": 207,
+      "refuge": 400,
+      "riga": 2681,
+      "rimone": 285,
+      "rite": 16,
+      "stare": 24,
+      "uoadr": 400
+    }
+  },
+  "validation_support": {
+    "supervised_channels": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "annotated_pixels_per_record_sum": [
+      115227615,
+      2626284,
+      2626284,
+      613321044,
+      523296979
+    ],
+    "av_reference_class_pixels": {
+      "artery": 1196224,
+      "vein": 1430060
+    },
+    "records": 993,
+    "photos": 770,
+    "datasets": {
+      "aria": 78,
+      "avrdb": 40,
+      "chasedb1": 12,
+      "drhagis": 11,
+      "drishti": 10,
+      "drive": 4,
+      "erlangen": 22,
+      "g1020": 204,
+      "hrf": 18,
+      "iostar": 18,
+      "onhsd": 68,
+      "refuge": 400,
+      "rimone": 96,
+      "rite": 4,
+      "stare": 8
+    }
+  },
+  "parameters": 1106597,
+  "torch": "2.6.0+cu124",
+  "inference_max_size": null,
+  "purpose": "full_data",
+  "accuracy_claim": "requires independent benchmark"
+}

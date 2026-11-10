@@ -71,3 +71,25 @@ timestamps alone are insufficient. A regenerated audit after an annotation
 change does not authorize silently replacing data in an existing plan. Core
 full-data training stores this fingerprint in checkpoints and rejects changed
 inputs before optimization. Copied preparations remain portable across hosts.
+
+## First full-data epoch and normalization refinement
+
+The first baseline epoch used every one of the 2,221 training photographs and
+3,264 of 5,281 eligible observer/task variants, selected stochastically. There
+were 8,192 delivered crops and 2,048 optimizer updates. On GTX 1070, training took
+897.53 seconds and full validation took 310.11 seconds, excluding startup data
+checks. Macro validation Dice was 0.3762; this is an undertrained diagnostic,
+not a selected final model or a quality improvement claim. The learning-rate 0.0003 trial
+also covered every training photo and reached macro 0.4408 after one epoch;
+early rankings are not final convergence evidence. Both retain a 60-epoch
+cosine horizon and are continuing to the 8-epoch screen.
+
+A bounded paired probe on 12 predeclared validation photos found heterogeneous
+BatchNorm-statistics sensitivity, without changing the checkpoint or using test
+images. Temporary tile statistics improved some cup/vessel predictions and
+worsened others; they are not deployed as an inference change. The frozen
+supplemental `reports/unified/plan-groupnorm-87cf045.json` therefore adds one
+from-scratch GroupNorm candidate with all other baseline settings unchanged.
+Its parent plan hash, execution source, dataset identity, seed and training
+budget are recorded. Separate plan provenance remains distinct from the
+original seven-candidate plan; no existing run is silently reassigned to it.
