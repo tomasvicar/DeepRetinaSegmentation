@@ -74,5 +74,35 @@
   "output": "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_87cf045/runs/group_norm-seed42",
   "log": "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_87cf045/runs/group_norm-seed42.log",
   "test_evaluation_performed": false,
-  "accuracy_improvement_claim": false
+  "accuracy_improvement_claim": false,
+  "resume_launches": [
+    {
+      "pid": 3304722,
+      "launch_utc": "2026-11-10T12:20:13.637188+00:00",
+      "command": [
+        "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python",
+        "-u",
+        "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/scripts/unified_hpo.py",
+        "run",
+        "--plan",
+        "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_87cf045/plan-groupnorm-87cf045.json",
+        "--trial",
+        "group_norm",
+        "--output",
+        "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_87cf045/runs/group_norm-seed42",
+        "--manifest",
+        "/var/home/tom/code/DeepRetinaSegmentation_for_Leipzig/data/unified25/manifest.json",
+        "--device",
+        "cuda:0",
+        "--resume"
+      ],
+      "cuda_visible_devices": "GPU-d0675605-e6c2-1c85-9799-08b279aab0ff",
+      "gpu_snapshot": "GPU-d0675605-e6c2-1c85-9799-08b279aab0ff, 0, 766",
+      "resume_from_epoch": 1,
+      "target_screen_epoch": 8,
+      "scheduler_horizon": 60,
+      "log": "/var/home/tom/code/DeepRetinaSegmentation_unified_trials_87cf045/runs/group_norm-seed42.resume-e008.log"
+    }
+  ],
+  "active_pid": 3304722
 }
