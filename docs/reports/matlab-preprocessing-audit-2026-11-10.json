@@ -1,0 +1,169 @@
+{
+  "date": "2026-11-10",
+  "scope": "CPU-only bounded raw-preprocessing audit; no model forward, training interruption, production code edits or original-data writes.",
+  "reference_commit": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+  "matlab": "26.2.0.3433840 (R2026b) Update 1, Ada, -singleCompThread, Image Processing Toolbox license available",
+  "scratch_local_and_ada": "/tmp/matlab_parity_audit_1jzmlm7x",
+  "source_sha256": {
+    "image_adjustment": "f4344ca657e525ba898c81ac969f06fb6ebf0af88ae0f44b85543d2f347b06bf",
+    "souradnice": "6f47763d8c1b1821d0f6613bc5c823b910577d668857bf617f54d01dcb1fcf9b",
+    "local_contrast_and_clahe": "bce99e1b0475ba4c5fb45ed9ae26d7a1085a4878d5fe035238b515ce317e10e2"
+  },
+  "pipeline": [
+    "Raw uint8 RGB -> im2double; use official DRIVE/HRF FOV as logical, bypass automatic threshold FOV detection.",
+    "souradnice: MATLAB edge(final_closed) default edge detector; row/column midpoint modes rounded give center. Radius=round(mode(Euclidean distances from center to edge pixels))+1. Diameter=2*radius. This is not bbox extent.",
+    "image_adjustment: imresize(double RGB, pixels_per_degree*degrees/diameter) default bicubic; preserve entire frame. imresize masks to exact output HW with nearest.",
+    "local_contrast_and_clahe: erode FOV with strel disk1; bwdist; Sobel imgradientxy; extrapolate interp2 linear with zero outside using coordinate minus gradient/4*distance.",
+    "imgaussfilt with replicate padding and sigma=80/(55/25), regardless of image resampling resolution. Compute (extrapolated-background)/background+0.5; clamp0..1.",
+    "rgb2hsv; adapthisteq on V with NumTiles=round(HW/(250/(55/25))) and ClipLimit=.005; hsv2rgb; zero outside FOV.",
+    "Historical commented DICOM export: uint16(round(normalized*4096)); later active nnUNet export:uint8(round(normalized*255))."
+  ],
+  "calibration": {
+    "drive_degrees": 45,
+    "hrf_degrees": 60,
+    "training_path_evidence": "Ves_Class/Main_Training.py dataset=data_preprocessed_dicom_25N; Main_Predict.py uses data_preprocessed_dicom_25N_UBMI. This supports an intended25px profile, but is not proof of provenance of each historical training file.",
+    "later_export": "MAIN_VA.m resolution35, Task535_Ophtalmo, active nnUNet uint8 export; local contrast remains hard-coded25."
+  },
+  "goldens": [
+    {
+      "name": "drive",
+      "pixels_per_degree": 25,
+      "shape": [
+        1222,
+        1182,
+        3
+      ],
+      "radius": 269,
+      "diameter": 538,
+      "stored_sha256_c_order_uint16_little_endian": "66041161182dc9313015d08ce5031079e91416234e8b9e7b9e60650d9d481e94"
+    },
+    {
+      "name": "hrf",
+      "pixels_per_degree": 25,
+      "shape": [
+        1073,
+        1610,
+        3
+      ],
+      "radius": 1633,
+      "diameter": 3266,
+      "stored_sha256_c_order_uint16_little_endian": "ffcd48b37f809d47f5bb7bce9ebc9922c276a73716bd5b21ae06280ef4c8781a"
+    },
+    {
+      "name": "drive_35",
+      "pixels_per_degree": 35,
+      "shape": [
+        1710,
+        1655,
+        3
+      ],
+      "radius": 269,
+      "diameter": 538,
+      "stored_sha256_c_order_uint16_little_endian": "4ea67db364488c8e573ea3ad7498d81e2714e10dbbc805cc9fea787fcd8bca0d"
+    }
+  ],
+  "proxy_comparisons": [
+    {
+      "dataset": "drive",
+      "radius": 269.0,
+      "center_matlab_1based": [
+        301,
+        279
+      ],
+      "shape": [
+        1222,
+        1182
+      ],
+      "proxy_shape": [
+        1222,
+        1182,
+        3
+      ],
+      "fov_disagreement_pixels": 0,
+      "raw_resize_fov": {
+        "mae": 0.0030755249557924843,
+        "p95": 0.008315523052961238,
+        "max": 0.19840642215998122,
+        "equal_fraction": 0.003445626740871857
+      },
+      "full_proxy_dic12_fov": {
+        "mae": 451.90341680067075,
+        "p95": 743.0,
+        "max": 1582.0,
+        "equal_fraction": 0.0027975464761310687
+      },
+      "photometric_only_dic12_fov": {
+        "mae": 447.9586042106315,
+        "p95": 714.0,
+        "max": 1174.0,
+        "equal_fraction": 0.0034884945500500237
+      },
+      "mat_sha256": "5869305d9f6ba9a4afe3ef644b96bed591a5f4d547adb04c651a05818c2a0016"
+    },
+    {
+      "dataset": "hrf",
+      "radius": 1633.0,
+      "center_matlab_1based": [
+        1167,
+        1762
+      ],
+      "shape": [
+        1073,
+        1610
+      ],
+      "proxy_shape": [
+        1073,
+        1610,
+        3
+      ],
+      "fov_disagreement_pixels": 0,
+      "raw_resize_fov": {
+        "mae": 0.001676990767351285,
+        "p95": 0.004670304045497707,
+        "max": 0.17926085677059728,
+        "equal_fraction": 0.00015600894847227724
+      },
+      "full_proxy_dic12_fov": {
+        "mae": 545.6310287865062,
+        "p95": 854.0,
+        "max": 3640.0,
+        "equal_fraction": 0.00020374814353919663
+      },
+      "photometric_only_dic12_fov": {
+        "mae": 542.9227497593624,
+        "p95": 833.0,
+        "max": 1920.0,
+        "equal_fraction": 0.0002366402205231028
+      },
+      "mat_sha256": "ccfc06162ca1abd9f2e28daad749a3076fad82851bdce3ce1aaea75b09323536"
+    }
+  ],
+  "limitations": [
+    "Source-executed R2026b outputs are deterministic test references, not a certification against unknown2022/2023 MATLAB/toolbox runtime or original prepared training DICOM.",
+    "Only official provided FOV paths exercised; automatic souradnice threshold paths and UBMI-specific morphology remain untested.",
+    "Zero dummy vessel was supplied for the proxy photometry comparison; actual AV supervision/removal of unknown labels is not tested.",
+    "No proprietary MathWorks toolbox source read or copied."
+  ],
+  "next_minimal_implementation": [
+    "Keep raw proxy explicitly uncertified and prepared-DICOM exact model path distinct.",
+    "Create isolated Python MATLAB-compatible photometric implementation against saved stage references, starting with CLAHE tile geometry/histogram mapping and Gaussian defaults; do not assume skimage equalize_adapthist is equivalent.",
+    "Port bicubic scalar-scale pixel coordinates/antialiasing and the provided-FOV radius estimator next; retain explicit calibration as an auditable option.",
+    "Validate stage errors and stored12bit differences on both goldens before replacing any production route; expand to automatic/UBMI FOV only afterwards."
+  ],
+  "isolated_stage_comparison_drive25": {
+    "clahe_on_identical_v": {
+      "mae": 0.11500332535122068,
+      "p95": 0.1835863611775244,
+      "max": 0.28617675961720956,
+      "mean_python": 0.6271736256049629,
+      "mean_matlab": 0.5155697978804422
+    },
+    "gaussian_on_identical_extrapolated": {
+      "mae": 0.0009977067668856567,
+      "p95": 0.00366621417897664,
+      "max": 0.024536757104808182,
+      "mean_python": 0.5142284074098,
+      "mean_matlab": 0.514427798653015
+    }
+  }
+}

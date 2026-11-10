@@ -1,0 +1,179 @@
+"""Temporary CPU-only measurement; does not modify immutable source or corpus."""
+import os,sys,time,json,inspect,tempfile,hashlib,random,statistics,shutil,resource
+from pathlib import Path
+from collections import defaultdict,Counter
+import numpy as np
+import torch
+from PIL import Image
+SRC=Path('/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045')
+sys.path.insert(0,str(SRC/'src'))
+from deepretina.unified import UnifiedDataset,UnifiedConfig,map_record_targets
+MANIFEST=Path('/var/home/tom/code/DeepRetinaSegmentation_for_Leipzig/data/unified25/manifest.json')
+ROOT=MANIFEST.parent
+OUT=Path('/var/home/tom/code/DeepRetinaSegmentation_unified_trials_87cf045/io-profile-cpu.json')
+torch.set_num_threads(2);torch.set_num_interop_threads(1)
+cfg=UnifiedConfig(device='cpu',workers=0,purpose='full_data')
+data=UnifiedDataset(MANIFEST,'train',cfg,return_trace=True)
+all_sources=sorted({r['dataset']for r in data.rows})
+selected=[];seen=set();strata={}
+for source in all_sources:
+ choices=[i for i,g in enumerate(data.groups)if any(r['dataset']==source for r in g)and i not in seen]
+ count=4 if len(selected)+4+(len(all_sources)-len(strata)-1)*3<=64 else 3
+ indices=[choices[(k*len(choices))//count]for k in range(count)]
+ strata[source]=indices
+ for i in indices:selected.append((source,i));seen.add(i)
+assert len(selected)==64
+print(json.dumps({'phase':'start','strata':{k:len(v)for k,v in strata.items()},'nice':os.nice(0),'threads':torch.get_num_threads()}),flush=True)
+source_hash=hashlib.sha256((SRC/'src/deepretina/unified.py').read_bytes()).hexdigest()
+rand=random.Random(903)
+
+def rgb(path,method):
+ if method=='png':
+  with Image.open(path)as im:return np.asarray(im.convert('RGB')).copy()
+ if method=='npy':return np.load(path,allow_pickle=False)
+ return np.load(path,mmap_mode='r',allow_pickle=False).copy()
+
+def labels(path):
+ with np.load(path,allow_pickle=False)as obj:
+  return {k:obj[k].astype(np.float32 if k=='target'else bool)for k in obj.files}
+
+def evict_own(path):
+ # Only private copies on local NVMe; never evict or alter the original corpus.
+ with open(path,'rb')as handle:
+  os.fsync(handle.fileno())
+  os.posix_fadvise(handle.fileno(),0,0,os.POSIX_FADV_DONTNEED)
+
+def timed(fn,*args):
+ started=time.perf_counter();result=fn(*args);return result,time.perf_counter()-started
+
+def cache_clear(ds):ds._image_cache.clear();ds._cache_bytes=0
+
+def seed(ds,value):torch.manual_seed(value);ds._augmentation_generator=None;cache_clear(ds)
+
+# Trace exact original lines, attributing native-array loading and mapping separately.
+source_lines={};codes={};line_times=defaultdict(float);stacks={}
+for name in ['sample','__getitem__']:
+ fn=getattr(UnifiedDataset,name);lines,first=inspect.getsourcelines(fn);codes[fn.__code__]=name
+ source_lines.update({(name,first+i):line.strip()for i,line in enumerate(lines)})
+
+def trace(frame,event,arg):
+ code=frame.f_code
+ if code not in codes:return None
+ key=id(frame);now=time.perf_counter();name=codes[code]
+ if event=='call':stacks[key]=(None,now);return trace
+ previous,started=stacks.get(key,(None,now))
+ if previous is not None:line_times[(name,previous)]+=now-started
+ if event=='return':stacks.pop(key,None)
+ else:stacks[key]=(frame.f_lineno,now)
+ return trace
+
+with tempfile.TemporaryDirectory(prefix='unified-io-profile-',dir=str(OUT.parent))as scratch:
+ scratch=Path(scratch);images={};mask_paths={};stage_bytes=Counter();correct=Counter();raw_specs=[];mask_specs=[]
+ for n,(source,index)in enumerate(selected):
+  image=data._image(index);reference=(image.numpy().transpose(1,2,0)*255).round().astype(np.uint8)
+  # Match original PNG decode, not a float reconstruction, for serialization proof.
+  original=ROOT/data.groups[index][0]['image']
+  with Image.open(original)as im:reference=np.asarray(im.convert('RGB')).copy()
+  png=scratch/f'{n}.png';png.write_bytes(original.read_bytes());npy=scratch/f'{n}.npy';np.save(npy,reference,allow_pickle=False)
+  images[index]=npy;stage_bytes['original_png']+=png.stat().st_size;stage_bytes['rgb_npy']+=npy.stat().st_size
+  raw_specs.append((source,index,reference,png,npy))
+  for row in data.groups[index]:
+   original_mask=ROOT/row['mask']
+   if str(original_mask)in mask_paths:continue
+   with np.load(original_mask,allow_pickle=False)as archive:arrays={k:archive[k]for k in archive.files}
+   assert arrays['target'].dtype==np.float32 and np.isin(arrays['target'],[0,1]).all()
+   idx=len(mask_paths);float_path=scratch/f'label-{idx}.float.npz';bool_path=scratch/f'label-{idx}.bool.npz'
+   float_path.write_bytes(original_mask.read_bytes());encoded=dict(arrays);encoded['target']=arrays['target'].astype(bool);np.savez_compressed(bool_path,**encoded)
+   restored=labels(bool_path)
+   assert all(np.array_equal(arrays[k],restored[k])for k in arrays)
+   assert restored['target'].dtype==np.float32
+   original_mapped=map_record_targets(row,arrays['target'],arrays['valid'])
+   restored_mapped=map_record_targets(row,restored['target'],restored['valid'])
+   assert all(np.array_equal(a,b)for a,b in zip(original_mapped,restored_mapped))
+   mask_paths[str(original_mask)]=bool_path;mask_specs.append((row['dataset'],float_path,bool_path))
+   stage_bytes['float_target_npz']+=float_path.stat().st_size;stage_bytes['bool_target_npz']+=bool_path.stat().st_size;correct['mask_variants_identical']+=1
+  if(n+1)%16==0:print(json.dumps({'phase':'staged','photos':n+1,'masks':len(mask_specs)}),flush=True)
+ del reference,image
+ cache_clear(data)
+ # Serialization timings: own clean copies for cache-advised pass; paired randomized warm passes.
+ timings=[]
+ for phase in ['cache_advised_first','warm1','warm2']:
+  for source,index,reference,png,npy in raw_specs:
+   methods=['png','npy','mmap'];rand.shuffle(methods)
+   for method in methods:
+    path=png if method=='png'else npy
+    if phase=='cache_advised_first':evict_own(path)
+    array,seconds=timed(rgb,path,method)
+    assert np.array_equal(array,reference)
+    correct['rgb_reads_identical']+=1
+    timings.append({'kind':'rgb','phase':phase,'dataset':source,'method':method,'seconds':seconds,'pixels':int(reference.shape[0]*reference.shape[1])})
+  for source,float_path,bool_path in mask_specs:
+   methods=[('float_npz',float_path),('bool_npz_cast_float32',bool_path)];rand.shuffle(methods)
+   for method,path in methods:
+    if phase=='cache_advised_first':evict_own(path)
+    arrays,seconds=timed(labels,path)
+    timings.append({'kind':'labels','phase':phase,'dataset':source,'method':method,'seconds':seconds,'pixels':int(arrays['target'].shape[-2]*arrays['target'].shape[-1])})
+  print(json.dumps({'phase':'serialization_done','pass':phase}),flush=True)
+ # Full native __getitem__, untraced replay, and private optimized serialization replay.
+ variant=UnifiedDataset(MANIFEST,'train',cfg,return_trace=True)
+ def mapped_image(index):
+  array=np.load(images[index],mmap_mode='r',allow_pickle=False)
+  return torch.from_numpy(array.transpose(2,0,1).copy()).float()/255
+ variant._image=mapped_image
+ orig_load=np.load;profile=[]
+ def redirected_load(file,*args,**kwargs):return orig_load(mask_paths.get(str(file),file),*args,**kwargs)
+ for n,(source,index)in enumerate(selected):
+  seed(data,1700+n);sys.settrace(trace)
+  try:original,traced_seconds=timed(data.__getitem__,index)
+  finally:sys.settrace(None)
+  order=['original','prototype'];rand.shuffle(order);paired={}
+  for method in order:
+   ds=data if method=='original'else variant
+   seed(ds,1700+n)
+   if method=='prototype':np.load=redirected_load
+   try:paired[method]=timed(ds.__getitem__,index)
+   finally:np.load=orig_load
+  replayed,untraced_seconds=paired['original'];alternative,alternative_seconds=paired['prototype']
+  assert all(torch.equal(a,b)for a,b in zip(original[:3],replayed[:3]))and original[3:]==replayed[3:]
+  assert all(torch.equal(a,b)for a,b in zip(original[:3],alternative[:3]))and original[3:]==alternative[3:]
+  correct['full_getitem_identical']+=1
+  profile.append({'dataset':source,'photo_id':data.photo_ids[index],'native_shape':list(original[0].shape),'traced_seconds':traced_seconds,'original_untraced_seconds':untraced_seconds,'prototype_untraced_seconds':alternative_seconds})
+  if(n+1)%16==0:print(json.dumps({'phase':'getitem_done','photos':n+1}),flush=True)
+ # Detailed exact original lines + section totals.
+ categorized=Counter();details=[]
+ get_lines=[(line,text)for(name,line),text in source_lines.items()if name=='__getitem__']
+ def at(text):return next(line for line,value in get_lines if text in value)
+ bounds=[(at('if cfg.train_view'), 'padding_or_whole_view'),(at('foreground = None'),'foreground_selection'),(at('if foreground is not None'),'crop_coordinates_and_slice'),(at('rotation ='),'dihedral'),(at('if cfg.augmentation'),'augmentation'),(at('if not _supervision_mask'),'fallback_and_trace')]
+ for(name,line),seconds in line_times.items():
+  text=source_lines[(name,line)];category='sample_other'
+  if name=='__getitem__':
+   category='sample_total_inclusive'
+   for lower,label in bounds:
+    if line>=lower:category=label
+  else:
+   if 'self._image('in text:category='png_decode_and_rgb_tensor'
+   elif 'torch.zeros'in text:category='five_channel_initial_allocation'
+   elif 'np.load('in text or 'data['in text:category='npz_read_cast_and_fov'
+   elif 'map_record_targets('in text:category='numpy_five_channel_mapping'
+   elif 'target[support]'in text:category='torch_boolean_target_copy'
+   elif 'valid |='in text:category='torch_valid_union'
+   elif 'torch.from_numpy'in text:category='numpy_to_torch_views'
+  categorized[category]+=seconds;details.append({'function':name,'line':line,'code':text,'seconds':seconds,'category':category})
+ summaries=[]
+ for kind in ['rgb','labels']:
+  for phase in ['cache_advised_first','warm1','warm2']:
+   for method in sorted({r['method']for r in timings if r['kind']==kind}):
+    values=[r['seconds']for r in timings if r['kind']==kind and r['phase']==phase and r['method']==method]
+    summaries.append({'kind':kind,'phase':phase,'method':method,'n':len(values),'total_seconds':sum(values),'median_ms':1000*statistics.median(values),'p90_ms':1000*float(np.percentile(values,90))})
+ report={'purpose':'CPU-only temporary serialization and dataset-stage profile; no production changes',
+  'host':os.uname().nodename,'source_commit':'87cf045','module_path':str(SRC/'src/deepretina/unified.py'),'module_sha256':source_hash,
+  'manifest_sha256':hashlib.sha256(MANIFEST.read_bytes()).hexdigest(),'device':'cpu','cuda_visible_devices':os.environ.get('CUDA_VISIBLE_DEVICES'),
+  'nice':os.nice(0),'torch_threads':torch.get_num_threads(),'logical_cpus':os.cpu_count(),'photos':len(selected),'annotation_variants':len(mask_specs),'strata':{k:len(v)for k,v in strata.items()},
+  'config':cfg.__dict__,'identity_checks':dict(correct),'staging_bytes':dict(stage_bytes),'serialization_summary':summaries,
+  'getitem_stage_seconds':dict(categorized),'line_times':sorted(details,key=lambda r:r['seconds'],reverse=True),'getitem':profile,'serialization_observations':timings,
+  'cache_protocol':'Private scratch copies only on local NVMe. fsync+POSIX_FADV_DONTNEED before each cache-advised read; not guaranteed physically cold. Warm paired methods randomized per sample. Dataset RGBcache cleared per sample to represent large working set; OS original corpus cache not evicted. Complete untraced original/prototype order randomized per photo; traced original provides stage timings and an independent equality reference. Alias verification was completed during staging. No original corpus pages evicted.',
+  'equality_protocol':'Every staged RGB read bitwise equal; every native target/valid/fov and five-channel map identical after booltarget→float32;64same-seed completegetitem results image/target/valid/index/recordtrace bitwise equal under original vs NPYmmap+boolNPZ. No updates or GPU.',
+  'peak_process_rss_kib':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,'scratch_cleaned_on_exit':True}
+ assert source_hash==hashlib.sha256((SRC/'src/deepretina/unified.py').read_bytes()).hexdigest()
+ OUT.write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
+print(json.dumps({'phase':'complete','report':str(OUT),'getitem_stage_seconds':dict(categorized),'identity_checks':dict(correct)}),flush=True)
