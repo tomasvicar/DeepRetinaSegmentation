@@ -1,0 +1,147 @@
+{
+  "scope": "Two real source image_adjustment frames plus separately invoked source photometry; no public activation",
+  "reference": "7bb0539b90dfce2ed6eaeef1de812072be1155d0, MATLAB R2026b singleCompThread CPU nice10",
+  "matlab_parity_certified": false,
+  "historical_export_provenance_verified": false,
+  "source_helpers_sha256": {
+    "souradnice.m": "6f47763d8c1b1821d0f6613bc5c823b910577d668857bf617f54d01dcb1fcf9b",
+    "image_adjustment.m": "f4344ca657e525ba898c81ac969f06fb6ebf0af88ae0f44b85543d2f347b06bf",
+    "local_contrast_and_clahe.m": "bce99e1b0475ba4c5fb45ed9ae26d7a1085a4878d5fe035238b515ce317e10e2"
+  },
+  "notes": [
+    "7bb source image_adjustment has no active crop; full stereo width retained for RIM",
+    "Pattern is synthetic categorical test, not source GT",
+    "Loader image_adjustment output and optional LC/CLAHE are separate stages"
+  ],
+  "cases": [
+    {
+      "dataset": "erlangen",
+      "input_file_sha256": "2dabe96edcfcc9ee1f56b3867009af29e41fcac00941689a6566a565f36c9ae2",
+      "input_shape": [
+        770,
+        1000,
+        3
+      ],
+      "scale": 0.499001996007984,
+      "center_row_one_based": 386,
+      "center_col_one_based": 501,
+      "radius_pixels": 501,
+      "resized_rgb": {
+        "shape": [
+          385,
+          500,
+          3
+        ],
+        "unequal_values": 386553,
+        "max_absolute_error": 1.3322676295501878e-15,
+        "mean_absolute_error": 1.0267291828532756e-16,
+        "python_nonfinite": 0,
+        "matlab_nonfinite": 0
+      },
+      "processing_fov_disagreements": 0,
+      "categorical_pattern_disagreements": 0,
+      "photometry_source_error": "",
+      "normalized_rgb": {
+        "shape": [
+          385,
+          500,
+          3
+        ],
+        "unequal_values": 353171,
+        "max_absolute_error": 4.323798263872192e-15,
+        "mean_absolute_error": 2.1481857861512908e-16,
+        "python_nonfinite": 0,
+        "matlab_nonfinite": 0
+      },
+      "storage_quantization": {
+        "dicom12": {
+          "disagreements": 0,
+          "max_absolute_difference": 0,
+          "scale": 4096,
+          "changed_source_distance_to_half_integer_max": 0.0,
+          "first_changed_values": [],
+          "rounding": "positive half up, source normalized array independently rounded"
+        },
+        "uint8": {
+          "disagreements": 0,
+          "max_absolute_difference": 0,
+          "scale": 255,
+          "changed_source_distance_to_half_integer_max": 0.0,
+          "first_changed_values": [],
+          "rounding": "positive half up, source normalized array independently rounded"
+        }
+      }
+    },
+    {
+      "dataset": "rimone",
+      "input_file_sha256": "205d5293f856d05d8455fb3a170786921033c79342987ea628d5391f3797fc18",
+      "input_shape": [
+        1424,
+        2144,
+        3
+      ],
+      "scale": 0.4655493482309125,
+      "center_row_one_based": 713,
+      "center_col_one_based": 537,
+      "radius_pixels": 537,
+      "resized_rgb": {
+        "shape": [
+          663,
+          999,
+          3
+        ],
+        "unequal_values": 1520097,
+        "max_absolute_error": 8.881784197001252e-16,
+        "mean_absolute_error": 3.2252796329870486e-17,
+        "python_nonfinite": 0,
+        "matlab_nonfinite": 0
+      },
+      "processing_fov_disagreements": 0,
+      "categorical_pattern_disagreements": 0,
+      "photometry_source_error": "",
+      "normalized_rgb": {
+        "shape": [
+          663,
+          999,
+          3
+        ],
+        "unequal_values": 1679506,
+        "max_absolute_error": 4.107825191113079e-15,
+        "mean_absolute_error": 2.897638252530777e-16,
+        "python_nonfinite": 0,
+        "matlab_nonfinite": 0
+      },
+      "storage_quantization": {
+        "dicom12": {
+          "disagreements": 47,
+          "max_absolute_difference": 1,
+          "scale": 4096,
+          "changed_source_distance_to_half_integer_max": 4.547473508864641e-13,
+          "first_changed_values": [
+            {
+              "python": 0.6519775390625001,
+              "matlab": 0.6519775390624999
+            },
+            {
+              "python": 0.6531982421875,
+              "matlab": 0.6531982421874999
+            },
+            {
+              "python": 0.4073486328125,
+              "matlab": 0.40734863281249994
+            }
+          ],
+          "rounding": "positive half up, source normalized array independently rounded"
+        },
+        "uint8": {
+          "disagreements": 0,
+          "max_absolute_difference": 0,
+          "scale": 255,
+          "changed_source_distance_to_half_integer_max": 0.0,
+          "first_changed_values": [],
+          "rounding": "positive half up, source normalized array independently rounded"
+        }
+      }
+    }
+  ]
+}

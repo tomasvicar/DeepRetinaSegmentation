@@ -156,3 +156,38 @@ Public operator documentation:
 [histcounts](https://www.mathworks.com/help/matlab/ref/double.histcounts.html).
 The footprint, coefficients and error counts above are direct R2026b oracle
 measurements; no proprietary toolbox implementation was inspected.
+
+## Real source caller gate: Erlangen and RIM-ONE
+
+The exact user-owned `image_adjustment.m` from7bb0539b was executed on one
+original frame from each collection, with source loader FOVs and25pixels/degree,
+20degrees. Python applies the separate processing FOV returned by
+`provided_fov_source`, never the RIM wireframe as an image mask.
+
+| Case | Original → prepared | Radius | Bicubic max absolute error | LC/CLAHE max absolute error |
+| --- | --- | --- | --- | --- |
+| Erlangen | 770×1000 →385×500 | 501 | 1.33e−15 | 4.32e−15 |
+| RIM-ONE | 1424×2144 →663×999 | 537 | 8.88e−16 | 4.11e−15 |
+
+Centers/radii, prepared processing FOVs and a synthetic categorical nearest-
+resampling pattern match exactly. No stage produced nonfinite values. Applying
+the documented historical positive-rounding `dicom12` scale4096 to the final
+RGB gives zero unequal values for Erlangen and47 for RIM-ONE (maximum one stored
+unit). The uint8 scale255 study gives zero unequal values for both. Floating
+residuals and these discrete differences are preserved in the report; no epsilon
+or rounding patch is applied. This is agreement on two source frames, not a
+blanket raw-image or historical-file certification.
+
+The7bb source caller has its crop code commented out: the measured RIM case
+retains the complete stereo frame. This does not establish behavior of every
+other historical revision. The source `load_rimone` invokes image_adjustment and
+writes its result; the separately measured `local_contrast_and_clahe` stage must
+not be presented as an unconditional step inside that loader. The handling of a
+constant all-ones FOV by a later exporter also remains a separate provenance
+question. An Erlangen-video-specific upstream loader has not been established by
+this gate.
+
+Full numerical output and exact source-helper hashes:
+[`adjustment-comparison.json`](../reports/legacy/matlab-fov-source/adjustment-comparison.json).
+Only hashes, dimensions and numerical errors are committed; source photos and
+large intermediate arrays remain external scratch artifacts.
