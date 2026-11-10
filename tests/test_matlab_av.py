@@ -70,7 +70,7 @@ def test_bad_resize_scale_rejected(scale):
 def test_calibration_and_threshold_requirements_are_explicit():
     image = np.full((20, 20, 3), 127, np.uint8)
     fov = np.ones((20, 20), bool)
-    with pytest.raises(TypeError, match="fov_diameter_pixels"):
+    with pytest.raises(ValueError, match="paired edge"):
         prepare_vesclass_matlab_calibrated(image, fov, fov=fov, dataset="drive")
     with pytest.raises(ValueError, match="Threshold"):
         prepare_vesclass_matlab_calibrated(
@@ -82,3 +82,53 @@ def test_calibration_and_threshold_requirements_are_explicit():
         prepare_vesclass_matlab_calibrated(
             image, fov, fov=fov, fov_diameter_pixels=0, dataset="drive"
         )
+
+
+def test_generic_fov_estimate_and_explicit_calibration_prepare_identical_pixels():
+    from deepretina.legacy.matlab_fov import calibrate_provided_fov
+
+    rng = np.random.default_rng(27)
+    image = rng.integers(30, 220, (200, 240, 3), np.uint8)
+    y, x = np.indices(image.shape[:2])
+    fov = (x - 120) ** 2 + (y - 100) ** 2 < 85**2
+    vessel = ((x % 13) == 0) & fov
+    calibration = calibrate_provided_fov(fov)
+    automatic = prepare_vesclass_matlab_calibrated(image, vessel, fov=fov, field_of_view_degrees=8)
+    explicit = prepare_vesclass_matlab_calibrated(
+        image,
+        vessel,
+        fov=fov,
+        field_of_view_degrees=8,
+        fov_diameter_pixels=calibration.diameter_pixels,
+    )
+    np.testing.assert_array_equal(automatic.image, explicit.image)
+    np.testing.assert_array_equal(automatic.inputs(), explicit.inputs())
+    assert automatic.geometry == explicit.geometry
+    info = automatic.metadata["fov_calibration"]
+    assert info["mode"] == "estimated_from_provided_fov"
+    assert info["method"] == "souradnice_generic_binary_sobel"
+    assert info["center_row_one_based"] == calibration.center_row_one_based
+    assert info["radius_pixels"] == calibration.radius_pixels
+    assert explicit.metadata["fov_calibration"]["mode"] == "explicit_diameter"
+
+
+def test_explicit_diameter_bypasses_fov_estimator_even_for_special_source(monkeypatch):
+    import deepretina.legacy.matlab_av as profile
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("Explicit diameter must take priority over automatic calibration")
+
+    monkeypatch.setattr(profile, "calibrate_provided_fov", forbidden)
+    image = np.full((200, 240, 3), 127, np.uint8)
+    fov = np.ones((200, 240), bool)
+    vessel = np.indices(fov.shape).sum(0) % 2 == 0
+    result = profile.prepare_vesclass_matlab_calibrated(
+        image,
+        vessel,
+        fov=fov,
+        dataset="riga",
+        field_of_view_degrees=8,
+        fov_diameter_pixels=200,
+    )
+    assert result.metadata["fov_calibration"]["mode"] == "explicit_diameter"
+    assert result.metadata["fov_calibration"]["center_row_one_based"] is None

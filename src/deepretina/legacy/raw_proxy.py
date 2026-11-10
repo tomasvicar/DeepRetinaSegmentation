@@ -43,10 +43,8 @@ def predict_raw_av(
     if preprocessing_profile == "matlab":
         if fov_path is None:
             raise ValueError("--av-raw-matlab requires provided --fov")
-        if (
-            fov_diameter_pixels is None
-            or not math.isfinite(fov_diameter_pixels)
-            or fov_diameter_pixels <= 0
+        if fov_diameter_pixels is not None and (
+            not math.isfinite(fov_diameter_pixels) or fov_diameter_pixels <= 0
         ):
             raise ValueError("--av-raw-matlab requires positive finite --fov-diameter-pixels")
         angle = field_of_view_degrees
@@ -70,7 +68,12 @@ def predict_raw_av(
     if preprocessing_profile == "matlab":
         if not fov.any():
             raise ValueError("Provided --fov must contain foreground pixels")
-        scale = pixels_per_degree * angle / fov_diameter_pixels
+        diameter = fov_diameter_pixels
+        if diameter is None:
+            from .matlab_fov import calibrate_provided_fov
+
+            diameter = calibrate_provided_fov(fov, dataset=dataset).diameter_pixels
+        scale = pixels_per_degree * angle / diameter
         shape = np.ceil(np.asarray(rgb.shape[:2]) * scale)
         if np.any(np.floor(shape / (250 / (55 / 25)) + 0.5) < 2):
             raise ValueError(

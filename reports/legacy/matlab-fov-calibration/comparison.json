@@ -1,0 +1,1597 @@
+{
+  "scope": "Provided binary FOV generic souradnice branch, no automatic FOV extraction or production activation",
+  "runtime": "MATLAB R2026b Update1, CPU nice5 singleCompThread",
+  "original_helper_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0:matlab_preprocessing/souradnice.m",
+  "original_helper_sha256": "6f47763d8c1b1821d0f6613bc5c823b910577d668857bf617f54d01dcb1fcf9b",
+  "synthetic": [
+    {
+      "name": "circle_odd",
+      "shape": [
+        61,
+        71
+      ],
+      "mask_sha256": "01fb2b93b3163d452c9d4037efd1700a8dc5f27eb9e0fa3214a334c45c82c9bb",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 31.0,
+      "reference_center_col": 36.0,
+      "reference_radius": 23.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 31,
+        "center_col_one_based": 36,
+        "radius_pixels": 23,
+        "edge_pixels": 128
+      }
+    },
+    {
+      "name": "circle_even",
+      "shape": [
+        60,
+        70
+      ],
+      "mask_sha256": "212a82523cc0a79144e38f9840bd537fcab57054f693c3cfb34e8acc0c364811",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 31.0,
+      "reference_center_col": 36.0,
+      "reference_radius": 23.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 31,
+        "center_col_one_based": 36,
+        "radius_pixels": 23,
+        "edge_pixels": 127
+      }
+    },
+    {
+      "name": "circle_offcenter",
+      "shape": [
+        63,
+        79
+      ],
+      "mask_sha256": "6781303d532d0674f98bb412ed55e16afed2935655e7b6dd202baec719e1fc49",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 37.0,
+      "reference_center_col": 30.0,
+      "reference_radius": 25.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 37,
+        "center_col_one_based": 30,
+        "radius_pixels": 25,
+        "edge_pixels": 145
+      }
+    },
+    {
+      "name": "ellipse",
+      "shape": [
+        63,
+        79
+      ],
+      "mask_sha256": "cdf42e55b54997da3913a6ccac8a7fb29b2f391a5f42098ef5d416dbe92aaf85",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 32.0,
+      "reference_center_col": 40.0,
+      "reference_radius": 23.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 32,
+        "center_col_one_based": 40,
+        "radius_pixels": 23,
+        "edge_pixels": 167
+      }
+    },
+    {
+      "name": "cropped",
+      "shape": [
+        63,
+        79
+      ],
+      "mask_sha256": "edca381ed0cf60eb248bbf25b5149605750fec84898cbcef6697d7fdd12099bf",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 32.0,
+      "reference_center_col": 30.0,
+      "reference_radius": 20.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 32,
+        "center_col_one_based": 30,
+        "radius_pixels": 20,
+        "edge_pixels": 72
+      }
+    },
+    {
+      "name": "touches",
+      "shape": [
+        61,
+        71
+      ],
+      "mask_sha256": "2c803c9a976356b8aba4f5ff13b108f4252eeecd2b20650f93091bee968a9b65",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 31.0,
+      "reference_center_col": 36.0,
+      "reference_radius": 31.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 31,
+        "center_col_one_based": 36,
+        "radius_pixels": 31,
+        "edge_pixels": 177
+      }
+    },
+    {
+      "name": "small",
+      "shape": [
+        9,
+        11
+      ],
+      "mask_sha256": "575651e837f80affdbb8aead43379df0d49481ddffc5da7ef49e34e90385bd78",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "hole",
+      "shape": [
+        61,
+        71
+      ],
+      "mask_sha256": "02b6659d631393f387d70b60bb5ed53247650ae4466f975ff929dfbb39730d4a",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 31.0,
+      "reference_center_col": 36.0,
+      "reference_radius": 23.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 31,
+        "center_col_one_based": 36,
+        "radius_pixels": 23,
+        "edge_pixels": 164
+      }
+    },
+    {
+      "name": "rectangle",
+      "shape": [
+        61,
+        71
+      ],
+      "mask_sha256": "7622d914d6e44bcecc2517a897caf47a48362092bdce2455bb6779bb3800cd31",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 31.0,
+      "reference_center_col": 36.0,
+      "reference_radius": 31.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 31,
+        "center_col_one_based": 36,
+        "radius_pixels": 31,
+        "edge_pixels": 192
+      }
+    },
+    {
+      "name": "empty",
+      "shape": [
+        31,
+        41
+      ],
+      "mask_sha256": "5e3b45a767c6934e631cf6839c33d074e92cf1f6ff05431f42e8537a5ad427af",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "full",
+      "shape": [
+        31,
+        41
+      ],
+      "mask_sha256": "ce0fba9b82c9ee6c65e26c9c023a82f1181cd918fc3cf1e4ae4c2162a8821f9a",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "checkerboard",
+      "shape": [
+        31,
+        41
+      ],
+      "mask_sha256": "6b37f633bdeecde46eed8bb4075ecbef110329191fd8e4f211e426c74459ede9",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 16.0,
+      "reference_center_col": 21.0,
+      "reference_radius": 26.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 16,
+        "center_col_one_based": 21,
+        "radius_pixels": 26,
+        "edge_pixels": 4
+      }
+    },
+    {
+      "name": "random",
+      "shape": [
+        35,
+        43
+      ],
+      "mask_sha256": "da4e545a95666b3c6bbfdb507d755b43a0d540ff56cffab0f50509af2499e6c1",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 13.0,
+      "reference_center_col": 8.0,
+      "reference_radius": 9.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 13,
+        "center_col_one_based": 8,
+        "radius_pixels": 9,
+        "edge_pixels": 18
+      }
+    },
+    {
+      "name": "held_probe_00",
+      "shape": [
+        31,
+        9
+      ],
+      "mask_sha256": "2337fca147bf71a828b852cf9cfe67162287d8b4b92e8a315e648f8dbc917a4b",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 19.0,
+      "reference_center_col": 5.0,
+      "reference_radius": 10.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 19,
+        "center_col_one_based": 5,
+        "radius_pixels": 10,
+        "edge_pixels": 35
+      }
+    },
+    {
+      "name": "held_probe_01",
+      "shape": [
+        31,
+        75
+      ],
+      "mask_sha256": "66804ef3d527005cd865d42c2f98b5b7861fe0849ce37413757b54543d5413ac",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 19.0,
+      "reference_center_col": 43.0,
+      "reference_radius": 3.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 19,
+        "center_col_one_based": 43,
+        "radius_pixels": 3,
+        "edge_pixels": 99
+      }
+    },
+    {
+      "name": "held_probe_02",
+      "shape": [
+        42,
+        18
+      ],
+      "mask_sha256": "7769fa89f5c95a05be172028cc013041ad6f554b0045d49c39f3b9a519b16d78",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 23.0,
+      "reference_center_col": 5.0,
+      "reference_radius": 7.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 23,
+        "center_col_one_based": 5,
+        "radius_pixels": 7,
+        "edge_pixels": 58
+      }
+    },
+    {
+      "name": "held_probe_03",
+      "shape": [
+        63,
+        29
+      ],
+      "mask_sha256": "63eac0cf12d62461b6d6fecf4bbcbd3efe234bbbce915db5c0ddf97e7783feee",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 30.0,
+      "reference_center_col": 5.0,
+      "reference_radius": 13.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 30,
+        "center_col_one_based": 5,
+        "radius_pixels": 13,
+        "edge_pixels": 32
+      }
+    },
+    {
+      "name": "held_probe_04",
+      "shape": [
+        12,
+        15
+      ],
+      "mask_sha256": "3e3d9fd9f38d651e503fd8fc4aa2d448fcb28e1f203612ca27c54a3300d1dbd6",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_05",
+      "shape": [
+        79,
+        28
+      ],
+      "mask_sha256": "7fb3c9e6c16d96b7991a883df6420a9b9a6d070a12b88063517e402d7058abda",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 40.0,
+      "reference_center_col": 15.0,
+      "reference_radius": 12.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 40,
+        "center_col_one_based": 15,
+        "radius_pixels": 12,
+        "edge_pixels": 57
+      }
+    },
+    {
+      "name": "held_probe_06",
+      "shape": [
+        45,
+        54
+      ],
+      "mask_sha256": "6dc7da1e08c70b349ca39705616ca7e919edeaced3ad9726f2f72ce6046ef1f3",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 9.0,
+      "reference_center_col": 27.0,
+      "reference_radius": 2.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 9,
+        "center_col_one_based": 27,
+        "radius_pixels": 2,
+        "edge_pixels": 65
+      }
+    },
+    {
+      "name": "held_probe_07",
+      "shape": [
+        35,
+        67
+      ],
+      "mask_sha256": "62cbeec5110c8200b34f83747a772164c8ae4e75e23d68266fb45e4de5f67fb7",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 2.0,
+      "reference_center_col": 32.0,
+      "reference_radius": 14.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 2,
+        "center_col_one_based": 32,
+        "radius_pixels": 14,
+        "edge_pixels": 54
+      }
+    },
+    {
+      "name": "held_probe_08",
+      "shape": [
+        76,
+        43
+      ],
+      "mask_sha256": "adebf5e57b4c71e8d7f387567af577082735811f567f36796987acfe900633f0",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_09",
+      "shape": [
+        41,
+        52
+      ],
+      "mask_sha256": "f35c8f8e744ad5b85a6c20ba57584f970376f84cbb7b30c9cddef419ea26157d",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_10",
+      "shape": [
+        24,
+        44
+      ],
+      "mask_sha256": "fc5b98f5995e7329802205425f0f5db8ac69e3c2650a6f7d170e03b463e5ccb0",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_11",
+      "shape": [
+        32,
+        16
+      ],
+      "mask_sha256": "7f8c046d30f604030283e6ae69fec5319d46b7cf57e4e314bf749c50fe1063c4",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_12",
+      "shape": [
+        24,
+        45
+      ],
+      "mask_sha256": "17acc0e747b30c1c136b5cd507a4f3469f3ea8ef42e3a57a6f23e8d025f4c5b2",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_13",
+      "shape": [
+        47,
+        9
+      ],
+      "mask_sha256": "e40b346d9029f622deac1d78c7622edd136e525529bcff48e00384139dba9e50",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_14",
+      "shape": [
+        79,
+        11
+      ],
+      "mask_sha256": "d4371c0b46356cae5a25c17998626ab8c908c3bb1a8dc6c0453e010f87f6564a",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_15",
+      "shape": [
+        72,
+        71
+      ],
+      "mask_sha256": "4fc171e0bc4b9ea44c7ce15a02d06d2e77498dc0c84838a6d6695074cb0bf8be",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_16",
+      "shape": [
+        56,
+        17
+      ],
+      "mask_sha256": "7ebd48eda89b38c10719fd22cf8ad246de2aa46e070f8df1e0f062d7d4b397d6",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_17",
+      "shape": [
+        31,
+        72
+      ],
+      "mask_sha256": "46f698298dfb83d08a21a5a81682a0d199b0fb3f964b2d763e8d70e6b0ef79cb",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_18",
+      "shape": [
+        49,
+        30
+      ],
+      "mask_sha256": "b4f57e159229eaef747d75d8324860197169cd375a392072058fc0ff11123ea7",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_19",
+      "shape": [
+        7,
+        76
+      ],
+      "mask_sha256": "5ee6bf90eca90391b47fe615bed3d18b1473ca8cca3d612beacc54f288d8cb24",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_20",
+      "shape": [
+        61,
+        65
+      ],
+      "mask_sha256": "77d320fd423b7506fc7fbf63595da394f02b727eca772762fc1ecbd721116ccb",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_21",
+      "shape": [
+        17,
+        46
+      ],
+      "mask_sha256": "ddb06433f60c7c1b9cde0ccbae4813b16dd687561f62503839dc179c5b46d93c",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_22",
+      "shape": [
+        71,
+        27
+      ],
+      "mask_sha256": "928fc7bd4dcdbfd630d89b2da8c6dbdef79080b66bc3658fbfb84bd378ab5d92",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_23",
+      "shape": [
+        74,
+        68
+      ],
+      "mask_sha256": "4773daac98af3ce66dc7390b0fd1ba0fab294d5e09c2e4250371beec395eb103",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 8.0,
+      "reference_center_col": 7.0,
+      "reference_radius": 35.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 8,
+        "center_col_one_based": 7,
+        "radius_pixels": 35,
+        "edge_pixels": 67
+      }
+    },
+    {
+      "name": "held_probe_24",
+      "shape": [
+        69,
+        46
+      ],
+      "mask_sha256": "06f14d15d2323458ae235818a286f15ddfdce24cbdd71034409ec7303d628638",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 47.0,
+      "reference_center_col": 31.0,
+      "reference_radius": 20.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 47,
+        "center_col_one_based": 31,
+        "radius_pixels": 20,
+        "edge_pixels": 61
+      }
+    },
+    {
+      "name": "held_probe_25",
+      "shape": [
+        65,
+        34
+      ],
+      "mask_sha256": "582ba4f42b6ee3a042bf9eafe48a34156ef20bd77586523372d29774a1d48e77",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 22.0,
+      "reference_center_col": 4.0,
+      "reference_radius": 37.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 22,
+        "center_col_one_based": 4,
+        "radius_pixels": 37,
+        "edge_pixels": 45
+      }
+    },
+    {
+      "name": "held_probe_26",
+      "shape": [
+        59,
+        51
+      ],
+      "mask_sha256": "6e3dcccf80b0304efe9bc396a124649c1eb0810102508e76183bfbebc86f1494",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 17.0,
+      "reference_center_col": 10.0,
+      "reference_radius": 40.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 17,
+        "center_col_one_based": 10,
+        "radius_pixels": 40,
+        "edge_pixels": 48
+      }
+    },
+    {
+      "name": "held_probe_27",
+      "shape": [
+        39,
+        52
+      ],
+      "mask_sha256": "01695a1ac07b74a2192cdf3778817d48254b3d062c9b59828d2e006edc3367da",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 29.0,
+      "reference_center_col": 9.0,
+      "reference_radius": 2.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 29,
+        "center_col_one_based": 9,
+        "radius_pixels": 2,
+        "edge_pixels": 24
+      }
+    },
+    {
+      "name": "held_probe_28",
+      "shape": [
+        69,
+        48
+      ],
+      "mask_sha256": "b201ff6463f9956bd8dc1e03b5cf4f4d7f487a417fc685742c26de311968ca31",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 35.0,
+      "reference_center_col": 2.0,
+      "reference_radius": 7.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 35,
+        "center_col_one_based": 2,
+        "radius_pixels": 7,
+        "edge_pixels": 179
+      }
+    },
+    {
+      "name": "held_probe_29",
+      "shape": [
+        14,
+        26
+      ],
+      "mask_sha256": "bb49240862e6fbf9c466d4e344546b9c7abdc1a623f30078a1634b3ace805e5c",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 3.0,
+      "reference_center_col": 22.0,
+      "reference_radius": 10.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 3,
+        "center_col_one_based": 22,
+        "radius_pixels": 10,
+        "edge_pixels": 16
+      }
+    },
+    {
+      "name": "held_probe_30",
+      "shape": [
+        80,
+        67
+      ],
+      "mask_sha256": "eb32f7c4138af0f8e7efec9f33f9207b9385077ad1e092b871ca873809a3d3d0",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 22.0,
+      "reference_center_col": 3.0,
+      "reference_radius": 21.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 22,
+        "center_col_one_based": 3,
+        "radius_pixels": 21,
+        "edge_pixels": 85
+      }
+    },
+    {
+      "name": "held_probe_31",
+      "shape": [
+        70,
+        16
+      ],
+      "mask_sha256": "a6b12929aa5adf335813d520731a453fe946e90bb46d1865281dd48925f1e1fa",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_32",
+      "shape": [
+        73,
+        49
+      ],
+      "mask_sha256": "8ac6ca4d6439b32f5b82ea38c034170b64f807a954f8329deafa7e7604113699",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_33",
+      "shape": [
+        26,
+        48
+      ],
+      "mask_sha256": "e21a614f4134deb3aad6c843bf562d2a985c48a67bc7cadb352be4c0c9f006f4",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 20.0,
+      "reference_center_col": 29.0,
+      "reference_radius": 7.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 20,
+        "center_col_one_based": 29,
+        "radius_pixels": 7,
+        "edge_pixels": 37
+      }
+    },
+    {
+      "name": "held_probe_34",
+      "shape": [
+        66,
+        55
+      ],
+      "mask_sha256": "305ada6f10d2a1cc709d50616dccec35f1f6d7ff5c1851a32f3b739f6a023025",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_35",
+      "shape": [
+        60,
+        49
+      ],
+      "mask_sha256": "5ea51840aa24a34df99de2ea9d9ccda3909da6f6040a2bb0a56af0c86a6ef8c4",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 9.0,
+      "reference_center_col": 30.0,
+      "reference_radius": 7.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 9,
+        "center_col_one_based": 30,
+        "radius_pixels": 7,
+        "edge_pixels": 40
+      }
+    },
+    {
+      "name": "held_probe_36",
+      "shape": [
+        78,
+        62
+      ],
+      "mask_sha256": "f0228968609929154162eb49a497f5dc514a94300a9f6737bbf08d3875ca56da",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 48.0,
+      "reference_center_col": 45.0,
+      "reference_radius": 12.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 48,
+        "center_col_one_based": 45,
+        "radius_pixels": 12,
+        "edge_pixels": 72
+      }
+    },
+    {
+      "name": "held_probe_37",
+      "shape": [
+        36,
+        35
+      ],
+      "mask_sha256": "617528f460cb60474d47501749a1e734afdfc57743455ace05c07add5c42ddb8",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 34.0,
+      "reference_center_col": 28.0,
+      "reference_radius": 5.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 34,
+        "center_col_one_based": 28,
+        "radius_pixels": 5,
+        "edge_pixels": 16
+      }
+    },
+    {
+      "name": "held_probe_38",
+      "shape": [
+        78,
+        19
+      ],
+      "mask_sha256": "cd403a19303bd84c2718d2eb211440e1454b9d99bcbea59daf2440eab47a713e",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_39",
+      "shape": [
+        80,
+        48
+      ],
+      "mask_sha256": "b99e2ae597e4d0db1c1d44f3382f3ca41804cbede4688211d9fa74bcc6d19fb6",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_40",
+      "shape": [
+        74,
+        77
+      ],
+      "mask_sha256": "1e39ce256d0f7953f5cbde8ed97aa6b5cb902304e55b662e0f594318776dc467",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 41.0,
+      "reference_center_col": 10.0,
+      "reference_radius": 13.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 41,
+        "center_col_one_based": 10,
+        "radius_pixels": 13,
+        "edge_pixels": 86
+      }
+    },
+    {
+      "name": "held_probe_41",
+      "shape": [
+        41,
+        26
+      ],
+      "mask_sha256": "7ae3d98c829ebc6eab4da0e76baeafd8c201c0757623f47b8e72350ef1bed644",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 12.0,
+      "reference_center_col": 16.0,
+      "reference_radius": 18.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 12,
+        "center_col_one_based": 16,
+        "radius_pixels": 18,
+        "edge_pixels": 49
+      }
+    },
+    {
+      "name": "held_probe_42",
+      "shape": [
+        13,
+        45
+      ],
+      "mask_sha256": "75df86d14067a37c025e74c0d48e889e56348dcd3038e39e9a3e670576b2b2ff",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'sloupec'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_43",
+      "shape": [
+        20,
+        68
+      ],
+      "mask_sha256": "0ec5bfb6d93ace0033bae77c530a03cf4c46b9ac8e3b4f2d828651eef59539ba",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'radek'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_44",
+      "shape": [
+        33,
+        42
+      ],
+      "mask_sha256": "e7c20e4454fbb619337314dc3a523377e36a46072a050484e83206fc1cc8a4a4",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 28.0,
+      "reference_center_col": 25.0,
+      "reference_radius": 3.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 28,
+        "center_col_one_based": 25,
+        "radius_pixels": 3,
+        "edge_pixels": 23
+      }
+    },
+    {
+      "name": "held_probe_45",
+      "shape": [
+        23,
+        63
+      ],
+      "mask_sha256": "89e245d3f1ae33f179beb324ba4e490a1b3d96a7c98376a7f9cab7ff6164e1ae",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 20.0,
+      "reference_center_col": 13.0,
+      "reference_radius": 4.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 20,
+        "center_col_one_based": 13,
+        "radius_pixels": 4,
+        "edge_pixels": 52
+      }
+    },
+    {
+      "name": "held_probe_46",
+      "shape": [
+        51,
+        72
+      ],
+      "mask_sha256": "003995cb7b31f47582e94c9d4dd39b64da5bb7e0149c36bc93c17ecb17be1ad8",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 4.0,
+      "reference_center_col": 55.0,
+      "reference_radius": 2.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 4,
+        "center_col_one_based": 55,
+        "radius_pixels": 2,
+        "edge_pixels": 61
+      }
+    },
+    {
+      "name": "held_probe_47",
+      "shape": [
+        36,
+        62
+      ],
+      "mask_sha256": "7ae9ed69c724965a1d6ad646f29f3949887ae39ca0a9cd76e6d1589a40f71fdc",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 19.0,
+      "reference_center_col": 7.0,
+      "reference_radius": 7.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 19,
+        "center_col_one_based": 7,
+        "radius_pixels": 7,
+        "edge_pixels": 39
+      }
+    },
+    {
+      "name": "held_probe_48",
+      "shape": [
+        74,
+        52
+      ],
+      "mask_sha256": "d4a4653593e767b234debcb4b4428682dec1bd08fe0ab922dc96d76bd07425c5",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 3.0,
+      "reference_center_col": 31.0,
+      "reference_radius": 5.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 3,
+        "center_col_one_based": 31,
+        "radius_pixels": 5,
+        "edge_pixels": 34
+      }
+    },
+    {
+      "name": "held_probe_49",
+      "shape": [
+        30,
+        27
+      ],
+      "mask_sha256": "18cfee150faffed64a78b416b74f6724513399e75fac60ac1f0c4c08fc5491a9",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'radek'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_50",
+      "shape": [
+        12,
+        65
+      ],
+      "mask_sha256": "f07187dc32ba4534238e304e2b742787db09b194dc646d0874cb6cf5a17bf079",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 8.0,
+      "reference_center_col": 37.0,
+      "reference_radius": 6.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 8,
+        "center_col_one_based": 37,
+        "radius_pixels": 6,
+        "edge_pixels": 30
+      }
+    },
+    {
+      "name": "held_probe_51",
+      "shape": [
+        63,
+        80
+      ],
+      "mask_sha256": "d7d75e4f84286e3a61c8398250bd91fd89a250640591b92ad4a7c41665422805",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 61.0,
+      "reference_center_col": 3.0,
+      "reference_radius": 8.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 61,
+        "center_col_one_based": 3,
+        "radius_pixels": 8,
+        "edge_pixels": 16
+      }
+    },
+    {
+      "name": "held_probe_52",
+      "shape": [
+        19,
+        55
+      ],
+      "mask_sha256": "e1aad6ab20d867fb3fa3ff1dbc5d720df576926b7b8b716781e1a5c606c37217",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 3.0,
+      "reference_center_col": 6.0,
+      "reference_radius": 8.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 3,
+        "center_col_one_based": 6,
+        "radius_pixels": 8,
+        "edge_pixels": 33
+      }
+    },
+    {
+      "name": "held_probe_53",
+      "shape": [
+        26,
+        47
+      ],
+      "mask_sha256": "86a3f6e5e6c68549ee6ee129f708cb63789e5a553fd337bd5936ce0731662f3c",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 18.0,
+      "reference_center_col": 10.0,
+      "reference_radius": 9.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 18,
+        "center_col_one_based": 10,
+        "radius_pixels": 9,
+        "edge_pixels": 53
+      }
+    },
+    {
+      "name": "held_probe_54",
+      "shape": [
+        51,
+        64
+      ],
+      "mask_sha256": "ad1bf1249469d43cec7c2658da967656db0b740e992f5a2868ef0c6a1a22e3d1",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 23.0,
+      "reference_center_col": 52.0,
+      "reference_radius": 11.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 23,
+        "center_col_one_based": 52,
+        "radius_pixels": 11,
+        "edge_pixels": 57
+      }
+    },
+    {
+      "name": "held_probe_55",
+      "shape": [
+        48,
+        72
+      ],
+      "mask_sha256": "668513ab332da889ce99fe2f6a313cdeca7982322ddb08d70ea4376279e3910a",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 10.0,
+      "reference_center_col": 4.0,
+      "reference_radius": 34.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 10,
+        "center_col_one_based": 4,
+        "radius_pixels": 34,
+        "edge_pixels": 67
+      }
+    },
+    {
+      "name": "held_probe_56",
+      "shape": [
+        23,
+        50
+      ],
+      "mask_sha256": "a17699444a2dab4e4ebe13bccc1e3690e42f6426637304fe5bcfaa7ef21453e1",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": null,
+      "reference_center_col": null,
+      "reference_radius": null,
+      "reference_error": "Unrecognized function or variable 'radek'.",
+      "python_error": "Provided FOV has no usable paired edge intersections"
+    },
+    {
+      "name": "held_probe_57",
+      "shape": [
+        68,
+        73
+      ],
+      "mask_sha256": "c78eaf00072e12db2e77030f39edd402fb710873e29decfbeb64fdce08bc0f1a",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 50.0,
+      "reference_center_col": 42.0,
+      "reference_radius": 22.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 50,
+        "center_col_one_based": 42,
+        "radius_pixels": 22,
+        "edge_pixels": 131
+      }
+    },
+    {
+      "name": "held_probe_58",
+      "shape": [
+        37,
+        51
+      ],
+      "mask_sha256": "fca2e06faeda8bbd818c77637234dfe5ef123de2bfc6cfe6a2f456015fb37fae",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 27.0,
+      "reference_center_col": 18.0,
+      "reference_radius": 17.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 27,
+        "center_col_one_based": 18,
+        "radius_pixels": 17,
+        "edge_pixels": 74
+      }
+    },
+    {
+      "name": "held_probe_59",
+      "shape": [
+        25,
+        52
+      ],
+      "mask_sha256": "922dd007c4ddaebd400d29df281158b32e1c00e5d18cb7be6846d10724f466c5",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 17.0,
+      "reference_center_col": 33.0,
+      "reference_radius": 6.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 17,
+        "center_col_one_based": 33,
+        "radius_pixels": 6,
+        "edge_pixels": 78
+      }
+    }
+  ],
+  "real": [
+    {
+      "name": "drive",
+      "shape": [
+        584,
+        565
+      ],
+      "mask_sha256": "486d5375729fbe5279f9473e518611d751c909b35619f3d6980cd5a355cd63ab",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 301.0,
+      "reference_center_col": 279.0,
+      "reference_radius": 269.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 301,
+        "center_col_one_based": 279,
+        "radius_pixels": 269,
+        "edge_pixels": 1588
+      }
+    },
+    {
+      "name": "hrf",
+      "shape": [
+        2336,
+        3504
+      ],
+      "mask_sha256": "37b5e777b9648184ab6d74cea8fc770477c5054ac66ee59fe91e78e2f6b6c993",
+      "edge_disagreements": 0,
+      "unthinned_disagreements": 0,
+      "threshold_error": 0.0,
+      "gx_max_error": 0.0,
+      "gy_max_error": 0.0,
+      "reference_center_row": 1167.0,
+      "reference_center_col": 1762.0,
+      "reference_radius": 1633.0,
+      "reference_error": "",
+      "python": {
+        "center_row_one_based": 1167,
+        "center_col_one_based": 1762,
+        "radius_pixels": 1633,
+        "edge_pixels": 4931
+      }
+    }
+  ],
+  "production_activated": false,
+  "historical_training_file_provenance_verified": false
+}
