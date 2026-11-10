@@ -41,5 +41,30 @@ including exact reproduction of original vessel counts. Its
 [report](../reports/unified/original-calibrated-av-canary.json) retains geometry
 and A/V confusion counts. The full refresh started on Ada CPU at 13:50:58 UTC;
 [launch provenance](../reports/unified/original-calibrated-av-val.launch.json)
-records the immutable source, command and pins. It must complete before this
-profile supplies a full reference score.
+records the immutable source, command and pins.
+
+## Completed validation result
+
+The full refresh completed all 42 A/V-supported photographs from the 770-photo
+validation partition in 262.29 seconds on Ada CPU. Every rerun vessel confusion
+count matched the baseline exactly. All per-photo vessel/disc/cup metrics remain
+identical, and every A/V valid/positive GT count was independently checked.
+
+| A/V metric | Existing raw proxy | Calibrated MATLAB-style Python |
+|---|---:|---:|
+| Artery Dice |0.650863|0.689529|
+| Vein Dice |0.664795|0.697298|
+| Conditional accuracy |0.710883|0.748573|
+| End-to-end accuracy |0.598154|0.630316|
+
+The five-head dataset-balanced mean consequently rises 0.610351→0.624398.
+This is evidence that the preprocessing correction improves this validation
+reference. It is not a retrained network, a held-out test claim, or proof of
+historical file provenance. Future original-versus-new comparisons should use
+this stronger calibrated A/V reference instead of the earlier raw proxy, while
+dedicated-disc selection is still pending.
+
+[Complete result](../reports/unified/original-calibrated-av-val.json) and
+[CPU timing observations](../reports/unified/original-calibrated-av-val.timing.json)
+preserve the source, input and baseline hashes. No models, raw data or existing
+reports were overwritten.
