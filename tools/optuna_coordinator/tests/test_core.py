@@ -110,6 +110,7 @@ def test_full_ask_report_rungs_and_actual60_only(tmp_path, protocol, profiles):
             and task["plan"]["candidates"][task["trial"]]["av_weight"] == 2
         )
         plan_sha = task["plan_sha256"]
+        leases = {task["lease"]}
         for epoch in [3, 9, 27]:
             assert task["target_epoch"] == epoch
             r = receipt(task)
@@ -117,6 +118,8 @@ def test_full_ask_report_rungs_and_actual60_only(tmp_path, protocol, profiles):
             assert decision["action"] == "continue"
             assert c.report(r) == decision
             task = decision["next_task"]
+            assert task["lease"] not in leases
+            leases.add(task["lease"])
             assert task["plan_sha256"] == plan_sha and task["gpu_uuid"] == "GPU-test"
         assert c.status()["trials"][1]["state"] == "RUNNING"
         result = c.report(receipt(task))
@@ -179,14 +182,41 @@ def test_local_singlewriter_and_no_torch(tmp_path, protocol, profiles):
         c.close()
 
 
-def test_restart_preserves_same_lease_and_plan(tmp_path, protocol, profiles):
+def test_old_style_pending_e3_promotes_to_distinct_lease_and_survives_restart(
+    tmp_path, protocol, profiles, monkeypatch
+):
     path = tmp_path / "study.sqlite3"
-    with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
-        baseline(c)
-        task = c.ask("meta1", "GPU-test")
+    current_task = Coordinator._task
+
+    def old_style_task(self, trial, meta, target, previous):
+        task = current_task(self, trial, meta, target, previous)
+        task["lease"] = meta["lease"]
+        return task
+
+    # Persist exactly the old coordinator's E3 envelope, rather than migrating it.
+    with monkeypatch.context() as legacy:
+        legacy.setattr(Coordinator, "_task", old_style_task)
+        with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
+            baseline(c)
+            task = c.ask("meta1", "GPU-test")
+    original_receipt = receipt(task)
     with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
         assert c.ask("meta1", "GPU-test") == task
-        assert c.report(receipt(task))["action"] == "continue"
+        decision = c.report(original_receipt)
+        assert decision["action"] == "continue"
+        assert decision["lease"] == task["lease"]
+        promoted = decision["next_task"]
+        assert promoted["lease"] == task["lease"] + "-e009"
+        assert promoted["plan"] == task["plan"]
+        assert promoted["plan_sha256"] == task["plan_sha256"]
+        assert promoted["config_sha256"] == task["config_sha256"]
+        assert c.report(original_receipt) == decision
+    with Coordinator(path, protocol, profiles, clock=lambda: NOW) as c:
+        assert c.ask("meta1", "GPU-test") == promoted
+        assert c.report(original_receipt) == decision
+        next_decision = c.report(receipt(promoted))
+        assert next_decision["next_task"]["lease"] == task["lease"] + "-e027"
+        assert c.report(receipt(promoted)) == next_decision
 
 
 def test_asha_prunes_weaker_peer_and_new_config_cap(tmp_path, protocol, profiles):
