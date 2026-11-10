@@ -47,3 +47,27 @@ it prints true source edge locations without inspecting toolbox source.
 edges from native Python behavior. N3/4/5 multithresh and automatic histogram
 edge placement remain guarded. Neither synthetic stage agreement nor the
 provided-special measurements certify the complete image_adjustment chain.
+
+Real caller gate reproduction:
+
+1. Use `prepare_oracle_inputs.py` above to extract the two owned source frames to
+   a new external scratch directory. Never use the database directory as output.
+2. Export the exact user-owned helpers from revision
+   `7bb0539b90dfce2ed6eaeef1de812072be1155d0` into that scratch directory:
+   `git show REF:matlab_preprocessing/image_adjustment.m > SCRATCH/image_adjustment.m`
+   and the same for `local_contrast_and_clahe.m`. The already verified
+   `souradnice.m` is also required. Check their SHA256 against
+   `adjustment-comparison.json`; toolbox source is not needed or inspected.
+3. Copy `generate_adjustment_real.m` to scratch and run it with MATLAB
+   `-singleCompThread -batch generate_adjustment_real`, CUDA hidden and nice10.
+   This creates external `adjustment_real_goldens.mat`. It invokes original
+   image_adjustment, then measures LC/CLAHE separately. The nearest-label pattern
+   is generated synthetically and is not claimed to be source ground truth.
+4. With this branch on PYTHONPATH, run `compare_adjustment_real.py --oracle-dir
+   SCRATCH --report NEW_REPORT.json`. Reports are opened exclusively. The script
+   checks source calibration/mask equality and reports all float, quantization
+   and nonfinite errors; no real arrays need to be checked into Git.
+
+The recorded runtime used the existing Python/uv environment and MATLAB R2026b,
+CPU1 only. MATLAB remains an optional reference generator, never a runtime
+package dependency.
