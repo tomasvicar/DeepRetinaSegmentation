@@ -23,6 +23,25 @@ case = _canonical_case
 @pytest.fixture(autouse=True)
 def cpu_and_reader_guard(monkeypatch):
     previous = torch.get_num_threads()
+    backend_before = {
+        "deterministic": torch.are_deterministic_algorithms_enabled(),
+        "warn_only": torch.is_deterministic_algorithms_warn_only_enabled(),
+        "precision": torch.get_float32_matmul_precision(),
+        "cuda_tf32": torch.backends.cuda.matmul.allow_tf32,
+        "cudnn_tf32": torch.backends.cudnn.allow_tf32,
+        "benchmark": torch.backends.cudnn.benchmark,
+        "cudnn_deterministic": torch.backends.cudnn.deterministic,
+        "dtype": torch.get_default_dtype(),
+    }
+    # The CLI starts a fresh interpreter. Keep this synthetic artifact fixture
+    # at the same defaults even if earlier training tests changed global flags.
+    torch.use_deterministic_algorithms(False, warn_only=False)
+    torch.set_float32_matmul_precision("highest")
+    torch.backends.cuda.matmul.allow_tf32 = False
+    torch.backends.cudnn.allow_tf32 = True
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = False
+    torch.set_default_dtype(torch.float32)
     torch.set_num_threads(1)
     monkeypatch.setattr(torch.cuda, "init", lambda: pytest.fail("No CUDA initialization"))
     state = {"gate_passed": False, "test_reads": 0}
@@ -36,6 +55,15 @@ def cpu_and_reader_guard(monkeypatch):
 
     monkeypatch.setattr(np, "load", checked_read)
     yield state
+    torch.use_deterministic_algorithms(
+        backend_before["deterministic"], warn_only=backend_before["warn_only"]
+    )
+    torch.set_float32_matmul_precision(backend_before["precision"])
+    torch.backends.cuda.matmul.allow_tf32 = backend_before["cuda_tf32"]
+    torch.backends.cudnn.allow_tf32 = backend_before["cudnn_tf32"]
+    torch.backends.cudnn.benchmark = backend_before["benchmark"]
+    torch.backends.cudnn.deterministic = backend_before["cudnn_deterministic"]
+    torch.set_default_dtype(backend_before["dtype"])
     torch.set_num_threads(previous)
 
 
@@ -565,3 +593,15 @@ def test_foreign_symlink_to_open_report_inode_is_preserved(selected, tmp_path, m
         run(selected, tmp_path)
     assert output.is_symlink()
     assert os.readlink(output) == target[0]
+
+
+def test_actual_backend_mismatch_refused_before_test_read(
+    selected, tmp_path, monkeypatch, cpu_and_reader_guard
+):
+    torch.use_deterministic_algorithms(True, warn_only=True)
+    monkeypatch.setattr(
+        heldout, "load_unified", lambda *_a, **_k: pytest.fail("No execution under changed backend")
+    )
+    with pytest.raises(gate.SelectionError, match="source/data/inference protocol"):
+        run(selected, tmp_path)
+    assert cpu_and_reader_guard["test_reads"] == 0
