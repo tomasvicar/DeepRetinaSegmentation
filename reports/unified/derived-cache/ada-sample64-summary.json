@@ -1,0 +1,60 @@
+{
+  "scope": "Warmed CPU DataLoader delivery on a 64-train-photo working set; no GPU/epoch/quality claim",
+  "reference_source": "503179266669d9a8373a2734e82c0ac6ef166715",
+  "candidate_source": "ef5413b",
+  "canonical_fingerprint": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "cache_fingerprint": "d73bb541ea0eb3ee422095b5a12f071906ff6f03e0f667c3f36ce65dae196d9a",
+  "coverage": {
+    "kind": "subset",
+    "photos": 64,
+    "annotation_variants": 140,
+    "datasets": 17,
+    "dataset_task_pairs": 24
+  },
+  "construction_exact": {
+    "exact_equality_verified": true,
+    "rgb_exact": 64,
+    "binary-bool-npz": 140,
+    "labels_exact": 140
+  },
+  "gate_paired_samples": 384,
+  "gate_checks": [
+    "RGB/target/valid/index tensors",
+    "observer traces",
+    "worker global Torch RNG",
+    "worker private augmentation RNG",
+    "parent sampler RNG"
+  ],
+  "timed_paired_samples": 1280,
+  "timing_checks": [
+    "RGB/target/valid/index tensors",
+    "observer traces",
+    "parent sampler RNG"
+  ],
+  "reference_seconds": 38.88413222297095,
+  "candidate_seconds": 27.14188248087885,
+  "aggregate_throughput_ratio": 1.432624735972694,
+  "median_paired_ratio": 1.3830290605779396,
+  "paired_ratio_range": [
+    1.31554642901266,
+    1.6750254538985632
+  ],
+  "exclude_first_pair_ratio": 1.3711493890220559,
+  "sample_cache_bytes": 151949829,
+  "max_parent_rss_kib": 3246912,
+  "canonical_writes": false,
+  "gpu_work": false,
+  "limitations": [
+    "Only 64 photos reused for timing; does not measure full-corpus epoch/GPU throughput.",
+    "Five seeded randomized orders contain 4 reference-first and 1 candidate-first pair.",
+    "Shared host includes the ongoing augmentation_strong GPU run; nice 5 CPU benchmark.",
+    "Cache verification and sampling-support scans excluded from delivery timings.",
+    "Explicit canonical fallback permits full-population startup support scan only; all gate/timed sample references required to be cached.",
+    "RGB held in existing 128 MiB per-worker image cache can bypass disk reads in both methods."
+  ],
+  "provenance_verified": {
+    "reference_module_matches_git5031792": true,
+    "candidate_module_matches_git_ef5413b": true,
+    "benchmark_protocol_matches_git_ef5413b": true
+  }
+}

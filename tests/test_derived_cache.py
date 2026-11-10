@@ -51,7 +51,14 @@ def corpus(root):
                 "pixels_per_degree": 25.0,
             }
         )
-        photos.append({"image": image_path, "fov": fov_path})
+        photos.append(
+            {
+                "photo_id": f"photo-{number}",
+                "image": image_path,
+                "fov": fov_path,
+                "prepared_shape": list(image.shape),
+            }
+        )
     manifest = root / "manifest.json"
     manifest.write_text(json.dumps(rows))
     (root / "photos.json").write_text(json.dumps(photos))
@@ -290,3 +297,20 @@ def test_training_pins_cache_outside_config_and_resume_allows_only_path_relocati
             )
     finally:
         torch.set_num_threads(previous)
+
+
+def test_capacity_estimate_matches_actual_complete_small_cache(tmp_path):
+    import importlib.util
+    from pathlib import Path
+
+    manifest, _ = corpus(tmp_path / "canonical")
+    report = build_cache(manifest, tmp_path / "derived")
+    path = Path(__file__).parents[1] / "scripts/estimate_derived_cache.py"
+    spec = importlib.util.spec_from_file_location("estimate_derived_cache", path)
+    estimator = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(estimator)
+    estimate = estimator.estimate(
+        manifest, report["root"], report["cache_fingerprint"], report["canonical_fingerprint"]
+    )
+    assert estimate["photos"] == 3 and estimate["records"] == 3
+    assert estimate["total_estimated_bytes"] == report["bytes"]
