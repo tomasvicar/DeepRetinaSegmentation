@@ -700,3 +700,54 @@ def test_resume_rejects_unrelated_best_checkpoint(tmp_path, field, value):
     torch.save(best, tmp_path / "run/best.pt")
     with pytest.raises(ValueError, match="best checkpoint provenance"):
         train_unified(manifest, tmp_path / "run", cfg, resume=tmp_path / "run/last.pt")
+
+
+def test_resume_refuses_changed_gt_under_unchanged_manifest(tmp_path):
+    import hashlib
+
+    from deepretina.integrity import FINGERPRINT_SCHEMA, prepared_content_fingerprint
+
+    manifest = make_manifest(tmp_path)
+    rows = json.loads(manifest.read_text())
+    (tmp_path / "photos.json").write_text(
+        json.dumps([{"image": row["image"], "fov": row["image"]} for row in rows])
+    )
+    content = prepared_content_fingerprint(manifest)
+    manifest_sha = hashlib.sha256(manifest.read_bytes()).hexdigest()
+    (tmp_path / "_SUCCESS").write_text(manifest_sha)
+    (tmp_path / "integrity.json").write_text(
+        json.dumps(
+            {
+                "manifest_sha256": manifest_sha,
+                "prepared_content_sha256": content,
+                "fingerprint_schema": FINGERPRINT_SCHEMA,
+            }
+        )
+    )
+    config = UnifiedConfig(
+        epochs=2,
+        epoch_samples=2,
+        batch_size=2,
+        patch_size=32,
+        base_channels=2,
+        depth=1,
+        workers=0,
+        device="cpu",
+        augmentation="basic",
+        tile_size=32,
+        overlap=8,
+    )
+    output = tmp_path / "data_bound_run"
+    train_unified(manifest, output, config, stop_after_epoch=1, expected_content_sha256=content)
+    saved = torch.load(output / "last.pt", map_location="cpu", weights_only=True)
+    assert saved["prepared_content_sha256"] == content
+    label = tmp_path / rows[0]["mask"]
+    with np.load(label, allow_pickle=False) as source:
+        arrays = {name: source[name].copy() for name in source.files}
+    arrays["target"].flat[0] = 1 - arrays["target"].flat[0]
+    np.savez_compressed(label, **arrays)
+    with pytest.raises(ValueError, match="content changed"):
+        train_unified(
+            manifest, output, config, resume=output / "last.pt", expected_content_sha256=content
+        )
+    assert torch.load(output / "last.pt", weights_only=True)["epoch"] == 1

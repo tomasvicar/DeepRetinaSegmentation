@@ -32,3 +32,10 @@ a partial CSV tail; then verifies exact final weights/coverage, unique epoch row
 and preservation of a0.80 best against a0.75 replay. Unrelated manifest, lineage
 and source identities are rejected. All29 unified tests passed on CPU with two
 threads; no GPU training was used for this change.
+
+Full-data runs also bind checkpoints to schema2 prepared-content identity.
+Startup re-reads the referenced input bytes; both the frozen search-plan identity
+and the integrity audit must match. Manifest metadata alone cannot conceal a
+modified image, mask, FOV or photograph geometry. Resume refuses changed data
+before any optimizer update. Executable source identity includes the integrity
+checker itself.

@@ -17,6 +17,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+from deepretina.integrity import FINGERPRINT_SCHEMA, prepared_content_fingerprint
 from deepretina.legacy.preprocessing import (
     DATASET_FOV_DEGREES,
     OFFICIAL_FOV_DATASETS,
@@ -482,6 +483,13 @@ def audit_prepared(output):
     if (output / "_SUCCESS").read_text().strip() != manifest_sha:
         raise ValueError("Incomplete preparation or manifest completion hash mismatch")
     rows = json.loads(manifest_path.read_text())
+    photos = json.loads((output / "photos.json").read_text())
+    photo_index = {photo["photo_id"]: photo for photo in photos}
+    if len(photo_index) != len(photos) or set(photo_index) != {r["photo_id"] for r in rows}:
+        raise ValueError("Photograph index does not match the manifest")
+    indexed_annotations = [item["id"] for photo in photos for item in photo["annotations"]]
+    if sorted(indexed_annotations) != sorted(row["id"] for row in rows):
+        raise ValueError("Photograph annotation variants do not match the manifest")
     channels = {
         "vessels": ("vessel",),
         "av": ("vessel", "artery", "vein"),
@@ -489,11 +497,18 @@ def audit_prepared(output):
     }
     counts, partitions, image_shapes, image_hashes, profiles = {}, {}, {}, {}, set()
     ids = set()
-    content_hash = hashlib.sha256()
     for row in sorted(rows, key=lambda item: item["id"]):
         if row["id"] in ids:
             raise ValueError(f"Duplicate annotation: {row['id']}")
         ids.add(row["id"])
+        photo = photo_index[row["photo_id"]]
+        if (
+            photo["split"] != row["split"]
+            or row["source_id"] not in photo["source_ids"]
+            or photo["geometry"] != row["metadata"]["original_geometry"]
+            or photo["raw_rgb_sha256"] != row["metadata"]["raw_rgb_sha256"]
+        ):
+            raise ValueError(f"Photograph provenance differs from its annotation: {row['id']}")
         profiles.add((row["preprocessing_profile"], row["pixels_per_degree"]))
         for key in ("source_id", "photo_id"):
             group = (key, row[key])
@@ -513,19 +528,12 @@ def audit_prepared(output):
                     raise ValueError(f"Prepared image must be RGB: {image_path}")
                 image_shapes[file_key] = (image.height, image.width)
             image_hashes[file_key] = hashlib.sha256(image_path.read_bytes()).hexdigest()
+        if list(image_shapes[file_key]) != photo["prepared_shape"][:2]:
+            raise ValueError(f"Prepared photograph geometry differs from its index: {row['id']}")
         photo_key = ("photo_hash", row["photo_id"])
         if partitions.setdefault(photo_key, image_hashes[file_key]) != image_hashes[file_key]:
             raise ValueError(f"Photograph aliases have different prepared RGB: {row['photo_id']}")
         mask_path = output / row["mask"]
-        content_hash.update(
-            json.dumps(
-                [
-                    row["id"],
-                    image_hashes[file_key],
-                    hashlib.sha256(mask_path.read_bytes()).hexdigest(),
-                ]
-            ).encode()
-        )
         with np.load(mask_path, allow_pickle=False) as arrays:
             target, valid, fov = arrays["target"], arrays["valid"], arrays["fov"]
             expected = (len(channels[row["task"]]), *image_shapes[file_key])
@@ -571,7 +579,8 @@ def audit_prepared(output):
         raise ValueError(f"Mixed preparation profiles: {profiles}")
     report = {
         "manifest_sha256": manifest_sha,
-        "prepared_content_sha256": content_hash.hexdigest(),
+        "prepared_content_sha256": prepared_content_fingerprint(manifest_path),
+        "fingerprint_schema": FINGERPRINT_SCHEMA,
         "annotations_checked": len(rows),
         "photos_checked": len({row["photo_id"] for row in rows}),
         "preview_only": any(row.get("preparation_preview", False) for row in rows),

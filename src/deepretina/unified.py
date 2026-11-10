@@ -25,6 +25,7 @@ from torch.utils.data import DataLoader, Sampler
 
 from .dataset import letterbox_geometry, whole_view
 from .inference import resolve_device, tile_starts
+from .integrity import verify_prepared_content
 from .model import UNet
 
 CHANNELS = ("vessel", "artery", "vein", "disc", "cup")
@@ -973,6 +974,7 @@ def _training_source_sha256():
         "dataset.py",
         "augment.py",
         "inference.py",
+        "integrity.py",
         "legacy/single_net.py",
         "legacy/preprocessing.py",
     ):
@@ -997,6 +999,7 @@ def _reconcile_resume_outputs(output, saved, config, fields):
     if (
         best_payload.get("family") != "unified"
         or best_payload.get("manifest_sha256") != saved["manifest_sha256"]
+        or best_payload.get("prepared_content_sha256") != saved.get("prepared_content_sha256")
         or _normalized_config(best_payload["config"]) != _normalized_config(config)
         or best_payload.get("training_source_sha256") != saved.get("training_source_sha256")
         or best_payload.get("lineage") != saved.get("lineage")
@@ -1075,6 +1078,7 @@ def train_unified(
     resume: Path | None = None,
     stop_after_epoch: int | None = None,
     validation_fn=None,
+    expected_content_sha256: str | None = None,
 ):
     """Train the shared network; purpose=functionality never implies model quality.
 
@@ -1124,6 +1128,11 @@ def train_unified(
     inference_max_size = caps.pop()
     if inference_max_size is not None and inference_max_size < 16:
         raise ValueError("Invalid preparation_max_size")
+    prepared_content_sha256 = (
+        verify_prepared_content(manifest, expected=expected_content_sha256)
+        if config.purpose == "full_data" or expected_content_sha256 is not None
+        else None
+    )
     generator = torch.Generator().manual_seed(config.seed)
     sampler = CoverageSampler(
         dataset.sampling_weights(), config.epoch_samples, generator, config.coverage_first
@@ -1158,6 +1167,8 @@ def train_unified(
             raise ValueError("Resume requires unified last.pt with training state")
         if saved["manifest_sha256"] != digest:
             raise ValueError("Resume manifest changed")
+        if saved.get("prepared_content_sha256") != prepared_content_sha256:
+            raise ValueError("Resume prepared image/annotation content changed")
         if saved.get("training_source_sha256", training_source_sha256) != training_source_sha256:
             raise ValueError("Resume executable training sources changed")
         original = asdict(UnifiedConfig(**saved["config"]))
@@ -1195,6 +1206,7 @@ def train_unified(
                 "config": asdict(config),
                 "manifest": str(manifest.resolve()),
                 "manifest_sha256": digest,
+                "prepared_content_sha256": prepared_content_sha256,
                 "training_source_sha256": training_source_sha256,
                 "normalization": "RGB/255-0.5",
                 "preprocessing": {
@@ -1323,6 +1335,7 @@ def train_unified(
                 "config": asdict(config),
                 "state_dict": model.state_dict(),
                 "manifest_sha256": digest,
+                "prepared_content_sha256": prepared_content_sha256,
                 "training_source_sha256": training_source_sha256,
                 "supervised_channels": flags,
                 "inference_max_size": inference_max_size,

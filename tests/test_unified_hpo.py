@@ -7,6 +7,8 @@ from pathlib import Path
 
 import pytest
 
+from deepretina.integrity import FINGERPRINT_SCHEMA, prepared_content_fingerprint
+
 
 def module():
     path = Path(__file__).parents[1] / "scripts/unified_hpo.py"
@@ -23,13 +25,22 @@ def inventory(root, *, preview=False, omit_source=None):
         for name in sorted(helper.REQUIRED_SOURCES)
         if name != omit_source
     ]
+    for row in rows:
+        row["id"] = row["dataset"]
+        row["image"] = "image.bin"
+        row["mask"] = "mask.bin"
+    (root / "image.bin").write_bytes(b"synthetic search metadata image")
+    (root / "mask.bin").write_bytes(b"synthetic search metadata mask")
+    (root / "fov.bin").write_bytes(b"synthetic search metadata fov")
+    (root / "photos.json").write_text(json.dumps([{"image": "image.bin", "fov": "fov.bin"}]))
     path = root / "manifest.json"
     path.write_text(json.dumps(rows))
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
     (root / "_SUCCESS").write_text(digest)
     audit = {
         "manifest_sha256": digest,
-        "prepared_content_sha256": "synthetic-metadata-only",
+        "prepared_content_sha256": prepared_content_fingerprint(path),
+        "fingerprint_schema": FINGERPRINT_SCHEMA,
         "preview_only": preview,
         "annotations_checked": len(rows),
         "photos_checked": len(rows),

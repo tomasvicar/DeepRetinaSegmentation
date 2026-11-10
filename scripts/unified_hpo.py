@@ -13,6 +13,7 @@ import subprocess
 from dataclasses import asdict, replace
 from pathlib import Path
 
+from deepretina.integrity import verify_prepared_content
 from deepretina.unified import UnifiedConfig, train_unified
 
 REQUIRED_SOURCES = frozenset(
@@ -79,6 +80,7 @@ def make_plan(manifest, *, screen_epochs=8, total_epochs=60, epoch_samples=8192)
     audit = json.loads((manifest.parent / "integrity.json").read_text())
     if audit["manifest_sha256"] != manifest_hash or audit["preview_only"]:
         raise ValueError("Require audited full preparation, not a preview")
+    verified_content = verify_prepared_content(manifest)
     rows = json.loads(manifest.read_text())
     if any(r.get("preparation_preview", False) for r in rows):
         raise ValueError("Limited source preparation cannot be used for full-data search")
@@ -129,7 +131,7 @@ def make_plan(manifest, *, screen_epochs=8, total_epochs=60, epoch_samples=8192)
         "purpose": "full_data_validation_search",
         "manifest": str(manifest),
         "manifest_sha256": manifest_hash,
-        "prepared_content_sha256": audit["prepared_content_sha256"],
+        "prepared_content_sha256": verified_content,
         "source_commit": source,
         "execution_code_sha256": code_digest(root),
         "training_photos": len(train_photos),
@@ -201,6 +203,7 @@ def run_trial(
         config,
         resume=output / "last.pt" if resume else None,
         stop_after_epoch=until,
+        expected_content_sha256=plan["prepared_content_sha256"],
     )
     return {
         "trial": trial,

@@ -63,3 +63,11 @@ evaluation. A single-seed early screen is not a robustness result. Compare the
 selected full-budget model with original models under the limitations in
 [BENCHMARK_PROTOCOL.md](BENCHMARK_PROTOCOL.md), including unresolved historical
 exposure and the uncertified raw A/V preprocessing proxy.
+
+Prepared-data identity is rechecked from the actual file bytes at planning and
+trial startup/resume. Schema2 covers manifest, photo geometry/provenance, every
+referenced RGB/annotation file and standalone FOVs. Matching filenames, sizes or
+timestamps alone are insufficient. A regenerated audit after an annotation
+change does not authorize silently replacing data in an existing plan. Core
+full-data training stores this fingerprint in checkpoints and rejects changed
+inputs before optimization. Copied preparations remain portable across hosts.
