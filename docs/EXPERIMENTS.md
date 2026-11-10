@@ -112,15 +112,10 @@ Early baseline validation JSONs predate the addition of explicit support-descrip
 fields; their score semantics match the later test reports and definitions above.
 
 Local weights remain in `runs/{drive_bce_dice,rite_bce,drishti_bce_dice}/best.pt`.
-Selected weights and metadata are also copied into the new shared directory:
-
-```
-/var/home/tom/ownCloud/fundus_databases/models/for_Leipzig_2026-11-10/
-  vessels/best.pt
-  av/best.pt
-  disc_cup/best.pt
-  selected-models.json
-```
+A temporary ownCloud backup of the three selected weights and metadata was removed
+after the user clarified the storage constraint. It occupied 6,005,545 bytes (5.73 MiB).
+All three local checkpoints were verified byte-identical before removing that new backup
+directory. Keep subsequent outputs in this repository working directory, outside ownCloud.
 
 Example outputs are under `predictions/{vessels,av,disc_cup}`. Existing archive/model
 folders were not modified. Prepared images, outputs and weights are ignored by Git.

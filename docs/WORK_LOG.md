@@ -70,3 +70,10 @@ inspects the original instance. A default session connection alone was misleadin
   boundary false positives, documented without tuning against test examples.
 - Selected weights backed up to a new ownCloud model folder, preserving all existing
   archives/models. Full commands, hashes, metric support and limitations in EXPERIMENTS.md.
+
+## Storage correction
+
+The user clarified that ownCloud has limited space. Removed only the newly added
+`models/for_Leipzig_2026-11-10` backup (15 files, 6,005,545 bytes). The three checkpoint
+copies in local `runs/` were checked byte-identical before deletion. No existing datasets
+or historical models were removed. Future outputs stay in the local repository directory.
