@@ -1827,6 +1827,78 @@
           "decoded_reference_uses": 0
         }
       }
+    },
+    {
+      "selector": "drions",
+      "legacy_paths": [],
+      "legacy_refs": [],
+      "required_resources": [
+        "DRIONS-DB.zip"
+      ],
+      "legacy_outputs": [],
+      "native_outputs": [
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "disc_cup"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Native two-expert disc contours, no cup, unknown patients TRAIN-only; physical angle unresolved.",
+          "Full native TRAIN pass: 220 variants; encoded-resource and decoded-photo hashes retained; no TEST mask opened. This validates decoding, not completed corpus-v2 physical geometry."
+        ]
+      }
+    },
+    {
+      "selector": "gamma",
+      "legacy_paths": [],
+      "legacy_refs": [],
+      "required_resources": [
+        "GAMMA.zip"
+      ],
+      "legacy_outputs": [],
+      "native_outputs": [
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "disc_cup"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Official TRAIN fundus disc/cup PNGs only; exclude OCT/diagnostic overlays; unknown patients TRAIN-only; angle unresolved.",
+          "Full native TRAIN pass: 100 variants; encoded-resource and decoded-photo hashes retained; no TEST mask opened. This validates decoding, not completed corpus-v2 physical geometry."
+        ]
+      }
+    },
+    {
+      "selector": "idrid_disc",
+      "legacy_paths": [],
+      "legacy_refs": [],
+      "required_resources": [
+        "IDRiD.zip"
+      ],
+      "legacy_outputs": [],
+      "native_outputs": [
+        "disc_cup"
+      ],
+      "supported_tasks": [
+        "disc_cup"
+      ],
+      "status": "validated",
+      "verification": {
+        "archive_inventory": true,
+        "real_sample": true,
+        "notes": [
+          "Native A.Segmentation optic-disc TIFFs, separate from existing idrid C.Localization selector; official54TRAIN/27TEST preserved, TEST labels unopened in proposal.",
+          "Full native TRAIN pass: 54 variants; encoded-resource and decoded-photo hashes retained; no TEST mask opened. This validates decoding, not completed corpus-v2 physical geometry."
+        ]
+      }
     }
   ]
 }

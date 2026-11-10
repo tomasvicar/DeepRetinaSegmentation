@@ -73,10 +73,11 @@ def test_inventory_covers_every_historical_adapter():
         Path(path).stem.removeprefix("Loader") for path in paths if path.endswith(".py")
     } == LEGACY_PYTHON_LOADERS
     selectors = [entry["selector"] for entry in entries]
-    assert len(selectors) == len(set(selectors)) == 31
+    assert len(selectors) == len(set(selectors)) == 34
+    assert sum(bool(e["legacy_paths"]) for e in entries) == 31
     for entry in entries:
         assert entry["required_resources"]
-        assert entry["legacy_outputs"]
+        assert entry["legacy_outputs"] if entry["legacy_paths"] else entry["native_outputs"]
         assert entry["supported_tasks"]
         assert entry["status"] in {
             "inventoried",

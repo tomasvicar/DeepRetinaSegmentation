@@ -1,0 +1,55 @@
+{
+  "scope": "Native TRAIN decoder and overlap audit; not a training-ready corpus-v2 release",
+  "native_candidate_annotation_variants": 374,
+  "unique_photos": 263,
+  "v1_exact_photo_overlaps": 0,
+  "known_v1_source_group_overlaps": 0,
+  "v1_manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "v1_memberships_changed": false,
+  "v1_or_test_masks_opened": false,
+  "native_proposal_sha256": "28a0192d269bc269b4e4f9a9878a3ec8ce426c212fbdc39b4ae1904bd9d0ae99",
+  "biomisa_quarantine_sha256": "5de23edcd5d22f5121a78fbc66536892da43a777290bb2eddce85ea5995f05c1",
+  "biomisa_overlay": {
+    "path": "/tmp/biomisa-native-overlay.png",
+    "sha256": "feb7426379b3cc2ac4736bcbb6063f7cbe244407d8d2b4d457cc6e8c6ae2f575",
+    "visually_inspected": true,
+    "colors": "cyan=named Cup file; red=named Disc file; no labels swapped",
+    "observation": "Outer cyan matches disc-like boundary; inner red is cup-like, consistent with all44 reversed nesting pairs"
+  },
+  "geometry": {
+    "idrid_disc": {
+      "angle": 50,
+      "basis": "Primary dataset paper section3.2; Kowa VX-10 alpha acquisition, not generic camera guess",
+      "source": "https://www.mdpi.com/2306-5729/3/3/25"
+    },
+    "gamma": {
+      "angle": null,
+      "status": "Unresolved per-image acquisition setting and KOWA model; Topcon manufacturer lists45\u00b0/30\u00b0digital zoom, not a measurement of this export",
+      "source": "https://topconhealthcare.eu/uploads/media/63d9164559502/tc-trc-nw400-brochure-emea-rev4-31012023-lrs-spreads.pdf"
+    },
+    "drions": {
+      "angle": null,
+      "status": "Original analog camera field angle not supplied by archive or creator summary"
+    }
+  },
+  "no_huge_archive_hash_or_oct_decode": true,
+  "training_performed": false,
+  "test_scoring_performed": false,
+  "all_source_annotation_files_remain_unmodified": true,
+  "focused_tests": {
+    "passed": 25,
+    "modules": [
+      "tests/test_adapters_additional.py",
+      "tests/test_adapter_coverage.py",
+      "tests/test_corpus_v2_proposal.py",
+      "tests/test_prepare.py"
+    ],
+    "cpu_threads": 1,
+    "cuda_visible_devices": ""
+  },
+  "new_code_sha256": {
+    "src/deepretina/adapters/additional.py": "e6eaec2d7e449bf09c3174f94c690e2afcd1c7dad0638d83a99b57ba3e50d743",
+    "scripts/propose_corpus_v2.py": "9ad732cc30a3b4dd1c7b79d3bc8dd7c4f4dc1cb82509da919a1d11a5a13e4bea",
+    "scripts/audit_archive_inventory.py": "32f1def4b1968238d81b9e4de30918f59416c24e74144e171a2a80d62ea97c42"
+  }
+}
