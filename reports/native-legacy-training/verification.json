@@ -1,0 +1,68 @@
+{
+  "base_commit": "4ec73444932f6393de6da8a58d0e28d4e74c9c6a",
+  "recipe": "native_legacy_canonical_fresh_v1",
+  "tests": {
+    "passed": 2540,
+    "warnings": 79,
+    "duration_seconds": 51.94,
+    "new_native_tests": 23,
+    "cpu_affinity": [
+      0
+    ],
+    "nice": 10,
+    "numerical_threads": 1,
+    "CUDA_VISIBLE_DEVICES": "",
+    "cuda_init_blocked": true,
+    "log_sha256": "7b22025c6b0ce5d926d629199a08d3ee67e17d20538c8b6f1ba5629bcf602918"
+  },
+  "ruff": "PASS",
+  "wheel": {
+    "build": "uv build --wheel PASS",
+    "new_runtime_and_stdlib_dispatch_modules_match": true,
+    "all9_models_preserved": true,
+    "sha256": "8d7c4c7bc72057e9993d327559f939169f7475c5315f548821f8fdeb218b1ba0"
+  },
+  "architecture_defaults": {
+    "single_net": {
+      "filters": 32,
+      "in_size": 3,
+      "out_size_by_task": {
+        "vessel": 1,
+        "disc": 1,
+        "universal": 3
+      },
+      "do": 0.0,
+      "depth": 4
+    },
+    "av": {
+      "encoder_channels": [
+        4,
+        32,
+        64,
+        128,
+        256
+      ],
+      "decoder_channels": [
+        256,
+        128,
+        64,
+        32
+      ],
+      "head_channels": 128,
+      "num_classes": 3
+    }
+  },
+  "source_scope": [
+    "new src/deepretina/legacy_training.py",
+    "new src/deepretina/legacy_training_cli.py",
+    "legacy/av.py checkpoint_payload optional preprocessing/geometry metadata only"
+  ],
+  "qualifications": [
+    "New explicitly named recipe, not historical optimizer/photometry reproduction",
+    "Actual synthetic CPU training and VAL only, no GPU training or real TEST evaluation",
+    "Fresh constructors: tests forbid torch.load during training; production metadata inspected on meta device only",
+    "No existing bundled model/default/CLI/inference/checkpoint loader edited",
+    "GT-vessel AV training context differs from imperfect explicit deployment vessel masks",
+    "Core supports fresh runs only; saved optimizer/RNG are inspection evidence, no resume claim"
+  ]
+}

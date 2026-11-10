@@ -190,8 +190,14 @@ def _architecture_from_state(state):
     }
 
 
-def checkpoint_payload(model: LegacyAVNet, provenance: dict[str, Any] | None = None):
-    return {
+def checkpoint_payload(
+    model: LegacyAVNet,
+    provenance: dict[str, Any] | None = None,
+    *,
+    preprocessing: dict[str, Any] | None = None,
+    geometry_policy: dict[str, Any] | None = None,
+):
+    payload = {
         "format_version": 1,
         "family": "legacy_av",
         "architecture": model.architecture,
@@ -215,6 +221,18 @@ def checkpoint_payload(model: LegacyAVNet, provenance: dict[str, Any] | None = N
         },
         "provenance": dict(provenance or {}),
     }
+    if preprocessing is not None:
+        import copy
+
+        payload["preprocessing"] = copy.deepcopy(preprocessing)
+    if geometry_policy is not None:
+        from ..geometry_policy import validate_geometry_policy
+
+        validate_geometry_policy(geometry_policy)
+        import copy
+
+        payload["geometry_policy"] = copy.deepcopy(geometry_policy)
+    return payload
 
 
 def convert_av(source: Path, destination: Path, *, require_known=True):
