@@ -256,8 +256,9 @@ def test_input_identity_matches_decoded_snapshot_after_path_replacement(
     assert hashlib.sha256(read(image)).hexdigest() != identity["input_sha256"]
 
 
+@pytest.mark.parametrize("cup_policy", ["native", "inside-disc"])
 def test_benchmark_report_retains_timed_input_snapshot_hashes(
-    tmp_path, benchmark_module, reference_files, monkeypatch
+    tmp_path, benchmark_module, reference_files, monkeypatch, cup_policy
 ):
     import hashlib
     import json
@@ -266,6 +267,13 @@ def test_benchmark_report_retains_timed_input_snapshot_hashes(
 
     m = benchmark_module
     paths, reference = reference_files
+    selected_policy = cup_policy
+    if selected_policy == "inside-disc":
+        reference["fresh_paired_cup_component"] = {
+            "cup_variant": "disc0",
+            "reference_context": "disc0",
+            "policy": m.CUP_COMPONENT_POLICY,
+        }
     image = tmp_path / "input.png"
     fov = tmp_path / "fov.png"
     unified = tmp_path / "unified.pt"
@@ -297,8 +305,9 @@ def test_benchmark_report_retains_timed_input_snapshot_hashes(
     )
     calls = []
 
-    def inspect_original(rgb, mask, *args):
+    def inspect_original(rgb, mask, *args, cup_policy):
         assert (rgb == 80).all() and mask.all()
+        assert cup_policy == selected_policy
         calls.append("original")
         return np.zeros((5, 2, 3), bool)
 
@@ -328,10 +337,80 @@ def test_benchmark_report_retains_timed_input_snapshot_hashes(
         field_of_view_degrees=None,
         device="cpu",
         unified_threshold=0.35,
+        original_cup_policy=selected_policy,
+        original_disc_variant="disc0/raw",
         warmup=0,
         repeats=1,
     )
     report = m.benchmark(args)
     assert report["unified"]["threshold"] == 0.35
+    assert report["original"]["cup_policy"] == selected_policy
+    assert report["original"]["quality_reference_cup_policy"] == selected_policy
     assert calls == ["original", "unified"]
     assert {key: report[key] for key in snapshots} == snapshots
+
+
+@pytest.mark.parametrize("variant", ["disc0/raw", "disc1/raw"])
+def test_explicit_cup_policy_binds_completed_quality_reference(
+    benchmark_module, reference_files, variant
+):
+    m = benchmark_module
+    paths, report = reference_files
+    report["disc_reference_variant"] = variant
+    disc = variant.split("/")[0]
+    report["fresh_paired_cup_component"] = {
+        "cup_variant": disc,
+        "reference_context": disc,
+        "policy": m.CUP_COMPONENT_POLICY,
+    }
+    m.validate_reference(report, paths, cup_policy="inside-disc", disc_variant=variant)
+    with pytest.raises(ValueError, match="timed decoding"):
+        m.validate_reference(report, paths, cup_policy="native", disc_variant=variant)
+    with pytest.raises(ValueError, match="explicit"):
+        m.validate_reference(report, paths, cup_policy="inside-disc")
+    other = "disc1/raw" if variant == "disc0/raw" else "disc0/raw"
+    with pytest.raises(ValueError, match="Selected disc"):
+        m.validate_reference(report, paths, cup_policy="inside-disc", disc_variant=other)
+    report["fresh_paired_cup_component"]["cup_variant"] = other.split("/")[0]
+    with pytest.raises(ValueError, match="clipping disc"):
+        m.validate_reference(report, paths, cup_policy="inside-disc", disc_variant=variant)
+
+
+def test_cup_clip_exact_strict_source_semantics_before_restoration(benchmark_module, monkeypatch):
+    m = benchmark_module
+    native = {
+        "vessel": torch.ones(1, 2, 3),
+        "disc": torch.tensor([[[0.0, 1.0, -1.0], [1.0, 0.0, 1.0]]]),
+        "universal": torch.ones(3, 2, 3),
+    }
+    native["universal"][2, 1, 2] = 0.0
+    restored_inputs = []
+
+    class Geometry:
+        def restore(self, values, order):
+            assert order == 0
+            restored_inputs.append(values.copy())
+            return values
+
+    prepared = SimpleNamespace(tensor=lambda: torch.zeros(3, 2, 3), geometry=Geometry())
+    monkeypatch.setattr(m, "prepare_single_net", lambda *a, **kw: prepared)
+    monkeypatch.setattr(m, "tiled_logits", lambda model, *a, **kw: native[model])
+    monkeypatch.setattr(
+        m,
+        "prepare_vesclass_matlab_calibrated",
+        lambda *a, **kw: SimpleNamespace(inputs=lambda: None),
+    )
+    monkeypatch.setattr(
+        m, "predict_av_input", lambda *a, **kw: {"classes": np.ones((2, 3), np.uint8)}
+    )
+    models = {key: (key, {"tiling": {}}) for key in native}
+    rgb = np.zeros((2, 3, 3), np.uint8)
+    kwargs = (rgb, np.ones((2, 3), bool), models, None, "cpu", {})
+    baseline = m.original_operation(*kwargs)
+    clipped = m.original_operation(*kwargs, cup_policy="inside-disc")
+    np.testing.assert_array_equal(clipped[4], baseline[4] & baseline[3])
+    np.testing.assert_array_equal(clipped[:4], baseline[:4])
+    np.testing.assert_array_equal(restored_inputs[-1][2], clipped[4])
+    assert not clipped[4, 0, 0] and not clipped[4, 1, 2]  # zero logits remain background.
+    assert baseline[4].sum() == 5 and clipped[4].sum() == 2
+    assert torch.count_nonzero(native["universal"][2]) == 5  # weights/logits unchanged.

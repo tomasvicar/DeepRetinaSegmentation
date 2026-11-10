@@ -58,7 +58,31 @@ def input_snapshots(image_path, fov_path):
     return rgb, fov, identity
 
 
-def validate_reference(reference, paths):
+CUP_COMPONENT_POLICY = "Fresh native cup strictlogit>0 vs cup intersect SAMEforward fresh dedicated disc strictlogit>0; no GTused for clipping"
+
+
+def reference_cup_policy(reference):
+    """Identify the completed paired source policy, without reading GT/resources."""
+    component = reference.get("fresh_paired_cup_component")
+    if component is None:
+        if reference.get("optional_cup_postprocessing_experiment") is not None:
+            raise ValueError("Require the completed paired cup policy reference")
+        return "native"
+    disc = reference["disc_reference_variant"].split("/")[0]
+    if (
+        component.get("policy") != CUP_COMPONENT_POLICY
+        or component.get("reference_context") != disc
+    ):
+        raise ValueError("Cup reference policy/source context differs")
+    variant = component.get("cup_variant")
+    if variant == "native":
+        return "native"
+    if variant == disc:
+        return "inside-disc"
+    raise ValueError("Cup clipping disc differs from selected disc reference")
+
+
+def validate_reference(reference, paths, *, cup_policy="native", disc_variant=None):
     """Require precisely the calibrated four-component validation reference."""
     if (
         reference.get("family") != "original_reference"
@@ -69,6 +93,14 @@ def validate_reference(reference, paths):
         or reference.get("single_net_normalized") is not False
     ):
         raise ValueError("Require a full calibrated AV + dedicated raw disc validation reference")
+    if cup_policy not in {"native", "inside-disc"}:
+        raise ValueError("Unknown original cup policy")
+    if disc_variant is not None and reference["disc_reference_variant"] != disc_variant:
+        raise ValueError("Selected disc variant differs from reference")
+    if cup_policy == "inside-disc" and disc_variant is None:
+        raise ValueError("Inside-disc requires an explicit selected disc variant")
+    if reference_cup_policy(reference) != cup_policy:
+        raise ValueError("Quality reference cup policy differs from timed decoding")
     keys = {
         "vessel": "vessel_checkpoint_sha256",
         "disc": "disc_checkpoint_sha256",
@@ -80,16 +112,22 @@ def validate_reference(reference, paths):
             raise ValueError(f"Original {name} weights differ from selected reference")
 
 
-def original_operation(rgb, fov, models, av, device, kwargs):
+def original_operation(rgb, fov, models, av, device, kwargs, *, cup_policy="native"):
     """Share single-net preparation, retaining each checkpoint's native tiling."""
+    if cup_policy not in {"native", "inside-disc"}:
+        raise ValueError("Unknown original cup policy")
     prepared = prepare_single_net(rgb, fov=fov, normalized=False, **kwargs)
     image = prepared.tensor()
-    restored = {}
+    native = {}
     for name, (model, payload) in models.items():
         logits = tiled_logits(model, image, device=device, **payload["tiling"])
         if not torch.isfinite(logits).all():
             raise ValueError("Nonfinite original logits")
-        restored[name] = prepared.geometry.restore(logits.numpy() > 0, order=0)
+        native[name] = logits.numpy() > 0
+    if cup_policy == "inside-disc":
+        # Exactly the completed paired experiment: same-forward raw masks, >0.
+        native["universal"][2] &= native["disc"][0]
+    restored = {name: prepared.geometry.restore(mask, order=0) for name, mask in native.items()}
     vessel = restored["vessel"][0]
     calibrated = prepare_vesclass_matlab_calibrated(rgb, vessel, fov=fov, **kwargs)
     classified = predict_av_input(
@@ -118,12 +156,16 @@ def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5)
 def benchmark(args):
     if not np.isfinite(args.unified_threshold) or not 0 < args.unified_threshold < 1:
         raise ValueError("Unified threshold must be finite and strictly between0 and1")
+    cup_policy = getattr(args, "original_cup_policy", "native")
+    disc_variant = getattr(args, "original_disc_variant", None)
+    if cup_policy not in {"native", "inside-disc"}:
+        raise ValueError("Unknown original cup policy")
     device = resolve_device(args.device)
     paths = {name: getattr(args, name) for name in ("vessel", "disc", "universal", "av")}
     all_paths = {**paths, "unified": args.unified, "reference": args.reference_report}
     before = {key: sha256(path) for key, path in all_paths.items()}
     reference = json.loads(args.reference_report.read_text())
-    validate_reference(reference, paths)
+    validate_reference(reference, paths, cup_policy=cup_policy, disc_variant=disc_variant)
     rgb, fov, input_identity = input_snapshots(args.input, args.fov)
     kwargs = {"dataset": args.dataset, "field_of_view_degrees": args.field_of_view_degrees}
     models = {
@@ -143,7 +185,9 @@ def benchmark(args):
     av, _ = load_av(paths["av"], device)
     with torch.inference_mode():
         original_timing = measure(
-            lambda models=models, av=av: original_operation(rgb, fov, models, av, device, kwargs),
+            lambda models=models, av=av: original_operation(
+                rgb, fov, models, av, device, kwargs, cup_policy=cup_policy
+            ),
             device,
             warmup=args.warmup,
             repeats=args.repeats,
@@ -191,6 +235,11 @@ def benchmark(args):
             "checkpoint_sha256": {key: before[key] for key in paths},
             "reference_sha256": before["reference"],
             "disc_variant": reference["disc_reference_variant"],
+            "cup_policy": cup_policy,
+            "cup_decoding": "native universal/raw strictlogit>0"
+            if cup_policy == "native"
+            else "native universal/raw strictlogit>0 intersect same-forward selected dedicated raw disc strictlogit>0 before nearest restoration",
+            "quality_reference_cup_policy": reference_cup_policy(reference),
             "parameters": original_parameters,
             "checkpoint_bytes": sum(path.stat().st_size for path in paths.values()),
             "av_profile": "vesclass_matlab_provided_fov_calibrated",
@@ -210,7 +259,8 @@ def benchmark(args):
             "Historical original exposure and preprocessing provenance remain unresolved",
             "Calibrated AV photometry retains documented numerical residuals",
             "Original single-net preparation is shared across three networks; individual native tiles are retained",
-            "Original threshold is strict logit>0, AV retains original tie0; no added original cup containment",
+            "Original threshold is strict logit>0, AV retains original tie0; declared optional cup policy is identical in selected quality reference and timed pipeline",
+            "Inside-disc is an added postprocessing variant, not a modification of original weights/defaults; completed paired VAL evidence includes TP losses and backend numeric drift",
             "Unified retains its configured inference geometry, vessel gating and cup containment",
             "Torch CUDA allocation excludes external/process memory; other CPU/GPU load affects timings",
             "Checkpoint epoch/purpose do not establish final model selection or sufficient convergence",
@@ -235,6 +285,15 @@ def main():
     parser.add_argument("--dataset", required=True)
     parser.add_argument("--field-of-view-degrees", type=float)
     parser.add_argument("--device", default="auto")
+    parser.add_argument(
+        "--original-cup-policy", choices=("native", "inside-disc"), default="native"
+    )
+    parser.add_argument(
+        "--original-disc-variant",
+        choices=("disc0/raw", "disc1/raw"),
+        required=True,
+        help="Explicit selected component; must match checkpoint and quality reference",
+    )
     parser.add_argument(
         "--unified-threshold", type=float, default=0.5, help="Frozen selected VAL threshold"
     )

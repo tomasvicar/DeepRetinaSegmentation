@@ -1,0 +1,13 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "ada",
+    "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 nice -n 10 /var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python -"
+  ],
+  "transport": "Temporary synthetic files viaSSHstdin; no source/model/data changes",
+  "bootstrap_sha256": "a9a1df4d478ac6a19fae123fbdab2e935029c42da4fce9903ef6885c418dbf63"
+}
