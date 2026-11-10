@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "planned_global_threshold_validation_only",
+  "status": "planned_not_executed",
+  "created_utc": "2026-11-10T17:58:22.974310+00:00",
+  "parent_training_plan_sha256": "6be48b57fc85e8ffba7772058562aa5a8bf855f9cb445c5180484111ffba5778",
+  "training_source_commit": "3157bb957fcf6e6f632a5c49d6df2c8a78ea3747",
+  "training_execution_code_sha256": "8e0481fff8ef53beca760acf074e96b5b73305e3adea2849e79805fb961cb30b",
+  "checkpoint_training_source_sha256": "dd69012a1741000ae5841634094094397c690a2371c9a91aa411344a436f1136",
+  "evaluation_source_base_commit": "4b6c07e246ec2310e35f0de9d27232975879807a",
+  "evaluation_package_source_sha256": "3779e1b5e9577d6870cf5e9a3ee48fb2271941dbbca12891f7a7f002075c4c9c",
+  "producer_script_sha256": "824bab3412676a8a918d3efc8c863b7b85803e653ef7cf7c957c375fd1f17fbf",
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "canonical_fingerprint": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "trained_with_cache_fingerprint": "4e39e40def03d0f2859dd147107a3736a62b4fc0249dd440a1280a9803aa8591",
+  "evaluation_cache": null,
+  "split": "val",
+  "expected_photos": 770,
+  "expected_selected_records": 993,
+  "threshold_candidates": [
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6
+  ],
+  "always_reference_threshold": 0.5,
+  "run_order": [
+    0.5,
+    0.35,
+    0.4,
+    0.45,
+    0.55,
+    0.6
+  ],
+  "checkpoint_selection": "Immutable copy of best.pt from the original control run AFTER last.pt epoch60 completion QA; best selected epoch may precede60",
+  "checkpoint_sha256": null,
+  "checkpoint_pin_status": "REQUIRED before ANY threshold evaluation; do not substitute live E33 or different weights between candidates",
+  "required_pre_execution_addendum": [
+    "exact immutable checkpoint path+SHA256+selected_epoch",
+    "terminal last60 QA+SHA256 proving planned budget completed",
+    "evaluation checkout commit+package/producer hashes matching this plan",
+    "same frozen Python/runtime/device UUID+driver and numerical flags for all6",
+    "parent approval; canonical fingerprint and checkpoint source/config validated"
+  ],
+  "fixed_inference": {
+    "preprocessing_profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "normalization": "RGB/255-0.5",
+    "geometry": "checkpoint inference_config; no tile/overlap override",
+    "expected_tile_size": 512,
+    "expected_overlap": 64,
+    "conditional_AV": "argmax of two conditional probabilities, artery wins ties; both gated only by vessel probability>=threshold",
+    "disc_cup": "both probability>=same global threshold; cup intersects predicted disc",
+    "weights_geometry_FOV_annotation_support": "identical across6; deterministic first selected observer on same770 VALphotos"
+  },
+  "primary_selection": {
+    "metric": "macro_dataset_mean_dice",
+    "direction": "maximize",
+    "definition": "existing producer mean of five per-head source-macro Dice values; identical missing-support rules",
+    "tie_tolerance_absolute": 1e-12,
+    "tie_order": "Within tolerance of maximum prefer0.5; otherwise nearest0.5, then lower threshold",
+    "reference_always_retained": true,
+    "failure_policy": "Do not select until all6 independent fresh enriched reports pass identical checkpoint/source/runtime/data/protocol except threshold, inventory/GT support and finite-count checks"
+  },
+  "required_reporting": [
+    "all6 primary scores including delta vs fresh0.5",
+    "all5 pooled and source-macro Dice/precision/recall/TP/FP/FN/valid and GT-positive counts",
+    "each source+head supported-photo count and Dice/precision/recall/count changes",
+    "vascular macro: arithmetic mean vessel/artery/vein source-macros; DC macro separately, secondary descriptive only",
+    "per-photo conditional correct/labeled AV counts MUST match across thresholds; unchanged conditional probabilities cannot improve classification ranking",
+    "end-to-end AV accuracy plus artery/vein Dice and vessel recall tradeoffs",
+    "same770 IDs/selected annotations/channel-source supports across6",
+    "effect of global vessel/disc/cup threshold coupling and cup containment",
+    "no final superiority statement from one validation-tuned threshold; record multiplicity of six candidates"
+  ],
+  "test_evaluation": false,
+  "real_forward_authorized_by_this_artifact": false,
+  "training_or_weights_changes": false,
+  "original_defaults_changed": false,
+  "test_freeze": "After all VAL choices, freeze one final weights+protocol decision plus retained0.5 reference BEFORE any TEST opening; do not tune after TEST"
+}
