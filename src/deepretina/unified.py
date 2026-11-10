@@ -24,6 +24,7 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader, Sampler
 
 from .dataset import letterbox_geometry, whole_view
+from .derived_cache import VerifiedCache
 from .inference import resolve_device, tile_starts
 from .integrity import verify_prepared_content
 from .model import UNet
@@ -181,11 +182,27 @@ def map_record_targets(row: dict, target: np.ndarray, valid: np.ndarray):
     return mapped, support
 
 
-def read_unified_sample(root: Path, row: dict):
+def _rgb(root, relative, derived_cache=None):
+    if derived_cache is not None:
+        if Path(root).resolve() != derived_cache.canonical_root:
+            raise ValueError("Cache was verified against a different canonical directory")
+        return derived_cache.rgb(relative)
+    with Image.open(Path(root) / relative) as image:
+        return np.asarray(image.convert("RGB")).copy()
+
+
+def _labels(root, relative, derived_cache=None):
+    return (
+        derived_cache.labels(relative)
+        if derived_cache is not None
+        else np.load(Path(root) / relative, allow_pickle=False)
+    )
+
+
+def read_unified_sample(root: Path, row: dict, *, derived_cache=None):
     """Public row reader for independent evaluation scripts; RGB in [0,1]."""
-    with Image.open(Path(root) / row["image"]) as im:
-        image = np.asarray(im.convert("RGB"), dtype=np.float32) / 255
-    with np.load(Path(root) / row["mask"], allow_pickle=False) as labels:
+    image = np.asarray(_rgb(root, row["image"], derived_cache), dtype=np.float32) / 255
+    with _labels(root, row["mask"], derived_cache) as labels:
         target = labels["target"].astype(np.float32)
         valid = labels["valid"].astype(bool)
         if "fov" in labels:
@@ -249,10 +266,17 @@ class UnifiedDataset(torch.utils.data.Dataset):
         config: UnifiedConfig | None = None,
         *,
         return_trace=False,
+        derived_cache=None,
     ):
         self.return_trace = return_trace
         self.manifest = Path(manifest)
         self.root = self.manifest.parent
+        self.derived_cache = derived_cache
+        if (
+            derived_cache is not None
+            and derived_cache.manifest.resolve() != self.manifest.resolve()
+        ):
+            raise ValueError("Derived cache must be verified against this manifest")
         self.split = split
         self.config = config or UnifiedConfig()
         self.config.validate()
@@ -302,12 +326,18 @@ class UnifiedDataset(torch.utils.data.Dataset):
             self._image_cache[key] = image
             return image
         paths = sorted({str((self.root / r["image"]).resolve()) for r in rows})
-        with Image.open(paths[0]) as im:
-            array = np.asarray(im.convert("RGB")).copy()
+        array = _rgb(
+            self.root,
+            Path(paths[0]).relative_to(self.root.resolve()).as_posix(),
+            self.derived_cache,
+        )
         if key not in self._verified_aliases:
             for path in paths[1:]:
-                with Image.open(path) as im:
-                    other = np.asarray(im.convert("RGB"))
+                other = _rgb(
+                    self.root,
+                    Path(path).relative_to(self.root.resolve()).as_posix(),
+                    self.derived_cache,
+                )
                 if not np.array_equal(array, other):
                     raise ValueError(f"photo_id aliases contain different RGB pixels: {key}")
             self._verified_aliases.add(key)
@@ -349,7 +379,7 @@ class UnifiedDataset(torch.utils.data.Dataset):
             )
             row = options[selected]
             trace.append((row["id"], task))
-            with np.load(self.root / row["mask"], allow_pickle=False) as data:
+            with _labels(self.root, row["mask"], self.derived_cache) as data:
                 raw = data["target"].astype(np.float32)
                 support = data["valid"].astype(bool)
                 if "fov" in data:
@@ -376,7 +406,7 @@ class UnifiedDataset(torch.utils.data.Dataset):
         pixels = np.zeros(5, np.int64)
         classes = np.zeros(2, np.int64)
         for row in self.rows:
-            with np.load(self.root / row["mask"], allow_pickle=False) as data:
+            with _labels(self.root, row["mask"], self.derived_cache) as data:
                 target = data["target"].astype(np.float32)
                 valid = data["valid"].astype(bool)
                 if "fov" in data:
@@ -708,7 +738,9 @@ def _metrics(counts):
     }
 
 
-def evaluate_unified_model(model, manifest, split="val", device="cpu", config=None, threshold=0.5):
+def evaluate_unified_model(
+    model, manifest, split="val", device="cpu", config=None, threshold=0.5, derived_cache=None
+):
     cfg = (
         UnifiedConfig(**config)
         if isinstance(config, dict)
@@ -722,7 +754,7 @@ def evaluate_unified_model(model, manifest, split="val", device="cpu", config=No
         raise ValueError(
             "Historical initialization has unknown teacher exposure; exploratory train/val evaluation only"
         )
-    dataset = UnifiedDataset(manifest, split, cfg)
+    dataset = UnifiedDataset(manifest, split, cfg, derived_cache=derived_cache)
     counts = np.zeros((5, 4), np.int64)
     by_dataset = {}
     per_photo = []
@@ -979,6 +1011,7 @@ def _training_source_sha256():
         "augment.py",
         "inference.py",
         "integrity.py",
+        "derived_cache.py",
         "legacy/single_net.py",
         "legacy/preprocessing.py",
     ):
@@ -1006,6 +1039,7 @@ def _reconcile_resume_outputs(output, saved, config, fields):
         or best_payload.get("prepared_content_sha256") != saved.get("prepared_content_sha256")
         or _normalized_config(best_payload["config"]) != _normalized_config(config)
         or best_payload.get("training_source_sha256") != saved.get("training_source_sha256")
+        or best_payload.get("derived_cache") != saved.get("derived_cache")
         or best_payload.get("lineage") != saved.get("lineage")
     ):
         raise ValueError("Resume best checkpoint provenance differs from committed last.pt")
@@ -1083,6 +1117,8 @@ def train_unified(
     stop_after_epoch: int | None = None,
     validation_fn=None,
     expected_content_sha256: str | None = None,
+    derived_cache_root: Path | None = None,
+    expected_cache_fingerprint: str | None = None,
 ):
     """Train the shared network; purpose=functionality never implies model quality.
 
@@ -1092,6 +1128,23 @@ def train_unified(
     config.validate()
     manifest = Path(manifest)
     output = Path(output)
+    derived_cache = None
+    if derived_cache_root is not None:
+        if not expected_content_sha256 or not expected_cache_fingerprint:
+            raise ValueError("Derived cache requires explicit canonical and cache fingerprint pins")
+        derived_cache = VerifiedCache(
+            derived_cache_root,
+            manifest,
+            expected_cache_fingerprint=expected_cache_fingerprint,
+            expected_canonical_fingerprint=expected_content_sha256,
+        )
+        required_rows = [
+            row for row in json.loads(manifest.read_text()) if row["split"] in {"train", "val"}
+        ]
+        derived_cache.require_coverage(required_rows)
+    elif expected_cache_fingerprint is not None:
+        raise ValueError("A cache fingerprint requires an explicit runtime cache directory")
+    cache_identity = derived_cache.identity if derived_cache is not None else None
     digest = hashlib.sha256(manifest.read_bytes()).hexdigest()
     training_source_sha256 = _training_source_sha256()
     random.seed(config.seed)
@@ -1102,7 +1155,9 @@ def train_unified(
         torch.cuda.manual_seed_all(config.seed)
     torch.backends.cudnn.benchmark = False
     torch.use_deterministic_algorithms(True, warn_only=True)
-    dataset = UnifiedDataset(manifest, "train", config, return_trace=True)
+    dataset = UnifiedDataset(
+        manifest, "train", config, return_trace=True, derived_cache=derived_cache
+    )
     if config.purpose == "full_data" and (
         not config.coverage_first or config.epoch_samples < len(dataset)
     ):
@@ -1113,7 +1168,9 @@ def train_unified(
     support = dataset.support_summary()
     validation_support = None
     if config.purpose == "full_data" and config.require_all_heads:
-        validation_support = UnifiedDataset(manifest, "val", config).support_summary()
+        validation_support = UnifiedDataset(
+            manifest, "val", config, derived_cache=derived_cache
+        ).support_summary()
         if (
             not all(validation_support["supervised_channels"])
             or min(validation_support["av_reference_class_pixels"].values()) == 0
@@ -1173,6 +1230,8 @@ def train_unified(
             raise ValueError("Resume manifest changed")
         if saved.get("prepared_content_sha256") != prepared_content_sha256:
             raise ValueError("Resume prepared image/annotation content changed")
+        if saved.get("derived_cache") != cache_identity:
+            raise ValueError("Resume derived-cache identity changed; runtime paths may relocate")
         if saved.get("training_source_sha256", training_source_sha256) != training_source_sha256:
             raise ValueError("Resume executable training sources changed")
         original = asdict(UnifiedConfig(**saved["config"]))
@@ -1211,6 +1270,7 @@ def train_unified(
                 "manifest": str(manifest.resolve()),
                 "manifest_sha256": digest,
                 "prepared_content_sha256": prepared_content_sha256,
+                "derived_cache": cache_identity,
                 "training_source_sha256": training_source_sha256,
                 "normalization": "RGB/255-0.5",
                 "preprocessing": {
@@ -1297,8 +1357,17 @@ def train_unified(
                 raise ValueError("No supervised pixels were sampled in this epoch")
             train_seconds = time.perf_counter() - train_started
             val_started = time.perf_counter()
-            metrics = (validation_fn or evaluate_unified_model)(
-                model, manifest, split="val", device=device, config=config
+            metrics = (
+                validation_fn(model, manifest, split="val", device=device, config=config)
+                if validation_fn is not None
+                else evaluate_unified_model(
+                    model,
+                    manifest,
+                    split="val",
+                    device=device,
+                    config=config,
+                    **({"derived_cache": derived_cache} if derived_cache is not None else {}),
+                )
             )
             score = metrics[config.selection_metric]
             if score is None or not math.isfinite(score):
@@ -1340,6 +1409,7 @@ def train_unified(
                 "state_dict": model.state_dict(),
                 "manifest_sha256": digest,
                 "prepared_content_sha256": prepared_content_sha256,
+                "derived_cache": cache_identity,
                 "training_source_sha256": training_source_sha256,
                 "supervised_channels": flags,
                 "inference_max_size": inference_max_size,
@@ -1435,6 +1505,9 @@ def main(argv=None):
     training.add_argument("--epoch-samples", type=int)
     training.add_argument("--max-steps", type=int)
     training.add_argument("--stop-after-epoch", type=int)
+    training.add_argument("--derived-cache", type=Path)
+    training.add_argument("--expected-cache-fingerprint")
+    training.add_argument("--expected-content-sha256")
     prediction = commands.add_parser(
         "predict", help="Predict a raw fundus photograph with reversible legacy25 geometry"
     )
@@ -1479,6 +1552,15 @@ def main(argv=None):
                         config,
                         resume=args.resume,
                         stop_after_epoch=args.stop_after_epoch,
+                        **{
+                            key: value
+                            for key, value in {
+                                "derived_cache_root": args.derived_cache,
+                                "expected_cache_fingerprint": args.expected_cache_fingerprint,
+                                "expected_content_sha256": args.expected_content_sha256,
+                            }.items()
+                            if value is not None
+                        },
                     )
                 ),
                 "purpose": config.purpose,

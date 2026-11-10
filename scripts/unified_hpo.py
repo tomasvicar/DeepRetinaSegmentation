@@ -13,6 +13,7 @@ import subprocess
 from dataclasses import asdict, replace
 from pathlib import Path
 
+from deepretina.derived_cache import VerifiedCache
 from deepretina.integrity import verify_prepared_content
 from deepretina.unified import UnifiedConfig, train_unified
 
@@ -67,7 +68,15 @@ def write_new(path, payload):
         handle.write("\n")
 
 
-def make_plan(manifest, *, screen_epochs=8, total_epochs=60, epoch_samples=8192):
+def make_plan(
+    manifest,
+    *,
+    screen_epochs=8,
+    total_epochs=60,
+    epoch_samples=8192,
+    derived_cache_root=None,
+    expected_cache_fingerprint=None,
+):
     manifest = Path(manifest).resolve()
     if epoch_samples < 1:
         raise ValueError("epoch_samples must be positive")
@@ -82,6 +91,18 @@ def make_plan(manifest, *, screen_epochs=8, total_epochs=60, epoch_samples=8192)
         raise ValueError("Require audited full preparation, not a preview")
     verified_content = verify_prepared_content(manifest)
     rows = json.loads(manifest.read_text())
+    cache_identity = None
+    if derived_cache_root is not None:
+        cache = VerifiedCache(
+            derived_cache_root,
+            manifest,
+            expected_cache_fingerprint=expected_cache_fingerprint,
+            expected_canonical_fingerprint=verified_content,
+        )
+        cache.require_coverage([row for row in rows if row["split"] in {"train", "val"}])
+        cache_identity = cache.identity
+    elif expected_cache_fingerprint is not None:
+        raise ValueError("Cache fingerprint requires an explicit runtime cache directory")
     if any(r.get("preparation_preview", False) for r in rows):
         raise ValueError("Limited source preparation cannot be used for full-data search")
     train_sources = {r["dataset"] for r in rows if r["split"] == "train"}
@@ -132,6 +153,7 @@ def make_plan(manifest, *, screen_epochs=8, total_epochs=60, epoch_samples=8192)
         "manifest": str(manifest),
         "manifest_sha256": manifest_hash,
         "prepared_content_sha256": verified_content,
+        "derived_cache": cache_identity,
         "source_commit": source,
         "execution_code_sha256": code_digest(root),
         "training_photos": len(train_photos),
@@ -159,6 +181,7 @@ def run_trial(
     resume=False,
     final=False,
     stop_after_epoch=None,
+    derived_cache_root=None,
 ):
     plan = json.loads(Path(plan_path).read_text())
     if plan.get("schema_version") != 1 or plan.get("purpose") != "full_data_validation_search":
@@ -170,6 +193,9 @@ def run_trial(
     if digest(manifest) != plan["manifest_sha256"]:
         raise ValueError("Trial manifest differs from frozen plan")
     config = UnifiedConfig(**plan["candidates"][trial])
+    cache_identity = plan.get("derived_cache")
+    if bool(cache_identity) != bool(derived_cache_root):
+        raise ValueError("Runtime cache presence differs from its explicit frozen plan")
     if config.legacy_initialization is not None:
         raise ValueError("Independent full-data search excludes historical teacher initialization")
     if device is not None:
@@ -204,6 +230,8 @@ def run_trial(
         resume=output / "last.pt" if resume else None,
         stop_after_epoch=until,
         expected_content_sha256=plan["prepared_content_sha256"],
+        derived_cache_root=derived_cache_root,
+        expected_cache_fingerprint=cache_identity["fingerprint"] if cache_identity else None,
     )
     return {
         "trial": trial,
@@ -222,6 +250,8 @@ def main():
     plan.add_argument("--screen-epochs", type=int, default=8)
     plan.add_argument("--total-epochs", type=int, default=60)
     plan.add_argument("--epoch-samples", type=int, default=8192)
+    plan.add_argument("--derived-cache", type=Path)
+    plan.add_argument("--expected-cache-fingerprint")
     run = commands.add_parser("run")
     run.add_argument("--plan", type=Path, required=True)
     run.add_argument("--trial", required=True)
@@ -231,6 +261,7 @@ def main():
     run.add_argument("--resume", action="store_true")
     run.add_argument("--final", action="store_true")
     run.add_argument("--stop-after-epoch", type=int)
+    run.add_argument("--derived-cache", type=Path)
     args = parser.parse_args()
     try:
         if args.command == "plan":
@@ -239,6 +270,8 @@ def main():
                 screen_epochs=args.screen_epochs,
                 total_epochs=args.total_epochs,
                 epoch_samples=args.epoch_samples,
+                derived_cache_root=args.derived_cache,
+                expected_cache_fingerprint=args.expected_cache_fingerprint,
             )
             write_new(args.output, result)
             print(json.dumps({"candidates": list(result["candidates"]), "plan": str(args.output)}))
@@ -254,6 +287,7 @@ def main():
                         resume=args.resume,
                         final=args.final,
                         stop_after_epoch=args.stop_after_epoch,
+                        derived_cache_root=args.derived_cache,
                     )
                 )
             )

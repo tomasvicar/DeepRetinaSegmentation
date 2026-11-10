@@ -17,6 +17,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset, Subset
 
 import deepretina.unified as candidate
+from deepretina.derived_cache import VerifiedCache
 
 
 class RNGTrace(Dataset):
@@ -51,7 +52,7 @@ def load_reference(path):
     return module
 
 
-def loader(module, dataset, weights, seed, *, indices=None, rng_trace=False):
+def loader(module, dataset, weights, seed, *, indices=None, rng_trace=False, sample_count=None):
     dataset._image_cache.clear()
     dataset._cache_bytes = 0
     dataset._verified_aliases.clear()
@@ -62,7 +63,10 @@ def loader(module, dataset, weights, seed, *, indices=None, rng_trace=False):
         selected = RNGTrace(selected)
     generator = torch.Generator().manual_seed(seed)
     sampler = module.CoverageSampler(
-        selected_weights, len(indices) if indices is not None else 8192, generator, True
+        selected_weights,
+        sample_count or (len(indices) if indices is not None else 8192),
+        generator,
+        True,
     )
     return DataLoader(
         selected, batch_size=4, sampler=sampler, num_workers=2, generator=generator
@@ -92,6 +96,10 @@ def main():
     parser.add_argument("--repeats", type=int, default=5)
     parser.add_argument("--warmup-batches", type=int, default=8)
     parser.add_argument("--measured-batches", type=int, default=64)
+    parser.add_argument("--derived-cache", type=Path)
+    parser.add_argument("--expected-cache-fingerprint")
+    parser.add_argument("--expected-canonical-fingerprint")
+    parser.add_argument("--allow-canonical-fallback", action="store_true")
     args = parser.parse_args()
     assert args.repeats >= 3 and args.warmup_batches >= 1 and args.measured_batches >= 8
     torch.set_num_threads(2)
@@ -101,10 +109,23 @@ def main():
     frozen = json.loads(args.plan.read_text())["candidates"]["baseline"]
     settings = dict(frozen, device="cpu", workers=2)
     datasets, weights, startup = {}, {}, {}
+    cache = None
+    if args.derived_cache is not None:
+        cache = VerifiedCache(
+            args.derived_cache,
+            args.manifest,
+            expected_cache_fingerprint=args.expected_cache_fingerprint,
+            expected_canonical_fingerprint=args.expected_canonical_fingerprint,
+            allow_canonical_fallback=args.allow_canonical_fallback,
+        )
     for method, module in modules.items():
         started = time.perf_counter()
         datasets[method] = module.UnifiedDataset(
-            args.manifest, "train", module.UnifiedConfig(**settings), return_trace=True
+            args.manifest,
+            "train",
+            module.UnifiedConfig(**settings),
+            return_trace=True,
+            **({"derived_cache": cache} if method == "candidate" and cache is not None else {}),
         )
         weights[method] = datasets[method].sampling_weights()
         startup[method] = time.perf_counter() - started
@@ -124,8 +145,14 @@ def main():
             if i not in chosen and any(r["dataset"] == source for r in rows)
         ]
         chosen.update(choices[:: max(1, len(choices) // 2)][:2])
-    while len(chosen) % 4:
-        chosen.add(next(i for i in range(len(original)) if i not in chosen))
+    if cache is not None:
+        selected = set(cache.index["coverage"]["photo_ids"])
+        chosen = {i for i, photo in enumerate(original.photo_ids) if photo in selected}
+        cache.require_coverage([row for i in chosen for row in original.groups[i]])
+        assert len(chosen) == len(selected), "Cache benchmark selects train photographs only"
+    else:
+        while len(chosen) % 4:
+            chosen.add(next(i for i in range(len(original)) if i not in chosen))
     indices = sorted(chosen)
     gates = []
     for setting, (augmentation, view) in enumerate(
@@ -170,7 +197,14 @@ def main():
         order_rng.shuffle(order)
         results, kept = {}, {}
         for method in order:
-            dl, generator = loader(modules[method], datasets[method], weights[method], 42 + repeat)
+            dl, generator = loader(
+                modules[method],
+                datasets[method],
+                weights[method],
+                42 + repeat,
+                indices=indices if cache is not None else None,
+                sample_count=8192,
+            )
             started = time.perf_counter()
             iterator = iter(dl)
             try:
@@ -236,6 +270,8 @@ def main():
             "persistent_workers": False,
         },
         "training_config": dataclasses.asdict(datasets["candidate"].config),
+        "derived_cache": cache.identity if cache is not None else None,
+        "cache_coverage": cache.index["coverage"] if cache is not None else None,
         "startup_seconds_excluded": startup,
         "gate_sources": sources,
         "gate_photos": len(indices),
