@@ -127,3 +127,14 @@ MetaCentrum operational notes and scripts are maintained separately in the priva
 have passed; environment bootstrap and GPU probe remain drafts.
 Unified-model development remains on the experimental branch; its short CUDA
 functionality check is not evidence of segmentation quality.
+
+## 2026-11-10 — Patient and exact-photo split safeguards
+
+G1020 now requires the supplied image-to-patient CSV; ARIA transport filename
+counters no longer split a shared subject base. RIGA and UoA remain training-only
+when no patient crosswalk is available. Preparation hashes original decoded RGB
+and groups exact-photo aliases transitively with known patient/source IDs,
+including the actual DRHAGIS24/32 duplicate. Official heldouts stay protected;
+train-only/heldout conflicts fail rather than moving heldouts into training.
+All137 stable-branch tests, Ruff checks and formatting passed after integration.
+Source data and original model weights were not changed.
