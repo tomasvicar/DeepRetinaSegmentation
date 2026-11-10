@@ -172,7 +172,7 @@ no usable record had an entirely empty target. Output:
 quarantined dense annotations, and 377 image-only STARE photographs. Every corrected
 UoA disc record has an all-false cup channel; all 200 original center-marker JPEGs
 and all 200 derived marker centroids were checked. RIGA full-pass
-results follow when complete.
+results are recorded below.
 
 The bounded RIGA recovery fallback was checked against a synthetic reference:
 a small missing contour pixel is recovered with disc/cup IoU above 0.98, while a
@@ -192,3 +192,37 @@ pairs remained rejected. Measured morphology/recovery time for these 60 pairs
 fell from 11.16 seconds to 1.67 seconds; timings exclude annotation I/O and the shared
 writer. Reports are `data/migration/riga-crop-equivalence.json` and
 `data/migration/riga-crop-equivalence-rejected.json`.
+
+### Final RIGA pass and complete eight-adapter inventory
+
+The full final RIGA conversion completed in **1,607.95 seconds** at longest side
+128: **749 original photographs × six observers = 4,494 records**. Of these,
+**2,681 annotations reconstructed two checked nested closed regions** and are
+usable; **1,813 are explicitly quarantined**, with all-false validity and their
+original marked rasters preserved for review. Unrecoverable line annotations are
+not reported as successfully reconstructed segmentation masks.
+
+Usable RIGA records split into 1,673 training, 508 validation and 500 test observations;
+quarantined records split into 1,021/392/400. Every original photograph and all its
+observers stay in one split. Among successful reconstructions, 2,422 required no
+closing, 111 used radius 1, 109 radius 2 and 39 radius 3. All 4,494 records passed shape,
+dtype/range and source-group integrity checks. Every usable record retained both
+nonempty disc and cup at the deliberately small smoke resolution; every rejected
+record's preserved raw annotation was checked to exist. Final output and report:
+`data/migration/segmentation-riga-128-v4` and
+`data/migration/riga-final-integrity.json`.
+
+Across a fixed 1,113-record comparison against the unclosed recovery algorithm,
+692 existing successful records remained **bitwise identical** in target,
+validity and FOV arrays. Bounded closing recovered 136 previously rejected records,
+while 285 remained quarantined. Usable annotations increased 692→828 (+19.7%);
+no previously successful reconstruction was lost. This establishes an annotation
+recovery improvement, not a model-accuracy gain. The comparison is recorded in
+`data/migration/riga-bounded-recovery-comparison.json`.
+
+All eight migrated adapters have now completed full real-source passes:
+**7,810 records = 5,566 usable dense annotations + 1,867 explicitly quarantined
+dense annotations + 377 image-only photographs**. The quarantined dense total is
+1,813 RIGA outlines, 53 ONHSD radial annotations and one ambiguous G1020 JSON.
+Decoded labels, missing channels, source quality and auxiliary center annotations
+remain distinguished in the manifests.
