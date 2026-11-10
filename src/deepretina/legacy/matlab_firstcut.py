@@ -75,7 +75,7 @@ def _nelder_mead(fun, x0):
 
 
 def _search_thresholds(image, n):
-    """Uncertified local-search hypothesis, deliberately not wired into runtime.
+    """Private search state behind the optional measured first-cutoff backend.
 
     Histogram, simplex stable ordering and failed-search fallback are measured
     hypotheses. A known N5 ramp disagrees in two returned higher thresholds.
