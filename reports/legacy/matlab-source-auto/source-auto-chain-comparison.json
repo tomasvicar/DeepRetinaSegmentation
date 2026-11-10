@@ -1,0 +1,677 @@
+{
+  "scope": "Source auto FOV -> exact7bb image_adjustment -> separately invokedLC -> independent round(normalized*4096) storage contract; not historical exporter replay or model quality",
+  "matlab_parity_certified": false,
+  "historical_training_file_provenance_verified": false,
+  "cases": [
+    {
+      "name": "chain1-stare",
+      "dataset": "stare",
+      "degree": 35.0,
+      "original_shape": [
+        605,
+        700,
+        3
+      ],
+      "prepared_shape": [
+        815,
+        943,
+        3
+      ],
+      "scale": 1.3461538461538463,
+      "calibration": {
+        "center_row_one_based": 290,
+        "center_col_one_based": 345,
+        "radius_pixels": 325,
+        "edge_pixels": 1951
+      },
+      "processing_fov_disagreements": 0,
+      "resized": {
+        "shape": [
+          815,
+          943,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 1632124,
+        "max_abs": 9.992007221626409e-16,
+        "mean_abs": 4.711027400924438e-17
+      },
+      "normalized": {
+        "shape": [
+          815,
+          943,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 1187720,
+        "max_abs": 6.355034730753939e-05,
+        "mean_abs": 4.2127687720142046e-08
+      },
+      "stored_dicom12": {
+        "shape": [
+          815,
+          943,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 390,
+        "max_abs": 1.0,
+        "mean_abs": 0.00016915079793636026
+      },
+      "prepared_fov_disagreements": 0,
+      "vessel_disagreements": 0,
+      "geometry": {
+        "original_shape": [
+          605,
+          700
+        ],
+        "crop_position": [
+          0,
+          604,
+          0,
+          699
+        ],
+        "rescale_factor": 1.3461538461538463,
+        "prepared_shape": [
+          815,
+          943
+        ]
+      },
+      "profile": {
+        "name": "vesclass_matlab_source_auto",
+        "matlab_parity_certified": false,
+        "reference_runtime": "R2026b Update1",
+        "scope": "explicit source fov=0 min-only automatic branch; resize/photometric residuals and historical provenance qualifications remain",
+        "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+        "pixels_per_degree": 25.0,
+        "photometry_pixels_per_degree": 25.0,
+        "field_of_view_degrees": 35.0,
+        "fov_diameter_pixels": 650.0,
+        "fov_source": "automatic source souradnice with scalar-zero FOV argument",
+        "diameter_source": "automatic source boundary calibration; explicitly transferred without second calibration",
+        "fov_calibration": {
+          "mode": "estimated_from_source_automatic_fov",
+          "method": "automatic_generic",
+          "center_row_one_based": 290,
+          "center_col_one_based": 345,
+          "radius_pixels": 325,
+          "edge_pixels": 1951
+        },
+        "mask_resampling": "nearest to explicit resized image dimensions",
+        "storage": "dicom12",
+        "historical_training_file_provenance_verified": false,
+        "original_single_net_python_profile_changed": false,
+        "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+        "dataset": "stare",
+        "field_angle_source": "explicit supplied field angle",
+        "calibration_boundary_policy": "final_closed before hole filling; source-special rules remain separate",
+        "processing_fov_policy": "source returned processing FOV, distinct from calibration boundary",
+        "source_fov_diagnostics": {
+          "dataset": "stare",
+          "low_threshold": 0.1794240601097486,
+          "high_threshold": 0.6203814959726901,
+          "fallback_used": false,
+          "multithresh_backend": "source_first_cutoff",
+          "first_cutoff": {
+            "value": 0.1794240601097486,
+            "bin_coordinate": 59.0,
+            "threshold_count": 3,
+            "effectiveness_status": "finite",
+            "method": "source_first_cutoff_stable_nelder_mead_r2026b_measured",
+            "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+            "reference_runtime": "MATLAB R2026b",
+            "full_multithresh_clone": false,
+            "matlab_parity_certified": false
+          },
+          "histogram_backend": "not_required",
+          "initial_white_fraction": 0.7298394332939787,
+          "expected_black_fraction": 0.269
+        },
+        "generic_recalibration_performed": false,
+        "histogram_oracle_override_used": false,
+        "source_calibration_boundary_sha256": "e2d988aab07d618e80233e54817c54af035aa2b4996a19991404cae00c0aa2dc",
+        "source_processing_fov_sha256": "dbf5b2d58c2c7ef4846597a29a5981aff0d2c292ab1fd1b4bc9c6355575e1a6e"
+      }
+    },
+    {
+      "name": "chain2-drishtigs",
+      "dataset": "drishtigs",
+      "degree": 30.0,
+      "original_shape": [
+        1752,
+        2045,
+        3
+      ],
+      "prepared_shape": [
+        641,
+        749,
+        3
+      ],
+      "scale": 0.36585365853658536,
+      "calibration": {
+        "center_row_one_based": 879,
+        "center_col_one_based": 1025,
+        "radius_pixels": 1025,
+        "edge_pixels": 6172
+      },
+      "processing_fov_disagreements": 0,
+      "resized": {
+        "shape": [
+          641,
+          749,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 1199690,
+        "max_abs": 5.551115123125783e-16,
+        "mean_abs": 2.01141283237458e-17
+      },
+      "normalized": {
+        "shape": [
+          641,
+          749,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 1033914,
+        "max_abs": 8.573388203025889e-05,
+        "mean_abs": 6.202393601941763e-08
+      },
+      "stored_dicom12": {
+        "shape": [
+          641,
+          749,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 354,
+        "max_abs": 1.0,
+        "mean_abs": 0.00024577752135452577
+      },
+      "prepared_fov_disagreements": 0,
+      "vessel_disagreements": 0,
+      "geometry": {
+        "original_shape": [
+          1752,
+          2045
+        ],
+        "crop_position": [
+          0,
+          1751,
+          0,
+          2044
+        ],
+        "rescale_factor": 0.36585365853658536,
+        "prepared_shape": [
+          641,
+          749
+        ]
+      },
+      "profile": {
+        "name": "vesclass_matlab_source_auto",
+        "matlab_parity_certified": false,
+        "reference_runtime": "R2026b Update1",
+        "scope": "explicit source fov=0 min-only automatic branch; resize/photometric residuals and historical provenance qualifications remain",
+        "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+        "pixels_per_degree": 25.0,
+        "photometry_pixels_per_degree": 25.0,
+        "field_of_view_degrees": 30.0,
+        "fov_diameter_pixels": 2050.0,
+        "fov_source": "automatic source souradnice with scalar-zero FOV argument",
+        "diameter_source": "automatic source boundary calibration; explicitly transferred without second calibration",
+        "fov_calibration": {
+          "mode": "estimated_from_source_automatic_fov",
+          "method": "automatic_generic",
+          "center_row_one_based": 879,
+          "center_col_one_based": 1025,
+          "radius_pixels": 1025,
+          "edge_pixels": 6172
+        },
+        "mask_resampling": "nearest to explicit resized image dimensions",
+        "storage": "dicom12",
+        "historical_training_file_provenance_verified": false,
+        "original_single_net_python_profile_changed": false,
+        "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+        "dataset": "drishtigs",
+        "field_angle_source": "explicit supplied field angle",
+        "calibration_boundary_policy": "final_closed before hole filling; source-special rules remain separate",
+        "processing_fov_policy": "source returned processing FOV, distinct from calibration boundary",
+        "source_fov_diagnostics": {
+          "dataset": "drishtigs",
+          "low_threshold": 0.04292673054336907,
+          "high_threshold": 0.36143422545093395,
+          "fallback_used": false,
+          "multithresh_backend": "source_first_cutoff",
+          "first_cutoff": {
+            "value": 0.04292673054336907,
+            "bin_coordinate": 24.0,
+            "threshold_count": 5,
+            "effectiveness_status": "finite",
+            "method": "source_first_cutoff_stable_nelder_mead_r2026b_measured",
+            "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+            "reference_runtime": "MATLAB R2026b",
+            "full_multithresh_clone": false,
+            "matlab_parity_certified": false
+          },
+          "histogram_backend": "not_required",
+          "initial_white_fraction": 0.8559115115383327,
+          "expected_black_fraction": 0.1568
+        },
+        "generic_recalibration_performed": false,
+        "histogram_oracle_override_used": false,
+        "source_calibration_boundary_sha256": "d73e7f53019a5e1a90a57a192e4bc2a4433387ec0a3a9e544be7a661858e9233",
+        "source_processing_fov_sha256": "98027f983e5623861f5d800a986df5eee9c15c90ff6d6679dc4999857a015411"
+      }
+    },
+    {
+      "name": "chain3-diaretdb",
+      "dataset": "diaretdb",
+      "degree": 50.0,
+      "original_shape": [
+        1152,
+        1500,
+        3
+      ],
+      "prepared_shape": [
+        1005,
+        1308,
+        3
+      ],
+      "scale": 0.8716875871687587,
+      "calibration": {
+        "center_row_one_based": 556,
+        "center_col_one_based": 743,
+        "radius_pixels": 717,
+        "edge_pixels": 2755
+      },
+      "processing_fov_disagreements": 0,
+      "resized": {
+        "shape": [
+          1005,
+          1308,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 2930523,
+        "max_abs": 7.771561172376096e-16,
+        "mean_abs": 4.167591406861578e-17
+      },
+      "normalized": {
+        "shape": [
+          1005,
+          1308,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 2597709,
+        "max_abs": 0.06624259466183173,
+        "mean_abs": 1.159651862581237e-05
+      },
+      "stored_dicom12": {
+        "shape": [
+          1005,
+          1308,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 74165,
+        "max_abs": 271.0,
+        "mean_abs": 0.04747516241422855
+      },
+      "prepared_fov_disagreements": 2,
+      "vessel_disagreements": 0,
+      "geometry": {
+        "original_shape": [
+          1152,
+          1500
+        ],
+        "crop_position": [
+          0,
+          1151,
+          0,
+          1499
+        ],
+        "rescale_factor": 0.8716875871687587,
+        "prepared_shape": [
+          1005,
+          1308
+        ]
+      },
+      "profile": {
+        "name": "vesclass_matlab_source_auto",
+        "matlab_parity_certified": false,
+        "reference_runtime": "R2026b Update1",
+        "scope": "explicit source fov=0 min-only automatic branch; resize/photometric residuals and historical provenance qualifications remain",
+        "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+        "pixels_per_degree": 25.0,
+        "photometry_pixels_per_degree": 25.0,
+        "field_of_view_degrees": 50.0,
+        "fov_diameter_pixels": 1434.0,
+        "fov_source": "automatic source souradnice with scalar-zero FOV argument",
+        "diameter_source": "automatic source boundary calibration; explicitly transferred without second calibration",
+        "fov_calibration": {
+          "mode": "estimated_from_source_automatic_fov",
+          "method": "automatic_generic",
+          "center_row_one_based": 556,
+          "center_col_one_based": 743,
+          "radius_pixels": 717,
+          "edge_pixels": 2755
+        },
+        "mask_resampling": "nearest to explicit resized image dimensions",
+        "storage": "dicom12",
+        "historical_training_file_provenance_verified": false,
+        "original_single_net_python_profile_changed": false,
+        "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+        "dataset": "diaretdb",
+        "field_angle_source": "explicit supplied field angle",
+        "calibration_boundary_policy": "final_closed before hole filling; source-special rules remain separate",
+        "processing_fov_policy": "source returned processing FOV, distinct from calibration boundary",
+        "source_fov_diagnostics": {
+          "dataset": "diaretdb",
+          "low_threshold": 0.008302464274564183,
+          "high_threshold": 0.4577574897327279,
+          "fallback_used": false,
+          "multithresh_backend": "source_first_cutoff",
+          "first_cutoff": {
+            "value": 0.08302464274564182,
+            "bin_coordinate": 37.0,
+            "threshold_count": 4,
+            "effectiveness_status": "finite",
+            "method": "source_first_cutoff_stable_nelder_mead_r2026b_measured",
+            "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+            "reference_runtime": "MATLAB R2026b",
+            "full_multithresh_clone": false,
+            "matlab_parity_certified": false
+          },
+          "histogram_backend": "not_required",
+          "initial_white_fraction": 0.8431238425925925,
+          "expected_black_fraction": 0.1634
+        },
+        "generic_recalibration_performed": false,
+        "histogram_oracle_override_used": false,
+        "source_calibration_boundary_sha256": "6b5bcf596ed9d0f495d7e986a9293c90aac5c748e0504cdfe0f4e81f10ead875",
+        "source_processing_fov_sha256": "4a10443ecd48207aab7c97dc1a794945a296e3cc496c8037238e461202a697e3"
+      }
+    },
+    {
+      "name": "chain4-stare",
+      "dataset": "stare",
+      "degree": 12.0,
+      "original_shape": [
+        128,
+        160,
+        3
+      ],
+      "prepared_shape": [
+        350,
+        437,
+        3
+      ],
+      "scale": 2.727272727272727,
+      "calibration": {
+        "center_row_one_based": 64,
+        "center_col_one_based": 80,
+        "radius_pixels": 55,
+        "edge_pixels": 319
+      },
+      "processing_fov_disagreements": 0,
+      "resized": {
+        "shape": [
+          350,
+          437,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 160195,
+        "max_abs": 2.350983990817568e-15,
+        "mean_abs": 4.1094483832644914e-17
+      },
+      "normalized": {
+        "shape": [
+          350,
+          437,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 158789,
+        "max_abs": 7.634122426114498e-05,
+        "mean_abs": 1.466272257443225e-08
+      },
+      "stored_dicom12": {
+        "shape": [
+          350,
+          437,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 27,
+        "max_abs": 1.0,
+        "mean_abs": 5.8842759071592024e-05
+      },
+      "prepared_fov_disagreements": 0,
+      "vessel_disagreements": 0,
+      "geometry": {
+        "original_shape": [
+          128,
+          160
+        ],
+        "crop_position": [
+          0,
+          127,
+          0,
+          159
+        ],
+        "rescale_factor": 2.727272727272727,
+        "prepared_shape": [
+          350,
+          437
+        ]
+      },
+      "profile": {
+        "name": "vesclass_matlab_source_auto",
+        "matlab_parity_certified": false,
+        "reference_runtime": "R2026b Update1",
+        "scope": "explicit source fov=0 min-only automatic branch; resize/photometric residuals and historical provenance qualifications remain",
+        "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+        "pixels_per_degree": 25.0,
+        "photometry_pixels_per_degree": 25.0,
+        "field_of_view_degrees": 12.0,
+        "fov_diameter_pixels": 110.0,
+        "fov_source": "automatic source souradnice with scalar-zero FOV argument",
+        "diameter_source": "automatic source boundary calibration; explicitly transferred without second calibration",
+        "fov_calibration": {
+          "mode": "estimated_from_source_automatic_fov",
+          "method": "automatic_generic",
+          "center_row_one_based": 64,
+          "center_col_one_based": 80,
+          "radius_pixels": 55,
+          "edge_pixels": 319
+        },
+        "mask_resampling": "nearest to explicit resized image dimensions",
+        "storage": "dicom12",
+        "historical_training_file_provenance_verified": false,
+        "original_single_net_python_profile_changed": false,
+        "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+        "dataset": "stare",
+        "field_angle_source": "explicit supplied field angle",
+        "calibration_boundary_policy": "final_closed before hole filling; source-special rules remain separate",
+        "processing_fov_policy": "source returned processing FOV, distinct from calibration boundary",
+        "source_fov_diagnostics": {
+          "dataset": "stare",
+          "low_threshold": 0.0,
+          "high_threshold": 0.42979472297080507,
+          "fallback_used": true,
+          "multithresh_backend": "source_first_cutoff",
+          "first_cutoff": {
+            "value": 0.0716324538284675,
+            "bin_coordinate": 34.0,
+            "threshold_count": 3,
+            "effectiveness_status": "finite",
+            "method": "source_first_cutoff_stable_nelder_mead_r2026b_measured",
+            "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+            "reference_runtime": "MATLAB R2026b",
+            "full_multithresh_clone": false,
+            "matlab_parity_certified": false
+          },
+          "histogram_backend": "python_source_histcounts250",
+          "initial_white_fraction": 0.446337890625,
+          "expected_black_fraction": 0.269
+        },
+        "generic_recalibration_performed": false,
+        "histogram_oracle_override_used": false,
+        "source_calibration_boundary_sha256": "c5fed623f92ab4edd0cb5675866003ad48df3d097883611de3493e3c76e4f322",
+        "source_processing_fov_sha256": "c178e1fa29d21847fef8c225eb2b46efa204e9b7206d23c21aa8e3d0a0d4f563"
+      }
+    },
+    {
+      "name": "chain5-eophtha",
+      "dataset": "eophtha",
+      "degree": 12.0,
+      "original_shape": [
+        128,
+        160,
+        3
+      ],
+      "prepared_shape": [
+        250,
+        312,
+        3
+      ],
+      "scale": 1.948051948051948,
+      "calibration": {
+        "center_row_one_based": 72,
+        "center_col_one_based": 81,
+        "radius_pixels": 77,
+        "edge_pixels": 431
+      },
+      "processing_fov_disagreements": 0,
+      "resized": {
+        "shape": [
+          250,
+          312,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 164185,
+        "max_abs": 2.220446049250313e-15,
+        "mean_abs": 7.06436311199502e-17
+      },
+      "normalized": {
+        "shape": [
+          250,
+          312,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 93105,
+        "max_abs": 4.4518449515695835e-07,
+        "mean_abs": 1.5358737915982465e-09
+      },
+      "stored_dicom12": {
+        "shape": [
+          250,
+          312,
+          3
+        ],
+        "nonfinite_python": 0,
+        "nonfinite_matlab": 0,
+        "unequal": 1,
+        "max_abs": 1.0,
+        "mean_abs": 4.273504273504274e-06
+      },
+      "prepared_fov_disagreements": 0,
+      "vessel_disagreements": 0,
+      "geometry": {
+        "original_shape": [
+          128,
+          160
+        ],
+        "crop_position": [
+          0,
+          127,
+          0,
+          159
+        ],
+        "rescale_factor": 1.948051948051948,
+        "prepared_shape": [
+          250,
+          312
+        ]
+      },
+      "profile": {
+        "name": "vesclass_matlab_source_auto",
+        "matlab_parity_certified": false,
+        "reference_runtime": "R2026b Update1",
+        "scope": "explicit source fov=0 min-only automatic branch; resize/photometric residuals and historical provenance qualifications remain",
+        "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+        "pixels_per_degree": 25.0,
+        "photometry_pixels_per_degree": 25.0,
+        "field_of_view_degrees": 12.0,
+        "fov_diameter_pixels": 154.0,
+        "fov_source": "automatic source souradnice with scalar-zero FOV argument",
+        "diameter_source": "automatic source boundary calibration; explicitly transferred without second calibration",
+        "fov_calibration": {
+          "mode": "estimated_from_source_automatic_fov",
+          "method": "automatic_generic",
+          "center_row_one_based": 72,
+          "center_col_one_based": 81,
+          "radius_pixels": 77,
+          "edge_pixels": 431
+        },
+        "mask_resampling": "nearest to explicit resized image dimensions",
+        "storage": "dicom12",
+        "historical_training_file_provenance_verified": false,
+        "original_single_net_python_profile_changed": false,
+        "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+        "dataset": "eophtha",
+        "field_angle_source": "explicit supplied field angle",
+        "calibration_boundary_policy": "final_closed before hole filling; source-special rules remain separate",
+        "processing_fov_policy": "source returned processing FOV, distinct from calibration boundary",
+        "source_fov_diagnostics": {
+          "dataset": "eophtha",
+          "low_threshold": 0.372413,
+          "high_threshold": 0.4857882331937633,
+          "fallback_used": true,
+          "multithresh_backend": "source_first_cutoff",
+          "first_cutoff": {
+            "value": 0.1044738557715765,
+            "bin_coordinate": 42.5,
+            "threshold_count": 5,
+            "effectiveness_status": "negative_infinity",
+            "method": "source_first_cutoff_stable_nelder_mead_r2026b_measured",
+            "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+            "reference_runtime": "MATLAB R2026b",
+            "full_multithresh_clone": false,
+            "matlab_parity_certified": false
+          },
+          "histogram_backend": "python_source_histcounts250",
+          "initial_white_fraction": 0.7875,
+          "expected_black_fraction": 0.45
+        },
+        "generic_recalibration_performed": false,
+        "histogram_oracle_override_used": false,
+        "source_calibration_boundary_sha256": "66113f29b78e5d8d2f1903c2c3406a4a7508c5d777222cb78d66753ecdb79d6b",
+        "source_processing_fov_sha256": "e5619bd05034c5d447fedf5ba13fe7b6b040b276a32c2203050475f1a8d3453a"
+      }
+    }
+  ],
+  "source_helpers_sha256": {
+    "souradnice.m": "6f47763d8c1b1821d0f6613bc5c823b910577d668857bf617f54d01dcb1fcf9b",
+    "image_adjustment.m": "f4344ca657e525ba898c81ac969f06fb6ebf0af88ae0f44b85543d2f347b06bf",
+    "local_contrast_and_clahe.m": "bce99e1b0475ba4c5fb45ed9ae26d7a1085a4878d5fe035238b515ce317e10e2"
+  }
+}

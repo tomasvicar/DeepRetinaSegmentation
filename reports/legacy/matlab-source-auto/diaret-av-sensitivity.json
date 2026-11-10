@@ -1,0 +1,115 @@
+{
+  "scope": "One paired preprocessing numerical sensitivity measurement, not quality/GT/heldout evaluation",
+  "device": "cpu",
+  "threads": 2,
+  "cuda_initialized": false,
+  "weight_sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+  "weight_provenance": {
+    "source_filename": "net_v0_0_9.pt",
+    "source_sha256": "75c5048aed6adb9f783f8fabb056185c4eb81c23be45b3a152794f59dc8cb1c0",
+    "source_size": 8159748,
+    "source_version": "net_v0_0_9",
+    "source_ref": "7bb0539b90dfce2ed6eaeef1de812072be1155d0",
+    "source_path": "Ves_Class/Network.py",
+    "source_code_sha256": "8f99b450f38a3d01dbeb75a110f81ae13a39c0eeb1d4a8f785b38a33eaf8d7a9",
+    "conversion": "torch.load(weights_only=True), explicit Network class/layer aliases; state dictionary only",
+    "forward_reference_validation": "not implied by serialization conversion; see independent numeric parity report"
+  },
+  "input_npz_sha256": "045e4a705ec86530cf5855a0019968d06630c7c23afb0d82e5266cc7638379b0",
+  "source_stored_rgb_sha256": "d2084b3abc0e16c0d006497cfb8ae88d822e7f86a2afd18306c1d01452f041aa",
+  "python_stored_rgb_sha256": "87170b8e2849051d3084b23192de3c931656aef1e2be3637b4d9aa1235734b5b",
+  "same_prepared_vessel_sha256": "226ddf8f80a7469752d79cd28c1ff38b0a0d2b329250784353103d1732a7e5de",
+  "support": {
+    "weight_sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+    "original_weight_provenance": {
+      "source_filename": "_117_0.00013_gpu_74945536.00000_train_0.30473_valid_0.31326.pt",
+      "source_path": "/var/home/tom/ownCloud/fundus_databases/models/single_net_retina_jednotna_sit/test_vessels_seg_best/best_models/_117_0.00013_gpu_74945536.00000_train_0.30473_valid_0.31326.pt",
+      "source_sha256": "5e88d2a08732c741f6d3e7543d3e40e1e7733d9046ba272a1084832e674df97f",
+      "source_bytes": 5562871,
+      "legacy_ref": "7a152c31c2947ddf760716dfa8a6dfc4d2b881c9",
+      "parameters": 1304289,
+      "datasets": {
+        "aria": 143,
+        "avrdb": 100,
+        "chasedb1": 28,
+        "drhagis": 40,
+        "drive": 40,
+        "hrf": 45,
+        "iostar": 30,
+        "stare": 20,
+        "uoadr": 200
+      },
+      "splits": {
+        "train": 387,
+        "valid": 117,
+        "test": 142
+      },
+      "training_images": 646,
+      "channel_order_basis": "original evaluate_single_vs_multi.py and checkpoint method/head count",
+      "normalization_verified": false
+    },
+    "raw_rgb_sha256": "ec2ce9460af698abea0151b21b15f3be3236c00eb8ae0767e6430cd9bc0057ad",
+    "native_vessel_sha256": "1b04ee4a96bcef88e48f5c092207e375ae2f68e0df6ddf3232fa9ef2442d69ac",
+    "prepared_vessel_sha256": "226ddf8f80a7469752d79cd28c1ff38b0a0d2b329250784353103d1732a7e5de",
+    "native_shape": [
+      1152,
+      1500
+    ],
+    "prepared_shape": [
+      1005,
+      1308
+    ],
+    "native_positive": 78801,
+    "prepared_positive": 59805,
+    "threshold": "strict prepared logit>0, nearest restore then source-nearest to AV shape",
+    "normalized": false,
+    "field_angle": 50,
+    "pixels_per_degree": 25
+  },
+  "input_standardization_error": {
+    "max": 0.2078094482421875,
+    "mean": 4.881459608441219e-05,
+    "per_channel_max": [
+      0.04930853843688965,
+      0.046048521995544434,
+      0.2078094482421875,
+      0.0
+    ]
+  },
+  "logit_difference": {
+    "max": 0.2036876678466797,
+    "mean": 0.000318389676976949,
+    "unequal": 3941573
+  },
+  "conditional_probability_difference": {
+    "max": 0.06657540798187256,
+    "mean": 5.007096115150489e-05,
+    "unequal": 2389754
+  },
+  "prepared_gated_classes_disagree": 0,
+  "prepared_class_counts": {
+    "matlab": {
+      "0": 1254735,
+      "1": 45044,
+      "2": 14761
+    },
+    "python": {
+      "0": 1254735,
+      "1": 45044,
+      "2": 14761
+    }
+  },
+  "native_gated_classes_disagree": 0,
+  "native_class_counts": {
+    "matlab": {
+      "0": 1649337,
+      "1": 59325,
+      "2": 19338
+    },
+    "python": {
+      "0": 1649337,
+      "1": 59325,
+      "2": 19338
+    }
+  }
+}
