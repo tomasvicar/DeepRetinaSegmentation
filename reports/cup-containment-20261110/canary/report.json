@@ -1,0 +1,462 @@
+{
+  "schema_version": 1,
+  "split": "val",
+  "mode": "canary",
+  "preview_only": true,
+  "photos": 770,
+  "cup_supported_photos": 612,
+  "processed": 5,
+  "skipped_without_cup_supervision": 158,
+  "native_per_photo_counts_exact": true,
+  "models": {
+    "universal": {
+      "checkpoint_sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "architecture": {
+        "filters": 32,
+        "in_size": 3,
+        "out_size": 3,
+        "do": 0.0,
+        "depth": 4
+      },
+      "tiling": {
+        "crop_size": 288,
+        "border": 36,
+        "blend": "logits",
+        "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+      },
+      "parameters": 1304355
+    },
+    "disc0": {
+      "checkpoint_sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+      "architecture": {
+        "filters": 32,
+        "in_size": 3,
+        "out_size": 1,
+        "do": 0.0,
+        "depth": 4
+      },
+      "tiling": {
+        "crop_size": 192,
+        "border": 24,
+        "blend": "logits",
+        "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+      },
+      "parameters": 1304289
+    },
+    "disc1": {
+      "checkpoint_sha256": "8ebf60971813bbaecc9602663034d75cfe7f5c3c9587b7b2a27d056c1cae3605",
+      "architecture": {
+        "filters": 32,
+        "in_size": 3,
+        "out_size": 1,
+        "do": 0.0,
+        "depth": 4
+      },
+      "tiling": {
+        "crop_size": 256,
+        "border": 32,
+        "blend": "logits",
+        "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+      },
+      "parameters": 1304289
+    }
+  },
+  "inference_seconds": {
+    "universal": 11.118485335086007,
+    "disc0": 8.604214147955645,
+    "disc1": 8.8178762839525
+  },
+  "data_seconds": 0.25976956298109144,
+  "observed_tiles": {
+    "universal": 81,
+    "disc0": 164,
+    "disc1": 84
+  },
+  "full_tiles": {
+    "universal": 13569,
+    "disc0": 27131,
+    "disc1": 13664
+  },
+  "projected_full_seconds": 4752.142857764075,
+  "projected_full_with_15pct_margin_seconds": 5464.964286428686,
+  "max_rss_kib": 838120,
+  "elapsed_seconds": 34.72473988303682,
+  "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+  "canonical_fingerprint": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+  "reference_sha256": {
+    "disc0": "2ce2a1891fac58999e903bb50b84a3378572d9ebea6ad0e430f55a535f8f0792",
+    "disc1": "e8b0c48437b8b3c341228b57cf83e5567d5263b15bb86e4570b3d42fb5d99091"
+  },
+  "script_sha256": "f8425bc81b34225137e72ac53353a2099363759ec075e58507900823e277ebf3",
+  "threads": 2,
+  "interop_threads": 1,
+  "cuda_visible_devices": "",
+  "original_defaults_or_weights_changed": false,
+  "postprocessing_gt_used": false,
+  "no_gpu": true,
+  "test_evaluation": false,
+  "per_photo": [
+    {
+      "photo_id": "sha256:51e5886ccdeea307bf35a712247fa9fdc089fd3ca0d911ea95bbae6851bb02b6",
+      "source": "refuge",
+      "record_ids": [
+        "refuge_V0013_disc_cup"
+      ],
+      "selected_trace": [
+        [
+          "refuge_V0013_disc_cup",
+          "disc_cup"
+        ]
+      ],
+      "shape": [
+        1071,
+        1071
+      ],
+      "cup": {
+        "native": {
+          "dice": 0.3798922800718133,
+          "iou": 0.23448581560283688,
+          "precision": 0.23448581560283688,
+          "recall": 1.0,
+          "tp": 4232,
+          "fp": 13816,
+          "fn": 0,
+          "valid_pixels": 900037
+        },
+        "disc0": {
+          "dice": 0.43509998457821414,
+          "iou": 0.27803692267262337,
+          "precision": 0.27803692267262337,
+          "recall": 1.0,
+          "tp": 4232,
+          "fp": 10989,
+          "fn": 0,
+          "valid_pixels": 900037
+        },
+        "disc1": {
+          "dice": 0.4260331202496602,
+          "iou": 0.27067476814838504,
+          "precision": 0.27067476814838504,
+          "recall": 1.0,
+          "tp": 4232,
+          "fp": 11403,
+          "fn": 0,
+          "valid_pixels": 900037
+        }
+      },
+      "native_disc": {
+        "disc0": {
+          "dice": 0.9347037847232628,
+          "iou": 0.8774120956399437,
+          "precision": 0.9570446735395189,
+          "recall": 0.9133821376281113,
+          "tp": 15596,
+          "fp": 700,
+          "fn": 1479,
+          "valid_pixels": 900037
+        },
+        "disc1": {
+          "dice": 0.946267874304686,
+          "iou": 0.8980155878613675,
+          "precision": 0.9411423936971383,
+          "recall": 0.9514494875549049,
+          "tp": 16246,
+          "fp": 1016,
+          "fn": 829,
+          "valid_pixels": 900037
+        }
+      },
+      "native_counts_exact": true
+    },
+    {
+      "photo_id": "sha256:ae600bfccc825c25002006575728260191a1373d09541dfd25215a9b224b3c2d",
+      "source": "refuge",
+      "record_ids": [
+        "refuge_V0147_disc_cup"
+      ],
+      "selected_trace": [
+        [
+          "refuge_V0147_disc_cup",
+          "disc_cup"
+        ]
+      ],
+      "shape": [
+        1071,
+        1071
+      ],
+      "cup": {
+        "native": {
+          "dice": 0.450640052072033,
+          "iou": 0.2908556224618401,
+          "precision": 0.2908556224618401,
+          "recall": 1.0,
+          "tp": 6231,
+          "fp": 15192,
+          "fn": 0,
+          "valid_pixels": 900037
+        },
+        "disc0": {
+          "dice": 0.4659039928218932,
+          "iou": 0.3036993712531072,
+          "precision": 0.3036993712531072,
+          "recall": 1.0,
+          "tp": 6231,
+          "fp": 14286,
+          "fn": 0,
+          "valid_pixels": 900037
+        },
+        "disc1": {
+          "dice": 0.46660176726074587,
+          "iou": 0.30429262098940274,
+          "precision": 0.30429262098940274,
+          "recall": 1.0,
+          "tp": 6231,
+          "fp": 14246,
+          "fn": 0,
+          "valid_pixels": 900037
+        }
+      },
+      "native_disc": {
+        "disc0": {
+          "dice": 0.9442460621727605,
+          "iou": 0.8943808100929614,
+          "precision": 0.9888501422409838,
+          "recall": 0.903492223200436,
+          "tp": 21551,
+          "fp": 243,
+          "fn": 2302,
+          "valid_pixels": 900037
+        },
+        "disc1": {
+          "dice": 0.942827078218169,
+          "iou": 0.8918380889183809,
+          "precision": 0.9880990672241878,
+          "recall": 0.9015218211545718,
+          "tp": 21504,
+          "fp": 259,
+          "fn": 2349,
+          "valid_pixels": 900037
+        }
+      },
+      "native_counts_exact": true
+    },
+    {
+      "photo_id": "sha256:75d76aed4fbe4218f4df15979a5aa589d5362138159b5362288cab04a0c34051",
+      "source": "g1020",
+      "record_ids": [
+        "g1020_image_1355_disc_cup"
+      ],
+      "selected_trace": [
+        [
+          "g1020_image_1355_disc_cup",
+          "disc_cup"
+        ]
+      ],
+      "shape": [
+        907,
+        1125
+      ],
+      "cup": {
+        "native": {
+          "dice": 0.590766628525944,
+          "iou": 0.4192113531259929,
+          "precision": 0.4192113531259929,
+          "recall": 1.0,
+          "tp": 11875,
+          "fp": 16452,
+          "fn": 0,
+          "valid_pixels": 883139
+        },
+        "disc0": {
+          "dice": 0.6191506556479575,
+          "iou": 0.4483839299199517,
+          "precision": 0.4483839299199517,
+          "recall": 1.0,
+          "tp": 11875,
+          "fp": 14609,
+          "fn": 0,
+          "valid_pixels": 883139
+        },
+        "disc1": {
+          "dice": 0.6179906846035752,
+          "iou": 0.44716824823015516,
+          "precision": 0.44716824823015516,
+          "recall": 1.0,
+          "tp": 11875,
+          "fp": 14681,
+          "fn": 0,
+          "valid_pixels": 883139
+        }
+      },
+      "native_disc": {
+        "disc0": {
+          "dice": 0.9597373180453372,
+          "iou": 0.9225913172641955,
+          "precision": 0.9521304393268997,
+          "recall": 0.9674667233078448,
+          "tp": 27329,
+          "fp": 1374,
+          "fn": 919,
+          "valid_pixels": 883139
+        },
+        "disc1": {
+          "dice": 0.9686452932670264,
+          "iou": 0.9391970453457356,
+          "precision": 0.9650713331927753,
+          "recall": 0.9722458227131124,
+          "tp": 27464,
+          "fp": 994,
+          "fn": 784,
+          "valid_pixels": 883139
+        }
+      },
+      "native_counts_exact": true
+    },
+    {
+      "photo_id": "sha256:6b020f830aedabdcdf6b5a92466d8a5c6bbcba6c0e11d47cdae2d96cc74fcd5d",
+      "source": "rimone",
+      "record_ids": [
+        "rimone_N-66-R_average_disc_cup",
+        "rimone_N-66-R_expert1_disc_cup",
+        "rimone_N-66-R_expert2_disc_cup"
+      ],
+      "selected_trace": [
+        [
+          "rimone_N-66-R_average_disc_cup",
+          "disc_cup"
+        ]
+      ],
+      "shape": [
+        332,
+        250
+      ],
+      "cup": {
+        "native": {
+          "dice": 0.039722863741339494,
+          "iou": 0.020263901979264844,
+          "precision": 0.02057088183702759,
+          "recall": 0.5758928571428571,
+          "tp": 129,
+          "fp": 6142,
+          "fn": 95,
+          "valid_pixels": 83000
+        },
+        "disc0": {
+          "dice": 0.2268041237113402,
+          "iou": 0.12790697674418605,
+          "precision": 0.15942028985507245,
+          "recall": 0.39285714285714285,
+          "tp": 88,
+          "fp": 464,
+          "fn": 136,
+          "valid_pixels": 83000
+        },
+        "disc1": {
+          "dice": 0.21322314049586777,
+          "iou": 0.11933395004625347,
+          "precision": 0.1308316430020284,
+          "recall": 0.5758928571428571,
+          "tp": 129,
+          "fp": 857,
+          "fn": 95,
+          "valid_pixels": 83000
+        }
+      },
+      "native_disc": {
+        "disc0": {
+          "dice": 0.613838550247117,
+          "iou": 0.4428333729498455,
+          "precision": 0.8214285714285714,
+          "recall": 0.4900052603892688,
+          "tp": 1863,
+          "fp": 405,
+          "fn": 1939,
+          "valid_pixels": 83000
+        },
+        "disc1": {
+          "dice": 0.6776608187134503,
+          "iou": 0.512471254201309,
+          "precision": 0.6101516427969671,
+          "recall": 0.7619673855865334,
+          "tp": 2897,
+          "fp": 1851,
+          "fn": 905,
+          "valid_pixels": 83000
+        }
+      },
+      "native_counts_exact": true
+    },
+    {
+      "photo_id": "sha256:714d96c373736ccea1e52f82735b523097b7eecb0ea81ea74c721ebe5ad6822a",
+      "source": "drishti",
+      "record_ids": [
+        "drishti_drishtiGS_015_disc_cup"
+      ],
+      "selected_trace": [
+        [
+          "drishti_drishtiGS_015_disc_cup",
+          "disc_cup"
+        ]
+      ],
+      "shape": [
+        643,
+        750
+      ],
+      "cup": {
+        "native": {
+          "dice": 0.8108235850171334,
+          "iou": 0.6818362480127186,
+          "precision": 0.6818362480127186,
+          "recall": 1.0,
+          "tp": 10293,
+          "fp": 4803,
+          "fn": 0,
+          "valid_pixels": 410230
+        },
+        "disc0": {
+          "dice": 0.8116956241956242,
+          "iou": 0.6830704663913897,
+          "precision": 0.6925399766659803,
+          "recall": 0.9803750121441757,
+          "tp": 10091,
+          "fp": 4480,
+          "fn": 202,
+          "valid_pixels": 410230
+        },
+        "disc1": {
+          "dice": 0.8187241489023226,
+          "iou": 0.6930846407649317,
+          "precision": 0.6930846407649317,
+          "recall": 1.0,
+          "tp": 10293,
+          "fp": 4558,
+          "fn": 0,
+          "valid_pixels": 410230
+        }
+      },
+      "native_disc": {
+        "disc0": {
+          "dice": 0.9228732207878186,
+          "iou": 0.8567916410571604,
+          "precision": 0.8698365156620492,
+          "recall": 0.9827975183305132,
+          "tp": 13940,
+          "fp": 2086,
+          "fn": 244,
+          "valid_pixels": 410230
+        },
+        "disc1": {
+          "dice": 0.9435054564812351,
+          "iou": 0.8930528437362222,
+          "precision": 0.8933341733870968,
+          "recall": 0.9996474901297236,
+          "tp": 14179,
+          "fp": 1693,
+          "fn": 5,
+          "valid_pixels": 410230
+        }
+      },
+      "native_counts_exact": true
+    }
+  ]
+}
