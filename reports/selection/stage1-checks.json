@@ -1,0 +1,26 @@
+{
+  "status": "stage1_cpu_checks_passed_pending_review",
+  "base_source_commit": "d83f17a83e873f840751493b1e0457b4c386a07d",
+  "tests_passed": 51,
+  "pytest_seconds": 7.55,
+  "command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src nice -n 10 <existing-uv-environment>/bin/python -m pytest -q -x --tb=short -p no:cacheprovider tests/test_unified_selection.py",
+  "ruff": "passed, --no-cache, only four new gate files checked",
+  "real_model_forward_calls": 0,
+  "cuda_initialization_calls": 0,
+  "forward_and_cuda_forbidden_by_test_guard": true,
+  "actual_real_data_selection_artifact_created": false,
+  "actual_heldout_or_real_validation_evaluation_performed": false,
+  "public_test_cli_still_blocked": true,
+  "existing_entrypoint_bytes_unchanged": {
+    "src/deepretina/unified_cli.py": "8ff67c1babf92f950999e32c3515a517937e8deabae8990594cb5a978ed5d911",
+    "src/deepretina/unified.py": "3ffd83cbb2be21f80e5ab7916e05d77c25dcfa754073f22ee75e96ece9dc80b7",
+    "src/deepretina/cli.py": "318d49728e6d8cda32eb6100e8c0d20e26aca94cdc6d1a0a742ca7e83c7a92b5"
+  },
+  "checked_utc": "2026-11-10T16:38:14.758870+00:00",
+  "scope": "New module+standalone create/check only; no public test integration, no retroactive enrichment of thin reports, no jobs",
+  "fingerprint_review_fix": "All actual src/deepretina/**/*.py sorted by relative path, plus pyproject/uv.lock; optional module add/change tested, pyc excluded; source identity rechecked before receipt",
+  "runtime_review_fix": "Installed distribution metadata versions recorded including Pillow/scipy/skimage/OpenCV/h5py/pydicom; CPU hardware/binary attestation limits explicit",
+  "canonical_race_review_fix": "Before/after full schema2 byte fingerprint against same pin; referenced input and audit/completion metadata stable across whole operation; RGB replacement, same-total VALlabel swap and bytes+mtime restoration during GTread negative tests; immutable-input contract explicitly operation-scoped",
+  "exclusive_av_review_fix": "tpA+fpV<=positiveGTA; tpV+fpA<=positiveGTV; end-to-end=tpA+tpV<=conditional<=known-fpA-fpV; five impossible and four actual-valid count cases",
+  "next_step": "Fresh reviewed enriched VAL producer under frozen final runtime; do not retrofit thin historical reports; actual test entrypoint remains blocked"
+}
