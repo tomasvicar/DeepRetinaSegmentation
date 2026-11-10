@@ -12,6 +12,7 @@ import tempfile
 from pathlib import Path
 
 from deepretina.comparison import compare_reports
+from deepretina.val_bridge import WRAPPER, resolve_reference
 
 
 def sha(path):
@@ -37,7 +38,23 @@ def unwrap(value):
     return result
 
 
-def verify_completion(qa, evidence):
+def eligible_train_photo_ids(manifest):
+    document = json.loads(Path(manifest).read_text())
+    rows = document["records"] if isinstance(document, dict) else document
+    ids = {
+        r["photo_id"]
+        for r in rows
+        if r["split"] == "train"
+        and r["task"] in {"vessels", "av", "disc_cup"}
+        and r.get("usable_for_training", True)
+        and not r.get("exclude_from_training", False)
+    }
+    if not ids or any(not isinstance(value, str) or not value for value in ids):
+        raise ValueError("Require explicit eligible TRAIN photo identities in trusted manifest")
+    return sorted(ids)
+
+
+def verify_completion(qa, evidence, *, expected_train_photo_count=2221):
     if (
         qa.get("terminal") is not True
         or qa.get("last_epoch") != 60
@@ -56,26 +73,61 @@ def verify_completion(qa, evidence):
     ):
         raise ValueError("Completion source/data identity differs")
     if (
-        qa["eligible_photos"] != 2221
+        evidence["data"]["eligible_photo_counts"]["train"] != expected_train_photo_count
+        or qa["eligible_photos"] != expected_train_photo_count
         or qa["minimum_photo_visits"] < 60
         or qa["delivered_samples"] != 60 * 8192
     ):
         raise ValueError("Incomplete full-budget photo coverage")
 
 
-def compare(reference_path, evidence_path, manifest, *, completion_qa_path, repeats=2000, seed=42):
+def compare(
+    reference_path,
+    evidence_path,
+    manifest,
+    *,
+    completion_qa_path,
+    repeats=2000,
+    seed=42,
+    val_bridge_path=None,
+    trusted_val_bridge_sha256=None,
+    original_measured_reference=None,
+):
     input_paths = {
         "reference": reference_path,
         "candidate": evidence_path,
         "manifest": manifest,
         "completion_qa": completion_qa_path,
     }
+    options = (val_bridge_path, trusted_val_bridge_sha256, original_measured_reference)
+    if any(value is not None for value in options):
+        if not all(value is not None for value in options):
+            raise ValueError(
+                "Explicit VAL bridge requires file, external trusted SHA and original measured reference"
+            )
+        input_paths.update(
+            val_bridge=val_bridge_path, original_measured_reference=original_measured_reference
+        )
     before = {key: sha(path) for key, path in input_paths.items()}
     reference = json.loads(Path(reference_path).read_text())
+    bridge_provenance = None
+    if reference.get("family") == WRAPPER:
+        if not all(value is not None for value in options):
+            raise ValueError("Typed VAL context requires explicit external trusted bridge opt-in")
+        reference, bridge_provenance = resolve_reference(
+            reference_path,
+            val_bridge_path,
+            trusted_val_bridge_sha256,
+            original_measured_reference,
+            Path(manifest).parent,
+        )
+    elif any(value is not None for value in options):
+        raise ValueError("Bridge flags require an explicit typed VAL reference wrapper")
     evidence = json.loads(Path(evidence_path).read_text())
     candidate = unwrap(evidence)
     completion = json.loads(Path(completion_qa_path).read_text())
-    verify_completion(completion, evidence)
+    train_photo_ids = eligible_train_photo_ids(manifest)
+    verify_completion(completion, evidence, expected_train_photo_count=len(train_photo_ids))
     component = reference.get("fresh_paired_cup_component", {})
     if (
         reference.get("family") != "optional_fresh_paired_cup_experiment"
@@ -98,8 +150,12 @@ def compare(reference_path, evidence_path, manifest, *, completion_qa_path, repe
     with tempfile.TemporaryDirectory(prefix="retina-count-pair-") as temporary:
         flat = Path(temporary) / "candidate.json"
         flat.write_text(json.dumps(candidate, allow_nan=False))
+        comparison_reference = reference_path
+        if bridge_provenance:
+            comparison_reference = Path(temporary) / "reference-derived-val-context.json"
+            comparison_reference.write_text(json.dumps(reference, allow_nan=False))
         result = compare_reports(
-            reference_path,
+            comparison_reference,
             flat,
             manifest,
             repeats=repeats,
@@ -107,8 +163,16 @@ def compare(reference_path, evidence_path, manifest, *, completion_qa_path, repe
             include_sources=True,
             include_av=True,
         )
+    if bridge_provenance:
+        result["val_domain_bridge"] = bridge_provenance
+        result["reference_derived_view_sha256"] = result["reference_report_sha256"]
+        result["reference_report_sha256"] = before["reference"]
     result["completion_qa_sha256"] = sha(completion_qa_path)
     result["completed_training_epochs"] = completion["last_epoch"]
+    result["eligible_train_photo_count_from_manifest"] = len(train_photo_ids)
+    result["eligible_train_photo_ids_sha256"] = hashlib.sha256(
+        (json.dumps(train_photo_ids, separators=(",", ":")) + "\n").encode()
+    ).hexdigest()
     result["selected_checkpoint_epoch"] = evidence["checkpoint"]["epoch"]
     result["candidate_enriched_evidence_sha256"] = sha(evidence_path)
     result["candidate_flat_metrics_role"] = (
@@ -140,8 +204,10 @@ def compare(reference_path, evidence_path, manifest, *, completion_qa_path, repe
     }
     result["prepared_content_sha256"] = candidate["prepared_content_sha256"]
     result["corpus_scope"] = {
-        "version": "v1",
-        "training_registered_dense_selectors": 17,
+        "version": "v2_context_with_byte_identical_v1_VAL" if bridge_provenance else "v1",
+        "training_registered_dense_selectors": len(completion["by_dataset"])
+        if bridge_provenance
+        else 17,
         "observed_VAL_manifest_dataset_labels": len(
             {
                 row["dataset"]
@@ -152,7 +218,9 @@ def compare(reference_path, evidence_path, manifest, *, completion_qa_path, repe
         "selected_VAL_head_annotation_sources": len(result["by_dataset"]),
         "source_alias_qualification": "DRIVE/RITE shared photos remain one photo/group; AV-priority vessel/head annotation is attributed to RITE, so DRIVE is a canonical stratum but not an additional selected head source",
         "all_available_annotated_archives_claim": False,
-        "qualification": "Unregistered DRIONS-DB and GAMMA Disc_Cup_Mask were subsequently identified; separate corpusv2 audit does not change immutable v1/HPO/VAL770",
+        "qualification": "VAL is byte-identical to v1 under the explicit bridge; changed TRAIN/TEST domains are not evaluated by these scores"
+        if bridge_provenance
+        else "Unregistered DRIONS-DB and GAMMA Disc_Cup_Mask were subsequently identified; separate corpusv2 audit does not change immutable v1/HPO/VAL770",
     }
     result["script_sha256"] = sha(__file__)
     result["reads"] = (
@@ -177,6 +245,9 @@ def main():
         p.add_argument("--" + name, type=Path, required=True)
     p.add_argument("--draws", type=int, default=2000)
     p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--val-bridge", type=Path)
+    p.add_argument("--trusted-val-bridge-sha256")
+    p.add_argument("--original-measured-reference", type=Path)
     a = p.parse_args()
     if a.output.exists():
         raise FileExistsError("Preserve prior comparison")
@@ -187,6 +258,9 @@ def main():
         completion_qa_path=a.completion_qa,
         repeats=a.draws,
         seed=a.seed,
+        val_bridge_path=a.val_bridge,
+        trusted_val_bridge_sha256=a.trusted_val_bridge_sha256,
+        original_measured_reference=a.original_measured_reference,
     )
     a.output.parent.mkdir(parents=True, exist_ok=True)
     with a.output.open("x") as handle:

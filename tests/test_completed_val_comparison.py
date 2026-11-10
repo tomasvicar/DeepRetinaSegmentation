@@ -20,7 +20,11 @@ def matched():
         "metrics": {"split": "val", "photos": 770, "threshold": 0.5},
         "configuration": {"values": {"purpose": "full_data"}},
         "inference_protocol": {"threshold": 0.5},
-        "data": {"manifest_sha256": "manifest", "prepared_content_sha256": "canonical"},
+        "data": {
+            "manifest_sha256": "manifest",
+            "prepared_content_sha256": "canonical",
+            "eligible_photo_counts": {"train": 2221},
+        },
         "checkpoint": {"sha256": "best", "epoch": 56},
         "source": {"training_source_sha256": "source"},
     }
@@ -77,3 +81,35 @@ def test_threshold_and_split_must_be_actual_enriched_val(matched):
     evidence["inference_protocol"]["threshold"] = 0.35
     with pytest.raises(ValueError):
         m.unwrap(evidence)
+
+
+def test_self_consistent_subset_completion_cannot_replace_manifest_domain(matched):
+    evidence, qa = matched
+    qa["eligible_photos"] = 100
+    evidence["data"]["eligible_photo_counts"]["train"] = 100
+    with pytest.raises(ValueError, match="coverage"):
+        m.verify_completion(qa, evidence)
+    m.verify_completion(
+        qa, evidence, expected_train_photo_count=100
+    )  # Count must come from bound trusted manifest in compare().
+
+
+def test_eligible_training_ids_follow_frozen_reader_filters(tmp_path):
+    import json
+
+    rows = [
+        {"photo_id": "p0", "split": "train", "task": "disc_cup"},
+        {"photo_id": "p0", "split": "train", "task": "vessels"},
+        {"photo_id": "val", "split": "val", "task": "av"},
+        {"photo_id": "invalid", "split": "train", "task": "images"},
+        {"photo_id": "excluded", "split": "train", "task": "av", "exclude_from_training": True},
+        {
+            "photo_id": "unusable",
+            "split": "train",
+            "task": "disc_cup",
+            "usable_for_training": False,
+        },
+    ]
+    path = tmp_path / "manifest.json"
+    path.write_text(json.dumps(rows))
+    assert m.eligible_train_photo_ids(path) == ["p0"]
