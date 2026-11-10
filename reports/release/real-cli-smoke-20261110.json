@@ -1,0 +1,59 @@
+{
+  "verified_utc": "2026-11-10T18:19:00.820250+00:00",
+  "kind": "actual_public_cli_real_DRIVE21_smoke",
+  "source_parent": "1fdeb0b05b7800a1a003e0431332cfb2f3d2fe1d",
+  "release_parent_has_identical_package": "9c886c32749ca02e3decb0cc19d4644f908cd4c1",
+  "metadata_fix_sha256": "5bee9824e80ddbd2793d869bb3bdc7e45708cc56c29456ae2d1fccbc198c61ec",
+  "CPU_threads": 1,
+  "niceness": 10,
+  "cuda_visible_devices": "",
+  "input_shape": [
+    584,
+    565
+  ],
+  "inputs": {
+    "21_training.tif": {
+      "content/drive/Shareddrives/Retina GAC\u030cR/Data/databases/DRIVE/training/images/21_training.tif": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+      "training/images/21_training.tif": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83"
+    },
+    "21_training_mask.gif": {
+      "content/drive/Shareddrives/Retina GAC\u030cR/Data/databases/DRIVE/training/mask/21_training_mask.gif": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7",
+      "training/mask/21_training_mask.gif": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7"
+    }
+  },
+  "outputs": {
+    "av-metadata-fixed/vessel": {
+      "positive_pixels": 28394,
+      "sha256": "d387134934930d46378d8237a4a36c7a25812697b620ec70c265af77c88f7501"
+    },
+    "av-metadata-fixed/artery": {
+      "positive_pixels": 13537,
+      "sha256": "9b30c082efc15efee9fd9e796494f8954d3cb654a282f84ccca7fbf8ad000ea6"
+    },
+    "av-metadata-fixed/vein": {
+      "positive_pixels": 14999,
+      "sha256": "15e3e3c07ee985ae3109d97ddc137c4d4211b4f9a9cc6308f02b38b34f6fc18c"
+    },
+    "universal/vessel": {
+      "positive_pixels": 29627,
+      "sha256": "416d3d99f84fbe6dbaa4193d184a8464400a130792f742f32a2592996aae4f51"
+    },
+    "universal/disc": {
+      "positive_pixels": 29595,
+      "sha256": "843d5a30609ff70ac6579fe50a7bbf02127d78d14e5b3f5f13a78a3ef2691f63"
+    },
+    "universal/cup": {
+      "positive_pixels": 29550,
+      "sha256": "85952541f0554843dabcf9c683b27c8b6847e03b970ddb2a68a4d45f620e4b13"
+    }
+  },
+  "no_GT_scored": true,
+  "accuracy_claim": false,
+  "restored_support_vs_original_input_vessel_xor_pixels": 8090,
+  "source_vessel_note": "vessel.png is the original-frame input mask; nearest resize to AV grid and nearest restoration change boundary pixels. Actual output gating support is probabilities.npz:vessel_support. No intersection with the unresampled source mask was added.",
+  "metadata_fix_preserves_masks_overlay_classes_and_probability_arrays_exactly": true,
+  "AV_exclusive_and_gated_by_restored_support": true,
+  "all_probability_arrays_finite": true,
+  "nested_output_paths_persist": true,
+  "focused_tests": "35 passed,4 existing warnings,3.30s; Ada CPU1 nice10 CUDAhidden"
+}

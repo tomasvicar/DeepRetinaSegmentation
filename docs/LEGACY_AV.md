@@ -139,3 +139,14 @@ Output metadata records `raw_av_preprocessing`, its actual profile name,
 restored to the original photograph dimensions. The earlier proxy retains its
 `raw_av_proxy` metadata for compatibility. Native prepared inputs and original
 single-net normalization remain separate routes.
+
+## Output support in raw A/V prediction
+
+`vessel.png` retains the original-frame vessel mask supplied to A/V preparation.
+The classifier gates its output on the nearest-resized mask in its own prepared
+grid; restoring that support to the original frame can move boundary pixels.
+The exact restored gating mask is `vessel_support` in `probabilities.npz`.
+Artery/vein outputs are mutually exclusive and gated by that restored support.
+Nested vessel prediction metadata links only to the retained `vessel.png`;
+temporary probability, overlay and metadata files are discarded.
+
