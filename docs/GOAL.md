@@ -65,6 +65,18 @@ na stejném validačním korpusu. Testovací skóre nových modelů se nepoužil
 ladění. Úplný trénovací rozpočet, optimalizace a konečné porovnání ještě hotové
 nejsou; první epocha není finální předatelný model.
 
+MATLAB R2026b na Adě nyní slouží jako numerická reference pro převod původního
+A/V preprocessingu. Samostatný Python CLAHE krok odpovídá 80 syntetickým testům
+a oběma skutečným V rovinám DRIVE/HRF do maximální absolutní chyby 4,45e-16.
+Vývoj je na `experiments/matlab-clahe-parity`; celý raw řetězec se ještě ověřuje
+a produkční profil zatím nebyl změněn. MATLAB není závislostí výsledného balíčku.
+
+Na `experiments/unified-loader-fast` je oddělená optimalizace načítání anotací.
+663 párových vzorků zachovalo shodné tensory, anotátory a stavy RNG; 227 testů
+prošlo. Potvrzovací CPU měření snížilo čas přípravy vzorku přibližně o 30 %.
+Rychlost celé GPU epochy tím ještě doložená není. Běžící tréninky nadále používají
+neměnný kód `87cf045`, původní plány a stejný ověřený datový korpus.
+
 Provozní MetaCentrum poznámky, PBS skripty a evidence testů jsou vedené samostatně
 v soukromém repozitáři `metacentrum-workflows`. Cíl zůstává aktivní, dokud nejsou
 dokončené obě části a doložené jejich porovnání.
