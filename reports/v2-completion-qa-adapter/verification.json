@@ -1,0 +1,25 @@
+{
+  "base_commit": "b9b9cdb8f81da5baef2f71cec539ce0ab2710689",
+  "script": "scripts/adapt_pool_completion_qa.py",
+  "comparison_gate_changed": false,
+  "runtime_source_changed": false,
+  "actual_completed_report_produced": false,
+  "tests": {
+    "passed": 49,
+    "scope": [
+      "new synthetic metadata adapter tests",
+      "existing completed VAL comparison tests"
+    ],
+    "cpu_affinity": [
+      0
+    ],
+    "nice": 10,
+    "CUDA_VISIBLE_DEVICES": "",
+    "numerical_library_threads": 1,
+    "log_sha256": "e88e483f0d39a82ee478dfb74eda0412fff65af6134f3aabd0f3b5347e163460"
+  },
+  "ruff": "PASS",
+  "positive_cases": "Synthetic metadata only, no checkpoint files; test-only manifest SHA substituted for synthetic raw bytes; production pin fixed17a227",
+  "actual_negative_fixture": "tests/reference/pool_completion/actual-v2-e003-stripped.json",
+  "qualification": "No training, checkpoints, image/GT data, cache payloads, GPU runtime, live DB or workers accessed/modified. No E60 completion or model improvement claimed."
+}
