@@ -8,7 +8,7 @@ silently substituting a robust circle fit or the single_net Python loader.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 
 import numpy as np
 
@@ -244,13 +244,18 @@ def source_seed_components(mask, seeds):
 
 
 def automatic_fov_stages(
-    image, *, dataset="generic", multithresh_values=None, histogram_edges=None
+    image,
+    *,
+    dataset="generic",
+    multithresh_values=None,
+    histogram_edges=None,
+    threshold_backend="oracle",
 ):
     """Source threshold/components/close/fill stages, without inventing a radius.
 
-    For N3/4/5 profiles, the undocumented local search is not silently replaced
-    with global multi-Otsu. An explicit measured threshold vector may be supplied
-    for controlled oracle studies; this is recorded rather than called native.
+    N3/4/5 remains guarded by default. Explicit source_first_cutoff uses the
+    measured min-only contract; supplied vectors remain available for oracle
+    studies. No global multi-Otsu or complete threshold clone is substituted.
     """
     from scipy.ndimage import binary_fill_holes
 
@@ -274,15 +279,27 @@ def automatic_fov_stages(
         n = 3
     elif name in {"eophtha", "ridb"}:
         n, factor = 5, 0.5
+    if threshold_backend not in {"oracle", "source_first_cutoff"}:
+        raise ValueError("Choose oracle or explicit source_first_cutoff threshold backend")
+    if threshold_backend != "oracle" and multithresh_values is not None:
+        raise ValueError("Choose measured thresholds or source_first_cutoff, not both")
+    cutoff_metadata = None
     if n:
         if multithresh_values is None:
-            raise NotImplementedError(
-                f"Source multithresh N={n} local-search port is unresolved; supply measured thresholds explicitly for study"
-            )
-        thresholds = np.asarray(multithresh_values, np.float64)
-        if thresholds.shape != (n,) or not np.isfinite(thresholds).all():
-            raise ValueError(f"Provide exactly {n} finite source multithresh values")
-        low = float(thresholds.min()) * factor
+            if threshold_backend == "oracle":
+                raise NotImplementedError(
+                    f"Source N={n} first-cutoff backend is opt-in; supply measured thresholds or explicit source_first_cutoff"
+                )
+            from .matlab_firstcut import first_cutoff_source
+
+            cutoff = first_cutoff_source(gray, n)
+            low = cutoff.value * factor
+            cutoff_metadata = asdict(cutoff)
+        else:
+            thresholds = np.asarray(multithresh_values, np.float64)
+            if thresholds.shape != (n,) or not np.isfinite(thresholds).all():
+                raise ValueError(f"Provide exactly {n} finite source multithresh values")
+            low = float(thresholds.min()) * factor
     else:
         if multithresh_values is not None:
             raise ValueError("This source profile does not use multithresh")
@@ -329,7 +346,12 @@ def automatic_fov_stages(
         "low_threshold": low,
         "high_threshold": high,
         "fallback_used": bool(fallback),
-        "multithresh_backend": "supplied_oracle_vector" if n else "not_required",
+        "multithresh_backend": (
+            "source_first_cutoff" if cutoff_metadata is not None else "supplied_oracle_vector"
+        )
+        if n
+        else "not_required",
+        "first_cutoff": cutoff_metadata,
         "histogram_backend": (
             "python_source_histcounts250" if histogram_edges is None else "supplied_oracle_edges"
         )
@@ -341,7 +363,12 @@ def automatic_fov_stages(
 
 
 def automatic_fov_source(
-    image, *, dataset="generic", multithresh_values=None, histogram_edges=None
+    image,
+    *,
+    dataset="generic",
+    multithresh_values=None,
+    histogram_edges=None,
+    threshold_backend="oracle",
 ):
     """Optional source automatic FOV for measured primitive/profile subsets only."""
     from dataclasses import replace
@@ -351,6 +378,7 @@ def automatic_fov_source(
         dataset=dataset,
         multithresh_values=multithresh_values,
         histogram_edges=histogram_edges,
+        threshold_backend=threshold_backend,
     )
     name = stages["dataset"]
     # Source RIM uses fov AFTER fill as its boundary; generic/ROI uses final_closed.
