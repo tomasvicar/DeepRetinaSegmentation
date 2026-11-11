@@ -363,6 +363,58 @@
       "training_cache_fingerprint": "18c3af6ce64e23c896d7befc52e5ba8e8ebda8e4058c2f156574fa755480766e",
       "limitations": "Single-seed fixed-terminal control baseline, not optimized/final or superior on every task. E60 is published for actual contribution by all5700 annotations; the VAL-best E52 had only5699 contributors and is not this published model. Fresh VAL vessel Dice is lower than the strongest original vessel reference; artery Dice is also lower in point estimate with a paired interval crossing zero. Disc/cup, vein and conditional A/V gains do not remove these regressions. No heldout TEST evaluation or clinical claim. Known-source camera angles include documented nominal assumptions.",
       "training_corpus": "v2:21 supervised TRAIN sources,2529photos/5700annotation records, manifest17a2277c"
+    },
+    "unified-v2-vascular2": {
+      "filename": "unified-v2-vascular2.pt",
+      "sha256": "81113e7e74d86a3d51994754895d18e90b2ee8d54d5a8660a8d5535096451b7b",
+      "family": "unified",
+      "task": "unified",
+      "channels": [
+        "vessel",
+        "artery",
+        "vein",
+        "disc",
+        "cup"
+      ],
+      "status": "experimental corpus-v2 vascular sampling preview; completed 60-epoch run, VAL-selected E59 with full annotation coverage, TEST pending",
+      "selection_policy": "validation_best_macro_dataset_mean_dice",
+      "selected_epoch": 59,
+      "completed_epochs": 60,
+      "best_validation_epoch": 59,
+      "training_photos": 2529,
+      "training_annotation_records": 5700,
+      "training_sources": 21,
+      "minimum_photo_visits": 64,
+      "minimum_annotation_visits": 2,
+      "preprocessing_profile": "legacy25_raw",
+      "pixels_per_degree": 25,
+      "default_threshold": 0.5,
+      "validation": {
+        "metric": "macro_dataset_mean_dice",
+        "training_score": 0.8038980927142756,
+        "fresh_score": 0.8038980941929544,
+        "threshold": 0.5,
+        "photos": 770,
+        "fresh_validation_source_report_sha256": "ddc9677f100a61d2d0bc8d7fa0ee3f9212e5142c1329d7f96e9ce6698f6a3fc1",
+        "pooled_dice": {
+          "artery": 0.7180475758373055,
+          "cup": 0.8748712664808148,
+          "disc": 0.9335905761900962,
+          "vein": 0.7794767492848733,
+          "vessel": 0.7567128270323407
+        },
+        "conditional_av_accuracy": 0.8102570019083999
+      },
+      "source_commit": "0b8762e667c997a2dfd129dc65988c1f26f6b2ad",
+      "training_source_sha256": "85441afac96f47165df55505d06a08742183b9686fb1c608225166810a23a00f",
+      "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+      "prepared_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+      "geometry_policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+      "training_cache_fingerprint": "18c3af6ce64e23c896d7befc52e5ba8e8ebda8e4058c2f156574fa755480766e",
+      "limitations": "Experimental single-seed validation-selected preview, not a final optimized model or TEST-qualified. The complete run reached 60 epochs; this unchanged BEST checkpoint is E59 and already includes all 5,700 annotation contributors. Fresh VAL vessel Dice remains lower than the strongest original vessel reference; higher macro and A/V scores do not establish all-task superiority or a causal sampling-only improvement. Hyperparameter studies continue. Shared training-validation selection, historical original exposure, nominal camera assumptions and opaque patient IDs remain qualifications.",
+      "training_corpus": "v2: 21 supervised TRAIN sources, 2,529 photos / 5,700 annotation records, manifest 17a2277c",
+      "vascular_sampling_weight": 2.0,
+      "checkpoint_bytes": 5453234
     }
   },
   "aliases": {

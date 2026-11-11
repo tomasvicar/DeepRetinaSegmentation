@@ -1,0 +1,146 @@
+{
+  "status": "PASS_PUBLIC_CLI_FUNCTIONAL_SMOKE",
+  "model": "unified-v2-vascular2",
+  "checkpoint_sha256": "81113e7e74d86a3d51994754895d18e90b2ee8d54d5a8660a8d5535096451b7b",
+  "source_base": "87ee1a9ff62d65b66a12197bf9d780e68d4f8a4a",
+  "command": [
+    "uv",
+    "run",
+    "deepretina",
+    "predict",
+    "--model",
+    "unified-v2-vascular2",
+    "--input",
+    "DRIONS TRAIN images/image_001.jpg",
+    "--dataset",
+    "drions",
+    "--output",
+    "new isolated output",
+    "--device",
+    "cpu"
+  ],
+  "actual_execution": "existing Python environment, explicit preview PYTHONPATH, public module CLI; bootstrap limited Torch intraop/interop to1; no uv sync",
+  "device": "cpu",
+  "torch_threads": 1,
+  "torch_interop_threads": 1,
+  "input_membership": {
+    "source_archive": "DRIONS-DB.zip",
+    "source_member": "images/image_001.jpg",
+    "encoded_image_sha256": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1",
+    "photo_id": "sha256:d0d30763e7b390dd94bc084e2e8dbeedce22cd0cac1688cade051eb3324b5db2",
+    "image_shape_hwc": [
+      400,
+      600,
+      3
+    ],
+    "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "record_ids": [
+      "drions_image_001_expert1_disc_cup",
+      "drions_image_001_expert2_disc_cup"
+    ],
+    "split": "train",
+    "ground_truth_masks_read": false
+  },
+  "probability_shape_chw": [
+    5,
+    400,
+    600
+  ],
+  "finite_probabilities": true,
+  "mask_shapes_hw": {
+    "vessel": [
+      400,
+      600
+    ],
+    "artery": [
+      400,
+      600
+    ],
+    "vein": [
+      400,
+      600
+    ],
+    "disc": [
+      400,
+      600
+    ],
+    "cup": [
+      400,
+      600
+    ]
+  },
+  "av_exclusive_and_inside_vessel": true,
+  "cup_inside_disc": true,
+  "all_output_paths_exist": true,
+  "threshold": 0.5,
+  "preprocessing": {
+    "profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "field_of_view_degrees": 30.0,
+    "normalized": false,
+    "normalization": "RGB/255-0.5",
+    "fov_source": "automatic original Python thresholds",
+    "geometry": {
+      "original_shape": [
+        400,
+        600
+      ],
+      "crop_position": [
+        0,
+        399,
+        0,
+        599
+      ],
+      "rescale_factor": 1.25,
+      "prepared_shape": [
+        500,
+        750
+      ]
+    },
+    "geometry_policy": {
+      "policy_id": "corpusv2_nominal_fov_20261110_v1",
+      "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+      "dataset": "drions",
+      "native_shape_hw": [
+        400,
+        600
+      ],
+      "policy_applied": true,
+      "declared_rule": {
+        "alternatives_degrees": [
+          25.0,
+          30.0,
+          45.0
+        ],
+        "camera": "unspecified analog fundus camera",
+        "confidence": "low",
+        "evidence_ids": [
+          "drions_creator"
+        ],
+        "field_of_view_degrees": 30.0,
+        "nominal_assumption": true,
+        "per_image_angle_measured": false,
+        "qualification": "Research scale convention for the disc-centered low-resolution scan, not measured FoV.30 avoids an unsupported45degree default and greater upsampling; neither is proven correct. Do not fit angle from disc GT.",
+        "sources": [
+          "https://www.ia.uned.es/~ejcarmona/DRIONS-DB_2.html"
+        ],
+        "status": "research_nominal_unknown_camera",
+        "policy_id": "corpusv2_nominal_fov_20261110_v1",
+        "native_shape_hw": [
+          400,
+          600
+        ],
+        "camera_attribution_method": "dataset_acquisition_description_or_explicit_nominal_research_policy"
+      },
+      "unseen_native_shape": false,
+      "selection": "checkpoint_recorded_geometry_policy",
+      "field_of_view_degrees": 30.0,
+      "unseen_native_shape_fallback": false
+    }
+  },
+  "ground_truth_decoded_or_scored": false,
+  "training_performed": false,
+  "test_evaluation_performed": false,
+  "gpu_used": false,
+  "outputs_committed": false
+}

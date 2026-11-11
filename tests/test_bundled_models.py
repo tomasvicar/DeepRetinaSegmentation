@@ -30,6 +30,7 @@ def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums()
         "pilot-disc-cup",
         "unified-full-data-baseline",
         "unified-v2-control",
+        "unified-v2-vascular2",
     }
     for name, info in catalog.items():
         with bundled_checkpoint(name) as checkpoint:
@@ -71,6 +72,28 @@ def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums()
             assert saved["manifest_sha256"] == info["manifest_sha256"]
             assert saved["prepared_content_sha256"] == info["prepared_content_sha256"]
             assert saved["val_selection_score"] == info["validation"]["training_score"]
+
+        if name == "unified-v2-vascular2":
+            assert saved["epoch"] == info["selected_epoch"] == 59
+            assert info["completed_epochs"] == 60
+            assert info["selection_policy"] == "validation_best_macro_dataset_mean_dice"
+            assert (
+                saved["config"]["vascular_sampling_weight"] == info["vascular_sampling_weight"] == 2
+            )
+            assert saved["coverage"]["seen_photos"] == info["training_photos"] == 2529
+            assert saved["coverage"]["contributing_annotation_records"] == 5700
+            assert (
+                min(saved["coverage"]["photo_visits"].values())
+                == info["minimum_photo_visits"]
+                == 64
+            )
+            assert (
+                min(saved["coverage"]["annotation_visits"].values())
+                == info["minimum_annotation_visits"]
+                == 2
+            )
+            assert saved["val_selection_score"] == info["validation"]["training_score"]
+            assert saved["geometry_policy"]["sha256"] == info["geometry_policy_sha256"]
 
 
 def test_cli_predicts_without_dataset_or_external_checkpoint(tmp_path, capsys):
