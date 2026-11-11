@@ -1,8 +1,8 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11, 15:29 UTC**, with completed reports
-reviewed for this update. A last observed scheduler state is not a claim about
-current execution. The final optimized model, selection freeze and held-out TEST
+Snapshot: **2026-11-11, 16:30:31 UTC E1 observation**. Completed VAL and
+CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
+claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
 
 ## Product and common data
@@ -24,22 +24,41 @@ pixels and does not measure vessel discovery by itself.
 One further genuine native TPE proposal now continues the same auxiliary study
 after all six completed E27 observations. Width16/BatchNorm/basic stays fixed in
 this suggestion; LR becomes0.000411624945, weight decay0.0000823809785 and vascular
-sampling1.05918806. It is distinct from all five patch/photometry arms. No second
-full training has started; six observations do not establish optimality.
+sampling1.05918806. It is distinct from all five patch/photometry arms. The new
+observer actually launched at16:24:39UTC; a later16:26:54UTC observation
+confirmed the training NN live on the physical local Ada GPU with8 intra/1
+interop threads and8 workers. E1 was then observed complete at16:30:31UTC, with
+2,048 updates, finite training loss and157.11s TRAIN+64.32s VAL. This first epoch
+is neither full-budget completion nor evidence of final quality; its very early
+internal VAL score is not used as a model-quality claim. Six observations do not
+establish optimality.
 [Native continuation provenance](../reports/tpe72-completed-fresh-val/next-native-TPE-proposal).
 
-A separate TPE BEST58 TTA sweep actually started on Old at15:28UTC, with its
-first child verified live, all770 VAL planned per case and a90min cap. Results
-are pending. This extends the completed vascular4 TTA experiment below; it does
-not reuse its scores or change a released inference default. No TEST is involved.
+The separate [TPE BEST58 TTA sweep](../reports/tpe72-inference-tta-val) completed
+all four770-VAL cases with observed child and parent exits0, unchanged inputs and
+read-only reports. Fresh same-device none macro.810897 improved to.815087 with
+flips2,.818055 with rot4 and.818854 with dihedral8. The8-view change is+.007956
+[.005841,.010113]; conditional AV.837810 and vessel.767147. All five pooled/source-
+macro heads improved versus none, but RIMONE cup regressed (8-view−.002523,
+interval[−.013998,.007148]) and vessel still trails frozen original.77012340.
+The same-device none counts differ slightly from prior Ada source72 counts
+(359 photos/469 head-photo entries, macro+1.98535e−6); GT supports match exactly.
+Those contexts are not retagged as bitwise parity. No default, original-protocol
+certification, final selection or TEST status changed.
 
-The completed TPE BEST58 also has its own measured CPU example: median8.4163s
-versus59.6351s for the selected original four-network pipeline within the same
-run, one DRIVE TRAIN21 raw photo/official FOV and one CPU thread. Parameters:
-1,965,637 versus5,943,312. This is default `none` inference, not the ongoing TTA
-experiment's latency or a general throughput claim. All samples, actual exit0,
-FP32 checkpoint metadata and scope are in
-[the TPE benchmark](../reports/benchmark/strong-pipeline-cpu-drive21-tpe72-best58).
+The new [direct resident CPU tradeoff](../reports/benchmark/tpe72-tta-cpu-drive21)
+completed one run on one DRIVE TRAIN raw photograph/official FOV, one CPU thread,
+with16 operations and actual exit0: same-run original59.59455s, TPE none8.74876s,
+rot433.19967s and dihedral865.53144s medians. **Eight views were about10% slower
+than original on this photo**; rot4 about1.80× faster. None's8.75s is not8-view
+latency. Every group used1warmup+3measured calls, finite bool masks and checks
+outside clocks; defaultnone exactly matches the prior completed CPU mask hash.
+Peak whole-process RSS2,967,872KiB (~2.83GiB), FP32 inference with unchanged BF16
+training metadata, no optimizer state/compression/quantization, no GPU/GT/TEST.
+These timings exclude IO/model loading and measure no CLI startup or quality.
+The earlier [none-only CPU example](../reports/benchmark/strong-pipeline-cpu-drive21-tpe72-best58)
+remains separate historical evidence. No rot4 default or4-versus8 quality
+equivalence is inferred; consult the actual exploratory VAL intervals/adverse heads.
 
 ## Completed full60 models: keep roles and evidence distinct
 
@@ -70,7 +89,8 @@ six dimensions; this is actual native TPE, not evidence of convergence. Its
 [auxiliary Optuna trial now has a genuine COMPLETE27 proxy result](../reports/tpe72-completed-fresh-val/auxiliary-fixed27-result)
 (.97513476245,5,686/5,700 annotations at27, cosine horizon60). That bookkeeping
 value is neither the later full60 result nor macro-BEST; the main V3 study was
-not modified and no additional proposal was asked.
+not modified by that bookkeeping. A later additional proposal was asked separately,
+as recorded in the native continuation above.
 
 Fresh TPE counts differ slightly from saved counts: LAST changes6 photos/7
 head-photo entries, macro−4.29046e−8; BEST changes5 photos/7 entries,

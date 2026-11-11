@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "kind": "one_TRAIN_photo_resident_CPU_original_TPE_TTA_tradeoff",
+  "scope": "Resident preprocessing/inference/decoding/original-frame restoration; excludes fileIO/model loading and any command-line startup measurement",
+  "quality_evaluation_performed": false,
+  "dataset": "drive",
+  "partition": "TRAIN",
+  "photographs": 1,
+  "input_shape": [
+    584,
+    565,
+    3
+  ],
+  "input_sha256": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+  "official_FOV_sha256": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7",
+  "fixed_order": [
+    "original",
+    "none",
+    "rot4",
+    "dihedral8"
+  ],
+  "operation_groups": 16,
+  "warmup_each": 1,
+  "measured_calls_each": 3,
+  "original_reference": {
+    "checkpoint_sha256": {
+      "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+      "disc": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+      "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "av": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b"
+    },
+    "reference_sha256": "528233fe50876b15f127f8567fc43d7b8a34a8713cfceff54f02956a0a0bfa2c",
+    "reference_manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+    "reference_prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+    "quality_reference_gt_policy": "Untouched historical non-cup components; separately labelled fresh-native or same-forward clipped cup; historical native numeric drift logged separately",
+    "disc_variant": "disc0/raw",
+    "cup_policy": "inside-disc",
+    "cup_decoding": "native universal/raw strictlogit>0 intersect same-forward selected dedicated raw disc strictlogit>0 before nearest restoration",
+    "quality_reference_cup_policy": "inside-disc",
+    "parameters": 5943312,
+    "checkpoint_bytes": 25068700,
+    "av_profile": "vesclass_matlab_provided_fov_calibrated"
+  },
+  "TPE_checkpoint": {
+    "sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+    "epoch": 58,
+    "parameters": 1965637,
+    "checkpoint_bytes": 8894002,
+    "floating_model_dtypes": [
+      "torch.float32"
+    ],
+    "model_tensor_bytes": 7874468,
+    "optimizer_or_training_state_present": false,
+    "training_mixed_precision": "bf16",
+    "inference_precision": "FP32/no_autocast",
+    "compression_or_quantization_applied": false,
+    "checkpoint_ZIP_compression_methods": [
+      "stored"
+    ],
+    "original_checkpoint_training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28"
+  },
+  "resident_timings": {
+    "original": {
+      "seconds": [
+        59.59454836510122,
+        59.80121077201329,
+        59.330615994054824
+      ],
+      "median_seconds": 59.59454836510122,
+      "baseline_allocated_bytes": null,
+      "peak_allocated_bytes": null,
+      "peak_working_bytes": null,
+      "warmup_calls": 1,
+      "measured_calls": 3
+    },
+    "none": {
+      "seconds": [
+        8.806915962137282,
+        8.748764059972018,
+        8.70102441799827
+      ],
+      "median_seconds": 8.748764059972018,
+      "baseline_allocated_bytes": null,
+      "peak_allocated_bytes": null,
+      "peak_working_bytes": null,
+      "warmup_calls": 1,
+      "measured_calls": 3
+    },
+    "rot4": {
+      "seconds": [
+        33.19967217091471,
+        33.49377097096294,
+        33.0150297570508
+      ],
+      "median_seconds": 33.19967217091471,
+      "baseline_allocated_bytes": null,
+      "peak_allocated_bytes": null,
+      "peak_working_bytes": null,
+      "warmup_calls": 1,
+      "measured_calls": 3
+    },
+    "dihedral8": {
+      "seconds": [
+        66.34664281201549,
+        64.1757137128152,
+        65.53144277702086
+      ],
+      "median_seconds": 65.53144277702086,
+      "baseline_allocated_bytes": null,
+      "peak_allocated_bytes": null,
+      "peak_working_bytes": null,
+      "warmup_calls": 1,
+      "measured_calls": 3
+    }
+  },
+  "ratio_original_median_over_each": {
+    "original": 1.0,
+    "none": 6.8117676915945795,
+    "rot4": 1.7950342418534575,
+    "dihedral8": 0.9094038806360378
+  },
+  "ratio_each_median_over_none": {
+    "original": 6.8117676915945795,
+    "none": 1.0,
+    "rot4": 3.7947842624779726,
+    "dihedral8": 7.49036576227322
+  },
+  "output_checks": [
+    {
+      "mode": "original",
+      "calls": 4,
+      "predict_calls_forwarded": 0,
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "dtype": "bool",
+      "all_finite": true,
+      "mask_sha256": "60054453a1f5522187c1c476567e7fbe747d3d2e42339126adf22b950868872c",
+      "foreground_pixels": [
+        28394,
+        13537,
+        14999,
+        5575,
+        2051
+      ],
+      "validation_outside_measured_clocks": true,
+      "extra_NN_calls": 0
+    },
+    {
+      "mode": "none",
+      "calls": 4,
+      "predict_calls_forwarded": 4,
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "dtype": "bool",
+      "all_finite": true,
+      "mask_sha256": "32590cf934ec802bf7010933361ecb06fcc078aacc178252f6a8811a904811c3",
+      "foreground_pixels": [
+        26444,
+        10970,
+        15474,
+        5942,
+        2031
+      ],
+      "validation_outside_measured_clocks": true,
+      "extra_NN_calls": 0
+    },
+    {
+      "mode": "rot4",
+      "calls": 4,
+      "predict_calls_forwarded": 4,
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "dtype": "bool",
+      "all_finite": true,
+      "mask_sha256": "7e463fccfb7a6f7e6f8c27e4b52390527de49b02c5cd24466e49c238af8f4eb6",
+      "foreground_pixels": [
+        26165,
+        10913,
+        15252,
+        5963,
+        2062
+      ],
+      "validation_outside_measured_clocks": true,
+      "extra_NN_calls": 0
+    },
+    {
+      "mode": "dihedral8",
+      "calls": 4,
+      "predict_calls_forwarded": 4,
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "dtype": "bool",
+      "all_finite": true,
+      "mask_sha256": "30ce3d5a70e7b118aaa829259ac12e72dc207f6b98fcbe3ef8635602b3accd2e",
+      "foreground_pixels": [
+        26107,
+        10894,
+        15213,
+        5960,
+        2061
+      ],
+      "validation_outside_measured_clocks": true,
+      "extra_NN_calls": 0
+    }
+  ],
+  "none_last_mask_matches_prior_completed_CPU_benchmark_exactly": true,
+  "original_last_mask_matches_prior_completed_CPU_benchmark_exactly": true,
+  "limitations": [
+    "One selected TRAIN photograph/shape and three measured samples per pipeline do not establish general latency/throughput.",
+    "Fixed order and warm caches; external system load may affect times.",
+    "No annotation/GT/TEST array or extra image was opened; output shape/hash/finite checks measure identity, not quality.",
+    "The composed528 original CPU reference differs from the flatd14 VAL comparison provenance.",
+    "Dihedral8 was slower than original on this photograph; do not attach none timing to TTA quality.",
+    "VAL quality comes only from the separately reported exploratory770-photo TTA experiment; this timing run scores no quality.",
+    "No CLI startup, model loading, compression, quantization, optimizer removal, default promotion or final model/TEST selection was measured."
+  ]
+}
