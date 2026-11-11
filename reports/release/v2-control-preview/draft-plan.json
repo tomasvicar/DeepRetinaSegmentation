@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "status": "DRAFT_WAITING_FOR_ACTUAL_IMMUTABLE_E60_QA_AND_FRESH_VAL",
+  "release_base_commit": "42aa3e3",
+  "new_model_name": "unified-v2-control",
+  "new_model_filename": "unified-v2-control.pt",
+  "not_registered_or_bundled_yet": true,
+  "new_aliases": {},
+  "defaults_changed": false,
+  "expected_registry_metadata": {
+    "family": "unified",
+    "task": "unified",
+    "channels": [
+      "vessel",
+      "artery",
+      "vein",
+      "disc",
+      "cup"
+    ],
+    "training_photos": 2529,
+    "training_annotation_records": 5700,
+    "training_sources": 21,
+    "preprocessing_profile": "legacy25_raw",
+    "pixels_per_degree": 25,
+    "default_threshold": 0.5,
+    "source_commit": "6b3dfad605a256e904a877efcdcc1f3cc6135dd0",
+    "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "prepared_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+    "geometry_policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+    "training_cache_fingerprint": "18c3af6ce64e23c896d7befc52e5ba8e8ebda8e4058c2f156574fa755480766e"
+  },
+  "required_actual_inputs_from_parent": [
+    "Immutable terminal E60 best checkpoint path and exact SHA256",
+    "Terminal strict QA proof: completed60, finite best/last/optimizer, expected source/data/config/horizon, actual all2529photos and all5700positive record visits",
+    "Actual selected best epoch and training-selection validation score",
+    "Fresh validation on the same immutable best snapshot: producer/source/data/runtime pins and per-head/source/conditional-AV counts/metrics",
+    "Public-safe training CSV/summary and QA metadata to package without private endpoints/operational receipts"
+  ],
+  "release_qualification": [
+    "21-source corpus-v2 control baseline, not an optimized/final model",
+    "Training validation only; heldout TEST pending",
+    "No all-task superiority claim; report fresh vessel/AV tradeoffs explicitly",
+    "All original weights, corpus-v1 baseline, pilots and aliases retained"
+  ],
+  "planned_changes_after_gates": [
+    "Copy verified immutable best bytes under new filename only",
+    "Append one model registry entry; preserve current9 PT bytes and aliases",
+    "Update exact model-set test and new-checkpoint metadata checks",
+    "Add quick prediction example with embedded DRIONS nominal-camera policy",
+    "Run focused packaging/checksum/CLI tests and actual TRAIN-only DRIONS CPU smoke; no GT scoring",
+    "Record proof metadata and actual original-frame finite outputs/hierarchy",
+    "Clarify V1 limitations: newer sources now exist in separately prepared V2, not used by V1"
+  ],
+  "preservation_baseline": {
+    "registry_file_sha256": "09770fcc735b295b7b330155f9708f16c8eead0d9937d86bb40bfdec57789457",
+    "existing_models": [
+      {
+        "name": "pilot-vessels",
+        "filename": "vessels.pt",
+        "sha256": "38a4125d213b49526c6cf1fbd6dfde1e19394a1969d3724be0737b7bffda4544",
+        "bytes": 1971502
+      },
+      {
+        "name": "pilot-av",
+        "filename": "av.pt",
+        "sha256": "0a8c85dd4888a4aab1ffded7a9e2ac4b254745a15c03a465ff2106e34a1c0eb7",
+        "bytes": 1971694
+      },
+      {
+        "name": "legacy-universal",
+        "filename": "legacy-single-net-universal.pt",
+        "sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+        "bytes": 5802105
+      },
+      {
+        "name": "legacy-vessels",
+        "filename": "legacy-single-net-vessels.pt",
+        "sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+        "bytes": 5346739
+      },
+      {
+        "name": "legacy-disc-0",
+        "filename": "legacy-single-net-disc-0.pt",
+        "sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+        "bytes": 5767664
+      },
+      {
+        "name": "legacy-disc-1",
+        "filename": "legacy-single-net-disc-1.pt",
+        "sha256": "8ebf60971813bbaecc9602663034d75cfe7f5c3c9587b7b2a27d056c1cae3605",
+        "bytes": 5767664
+      },
+      {
+        "name": "legacy-av",
+        "filename": "legacy-av-v9.pt",
+        "sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+        "bytes": 8152192
+      },
+      {
+        "name": "pilot-disc-cup",
+        "filename": "disc_cup.pt",
+        "sha256": "36f72fd4817d432d6e953bbec39604374d40b25c0a0ffad7723b0b28ca55e22a",
+        "bytes": 1971630
+      },
+      {
+        "name": "unified-full-data-baseline",
+        "filename": "unified-full-data-baseline.pt",
+        "sha256": "bfe957460dfed168f2344b1b84ef99b7f502e9dbc8ce1fd4d68632c3234708b1",
+        "bytes": 5401330
+      }
+    ],
+    "aliases": {
+      "vessels": "legacy-vessels",
+      "disc_cup": "legacy-universal",
+      "av": "legacy-av"
+    }
+  }
+}
