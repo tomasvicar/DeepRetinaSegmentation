@@ -40,8 +40,10 @@ def run(preset, manifest, output_root, core):
         str(core),
         sys.executable,
         "-c",
-        "import torch;torch.set_num_threads(1);torch.set_num_interop_threads(1);"
-        "from deepretina.legacy_training_cli import main;main()",
+        (
+            "import torch;torch.set_num_threads(1);torch.set_num_interop_threads(1);"
+            "from deepretina.legacy_training_cli import main;main()"
+        ),
         "--manifest",
         str(manifest),
         "--config",
