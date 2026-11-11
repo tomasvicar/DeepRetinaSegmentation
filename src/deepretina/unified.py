@@ -1171,6 +1171,7 @@ def predict_unified(
     threshold=0.5,
     tile_size=None,
     overlap=None,
+    tta="none",
 ):
     """Complete raw-photo prediction with the verified legacy25_raw geometry.
 
@@ -1179,6 +1180,7 @@ def predict_unified(
     """
     from .legacy.preprocessing import prepare_single_net
 
+    tta_protocol(tta)
     model, payload, device = load_unified(checkpoint, device)
     with Image.open(image_path) as photo:
         original = np.asarray(photo.convert("RGB")).copy()
@@ -1205,7 +1207,13 @@ def predict_unified(
     )
     tensor = torch.from_numpy(input_rgb.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(
-        model, tensor, device, config, config.tile_size, config.overlap
+        model,
+        tensor,
+        device,
+        config,
+        config.tile_size,
+        config.overlap,
+        **({"tta": tta} if tta != "none" else {}),
     )
     probability[list(SEGMENTATION_CHANNELS)] *= prepared.fov[None]
     probability = restore_probabilities(probability, prepared.geometry)
@@ -1294,6 +1302,7 @@ def predict_unified(
                 if value is not None
             },
         },
+        **tta_protocol(tta),
         "outputs": paths,
     }
     _write_json(output / "prediction.json", metadata)
@@ -1925,6 +1934,7 @@ def main(argv=None):
     prediction.add_argument("--field-of-view-degrees", type=float)
     prediction.add_argument("--fov", type=Path)
     prediction.add_argument("--threshold", type=float, default=0.5)
+    prediction.add_argument("--tta", choices=list(TTA_OPERATORS), default="none")
     inspect = commands.add_parser("inspect", help="Inspect labeled photo groups and head support")
     inspect.add_argument("manifest", type=Path)
     inspect.add_argument("--split", choices=["train", "val", "test"], default="train")
@@ -1985,6 +1995,7 @@ def main(argv=None):
                 fov=fov,
                 field_of_view_degrees=args.field_of_view_degrees,
                 threshold=args.threshold,
+                **({"tta": args.tta} if args.tta != "none" else {}),
             )
         else:
             dataset = UnifiedDataset(args.manifest, args.split)

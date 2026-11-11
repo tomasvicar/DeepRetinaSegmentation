@@ -122,6 +122,8 @@ def apply_unified(args, checkpoint):
         "tile_size": args.tile_size,
         "overlap": args.overlap,
     }
+    if getattr(args, "tta", "none") != "none":
+        options["tta"] = args.tta
     if args.input.is_dir():
         images = sorted(
             path
