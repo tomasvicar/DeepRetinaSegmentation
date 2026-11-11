@@ -2,6 +2,7 @@
 
 import copy
 import io
+import json
 from pathlib import Path
 
 import pytest
@@ -32,6 +33,8 @@ def bind(case):
     }
     arm = case["arm"]
     study = v["study"]
+    if case.get("original_pretty_json"):
+        raw["study"] = (json.dumps(study, indent=2) + "\n").encode()
     config = study["arms"][arm]["config"]
     ph = m.portable(v["profile"]["photometry_cache"])
     parent_sha = gate.digest(raw["parent"])
@@ -42,8 +45,12 @@ def bind(case):
         reviewed_helper_manifest_sha256=helper_sha,
         parent_tpe_manifest_sha256=parent_sha,
     )
-    raw["profile"] = blob(v["profile"])
-    profile_sha = gate.digest(raw["profile"])
+    raw["profile"] = (
+        (json.dumps(v["profile"], indent=2) + "\n").encode()
+        if case.get("original_pretty_json")
+        else blob(v["profile"])
+    )
+    profile_sha = m.digest(v["profile"])
     v["identity60"]["profile_sha256"] = profile_sha
     raw["identity60"] = blob(v["identity60"])
     plan = {
@@ -78,7 +85,10 @@ def bind(case):
             "profile_sha256": profile_sha,
             "worker_id": "syntheticworker",
             "input_artifact_shas": {
-                k: gate.digest(raw[k]) for k in ["profile", "study", "parent", "helpers"]
+                "profile": gate.digest(raw["profile"]),
+                "study": gate.digest(raw["study"]),
+                "parent_tpe": gate.digest(raw["parent"]),
+                "helpers": gate.digest(raw["helpers"]),
             },
         }
         raw[key] = blob(v[key])
@@ -608,3 +618,22 @@ def test_independent_adapter_does_not_admit_current_final_gate():
             family=m.FAMILY,
             checkpoint_role="training_best",
         )
+
+
+def test_original_raw_dependency_bytes_and_canonical_profile_are_separate(case):
+    case["original_pretty_json"] = True
+    result = m.check_curated_completion(**bind(case))
+    task = gate.parse_json(case["raw"]["task60"])
+    assert task["input_artifact_shas"]["profile"] != task["profile_sha256"]
+    assert task["input_artifact_shas"]["study"] != task["study_contract_sha256"]
+    assert result.proof["checkpoint_epoch"] == 52
+
+
+def test_raw_dependency_cannot_be_replaced_with_canonical_hash(case):
+    case["original_pretty_json"] = True
+    bind(case)
+    task = gate.parse_json(case["raw"]["task60"])
+    task["input_artifact_shas"]["profile"] = task["profile_sha256"]
+    case["raw"]["task60"] = blob(task)
+    with pytest.raises(gate.SelectionError, match="frozen input dependency"):
+        m.check_curated_completion(**write(case))
