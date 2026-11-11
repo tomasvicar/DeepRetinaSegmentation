@@ -79,6 +79,19 @@ samostatný [preview model E59](UNIFIED_V2_VASCULAR2.md). Jeho cévní regrese p
 nejde o finální výběr ani důkaz zlepšení všech úloh.
 [Průběžné důkazy a scénáře](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/data).
 
+Další dvě úpravy tohoto preview byly skutečně změřené. Osm globálních prahů
+vybralo 0,45 podle bodového worst6 skóre; malý růst cévního Dice měl interval
+zahrnující nulu a cup mírně klesl. Přepočet BatchNorm statistik pouze z TRAIN
+zhoršil macro i podmíněnou A/V přesnost. Výchozí model a práh 0,5 proto zůstávají.
+[Prahy](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/vascular2-thresholds)
+a [BatchNorm](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/vascular2-bn-recalibration)
+obsahují všechny výsledky a párové intervaly, včetně neúspěšných úprav.
+
+Na jednom DRIVE TRAIN21 snímku a jednom CPU vlákně má aktuální preview měřený
+resident medián 6,03 s proti 63,32 s původních čtyř sítí; parametrů je 1,11 mil.
+proti 5,94 mil. Jde o konkrétní příklad včetně předzpracování a obnovy geometrie,
+bez načítání modelů/souborů. [Rozsah měření](UNIFIED_V2_VASCULAR2.md#size-and-measured-cpu-example).
+
 ## Co zbývá k dokončení cíle
 
 1. Dokončit a zkontrolovat skutečné trénovací běhy včetně pokrytí všech vhodných TRAIN dat.

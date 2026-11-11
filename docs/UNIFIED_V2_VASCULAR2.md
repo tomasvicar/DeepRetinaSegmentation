@@ -88,6 +88,19 @@ differences remain qualifications. This release does not establish a causal
 sampling-only gain. HPO continues separately; no final candidate or TEST protocol
 is selected here.
 
+## Size and measured CPU example
+
+A matched resident run on one DRIVE TRAIN21 photograph (584 × 565) and one CPU
+thread measured the original four-network pipeline at **63.32 s** and this
+checkpoint at **6.03 s**, a **10.51×** within-run ratio. The networks contain
+5,943,312 and 1,106,597 parameters respectively. Timing includes preprocessing,
+inference and restoration of all five masks, with one warmup and three measured
+calls. It excludes file I/O and model loading.
+
+This is one photograph on an AMD Ryzen 5 1600, not a general latency or GPU claim.
+Whole-process peak RSS was 2.76 GiB; no per-model RAM comparison was measured.
+See [the complete timing and provenance](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/benchmark/strong-pipeline-cpu-drive21-vascular2-best59).
+
 ## Provenance and release checks
 
 Training source is `0b8762e`, with manifest 17a2277c, canonical 00d9ef19 and geometry
