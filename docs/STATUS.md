@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 11. 11. 2026, po dokončení E60 a čerstvé VAL kontrolního V2. Celkový cíl není dokončený.**
+**Snímek: 11. 11. 2026, po vydání kontrolního V2 a cévně váženého preview. Celkový cíl není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -53,16 +53,19 @@ Korpus V2 má 2 529 TRAIN fotografií / 5 700 anotovaných variant z 21 zdrojů,
 předpoklady nových zdrojů jsou výslovné a uložené s daty i checkpointem;
 [přehled rozsahu a omezení](CORPUS_V2_PREPARATION.md).
 
-Kontrolovaná studie porovnává control a šest variant loss, geometrie a augmentací
-v etapách 3/9/27/60 na třech vlastních GPU. Při poslední zaznamenané kontrole
-control dokončil všech 60 epoch a prošel přísnou QA: přispělo všech 2 529 fotografií
+Kontrolovaná studie sedmi konfigurací skončila: control dokončil 60 epoch, pět
+variant bylo zastaveno a šestá varianta skončila po E21 na časovém limitu.
+Control prošel přísnou QA: přispělo všech 2 529 fotografií
 (minimálně 66 návštěv) a všech 5 700 variant (minimálně 2 příspěvky). Vydává se
 pevný terminální E60 `unified-v2-control`, nikoli VAL-best E52, který měl jen
 5 699 přispívajících variant. [Model card](UNIFIED_V2_CONTROL.md) rozlišuje role.
 Samostatný cévně vážený experiment dokončil 11. 11. všech 60 epoch
-(491 520 vzorků); původní supervisor zaznamenal návratový kód 0. Následuje
-nezávislá kontrola checkpointů, pokrytí dat a čerstvá VAL. Jeho kvalita zatím
-není vyhodnocená a není součástí této kontrolní varianty.
+(491 520 vzorků); původní supervisor zaznamenal návratový kód 0. Nezávislá
+kontrola obou checkpointů i čerstvá VAL prošly. Přibalený BEST E59 pokrývá
+všech 5 700 variant; terminální E60 a BEST mají samostatné výsledky.
+Párové porovnání E60 proti kontrolnímu E60 dokládá růst cévního Dice o 0,00575
+(95% interval [0,00226; 0,00934]) a podmíněné A/V přesnosti o 0,01407
+([0,00691; 0,02144]). Cévy stále zaostávají za původní sítí.
 
 Čerstvý E60 na 770 VAL fotografiích má macro Dice 0,78876 proti původní sestavě
 0,66703, ale pooled vessel Dice 0,75047 proti 0,77012: přetrvává doložená cévní
@@ -79,7 +82,7 @@ nejde o finální výběr ani důkaz zlepšení všech úloh.
 ## Co zbývá k dokončení cíle
 
 1. Dokončit a zkontrolovat skutečné trénovací běhy včetně pokrytí všech vhodných TRAIN dat.
-2. Změřit čerstvý párový VAL po úlohách a zdrojích; optimalizací řešit zbývající cévní/A/V regresi.
+2. Porovnávat další kandidáty párově po úlohách a zdrojích; optimalizací řešit zbývající cévní regresi.
 3. Zmrazit vybraný checkpoint, konfiguraci, prahy a inference protokol; poté provést samostatný TEST.
 4. Doložit kvalitu, velikost a rychlost vybraného modelu a předat jeho váhy vedle původních sítí.
 
