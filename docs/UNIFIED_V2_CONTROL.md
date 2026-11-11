@@ -84,6 +84,11 @@ GT scoring. All five masks/probabilities kept 400×600 geometry, probabilities w
 finite, A/V exclusive and inside vessel, and cup inside disc. This is a release
 functionality check, not an accuracy or speed benchmark.
 
+A separate one-photo CPU timing on DRIVE TRAIN image 21 measured medians of
+60.58 s for the four-network original pipeline and 5.44 s for this control
+(Ryzen 1600, one CPU thread, one warmup and three repeats). This does not establish
+general throughput or better quality. [Measured timing and protocol](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/benchmark/strong-pipeline-cpu-drive21-v2-terminal60).
+
 Further vascular sampling/loss experiments and model optimization remain separate
 from this control. A final candidate/protocol must be frozen and reviewed before
 the heldout TEST is evaluated.
