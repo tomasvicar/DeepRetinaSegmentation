@@ -31,6 +31,10 @@ from .geometry_policy import capture_geometry_policy, prediction_geometry, valid
 from .inference import resolve_device, tile_starts
 from .integrity import verify_prepared_content
 from .model import UNet
+from .photometry import PROFILES, fov_index, image_fov
+from .photometry import apply as apply_photometry
+from .photometry import contract as photometry_contract
+from .photometry import validate_saved as validate_saved_photometry
 
 CHANNELS = ("vessel", "artery", "vein", "disc", "cup")
 SEGMENTATION_CHANNELS = (0, 3, 4)
@@ -77,8 +81,11 @@ class UnifiedConfig:
     max_steps: int | None = None
     vascular_sampling_weight: float = 1.0
     mixed_precision: str = "none"
+    photometric_profile: str = "raw"
 
     def validate(self):
+        if self.photometric_profile not in PROFILES:
+            raise ValueError("Unsupported unified photometric_profile")
         if self.mixed_precision not in ("none", "bf16"):
             raise ValueError("mixed_precision must be none or bf16")
         if self.architecture not in {
@@ -240,9 +247,18 @@ def _labels(root, relative, derived_cache=None):
     )
 
 
-def read_unified_sample(root: Path, row: dict, *, derived_cache=None):
-    """Public row reader for independent evaluation scripts; RGB in [0,1]."""
-    image = np.asarray(_rgb(root, row["image"], derived_cache), dtype=np.float32) / 255
+def read_unified_sample(root: Path, row: dict, *, derived_cache=None, config=None):
+    """Public row reader; raw RGB01 by default, explicit config opts into photometry."""
+    raw = _rgb(root, row["image"], derived_cache)
+    cfg = UnifiedConfig(**config) if isinstance(config, dict) else config
+    if cfg is not None and cfg.photometric_profile != "raw":
+        raw = apply_photometry(
+            raw,
+            cfg.photometric_profile,
+            fov=image_fov(root, _photo_id(Path(root), row), raw.shape),
+            pixels_per_degree=cfg.pixels_per_degree,
+        )
+    image = np.asarray(raw, dtype=np.float32) / 255
     with _labels(root, row["mask"], derived_cache) as labels:
         target = labels["target"].astype(np.float32)
         valid = labels["valid"].astype(bool)
@@ -353,6 +369,7 @@ class UnifiedDataset(torch.utils.data.Dataset):
         self._cache_limit = 128 * 1024**2
         self._verified_aliases = set()
         self._augmentation_generator = None
+        self._photometry_fovs = None
         self._row_tasks = {}
         self._support_summary = None
 
@@ -360,7 +377,12 @@ class UnifiedDataset(torch.utils.data.Dataset):
         return len(self.groups)
 
     def _image(self, index):
-        key = self.photo_ids[index]
+        photo_id = self.photo_ids[index]
+        key = (
+            photo_id
+            if self.config.photometric_profile == "raw"
+            else (photo_id, self.config.photometric_profile, self.config.pixels_per_degree)
+        )
         rows = self.groups[index]
         if key in self._image_cache:
             image = self._image_cache.pop(key)
@@ -382,6 +404,16 @@ class UnifiedDataset(torch.utils.data.Dataset):
                 if not np.array_equal(array, other):
                     raise ValueError(f"photo_id aliases contain different RGB pixels: {key}")
             self._verified_aliases.add(key)
+        if self.config.photometric_profile != "raw":
+            if self._photometry_fovs is None:
+                self._photometry_fovs = fov_index(self.root)
+            fov = image_fov(self.root, photo_id, array.shape, self._photometry_fovs)
+            array = apply_photometry(
+                array,
+                self.config.photometric_profile,
+                fov=fov,
+                pixels_per_degree=self.config.pixels_per_degree,
+            )
         image = torch.from_numpy(array.transpose(2, 0, 1).copy()).float() / 255
         size = image.numel() * image.element_size()
         while self._image_cache and self._cache_bytes + size > self._cache_limit:
@@ -775,7 +807,10 @@ def restore_probabilities(probability, geometry):
 
 @torch.inference_mode()
 def predict_probabilities(model, image, device, config=None, tile_size=512, overlap=64):
-    """C=5 probabilities; BF16 training never enables reduced-precision inference."""
+    """C=5 probabilities from full prepared, already profile-processed RGB01.
+
+    Photometry belongs before crop/tiling, never independently to inference tiles.
+    """
     settings = (
         asdict(config)
         if isinstance(config, UnifiedConfig)
@@ -991,6 +1026,7 @@ def load_unified(path, device="auto"):
     if payload.get("normalization") != "RGB/255-0.5":
         raise ValueError("Unified normalization contract mismatch")
     config = UnifiedConfig(**payload["config"])
+    validate_saved_photometry(payload, config.photometric_profile, config.pixels_per_degree)
     if "geometry_policy" in payload:
         validate_geometry_policy(payload["geometry_policy"])
     model = build_unified(config, initialize=False)
@@ -1058,7 +1094,13 @@ def predict_unified(
         normalized=False,
     )
     # PreparedImage.tensor() is already centered; low-level inference expects01.
-    tensor = torch.from_numpy(prepared.image.transpose(2, 0, 1).copy()).float() / 255
+    input_rgb = apply_photometry(
+        prepared.image,
+        config.photometric_profile,
+        fov=prepared.fov,
+        pixels_per_degree=config.pixels_per_degree,
+    )
+    tensor = torch.from_numpy(input_rgb.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(
         model, tensor, device, config, config.tile_size, config.overlap
     )
@@ -1112,6 +1154,15 @@ def predict_unified(
             "pixels_per_degree": config.pixels_per_degree,
             "field_of_view_degrees": prepared.field_of_view_degrees,
             "normalized": False,
+            **(
+                {
+                    "photometry": photometry_contract(
+                        config.photometric_profile, config.pixels_per_degree
+                    )
+                }
+                if config.photometric_profile != "raw"
+                else {}
+            ),
             "normalization": "RGB/255-0.5",
             "fov_source": prepared.fov_source,
             "geometry": prepared.geometry.as_dict(),
@@ -1179,6 +1230,7 @@ def _training_source_sha256():
     result = hashlib.sha256()
     for name in (
         "unified.py",
+        "photometry.py",
         "geometry_policy.py",
         "unified_legacy.py",
         "unified_av.py",
@@ -1405,6 +1457,7 @@ def train_unified(
     annotation_visits = Counter()
     if resume is not None:
         saved = torch.load(resume, map_location="cpu", weights_only=True)
+        validate_saved_photometry(saved, config.photometric_profile, config.pixels_per_degree)
         if saved.get("family") != "unified" or "training_state" not in saved:
             raise ValueError("Resume requires unified last.pt with training state")
         if saved["manifest_sha256"] != digest:
@@ -1461,6 +1514,15 @@ def train_unified(
                     "profile": config.preprocessing_profile,
                     "pixels_per_degree": config.pixels_per_degree,
                     "normalized": False,
+                    **(
+                        {
+                            "photometry": photometry_contract(
+                                config.photometric_profile, config.pixels_per_degree
+                            )
+                        }
+                        if config.photometric_profile != "raw"
+                        else {}
+                    ),
                 },
                 "channels": list(CHANNELS),
                 "activation": [
@@ -1608,6 +1670,15 @@ def train_unified(
                     "profile": config.preprocessing_profile,
                     "pixels_per_degree": config.pixels_per_degree,
                     "normalized": False,
+                    **(
+                        {
+                            "photometry": photometry_contract(
+                                config.photometric_profile, config.pixels_per_degree
+                            )
+                        }
+                        if config.photometric_profile != "raw"
+                        else {}
+                    ),
                 },
                 "purpose": config.purpose,
                 "probability_fusion": "joint_av_mixture_then_conditional",

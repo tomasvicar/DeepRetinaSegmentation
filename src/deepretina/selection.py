@@ -193,6 +193,11 @@ def inference_protocol(payload, *, threshold=0.5, tile_size=None, overlap=None):
         "geometry": "canonical_prepared",
         "normalization": "RGB/255-0.5",
         "preprocessing_profile": config.preprocessing_profile,
+        **(
+            {"photometry": payload["preprocessing"]["photometry"]}
+            if config.photometric_profile != "raw"
+            else {}
+        ),
         "pixels_per_degree": config.pixels_per_degree,
         "preparation_max_size": payload.get("inference_max_size"),
         "channels": list(CHANNELS),
