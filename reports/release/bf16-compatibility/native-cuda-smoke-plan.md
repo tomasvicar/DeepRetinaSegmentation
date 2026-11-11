@@ -29,14 +29,15 @@ check, not training quality, model completion or general throughput evidence.
 
 ## Deferred command
 
-Stage this committed harness and the unchanged product source on Ada first, and
-retain the frozen reference checkout. Use the existing environment; do not run
+Stage this committed harness and the unchanged product source on Ada first. Root
+verified the detached Ada reference checkout below at 09:49:26 UTC: HEAD 72fb321,
+execution 347f78, training 3725ad32, tracked clean. Use the existing environment; do not run
 `uv sync` on an active environment. After root's idle-device check, replace the
 physical UUID with the independently observed Ada UUID and use a fresh output:
 
 ```bash
 PORT_ROOT=/var/home/tom/code/DeepRetinaSegmentation_bf16_compat
-REFERENCE_ROOT=/var/home/tom/code/DeepRetinaSegmentation_bf16_frozen72
+REFERENCE_ROOT=/var/home/tom/code/DeepRetinaSegmentation_bf16_run_72fb321
 CUDA_UUID=GPU_REPLACE_WITH_ACTUAL_ADA_UUID
 OUTPUT=/var/home/tom/code/DeepRetinaSegmentation_model_backups/bf16-port-native-cuda-smoke
 
