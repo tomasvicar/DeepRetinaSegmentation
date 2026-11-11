@@ -31,18 +31,20 @@ For the remaining three native families, choose separate new output directories:
 uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json \
   --config configs/native-legacy-disc.toml --device cuda:0 --output runs/native-disc
 uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json \
+  --config configs/native-legacy-disc-256.toml --device cuda:0 --output runs/native-disc-256
+uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json \
   --config configs/native-legacy-universal.toml --device cuda:0 --output runs/native-universal
 uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json \
   --config configs/native-legacy-av.toml --device cuda:0 --output runs/native-av
 ```
 
 These are independent jobs; the examples are alternatives or sequential runs,
-not a recommendation to launch all four on one GPU simultaneously. Substitute
+not a recommendation to launch them on one GPU simultaneously. Substitute
 `--device cpu` for a CPU-only machine. The native A/V model trains only eligible
 A/V-labelled sources; it does not invent A/V supervision for the other sources.
 
-The four production presets are `native-legacy-vessel.toml`,
-`native-legacy-disc.toml`, `native-legacy-universal.toml` and
+The five production presets are `native-legacy-vessel.toml`,
+`native-legacy-disc.toml`, `native-legacy-disc-256.toml`, `native-legacy-universal.toml` and
 `native-legacy-av.toml`. Defaults use CPU,60epochs, Adam(lr0.0001,weight_decay0),
 seed42 and batch1. Device/epochs/batch size/lr/seed can be explicit CLI overrides;
 AV always requires batch1 and rejects a patch size. `--expected-content-sha256`
@@ -62,6 +64,7 @@ must not be described as the verified original production specification.
 | --- | --- | --- | --- |
 | vessel | `single_net.Unet(filters=32,in_size=3,out_size=1,do=0,depth=4)` | vessel |320×320 |
 | disc | same, `out_size=1` | disc |192×192 (disc0 metadata) |
+| disc, 256 preset | same, `out_size=1` | disc |256×256 (disc1 metadata) |
 | universal | same, `out_size=3` | vessel,disc,cup |288×288 |
 | av | `LegacyAVNet(encoder_channels=[4,32,64,128,256],decoder_channels=[256,128,64,32],head_channels=128,num_classes=3)` | unused logit0,artery,vein | full canonical frame |
 
