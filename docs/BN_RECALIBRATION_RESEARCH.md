@@ -117,3 +117,24 @@ modified updater rejection and stale-score/predict-only lineage semantics.
 Prepared verification:9 tiny CPU tests passed in1.91s, including safe unified
 checkpoint save/load with odd rectangular prediction equality. Ruff check/format
 and syntax compilation pass. No actual8192-sample calibration was executed.
+
+## Prepared honest research VAL producer (not executed)
+
+`scripts/validate_bn_recalibration.py` is a separate proposed research route for
+root review. It never restores a parent validation score or invokes a final
+selection/TEST gate. It checks external parent/derived/sidecar byte pins, actual
+calibration coverage/recipe, original versus derived config/gradient history,
+absence of stale scores/optimizer state and independently rechecks every non-BN
+state byte against the parent. Only then does it use frozen6b
+`evaluate_unified_model(..., split='val', threshold=.5)` with the original config
+and pinned cache18c. Full770 photo identity/source/data leases are retained.
+
+The FLAT output has `kind=bn_recalibration_research_validation`, actual fresh
+per-photo/header counts and source/runtime/parent/calibration provenance,
+`selection_authorized=false`, `test_evaluation_enabled=false`. It contains no
+inherited training score and no standard `unified_validation_evidence` receipt.
+Generic metadata-only paired counts comparison can consume the flat metrics;
+that does not mint a final-selection artifact. This proposed producer has NOT
+been run on real VAL arrays. Additional synthetic tests reject changed
+parameters, stale scores, wrong derived SHA, missing coverage and changed recipe.
+Combined prototype/producer tests:15 pass in2.14s; no quality measurement yet.
