@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 11. 11. 2026, aktualizace po 01:55 UTC. Celkový cíl není dokončený.**
+**Snímek: 11. 11. 2026, aktualizace po 02:11 UTC. Celkový cíl není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -53,8 +53,8 @@ předpoklady nových zdrojů jsou výslovné a uložené s daty i checkpointem;
 
 Kontrolovaná studie porovnává control a šest variant loss, geometrie a augmentací
 v etapách 3/9/27/60 na třech vlastních GPU. Při poslední zaznamenané kontrole
-control dokončil 50 epoch; všechny fotografie a zdroje již přispěly, ale pouze
-5 699 z 5 700 anotovaných variant. Ještě to není dokončený model. Návazná
+control dokončil 54 epoch; všechny fotografie a zdroje již přispěly, a všech
+5 700 anotovaných variant. Ještě to není dokončený model. Návazná
 validace má samostatnou kontrolu skutečného E60 a úplného pokrytí anotací.
 
 Průběžný checkpoint E25 zlepšuje disk a cup, ale pooled vessel Dice a podmíněné
