@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11, V3 TTA complete; threshold v2 launch18:29:57UTC**. Completed VAL and
+Snapshot: **2026-11-11 19:49 UTC; V3 TTA/threshold and raw256 fresh VAL complete**. Completed VAL and
 CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
 claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -41,9 +41,10 @@ internal VAL score is not used as a model-quality claim. Six observations do not
 establish optimality.
 [Native continuation provenance](../reports/tpe72-completed-fresh-val/next-native-TPE-proposal).
 
-At17:35UTC the same actual Ada run had completed E18/36,864 updates; its
-observer, supervisor and NN were independently observed alive. This remains
-unfinished training, not a new quality result.
+At19:48UTC the same Ada run had completed E54/110,592 updates; its original
+observer/supervisor and resumed NN were independently observed alive. This remains
+unfinished training, not a new quality result. No additional Optuna proposal has
+been asked and trial6 has not yet been told.
 
 The [native V3 trial4 BEST54 TTA sweep](../reports/v3-trial4-inference-tta-val)
 completed all four modes on all 770 VAL with observed child and external supervisor
@@ -72,10 +73,44 @@ causality or blanket dominance is claimed. The earlier TPE8minus4 result is dist
 
 The [reviewed TTA selection route](FINAL_SELECTION_TTA.md) binds exact inference
 descriptors to fresh validation and later frozen execution. No final model, default
-promotion or TEST selection is made here. A first threshold-followup attempt failed
-before model loading with a missing sibling-helper import and actual outer exit1;
-it produced **no quality result**. A corrected v2 observer actually launched at18:29:57UTC; startup was being
-checked separately. No threshold quality or completion is claimed by this snapshot.
+promotion or TEST selection is made here. The completed
+[V3 BEST54 rot4 scalar threshold sweep](../reports/native-v3-best54-rot4-thresholds)
+used eight prespecified thresholds on all770 VAL, with same-array native.5 count
+parity for every photograph and observed child/outer exits0. A prior attempt
+failed before model loading on a sibling import; its failed evidence is retained.
+The declared worst-six ratio chose.4: macro.822148867, vessel.769410290 and
+conditionalAV.832471660. Against.5 vessel gains.001923150 with exploratory paired
+CI[.000349697,.003582857], while cup loses.00273378 with entirely negative CI.
+DRHAGIS/CHASE vessel and G1020/RIM disc also regress. Vessel still falls below
+the original.77012340 point reference; its difference interval crosses zero.
+This does not justify a default, final selection or TEST. A first-TPE BEST58
+threshold followup is being prepared separately; it has not started.
+
+## Completed patch256 and pending patch/photometry arms
+
+[Raw256 fresh BEST52/LAST60 validation](../reports/curated-raw256-fresh-val-20261111)
+completed on all770 VAL with actual child/outer exits0. Original fd44 training
+completed60, PBS finished Exit0, and both roles have their own2529-photo/5700-
+annotation coverage. The full saved configuration and preprocessing are retained.
+Fresh BEST52 macro.801231863, vessel.759437346 and conditionalAV.801502046 all
+trail the parent TPE384 NONE control (.810897419/.762879016/.824919544).
+Paired BEST macro change is−.00966556[−.014665,−.004196], vessel−.00344167
+[−.007268,−.000798], conditionalAV−.0234175[−.030766,−.015907]. LAST60 macro
+is.799432520 and also regresses. All-head/source counts and adverse source
+intervals accompany the report. Different training/evaluation source contexts
+prevent an isolated causal patch-size claim. Raw256 is not promoted or bundled.
+Saved/fresh BEST counts have small numeric drift (macro−1.19e−6), with identical
+GT support; the report preserves this distinction.
+
+MetaCentrum authentication was renewed and independently checked. At19:48UTC
+PBS still listed raw384, raw512, CLAHE384 and legacy-LC384 as active allocations;
+no new job was submitted. Raw256 is the completed fifth arm. Current elapsed
+scheduler time is not model quality, and unfinished arms are not ranked. Product
+`for_Leipzig` now supports their saved full-image photometry profiles without
+stripping config fields. Real TRAIN inference parity checks for the existing
+TPE and genuine raw256 checkpoint were bitwise exact (max probability error0).
+An independent curated completion adapter is under review; it does not yet admit
+this family to final selection or TEST.
 
 The separate [TPE BEST58 TTA sweep](../reports/tpe72-inference-tta-val) completed
 all four770-VAL cases with observed child and parent exits0, unchanged inputs and
