@@ -1,0 +1,2392 @@
+{
+  "kind": "supplementary_dense_vessel_saved_count_analysis_NOT_benchmark_redefinition",
+  "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "canonical_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+  "input_pins": {
+    "original182": {
+      "path": "reports/frozen-original-val-nearest/validation.json",
+      "sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+      "checkpoint_sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "kind": "frozen_original_reference"
+    },
+    "TPE5_LAST60_none_050": {
+      "path": "reports/tpe72-completed-fresh-val/fixed_terminal60-fresh-counts.json",
+      "sha256": "25a00c565ae36de34a9cf0f7e85bf55d2ffc0f836a342125ab8aae03d1c850cd",
+      "checkpoint_sha256": "0841d39ab3d01a9f3d4a50f9460bef48636c4cfd2a21f1281a7d3b6e98dbc5d4",
+      "kind": "derived_fresh_standalone72_VAL_count_view_not_original_evidence_file"
+    },
+    "TPE5_BEST58_rot4_035": {
+      "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/threshold-0.35.json",
+      "sha256": "1414f2eb8c751187ab86ca30d8991597903219aa0c3123fe02d2c30d0eee67af",
+      "checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+      "kind": "standalone72_BEST58_scalar_threshold_VAL_ablation"
+    },
+    "raw384_BEST59_none_050": {
+      "path": "reports/curated-raw384-typed-fresh-VAL-20261111/raw384-BEST59-runtime-redacted.json",
+      "sha256": "59c19581719b96e53ac32fd88fb55d53dd9295209946b0949e96e14da95396ab",
+      "checkpoint_sha256": "f6ef880c99148bdd6f7c53164e5f2d47dbef1f301c926910a6ddce880d2bbf8b",
+      "kind": "unified_validation_evidence"
+    }
+  },
+  "original_contexts_preserved": {
+    "original182": {
+      "source": {
+        "runtime": {
+          "evaluation_source_sha256": "fc9ea3b740d428c48ddf9deed8524ef115b303bbbda2f0875b614818ccb0332c",
+          "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+          "runtime": {
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "cudnn_benchmark": false,
+            "cudnn_deterministic": false,
+            "default_dtype": "torch.float32",
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "float32_matmul_precision": "highest",
+            "installed_distributions": {
+              "Pillow": "13.0.0",
+              "h5py": "3.16.0",
+              "numpy": "2.5.4",
+              "opencv-python": null,
+              "opencv-python-headless": "4.14.0.94",
+              "pydicom": "3.0.2",
+              "scikit-image": "0.26.0",
+              "scipy": "1.18.1",
+              "torch": "2.6.0+cu124"
+            },
+            "numpy": "2.5.4",
+            "python": "3.12.13",
+            "torch": "2.6.0+cu124"
+          },
+          "source_files": [
+            "src/deepretina/__init__.py",
+            "src/deepretina/__main__.py",
+            "src/deepretina/adapters/__init__.py",
+            "src/deepretina/adapters/additional.py",
+            "src/deepretina/adapters/auxiliary.py",
+            "src/deepretina/adapters/biomisa.py",
+            "src/deepretina/adapters/core.py",
+            "src/deepretina/adapters/labels.py",
+            "src/deepretina/adapters/segmentation.py",
+            "src/deepretina/augment.py",
+            "src/deepretina/bundled.py",
+            "src/deepretina/cli.py",
+            "src/deepretina/comparison.py",
+            "src/deepretina/dataset.py",
+            "src/deepretina/derived_cache.py",
+            "src/deepretina/engine.py",
+            "src/deepretina/geometry_policy.py",
+            "src/deepretina/heldout.py",
+            "src/deepretina/inference.py",
+            "src/deepretina/integrity.py",
+            "src/deepretina/legacy/__init__.py",
+            "src/deepretina/legacy/av.py",
+            "src/deepretina/legacy/checkpoints.py",
+            "src/deepretina/legacy/inference.py",
+            "src/deepretina/legacy/matlab_av.py",
+            "src/deepretina/legacy/matlab_clahe.py",
+            "src/deepretina/legacy/matlab_fov.py",
+            "src/deepretina/legacy/matlab_resize.py",
+            "src/deepretina/legacy/preprocessing.py",
+            "src/deepretina/legacy/raw_proxy.py",
+            "src/deepretina/legacy/single_net.py",
+            "src/deepretina/model.py",
+            "src/deepretina/prepare.py",
+            "src/deepretina/selection.py",
+            "src/deepretina/sources.py",
+            "src/deepretina/unified.py",
+            "src/deepretina/unified_av.py",
+            "src/deepretina/unified_cli.py",
+            "src/deepretina/unified_legacy.py",
+            "src/deepretina/val_bridge.py",
+            "src/deepretina/validation_evidence.py",
+            "pyproject.toml",
+            "uv.lock"
+          ],
+          "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation"
+        },
+        "scripts": {
+          "compose_original_disc_reference.py": "28654e8c43973167031279f60a247cc6e298f1541e47828947d2657a0f12acdc",
+          "evaluate_original.py": "8d0217743223001ed66724d3a070a8280727e0d055a0567572764da3647157fc",
+          "evaluate_original_frozen.py": "44f1faf4ff41b3dd60b8d6dea747a577bcfd2bb77b1f2366e153bc688fb27a61"
+        }
+      },
+      "policy_spec": {
+        "av": "vesclass_matlab_provided_fov_calibrated; canonical predicted vessel and provided FOV NN-restored to native frame; strict AV ties\u21920; original NN restore_classes then canonical prepare_mask",
+        "cup": "universal/raw cup>0 intersect SAME-forward dedicated disc0/raw>0 in canonical frame before any NN restoration",
+        "gt": "UnifiedDataset full_data: one photo once; deterministic first sorted annotation per task; AV vessel GT priority; unknown validity excluded",
+        "model_sha256": {
+          "av": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+          "disc": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+          "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+          "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01"
+        },
+        "name": "original-raw-vessel-calibrated-provided-fov-av-disc0-universal-cup-in-disc0-v1",
+        "single_net": "raw RGB/255 minus0.5; native checkpoint tiling; strict logits>0"
+      },
+      "reviewed_policy_sha256": null,
+      "evaluated_at_utc": "2026-11-11T01:37:51.657665+00:00"
+    },
+    "TPE5_LAST60_none_050": {
+      "derived_count_provenance": {
+        "original_report_sha256": "7570255b5eac5855d6bd3a1068ff12effbc66c7f05c6699ba26f82fc25c022be",
+        "original_qa_sha256": "9efabed486f54addb039c4356bf4e54272e0ca70cd7583433555a6f3cc21204d",
+        "checkpoint_role": "fixed_terminal60",
+        "source_training_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+        "source_evaluation_sha256": "b269a5e5214b8422a5b8028ff6922ff5c19137d7e0354afcd8fbef1c74e3662f",
+        "configuration": {
+          "sha256": "53906d54f966db4b40e4436522b51053e4f6a033029231b8f216afbdcd6c4a54",
+          "values": {
+            "allow_historical_exposure": false,
+            "architecture": "compact_unet",
+            "augmentation": "basic",
+            "av_weight": 1.0,
+            "base_channels": 16,
+            "batch_size": 4,
+            "bce_weight": 1.0,
+            "coverage_first": true,
+            "depth": 4,
+            "dice_weight": 1.0,
+            "epoch_samples": 8192,
+            "epochs": 60,
+            "foreground_probability": 0.5,
+            "legacy_initialization": null,
+            "lr": 0.000287722894608172,
+            "max_steps": null,
+            "min_lr_ratio": 0.05,
+            "mixed_precision": "bf16",
+            "norm": "batch",
+            "overlap": 64,
+            "patch_size": 384,
+            "pixels_per_degree": 25.0,
+            "preprocessing_profile": "legacy25_raw",
+            "purpose": "full_data",
+            "require_all_heads": true,
+            "sampling": "dataset_task_balanced",
+            "scheduler": "cosine",
+            "seed": 42,
+            "selection_metric": "macro_dataset_mean_dice",
+            "tile_size": 512,
+            "train_view": "patch",
+            "vascular_sampling_weight": 2.553934065831788,
+            "vessel_loss_weight": 1.0,
+            "vessel_pos_weight": 1.0,
+            "view_size": 512,
+            "weight_decay": 5.52164819184925e-06,
+            "workers": 8
+          }
+        },
+        "inference_protocol": {
+          "activation": [
+            "sigmoid",
+            "conditional_softmax",
+            "conditional_softmax",
+            "sigmoid",
+            "sigmoid"
+          ],
+          "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+          "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+          "av_decoding": "argmax_tie_artery_gated_by_vessel",
+          "av_fusion": "joint_av_mixture_then_conditional",
+          "channels": [
+            "vessel",
+            "artery",
+            "vein",
+            "disc",
+            "cup"
+          ],
+          "cup_containment": "cup_and_disc",
+          "geometry": "canonical_prepared",
+          "metric_support": {
+            "artery": "reference_class_labeled_vessel_pixels",
+            "cup": "annotated_valid_pixels_within_field_of_view",
+            "disc": "annotated_valid_pixels_within_field_of_view",
+            "vein": "reference_class_labeled_vessel_pixels",
+            "vessel": "annotated_valid_pixels_within_field_of_view"
+          },
+          "mode": "tiled",
+          "normalization": "RGB/255-0.5",
+          "overlap": 64,
+          "pixels_per_degree": 25.0,
+          "precision": "float32_no_autocast",
+          "preparation_max_size": null,
+          "preprocessing_profile": "legacy25_raw",
+          "threshold": 0.5,
+          "tile_size": 512,
+          "version": 1,
+          "view_size": null
+        }
+      }
+    },
+    "TPE5_BEST58_rot4_035": {
+      "actual_inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.35,
+        "tile_size": 512,
+        "tta": {
+          "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+          "domain": "full_prepared_RGB01_before_tiling",
+          "geometry_restoration": "once_after_all_views",
+          "inverse": "undo_horizontal_flip_then_inverse_rot90_before_combination",
+          "mode": "rot4",
+          "operators": [
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 0
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 1
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 2
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 3
+            }
+          ],
+          "precision": "float32_no_autocast",
+          "version": 1
+        },
+        "version": 1,
+        "view_size": null
+      },
+      "tta_protocol": {
+        "tta": {
+          "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+          "domain": "full_prepared_RGB01_before_tiling",
+          "geometry_restoration": "once_after_all_views",
+          "inverse": "undo_horizontal_flip_then_inverse_rot90_before_combination",
+          "mode": "rot4",
+          "operators": [
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 0
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 1
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 2
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 3
+            }
+          ],
+          "precision": "float32_no_autocast",
+          "version": 1
+        }
+      },
+      "threshold": 0.35
+    },
+    "raw384_BEST59_none_050": {
+      "checkpoint": {
+        "epoch": 59,
+        "sha256": "f6ef880c99148bdd6f7c53164e5f2d47dbef1f301c926910a6ddce880d2bbf8b",
+        "steps": 120832,
+        "training_selection_score": 0.8143756454551815
+      },
+      "configuration": {
+        "sha256": "342b839e25205fe8fc0a7cdbf86bc400f56349d91e1f3d4db078bb9fa735f15a",
+        "values": {
+          "allow_historical_exposure": false,
+          "architecture": "compact_unet",
+          "augmentation": "basic",
+          "av_weight": 1.0,
+          "base_channels": 16,
+          "batch_size": 4,
+          "bce_weight": 1.0,
+          "coverage_first": true,
+          "depth": 4,
+          "dice_weight": 1.0,
+          "epoch_samples": 8192,
+          "epochs": 60,
+          "foreground_probability": 0.5,
+          "legacy_initialization": null,
+          "lr": 0.000287722894608172,
+          "max_steps": null,
+          "min_lr_ratio": 0.05,
+          "mixed_precision": "bf16",
+          "norm": "batch",
+          "overlap": 64,
+          "patch_size": 384,
+          "photometric_profile": "raw",
+          "pixels_per_degree": 25.0,
+          "preprocessing_profile": "legacy25_raw",
+          "purpose": "full_data",
+          "require_all_heads": true,
+          "sampling": "dataset_task_balanced",
+          "scheduler": "cosine",
+          "seed": 42,
+          "selection_metric": "macro_dataset_mean_dice",
+          "tile_size": 512,
+          "train_view": "patch",
+          "vascular_sampling_weight": 2.553934065831788,
+          "vessel_loss_weight": 1.0,
+          "vessel_pos_weight": 1.0,
+          "view_size": 512,
+          "weight_decay": 5.52164819184925e-06,
+          "workers": 8
+        }
+      },
+      "source": {
+        "evaluation_source_sha256": "f13a23d1af43e2c23e098ce15f1d69f78251817b1a1be86415a48ffe6330b29a",
+        "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+        "runtime": {
+          "cuda_matmul_allow_tf32": false,
+          "cudnn_allow_tf32": true,
+          "cudnn_benchmark": false,
+          "cudnn_deterministic": false,
+          "default_dtype": "torch.float32",
+          "deterministic_algorithms": false,
+          "deterministic_warn_only": false,
+          "float32_matmul_precision": "highest",
+          "installed_distributions": {
+            "Pillow": "13.0.0",
+            "h5py": "3.16.0",
+            "numpy": "2.5.4",
+            "opencv-python": null,
+            "opencv-python-headless": "4.14.0.94",
+            "pydicom": "3.0.2",
+            "scikit-image": "0.26.0",
+            "scipy": "1.18.1",
+            "torch": "2.6.0+cu124"
+          },
+          "numpy": "2.5.4",
+          "python": "3.12.14",
+          "torch": "2.6.0+cu124"
+        },
+        "source_files": [
+          "src/deepretina/__init__.py",
+          "src/deepretina/__main__.py",
+          "src/deepretina/_frozen_v3/__init__.py",
+          "src/deepretina/_frozen_v3/v2.py",
+          "src/deepretina/_frozen_v3/v3.py",
+          "src/deepretina/adapters/__init__.py",
+          "src/deepretina/adapters/additional.py",
+          "src/deepretina/adapters/auxiliary.py",
+          "src/deepretina/adapters/biomisa.py",
+          "src/deepretina/adapters/core.py",
+          "src/deepretina/adapters/labels.py",
+          "src/deepretina/adapters/segmentation.py",
+          "src/deepretina/augment.py",
+          "src/deepretina/bundled.py",
+          "src/deepretina/cli.py",
+          "src/deepretina/comparison.py",
+          "src/deepretina/completion_profiles.py",
+          "src/deepretina/completion_roles.py",
+          "src/deepretina/curated_completion.py",
+          "src/deepretina/dataset.py",
+          "src/deepretina/derived_cache.py",
+          "src/deepretina/engine.py",
+          "src/deepretina/freeze_eligibility.py",
+          "src/deepretina/geometry_policy.py",
+          "src/deepretina/heldout.py",
+          "src/deepretina/inference.py",
+          "src/deepretina/inference_tta.py",
+          "src/deepretina/integrity.py",
+          "src/deepretina/legacy/__init__.py",
+          "src/deepretina/legacy/av.py",
+          "src/deepretina/legacy/checkpoints.py",
+          "src/deepretina/legacy/inference.py",
+          "src/deepretina/legacy/matlab_av.py",
+          "src/deepretina/legacy/matlab_clahe.py",
+          "src/deepretina/legacy/matlab_fov.py",
+          "src/deepretina/legacy/matlab_resize.py",
+          "src/deepretina/legacy/preprocessing.py",
+          "src/deepretina/legacy/raw_proxy.py",
+          "src/deepretina/legacy/single_net.py",
+          "src/deepretina/model.py",
+          "src/deepretina/photometry.py",
+          "src/deepretina/photometry_cache.py",
+          "src/deepretina/prepare.py",
+          "src/deepretina/selection.py",
+          "src/deepretina/sources.py",
+          "src/deepretina/unified.py",
+          "src/deepretina/unified_av.py",
+          "src/deepretina/unified_cli.py",
+          "src/deepretina/unified_legacy.py",
+          "src/deepretina/v3_completion.py",
+          "src/deepretina/val_bridge.py",
+          "src/deepretina/validation_evidence.py",
+          "pyproject.toml",
+          "uv.lock"
+        ],
+        "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation",
+        "training_source_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747"
+      },
+      "inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "evaluated_at_utc": "2026-11-11T22:33:52.766729+00:00"
+    }
+  },
+  "all770_exact_record_source_and_GTsupport_checks": "PASS",
+  "metadata_sparse_source_scan": [
+    "avrdb"
+  ],
+  "excluded_from_denseOnly": [
+    "avrdb"
+  ],
+  "policy": "exclude source AVRDB only from vessel-supported photo domain; leave all original inputs/gates/objectives unchanged",
+  "domains": {
+    "includeAll": {
+      "support": {
+        "photos": 107,
+        "known_split_groups": 75,
+        "sources": [
+          "aria",
+          "avrdb",
+          "chasedb1",
+          "drhagis",
+          "erlangen",
+          "hrf",
+          "iostar",
+          "rite",
+          "stare"
+        ]
+      },
+      "models": {
+        "original182": {
+          "pooled": {
+            "tp": 5142829,
+            "fp": 1723029,
+            "fn": 1347170,
+            "valid_pixels": 60922737,
+            "GT_positive_pixels": 6489999,
+            "GT_negative_pixels": 54432738,
+            "dice": 0.7701233997938133,
+            "precision": 0.7490438922564375,
+            "recall": 0.7924236968295373
+          },
+          "by_source": {
+            "aria": {
+              "support": {
+                "photos": 28,
+                "known_split_groups": 16,
+                "sources": [
+                  "aria"
+                ]
+              },
+              "tp": 2052605,
+              "fp": 855025,
+              "fn": 641183,
+              "valid_pixels": 27618662,
+              "GT_positive_pixels": 2693788,
+              "GT_negative_pixels": 24924874,
+              "dice": 0.732887636666287,
+              "precision": 0.7059374817291059,
+              "recall": 0.761977186029487
+            },
+            "avrdb": {
+              "support": {
+                "photos": 20,
+                "known_split_groups": 20,
+                "sources": [
+                  "avrdb"
+                ]
+              },
+              "tp": 461780,
+              "fp": 0,
+              "fn": 135212,
+              "valid_pixels": 596992,
+              "GT_positive_pixels": 596992,
+              "GT_negative_pixels": 0,
+              "dice": 0.872293562731164,
+              "precision": 1.0,
+              "recall": 0.7735112028301887
+            },
+            "chasedb1": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 3,
+                "sources": [
+                  "chasedb1"
+                ]
+              },
+              "tp": 191076,
+              "fp": 78643,
+              "fn": 22408,
+              "valid_pixels": 2149450,
+              "GT_positive_pixels": 213484,
+              "GT_negative_pixels": 1935966,
+              "dice": 0.7908725732249179,
+              "precision": 0.7084261768729678,
+              "recall": 0.8950366303797943
+            },
+            "drhagis": {
+              "support": {
+                "photos": 8,
+                "known_split_groups": 8,
+                "sources": [
+                  "drhagis"
+                ]
+              },
+              "tp": 222870,
+              "fp": 77316,
+              "fn": 38989,
+              "valid_pixels": 3829875,
+              "GT_positive_pixels": 261859,
+              "GT_negative_pixels": 3568016,
+              "dice": 0.7930681706980758,
+              "precision": 0.7424396873938158,
+              "recall": 0.8511068934044658
+            },
+            "erlangen": {
+              "support": {
+                "photos": 22,
+                "known_split_groups": 11,
+                "sources": [
+                  "erlangen"
+                ]
+              },
+              "tp": 269730,
+              "fp": 151943,
+              "fn": 177987,
+              "valid_pixels": 4235000,
+              "GT_positive_pixels": 447717,
+              "GT_negative_pixels": 3787283,
+              "dice": 0.6205040315623598,
+              "precision": 0.6396662816922117,
+              "recall": 0.6024564624528441
+            },
+            "hrf": {
+              "support": {
+                "photos": 9,
+                "known_split_groups": 3,
+                "sources": [
+                  "hrf"
+                ]
+              },
+              "tp": 866049,
+              "fp": 258483,
+              "fn": 154423,
+              "valid_pixels": 11404397,
+              "GT_positive_pixels": 1020472,
+              "GT_negative_pixels": 10383925,
+              "dice": 0.8075033892710689,
+              "precision": 0.7701417122856442,
+              "recall": 0.8486749268965733
+            },
+            "iostar": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 6,
+                "sources": [
+                  "iostar"
+                ]
+              },
+              "tp": 512345,
+              "fp": 133760,
+              "fn": 95904,
+              "valid_pixels": 5858697,
+              "GT_positive_pixels": 608249,
+              "GT_negative_pixels": 5250448,
+              "dice": 0.8169065511012042,
+              "precision": 0.7929748260731615,
+              "recall": 0.8423277309128334
+            },
+            "rite": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "rite"
+                ]
+              },
+              "tp": 369351,
+              "fp": 105757,
+              "fn": 64036,
+              "valid_pixels": 3364003,
+              "GT_positive_pixels": 433387,
+              "GT_negative_pixels": 2930616,
+              "dice": 0.8131051904523415,
+              "precision": 0.7774042954444043,
+              "recall": 0.8522429145313541
+            },
+            "stare": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "stare"
+                ]
+              },
+              "tp": 197023,
+              "fp": 62102,
+              "fn": 17028,
+              "valid_pixels": 1865661,
+              "GT_positive_pixels": 214051,
+              "GT_negative_pixels": 1651610,
+              "dice": 0.8327683568059242,
+              "precision": 0.7603396044380125,
+              "recall": 0.9204488649901191
+            }
+          }
+        },
+        "TPE5_LAST60_none_050": {
+          "pooled": {
+            "tp": 4858768,
+            "fp": 1423973,
+            "fn": 1631231,
+            "valid_pixels": 60922737,
+            "GT_positive_pixels": 6489999,
+            "GT_negative_pixels": 54432738,
+            "dice": 0.7608027721538213,
+            "precision": 0.7733516310794922,
+            "recall": 0.7486546608096549
+          },
+          "by_source": {
+            "aria": {
+              "support": {
+                "photos": 28,
+                "known_split_groups": 16,
+                "sources": [
+                  "aria"
+                ]
+              },
+              "tp": 1787486,
+              "fp": 641172,
+              "fn": 906302,
+              "valid_pixels": 27618662,
+              "GT_positive_pixels": 2693788,
+              "GT_negative_pixels": 24924874,
+              "dice": 0.6979033063501304,
+              "precision": 0.7359974109158226,
+              "recall": 0.6635585279910668
+            },
+            "avrdb": {
+              "support": {
+                "photos": 20,
+                "known_split_groups": 20,
+                "sources": [
+                  "avrdb"
+                ]
+              },
+              "tp": 575198,
+              "fp": 0,
+              "fn": 21794,
+              "valid_pixels": 596992,
+              "GT_positive_pixels": 596992,
+              "GT_negative_pixels": 0,
+              "dice": 0.9814074510105018,
+              "precision": 1.0,
+              "recall": 0.9634936481560892
+            },
+            "chasedb1": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 3,
+                "sources": [
+                  "chasedb1"
+                ]
+              },
+              "tp": 182719,
+              "fp": 78690,
+              "fn": 30765,
+              "valid_pixels": 2149450,
+              "GT_positive_pixels": 213484,
+              "GT_negative_pixels": 1935966,
+              "dice": 0.7695165016119421,
+              "precision": 0.6989774644331297,
+              "recall": 0.8558908395945364
+            },
+            "drhagis": {
+              "support": {
+                "photos": 8,
+                "known_split_groups": 8,
+                "sources": [
+                  "drhagis"
+                ]
+              },
+              "tp": 212271,
+              "fp": 84365,
+              "fn": 49588,
+              "valid_pixels": 3829875,
+              "GT_positive_pixels": 261859,
+              "GT_negative_pixels": 3568016,
+              "dice": 0.7601536271587033,
+              "precision": 0.7155941962539948,
+              "recall": 0.8106309120557247
+            },
+            "erlangen": {
+              "support": {
+                "photos": 22,
+                "known_split_groups": 11,
+                "sources": [
+                  "erlangen"
+                ]
+              },
+              "tp": 291834,
+              "fp": 185866,
+              "fn": 155883,
+              "valid_pixels": 4235000,
+              "GT_positive_pixels": 447717,
+              "GT_negative_pixels": 3787283,
+              "dice": 0.630708102401404,
+              "precision": 0.6109148000837346,
+              "recall": 0.651826935318516
+            },
+            "hrf": {
+              "support": {
+                "photos": 9,
+                "known_split_groups": 3,
+                "sources": [
+                  "hrf"
+                ]
+              },
+              "tp": 796363,
+              "fp": 199726,
+              "fn": 224109,
+              "valid_pixels": 11404397,
+              "GT_positive_pixels": 1020472,
+              "GT_negative_pixels": 10383925,
+              "dice": 0.7898228717107987,
+              "precision": 0.7994898046258918,
+              "recall": 0.7803869189943478
+            },
+            "iostar": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 6,
+                "sources": [
+                  "iostar"
+                ]
+              },
+              "tp": 480029,
+              "fp": 102815,
+              "fn": 128220,
+              "valid_pixels": 5858697,
+              "GT_positive_pixels": 608249,
+              "GT_negative_pixels": 5250448,
+              "dice": 0.8060310991668996,
+              "precision": 0.8235977379882096,
+              "recall": 0.7891981737742273
+            },
+            "rite": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "rite"
+                ]
+              },
+              "tp": 348357,
+              "fp": 87380,
+              "fn": 85030,
+              "valid_pixels": 3364003,
+              "GT_positive_pixels": 433387,
+              "GT_negative_pixels": 2930616,
+              "dice": 0.8016278459690447,
+              "precision": 0.7994661917624623,
+              "recall": 0.8038012215410245
+            },
+            "stare": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "stare"
+                ]
+              },
+              "tp": 184511,
+              "fp": 43959,
+              "fn": 29540,
+              "valid_pixels": 1865661,
+              "GT_positive_pixels": 214051,
+              "GT_negative_pixels": 1651610,
+              "dice": 0.8339084472827278,
+              "precision": 0.8075939948352081,
+              "recall": 0.8619955057439582
+            }
+          }
+        },
+        "TPE5_BEST58_rot4_035": {
+          "pooled": {
+            "tp": 5148305,
+            "fp": 1743233,
+            "fn": 1341694,
+            "valid_pixels": 60922737,
+            "GT_positive_pixels": 6489999,
+            "GT_negative_pixels": 54432738,
+            "dice": 0.7694639263038319,
+            "precision": 0.7470473209318442,
+            "recall": 0.7932674565897467
+          },
+          "by_source": {
+            "aria": {
+              "support": {
+                "photos": 28,
+                "known_split_groups": 16,
+                "sources": [
+                  "aria"
+                ]
+              },
+              "tp": 1949210,
+              "fp": 807058,
+              "fn": 744578,
+              "valid_pixels": 27618662,
+              "GT_positive_pixels": 2693788,
+              "GT_negative_pixels": 24924874,
+              "dice": 0.7152990721563228,
+              "precision": 0.7071917534869614,
+              "recall": 0.7235944328209941
+            },
+            "avrdb": {
+              "support": {
+                "photos": 20,
+                "known_split_groups": 20,
+                "sources": [
+                  "avrdb"
+                ]
+              },
+              "tp": 583778,
+              "fp": 0,
+              "fn": 13214,
+              "valid_pixels": 596992,
+              "GT_positive_pixels": 596992,
+              "GT_negative_pixels": 0,
+              "dice": 0.9888089975185684,
+              "precision": 1.0,
+              "recall": 0.9778657000428816
+            },
+            "chasedb1": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 3,
+                "sources": [
+                  "chasedb1"
+                ]
+              },
+              "tp": 188590,
+              "fp": 87991,
+              "fn": 24894,
+              "valid_pixels": 2149450,
+              "GT_positive_pixels": 213484,
+              "GT_negative_pixels": 1935966,
+              "dice": 0.7696530052135941,
+              "precision": 0.6818617330908486,
+              "recall": 0.8833917295909763
+            },
+            "drhagis": {
+              "support": {
+                "photos": 8,
+                "known_split_groups": 8,
+                "sources": [
+                  "drhagis"
+                ]
+              },
+              "tp": 222400,
+              "fp": 102386,
+              "fn": 39459,
+              "valid_pixels": 3829875,
+              "GT_positive_pixels": 261859,
+              "GT_negative_pixels": 3568016,
+              "dice": 0.7582098202490433,
+              "precision": 0.6847585794954216,
+              "recall": 0.8493120343390909
+            },
+            "erlangen": {
+              "support": {
+                "photos": 22,
+                "known_split_groups": 11,
+                "sources": [
+                  "erlangen"
+                ]
+              },
+              "tp": 314079,
+              "fp": 219002,
+              "fn": 133638,
+              "valid_pixels": 4235000,
+              "GT_positive_pixels": 447717,
+              "GT_negative_pixels": 3787283,
+              "dice": 0.6404560368189984,
+              "precision": 0.589176879311024,
+              "recall": 0.7015123392678857
+            },
+            "hrf": {
+              "support": {
+                "photos": 9,
+                "known_split_groups": 3,
+                "sources": [
+                  "hrf"
+                ]
+              },
+              "tp": 832062,
+              "fp": 242081,
+              "fn": 188410,
+              "valid_pixels": 11404397,
+              "GT_positive_pixels": 1020472,
+              "GT_negative_pixels": 10383925,
+              "dice": 0.7944772667053372,
+              "precision": 0.7746287039993743,
+              "recall": 0.8153697504684106
+            },
+            "iostar": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 6,
+                "sources": [
+                  "iostar"
+                ]
+              },
+              "tp": 502470,
+              "fp": 124602,
+              "fn": 105779,
+              "valid_pixels": 5858697,
+              "GT_positive_pixels": 608249,
+              "GT_negative_pixels": 5250448,
+              "dice": 0.8135051537211786,
+              "precision": 0.8012955450091855,
+              "recall": 0.8260926035225705
+            },
+            "rite": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "rite"
+                ]
+              },
+              "tp": 364849,
+              "fp": 108586,
+              "fn": 68538,
+              "valid_pixels": 3364003,
+              "GT_positive_pixels": 433387,
+              "GT_negative_pixels": 2930616,
+              "dice": 0.8046761106369277,
+              "precision": 0.7706422212130493,
+              "recall": 0.8418549702690666
+            },
+            "stare": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "stare"
+                ]
+              },
+              "tp": 190867,
+              "fp": 51527,
+              "fn": 23184,
+              "valid_pixels": 1865661,
+              "GT_positive_pixels": 214051,
+              "GT_negative_pixels": 1651610,
+              "dice": 0.8363198194744164,
+              "precision": 0.7874246062196258,
+              "recall": 0.8916893637497606
+            }
+          }
+        },
+        "raw384_BEST59_none_050": {
+          "pooled": {
+            "tp": 4829834,
+            "fp": 1394104,
+            "fn": 1660165,
+            "valid_pixels": 60922737,
+            "GT_positive_pixels": 6489999,
+            "GT_negative_pixels": 54432738,
+            "dice": 0.7597700067256901,
+            "precision": 0.7760093368539339,
+            "recall": 0.7441964166712507
+          },
+          "by_source": {
+            "aria": {
+              "support": {
+                "photos": 28,
+                "known_split_groups": 16,
+                "sources": [
+                  "aria"
+                ]
+              },
+              "tp": 1789286,
+              "fp": 623778,
+              "fn": 904502,
+              "valid_pixels": 27618662,
+              "GT_positive_pixels": 2693788,
+              "GT_negative_pixels": 24924874,
+              "dice": 0.7007393204267521,
+              "precision": 0.7414996038231891,
+              "recall": 0.6642267320219706
+            },
+            "avrdb": {
+              "support": {
+                "photos": 20,
+                "known_split_groups": 20,
+                "sources": [
+                  "avrdb"
+                ]
+              },
+              "tp": 540011,
+              "fp": 0,
+              "fn": 56981,
+              "valid_pixels": 596992,
+              "GT_positive_pixels": 596992,
+              "GT_negative_pixels": 0,
+              "dice": 0.9498849167504395,
+              "precision": 1.0,
+              "recall": 0.9045531598413379
+            },
+            "chasedb1": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 3,
+                "sources": [
+                  "chasedb1"
+                ]
+              },
+              "tp": 181531,
+              "fp": 75328,
+              "fn": 31953,
+              "valid_pixels": 2149450,
+              "GT_positive_pixels": 213484,
+              "GT_negative_pixels": 1935966,
+              "dice": 0.7719090110834008,
+              "precision": 0.706734044748286,
+              "recall": 0.8503260197485526
+            },
+            "drhagis": {
+              "support": {
+                "photos": 8,
+                "known_split_groups": 8,
+                "sources": [
+                  "drhagis"
+                ]
+              },
+              "tp": 214426,
+              "fp": 85066,
+              "fn": 47433,
+              "valid_pixels": 3829875,
+              "GT_positive_pixels": 261859,
+              "GT_negative_pixels": 3568016,
+              "dice": 0.7639640795153122,
+              "precision": 0.7159657019219211,
+              "recall": 0.8188605318129222
+            },
+            "erlangen": {
+              "support": {
+                "photos": 22,
+                "known_split_groups": 11,
+                "sources": [
+                  "erlangen"
+                ]
+              },
+              "tp": 295494,
+              "fp": 189149,
+              "fn": 152223,
+              "valid_pixels": 4235000,
+              "GT_positive_pixels": 447717,
+              "GT_negative_pixels": 3787283,
+              "dice": 0.633862456561843,
+              "precision": 0.6097147797450907,
+              "recall": 0.6600017421719524
+            },
+            "hrf": {
+              "support": {
+                "photos": 9,
+                "known_split_groups": 3,
+                "sources": [
+                  "hrf"
+                ]
+              },
+              "tp": 794455,
+              "fp": 192212,
+              "fn": 226017,
+              "valid_pixels": 11404397,
+              "GT_positive_pixels": 1020472,
+              "GT_negative_pixels": 10383925,
+              "dice": 0.791629279287583,
+              "precision": 0.8051906063545249,
+              "recall": 0.7785171959642205
+            },
+            "iostar": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 6,
+                "sources": [
+                  "iostar"
+                ]
+              },
+              "tp": 482634,
+              "fp": 101958,
+              "fn": 125615,
+              "valid_pixels": 5858697,
+              "GT_positive_pixels": 608249,
+              "GT_negative_pixels": 5250448,
+              "dice": 0.8092176576760859,
+              "precision": 0.8255911815419985,
+              "recall": 0.7934809592781904
+            },
+            "rite": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "rite"
+                ]
+              },
+              "tp": 350715,
+              "fp": 89876,
+              "fn": 82672,
+              "valid_pixels": 3364003,
+              "GT_positive_pixels": 433387,
+              "GT_negative_pixels": 2930616,
+              "dice": 0.8025716894475604,
+              "precision": 0.7960103588135028,
+              "recall": 0.8092420861724048
+            },
+            "stare": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "stare"
+                ]
+              },
+              "tp": 181282,
+              "fp": 36737,
+              "fn": 32769,
+              "valid_pixels": 1865661,
+              "GT_positive_pixels": 214051,
+              "GT_negative_pixels": 1651610,
+              "dice": 0.8391325479667646,
+              "precision": 0.8314963374751742,
+              "recall": 0.8469103157658688
+            }
+          }
+        }
+      },
+      "paired_contrasts": {
+        "TPE5_LAST60_none_050__minus_original182": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7608027721538213,
+          "candidate_minus_reference": -0.009320627639991974,
+          "paired_percentile_95ci": [
+            -0.018385533496536856,
+            -0.0021969135056813895
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 75,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('avrdb',)": 20,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        },
+        "TPE5_BEST58_rot4_035__minus_original182": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7694639263038319,
+          "candidate_minus_reference": -0.0006594734899814103,
+          "paired_percentile_95ci": [
+            -0.006517704455364348,
+            0.00483229924274378
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 75,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('avrdb',)": 20,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        },
+        "raw384_BEST59_none_050__minus_original182": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7597700067256901,
+          "candidate_minus_reference": -0.010353393068123218,
+          "paired_percentile_95ci": [
+            -0.01787665711274824,
+            -0.004224660112060618
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 75,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('avrdb',)": 20,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        },
+        "TPE5_BEST58_rot4_035__minus_TPE5_LAST60_none_050": {
+          "reference": 0.7608027721538213,
+          "candidate": 0.7694639263038319,
+          "candidate_minus_reference": 0.008661154150010564,
+          "paired_percentile_95ci": [
+            0.004749713303380787,
+            0.013378164648820325
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 75,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('avrdb',)": 20,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        },
+        "raw384_BEST59_none_050__minus_TPE5_LAST60_none_050": {
+          "reference": 0.7608027721538213,
+          "candidate": 0.7597700067256901,
+          "candidate_minus_reference": -0.0010327654281312437,
+          "paired_percentile_95ci": [
+            -0.00350619385542566,
+            0.0013964363391349636
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 75,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('avrdb',)": 20,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        }
+      }
+    },
+    "denseOnly": {
+      "support": {
+        "photos": 87,
+        "known_split_groups": 55,
+        "sources": [
+          "aria",
+          "chasedb1",
+          "drhagis",
+          "erlangen",
+          "hrf",
+          "iostar",
+          "rite",
+          "stare"
+        ]
+      },
+      "models": {
+        "original182": {
+          "pooled": {
+            "tp": 4681049,
+            "fp": 1723029,
+            "fn": 1211958,
+            "valid_pixels": 60325745,
+            "GT_positive_pixels": 5893007,
+            "GT_negative_pixels": 54432738,
+            "dice": 0.7613266070780189,
+            "precision": 0.7309481552223442,
+            "recall": 0.7943396300055303
+          },
+          "by_source": {
+            "aria": {
+              "support": {
+                "photos": 28,
+                "known_split_groups": 16,
+                "sources": [
+                  "aria"
+                ]
+              },
+              "tp": 2052605,
+              "fp": 855025,
+              "fn": 641183,
+              "valid_pixels": 27618662,
+              "GT_positive_pixels": 2693788,
+              "GT_negative_pixels": 24924874,
+              "dice": 0.732887636666287,
+              "precision": 0.7059374817291059,
+              "recall": 0.761977186029487
+            },
+            "chasedb1": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 3,
+                "sources": [
+                  "chasedb1"
+                ]
+              },
+              "tp": 191076,
+              "fp": 78643,
+              "fn": 22408,
+              "valid_pixels": 2149450,
+              "GT_positive_pixels": 213484,
+              "GT_negative_pixels": 1935966,
+              "dice": 0.7908725732249179,
+              "precision": 0.7084261768729678,
+              "recall": 0.8950366303797943
+            },
+            "drhagis": {
+              "support": {
+                "photos": 8,
+                "known_split_groups": 8,
+                "sources": [
+                  "drhagis"
+                ]
+              },
+              "tp": 222870,
+              "fp": 77316,
+              "fn": 38989,
+              "valid_pixels": 3829875,
+              "GT_positive_pixels": 261859,
+              "GT_negative_pixels": 3568016,
+              "dice": 0.7930681706980758,
+              "precision": 0.7424396873938158,
+              "recall": 0.8511068934044658
+            },
+            "erlangen": {
+              "support": {
+                "photos": 22,
+                "known_split_groups": 11,
+                "sources": [
+                  "erlangen"
+                ]
+              },
+              "tp": 269730,
+              "fp": 151943,
+              "fn": 177987,
+              "valid_pixels": 4235000,
+              "GT_positive_pixels": 447717,
+              "GT_negative_pixels": 3787283,
+              "dice": 0.6205040315623598,
+              "precision": 0.6396662816922117,
+              "recall": 0.6024564624528441
+            },
+            "hrf": {
+              "support": {
+                "photos": 9,
+                "known_split_groups": 3,
+                "sources": [
+                  "hrf"
+                ]
+              },
+              "tp": 866049,
+              "fp": 258483,
+              "fn": 154423,
+              "valid_pixels": 11404397,
+              "GT_positive_pixels": 1020472,
+              "GT_negative_pixels": 10383925,
+              "dice": 0.8075033892710689,
+              "precision": 0.7701417122856442,
+              "recall": 0.8486749268965733
+            },
+            "iostar": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 6,
+                "sources": [
+                  "iostar"
+                ]
+              },
+              "tp": 512345,
+              "fp": 133760,
+              "fn": 95904,
+              "valid_pixels": 5858697,
+              "GT_positive_pixels": 608249,
+              "GT_negative_pixels": 5250448,
+              "dice": 0.8169065511012042,
+              "precision": 0.7929748260731615,
+              "recall": 0.8423277309128334
+            },
+            "rite": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "rite"
+                ]
+              },
+              "tp": 369351,
+              "fp": 105757,
+              "fn": 64036,
+              "valid_pixels": 3364003,
+              "GT_positive_pixels": 433387,
+              "GT_negative_pixels": 2930616,
+              "dice": 0.8131051904523415,
+              "precision": 0.7774042954444043,
+              "recall": 0.8522429145313541
+            },
+            "stare": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "stare"
+                ]
+              },
+              "tp": 197023,
+              "fp": 62102,
+              "fn": 17028,
+              "valid_pixels": 1865661,
+              "GT_positive_pixels": 214051,
+              "GT_negative_pixels": 1651610,
+              "dice": 0.8327683568059242,
+              "precision": 0.7603396044380125,
+              "recall": 0.9204488649901191
+            }
+          }
+        },
+        "TPE5_LAST60_none_050": {
+          "pooled": {
+            "tp": 4283570,
+            "fp": 1423973,
+            "fn": 1609437,
+            "valid_pixels": 60325745,
+            "GT_positive_pixels": 5893007,
+            "GT_negative_pixels": 54432738,
+            "dice": 0.7385115360909612,
+            "precision": 0.7505103334306898,
+            "recall": 0.7268903634426364
+          },
+          "by_source": {
+            "aria": {
+              "support": {
+                "photos": 28,
+                "known_split_groups": 16,
+                "sources": [
+                  "aria"
+                ]
+              },
+              "tp": 1787486,
+              "fp": 641172,
+              "fn": 906302,
+              "valid_pixels": 27618662,
+              "GT_positive_pixels": 2693788,
+              "GT_negative_pixels": 24924874,
+              "dice": 0.6979033063501304,
+              "precision": 0.7359974109158226,
+              "recall": 0.6635585279910668
+            },
+            "chasedb1": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 3,
+                "sources": [
+                  "chasedb1"
+                ]
+              },
+              "tp": 182719,
+              "fp": 78690,
+              "fn": 30765,
+              "valid_pixels": 2149450,
+              "GT_positive_pixels": 213484,
+              "GT_negative_pixels": 1935966,
+              "dice": 0.7695165016119421,
+              "precision": 0.6989774644331297,
+              "recall": 0.8558908395945364
+            },
+            "drhagis": {
+              "support": {
+                "photos": 8,
+                "known_split_groups": 8,
+                "sources": [
+                  "drhagis"
+                ]
+              },
+              "tp": 212271,
+              "fp": 84365,
+              "fn": 49588,
+              "valid_pixels": 3829875,
+              "GT_positive_pixels": 261859,
+              "GT_negative_pixels": 3568016,
+              "dice": 0.7601536271587033,
+              "precision": 0.7155941962539948,
+              "recall": 0.8106309120557247
+            },
+            "erlangen": {
+              "support": {
+                "photos": 22,
+                "known_split_groups": 11,
+                "sources": [
+                  "erlangen"
+                ]
+              },
+              "tp": 291834,
+              "fp": 185866,
+              "fn": 155883,
+              "valid_pixels": 4235000,
+              "GT_positive_pixels": 447717,
+              "GT_negative_pixels": 3787283,
+              "dice": 0.630708102401404,
+              "precision": 0.6109148000837346,
+              "recall": 0.651826935318516
+            },
+            "hrf": {
+              "support": {
+                "photos": 9,
+                "known_split_groups": 3,
+                "sources": [
+                  "hrf"
+                ]
+              },
+              "tp": 796363,
+              "fp": 199726,
+              "fn": 224109,
+              "valid_pixels": 11404397,
+              "GT_positive_pixels": 1020472,
+              "GT_negative_pixels": 10383925,
+              "dice": 0.7898228717107987,
+              "precision": 0.7994898046258918,
+              "recall": 0.7803869189943478
+            },
+            "iostar": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 6,
+                "sources": [
+                  "iostar"
+                ]
+              },
+              "tp": 480029,
+              "fp": 102815,
+              "fn": 128220,
+              "valid_pixels": 5858697,
+              "GT_positive_pixels": 608249,
+              "GT_negative_pixels": 5250448,
+              "dice": 0.8060310991668996,
+              "precision": 0.8235977379882096,
+              "recall": 0.7891981737742273
+            },
+            "rite": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "rite"
+                ]
+              },
+              "tp": 348357,
+              "fp": 87380,
+              "fn": 85030,
+              "valid_pixels": 3364003,
+              "GT_positive_pixels": 433387,
+              "GT_negative_pixels": 2930616,
+              "dice": 0.8016278459690447,
+              "precision": 0.7994661917624623,
+              "recall": 0.8038012215410245
+            },
+            "stare": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "stare"
+                ]
+              },
+              "tp": 184511,
+              "fp": 43959,
+              "fn": 29540,
+              "valid_pixels": 1865661,
+              "GT_positive_pixels": 214051,
+              "GT_negative_pixels": 1651610,
+              "dice": 0.8339084472827278,
+              "precision": 0.8075939948352081,
+              "recall": 0.8619955057439582
+            }
+          }
+        },
+        "TPE5_BEST58_rot4_035": {
+          "pooled": {
+            "tp": 4564527,
+            "fp": 1743233,
+            "fn": 1328480,
+            "valid_pixels": 60325745,
+            "GT_positive_pixels": 5893007,
+            "GT_negative_pixels": 54432738,
+            "dice": 0.7482360740107569,
+            "precision": 0.7236367585323474,
+            "recall": 0.7745667025340374
+          },
+          "by_source": {
+            "aria": {
+              "support": {
+                "photos": 28,
+                "known_split_groups": 16,
+                "sources": [
+                  "aria"
+                ]
+              },
+              "tp": 1949210,
+              "fp": 807058,
+              "fn": 744578,
+              "valid_pixels": 27618662,
+              "GT_positive_pixels": 2693788,
+              "GT_negative_pixels": 24924874,
+              "dice": 0.7152990721563228,
+              "precision": 0.7071917534869614,
+              "recall": 0.7235944328209941
+            },
+            "chasedb1": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 3,
+                "sources": [
+                  "chasedb1"
+                ]
+              },
+              "tp": 188590,
+              "fp": 87991,
+              "fn": 24894,
+              "valid_pixels": 2149450,
+              "GT_positive_pixels": 213484,
+              "GT_negative_pixels": 1935966,
+              "dice": 0.7696530052135941,
+              "precision": 0.6818617330908486,
+              "recall": 0.8833917295909763
+            },
+            "drhagis": {
+              "support": {
+                "photos": 8,
+                "known_split_groups": 8,
+                "sources": [
+                  "drhagis"
+                ]
+              },
+              "tp": 222400,
+              "fp": 102386,
+              "fn": 39459,
+              "valid_pixels": 3829875,
+              "GT_positive_pixels": 261859,
+              "GT_negative_pixels": 3568016,
+              "dice": 0.7582098202490433,
+              "precision": 0.6847585794954216,
+              "recall": 0.8493120343390909
+            },
+            "erlangen": {
+              "support": {
+                "photos": 22,
+                "known_split_groups": 11,
+                "sources": [
+                  "erlangen"
+                ]
+              },
+              "tp": 314079,
+              "fp": 219002,
+              "fn": 133638,
+              "valid_pixels": 4235000,
+              "GT_positive_pixels": 447717,
+              "GT_negative_pixels": 3787283,
+              "dice": 0.6404560368189984,
+              "precision": 0.589176879311024,
+              "recall": 0.7015123392678857
+            },
+            "hrf": {
+              "support": {
+                "photos": 9,
+                "known_split_groups": 3,
+                "sources": [
+                  "hrf"
+                ]
+              },
+              "tp": 832062,
+              "fp": 242081,
+              "fn": 188410,
+              "valid_pixels": 11404397,
+              "GT_positive_pixels": 1020472,
+              "GT_negative_pixels": 10383925,
+              "dice": 0.7944772667053372,
+              "precision": 0.7746287039993743,
+              "recall": 0.8153697504684106
+            },
+            "iostar": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 6,
+                "sources": [
+                  "iostar"
+                ]
+              },
+              "tp": 502470,
+              "fp": 124602,
+              "fn": 105779,
+              "valid_pixels": 5858697,
+              "GT_positive_pixels": 608249,
+              "GT_negative_pixels": 5250448,
+              "dice": 0.8135051537211786,
+              "precision": 0.8012955450091855,
+              "recall": 0.8260926035225705
+            },
+            "rite": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "rite"
+                ]
+              },
+              "tp": 364849,
+              "fp": 108586,
+              "fn": 68538,
+              "valid_pixels": 3364003,
+              "GT_positive_pixels": 433387,
+              "GT_negative_pixels": 2930616,
+              "dice": 0.8046761106369277,
+              "precision": 0.7706422212130493,
+              "recall": 0.8418549702690666
+            },
+            "stare": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "stare"
+                ]
+              },
+              "tp": 190867,
+              "fp": 51527,
+              "fn": 23184,
+              "valid_pixels": 1865661,
+              "GT_positive_pixels": 214051,
+              "GT_negative_pixels": 1651610,
+              "dice": 0.8363198194744164,
+              "precision": 0.7874246062196258,
+              "recall": 0.8916893637497606
+            }
+          }
+        },
+        "raw384_BEST59_none_050": {
+          "pooled": {
+            "tp": 4289823,
+            "fp": 1394104,
+            "fn": 1603184,
+            "valid_pixels": 60325745,
+            "GT_positive_pixels": 5893007,
+            "GT_negative_pixels": 54432738,
+            "dice": 0.7410982907909814,
+            "precision": 0.7547287289228028,
+            "recall": 0.7279514516103578
+          },
+          "by_source": {
+            "aria": {
+              "support": {
+                "photos": 28,
+                "known_split_groups": 16,
+                "sources": [
+                  "aria"
+                ]
+              },
+              "tp": 1789286,
+              "fp": 623778,
+              "fn": 904502,
+              "valid_pixels": 27618662,
+              "GT_positive_pixels": 2693788,
+              "GT_negative_pixels": 24924874,
+              "dice": 0.7007393204267521,
+              "precision": 0.7414996038231891,
+              "recall": 0.6642267320219706
+            },
+            "chasedb1": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 3,
+                "sources": [
+                  "chasedb1"
+                ]
+              },
+              "tp": 181531,
+              "fp": 75328,
+              "fn": 31953,
+              "valid_pixels": 2149450,
+              "GT_positive_pixels": 213484,
+              "GT_negative_pixels": 1935966,
+              "dice": 0.7719090110834008,
+              "precision": 0.706734044748286,
+              "recall": 0.8503260197485526
+            },
+            "drhagis": {
+              "support": {
+                "photos": 8,
+                "known_split_groups": 8,
+                "sources": [
+                  "drhagis"
+                ]
+              },
+              "tp": 214426,
+              "fp": 85066,
+              "fn": 47433,
+              "valid_pixels": 3829875,
+              "GT_positive_pixels": 261859,
+              "GT_negative_pixels": 3568016,
+              "dice": 0.7639640795153122,
+              "precision": 0.7159657019219211,
+              "recall": 0.8188605318129222
+            },
+            "erlangen": {
+              "support": {
+                "photos": 22,
+                "known_split_groups": 11,
+                "sources": [
+                  "erlangen"
+                ]
+              },
+              "tp": 295494,
+              "fp": 189149,
+              "fn": 152223,
+              "valid_pixels": 4235000,
+              "GT_positive_pixels": 447717,
+              "GT_negative_pixels": 3787283,
+              "dice": 0.633862456561843,
+              "precision": 0.6097147797450907,
+              "recall": 0.6600017421719524
+            },
+            "hrf": {
+              "support": {
+                "photos": 9,
+                "known_split_groups": 3,
+                "sources": [
+                  "hrf"
+                ]
+              },
+              "tp": 794455,
+              "fp": 192212,
+              "fn": 226017,
+              "valid_pixels": 11404397,
+              "GT_positive_pixels": 1020472,
+              "GT_negative_pixels": 10383925,
+              "dice": 0.791629279287583,
+              "precision": 0.8051906063545249,
+              "recall": 0.7785171959642205
+            },
+            "iostar": {
+              "support": {
+                "photos": 6,
+                "known_split_groups": 6,
+                "sources": [
+                  "iostar"
+                ]
+              },
+              "tp": 482634,
+              "fp": 101958,
+              "fn": 125615,
+              "valid_pixels": 5858697,
+              "GT_positive_pixels": 608249,
+              "GT_negative_pixels": 5250448,
+              "dice": 0.8092176576760859,
+              "precision": 0.8255911815419985,
+              "recall": 0.7934809592781904
+            },
+            "rite": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "rite"
+                ]
+              },
+              "tp": 350715,
+              "fp": 89876,
+              "fn": 82672,
+              "valid_pixels": 3364003,
+              "GT_positive_pixels": 433387,
+              "GT_negative_pixels": 2930616,
+              "dice": 0.8025716894475604,
+              "precision": 0.7960103588135028,
+              "recall": 0.8092420861724048
+            },
+            "stare": {
+              "support": {
+                "photos": 4,
+                "known_split_groups": 4,
+                "sources": [
+                  "stare"
+                ]
+              },
+              "tp": 181282,
+              "fp": 36737,
+              "fn": 32769,
+              "valid_pixels": 1865661,
+              "GT_positive_pixels": 214051,
+              "GT_negative_pixels": 1651610,
+              "dice": 0.8391325479667646,
+              "precision": 0.8314963374751742,
+              "recall": 0.8469103157658688
+            }
+          }
+        }
+      },
+      "paired_contrasts": {
+        "TPE5_LAST60_none_050__minus_original182": {
+          "reference": 0.7613266070780189,
+          "candidate": 0.7385115360909612,
+          "candidate_minus_reference": -0.022815070987057706,
+          "paired_percentile_95ci": [
+            -0.03223311429967769,
+            -0.01489385721404599
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 55,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        },
+        "TPE5_BEST58_rot4_035__minus_original182": {
+          "reference": 0.7613266070780189,
+          "candidate": 0.7482360740107569,
+          "candidate_minus_reference": -0.013090533067262045,
+          "paired_percentile_95ci": [
+            -0.018557734358633154,
+            -0.008790731624640986
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 55,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        },
+        "raw384_BEST59_none_050__minus_original182": {
+          "reference": 0.7613266070780189,
+          "candidate": 0.7410982907909814,
+          "candidate_minus_reference": -0.020228316287037473,
+          "paired_percentile_95ci": [
+            -0.02835614924097332,
+            -0.013598028600818756
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 55,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        },
+        "TPE5_BEST58_rot4_035__minus_TPE5_LAST60_none_050": {
+          "reference": 0.7385115360909612,
+          "candidate": 0.7482360740107569,
+          "candidate_minus_reference": 0.009724537919795662,
+          "paired_percentile_95ci": [
+            0.005103970979898631,
+            0.015021214794885645
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 55,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        },
+        "raw384_BEST59_none_050__minus_TPE5_LAST60_none_050": {
+          "reference": 0.7385115360909612,
+          "candidate": 0.7410982907909814,
+          "candidate_minus_reference": 0.002586754700020233,
+          "paired_percentile_95ci": [
+            0.00045496432212625,
+            0.004792632171822302
+          ],
+          "draws": 2000,
+          "seed": 42,
+          "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+          "groups": 55,
+          "stratification": "dataset signature among included vessel-support photos of whole retained group",
+          "strata": {
+            "('aria',)": 16,
+            "('chasedb1',)": 3,
+            "('drhagis',)": 8,
+            "('drive',)": 4,
+            "('erlangen',)": 11,
+            "('hrf',)": 3,
+            "('iostar',)": 6,
+            "('stare',)": 4
+          },
+          "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+        }
+      }
+    },
+    "excluded_positiveOnly_AVRDB": {
+      "support": {
+        "photos": 20,
+        "known_split_groups": 20,
+        "sources": [
+          "avrdb"
+        ]
+      },
+      "models": {
+        "original182": {
+          "pooled": {
+            "tp": 461780,
+            "fp": 0,
+            "fn": 135212,
+            "valid_pixels": 596992,
+            "GT_positive_pixels": 596992,
+            "GT_negative_pixels": 0,
+            "dice": 0.872293562731164,
+            "precision": 1.0,
+            "recall": 0.7735112028301887
+          },
+          "by_source": {
+            "avrdb": {
+              "support": {
+                "photos": 20,
+                "known_split_groups": 20,
+                "sources": [
+                  "avrdb"
+                ]
+              },
+              "tp": 461780,
+              "fp": 0,
+              "fn": 135212,
+              "valid_pixels": 596992,
+              "GT_positive_pixels": 596992,
+              "GT_negative_pixels": 0,
+              "dice": 0.872293562731164,
+              "precision": 1.0,
+              "recall": 0.7735112028301887
+            }
+          }
+        },
+        "TPE5_LAST60_none_050": {
+          "pooled": {
+            "tp": 575198,
+            "fp": 0,
+            "fn": 21794,
+            "valid_pixels": 596992,
+            "GT_positive_pixels": 596992,
+            "GT_negative_pixels": 0,
+            "dice": 0.9814074510105018,
+            "precision": 1.0,
+            "recall": 0.9634936481560892
+          },
+          "by_source": {
+            "avrdb": {
+              "support": {
+                "photos": 20,
+                "known_split_groups": 20,
+                "sources": [
+                  "avrdb"
+                ]
+              },
+              "tp": 575198,
+              "fp": 0,
+              "fn": 21794,
+              "valid_pixels": 596992,
+              "GT_positive_pixels": 596992,
+              "GT_negative_pixels": 0,
+              "dice": 0.9814074510105018,
+              "precision": 1.0,
+              "recall": 0.9634936481560892
+            }
+          }
+        },
+        "TPE5_BEST58_rot4_035": {
+          "pooled": {
+            "tp": 583778,
+            "fp": 0,
+            "fn": 13214,
+            "valid_pixels": 596992,
+            "GT_positive_pixels": 596992,
+            "GT_negative_pixels": 0,
+            "dice": 0.9888089975185684,
+            "precision": 1.0,
+            "recall": 0.9778657000428816
+          },
+          "by_source": {
+            "avrdb": {
+              "support": {
+                "photos": 20,
+                "known_split_groups": 20,
+                "sources": [
+                  "avrdb"
+                ]
+              },
+              "tp": 583778,
+              "fp": 0,
+              "fn": 13214,
+              "valid_pixels": 596992,
+              "GT_positive_pixels": 596992,
+              "GT_negative_pixels": 0,
+              "dice": 0.9888089975185684,
+              "precision": 1.0,
+              "recall": 0.9778657000428816
+            }
+          }
+        },
+        "raw384_BEST59_none_050": {
+          "pooled": {
+            "tp": 540011,
+            "fp": 0,
+            "fn": 56981,
+            "valid_pixels": 596992,
+            "GT_positive_pixels": 596992,
+            "GT_negative_pixels": 0,
+            "dice": 0.9498849167504395,
+            "precision": 1.0,
+            "recall": 0.9045531598413379
+          },
+          "by_source": {
+            "avrdb": {
+              "support": {
+                "photos": 20,
+                "known_split_groups": 20,
+                "sources": [
+                  "avrdb"
+                ]
+              },
+              "tp": 540011,
+              "fp": 0,
+              "fn": 56981,
+              "valid_pixels": 596992,
+              "GT_positive_pixels": 596992,
+              "GT_negative_pixels": 0,
+              "dice": 0.9498849167504395,
+              "precision": 1.0,
+              "recall": 0.9045531598413379
+            }
+          }
+        }
+      },
+      "paired_contrasts": {}
+    }
+  },
+  "TPE5_control_LAST60_actual_fresh_runtime_context": {
+    "original_report_sha256": "7570255b5eac5855d6bd3a1068ff12effbc66c7f05c6699ba26f82fc25c022be",
+    "checkpoint": {
+      "epoch": 60,
+      "sha256": "0841d39ab3d01a9f3d4a50f9460bef48636c4cfd2a21f1281a7d3b6e98dbc5d4",
+      "steps": 122880,
+      "training_selection_score": 0.8088325846536613
+    },
+    "inference_protocol": {
+      "activation": [
+        "sigmoid",
+        "conditional_softmax",
+        "conditional_softmax",
+        "sigmoid",
+        "sigmoid"
+      ],
+      "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+      "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+      "av_decoding": "argmax_tie_artery_gated_by_vessel",
+      "av_fusion": "joint_av_mixture_then_conditional",
+      "channels": [
+        "vessel",
+        "artery",
+        "vein",
+        "disc",
+        "cup"
+      ],
+      "cup_containment": "cup_and_disc",
+      "geometry": "canonical_prepared",
+      "metric_support": {
+        "artery": "reference_class_labeled_vessel_pixels",
+        "cup": "annotated_valid_pixels_within_field_of_view",
+        "disc": "annotated_valid_pixels_within_field_of_view",
+        "vein": "reference_class_labeled_vessel_pixels",
+        "vessel": "annotated_valid_pixels_within_field_of_view"
+      },
+      "mode": "tiled",
+      "normalization": "RGB/255-0.5",
+      "overlap": 64,
+      "pixels_per_degree": 25.0,
+      "precision": "float32_no_autocast",
+      "preparation_max_size": null,
+      "preprocessing_profile": "legacy25_raw",
+      "threshold": 0.5,
+      "tile_size": 512,
+      "version": 1,
+      "view_size": null
+    },
+    "actual_runtime_flags": {
+      "cuda_matmul_allow_tf32": false,
+      "cudnn_allow_tf32": true,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms": false,
+      "deterministic_warn_only": false,
+      "float32_matmul_precision": "highest",
+      "installed_distributions": {
+        "Pillow": "13.0.0",
+        "h5py": "3.16.0",
+        "numpy": "2.5.4",
+        "opencv-python": null,
+        "opencv-python-headless": "4.14.0.94",
+        "pydicom": "3.0.2",
+        "scikit-image": "0.26.0",
+        "scipy": "1.18.1",
+        "torch": "2.6.0+cu124"
+      },
+      "numpy": "2.5.4",
+      "python": "3.12.13",
+      "torch": "2.6.0+cu124"
+    },
+    "measured_seconds": 91.4123295530444
+  },
+  "qualifications": [
+    "AVRDB FP0/precision1 are structural positive-only support, not dense vessel specificity/precision.",
+    "denseOnly means remaining benchmark label domains include negatives; unknown annotation completeness is not certified by counts.",
+    "Original historical exposure and preprocessing/backend differences persist.",
+    "BEST58rot4.35 was VAL-selected; role/TTA/threshold differ from LAST60none.5. These paired intervals compare specified pipelines on identical GT, not causal optimization effect.",
+    "No simultaneous multiple-comparison adjustment, clinical/noninferiority/equivalence claim or TEST.",
+    "No original report or current pool worst-six objective altered."
+  ],
+  "source_audit": {
+    "source_commit": "964f1a91ae188820fc3b9ad9e9b3c6a92419a203",
+    "files": {
+      "src/deepretina/adapters/segmentation.py": "e0cf0bdc72e69e5aab63caa9c754a45ea8d7f0d5820d6806cf5cb7a3d554cd45",
+      "src/deepretina/adapters/auxiliary.py": "b3d01bf76632cc8a6ff4943ef8799ec31a86a2029a4ea089f78a00c4fefda56d",
+      "src/deepretina/comparison.py": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e"
+    },
+    "AVRDB_binary_vessel": "segmentation.avrdb emits valid=vessel[None]; metadata annotation_support sparse vessel lines: unmarked pixels ignored",
+    "AVRDB_AV_vessel": "segmentation.avrdb AV valid channel0=vessel, independent of known class support",
+    "other_sparse_auxiliary": "width/caliber point annotations are resources, not inferred dense vessel masks; no extra such source contributes vessel counts here",
+    "other_remaining_label_completeness": "not clinically certified by counts; denseOnly only means scored negative support exists and no additional positive-only source established",
+    "all_vessel_photos": 107,
+    "whole_VAL_photos_and_known_groups": [
+      770,
+      612
+    ]
+  }
+}
