@@ -1,0 +1,38 @@
+{
+  "observed_utc": "2026-11-11T12:45:05.300533+00:00",
+  "source_commit": "f030be53ba2cecee327c888aa54a6db7d5abfd20",
+  "execution_sha256": "a71033827273271f442c12c773fe7b456d3d70b3ff37a1ea870dd9d43de667a7",
+  "training_sha256": "7856a9c7f9ff921f16b82f7fabc7a3a24b2acf6231593832467f0d28bcc854bc",
+  "operator_sha256": "196da8626c87d6b07bed6508252dd37328ee79846c4040c1403f9a090002708e",
+  "verification": {
+    "independent_root_run": true,
+    "returncode": 0,
+    "passed": 202,
+    "seconds": 34.58,
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_MKL_OPENBLAS_THREADS": 1,
+    "scope": [
+      "unified_photometry",
+      "photometry_cache",
+      "strong_pipeline_benchmark",
+      "unified_hpo",
+      "unified_cli",
+      "validation_evidence",
+      "unified",
+      "unified_selection",
+      "derived_cache"
+    ],
+    "warnings": "22 existing morphology deprecation and multiprocessing fork warnings; no failed tests"
+  },
+  "review_findings_resolved": [
+    "Explicit cache descriptor/config physical-scale agreement",
+    "Nonraw primitive benchmark uses saved config/tiles and declares model-only timing",
+    "Full-pipeline benchmark applies photometry once inside timed operation"
+  ],
+  "boundaries": {
+    "full_corpus_cache_built": false,
+    "new_training_arm_launched": false,
+    "TEST_evaluation": false,
+    "model_quality_improvement_proven": false
+  }
+}
