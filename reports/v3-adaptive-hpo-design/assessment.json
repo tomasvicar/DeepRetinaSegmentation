@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "assessment_only": true,
+  "base_commit": "72fb321187eca517823083aca80cedace9605570",
+  "coordinator_files": {
+    "core.py": {
+      "public_sha256": "91e11b9cd805d1eaf9ca5edb73d1e4327364aef44b39f296c319b795783f222c",
+      "frozen_running_copy_sha256": "91e11b9cd805d1eaf9ca5edb73d1e4327364aef44b39f296c319b795783f222c",
+      "byte_equal": true
+    },
+    "v2.py": {
+      "public_sha256": "a0e8df7e9bc86038c549523a0c84211e6892299b73246e0f12490f22d7110d6d",
+      "frozen_running_copy_sha256": "a0e8df7e9bc86038c549523a0c84211e6892299b73246e0f12490f22d7110d6d",
+      "byte_equal": true
+    }
+  },
+  "old_adaptive_checkout_head": "c6acd7c7fcd58926f2a045b853e76f1573e37520",
+  "new_protocol_proposal": {
+    "schema_version": 3,
+    "study_kind": "adaptive_v3_unified",
+    "indexing": "zero_based",
+    "first_pruning_epoch": 27,
+    "horizon": 60,
+    "task_objective_source": "actual last checkpoint validation_metrics; terminal60 objective for COMPLETE"
+  },
+  "no_remote_queries": true,
+  "no_live_changes": true,
+  "no_code_implementation": true,
+  "blockers": [
+    "V1 hardpins and imported baseline",
+    "finite-only seven queue and journals",
+    "adaptive issuance/promotion crash windows",
+    "macro-only CSV/best semantics vs new task objective",
+    "new worker/Meta runtime/source/BF16 contracts and actual staging readiness"
+  ]
+}
