@@ -223,6 +223,9 @@ see [precision requirements and scope](docs/UNIFIED_TRAIN_BF16.md). Validate a c
 and predict with `deepretina predict --checkpoint ...`. Experimental unified
 test evaluation remains blocked until final selection is frozen and reviewed.
 
+Optional unified inference ensembling is available with `--tta flips2`, `rot4`,
+or `dihedral8`; `none` remains the default. See [operators, cost and measured scope](docs/UNIFIED_TTA.md).
+
 ## Retrain the original architectures
 
 `train-legacy` constructs fresh native vessel/disc/universal/A/V networks;

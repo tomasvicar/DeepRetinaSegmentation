@@ -1,0 +1,39 @@
+{
+  "product_base_commit": "8b99b64f311ef0d7fc40f161486b4b6412a325f7",
+  "joint_reference_commit": "1f723ad92898fad8b04a6ef8b39065f021f52a9c",
+  "TTA_feature_commit": "35482646abe87bd5da72702beaad79e8de575c14",
+  "verification": {
+    "unique_focused_CPU_tests_passed": 148,
+    "initial_pass": 126,
+    "failed_subset_after_fixture_and_storage_corrections": {
+      "passed": 16,
+      "seconds": 5.1
+    },
+    "additional_TTA_namespace_and_whole_geometry": {
+      "passed": 6,
+      "seconds": 2.07
+    },
+    "Ruff": "PASS",
+    "GPU_tests_or_QUALITY_evaluation_run": false,
+    "CPU_affinity": [
+      4
+    ],
+    "nice": 17,
+    "numerical_threads": 1,
+    "CUDA_VISIBLE_DEVICES": ""
+  },
+  "source_scope": [
+    "cli.py optionalTTAparse/rejection",
+    "unified.py optinprobabilityensemble, defaultnoneunchanged",
+    "unified_cli.py explicitpredict/VALforwarding"
+  ],
+  "deliberate_reference_difference": "Only optin TTA additionally disables ambient autocast for FP32-trained metadata; defaultnone unchanged. BF16 metadata already uses existing FP32 inference wrapper.",
+  "real_checkpoint_prepared_forward_report_sha256": "019d9862480d6f59159f1bddc4c16cff842cdf636a25cb255a775ba455d73529",
+  "source_module_sha256": "4f38ca679a6d0acb626e3284cf29f37aab0cb61899ef888dfb5c29d71522764c",
+  "registry_weights_uvlock_and_trainingconfig_unchanged": true,
+  "original_checkpoint_paths_unchanged": true,
+  "photometry_or_cache_features_ported": false,
+  "TEST_enabled": false,
+  "no_global_quality_or_speed_claim": true,
+  "raw_generated_probability_arrays": "Retained only in dedicated local synthetic scratch, notGit"
+}

@@ -21,6 +21,7 @@ from .unified import (
     load_unified,
     predict_unified,
     train_unified,
+    tta_protocol,
 )
 
 
@@ -114,6 +115,8 @@ def apply_unified(args, checkpoint):
         "tile_size": args.tile_size,
         "overlap": args.overlap,
     }
+    if getattr(args, "tta", "none") != "none":
+        options["tta"] = args.tta
     if args.input.is_dir():
         images = sorted(
             path
@@ -157,7 +160,13 @@ def _evaluate(args, checkpoint):
         raise ValueError("Unified validation requires checkpoint-pinned audited prepared content")
     verified = verify_prepared_content(args.manifest, expected=content_pin)
     metrics = evaluate_unified_model(
-        model, args.manifest, split="val", device=device, config=config, threshold=args.threshold
+        model,
+        args.manifest,
+        split="val",
+        device=device,
+        config=config,
+        threshold=args.threshold,
+        **({"tta": args.tta} if getattr(args, "tta", "none") != "none" else {}),
     )
     metrics.update(
         {
@@ -173,6 +182,7 @@ def _evaluate(args, checkpoint):
                 "tile_size": config.tile_size if config.train_view == "patch" else None,
                 "overlap": config.overlap if config.train_view == "patch" else None,
                 "view_size": config.view_size if config.train_view == "whole" else None,
+                **tta_protocol(getattr(args, "tta", "none")),
                 "overrides": {
                     key: value
                     for key, value in {"tile_size": args.tile_size, "overlap": args.overlap}.items()

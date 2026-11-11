@@ -1,0 +1,78 @@
+{
+  "scope": "tiny_prepared_CPU_forward_compatibility_not_quality_or_latency_benchmark",
+  "checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+  "source_module_sha256": "4f38ca679a6d0acb626e3284cf29f37aab0cb61899ef888dfb5c29d71522764c",
+  "prepared_input_sha256": "4f1f41ede3cfc03de91442c0b2be06ac74b9f7ab33ee5cf0cfdb2e6b70d47b61",
+  "prepared_shape": [
+    3,
+    35,
+    49
+  ],
+  "overridden_tile_size": 32,
+  "overridden_overlap": 8,
+  "original_training_mixed_precision": "bf16",
+  "inference_parameter_dtype": "torch.float32",
+  "threads": 1,
+  "interop": 1,
+  "affinity": [
+    4
+  ],
+  "torch": "2.6.0+cu124",
+  "CUDA_initialized": false,
+  "GT_read": false,
+  "TEST_evaluated": false,
+  "cases": [
+    {
+      "mode": "none",
+      "seconds": 0.08759187720716,
+      "probability_sha256": "8aa01b629b67511d83c675873625720fa9277c417d0b6ec0b7e4861d221b804e",
+      "shape": [
+        5,
+        35,
+        49
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "model_weights_and_buffers_unchanged": true
+    },
+    {
+      "mode": "flips2",
+      "seconds": 0.10732425306923687,
+      "probability_sha256": "24837db0f191bb7240e68bab363afb1df8fc471247894357292653b3907cc863",
+      "shape": [
+        5,
+        35,
+        49
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "model_weights_and_buffers_unchanged": true
+    },
+    {
+      "mode": "rot4",
+      "seconds": 0.16427606507204473,
+      "probability_sha256": "e6e19d404a8f711ae7ba755a3142af769e4c0cf570e9edb7095609ab02ee2212",
+      "shape": [
+        5,
+        35,
+        49
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "model_weights_and_buffers_unchanged": true
+    },
+    {
+      "mode": "dihedral8",
+      "seconds": 0.2787559051066637,
+      "probability_sha256": "275e902d8d8ac710e94fea8fde76e1565cc08946f1ef998637838beb4f3feddb",
+      "shape": [
+        5,
+        35,
+        49
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "model_weights_and_buffers_unchanged": true
+    }
+  ]
+}

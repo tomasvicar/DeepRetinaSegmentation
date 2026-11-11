@@ -754,9 +754,56 @@ def restore_probabilities(probability, geometry):
     return _conditional_probabilities(restored)
 
 
+TTA_OPERATORS = {
+    "none": ((0, False),),
+    "flips2": ((0, False), (0, True)),
+    "rot4": tuple((rotation, False) for rotation in range(4)),
+    "dihedral8": tuple((rotation, flip) for flip in (False, True) for rotation in range(4)),
+}
+
+
+def tta_protocol(tta):
+    """Explicit experimental protocol; the default adds no report fields."""
+    if tta not in TTA_OPERATORS:
+        raise ValueError(f"Unknown unified TTA mode: {tta!r}")
+    if tta == "none":
+        return {}
+    return {
+        "tta": {
+            "mode": tta,
+            "operators": [
+                {"rot90_ccw": rotation, "horizontal_flip_after_rotation": flip}
+                for rotation, flip in TTA_OPERATORS[tta]
+            ],
+            "domain": "full_prepared_RGB01_after_photometry_before_tiling",
+            "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+            "precision": "float32_no_autocast",
+            "experimental": True,
+            "original_standalone_certification": False,
+        }
+    }
+
+
+def _tta_transform(image, rotation, flip):
+    image = torch.rot90(image, rotation, (-2, -1))
+    return image.flip(-1) if flip else image
+
+
+def _tta_inverse(probability, rotation, flip):
+    if flip:
+        probability = np.flip(probability, axis=-1)
+    return np.rot90(probability, -rotation, axes=(-2, -1))
+
+
 @torch.inference_mode()
-def predict_probabilities(model, image, device, config=None, tile_size=512, overlap=64):
-    """C=5 probabilities; BF16 training never enables reduced-precision inference."""
+def predict_probabilities(
+    model, image, device, config=None, tile_size=512, overlap=64, *, tta="none"
+):
+    """C=5 probabilities from full prepared, already profile-processed RGB01.
+
+    Photometry belongs before crop/tiling, never independently to inference tiles.
+    """
+    tta_protocol(tta)
     settings = (
         asdict(config)
         if isinstance(config, UnifiedConfig)
@@ -764,7 +811,21 @@ def predict_probabilities(model, image, device, config=None, tile_size=512, over
     )
     precision = settings.get("mixed_precision", "none")
     with _precision_context(UnifiedConfig(mixed_precision=precision), device, training=False):
-        return _predict_probabilities(model, image, device, config, tile_size, overlap)
+        if tta == "none":
+            return _predict_probabilities(model, image, device, config, tile_size, overlap)
+        with torch.autocast(device_type=torch.device(device).type, enabled=False):
+            joint = None
+            for rotation, flip in TTA_OPERATORS[tta]:
+                prediction = _predict_probabilities(
+                    model, _tta_transform(image, rotation, flip), device, config, tile_size, overlap
+                )
+                aligned = _tta_inverse(_joint_probabilities(prediction), rotation, flip)
+                if joint is None:
+                    joint = aligned.copy()
+                else:
+                    joint += aligned
+            joint /= np.float32(len(TTA_OPERATORS[tta]))
+            return _conditional_probabilities(joint)
 
 
 def _predict_probabilities(model, image, device, config=None, tile_size=512, overlap=64):
@@ -841,8 +902,17 @@ def _metrics(counts):
 
 
 def evaluate_unified_model(
-    model, manifest, split="val", device="cpu", config=None, threshold=0.5, derived_cache=None
+    model,
+    manifest,
+    split="val",
+    device="cpu",
+    config=None,
+    threshold=0.5,
+    derived_cache=None,
+    *,
+    tta="none",
 ):
+    tta_protocol(tta)
     cfg = (
         UnifiedConfig(**config)
         if isinstance(config, dict)
@@ -866,7 +936,15 @@ def evaluate_unified_model(
         image, target, valid, trace = dataset.sample(
             index, random_annotator=False, return_trace=True
         )
-        probability = predict_probabilities(model, image, device, cfg, cfg.tile_size, cfg.overlap)
+        probability = predict_probabilities(
+            model,
+            image,
+            device,
+            cfg,
+            cfg.tile_size,
+            cfg.overlap,
+            **({"tta": tta} if tta != "none" else {}),
+        )
         masks = decode_probabilities(probability, threshold, supported)
         t, v = target.numpy() >= 0.5, valid.numpy()
         v[~supported] = False
@@ -957,6 +1035,7 @@ def evaluate_unified_model(
         "by_dataset": dataset_metrics,
         "per_photo": per_photo,
         "threshold": threshold,
+        **tta_protocol(tta),
     }
 
 
@@ -1013,6 +1092,7 @@ def predict_unified(
     threshold=0.5,
     tile_size=None,
     overlap=None,
+    tta="none",
 ):
     """Complete raw-photo prediction with the verified legacy25_raw geometry.
 
@@ -1022,6 +1102,7 @@ def predict_unified(
     from .legacy.preprocessing import prepare_single_net
     from .prediction_output import check_prediction_output
 
+    tta_protocol(tta)
     output = check_prediction_output(output)
     model, payload, device = load_unified(checkpoint, device)
     with Image.open(image_path) as photo:
@@ -1043,7 +1124,13 @@ def predict_unified(
     # PreparedImage.tensor() is already centered; low-level inference expects01.
     tensor = torch.from_numpy(prepared.image.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(
-        model, tensor, device, config, config.tile_size, config.overlap
+        model,
+        tensor,
+        device,
+        config,
+        config.tile_size,
+        config.overlap,
+        **({"tta": tta} if tta != "none" else {}),
     )
     probability[list(SEGMENTATION_CHANNELS)] *= prepared.fov[None]
     probability = restore_probabilities(probability, prepared.geometry)
@@ -1123,6 +1210,7 @@ def predict_unified(
                 if value is not None
             },
         },
+        **tta_protocol(tta),
         "outputs": paths,
     }
     _write_json(output / "prediction.json", metadata)
