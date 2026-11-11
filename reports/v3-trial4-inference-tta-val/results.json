@@ -1,0 +1,492 @@
+{
+  "kind": "exploratory_completed_native_pool72_trial4_BEST54_TTA_VAL_with_separate_LAST60_control",
+  "source_commit": "318e342fe12d579a004ae7143fcf5e6155328a0b",
+  "evaluation_source_sha256": "198fdd476505ab38437f8668945d24c39dfb344a5d8fd96a4bb2c9d3a7400d05",
+  "original_training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+  "protocol": {
+    "split": "val",
+    "photos": 770,
+    "groups": 612,
+    "raw_pixels_per_degree": 25,
+    "FP32": true,
+    "tile_size": 512,
+    "overlap": 64,
+    "threshold": 0.5,
+    "CPU_threads": 2,
+    "interop_threads": 1,
+    "bootstrap_draws": 2000,
+    "seed": 42
+  },
+  "cases": {
+    "best54-none": {
+      "checkpoint": {
+        "epoch": 54,
+        "sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+        "steps": 110592,
+        "training_selection_score": 0.8150572613641757
+      },
+      "selected_role": "training_best",
+      "macro_dataset_mean_dice": 0.8150589335867975,
+      "macro_dataset_channel_dice": {
+        "artery": 0.7251181239624906,
+        "cup": 0.8689387974239909,
+        "disc": 0.9259153316650942,
+        "vein": 0.7675378382458503,
+        "vessel": 0.7877845766365614
+      },
+      "pooled_channels": {
+        "artery": {
+          "dice": 0.7462246730693496,
+          "fn": 368184,
+          "fp": 195014,
+          "iou": 0.5951821327479554,
+          "precision": 0.8093805410076106,
+          "recall": 0.6922114921620031,
+          "tp": 828040,
+          "valid_pixels": 2626284
+        },
+        "cup": {
+          "dice": 0.8766249955655876,
+          "fn": 347795,
+          "fp": 399926,
+          "iou": 0.7803493865407337,
+          "precision": 0.8691488488039464,
+          "recall": 0.8842308731873783,
+          "tp": 2656417,
+          "valid_pixels": 517984979
+        },
+        "disc": {
+          "dice": 0.9373573131791714,
+          "fn": 921165,
+          "fp": 757217,
+          "iou": 0.8821001873955572,
+          "precision": 0.9431283853135132,
+          "recall": 0.9316564387318835,
+          "tp": 12557281,
+          "valid_pixels": 583880677
+        },
+        "vein": {
+          "dice": 0.7869025238830062,
+          "fn": 399728,
+          "fp": 158311,
+          "iou": 0.6486721301257704,
+          "precision": 0.86681366903267,
+          "recall": 0.7204816581122471,
+          "tp": 1030332,
+          "valid_pixels": 2626284
+        },
+        "vessel": {
+          "dice": 0.7631446113775948,
+          "fn": 1630839,
+          "fp": 1385413,
+          "iou": 0.6170039103985925,
+          "precision": 0.7781412756324572,
+          "recall": 0.7487150614352945,
+          "tp": 4859160,
+          "valid_pixels": 60922737
+        }
+      },
+      "conditional_av_accuracy": 0.8239173676571155,
+      "end_to_end_av_accuracy": 0.7076051181060388,
+      "invocation_seconds": 220.33388845203444,
+      "counts_file": "best54-none-counts.json",
+      "original_evidence_kind": "unified_validation_evidence",
+      "original_whole_report_sha256": "f5fcdecf46591edf2d4c9b445e8147424f976e6ae363fa805873c173ee0e6db7"
+    },
+    "best54-flips2": {
+      "checkpoint": {
+        "epoch": 54,
+        "sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+        "steps": 110592,
+        "training_selection_score": 0.8150572613641757
+      },
+      "selected_role": "training_best",
+      "macro_dataset_mean_dice": 0.8160656910901061,
+      "macro_dataset_channel_dice": {
+        "artery": 0.7257132421234573,
+        "cup": 0.8695197793352465,
+        "disc": 0.9269525107863034,
+        "vein": 0.7676619482943834,
+        "vessel": 0.7904809749111396
+      },
+      "pooled_channels": {
+        "artery": {
+          "dice": 0.7487491742591298,
+          "fn": 364838,
+          "fp": 193123,
+          "iou": 0.5984005435647106,
+          "precision": 0.8114970195479005,
+          "recall": 0.6950086271467552,
+          "tp": 831386,
+          "valid_pixels": 2626284
+        },
+        "cup": {
+          "dice": 0.8772992226281773,
+          "fn": 326400,
+          "fp": 422648,
+          "iou": 0.7814185580969167,
+          "precision": 0.8636821632918986,
+          "recall": 0.8913525410323905,
+          "tp": 2677812,
+          "valid_pixels": 517984979
+        },
+        "disc": {
+          "dice": 0.9390078891035002,
+          "fn": 913057,
+          "fp": 719282,
+          "iou": 0.8850281538003827,
+          "precision": 0.9458562428832449,
+          "recall": 0.9322579917595841,
+          "tp": 12565389,
+          "valid_pixels": 583880677
+        },
+        "vein": {
+          "dice": 0.7890760054494041,
+          "fn": 396185,
+          "fp": 156535,
+          "iou": 0.6516313236837378,
+          "precision": 0.8685032887828563,
+          "recall": 0.7229591765380473,
+          "tp": 1033875,
+          "valid_pixels": 2626284
+        },
+        "vessel": {
+          "dice": 0.7656329319777956,
+          "fn": 1620773,
+          "fp": 1360254,
+          "iou": 0.6202635762184989,
+          "precision": 0.7816424484868721,
+          "recall": 0.7502660632151099,
+          "tp": 4869226,
+          "valid_pixels": 60922737
+        }
+      },
+      "conditional_av_accuracy": 0.8263123866268842,
+      "end_to_end_av_accuracy": 0.7102282159888268,
+      "invocation_seconds": 359.0002118709963,
+      "counts_file": "best54-flips2-counts.json",
+      "original_evidence_kind": "unified_tta_validation_evidence",
+      "original_whole_report_sha256": "5fb8d7a9211a9d4115f5921aa7ed111533c71fc6064106f41379a5c64a1ac1ce"
+    },
+    "best54-rot4": {
+      "checkpoint": {
+        "epoch": 54,
+        "sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+        "steps": 110592,
+        "training_selection_score": 0.8150572613641757
+      },
+      "selected_role": "training_best",
+      "macro_dataset_mean_dice": 0.8194117715244763,
+      "macro_dataset_channel_dice": {
+        "artery": 0.7291258271258173,
+        "cup": 0.8727449909520958,
+        "disc": 0.9288437317190266,
+        "vein": 0.7740437124204542,
+        "vessel": 0.7923005954049885
+      },
+      "pooled_channels": {
+        "artery": {
+          "dice": 0.7542238143839431,
+          "fn": 361546,
+          "fp": 182441,
+          "iou": 0.6054248131344453,
+          "precision": 0.8206296411727635,
+          "recall": 0.6977606200845327,
+          "tp": 834678,
+          "valid_pixels": 2626284
+        },
+        "cup": {
+          "dice": 0.880924936436304,
+          "fn": 311768,
+          "fp": 416110,
+          "iou": 0.7871902119157203,
+          "precision": 0.8661403340588583,
+          "recall": 0.8962230361905218,
+          "tp": 2692444,
+          "valid_pixels": 517984979
+        },
+        "disc": {
+          "dice": 0.9400399184299921,
+          "fn": 895027,
+          "fp": 710230,
+          "iou": 0.8868635100272921,
+          "precision": 0.9465737360750235,
+          "recall": 0.9335956830631662,
+          "tp": 12583419,
+          "valid_pixels": 583880677
+        },
+        "vein": {
+          "dice": 0.7954063885333276,
+          "fn": 385174,
+          "fp": 152355,
+          "iou": 0.6603109803686138,
+          "precision": 0.8727449193604295,
+          "recall": 0.7306588534746794,
+          "tp": 1044886,
+          "valid_pixels": 2626284
+        },
+        "vessel": {
+          "dice": 0.767487140245717,
+          "fn": 1615527,
+          "fp": 1337949,
+          "iou": 0.6227011216732661,
+          "precision": 0.7846332371872415,
+          "recall": 0.7510743838327247,
+          "tp": 4874472,
+          "valid_pixels": 60922737
+        }
+      },
+      "conditional_av_accuracy": 0.8324716595768012,
+      "end_to_end_av_accuracy": 0.7156743139736601,
+      "invocation_seconds": 624.6949344039895,
+      "counts_file": "best54-rot4-counts.json",
+      "original_evidence_kind": "unified_tta_validation_evidence",
+      "original_whole_report_sha256": "9a1de60d3518fd19d826aa9cd8f92fd1bdc7687848d4384150dce2c2b94c1a81"
+    },
+    "best54-dihedral8": {
+      "checkpoint": {
+        "epoch": 54,
+        "sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+        "steps": 110592,
+        "training_selection_score": 0.8150572613641757
+      },
+      "selected_role": "training_best",
+      "macro_dataset_mean_dice": 0.8193081833430252,
+      "macro_dataset_channel_dice": {
+        "artery": 0.7289508118142074,
+        "cup": 0.8723536483781329,
+        "disc": 0.9287269507247211,
+        "vein": 0.7738874435981942,
+        "vessel": 0.7926220621998703
+      },
+      "pooled_channels": {
+        "artery": {
+          "dice": 0.7546070329104432,
+          "fn": 360974,
+          "fp": 182261,
+          "iou": 0.605918816671926,
+          "precision": 0.8208756465532068,
+          "recall": 0.698238791396929,
+          "tp": 835250,
+          "valid_pixels": 2626284
+        },
+        "cup": {
+          "dice": 0.8810711359477188,
+          "fn": 310500,
+          "fp": 416706,
+          "iou": 0.7874237266137335,
+          "precision": 0.8660289388757395,
+          "recall": 0.8966451102651877,
+          "tp": 2693712,
+          "valid_pixels": 517984979
+        },
+        "disc": {
+          "dice": 0.940160254771389,
+          "fn": 892759,
+          "fp": 709360,
+          "iou": 0.8870777483142919,
+          "precision": 0.9466447918536881,
+          "recall": 0.9337639517196566,
+          "tp": 12585687,
+          "valid_pixels": 583880677
+        },
+        "vein": {
+          "dice": 0.7955965925850931,
+          "fn": 384913,
+          "fp": 152122,
+          "iou": 0.6605731831104134,
+          "precision": 0.87294250498426,
+          "recall": 0.7308413632994419,
+          "tp": 1045147,
+          "valid_pixels": 2626284
+        },
+        "vessel": {
+          "dice": 0.7677337498682055,
+          "fn": 1615006,
+          "fp": 1334705,
+          "iou": 0.6230258678155749,
+          "precision": 0.7850612058750683,
+          "recall": 0.7511546611948631,
+          "tp": 4874993,
+          "valid_pixels": 60922737
+        }
+      },
+      "conditional_av_accuracy": 0.8327374343368805,
+      "end_to_end_av_accuracy": 0.7159914921615484,
+      "invocation_seconds": 1147.3719664709643,
+      "counts_file": "best54-dihedral8-counts.json",
+      "original_evidence_kind": "unified_tta_validation_evidence",
+      "original_whole_report_sha256": "f603972b95cc75c63d7d8e7fcfbb49e44bba3e3df78a2283687d4efd40848c57"
+    },
+    "last60-none": {
+      "checkpoint": {
+        "epoch": 60,
+        "sha256": "939c7aac465dd74127fffd2ac3d3da765849761681d4af1074a8e25a842b656e",
+        "steps": 122880,
+        "training_selection_score": 0.804570082560543
+      },
+      "selected_role": "fixed_terminal60",
+      "macro_dataset_mean_dice": 0.8045715774616735,
+      "macro_dataset_channel_dice": {
+        "artery": 0.6984317596879767,
+        "cup": 0.8690971220237224,
+        "disc": 0.9265413560188233,
+        "vein": 0.7558501625382761,
+        "vessel": 0.7729374870395689
+      },
+      "pooled_channels": {
+        "artery": {
+          "dice": 0.7242750230547182,
+          "fn": 430079,
+          "fp": 153250,
+          "iou": 0.5677360215906345,
+          "precision": 0.8333142990771105,
+          "recall": 0.6404695107270879,
+          "tp": 766145,
+          "valid_pixels": 2626284
+        },
+        "cup": {
+          "dice": 0.8773524231135971,
+          "fn": 341393,
+          "fp": 403093,
+          "iou": 0.7815029766927234,
+          "precision": 0.8685242759740005,
+          "recall": 0.8863618812520554,
+          "tp": 2662819,
+          "valid_pixels": 517984979
+        },
+        "disc": {
+          "dice": 0.9361111012127633,
+          "fn": 1131486,
+          "fp": 553856,
+          "iou": 0.8798955438672856,
+          "precision": 0.9570681420462086,
+          "recall": 0.9160521917734433,
+          "tp": 12346960,
+          "valid_pixels": 583880677
+        },
+        "vein": {
+          "dice": 0.7711225108546709,
+          "fn": 438777,
+          "fp": 149670,
+          "iou": 0.6275015350724491,
+          "precision": 0.8688201880357911,
+          "recall": 0.693175810805141,
+          "tp": 991283,
+          "valid_pixels": 2626284
+        },
+        "vessel": {
+          "dice": 0.7505026655980935,
+          "fn": 1698629,
+          "fp": 1487060,
+          "iou": 0.6006436708064965,
+          "precision": 0.7631477933177562,
+          "recall": 0.7382697593635993,
+          "tp": 4791370,
+          "valid_pixels": 60922737
+        }
+      },
+      "conditional_av_accuracy": 0.8233237532574542,
+      "end_to_end_av_accuracy": 0.6691690616856364,
+      "invocation_seconds": 222.98521830001846,
+      "counts_file": "last60-none-counts.json",
+      "original_evidence_kind": "unified_validation_evidence",
+      "original_whole_report_sha256": "0e2f3af7654763e2be96947e92a5db603ec4d2b7f62d58f8355180526ffc7191"
+    }
+  },
+  "comparisons": {
+    "best54-dihedral8-vs-baseline.json": {
+      "original_whole_comparison_sha256": "a33516da4ca72aa4a94f1028ac201e7fc280ab84d6ecd3f6df749370bf7d8d58",
+      "comparison_math_sha256": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e",
+      "reference_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+      "candidate_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb"
+    },
+    "best54-flips2-vs-baseline.json": {
+      "original_whole_comparison_sha256": "6fcef5cd18dd2e1122f066d3099ee22d8cfd20efa538942855882c981f8cf504",
+      "comparison_math_sha256": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e",
+      "reference_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+      "candidate_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb"
+    },
+    "best54-rot4-vs-baseline.json": {
+      "original_whole_comparison_sha256": "105a1f9db51c165f34223ca63fd82f70e38c6c301f8b10b847cfba6e29742cf0",
+      "comparison_math_sha256": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e",
+      "reference_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+      "candidate_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb"
+    },
+    "dihedral8-minus-rot4.json": {
+      "original_whole_comparison_sha256": "2e719427a373ee1eaa654a65e7331f9d8de15fa6ca40aa1284274a3d3101c7d9",
+      "comparison_math_sha256": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e",
+      "reference_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+      "candidate_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb"
+    },
+    "dihedral8-V3-minus-TPE.json": {
+      "original_whole_comparison_sha256": "7a3f1674608d2c06dca8d83913397627154a2ae998efaad332739d3ec96bf16f",
+      "comparison_math_sha256": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e",
+      "reference_checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+      "candidate_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb"
+    },
+    "flips2-V3-minus-TPE.json": {
+      "original_whole_comparison_sha256": "2c52bbf97013368f4c00372a1b5372259b896384c1ad74dca3ec8e2b5315dae8",
+      "comparison_math_sha256": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e",
+      "reference_checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+      "candidate_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb"
+    },
+    "none-V3-minus-TPE.json": {
+      "original_whole_comparison_sha256": "d62c14071d7d00a82b70abb99f754e8f9b73953c6ad2d61a26053b74f6cbf063",
+      "comparison_math_sha256": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e",
+      "reference_checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+      "candidate_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb"
+    },
+    "rot4-V3-minus-TPE.json": {
+      "original_whole_comparison_sha256": "33a34e95f6bd6d5d912b6ed435c68bcf1fed0ea28729cfd006f4d593d2cc3b3a",
+      "comparison_math_sha256": "8fcd87112ba25a6093337088ad5dfe2af57ae8337cc2f4a05eb031acbbf7fe4e",
+      "reference_checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+      "candidate_checkpoint_sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb"
+    }
+  },
+  "actual_observed_supervisor_exit": 0,
+  "actual_observed_child_exits": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "total_seconds": 2575.7094296270516,
+  "original_inputs_unchanged": true,
+  "completed_original_reports_readonly": true,
+  "fresh_none_vs_saved_native": {
+    "saved_native_report_sha256": "b8d96efa75068ef8735f8d8033469168330b3784cfd9a8951a75cc22d6bd4464",
+    "support_exact_equal": true,
+    "all_metrics_except_runtime_exact_equal": false,
+    "per_photo_counts_exact_equal": false,
+    "scope": "Native stored sidecar is not independently fresh; new Old none is the matched baseline. No raw masks/probability parity claim."
+  },
+  "same_mode_prior_TPE_context": {
+    "checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+    "epoch": 58,
+    "source_commit": "1f723ad92898fad8b04a6ef8b39065f021f52a9c",
+    "execution_sha256": "c4ebf0618052054a09921263010d1613aed97534d28878beb75eaa769620cc0a",
+    "evaluation_source_sha256": "21d1eb578db6df3e38457ed64c3b46937cd60c523547de13687d7c519d7e04d7",
+    "same_physical_device_class": true,
+    "exact_GT_support": true,
+    "qualification": "Different executed source and model contexts; numeric microdrift cannot be isolated or attributed to model choice. Original TPE evidence kinds are preserved in their original report; these are analysis-only comparisons."
+  },
+  "qualifications": [
+    "Uncorrected exploratory source-stratified paired percentile intervals conditional on adaptive VAL and fixed checkpoints; no training-seed variance or clinical independence claim.",
+    "612known groups preserve recovered aliases; unknown patient independence remains unresolved.",
+    "Direct8minus4 macro is negative with interval crossingzero; no equivalence or selected default.",
+    "Full allhead/source and conditional/end-to-endAV results retain adverse outcomes.",
+    "Invocation seconds include full VAL process/preparation/integrity overhead; fixed order and warm cache qualify cost, no latencyCI or resident benchmark.",
+    "Public count views omit raw identities and operational details and cannot be submitted as original gated validation evidence.",
+    "No TEST, training, threshold followup quality, final selection, model promotion or default change is created by this export."
+  ],
+  "new_NN_performed_by_export": false,
+  "raw_report_sha256": {
+    "best54-none": "f5fcdecf46591edf2d4c9b445e8147424f976e6ae363fa805873c173ee0e6db7",
+    "best54-flips2": "5fb8d7a9211a9d4115f5921aa7ed111533c71fc6064106f41379a5c64a1ac1ce",
+    "best54-rot4": "9a1de60d3518fd19d826aa9cd8f92fd1bdc7687848d4384150dce2c2b94c1a81",
+    "best54-dihedral8": "f603972b95cc75c63d7d8e7fcfbb49e44bba3e3df78a2283687d4efd40848c57",
+    "last60-none": "0e2f3af7654763e2be96947e92a5db603ec4d2b7f62d58f8355180526ffc7191"
+  }
+}

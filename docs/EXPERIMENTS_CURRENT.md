@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11, 16:30:31 UTC E1 observation**. Completed VAL and
+Snapshot: **2026-11-11, V3 TTA complete; threshold v2 launch18:29:57UTC**. Completed VAL and
 CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
 claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -18,7 +18,7 @@ The completed first TPE BEST58 is now also available there as
 `unified-v3-tpe-preview`, with exact original20d4caab… weights and optional
 `--tta rot4`. The [model card and retraining recipe](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/for_Leipzig/docs/UNIFIED_V3_TPE_PREVIEW.md)
 keep it explicitly experimental, with no TEST/default-winner claim. It is not the
-later native trial6 currently training on Ada. All eleven previous model blobs
+later native trial6 run described below. All eleven previous model blobs
 and original aliases remain unchanged.
 
 Canonical V2 has **2,529 TRAIN photographs / 5,700 annotation records from21
@@ -45,26 +45,37 @@ At17:35UTC the same actual Ada run had completed E18/36,864 updates; its
 observer, supervisor and NN were independently observed alive. This remains
 unfinished training, not a new quality result.
 
-A fresh native V3 trial4 BEST54 validation sweep actually started on the local
-GTX1060 at17:37:11UTC. Four modes (none/flips2/rot4/dihedral8) each evaluate all770
-VAL photos under final source318e342, FP32, tile512/overlap64 and threshold.5.
-Its unchanged5400s envelope includes60s cleanup reserve; LAST60 none is optional
-only if budget permits. This is separate from the completed first-TPE sweep
-below. No result or completion is claimed yet. Original pool completion evidence
-is preserved; no standalone receipt is fabricated. The
-[reviewed TTA selection route](FINAL_SELECTION_TTA.md) binds the exact inference
-descriptor to fresh validation and later frozen execution. No selection or
-TEST evaluation has been performed by adding that route.
+The [native V3 trial4 BEST54 TTA sweep](../reports/v3-trial4-inference-tta-val)
+completed all four modes on all 770 VAL with observed child and external supervisor
+exits0. Separate LAST60none also completed770 VAL. Total42m55.7s under the unchanged
+5400s/60s envelope; source/input hashes stayed unchanged. Genuine `pool_72_v3`
+completion/selected-role proofs are retained, with own5700 annotations/2529 TRAIN
+photos in both BEST54 and LAST60. Fresh source318e342/evaluation198fdd47 remains
+separate from original checkpoint training3725; no standalone evidence is fabricated.
 
-The first required fresh V3 BEST54 `none` case subsequently finished with actual
-child exit0 in220.33s:770VAL, macro.8150589336, vessel.7631446114 and
-conditionalAV.8239173677 (report SHA
-`f5fcdecf46591edf2d4c9b445e8147424f976e6ae363fa805873c173ee0e6db7`).
-GT supports match the saved native sidecar exactly; per-photo counts do not.
-The macro difference from the saved sidecar is only+0.0000016722 and is not
-attributed to a causal backend change. This actual fresh `none` is the matched
-control for the remaining modes. The full sweep is still running; no aggregate
-completion or final winner is claimed.
+Fresh BEST54 none macro.815058934 increases to.816065691 with flips2,
+.819411772 with rot4 and.819308183 with dihedral8. Direct8minus4 macro is
+**−.000103588 [−.000497407,+.000299564]**; the interval crossing zero does not
+establish equivalence. Vessel gains a small+.000246610[+.000116107,+.000368509],
+while IOSTAR artery/vein Dice and conditional AV have negative direct 8 minus 4
+intervals (IOSTAR AV−.001555724[−.002377373,−.000765184]). Aggregate conditionalAV
+rot4.832471660 versus8.832737434 has a crossing zero difference interval. RIMONEcup
+also has an adverse point. Full all head/source/AV counts and intervals are exported.
+Separate LAST60none macro.804571577 is below BEST54none; roles are not substituted.
+
+All GT support matches the saved native sidecar, but fresh BEST54none prediction
+counts are not bitwise equal (macro+1.67222e−6); the saved sidecar is not a previous
+independently fresh control. Same-mode V3minusfirstTPErot4 macro+.001356551 has
+CI[−.001441812,+.007475376], with lower pooledvein/cup and conditionalAV despite
+higher artery/disc/vessel pointDice. Source/model contexts differ; no isolated model
+causality or blanket dominance is claimed. The earlier TPE8minus4 result is distinct.
+
+The [reviewed TTA selection route](FINAL_SELECTION_TTA.md) binds exact inference
+descriptors to fresh validation and later frozen execution. No final model, default
+promotion or TEST selection is made here. A first threshold-followup attempt failed
+before model loading with a missing sibling-helper import and actual outer exit1;
+it produced **no quality result**. A corrected v2 observer actually launched at18:29:57UTC; startup was being
+checked separately. No threshold quality or completion is claimed by this snapshot.
 
 The separate [TPE BEST58 TTA sweep](../reports/tpe72-inference-tta-val) completed
 all four770-VAL cases with observed child and parent exits0, unchanged inputs and
@@ -100,6 +111,9 @@ equivalence is inferred; consult the actual exploratory VAL intervals/adverse he
 | V3 control0 LAST60 | Saved native counts, typed pool eligibility | .801188 | .758714 | .808460 |
 | V3 trial4 BEST54 | Saved native counts, typed pool eligibility | .815057 | .763145 | .823922 |
 | V3 trial4 LAST60 | Saved native counts, typed pool eligibility | .804570 | .750500 | .823318 |
+| V3 trial4 BEST54 none | Fresh Old VAL770, typed pool role | .815059 | .763145 | .823917 |
+| V3 trial4 BEST54 rot4 | Fresh Old VAL770, typed pool role | .819412 | .767487 | .832472 |
+| V3 trial4 LAST60 none | Fresh Old VAL770, typed pool role | .804572 | 0.750503 | .823324 |
 | Auxiliary TPE candidate BEST58 | Independently fresh VAL770 | .810895 | .762882 | .824912 |
 | Auxiliary TPE candidate LAST60 | Independently fresh VAL770 | .808833 | .760803 | .821755 |
 
@@ -132,7 +146,7 @@ forward was run to assign a cause. Use the fresh counts for those fresh reports.
 
 The frozen original vessel reference is .77012340. Every V3/TPE vessel value above
 still falls below it. TPE BEST's vessel difference is−.007241 with exploratory
-paired95% interval[−.014591,−.000693]. Its macro difference against trial4 BEST is
+paired 95% interval[−.014591,−.000693]. Its macro difference against trial4 BEST is
 −.004162[−.012850,−.000147], while its LAST improves on trial4 LAST in vessel Dice.
 These are different roles/configurations/environments, not a causal single-factor
 experiment. A macro-BEST cannot replace the study's fixed-LAST worst-of-six
@@ -153,7 +167,7 @@ is a scoped latency/size measurement, not general throughput or quality evidence
 ## Completed inference experiments on the same vascular4 BEST55
 
 The [four tiling protocols](../reports/vascular4-inference-tiling-val) completed on
-all770 VAL photographs with observed child and parent exits0. None had a macro
+all 770 VAL photographs with observed child and parent exits0. None had a macro
 interval excluding zero;1024/256 reduced vessel Dice by .00075635 with an entirely
 negative paired interval. No tiling default was promoted.
 
@@ -161,7 +175,7 @@ The separate [spatial TTA experiment](../reports/inference-tta-vascular4) also
 completed all four cases with observed child/parent exits0, unchanged inputs and
 read-only reports. FP32, tile512/overlap64, threshold.5, one GTX1060, CPU2/inter-op1:
 
-| Mode | Macro Dice | Change vs fresh none [paired95% CI] | Conditional AV | Invocation seconds |
+| Mode | Macro Dice | Change vs fresh none [paired 95% CI] | Conditional AV | Invocation seconds |
 | --- | ---: | --- | ---: | ---: |
 | none | .805973 | reference | .822879 | 204.60 |
 | flips2 | .809128 | +.003156[.001669,.004872] | .829177 | 324.17 |
