@@ -61,4 +61,23 @@ used the wrong optimizer field name and failed before issuing a success record;
 the committed verifier uses the actual `training_state.optimizer` schema and
 completed successfully. No training rerun was needed.
 
-The full-frame native A/V check is still pending; this report does not certify it.
+## Actual full-frame A/V CPU attempt: controlled memory defer
+
+The separate exact-production A/V CPU attempt used the original full TRAIN
+frame1031×1033, batch1, unchanged constructor and one-epoch recipe. Root first
+independently ran all five wrapper/process tests (5passed0.62s) and inspected
+the corrected full VAL geometry1033×1040. Actual execution used helper413b654,
+SHA bf8be02061b8563c1cb7e020140c8c3a7139ca9f35030db826b413e80aa6bf2c.
+
+The group RSS crossed its3GiB limit at3,186,820KiB after12.86s. The observer
+stopped only its owned group, observed child−15 and returned75, with explicit
+`own_group_RSS_limit`, no exception and no automatic retry. Only run metadata
+exists; there is no completed A/V checkpoint, optimizer step or safe-reload proof
+claimed. System available memory recovered above6,100MiB after cleanup. See
+`av-train-observed-exit.json` and `av-train-launch.json` for original bytes.
+
+The full-frame native A/V check remains pending on a suitable free GPU. Neither
+the CPU memory cap nor batch/geometry will be silently changed to call this a
+successful run. This functional resource defer is unrelated to segmentation
+quality or Meta PBS state. The committed helper also supports a separate bounded
+verification phase only after an actual successful train exit; it was not run.

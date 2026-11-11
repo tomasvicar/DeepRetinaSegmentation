@@ -189,5 +189,7 @@ for one epoch on a separate four-photo TRAIN/VAL subset. All four completed actu
 optimizer updates and full-frame VAL, saved/reloaded finite checkpoints and changed
 parameters versus their same-seed fresh initialization. No custom small architecture,
 original-weight initialization or TEST input was used. This is a bounded code-path
-check, not full-corpus retraining or evidence of model quality. Real full-frame A/V
-verification remains separate and pending.
+check, not full-corpus retraining or evidence of model quality. A real full-frame
+A/V CPU attempt was stopped by its3GiB resource cap before completion. Its actual
+nonzero result is retained in the same report; successful full-frame A/V
+verification remains pending on a suitable free GPU.
