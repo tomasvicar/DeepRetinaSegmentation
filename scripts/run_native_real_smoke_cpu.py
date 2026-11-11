@@ -17,6 +17,10 @@ PRESETS = {
 }
 
 
+def interrupted(signum, _frame):
+    raise SystemExit(128 + signum)
+
+
 def run(preset, manifest, output_root, core):
     source = Path(__file__).resolve().parents[1]
     output_root = Path(output_root)
@@ -65,6 +69,7 @@ def run(preset, manifest, output_root, core):
         MKL_NUM_THREADS="1",
     )
     start, peak, reason = time.monotonic(), 0, None
+    signal.signal(signal.SIGTERM, interrupted)
     with logpath.open("x") as log:
         child = subprocess.Popen(
             command,
@@ -75,45 +80,50 @@ def run(preset, manifest, output_root, core):
             stderr=subprocess.STDOUT,
             start_new_session=True,
         )
-        launch.write_text(
-            json.dumps(
-                {
-                    "utc": datetime.datetime.now(datetime.UTC).isoformat(),
-                    "pid": child.pid,
-                    "command": command,
-                    "source_commit": subprocess.check_output(
-                        ["git", "-C", str(source), "rev-parse", "HEAD"],
-                        text=True,
-                    ).strip(),
-                    "maximum_seconds": 300,
-                    "max_RSS_KiB": 2097152,
-                    "minimum_MemAvailable_KiB": 2097152,
-                    "device": "cpu",
-                },
-                indent=2,
-            )
-            + "\n"
-        )
-        while child.poll() is None:
-            try:
-                status = dict(
-                    line.split(":", 1)
-                    for line in Path(f"/proc/{child.pid}/status").read_text().splitlines()
-                    if ":" in line
+        try:
+            launch.write_text(
+                json.dumps(
+                    {
+                        "utc": datetime.datetime.now(datetime.UTC).isoformat(),
+                        "pid": child.pid,
+                        "command": command,
+                        "source_commit": subprocess.check_output(
+                            ["git", "-C", str(source), "rev-parse", "HEAD"],
+                            text=True,
+                        ).strip(),
+                        "maximum_seconds": 300,
+                        "max_RSS_KiB": 2097152,
+                        "minimum_MemAvailable_KiB": 2097152,
+                        "device": "cpu",
+                    },
+                    indent=2,
                 )
-                peak = max(peak, int(status.get("VmRSS", "0 kB").split()[0]))
-            except FileNotFoundError:
-                pass
-            memory = dict(
-                line.split(":", 1) for line in Path("/proc/meminfo").read_text().splitlines()
+                + "\n"
             )
-            if time.monotonic() - start > 300:
-                reason = "deadline"
-            elif peak > 2097152:
-                reason = "own_RSS_limit"
-            elif int(memory["MemAvailable"].split()[0]) < 2097152:
-                reason = "system_MemAvailable_limit"
-            if reason:
+            while child.poll() is None:
+                try:
+                    status = dict(
+                        line.split(":", 1)
+                        for line in Path(f"/proc/{child.pid}/status").read_text().splitlines()
+                        if ":" in line
+                    )
+                    peak = max(peak, int(status.get("VmRSS", "0 kB").split()[0]))
+                except FileNotFoundError:
+                    pass
+                memory = dict(
+                    line.split(":", 1) for line in Path("/proc/meminfo").read_text().splitlines()
+                )
+                if time.monotonic() - start > 300:
+                    reason = "deadline"
+                elif peak > 2097152:
+                    reason = "own_RSS_limit"
+                elif int(memory["MemAvailable"].split()[0]) < 2097152:
+                    reason = "system_MemAvailable_limit"
+                if reason:
+                    break
+                time.sleep(0.5)
+        finally:
+            if child.poll() is None:
                 try:
                     os.killpg(child.pid, signal.SIGTERM)
                 except ProcessLookupError:
@@ -122,8 +132,7 @@ def run(preset, manifest, output_root, core):
                     child.wait(timeout=5)
                 except subprocess.TimeoutExpired:
                     os.killpg(child.pid, signal.SIGKILL)
-                break
-            time.sleep(0.5)
+                    child.wait()
         code = child.wait()
     receipt = {
         "kind": "actual_external_native_real_CPU_smoke_exit",
