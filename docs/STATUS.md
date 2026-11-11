@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 11. 11. 2026, po přibalení dokončeného TPE preview a ověření TTA. Celkový cíl není dokončený.**
+**Snímek: 11. 11. 2026 v 19:50 UTC, po ověření podpory uloženého preprocessingu. Celkový cíl není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -136,11 +136,19 @@ a [čerstvá měření dokončeného modelu](https://github.com/tomasvicar/DeepR
 Dokončené V3/TPE běhy držely patch 384 a vstup raw25 pevné. Navazující
 kontrolované porovnání zahrnuje patch 256/384/512 se stejným batchem 4
 a dvě fotometrické varianty při patchi 384: CLAHE a korekci osvětlení s CLAHE.
-Implementace opt-in předzpracování je na samostatné experimentální větvi;
-obě úplné cache 3 299 TRAIN/VAL snímků jsou sestavené a ověřené. Všech pět
-úloh bylo skutečně přijato PBS; při poslední společné kontrole ve 14:07 UTC
-čekaly ve frontě. Kontrola v 15:05 selhala kvůli vypršení přihlášení, takže
-aktuální stav není potvrzený a výsledek trénovacího srovnání zatím nemáme.
+Podpora uloženého předzpracování je nyní i v předatelné větvi; obě úplné
+cache 3 299 TRAIN/VAL snímků jsou sestavené a ověřené. Patch256 dokončil
+60 epoch a samostatnou čerstvou validaci BEST52 i LAST60 na všech 770 VAL
+snímcích. BEST macro 0,80123, vessel 0,75944 a conditional A/V 0,80150
+zaostávají za rodičovským TPE modelem; příslušné párové intervaly rozdílu jsou
+záporné. Tento model nepřebíráme jako zlepšení. Další čtyři úlohy zůstaly při
+kontrole 19:48 UTC aktivní; LC měla v 19:50 UTC dokončenou epochu 58/60.
+[Úplné výsledky a omezení porovnání](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/curated-raw256-fresh-val-20261111).
+Stejný nativní pomocný TPE běh na Adě dosáhl 54/60 epoch; jeho dokončení
+a čerstvá validace ještě nejsou prokázané.
+[Dvě skutečné TRAIN kontroly kompatibility](../reports/product-photometry-real-train-parity)
+daly při portu preprocessingu přesně stejné FP32 pravděpodobnosti a masky pro
+dosavadní TPE preview i původní raw256 checkpoint; nejde o měření kvality.
 Předzpracování se aplikuje na celý snímek před výřezem
 a stejně při predikci, s původními pixely mimo FOV. Vyšší fyzické rozlišení
 vyžaduje novou přípravu z RAW; zvětšení existující cache je nenahrazuje.
