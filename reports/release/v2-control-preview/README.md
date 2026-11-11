@@ -1,9 +1,8 @@
-# Release preview: unified-v2-control
+# Reviewed release: unified-v2-control
 
 This adds a separately named **fixed terminal E60 V2 control**, not an optimized
 final model or all-task win. It preserves the original nine PT files and aliases.
-Root review precedes any fast-forward into `for_Leipzig`; this branch does not
-merge itself. The [model card](../../../docs/UNIFIED_V2_CONTROL.md) has the colleague
+Root reviewed preview commit `94f73da` and fast-forwarded it into `for_Leipzig`. The [model card](../../../docs/UNIFIED_V2_CONTROL.md) has the colleague
 prediction command and per-head caveats.
 
 The published 14,385,264-byte checkpoint is the unchanged terminal `last.pt`, SHA
@@ -25,7 +24,7 @@ Evidence in this directory:
 - `real-cli-smoke.json`: actual raw TRAIN DRIONS CPU CLI, original-frame output
   checks and file hashes only; no raw photograph, prediction image or GT scoring.
 - `release-plan.json`: prior draft ownership/gates completed with actual pins;
-  outstanding root FF review is explicit.
+  root review and completed fast-forward are explicit.
 
 Fresh VAL macro 0.788763 exceeds the frozen original reference 0.667030, while
 pooled vessel 0.750472 is lower than 0.770123 (paired difference interval excludes 0).

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "ACTUAL_FIXED_TERMINAL60_RELEASE_PREVIEW_PENDING_ROOT_FF_REVIEW",
+  "status": "ROOT_REVIEWED_FIXED_TERMINAL60_RELEASED_ON_FOR_LEIPZIG",
   "release_base_commit": "42aa3e3",
   "new_model_name": "unified-v2-control",
   "new_model_filename": "unified-v2-control.pt",
@@ -106,14 +106,14 @@
   "actual_all_annotation_coverage": 5700,
   "fresh_validation_sha256": "b3b7d7e947d85b1c7d0334c8234cf44cc79c19bd1d1498ba4a101f74c0b157d7",
   "satisfied_actual_input_requirements": [
-    "Immutable terminal E60 best checkpoint path and exact SHA256",
+    "Immutable terminal E60 checkpoint path and exact SHA256",
     "Terminal strict QA proof: completed60, finite best/last/optimizer, expected source/data/config/horizon, actual all2529photos and all5700positive record visits",
-    "Actual selected best epoch and training-selection validation score",
-    "Fresh validation on the same immutable best snapshot: producer/source/data/runtime pins and per-head/source/conditional-AV counts/metrics",
+    "Actual fixed terminal epoch, separate best-epoch reference and terminal training-selection validation score",
+    "Fresh validation on the same immutable terminal snapshot: producer/source/data/runtime pins and per-head/source/conditional-AV counts/metrics",
     "Public-safe training CSV/summary and QA metadata to package without private endpoints/operational receipts"
   ],
   "completed_release_steps": [
-    "Copy verified immutable best bytes under new filename only",
+    "Copy verified immutable terminal E60 bytes under new filename only",
     "Append one model registry entry; preserve current9 PT bytes and aliases",
     "Update exact model-set test and new-checkpoint metadata checks",
     "Add quick prediction example with embedded DRIONS nominal-camera policy",
@@ -121,7 +121,18 @@
     "Record proof metadata and actual original-frame finite outputs/hierarchy",
     "Clarify V1 limitations: newer sources now exist in separately prepared V2, not used by V1"
   ],
-  "root_ff_review": "pending",
+  "root_ff_review": {
+    "status": "approved_and_fast_forwarded",
+    "reviewed_preview_commit": "94f73da291afb4370c5cc3ae2a7aecc93073adac",
+    "reviewed_at_utc": "2026-11-11T04:06:27.157244+00:00",
+    "independent_checks": [
+      "All nine prior checkpoint bytes and aliases match 42aa3e3",
+      "Exact tenth terminal checkpoint SHA10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2",
+      "Original completed QA, fresh terminal VAL and task-regression report reviewed",
+      "59 focused tests, actual TRAIN raw CPU CLI smoke and ten-model wheel evidence reviewed",
+      "Runtime Python source unchanged by release; no final selection or TEST authorization"
+    ]
+  },
   "actual_focused_tests_passed": 59,
   "wheel_model_count": 10,
   "real_train_drions_cpu_smoke": "PASS"
