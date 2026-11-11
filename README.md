@@ -19,6 +19,8 @@ See [the project goal and completion criteria](docs/GOAL.md).
 Check out `for_Leipzig`, then use [uv](https://docs.astral.sh/uv/) and Python 3.12:
 
 ```bash
+git clone --branch for_Leipzig https://github.com/tomasvicar/DeepRetinaSegmentation.git
+cd DeepRetinaSegmentation
 uv sync --frozen --dev
 uv run deepretina doctor
 uv run deepretina --help
@@ -78,7 +80,8 @@ An optional `--fov-diameter-pixels 538` supplies an explicit measured diameter
 and takes priority over estimation (538 belongs only to the measured DRIVE
 reference photograph). Add `--vessel-mask /path/to/vessels.png` to classify
 supplied original-frame vessels; otherwise the original vessel model runs first.
-The two raw profile flags are mutually exclusive. Empty/full or unusable FOVs
+The three raw profile flags (`--av-raw-proxy`, `--av-raw-matlab`, and
+`--av-raw-matlab-source`) are mutually exclusive. Empty/full or unusable FOVs
 fail closed when estimating; RIM-ONE, Erlangen, ROC and RIGA require explicit
 calibration because their original source uses special branches. These errors
 are rejected before vessel inference or output creation. See the
@@ -90,7 +93,7 @@ residuals and a synthetic counterexample. Actual saved-model checks on two real
 DRIVE/HRF inputs had **zero vessel-gated class disagreements**; this limited
 result does not establish universal parity or historical training-file provenance.
 
-Both raw A/V modes are **not certified pixel-equivalent to MATLAB**.
+None of the three raw A/V profiles is **certified pixel-equivalent to MATLAB**.
 Prepared-input model arithmetic is verified separately. See
 [original model details](docs/LEGACY_MODELS.md), [A/V input contracts](docs/LEGACY_AV.md)
 and [preprocessing evidence](docs/LEGACY_PREPROCESSING.md).
@@ -150,7 +153,10 @@ source location with `--source ubmi=/path/to/private/data`.
 Preparation preserves official test sets, groups shared DRIVE/RITE images and paired subjects,
 and creates validation only from training data. Prepare related datasets **together**.
 
-Prepared images retain aspect ratio and are at most `--max-size` pixels on their longest side.
+In the basic `deepretina prepare` example above, prepared images retain aspect ratio
+and are at most `--max-size` pixels on their longest side. This capped output is
+for the pilot trainers; native/unified full-data trainers require the canonical
+25-pixels/degree workflow linked above.
 Categorical labels use nearest-neighbour resizing. The manifest and NPZ files describe
 per-channel labels and which pixels are actually annotated; unknown A/V labels are ignored.
 Use a new or empty output directory for each preparation; the manifest contains exactly the

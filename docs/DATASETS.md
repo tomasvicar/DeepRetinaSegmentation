@@ -7,6 +7,21 @@ conversion, large intermediate extraction, pretraining database or network acces
 is required. Dataset selectors are lowercase. All 31 historical selectors are implemented; use
 `uv run deepretina datasets` for the packaged coverage inventory.
 
+## Choose the preparation contract
+
+This page's `max_size`, complete-frame and heuristic-FOV descriptions apply to
+**`deepretina prepare`**, the basic converter used by the pilot trainers. They do
+not describe canonical data required by `train-unified` or `train-legacy`.
+
+For complete native/unified retraining, start from RAW with
+[`scripts/prepare_training_data.py`](UNIFIED_QUICKSTART.md#prepare-all-21-annotated-training-sources-from-raw).
+That workflow jointly prepares all 21 training sources on the explicit
+`legacy25_raw` grid: source-specific camera angle, FOV/crop geometry and
+25 pixels/degree. Targets and validity receive the same geometry. See
+[canonical data](UNIFIED_DATA.md) and the
+[V2 nominal-angle qualifications](CORPUS_V2_PREPARATION.md).
+Do not substitute `deepretina prepare --max-size 1024` for this step.
+
 ## Implemented adapters
 
 | Selector | ZIP | Tasks | Source images | Split policy |

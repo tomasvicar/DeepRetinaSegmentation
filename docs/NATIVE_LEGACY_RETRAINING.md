@@ -10,7 +10,9 @@ Existing original weights, registry aliases and prediction defaults are unchange
 ## Run an explicit fresh training job
 
 Prepare and audit canonical `legacy25_raw`,25px/degree data with fixed TRAIN/VAL/TEST
-memberships first. Geometry-policy-bearing V2 preparations retain their policy in
+memberships first using the [RAW-only 21-source workflow](UNIFIED_QUICKSTART.md#prepare-all-21-annotated-training-sources-from-raw).
+The basic capped `deepretina prepare` output is not a substitute.
+Geometry-policy-bearing V2 preparations retain their policy in
 new checkpoints. Use a new run directory outside the immutable prepared directory.
 The module is directly runnable; the public `train-legacy` CLI registration uses
 the same stdlib-only `legacy_training_cli.add_cli_args`/`train_from_args` API.
@@ -18,10 +20,26 @@ Parser construction/help does not import Torch; runtime imports are lazy.
 
 ```bash
 uv run deepretina train-legacy \
-  --manifest /prepared/manifest.json \
+  --manifest data/rebuilt-training21/manifest.json \
   --config configs/native-legacy-vessel.toml --device cuda:0 \
-  --output /runs/new-native-vessel
+  --output runs/native-vessel
 ```
+
+For the remaining three native families, choose separate new output directories:
+
+```bash
+uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json \
+  --config configs/native-legacy-disc.toml --device cuda:0 --output runs/native-disc
+uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json \
+  --config configs/native-legacy-universal.toml --device cuda:0 --output runs/native-universal
+uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json \
+  --config configs/native-legacy-av.toml --device cuda:0 --output runs/native-av
+```
+
+These are independent jobs; the examples are alternatives or sequential runs,
+not a recommendation to launch all four on one GPU simultaneously. Substitute
+`--device cpu` for a CPU-only machine. The native A/V model trains only eligible
+A/V-labelled sources; it does not invent A/V supervision for the other sources.
 
 The four production presets are `native-legacy-vessel.toml`,
 `native-legacy-disc.toml`, `native-legacy-universal.toml` and
