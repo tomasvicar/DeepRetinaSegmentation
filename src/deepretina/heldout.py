@@ -14,6 +14,7 @@ from pathlib import Path
 import torch
 
 from . import selection as gate
+from .inference_tta import mode_from_protocol
 from .unified import UnifiedConfig, evaluate_unified_model, inference_config, load_unified
 from .validation_evidence import evaluation_runtime
 
@@ -84,6 +85,7 @@ def evaluate_reviewed_heldout(
     )
     frozen = artifact.get("inference_protocol")
     gate.require(isinstance(frozen, dict), "Missing frozen inference protocol")
+    tta = mode_from_protocol(frozen)
     checked = gate.check_selection(
         selection=selection,
         expected_selection_sha256=expected_selection_sha256,
@@ -93,6 +95,7 @@ def evaluate_reviewed_heldout(
         validation_evidence=validation_evidence,
         metrics_csv=metrics_csv,
         training_summary=training_summary,
+        tta=tta,
         threshold=frozen.get("threshold"),
         tile_size=frozen.get("tile_size"),
         overlap=frozen.get("overlap"),
@@ -150,6 +153,7 @@ def evaluate_reviewed_heldout(
             threshold=protocol["threshold"],
             tile_size=protocol["tile_size"],
             overlap=protocol["overlap"],
+            tta=tta,
         )
         == protocol,
         "Evaluated inference protocol differs from frozen selection",
@@ -167,6 +171,7 @@ def evaluate_reviewed_heldout(
             device=actual_device,
             config=config,
             threshold=protocol["threshold"],
+            **({"tta": tta} if tta != "none" else {}),
         )
     runtime["evaluation_finished_at_utc"] = datetime.now(UTC).isoformat()
     metrics["evaluation_runtime"] = runtime

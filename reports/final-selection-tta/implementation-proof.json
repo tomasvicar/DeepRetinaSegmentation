@@ -1,0 +1,208 @@
+{
+  "kind": "implementation_only_no_actual_model_selection",
+  "base_commit": "5eb49fa",
+  "evaluation_identity": {
+    "evaluation_source_sha256": "5e84b23517e85ef11d71562d92dce5546d424a9e42dbec05ecd69aa67236fd84",
+    "source_files": [
+      "src/deepretina/__init__.py",
+      "src/deepretina/__main__.py",
+      "src/deepretina/_frozen_v3/__init__.py",
+      "src/deepretina/_frozen_v3/v2.py",
+      "src/deepretina/_frozen_v3/v3.py",
+      "src/deepretina/adapters/__init__.py",
+      "src/deepretina/adapters/additional.py",
+      "src/deepretina/adapters/auxiliary.py",
+      "src/deepretina/adapters/biomisa.py",
+      "src/deepretina/adapters/core.py",
+      "src/deepretina/adapters/labels.py",
+      "src/deepretina/adapters/segmentation.py",
+      "src/deepretina/augment.py",
+      "src/deepretina/bundled.py",
+      "src/deepretina/cli.py",
+      "src/deepretina/comparison.py",
+      "src/deepretina/completion_profiles.py",
+      "src/deepretina/completion_roles.py",
+      "src/deepretina/dataset.py",
+      "src/deepretina/derived_cache.py",
+      "src/deepretina/engine.py",
+      "src/deepretina/freeze_eligibility.py",
+      "src/deepretina/geometry_policy.py",
+      "src/deepretina/heldout.py",
+      "src/deepretina/inference.py",
+      "src/deepretina/inference_tta.py",
+      "src/deepretina/integrity.py",
+      "src/deepretina/legacy/__init__.py",
+      "src/deepretina/legacy/av.py",
+      "src/deepretina/legacy/checkpoints.py",
+      "src/deepretina/legacy/inference.py",
+      "src/deepretina/legacy/matlab_av.py",
+      "src/deepretina/legacy/matlab_clahe.py",
+      "src/deepretina/legacy/matlab_fov.py",
+      "src/deepretina/legacy/matlab_resize.py",
+      "src/deepretina/legacy/preprocessing.py",
+      "src/deepretina/legacy/raw_proxy.py",
+      "src/deepretina/legacy/single_net.py",
+      "src/deepretina/model.py",
+      "src/deepretina/prepare.py",
+      "src/deepretina/selection.py",
+      "src/deepretina/sources.py",
+      "src/deepretina/unified.py",
+      "src/deepretina/unified_av.py",
+      "src/deepretina/unified_cli.py",
+      "src/deepretina/unified_legacy.py",
+      "src/deepretina/v3_completion.py",
+      "src/deepretina/val_bridge.py",
+      "src/deepretina/validation_evidence.py",
+      "pyproject.toml",
+      "uv.lock"
+    ],
+    "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation",
+    "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+    "runtime": {
+      "installed_distributions": {
+        "torch": "2.6.0+cu124",
+        "numpy": "2.5.4",
+        "Pillow": "13.0.0",
+        "scipy": "1.18.1",
+        "scikit-image": "0.26.0",
+        "opencv-python": null,
+        "opencv-python-headless": "4.14.0.94",
+        "h5py": "3.16.0",
+        "pydicom": "3.0.2"
+      },
+      "python": "3.12.13",
+      "torch": "2.6.0+cu124",
+      "numpy": "2.5.4",
+      "default_dtype": "torch.float32",
+      "float32_matmul_precision": "highest",
+      "cuda_matmul_allow_tf32": false,
+      "cudnn_allow_tf32": true,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": false,
+      "deterministic_algorithms": false,
+      "deterministic_warn_only": false
+    }
+  },
+  "new_training_source_sha256": "a6e2fa4ac5f68c6a346a93598afcefbf144abd8ec0c8571e033e27371a75137f",
+  "source72_original_training_identity_unchanged": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+  "files": {
+    "scripts/unified_validation.py": "a9610c323908810d3ffe86b9b8271fd2d0d067bd5e40fe5c87014a4b72d8c3d5",
+    "scripts/unified_selection.py": "920b1bf364c4b9a54120047481e0976c85a671540ab2a944336d16f6c1558246",
+    "scripts/compare_reviewed_test.py": "9bccff93fca25155b151dbdfe13065417a85618ff460eacad7352d9c42920a2a",
+    "src/deepretina/validation_evidence.py": "04d5bbe06c764656a83a076b00ab66ada3c27362c23dc9f6a2274cbf625946c2",
+    "src/deepretina/heldout.py": "fa2e6dd5a5fe3e04644171ee23a18f8556704dc2d649f502817dba347303a915",
+    "src/deepretina/selection.py": "d30dd504c9fd35bce46acbbf27c94fd982048102fb2c4c1beccbe4bab4b5c94f",
+    "src/deepretina/unified.py": "5b35c3c0141fdaa84976f2081f163b2cd47b7f5624015ad5d9392b19a90d8412",
+    "src/deepretina/inference_tta.py": "ed8324662243f4b1a3d1bb302a91153522e70c66d0ffca64213c7e592ac1c697"
+  },
+  "protocols": {
+    "none": {},
+    "flips2": {
+      "tta": {
+        "version": 1,
+        "mode": "flips2",
+        "operators": [
+          {
+            "rot90_ccw": 0,
+            "horizontal_flip_after_rotation": false
+          },
+          {
+            "rot90_ccw": 0,
+            "horizontal_flip_after_rotation": true
+          }
+        ],
+        "domain": "full_prepared_RGB01_before_tiling",
+        "inverse": "undo_horizontal_flip_then_inverse_rot90_before_combination",
+        "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+        "precision": "float32_no_autocast",
+        "geometry_restoration": "once_after_all_views"
+      }
+    },
+    "rot4": {
+      "tta": {
+        "version": 1,
+        "mode": "rot4",
+        "operators": [
+          {
+            "rot90_ccw": 0,
+            "horizontal_flip_after_rotation": false
+          },
+          {
+            "rot90_ccw": 1,
+            "horizontal_flip_after_rotation": false
+          },
+          {
+            "rot90_ccw": 2,
+            "horizontal_flip_after_rotation": false
+          },
+          {
+            "rot90_ccw": 3,
+            "horizontal_flip_after_rotation": false
+          }
+        ],
+        "domain": "full_prepared_RGB01_before_tiling",
+        "inverse": "undo_horizontal_flip_then_inverse_rot90_before_combination",
+        "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+        "precision": "float32_no_autocast",
+        "geometry_restoration": "once_after_all_views"
+      }
+    },
+    "dihedral8": {
+      "tta": {
+        "version": 1,
+        "mode": "dihedral8",
+        "operators": [
+          {
+            "rot90_ccw": 0,
+            "horizontal_flip_after_rotation": false
+          },
+          {
+            "rot90_ccw": 1,
+            "horizontal_flip_after_rotation": false
+          },
+          {
+            "rot90_ccw": 2,
+            "horizontal_flip_after_rotation": false
+          },
+          {
+            "rot90_ccw": 3,
+            "horizontal_flip_after_rotation": false
+          },
+          {
+            "rot90_ccw": 0,
+            "horizontal_flip_after_rotation": true
+          },
+          {
+            "rot90_ccw": 1,
+            "horizontal_flip_after_rotation": true
+          },
+          {
+            "rot90_ccw": 2,
+            "horizontal_flip_after_rotation": true
+          },
+          {
+            "rot90_ccw": 3,
+            "horizontal_flip_after_rotation": true
+          }
+        ],
+        "domain": "full_prepared_RGB01_before_tiling",
+        "inverse": "undo_horizontal_flip_then_inverse_rot90_before_combination",
+        "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+        "precision": "float32_no_autocast",
+        "geometry_restoration": "once_after_all_views"
+      }
+    }
+  },
+  "eligible_TTA_completion_families": [
+    "standalone_72",
+    "pool_72_v3"
+  ],
+  "completion_verifier_modified": false,
+  "default_none_schema_unchanged": true,
+  "actual_NN_forward": false,
+  "actual_VAL_or_TEST_scoring": false,
+  "selection_artifact_created": false,
+  "test_count": 160,
+  "tests": "106 initial passes +1 corrected import pass +3 additional checks +50 comparator/operator-order checks; no actual data or network forwards",
+  "fresh_actual_VAL_required": true
+}

@@ -46,6 +46,7 @@ def main():
         cmd.add_argument("--threshold", type=float, default=0.5)
         cmd.add_argument("--tile-size", type=int)
         cmd.add_argument("--overlap", type=int)
+        cmd.add_argument("--tta", choices=["none", "flips2", "rot4", "dihedral8"], default="none")
         if name == "create":
             cmd.add_argument("--reviewer", required=True)
             cmd.add_argument("--rationale", required=True)

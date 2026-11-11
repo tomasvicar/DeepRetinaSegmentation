@@ -29,6 +29,7 @@ from .dataset import letterbox_geometry, whole_view
 from .derived_cache import VerifiedCache
 from .geometry_policy import capture_geometry_policy, prediction_geometry, validate_geometry_policy
 from .inference import resolve_device, tile_starts
+from .inference_tta import protocol_extension as tta_protocol
 from .integrity import verify_prepared_content
 from .model import UNet
 
@@ -773,9 +774,34 @@ def restore_probabilities(probability, geometry):
     return _conditional_probabilities(restored)
 
 
+TTA_OPERATORS = {
+    "none": ((0, False),),
+    "flips2": ((0, False), (0, True)),
+    "rot4": tuple((rotation, False) for rotation in range(4)),
+    "dihedral8": tuple((rotation, flip) for flip in (False, True) for rotation in range(4)),
+}
+
+
+def _tta_transform(image, rotation, flip):
+    image = torch.rot90(image, rotation, (-2, -1))
+    return image.flip(-1) if flip else image
+
+
+def _tta_inverse(probability, rotation, flip):
+    if flip:
+        probability = np.flip(probability, axis=-1)
+    return np.rot90(probability, -rotation, axes=(-2, -1))
+
+
 @torch.inference_mode()
-def predict_probabilities(model, image, device, config=None, tile_size=512, overlap=64):
-    """C=5 probabilities; BF16 training never enables reduced-precision inference."""
+def predict_probabilities(
+    model, image, device, config=None, tile_size=512, overlap=64, *, tta="none"
+):
+    """C=5 probabilities from full prepared, already profile-processed RGB01.
+
+    Photometry belongs before crop/tiling, never independently to inference tiles.
+    """
+    tta_protocol(tta)
     settings = (
         asdict(config)
         if isinstance(config, UnifiedConfig)
@@ -783,7 +809,21 @@ def predict_probabilities(model, image, device, config=None, tile_size=512, over
     )
     precision = settings.get("mixed_precision", "none")
     with _precision_context(UnifiedConfig(mixed_precision=precision), device, training=False):
-        return _predict_probabilities(model, image, device, config, tile_size, overlap)
+        if tta == "none":
+            return _predict_probabilities(model, image, device, config, tile_size, overlap)
+        with torch.autocast(device_type=torch.device(device).type, enabled=False):
+            joint = None
+            for rotation, flip in TTA_OPERATORS[tta]:
+                prediction = _predict_probabilities(
+                    model, _tta_transform(image, rotation, flip), device, config, tile_size, overlap
+                )
+                aligned = _tta_inverse(_joint_probabilities(prediction), rotation, flip)
+                if joint is None:
+                    joint = aligned.copy()
+                else:
+                    joint += aligned
+            joint /= np.float32(len(TTA_OPERATORS[tta]))
+            return _conditional_probabilities(joint)
 
 
 def _predict_probabilities(model, image, device, config=None, tile_size=512, overlap=64):
@@ -860,8 +900,17 @@ def _metrics(counts):
 
 
 def evaluate_unified_model(
-    model, manifest, split="val", device="cpu", config=None, threshold=0.5, derived_cache=None
+    model,
+    manifest,
+    split="val",
+    device="cpu",
+    config=None,
+    threshold=0.5,
+    derived_cache=None,
+    *,
+    tta="none",
 ):
+    tta_protocol(tta)
     cfg = (
         UnifiedConfig(**config)
         if isinstance(config, dict)
@@ -885,7 +934,15 @@ def evaluate_unified_model(
         image, target, valid, trace = dataset.sample(
             index, random_annotator=False, return_trace=True
         )
-        probability = predict_probabilities(model, image, device, cfg, cfg.tile_size, cfg.overlap)
+        probability = predict_probabilities(
+            model,
+            image,
+            device,
+            cfg,
+            cfg.tile_size,
+            cfg.overlap,
+            **({"tta": tta} if tta != "none" else {}),
+        )
         masks = decode_probabilities(probability, threshold, supported)
         t, v = target.numpy() >= 0.5, valid.numpy()
         v[~supported] = False
@@ -976,6 +1033,7 @@ def evaluate_unified_model(
         "by_dataset": dataset_metrics,
         "per_photo": per_photo,
         "threshold": threshold,
+        **tta_protocol(tta),
     }
 
 
@@ -1179,6 +1237,7 @@ def _training_source_sha256():
     result = hashlib.sha256()
     for name in (
         "unified.py",
+        "inference_tta.py",
         "geometry_policy.py",
         "unified_legacy.py",
         "unified_av.py",

@@ -16,6 +16,7 @@ from pathlib import Path
 
 from deepretina.comparison import CHANNELS, compare_reports
 from deepretina.completion_profiles import PROFILES, ROLES
+from deepretina.inference_tta import mode_from_protocol, require_metric_extension
 
 TASK_CHANNELS = {
     "vessels": ("vessel",),
@@ -454,6 +455,12 @@ def checked_candidate(
         "Missing completed-run/VAL byte pins",
     )
     protocol = selection["inference_protocol"]
+    tta = mode_from_protocol(protocol)
+    require(
+        tta == "none"
+        or selection["freeze_eligibility"]["family"] in {"standalone_72", "pool_72_v3"},
+        "Reviewed TTA requires source72 typed completion",
+    )
     threshold = protocol["threshold"]
     require(
         type(threshold) in (int, float) and math.isfinite(threshold) and 0 < threshold < 1,
@@ -475,6 +482,7 @@ def checked_candidate(
     # Tile size/overlap may be explicit reviewed overrides; equality to the
     # selected protocol is enforced above rather than to training config defaults.
     metrics = candidate["metrics"]
+    require_metric_extension(metrics, protocol)
     require(
         metrics["family"] == "unified"
         and metrics["purpose"] == "full_data"

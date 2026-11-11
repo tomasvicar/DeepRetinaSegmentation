@@ -3,6 +3,7 @@
 import argparse
 
 import torch
+
 from deepretina.selection import SelectionError
 from deepretina.validation_evidence import produce_validation_evidence
 
@@ -17,6 +18,7 @@ def main(argv=None):
     parser.add_argument("--threshold", type=float, default=0.5)
     parser.add_argument("--tile-size", type=int)
     parser.add_argument("--overlap", type=int)
+    parser.add_argument("--tta", choices=["none", "flips2", "rot4", "dihedral8"], default="none")
     args = parser.parse_args(argv)
     if args.cpu_threads < 1:
         parser.error("--cpu-threads must be positive")
@@ -30,6 +32,7 @@ def main(argv=None):
             threshold=args.threshold,
             tile_size=args.tile_size,
             overlap=args.overlap,
+            tta=args.tta,
         )
     except (SelectionError, ValueError, KeyError, TypeError, OSError) as error:
         parser.exit(2, f"unified-validation: {error}\n")

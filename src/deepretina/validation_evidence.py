@@ -15,6 +15,8 @@ from pathlib import Path
 import torch
 
 from . import selection as gate
+from .completion_profiles import PROFILES
+from .inference_tta import evidence_kind, protocol_extension
 from .unified import (
     UnifiedConfig,
     evaluate_unified_model,
@@ -84,6 +86,7 @@ def produce_validation_evidence(
     threshold=0.5,
     tile_size=None,
     overlap=None,
+    tta="none",
 ):
     """Evaluate an eligible full-data E1..60 snapshot, then write fresh evidence.
 
@@ -91,6 +94,7 @@ def produce_validation_evidence(
     actually completed last60 checkpoint. No historical reports are accepted as
     inputs, and there is intentionally no split argument.
     """
+    protocol_extension(tta)
     output, manifest = Path(output), Path(manifest)
     gate.require(
         not output.exists() and not output.is_symlink(),
@@ -103,9 +107,13 @@ def produce_validation_evidence(
     source_before = gate.evaluation_source_identity()
     snapshot, payload = gate.checkpoint_snapshot(checkpoint)
     gate.canonical({"training_selection_score": payload["val_selection_score"]})
+    gate.require(
+        tta == "none" or payload["training_source_sha256"] == PROFILES["standalone_72"][3],
+        "Reviewed TTA producer requires source72 checkpoint; completion eligibility is checked separately",
+    )
     configuration = gate.config_identity(payload)
     protocol = gate.inference_protocol(
-        payload, threshold=threshold, tile_size=tile_size, overlap=overlap
+        payload, threshold=threshold, tile_size=tile_size, overlap=overlap, tta=tta
     )
     config = inference_config(payload, tile_size=tile_size, overlap=overlap)
     canonical_before = gate._canonical_metadata(manifest)
@@ -138,6 +146,7 @@ def produce_validation_evidence(
             device=actual_device,
             config=config,
             threshold=threshold,
+            **({"tta": tta} if tta != "none" else {}),
         )
     runtime["evaluation_finished_at_utc"] = datetime.now(UTC).isoformat()
     # Recompute provenance from this actual evaluation, never retrofit a thin
@@ -163,7 +172,7 @@ def produce_validation_evidence(
     )
     evidence = {
         "schema_version": gate.VERSION,
-        "kind": "unified_validation_evidence",
+        "kind": evidence_kind(tta),
         "checkpoint": {
             "sha256": gate.digest(snapshot),
             "epoch": payload["epoch"],

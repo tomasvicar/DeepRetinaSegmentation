@@ -21,6 +21,11 @@ from pathlib import Path
 import numpy as np
 import torch
 
+from .inference_tta import (
+    evidence_kind,
+    protocol_extension,
+    require_metric_extension,
+)
 from .integrity import FINGERPRINT_SCHEMA, verify_prepared_content
 from .unified import (
     CHANNELS,
@@ -183,7 +188,7 @@ def config_identity(payload):
     return {"values": config, "sha256": digest(canonical(config))}
 
 
-def inference_protocol(payload, *, threshold=0.5, tile_size=None, overlap=None):
+def inference_protocol(payload, *, threshold=0.5, tile_size=None, overlap=None, tta="none"):
     require(
         type(threshold) in (int, float) and math.isfinite(threshold) and 0 < threshold < 1,
         "Threshold must be finite and in (0,1)",
@@ -216,6 +221,7 @@ def inference_protocol(payload, *, threshold=0.5, tile_size=None, overlap=None):
         "metric_support": SUPPORT,
         "annotation_policy": POLICY,
         "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        **protocol_extension(tta),
     }
 
 
@@ -463,6 +469,10 @@ def reference_support(rows, root):
 
 def validate_metrics(metrics, groups, protocol, config, root, *, expected_split="val"):
     require(expected_split in {"val", "test"}, "Unsupported checked metric split")
+    try:
+        require_metric_extension(metrics, protocol)
+    except (ValueError, TypeError) as error:
+        raise SelectionError(str(error)) from error
     require(
         metrics.get("family") == "unified"
         and metrics.get("split") == expected_split
@@ -753,9 +763,15 @@ def _context(
     threshold=0.5,
     tile_size=None,
     overlap=None,
+    tta="none",
 ):
     from .freeze_eligibility import PROFILES, ROLES, check_freeze_eligibility
 
+    protocol_extension(tta)
+    require(
+        tta == "none" or completion_family in {"standalone_72", "pool_72_v3"},
+        "Reviewed TTA currently requires original standalone_72 or pool_72_v3 completion family",
+    )
     require(
         completion_family in PROFILES and checkpoint_role in ROLES,
         "Final selection requires explicit typed completion family and selected role; no untyped fallback",
@@ -810,7 +826,9 @@ def _context(
     canonical_before = _canonical_metadata(manifest)
     data, groups = data_identity(manifest, best)
     config = UnifiedConfig(**best["config"])
-    protocol = inference_protocol(best, threshold=threshold, tile_size=tile_size, overlap=overlap)
+    protocol = inference_protocol(
+        best, threshold=threshold, tile_size=tile_size, overlap=overlap, tta=tta
+    )
     evidence_snapshot, evidence = json_snapshot(validation_evidence)
     exact(
         evidence,
@@ -830,7 +848,7 @@ def _context(
     require(
         type(evidence["schema_version"]) is int
         and evidence["schema_version"] == VERSION
-        and evidence["kind"] == "unified_validation_evidence",
+        and evidence["kind"] == evidence_kind(tta),
         "Require freshly enriched VAL evidence; thin historical reports are not eligible",
     )
     identity = {
