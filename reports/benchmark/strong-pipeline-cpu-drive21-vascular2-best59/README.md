@@ -18,7 +18,7 @@ The within-run median ratio is **10.507735×**. The unified architecture has abo
 separately from parameter counts; they include serialization and metadata.
 The current BEST59 has **no optimizer/training state**. The older control LAST60
 file (14,385,264 bytes) includes AdamW/RNG state and has identical model-state shapes
-and model tensor bytes to this BEST. Their different file sizes do not establish
+and the same total model-tensor byte count as this BEST. The tensor values differ. Their different file sizes do not establish
 model compression or quantization; both contain float32 floating state.
 
 ## Exact scope and conditions
