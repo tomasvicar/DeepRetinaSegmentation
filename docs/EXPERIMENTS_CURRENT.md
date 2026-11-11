@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11 20:07 UTC; LC training and own-role audit complete**. Completed VAL and
+Snapshot: **2026-11-11 21:20 UTC; TPE6 fresh VAL and LC BEST assessed; TPE7 training started**. Completed VAL and
 CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
 claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -46,8 +46,23 @@ at20:08:57UTC. BEST52 and LAST60 each independently cover2529photos/5700annotati
 The genuine fixed-LAST27 proxy.943596514663 was then told to native auxiliary
 trial6 with actual CLI0, below prior trial5.975134762451; the auxiliary study now
 has7 COMPLETE observations (5 imported,2 native), previous6 and sampler unchanged.
-No new ask or main-study mutation occurred. Fresh final-role VAL is pending;
-saved training-time macro scores do not establish new quality.
+[Matched fresh TPE6 BEST/LAST VAL](../reports/native-TPE6-matched-fresh-VAL-20261111)
+then completed both770-photo roles with actual child/outer exits0. BEST macro.808852833,
+vessel.761709005 and conditionalAV.806978606 trail the matched first-TPE roles.
+BEST conditionalAV change−.01793294[−.02433401,−.01129130]; LAST vessel
+−.00451966[−.00832313,−.00031107]. Macro intervals cross zero; the full all-head
+and source differences, known612-group uncertainty and tiny saved/fresh count drift
+are retained. No quality promotion follows.
+
+A third actual native proposal, trial7, continued that same sampler with all7
+previous observations preserved. It chose LR.0001249535964, WD.000001641515876,
+vascularsampling2.6995567465 with width16/BatchNorm/basic, without manual changes.
+The original03UTC start window was missed and its disabled packet/defer retained.
+A separate explicitly reviewed own-Ada window ends04UTC/max12h, with the same
+326s/epoch+1800sQA+300scleanup conservative budget. Training actually started
+21:13:51UTC; GPU/config/intra8/inter1/workers8/BF16 were observed. E1/2048updates
+completed with finite loss and236.834s TRAIN+VAL. This is unfinished training,
+not a quality result. No extra Meta job, main-study mutation or TEST was used.
 
 The [native V3 trial4 BEST54 TTA sweep](../reports/v3-trial4-inference-tta-val)
 completed all four modes on all 770 VAL with observed child and external supervisor
@@ -114,9 +129,16 @@ all60 history rows are preserved. Both BEST and LAST are E60 with their own
 2529-photo/5700-annotation coverage, independently rechecked on CPU with actual
 CLI exits0; finite state, optimizer/horizon and the complete nonraw configuration,
 operator/backend/cache were retained. See the [genuine LC audit](../reports/curated-fd44-completion/genuine-lc384-two-role-audit.json).
-The original saved macro.806017682 is historical training-time VAL, not a fresh
-independent comparison. Both original checkpoints are byte-verified in controller
-and Old backups; they are not bundled or promoted. Fresh LC VAL is being prepared.
+[LC BEST fresh validation](../reports/curated-lc384-best60-fresh-val-20261111)
+completed all770 photos with actual child0. Fresh macro.806021640, vessel.74554493
+and cup.85947379 show adverse vessel/cup changes against parent raw TPE NONE:
+−.0173341[−.0227600,−.0125179] and−.0213102[−.0266982,−.0161283]. Disc improves
++.0064172[+.0006127,+.0125841]; macro/artery/vein/conditionalAV intervals cross0.
+The planned LAST inference did not complete before the original work deadline;
+whole observer returned1, stage timed_out=true, BEST0 retained, inputs unchanged.
+This partial inference outcome is distinct from successful full60 training.
+No automatic retry, budget change, LAST metric or promotion is claimed. Full
+counts, descriptor/config, source adverse intervals and outcome are published.
 
 Raw384, raw512 and CLAHE384 remain unfinished; their last actual scheduler/progress
 snapshot19:55UTC was R/E34, R/E24 and R/E25. No new Meta job was submitted.
@@ -125,9 +147,12 @@ ranked. Product `for_Leipzig` supports saved full-image photometry profiles with
 stripping config fields. Real TRAIN inference parity checks for the existing TPE
 and genuine raw256 checkpoint were bitwise exact (max probability error0).
 The reviewed independent curated completion adapter and compatible HPO photometry
-port are integrated. This proves completion compatibility; it does not yet admit
-curated models to final selection, TTA or TEST. Raw protocol schemas and existing
-completion-family gates remain unchanged; no source/model has been frozen here.
+port are integrated. The [explicit curated eligibility adapter](CURATED_FD44_SELECTION_PROPOSAL.md)
+now requires its distinct original index/SHA, role-owned coverage and freshly bound
+VAL header.105 focused integration tests and a genuine LC CPU adapter check passed
+(actual0,118.04s, no forward/GT decoding/GPU/selection/TEST). Existing family/raw
+protocol contracts remain. Historical untyped reports are not newly eligible;
+no actual candidate/source has been frozen or held-out data evaluated.
 
 The separate [TPE BEST58 TTA sweep](../reports/tpe72-inference-tta-val) completed
 all four770-VAL cases with observed child and parent exits0, unchanged inputs and
