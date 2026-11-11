@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 11. 11. 2026 kolem 01:25 UTC. Celkový cíl není dokončený.**
+**Snímek: 11. 11. 2026, aktualizace po 01:55 UTC. Celkový cíl není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -32,8 +32,11 @@ běžné instalace ani predikce.
 zopakovala dřívější počty TP/FP/FN a podmíněné A/V: macro dataset/head Dice
 0,66703, pooled vessel Dice 0,77012, conditional A/V accuracy 0,74857.
 [Důkaz a celý report](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/frozen-original-val-reproduction).
-Po nearest opravě běží samostatné měření ze zdroje `d14aa14`; jeho výsledek se
-nebude vydávat za původní report.
+Po nearest opravě dokončil zdroj `d14aa14` nové měření všech 770 VAL snímků.
+Počty pro cévy, disk a cup zůstaly stejné; A/V se nepatrně změnilo na dvou HRF
+snímcích (o 18 správných pixelů méně z 2 626 284). Macro Dice je 0,667029585.
+Jde o ověřenou opravu shody operátoru s MATLABem, nikoli o doložené zlepšení
+kvality predikce. [Nový report a přesné rozdíly](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/frozen-original-val-nearest).
 
 Stejný skutečný raný compact checkpoint dává ve zmrazeném trénovacím zdroji
 `6b3dfad` a předatelné větvi bitově stejné výstupy na testovaných CPU vstupech,
@@ -50,15 +53,16 @@ předpoklady nových zdrojů jsou výslovné a uložené s daty i checkpointem;
 
 Kontrolovaná studie porovnává control a šest variant loss, geometrie a augmentací
 v etapách 3/9/27/60 na třech vlastních GPU. Při poslední zaznamenané kontrole
-control dokončil 38 epoch; všechny fotografie a zdroje již přispěly, ale pouze
-5 698 z 5 700 anotovaných variant. Ještě to není dokončený model. Návazná
+control dokončil 50 epoch; všechny fotografie a zdroje již přispěly, ale pouze
+5 699 z 5 700 anotovaných variant. Ještě to není dokončený model. Návazná
 validace má samostatnou kontrolu skutečného E60 a úplného pokrytí anotací.
 
 Průběžný checkpoint E25 zlepšuje disk a cup, ale pooled vessel Dice a podmíněné
 A/V zatím zaostávají za původní sestavou. Nelze jej označit za zlepšení všech úloh.
 TRAIN audit navíc ukázal přibližně pětinový pokles očekávané cévní/A/V expozice
 po přidání nových disk/cup zdrojů při stejném rozpočtu. Další experiment proto
-připravuje samostatnou úpravu samplingu; její lepší kvalita zatím změřená není.
+má samostatnou implementaci úpravy samplingu na větvi
+`experiments/v2-vascular-mixture`; její lepší modelová kvalita zatím změřená není.
 [Průběžné důkazy a scénáře](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/data).
 
 ## Co zbývá k dokončení cíle
