@@ -13,8 +13,9 @@ Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad,
 | Nové trénování | Příprava 21 zdrojů z RAW dat v ownCloudu, unified trainer a čerstvé trénování původních architektur. Nativní recepty nejsou reprodukcí neznámého historického optimalizátoru. |
 | Unified baseline V1 | Dokončených 60 epoch, 2 221 TRAIN fotografií a 5 281 anotovaných variant ze 17 zdrojů. Vybrán checkpoint E56; není finálním modelem na širším V2. |
 | Unified control V2 | Pevný terminální E60, 21 zdrojů, všech 2 529 TRAIN fotografií / 5 700 anotovaných variant skutečně přispělo. Čerstvá VAL; cévní regrese vůči původní sestavě, není optimalizovaný finální model. |
+| Unified vascular2 preview | Dokončený běh 60 epoch; přibalený VAL-best E59 už pokrývá všech 2 529 fotografií / 5 700 variant. Macro 0,80390, conditional A/V 0,81026; vessel 0,75671 stále pod původním 0,77012. Experimentální, bez TEST. |
 | Piloty | Tři starší pokusy na jednotlivých databázích, jasně označené jako piloty. |
-| Instalace a kontrola | `uv`, ověřený wheel a izolovaná instalace; předchozí integrační kontrola 2 605 CPU testů; přidání V2 ověřuje 59 cílených testů, CPU RAW smoke a wheel s deseti modely. Původních devět checkpointů zachovalo bajty; samostatně přibyl desátý V2 control. |
+| Instalace a kontrola | `uv`, ověřený wheel a izolovaná instalace; předchozí integrační kontrola 2 605 CPU testů; přidání V2 ověřuje 59 cílených testů, CPU RAW smoke a wheel s deseti modely. Vascular2 preview přidává 45 cílených CPU testů, RAW TRAIN smoke a wheel s jedenácti modely; všech deset dřívějších vah zachovalo původní bajty. |
 
 Začněte [instalací a predikcí](../README.md#install),
 [přípravou celého korpusu](UNIFIED_QUICKSTART.md),
@@ -70,7 +71,9 @@ disk/cup a podmíněná A/V jsou vyšší. Nelze jej označit za zlepšení vše
 TRAIN audit navíc ukázal přibližně pětinový pokles očekávané cévní/A/V expozice
 po přidání nových disk/cup zdrojů při stejném rozpočtu. Další experiment proto
 má samostatnou implementaci úpravy samplingu na větvi
-`experiments/v2-vascular-mixture`; její lepší modelová kvalita zatím změřená není.
+`experiments/v2-vascular-mixture`; dokončený běh a čerstvá VAL nyní podkládají
+samostatný [preview model E59](UNIFIED_V2_VASCULAR2.md). Jeho cévní regrese přetrvává;
+nejde o finální výběr ani důkaz zlepšení všech úloh.
 [Průběžné důkazy a scénáře](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/data).
 
 ## Co zbývá k dokončení cíle
@@ -80,7 +83,7 @@ má samostatnou implementaci úpravy samplingu na větvi
 3. Zmrazit vybraný checkpoint, konfiguraci, prahy a inference protokol; poté provést samostatný TEST.
 4. Doložit kvalitu, velikost a rychlost vybraného modelu a předat jeho váhy vedle původních sítí.
 
-**Použitelný kontrolní V2 checkpoint je přibalený; optimalizovaný finální model a TEST výsledky zatím nejsou vydané.**
+**Použitelný kontrolní V2 checkpoint a samostatný vascular2 preview jsou přibalené; optimalizovaný finální model a TEST výsledky zatím nejsou vydané.**
 Podrobný cíl je v [GOAL.md](GOAL.md), historické záznamy v
 [PROGRESS_HISTORY_2026-11.md](PROGRESS_HISTORY_2026-11.md). Operátorské přístupy a
 spotřeba MetaCentra jsou vedené v samostatném soukromém provozním repozitáři.

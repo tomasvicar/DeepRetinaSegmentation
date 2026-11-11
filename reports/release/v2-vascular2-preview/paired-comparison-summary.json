@@ -1,0 +1,321 @@
+{
+  "source_public_commit": "1a2ea5f",
+  "best_vs_original": {
+    "source_report_sha256": "13530dd17cf619f145c28dc7e8efe19edcf7054be701a9e1d6620df026e9650f",
+    "photos": 770,
+    "split_groups": 612,
+    "bootstrap": {
+      "draws": 2000,
+      "seed": 42,
+      "unit": "reviewed split_group_id",
+      "stratification": "signature of canonical datasets in the whole group"
+    },
+    "macro_dataset_mean_dice": {
+      "reference": 0.6670295852091139,
+      "candidate": 0.8038980941929544,
+      "candidate_minus_reference": 0.1368685089838405,
+      "paired_percentile_95ci": [
+        0.12795440773148092,
+        0.14732584618976088
+      ],
+      "defined_bootstrap_draws": 2000
+    },
+    "channels": {
+      "vessel": {
+        "pooled_dice": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7567128270323407,
+          "candidate_minus_reference": -0.013410572761472617,
+          "paired_percentile_95ci": [
+            -0.018952364155746967,
+            -0.00800032235280897
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.786656606945927,
+          "candidate": 0.7774320555736939,
+          "candidate_minus_reference": -0.009224551372233103,
+          "paired_percentile_95ci": [
+            -0.015797602702899215,
+            -0.002771982743192276
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      },
+      "artery": {
+        "pooled_dice": {
+          "reference": 0.689521829787506,
+          "candidate": 0.7180475758373055,
+          "candidate_minus_reference": 0.028525746049799516,
+          "paired_percentile_95ci": [
+            0.014702122565373744,
+            0.04214354343614832
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.6808690952407886,
+          "candidate": 0.6963403227400471,
+          "candidate_minus_reference": 0.015471227499258444,
+          "paired_percentile_95ci": [
+            -0.0033181549657627456,
+            0.03369097696356997
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      },
+      "vein": {
+        "pooled_dice": {
+          "reference": 0.6972863687090058,
+          "candidate": 0.7794767492848733,
+          "candidate_minus_reference": 0.08219038057586747,
+          "paired_percentile_95ci": [
+            0.06836335513960755,
+            0.09547552729278898
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.6995405927524971,
+          "candidate": 0.7618574331883179,
+          "candidate_minus_reference": 0.06231684043582075,
+          "paired_percentile_95ci": [
+            0.04649372694348025,
+            0.07964289775025052
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      },
+      "disc": {
+        "pooled_dice": {
+          "reference": 0.8948079084718797,
+          "candidate": 0.9335905761900962,
+          "candidate_minus_reference": 0.03878266771821648,
+          "paired_percentile_95ci": [
+            0.032873445052178,
+            0.04498414382457236
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.7295300905977455,
+          "candidate": 0.92228618484509,
+          "candidate_minus_reference": 0.1927560942473444,
+          "paired_percentile_95ci": [
+            0.18078312612492006,
+            0.2061120759671729
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      },
+      "cup": {
+        "pooled_dice": {
+          "reference": 0.4353989841007063,
+          "candidate": 0.8748712664808148,
+          "candidate_minus_reference": 0.4394722823801085,
+          "paired_percentile_95ci": [
+            0.4259974317067336,
+            0.45252128711075285
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.4385515405086113,
+          "candidate": 0.8615744746176234,
+          "candidate_minus_reference": 0.4230229341090121,
+          "paired_percentile_95ci": [
+            0.39550568795367075,
+            0.4565406393488036
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      }
+    },
+    "conditional_av_accuracy": {
+      "reference": 0.748566415513326,
+      "candidate": 0.8102570019083999,
+      "candidate_minus_reference": 0.061690586395073854,
+      "paired_percentile_95ci": [
+        0.04714007456773904,
+        0.07642104234825027
+      ],
+      "defined_bootstrap_draws": 2000
+    },
+    "qualifications": [
+      "Validation results used for tuning are exploratory, including their confidence intervals",
+      "Historical original-model exposure and documented preprocessing/backend differences remain qualifications",
+      "Split groups preserve known patients/aliases; opaque patient IDs are not proven independent",
+      "Identical input hashes and valid/positive counts support pairing; this script does not rerun mask inference",
+      "Percentile intervals are conditional on these checkpoints and do not measure training-seed uncertainty",
+      "Aggregate gains cannot establish improvement of each individual task",
+      "Actual standalone provenance, not rewritten as historical 6b/pool QA.",
+      "BESTE59 and terminalLASTE60 are separate roles; comparison does not select either.",
+      "Original models have incompletely recoverable historical training exposure and distinct preprocessing/decoding.",
+      "Control60 used fresh CPU evaluation; vascular2 used CUDA; backend/thread differences are not causally isolated.",
+      "612 known split groups are not proof of complete patient independence; no seed-level uncertainty.",
+      "VAL used for development; source/head intervals are descriptive without multiplicity correction."
+    ],
+    "test_evaluation_performed": false,
+    "independent_quality_improvement_claim": false
+  },
+  "best_vs_terminal_control": {
+    "source_report_sha256": "1b35589abf7befe7f42c8ff809d7b8e6380d8d3f72daaf3f7a43681c96f938dc",
+    "photos": 770,
+    "split_groups": 612,
+    "bootstrap": {
+      "draws": 2000,
+      "seed": 42,
+      "unit": "reviewed split_group_id",
+      "stratification": "signature of canonical datasets in the whole group"
+    },
+    "macro_dataset_mean_dice": {
+      "reference": 0.7887627334285886,
+      "candidate": 0.8038980941929544,
+      "candidate_minus_reference": 0.015135360764365835,
+      "paired_percentile_95ci": [
+        0.011742679245971915,
+        0.018434539011789448
+      ],
+      "defined_bootstrap_draws": 2000
+    },
+    "channels": {
+      "vessel": {
+        "pooled_dice": {
+          "reference": 0.7504721656517305,
+          "candidate": 0.7567128270323407,
+          "candidate_minus_reference": 0.006240661380610191,
+          "paired_percentile_95ci": [
+            0.0029635889032684297,
+            0.009633885706114075
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.7697073866409276,
+          "candidate": 0.7774320555736939,
+          "candidate_minus_reference": 0.007724668932766243,
+          "paired_percentile_95ci": [
+            0.003926668229356558,
+            0.011985144457505995
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      },
+      "artery": {
+        "pooled_dice": {
+          "reference": 0.6771091345930581,
+          "candidate": 0.7180475758373055,
+          "candidate_minus_reference": 0.04093844124424739,
+          "paired_percentile_95ci": [
+            0.032958932678606494,
+            0.048856382622105066
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.6470801521075569,
+          "candidate": 0.6963403227400471,
+          "candidate_minus_reference": 0.04926017063249022,
+          "paired_percentile_95ci": [
+            0.041047435311577105,
+            0.058648670540182246
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      },
+      "vein": {
+        "pooled_dice": {
+          "reference": 0.7543140406068415,
+          "candidate": 0.7794767492848733,
+          "candidate_minus_reference": 0.02516270867803183,
+          "paired_percentile_95ci": [
+            0.019125031205668854,
+            0.031235159814912955
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.7380671496198877,
+          "candidate": 0.7618574331883179,
+          "candidate_minus_reference": 0.02379028356843016,
+          "paired_percentile_95ci": [
+            0.01667264450278606,
+            0.03028610134754062
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      },
+      "disc": {
+        "pooled_dice": {
+          "reference": 0.934122076215391,
+          "candidate": 0.9335905761900962,
+          "candidate_minus_reference": -0.0005315000252947844,
+          "paired_percentile_95ci": [
+            -0.0064473021103624685,
+            0.0030046926395806773
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.9230746414943375,
+          "candidate": 0.92228618484509,
+          "candidate_minus_reference": -0.0007884566492475376,
+          "paired_percentile_95ci": [
+            -0.005111618708026103,
+            0.0036845863036017107
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      },
+      "cup": {
+        "pooled_dice": {
+          "reference": 0.872808188045654,
+          "candidate": 0.8748712664808148,
+          "candidate_minus_reference": 0.0020630784351608478,
+          "paired_percentile_95ci": [
+            -0.0023324436219696264,
+            0.005821835849356825
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "macro_dataset_dice": {
+          "reference": 0.8658843372802332,
+          "candidate": 0.8615744746176234,
+          "candidate_minus_reference": -0.004309862662609798,
+          "paired_percentile_95ci": [
+            -0.012496065109950818,
+            0.002721607618097883
+          ],
+          "defined_bootstrap_draws": 2000
+        }
+      }
+    },
+    "conditional_av_accuracy": {
+      "reference": 0.7880366327480196,
+      "candidate": 0.8102570019083999,
+      "candidate_minus_reference": 0.022220369160380282,
+      "paired_percentile_95ci": [
+        0.01646950360601724,
+        0.02783968460137447
+      ],
+      "defined_bootstrap_draws": 2000
+    },
+    "qualifications": [
+      "Validation results used for tuning are exploratory, including their confidence intervals",
+      "Historical original-model exposure and documented preprocessing/backend differences remain qualifications",
+      "Split groups preserve known patients/aliases; opaque patient IDs are not proven independent",
+      "Identical input hashes and valid/positive counts support pairing; this script does not rerun mask inference",
+      "Percentile intervals are conditional on these checkpoints and do not measure training-seed uncertainty",
+      "Aggregate gains cannot establish improvement of each individual task",
+      "Actual standalone provenance, not rewritten as historical 6b/pool QA.",
+      "BESTE59 and terminalLASTE60 are separate roles; comparison does not select either.",
+      "Original models have incompletely recoverable historical training exposure and distinct preprocessing/decoding.",
+      "Control60 used fresh CPU evaluation; vascular2 used CUDA; backend/thread differences are not causally isolated.",
+      "612 known split groups are not proof of complete patient independence; no seed-level uncertainty.",
+      "VAL used for development; source/head intervals are descriptive without multiplicity correction."
+    ],
+    "test_evaluation_performed": false,
+    "independent_quality_improvement_claim": false
+  }
+}
