@@ -20,7 +20,7 @@ uv run python scripts/prepare_corpus_v2.py \
   --output /path/to/new-corpus-v2
 ```
 
-Use a NEW output directory. GNU cp uses reflink where supported, or ordinary
+Use a NEW output directory. The Python copier uses optional Linux reflink where supported, or ordinary
 copy, with no writable inode shared with the parent. Parent image/mask/FOV bytes,
 all original rows and split memberships are checked before/after. Original metadata
 is retained under`parent-v1-metadata`; current manifest/photos/composition/integrity

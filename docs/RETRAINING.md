@@ -3,7 +3,8 @@
 Use [UNIFIED_QUICKSTART.md](UNIFIED_QUICKSTART.md) for the complete RAW → 21-source
 manifest → first epoch → resume workflow. Only the repository and shared RAW
 archives are required. `uv sync --frozen` supplies the Python dependencies;
-Linux preparation currently also uses GNU `cp` for independent CoW-capable copies.
+Corpus preparation uses a Python-only independent copier, with optional Linux
+CoW acceleration and an ordinary-copy fallback on other platforms.
 Neither MATLAB nor the unavailable large pretraining database is used.
 
 | Route | Trainable now | What it reproduces |
