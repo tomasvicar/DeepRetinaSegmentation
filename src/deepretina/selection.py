@@ -748,6 +748,8 @@ def _context(
     expected_protocol_sha256=None,
     original_terminal=None,
     expected_terminal_sha256=None,
+    original_pool_evidence=None,
+    expected_pool_evidence_sha256=None,
     threshold=0.5,
     tile_size=None,
     overlap=None,
@@ -783,6 +785,8 @@ def _context(
         expected_protocol_sha256=expected_protocol_sha256,
         original_terminal=original_terminal,
         expected_terminal_sha256=expected_terminal_sha256,
+        original_pool_evidence=original_pool_evidence,
+        expected_pool_evidence_sha256=expected_pool_evidence_sha256,
     )
     snapshot = eligible.checkpoint_snapshot
     proof = eligible.proof

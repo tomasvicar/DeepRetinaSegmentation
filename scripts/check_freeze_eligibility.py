@@ -30,6 +30,8 @@ def main():
         "reviewed-protocol",
         "expected-protocol-sha256",
         "original-terminal",
+        "original-pool-evidence",
+        "expected-pool-evidence-sha256",
         "expected-terminal-sha256",
     ):
         parser.add_argument("--" + option)

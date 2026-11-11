@@ -244,7 +244,29 @@ def check_v2_eligibility(selection, candidate, groups):
         )
     terminal = proof["original_completion"]
     require(digest_value(terminal["sha256"]), "Original completion outcome byte pin missing")
-    if proof["family"] == "pool_6b":
+    if proof["family"] == "pool_72_v3":
+        require(
+            terminal["kind"] == "original_v3_pool_COMPLETE_receipt"
+            and terminal["core_source_commit"] == "8777d6cca60f7ced08798ad2af7fabf626421d05"
+            and terminal["study_objective_role"] == "fixed_terminal60_worst6_ratio"
+            and type(terminal["study_terminal_objective"]) is float
+            and math.isfinite(terminal["study_terminal_objective"])
+            and terminal["study_terminal_objective"] > 0
+            and terminal["macro_best_epoch"] == completion["best_epoch"]
+            and terminal["macro_best_score"] == completion["best_training_selection_score"]
+            and all(
+                digest_value(terminal[k])
+                for k in (
+                    "original_task_sha256",
+                    "reviewed_protocol_sha256",
+                    "envelope_sha256",
+                    "profile_sha256",
+                    "milestone_inventory_sha256",
+                )
+            ),
+            "Genuine native V3 pool provenance missing",
+        )
+    elif proof["family"] == "pool_6b":
         require(
             terminal["kind"] == "original_pool_COMPLETE_receipt"
             and digest_value(terminal["original_task_sha256"])

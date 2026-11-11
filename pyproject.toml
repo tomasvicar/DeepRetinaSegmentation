@@ -28,7 +28,7 @@ dev = ["pytest>=8", "ruff>=0.9"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "/src/deepretina/**/*.py", "/src/deepretina/adapters/*.json", "/src/deepretina/pretrained/*", "/configs/*.toml", "/docs/*.md", "/scripts/*.py",
+  "/src/deepretina/**/*.py", "/src/deepretina/adapters/*.json", "/src/deepretina/_frozen_v3/*.json", "/src/deepretina/pretrained/*", "/configs/*.toml", "/docs/*.md", "/scripts/*.py",
   "/tests/*.py", "/reports/**/*.json", "/reports/**/*.csv", "/reports/**/*.md",
   "/README.md", "/pyproject.toml", "/uv.lock", "/.python-version",
 ]
@@ -50,4 +50,4 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-extend-exclude = ["tests/reference"]
+extend-exclude = ["tests/reference", "src/deepretina/_frozen_v3"]

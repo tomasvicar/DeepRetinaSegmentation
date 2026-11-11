@@ -504,6 +504,26 @@ def typed_case(case, role="training_best", family="standalone_0b"):
             "original_task_sha256": "9" * 64,
             "original_decision_sha256": "a" * 64,
         }
+    if family == "pool_72_v3":
+        proof["original_completion"] = {
+            "kind": "original_v3_pool_COMPLETE_receipt",
+            "sha256": "8" * 64,
+            "core_source_commit": "8777d6cca60f7ced08798ad2af7fabf626421d05",
+            "study_objective_role": "fixed_terminal60_worst6_ratio",
+            "study_terminal_objective": 1.0,
+            "macro_best_epoch": 56,
+            "macro_best_score": 0.7,
+            **{
+                k: "9" * 64
+                for k in (
+                    "original_task_sha256",
+                    "reviewed_protocol_sha256",
+                    "envelope_sha256",
+                    "profile_sha256",
+                    "milestone_inventory_sha256",
+                )
+            },
+        }
     selected.update(checkpoint_role=role, freeze_eligibility=proof)
     candidate.update(
         checkpoint_role=role,
@@ -526,7 +546,7 @@ def typed_case(case, role="training_best", family="standalone_0b"):
 
 
 @pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
-@pytest.mark.parametrize("family", ["pool_6b", "standalone_0b", "standalone_72"])
+@pytest.mark.parametrize("family", ["pool_6b", "standalone_0b", "standalone_72", "pool_72_v3"])
 def test_schema2_typed_roles_and_families_compare_metadata(case, role, family):
     typed_case(case, role, family)
     assert run(case)["photos"] == 2

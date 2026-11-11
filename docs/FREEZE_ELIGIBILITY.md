@@ -2,8 +2,8 @@
 
 This experimental branch adds source-compatible loading, typed CPU eligibility
 and fail-closed schema2 create/check/reviewed execution interfaces. No actual
-model selection or TEST evaluation was performed during implementation. V3 pool
-completion still requires its own adapter. The earlier compatibility-only commit
+model selection or TEST evaluation was performed during implementation. Genuine V3 pool
+completion has a separate [native adapter](FREEZE_V3_POOL.md). The earlier compatibility-only commit
 is not independently deployable: consume the complete reviewed integration.
 
 `check_freeze_eligibility` / `scripts/check_freeze_eligibility.py` require explicit
@@ -65,13 +65,11 @@ metadata comparator supports both schema2 roles and preserves a historical
 schema1 reader. No compatible-source path can fall back to untyped completion.
 See [selection](HELDOUT_SELECTION.md) and [reviewed execution](REVIEWED_HELDOUT.md).
 
-Still required: the **genuine source72 V3 final60 pool adapter**: original typed
-   `v3_rung_evidence`, COMPLETE receipt, actual task/lease/plan/runtime/PBS pins,
-   native V3 validation and independent terminal milestones. It must support
-   selection among actual Meta candidates, not just a future standalone TPE run.
-   Partial3/9/27 never qualifies. V3 ranks LAST worst6ratio; macro-BEST is a separate
-   saved checkpoint role. No standalone QA can be manufactured without a real
-   standalone supervisor terminal.
+The separate [genuine source72 V3 final60 pool adapter](FREEZE_V3_POOL.md) consumes
+original native rung/COMPLETE/task/protocol/profile evidence and host-independent
+milestones. It supports both roles while retaining LAST worst6 objective and
+macro-BEST separately. Actual final60 positive evidence remains pending; all
+actual E27/E3 artifacts are partial and cannot qualify.
 
 No source0b/72 live run imports this worktree. Production aliases and model cards
 are unchanged. No final decision or TEST authorization is created by these checks.
