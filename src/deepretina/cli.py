@@ -101,6 +101,10 @@ def parser() -> argparse.ArgumentParser:
     joint.add_argument(
         "--expected-cache-fingerprint", help="Externally pinned derived cache identity"
     )
+    joint.add_argument(
+        "--photometry-cache", type=Path, help="Verified profile-specific full-image RGB cache"
+    )
+    joint.add_argument("--expected-photometry-cache-fingerprint")
     joint.add_argument("--purpose", choices=["functionality", "full_data"])
     for name in ("epochs", "epoch_samples", "max_steps"):
         joint.add_argument("--" + name.replace("_", "-"), type=int)

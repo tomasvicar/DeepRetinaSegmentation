@@ -1,0 +1,66 @@
+{
+  "kind": "isolated_product_photometry_port_synthetic_review_only",
+  "base_commit": "d028314d6a26c6790d82bdc97219027184c051df",
+  "authority_commit": "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+  "code_sha256": {
+    "src/deepretina/unified.py": "cac538ccf026082795564e62ce5aa4a0849c74cc4a42d3b0a46f9ed44e70480a",
+    "src/deepretina/photometry.py": "bdc142c31018d04f16288b0495023ba5fe48c0092e3593366204b3bb301735d3",
+    "src/deepretina/photometry_cache.py": "f0f58f1e68a7e6ce480bb2e63854030b152626021b8688755754bd54fbd34771",
+    "src/deepretina/cli.py": "444f8a229cfce2f41ec0338f5444b6f394282f5848cd7ad4d49a3a378110a8f3",
+    "src/deepretina/unified_cli.py": "9e297e57ea2977f540ec92121d8ecf0f8e4b51e414321064e1f9f936fddaf47a",
+    "scripts/benchmark_latency.py": "8311583e2f80e65a541dbae1d8cd8a45480141ff38bcfbc586e0c4f27216dca3"
+  },
+  "actual_test_results": [
+    {
+      "scope": "combined_photometry_cache_TTA_and_initial_product_checks",
+      "passed": 89,
+      "seconds": 8.34,
+      "observed_exit": 0
+    },
+    {
+      "scope": "updated_product_integration_checks_including_BF16_training_metadata",
+      "passed": 32,
+      "seconds": 5.61,
+      "observed_exit": 0
+    }
+  ],
+  "ruff_pass": true,
+  "scope_exception": {
+    "unintended_existing_CLI_trained_fixture_count": 13,
+    "generated_RGB_labels_only": true,
+    "base_channels": 2,
+    "depth": 1,
+    "epochs": 2,
+    "samples_per_epoch": 2,
+    "patch_size": 32,
+    "batch_size": 1,
+    "device": "CPU",
+    "CUDA_visible_devices": "",
+    "affinity": [
+      6
+    ],
+    "CLI_subset_tests": 16,
+    "CLI_subset_seconds": 7.52,
+    "observed_exit": 0,
+    "disclosed_to_parent": true,
+    "no_real_images_GT_operational_weights_or_GPU": true,
+    "not_quality_or_real_model_validation": true
+  },
+  "real_TRAIN_or_VAL_or_TEST_images_decoded": false,
+  "operational_checkpoint_or_model_forward": false,
+  "GPU_used": false,
+  "full_cache_build_performed": false,
+  "model_promotion_or_merge": false,
+  "all12_bundled_weights_aliases_legacy_configs_unchanged": true,
+  "authorized_additional_tiny_checks": {
+    "constraint": "CPU1core/thread1/nice17/CUDAhidden,external60s cap",
+    "architecture": "base2_depth1",
+    "raw_d028_weights_optimizer_RNG_exact": true,
+    "cached_uncached_training_relocated_resume_optimizer_RNG_exact": true,
+    "actual_public_CLI_saved_profile_cache_identity_load": true,
+    "cached_resume_observed_exit": 0,
+    "raw_and_CLI_observed_exit": 0,
+    "raw_and_CLI_seconds": 3.5,
+    "real_images_operational_models_or_GPU": false
+  }
+}

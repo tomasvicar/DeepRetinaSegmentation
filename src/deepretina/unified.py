@@ -31,10 +31,26 @@ from .geometry_policy import capture_geometry_policy, prediction_geometry, valid
 from .inference import resolve_device, tile_starts
 from .integrity import verify_prepared_content
 from .model import UNet
+from .photometry import PROFILES, fov_index, image_fov
+from .photometry import apply as apply_photometry
+from .photometry import contract as photometry_contract
+from .photometry import validate_saved as _validate_saved_photometry
+from .photometry_cache import VerifiedPhotometryCache
+from .photometry_cache import canonical as _photometry_canonical
 
 CHANNELS = ("vessel", "artery", "vein", "disc", "cup")
 SEGMENTATION_CHANNELS = (0, 3, 4)
 SOURCE_CHANNELS = {"vessels": (0,), "av": (0, 1, 2), "disc_cup": (3, 4)}
+
+
+def validate_saved_photometry(payload, profile, pixels_per_degree=25.0):
+    """Preserve fd44's recipe while binding exact JSON value types at admission."""
+    _validate_saved_photometry(payload, profile, pixels_per_degree)
+    saved = payload.get("preprocessing", {}).get("photometry")
+    if saved is not None and _photometry_canonical(saved) != _photometry_canonical(
+        photometry_contract(profile, pixels_per_degree)
+    ):
+        raise ValueError("Checkpoint photometry parameters/backend JSON types differ")
 
 
 @dataclass
@@ -77,8 +93,11 @@ class UnifiedConfig:
     max_steps: int | None = None
     vascular_sampling_weight: float = 1.0
     mixed_precision: str = "none"
+    photometric_profile: str = "raw"
 
     def validate(self):
+        if self.photometric_profile not in PROFILES:
+            raise ValueError("Unsupported unified photometric_profile")
         if self.mixed_precision not in ("none", "bf16"):
             raise ValueError("mixed_precision must be none or bf16")
         if self.architecture not in {"compact_unet", "legacy_universal"}:
@@ -236,9 +255,18 @@ def _labels(root, relative, derived_cache=None):
     )
 
 
-def read_unified_sample(root: Path, row: dict, *, derived_cache=None):
-    """Public row reader for independent evaluation scripts; RGB in [0,1]."""
-    image = np.asarray(_rgb(root, row["image"], derived_cache), dtype=np.float32) / 255
+def read_unified_sample(root: Path, row: dict, *, derived_cache=None, config=None):
+    """Public row reader; raw RGB01 by default, explicit config opts into photometry."""
+    raw = _rgb(root, row["image"], derived_cache)
+    cfg = UnifiedConfig(**config) if isinstance(config, dict) else config
+    if cfg is not None and cfg.photometric_profile != "raw":
+        raw = apply_photometry(
+            raw,
+            cfg.photometric_profile,
+            fov=image_fov(root, _photo_id(Path(root), row), raw.shape),
+            pixels_per_degree=cfg.pixels_per_degree,
+        )
+    image = np.asarray(raw, dtype=np.float32) / 255
     with _labels(root, row["mask"], derived_cache) as labels:
         target = labels["target"].astype(np.float32)
         valid = labels["valid"].astype(bool)
@@ -304,11 +332,13 @@ class UnifiedDataset(torch.utils.data.Dataset):
         *,
         return_trace=False,
         derived_cache=None,
+        photometry_cache=None,
     ):
         self.return_trace = return_trace
         self.manifest = Path(manifest)
         self.root = self.manifest.parent
         self.derived_cache = derived_cache
+        self.photometry_cache = photometry_cache
         if (
             derived_cache is not None
             and derived_cache.manifest.resolve() != self.manifest.resolve()
@@ -344,11 +374,29 @@ class UnifiedDataset(torch.utils.data.Dataset):
             groups[_photo_id(self.root, row)].append(row)
         self.groups = [sorted(group, key=lambda r: r["id"]) for _, group in sorted(groups.items())]
         self.photo_ids = sorted(groups)
+        if photometry_cache is not None:
+            if (
+                photometry_cache.manifest.resolve() != self.manifest.resolve()
+                or photometry_cache.profile != self.config.photometric_profile
+                or _photometry_canonical(photometry_cache.index["descriptor"])
+                != _photometry_canonical(
+                    photometry_contract(
+                        self.config.photometric_profile, self.config.pixels_per_degree
+                    )
+                )
+            ):
+                raise ValueError("Photometry cache manifest/profile differs")
+            photometry_cache.require_coverage(self.rows)
+            self._photometry_cache_binding = (
+                self.config.photometric_profile,
+                self.config.pixels_per_degree,
+            )
         self._image_cache = OrderedDict()
         self._cache_bytes = 0
         self._cache_limit = 128 * 1024**2
         self._verified_aliases = set()
         self._augmentation_generator = None
+        self._photometry_fovs = None
         self._row_tasks = {}
         self._support_summary = None
 
@@ -356,28 +404,52 @@ class UnifiedDataset(torch.utils.data.Dataset):
         return len(self.groups)
 
     def _image(self, index):
-        key = self.photo_ids[index]
+        if (
+            self.photometry_cache is not None
+            and (self.config.photometric_profile, self.config.pixels_per_degree)
+            != self._photometry_cache_binding
+        ):
+            raise ValueError("Photometry cache configuration changed after admission")
+        photo_id = self.photo_ids[index]
+        key = (
+            photo_id
+            if self.config.photometric_profile == "raw"
+            else (photo_id, self.config.photometric_profile, self.config.pixels_per_degree)
+        )
         rows = self.groups[index]
         if key in self._image_cache:
             image = self._image_cache.pop(key)
             self._image_cache[key] = image
             return image
-        paths = sorted({str((self.root / r["image"]).resolve()) for r in rows})
-        array = _rgb(
-            self.root,
-            Path(paths[0]).relative_to(self.root.resolve()).as_posix(),
-            self.derived_cache,
-        )
-        if key not in self._verified_aliases:
-            for path in paths[1:]:
-                other = _rgb(
-                    self.root,
-                    Path(path).relative_to(self.root.resolve()).as_posix(),
-                    self.derived_cache,
+        if self.photometry_cache is not None:
+            array = self.photometry_cache.rgb(photo_id)
+        else:
+            paths = sorted({str((self.root / r["image"]).resolve()) for r in rows})
+            array = _rgb(
+                self.root,
+                Path(paths[0]).relative_to(self.root.resolve()).as_posix(),
+                self.derived_cache,
+            )
+            if key not in self._verified_aliases:
+                for path in paths[1:]:
+                    other = _rgb(
+                        self.root,
+                        Path(path).relative_to(self.root.resolve()).as_posix(),
+                        self.derived_cache,
+                    )
+                    if not np.array_equal(array, other):
+                        raise ValueError(f"photo_id aliases contain different RGB pixels: {key}")
+                self._verified_aliases.add(key)
+            if self.config.photometric_profile != "raw":
+                if self._photometry_fovs is None:
+                    self._photometry_fovs = fov_index(self.root)
+                fov = image_fov(self.root, photo_id, array.shape, self._photometry_fovs)
+                array = apply_photometry(
+                    array,
+                    self.config.photometric_profile,
+                    fov=fov,
+                    pixels_per_degree=self.config.pixels_per_degree,
                 )
-                if not np.array_equal(array, other):
-                    raise ValueError(f"photo_id aliases contain different RGB pixels: {key}")
-            self._verified_aliases.add(key)
         image = torch.from_numpy(array.transpose(2, 0, 1).copy()).float() / 255
         size = image.numel() * image.element_size()
         while self._image_cache and self._cache_bytes + size > self._cache_limit:
@@ -911,6 +983,7 @@ def evaluate_unified_model(
     derived_cache=None,
     *,
     tta="none",
+    photometry_cache=None,
 ):
     tta_protocol(tta)
     cfg = (
@@ -926,7 +999,9 @@ def evaluate_unified_model(
         raise ValueError(
             "Historical initialization has unknown teacher exposure; exploratory train/val evaluation only"
         )
-    dataset = UnifiedDataset(manifest, split, cfg, derived_cache=derived_cache)
+    dataset = UnifiedDataset(
+        manifest, split, cfg, derived_cache=derived_cache, photometry_cache=photometry_cache
+    )
     counts = np.zeros((5, 4), np.int64)
     by_dataset = {}
     per_photo = []
@@ -1051,6 +1126,7 @@ def load_unified(path, device="auto"):
     if payload.get("normalization") != "RGB/255-0.5":
         raise ValueError("Unified normalization contract mismatch")
     config = UnifiedConfig(**payload["config"])
+    validate_saved_photometry(payload, config.photometric_profile, config.pixels_per_degree)
     if "geometry_policy" in payload:
         validate_geometry_policy(payload["geometry_policy"])
     model = build_unified(config, initialize=False)
@@ -1122,7 +1198,13 @@ def predict_unified(
         normalized=False,
     )
     # PreparedImage.tensor() is already centered; low-level inference expects01.
-    tensor = torch.from_numpy(prepared.image.transpose(2, 0, 1).copy()).float() / 255
+    input_rgb = apply_photometry(
+        prepared.image,
+        config.photometric_profile,
+        fov=prepared.fov,
+        pixels_per_degree=config.pixels_per_degree,
+    )
+    tensor = torch.from_numpy(input_rgb.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(
         model,
         tensor,
@@ -1182,6 +1264,15 @@ def predict_unified(
             "pixels_per_degree": config.pixels_per_degree,
             "field_of_view_degrees": prepared.field_of_view_degrees,
             "normalized": False,
+            **(
+                {
+                    "photometry": photometry_contract(
+                        config.photometric_profile, config.pixels_per_degree
+                    )
+                }
+                if config.photometric_profile != "raw"
+                else {}
+            ),
             "normalization": "RGB/255-0.5",
             "fov_source": prepared.fov_source,
             "geometry": prepared.geometry.as_dict(),
@@ -1250,6 +1341,8 @@ def _training_source_sha256():
     result = hashlib.sha256()
     for name in (
         "unified.py",
+        "photometry.py",
+        "photometry_cache.py",
         "geometry_policy.py",
         "unified_legacy.py",
         "model.py",
@@ -1366,6 +1459,8 @@ def train_unified(
     expected_content_sha256: str | None = None,
     derived_cache_root: Path | None = None,
     expected_cache_fingerprint: str | None = None,
+    photometry_cache_root: Path | None = None,
+    expected_photometry_cache_fingerprint: str | None = None,
 ):
     """Train the shared network; purpose=functionality never implies model quality.
 
@@ -1394,6 +1489,22 @@ def train_unified(
     elif expected_cache_fingerprint is not None:
         raise ValueError("A cache fingerprint requires an explicit runtime cache directory")
     cache_identity = derived_cache.identity if derived_cache is not None else None
+    photometry_cache = None
+    if photometry_cache_root is not None:
+        if not expected_content_sha256 or not expected_photometry_cache_fingerprint:
+            raise ValueError(
+                "Photometry cache requires external canonical and cache fingerprint pins"
+            )
+        photometry_cache = VerifiedPhotometryCache(
+            photometry_cache_root,
+            manifest,
+            config.photometric_profile,
+            expected_fingerprint=expected_photometry_cache_fingerprint,
+            expected_canonical_fingerprint=expected_content_sha256,
+        )
+    elif expected_photometry_cache_fingerprint is not None:
+        raise ValueError("Photometry cache fingerprint requires its runtime directory")
+    photo_cache_identity = photometry_cache.identity if photometry_cache is not None else None
     manifest_snapshot = manifest.read_bytes()
     digest = hashlib.sha256(manifest_snapshot).hexdigest()
     geometry_policy = capture_geometry_policy(manifest.parent, json.loads(manifest_snapshot))
@@ -1407,7 +1518,12 @@ def train_unified(
     torch.backends.cudnn.benchmark = False
     torch.use_deterministic_algorithms(True, warn_only=True)
     dataset = UnifiedDataset(
-        manifest, "train", config, return_trace=True, derived_cache=derived_cache
+        manifest,
+        "train",
+        config,
+        return_trace=True,
+        derived_cache=derived_cache,
+        photometry_cache=photometry_cache,
     )
     if config.purpose == "full_data" and (
         not config.coverage_first or config.epoch_samples < len(dataset)
@@ -1420,7 +1536,7 @@ def train_unified(
     validation_support = None
     if config.purpose == "full_data" and config.require_all_heads:
         validation_support = UnifiedDataset(
-            manifest, "val", config, derived_cache=derived_cache
+            manifest, "val", config, derived_cache=derived_cache, photometry_cache=photometry_cache
         ).support_summary()
         if (
             not all(validation_support["supervised_channels"])
@@ -1475,6 +1591,9 @@ def train_unified(
     annotation_visits = Counter()
     if resume is not None:
         saved = torch.load(resume, map_location="cpu", weights_only=True)
+        validate_saved_photometry(saved, config.photometric_profile, config.pixels_per_degree)
+        if saved.get("photometry_cache") != photo_cache_identity:
+            raise ValueError("Resume photometry cache identity changed")
         if saved.get("family") != "unified" or "training_state" not in saved:
             raise ValueError("Resume requires unified last.pt with training state")
         if saved["manifest_sha256"] != digest:
@@ -1524,6 +1643,11 @@ def train_unified(
                 "manifest_sha256": digest,
                 "prepared_content_sha256": prepared_content_sha256,
                 "derived_cache": cache_identity,
+                **(
+                    {"photometry_cache": photo_cache_identity}
+                    if photo_cache_identity is not None
+                    else {}
+                ),
                 **({"geometry_policy": geometry_policy} if geometry_policy is not None else {}),
                 "training_source_sha256": training_source_sha256,
                 "normalization": "RGB/255-0.5",
@@ -1531,6 +1655,15 @@ def train_unified(
                     "profile": config.preprocessing_profile,
                     "pixels_per_degree": config.pixels_per_degree,
                     "normalized": False,
+                    **(
+                        {
+                            "photometry": photometry_contract(
+                                config.photometric_profile, config.pixels_per_degree
+                            )
+                        }
+                        if config.photometric_profile != "raw"
+                        else {}
+                    ),
                 },
                 "channels": list(CHANNELS),
                 "activation": [
@@ -1626,6 +1759,11 @@ def train_unified(
                         device=device,
                         config=config,
                         **({"derived_cache": derived_cache} if derived_cache is not None else {}),
+                        **(
+                            {"photometry_cache": photometry_cache}
+                            if photometry_cache is not None
+                            else {}
+                        ),
                     )
                 )
             score = metrics[config.selection_metric]
@@ -1669,6 +1807,11 @@ def train_unified(
                 "manifest_sha256": digest,
                 "prepared_content_sha256": prepared_content_sha256,
                 "derived_cache": cache_identity,
+                **(
+                    {"photometry_cache": photo_cache_identity}
+                    if photo_cache_identity is not None
+                    else {}
+                ),
                 **({"geometry_policy": geometry_policy} if geometry_policy is not None else {}),
                 "training_source_sha256": training_source_sha256,
                 "supervised_channels": flags,
@@ -1678,6 +1821,15 @@ def train_unified(
                     "profile": config.preprocessing_profile,
                     "pixels_per_degree": config.pixels_per_degree,
                     "normalized": False,
+                    **(
+                        {
+                            "photometry": photometry_contract(
+                                config.photometric_profile, config.pixels_per_degree
+                            )
+                        }
+                        if config.photometric_profile != "raw"
+                        else {}
+                    ),
                 },
                 "purpose": config.purpose,
                 "probability_fusion": "joint_av_mixture_then_conditional",

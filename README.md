@@ -7,6 +7,8 @@ Completed corpus-v1 and corpus-v2 control baselines are bundled, alongside an
 [completed TPE BEST58 preview](docs/UNIFIED_V3_TPE_PREVIEW.md).
 V2 uses 21 TRAIN sources, 2,529 photos and all 5,700 annotation variants;
 its fixed terminal E60 is not an optimized/final model. Model optimization and TEST remain pending.
+Unified checkpoints can also retain [full-image raw/CLAHE/LC preprocessing](docs/UNIFIED_PHOTOMETRY.md);
+prediction automatically uses the saved recipe. Existing bundled weights retain raw defaults.
 See the [current status and remaining work](docs/STATUS.md) and the
 [agreed deliverable](docs/GOAL.md).
 

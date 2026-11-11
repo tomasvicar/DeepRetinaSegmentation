@@ -159,3 +159,12 @@ pass `--derived-cache` and `--expected-cache-fingerprint` explicitly at training
 Keep the same cache identity on resume. Cache construction is CPU work; it does
 not train a model or establish quality. Full objectives, sampling, augmentations,
 partial-label rules and checkpoint contracts are in [UNIFIED.md](UNIFIED.md).
+
+## Optional saved full-image photometry
+
+Unified configs may select `photometric_profile = "clahe_hsv_v1"` or
+`"legacy_lc_clahe_v1"`; omitted fields retain raw RGB. A checkpoint automatically
+selects its saved recipe during prediction, before TTA/tiling. Read the
+[exact contract and retraining limits](UNIFIED_PHOTOMETRY.md) and
+[separately pinned RGB cache guide](UNIFIED_PHOTOMETRY_CACHE.md).
+Do not relabel existing weights or raw caches as photometric models.
