@@ -114,6 +114,16 @@ Some source/head results regress. Defaults remain threshold0.5/TTA`none`; this
 does not make the preview a final or TEST-qualified model. The CPU timings above
 were measured at0.5 and are not a new timing measurement of0.35.
 
+These all-source vessel scores pool107 annotated VAL photos, including20 AVRDB
+photos with **positive vessel support only**: background false positives cannot
+be scored there. On the remaining87 densely supported photos/55 known groups,
+original vessel Dice is **0.7613266**, while this BEST58/rot4/.35 pipeline scores
+**0.7482361**. The difference−0.0130905 has paired95% interval
+[−0.0185577,−0.0087907]. The close all-source point estimates therefore conceal
+a clear dense-domain vessel regression. See the
+[support-specific analysis](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/dense-vessel-support-20261112)
+for counts, source results and historical exposure/backend limitations.
+
 The [full threshold report](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/first-TPE-BEST58-rot4-threshold-20261111)
 retains all eight settings, counts, source regressions and uncertainty. The
 [all-head comparison](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/all-head-candidate-comparison-20261111)
