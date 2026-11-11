@@ -342,6 +342,18 @@ and a common frozen25/native VAL GT support grid, not retagged native35 supports
 
 ## Remaining decision and evidence limits
 
+The [dense-vessel supplement](../reports/dense-vessel-support-20261112) separates
+positive-only AVRDB support from dense segmentation. Vessel-supported VAL has
+107photos/75known groups/9sources; removing AVRDB leaves87/55/8. AVRDB contributes
+no scored background negatives, so its FP0/precision1 is structural. Dense Dice
+is.7613266 for original182, .7385115 for first-TPE LAST60 NONE/.5,
+.7482361 for first-TPE BEST58rot4/.35 and.7410983 for raw384 BEST59 NONE/.5;
+all three paired differences against original are entirely negative. Aggregate
+near-original vessel Dice is therefore not evidence of dense near-parity.
+All source/GT supports match; the supplement preserves exact counts and actual
+55-group uncertainty without changing frozen benchmarks or existing objectives.
+Future vessel-loss evaluation must inspect dense performance and AVRDB separately.
+
 Source0b vascular baselines, source72 V3/TPE and sourcefd44 photometry are distinct
 frozen families. Execute each from its declared source/runtime; an overview does
 not make an older trainer support new checkpoint fields. Do not alter live or
