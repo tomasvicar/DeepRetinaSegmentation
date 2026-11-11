@@ -1,0 +1,155 @@
+{
+  "kind": "actual_native_fixed27_tpe_proposal_and_training_start",
+  "observed_at_utc": "2026-11-11T10:49:24Z",
+  "proposal_sha256": "89f304fa69749c25999f06d70638ee4e011c7066223fe03478f1dad258affaef",
+  "native_sampler": "TPESampler_post_startup",
+  "optuna_version": "5.0.0",
+  "sampler_kwargs": {
+    "seed": 42,
+    "constant_liar": true,
+    "multivariate": true,
+    "n_startup_trials": 4,
+    "n_ei_candidates": 24
+  },
+  "imported_unique_count": 5,
+  "source_commit": "72fb321187eca517823083aca80cedace9605570",
+  "core_commit": "8777d6cca60f7ced08798ad2af7fabf626421d05",
+  "original_parent_protocol_sha256": "053f05c094d052f98069358effc56522b743b8a25c85c3afcb9a6a75aef79200",
+  "original_parents": [
+    {
+      "parent_trial": 0,
+      "status_at_import": "RUNNING",
+      "fidelity_epoch": 27,
+      "scheduler_horizon": 60,
+      "last_worst6ratio": 0.90516226546815,
+      "params": {
+        "augmentation": "mild",
+        "base_channels": 12,
+        "lr": 0.0003,
+        "norm": "batch",
+        "vascular_sampling_weight": 2.0,
+        "weight_decay": 1e-05
+      }
+    },
+    {
+      "parent_trial": 1,
+      "status_at_import": "PRUNED",
+      "fidelity_epoch": 27,
+      "scheduler_horizon": 60,
+      "last_worst6ratio": 0.960496762720235,
+      "params": {
+        "augmentation": "mild",
+        "base_channels": 12,
+        "lr": 0.00013831748681407513,
+        "norm": "group",
+        "vascular_sampling_weight": 1.9355515774429441,
+        "weight_decay": 0.000133112160807369
+      }
+    },
+    {
+      "parent_trial": 2,
+      "status_at_import": "PRUNED",
+      "fidelity_epoch": 27,
+      "scheduler_horizon": 60,
+      "last_worst6ratio": 0.950604556030347,
+      "params": {
+        "augmentation": "mild",
+        "base_channels": 12,
+        "lr": 0.0001464302407518504,
+        "norm": "group",
+        "vascular_sampling_weight": 1.6072748506390395,
+        "weight_decay": 7.4763120622522945e-06
+      }
+    },
+    {
+      "parent_trial": 4,
+      "status_at_import": "RUNNING",
+      "fidelity_epoch": 27,
+      "scheduler_horizon": 60,
+      "last_worst6ratio": 0.9666287456494661,
+      "params": {
+        "augmentation": "basic",
+        "base_channels": 16,
+        "lr": 0.0005371004924854037,
+        "norm": "batch",
+        "vascular_sampling_weight": 2.120616421415866,
+        "weight_decay": 2.091498132903561e-05
+      }
+    },
+    {
+      "parent_trial": 5,
+      "status_at_import": "PRUNED",
+      "fidelity_epoch": 27,
+      "scheduler_horizon": 60,
+      "last_worst6ratio": 0.8948818875191661,
+      "params": {
+        "augmentation": "mild",
+        "base_channels": 12,
+        "lr": 0.000396567611110348,
+        "norm": "group",
+        "vascular_sampling_weight": 1.8232536617196038,
+        "weight_decay": 3.5856126103453987e-06
+      }
+    }
+  ],
+  "proposed_params": {
+    "lr": 0.000287722894608172,
+    "weight_decay": 5.52164819184925e-06,
+    "vascular_sampling_weight": 2.553934065831788,
+    "base_channels": 16,
+    "norm": "batch",
+    "augmentation": "basic"
+  },
+  "full_future60_config": {
+    "architecture": "compact_unet",
+    "legacy_initialization": null,
+    "allow_historical_exposure": false,
+    "preprocessing_profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "epochs": 60,
+    "epoch_samples": 8192,
+    "coverage_first": true,
+    "batch_size": 4,
+    "patch_size": 384,
+    "base_channels": 16,
+    "depth": 4,
+    "norm": "batch",
+    "lr": 0.000287722894608172,
+    "weight_decay": 5.52164819184925e-06,
+    "scheduler": "cosine",
+    "min_lr_ratio": 0.05,
+    "seed": 42,
+    "workers": 8,
+    "device": "cuda:0",
+    "sampling": "dataset_task_balanced",
+    "train_view": "patch",
+    "view_size": 512,
+    "foreground_probability": 0.5,
+    "augmentation": "basic",
+    "bce_weight": 1.0,
+    "dice_weight": 1.0,
+    "av_weight": 1.0,
+    "vessel_loss_weight": 1.0,
+    "vessel_pos_weight": 1.0,
+    "tile_size": 512,
+    "overlap": 64,
+    "require_all_heads": true,
+    "selection_metric": "macro_dataset_mean_dice",
+    "purpose": "full_data",
+    "max_steps": null,
+    "vascular_sampling_weight": 2.553934065831788,
+    "mixed_precision": "bf16"
+  },
+  "proposal_study_name": "leipzig-fixed27-proposal-20261111",
+  "auxiliary_trial_number": 5,
+  "raw_proposal_no_manual_changes": true,
+  "new_run_started_at_utc": "2026-11-11T10:53:02.986902+00:00",
+  "new_run_total_epochs": 60,
+  "phase27": "stopped independent evidence then SAME checkpoint resume to60, original60 cosine horizon",
+  "observed_completed_epoch_at_110828UTC": 4,
+  "first_epoch_training_seconds": 149.31226196698844,
+  "first_epoch_validation_seconds": 62.52359080302995,
+  "new_model_completed_or_quality_selected": false,
+  "test_evaluation": false,
+  "qualification": "Five proxy observations across six dimensions are thin evidence, not global optimality. Parent statuses/DB/protocol preserved. Actual full60 plus fresh VAL/final freeze/TEST remain pending. Patch384/raw25 are fixed in this study; controlled patch/photometry study is a separate required phase."
+}

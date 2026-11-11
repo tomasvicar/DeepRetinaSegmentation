@@ -7,8 +7,13 @@ It must not call that parent a completed 60 trial. Every imported native Optuna
 trial is COMPLETE only for the newly defined fixed-27 measurement problem, with
 the original parent ID/status/source/node/checkpoint provenance in user attributes.
 
-**No actual observation or proposal has been consumed/generated here.** Tests
-use explicitly synthetic temporary metadata/SQLite only, never model/GT arrays.
+The pre-outcome plan and test fixtures below are preserved. **An actual proposal
+was subsequently generated on2026-11-11 from all five qualified E27 observations**,
+after the idle-device/time gates. See
+[actual-proposal-20261111.json](actual-proposal-20261111.json). Its fresh full60
+training started10:53UTC and has completed at least four epochs; it is not a
+completed/final model or a quality result. Tests themselves remain explicitly
+synthetic temporary metadata/SQLite only.
 
 ## Revised pre-outcome decision rule
 
