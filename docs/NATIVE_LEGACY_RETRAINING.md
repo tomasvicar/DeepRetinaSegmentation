@@ -89,8 +89,10 @@ ID before outputs/device setup. Arithmetic is not changed to accommodate them.
 
 A/V training uses batch1 and the full prepared frame. It performs no patch crop,
 letterbox, external pad or resize. Native output interpolation restores the input
-spatial dimensions. Only logits1:3 enter CE on valid known artery XOR vein pixels;
-logit0 and unknown/ambiguous pixels receive zero class-loss gradient. Each selected
+spatial dimensions. Only logits1:3 enter CE on valid known artery XOR vein pixels
+inside valid positive vessel support. The same support helper controls row
+eligibility and training/validation loss. Class labels outside the supplied vessel
+context, unused logit0 and unknown/ambiguous pixels receive zero class-loss gradient. Each selected
 A/V observer supplies its own vessel and artery/vein targets. Vessel-only rows
 cannot become A/V samples, even when they share a photograph.
 

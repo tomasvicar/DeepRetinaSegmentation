@@ -116,12 +116,13 @@ def av_input(image, target, valid, *, record_id):
 
 
 def av_known(target, valid):
+    """Known class pixels inside valid positive vessels, CHW or batched BCHW."""
     return (
-        valid[0]
-        & (target[0] >= 0.5)
-        & valid[1]
-        & valid[2]
-        & ((target[1] >= 0.5) ^ (target[2] >= 0.5))
+        valid.select(-3, 0)
+        & (target.select(-3, 0) >= 0.5)
+        & valid.select(-3, 1)
+        & valid.select(-3, 2)
+        & ((target.select(-3, 1) >= 0.5) ^ (target.select(-3, 2) >= 0.5))
     )
 
 
@@ -258,7 +259,7 @@ class NativeDataset:
 
 def native_loss(logits, target, valid, task):
     if task == "av":
-        known = valid[:, 1] & valid[:, 2] & ((target[:, 1] >= 0.5) ^ (target[:, 2] >= 0.5))
+        known = av_known(target, valid)
         if not known.any():
             return logits.sum() * 0
         classes = (target[:, 2] >= 0.5).long()
