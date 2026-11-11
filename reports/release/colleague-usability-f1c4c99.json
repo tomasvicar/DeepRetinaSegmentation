@@ -1,0 +1,177 @@
+{
+  "audited_source": "f1c4c99",
+  "scope": "stdlib-only parser/config/catalog checks; no dispatch, model forward, preparation or training",
+  "parsed_commands": [
+    [
+      "doctor"
+    ],
+    [
+      "models"
+    ],
+    [
+      "inspect",
+      "data/rebuilt-training21/manifest.json"
+    ],
+    [
+      "prepare",
+      "--data-root",
+      "RAW",
+      "--datasets",
+      "drive",
+      "rite",
+      "drishti",
+      "--output",
+      "data/leipzig",
+      "--max-size",
+      "1024"
+    ],
+    [
+      "train-unified",
+      "--manifest",
+      "data/rebuilt-training21/manifest.json",
+      "--config",
+      "configs/unified.toml",
+      "--output",
+      "runs/unified",
+      "--stop-after-epoch",
+      "1"
+    ],
+    [
+      "train-unified",
+      "--manifest",
+      "data/rebuilt-training21/manifest.json",
+      "--output",
+      "runs/unified",
+      "--resume",
+      "runs/unified/last.pt"
+    ],
+    [
+      "train-legacy",
+      "--manifest",
+      "data/rebuilt-training21/manifest.json",
+      "--config",
+      "configs/native-legacy-vessel.toml",
+      "--device",
+      "cuda:0",
+      "--output",
+      "runs/native-vessel"
+    ],
+    [
+      "train-legacy",
+      "--manifest",
+      "data/rebuilt-training21/manifest.json",
+      "--config",
+      "configs/native-legacy-disc.toml",
+      "--device",
+      "cuda:0",
+      "--output",
+      "runs/native-disc"
+    ],
+    [
+      "train-legacy",
+      "--manifest",
+      "data/rebuilt-training21/manifest.json",
+      "--config",
+      "configs/native-legacy-universal.toml",
+      "--device",
+      "cuda:0",
+      "--output",
+      "runs/native-universal"
+    ],
+    [
+      "train-legacy",
+      "--manifest",
+      "data/rebuilt-training21/manifest.json",
+      "--config",
+      "configs/native-legacy-av.toml",
+      "--device",
+      "cuda:0",
+      "--output",
+      "runs/native-av"
+    ],
+    [
+      "predict",
+      "--model",
+      "legacy-av",
+      "--prepared-array",
+      "input.npz",
+      "--output",
+      "predictions/av"
+    ],
+    [
+      "predict",
+      "--model",
+      "legacy-av",
+      "--av-raw-matlab-source",
+      "--input",
+      "fundus.png",
+      "--dataset",
+      "stare",
+      "--output",
+      "predictions/av"
+    ],
+    [
+      "predict",
+      "--checkpoint",
+      "runs/native-av/best.pt",
+      "--input",
+      "fundus.png",
+      "--dataset",
+      "drive",
+      "--fov",
+      "fov.png",
+      "--vessel-mask",
+      "predictions/native-vessel/vessel.png",
+      "--output",
+      "predictions/native-av"
+    ]
+  ],
+  "models": [
+    {
+      "name": "pilot-vessels",
+      "sha256": "38a4125d213b49526c6cf1fbd6dfde1e19394a1969d3724be0737b7bffda4544",
+      "bytes": 1971502
+    },
+    {
+      "name": "pilot-av",
+      "sha256": "0a8c85dd4888a4aab1ffded7a9e2ac4b254745a15c03a465ff2106e34a1c0eb7",
+      "bytes": 1971694
+    },
+    {
+      "name": "legacy-universal",
+      "sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "bytes": 5802105
+    },
+    {
+      "name": "legacy-vessels",
+      "sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+      "bytes": 5346739
+    },
+    {
+      "name": "legacy-disc-0",
+      "sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+      "bytes": 5767664
+    },
+    {
+      "name": "legacy-disc-1",
+      "sha256": "8ebf60971813bbaecc9602663034d75cfe7f5c3c9587b7b2a27d056c1cae3605",
+      "bytes": 5767664
+    },
+    {
+      "name": "legacy-av",
+      "sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+      "bytes": 8152192
+    },
+    {
+      "name": "pilot-disc-cup",
+      "sha256": "36f72fd4817d432d6e953bbec39604374d40b25c0a0ffad7723b0b28ca55e22a",
+      "bytes": 1971630
+    },
+    {
+      "name": "unified-full-data-baseline",
+      "sha256": "bfe957460dfed168f2344b1b84ef99b7f502e9dbc8ce1fd4d68632c3234708b1",
+      "bytes": 5401330
+    }
+  ],
+  "torch_imported": false
+}
