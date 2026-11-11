@@ -64,3 +64,7 @@ No TEST decoding/evaluation, model forward, new training, model selection or
 release occurs in this change. A real final60 pool candidate still needs its
 original final receipt, retained milestone and fresh final-source VAL before
 root review; a synthetic fixture or old thin report cannot substitute for them.
+
+The final bounded CPU suite passed223 cases in37.05seconds, including retained
+0b/6b role/source compatibility, reviewed stage2/comparator and feature contracts.
+Ruff and `git diff --check` passed. This does not replace real final60 V3 evidence.
