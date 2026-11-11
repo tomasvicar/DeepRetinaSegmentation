@@ -1,0 +1,24 @@
+{
+  "checked_utc": "2026-11-11T07:16:03.539760+00:00",
+  "source_commit": "a6bc18e",
+  "checks": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_vascular_sampling_weight.py",
+      "passed": 42,
+      "seconds": 7.82
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_unified.py tests/test_unified_cli.py tests/test_unified_warmstart.py tests/test_unified_loss_balance.py",
+      "passed": 93,
+      "seconds": 19.19,
+      "warnings": 22
+    }
+  ],
+  "environment": {
+    "OMP_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "PYTHONPATH": "src"
+  },
+  "scope": "CPU sampler/config/checkpoint and existing unified training/CLI/loss contracts; does not assert optimized model quality"
+}
