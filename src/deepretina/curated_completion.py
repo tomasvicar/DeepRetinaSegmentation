@@ -223,10 +223,15 @@ def original_chain(r, raw):
         same(t[k], t27[k], "Original same-worker/config/GPU resume differs")
     same(
         t["input_artifact_shas"],
-        {k: gate.digest(raw[k]) for k in ("profile", "study", "parent", "helpers")},
+        {
+            "profile": gate.digest(raw["profile"]),
+            "study": gate.digest(raw["study"]),
+            "parent_tpe": gate.digest(raw["parent"]),
+            "helpers": gate.digest(raw["helpers"]),
+        },
         "Original frozen input dependency hashes differ",
     )
-    gate.require(t["profile_sha256"] == gate.digest(raw["profile"]), "Profile bytes differ")
+    gate.require(t["profile_sha256"] == digest(r["profile"]), "Canonical profile differs")
     same(receipt["task"], t, "E60 receipt task differs")
     same(receipt["run_result"], r["run_result60"], "Original observed child result differs")
     for rec, epoch in ((receipt, 60), (r["receipt27"], 27)):

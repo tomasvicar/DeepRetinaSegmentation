@@ -79,6 +79,11 @@ an explicit local materialization path and the SHA256 of its original bytes:
 No native V3 envelope or standalone supervisor terminal is fabricated. Input
 paths may relocate the preserved bytes; historical paths inside original JSON
 remain provenance. Each input is snapshotted, hashed and rechecked at the end.
+The original task's `input_artifact_shas` binds raw original JSON bytes, using
+the original key `parent_tpe`. Its `profile_sha256` and `study_contract_sha256`
+instead bind canonical compact sorted JSON plus a newline. Both bindings are
+verified separately; pretty original JSON must not be silently replaced by its
+canonical serialization.
 The manifest and checker source/runtime identity are also checked for changes
 during the operation. This is a bounded consistency check, not a guarantee
 against future storage changes or proof of previous TEST blindness. The trusted
@@ -101,12 +106,13 @@ agree with the independently loaded role bytes.
 
 ## Verification scope of this implementation
 
-26 focused CPU tests passed in 7.52 seconds. They use tiny constructed weights
+28 focused CPU tests passed in 8.53 seconds. They use tiny constructed weights
 and synthetic metadata, with NN forward and CUDA initialization prohibited.
 Synthetic trust-anchor substitutions are explicit fixtures, not claims of a
 real fd44 completion. Cases cover both roles, all five arms, full-config and
 nonraw cache/backend binding, changed task/study/source/receipt, worker-success
-versus nonterminal PBS state, stale optimizer, wrong horizon, malformed/nonfinite
+versus nonterminal PBS state, distinct raw/canonical dependency hashes, stale
+optimizer, wrong horizon, malformed/nonfinite
 state, and zero/missing/foreign BEST annotation visits. A regression confirms
 that the existing final-selection gate still rejects `curated_fd44`.
 
