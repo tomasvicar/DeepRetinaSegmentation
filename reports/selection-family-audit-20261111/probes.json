@@ -1,0 +1,60 @@
+{
+  "audited_commit": "317c3030afbb25dcb23b65090a712c5a92faa7c5",
+  "scope": "CPU metadata/control-flow probes; no real GT, no NN forward, no selection created or heldout execution",
+  "probes": [
+    {
+      "name": "actual0b_BEST59",
+      "outcome": "REJECT",
+      "exception": "SelectionError",
+      "message": "Invalid safe unified checkpoint: UnifiedConfig.__init__() got an unexpected keyword argument 'vascular_sampling_weight'"
+    },
+    {
+      "name": "actual72_LAST3",
+      "outcome": "REJECT",
+      "exception": "SelectionError",
+      "message": "Invalid safe unified checkpoint: UnifiedConfig.__init__() got an unexpected keyword argument 'vascular_sampling_weight'"
+    },
+    {
+      "name": "72config_mixed_precision_still_unsupported_after_omitting_other_new_field_IN_MEMORY_ONLY",
+      "outcome": "REJECT",
+      "exception": "TypeError",
+      "message": "UnifiedConfig.__init__() got an unexpected keyword argument 'mixed_precision'"
+    },
+    {
+      "name": "public_unified_evaluate_test_rejected_before_missing_checkpoint",
+      "outcome": "REJECT",
+      "exception": "ValueError",
+      "message": "Public unified evaluation permits --split val only; test requires a reviewed frozen-selection record schema"
+    },
+    {
+      "name": "heldout_missing_explicit_execution_rejected_before_inputs",
+      "outcome": "REJECT",
+      "exception": "SelectionError",
+      "message": "Explicit reviewed stage2 held-out execution request required"
+    },
+    {
+      "name": "metadata_comparator_accepts_new_config_and_training_source_0b",
+      "outcome": "ACCEPT synthetic metadata fixture only; no TEST evaluator called"
+    },
+    {
+      "name": "metadata_comparator_accepts_new_config_and_training_source_72",
+      "outcome": "ACCEPT synthetic metadata fixture only; no TEST evaluator called"
+    },
+    {
+      "name": "completion_subgate_accepts_no_annotation_visits_and_only_one_photo_visit_SYNTHETIC",
+      "outcome": "ACCEPT",
+      "missing_train_annotations": 1,
+      "observed_photo_visits": 1,
+      "planned_samples": 491520,
+      "selected_best_coverage_supplied": false,
+      "scope": "completion_evidence only; did not call create/check_selection/data_identity/GT decoder"
+    },
+    {
+      "name": "completion_subgate_partial_epoch3",
+      "outcome": "REJECT",
+      "exception": "SelectionError",
+      "message": "Training has not actually completed60 epochs"
+    }
+  ],
+  "cuda_initialized": false
+}
