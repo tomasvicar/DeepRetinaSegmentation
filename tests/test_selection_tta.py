@@ -341,3 +341,16 @@ def test_declared_operators_match_actual_prediction_order():
         assert [(o["rot90_ccw"], o["horizontal_flip_after_rotation"]) for o in operators] == list(
             unified.TTA_OPERATORS[mode]
         )
+
+
+def test_header_only_bool_rotation_rejected_with_unchanged_metrics(case, tmp_path):
+    inputs = prepared(case)
+    report = json.loads(inputs["validation_evidence"].read_text())
+    original_metrics = copy.deepcopy(report["metrics"])
+    report["inference_protocol"]["tta"]["operators"][1]["rot90_ccw"] = True
+    assert report["metrics"] == original_metrics
+    rewrite(inputs["validation_evidence"], report)
+    with pytest.raises(gate.SelectionError, match="TTA header"):
+        gate.create_selection(
+            output=tmp_path / "bad-header.json", reviewer="fixture", rationale="fixture", **inputs
+        )

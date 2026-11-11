@@ -29,3 +29,14 @@ passed; neither correction changed model arithmetic.
 Ruff and whitespace checks passed. Implementation/runtime identities and precise
 scope are in `implementation-proof.json`. No old TTA report was converted into
 eligible evidence. See [the protocol and remaining real-evidence requirements](../../docs/FINAL_SELECTION_TTA.md).
+
+## Header JSON-type follow-up
+
+Root review identified that the evidence header's ordinary Python dictionary
+comparison could accept `rot90_ccw: true` as rotation `1`, while the metrics
+contained the correct strict descriptor. The new header-only fixture reproduced
+that acceptance before the fix. Non-default TTA now additionally binds the entire
+header using canonical JSON bytes before ordinary equality; `none` follows the
+unchanged path. The fixture and 17 related checks passed in 6.90 seconds. This is
+161 distinct checks including the earlier 160; no full suite or NN was repeated.
+The implementation proof records the new source identity and predecessor digest.

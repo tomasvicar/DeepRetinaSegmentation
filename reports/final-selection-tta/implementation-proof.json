@@ -2,7 +2,7 @@
   "kind": "implementation_only_no_actual_model_selection",
   "base_commit": "5eb49fa",
   "evaluation_identity": {
-    "evaluation_source_sha256": "5e84b23517e85ef11d71562d92dce5546d424a9e42dbec05ecd69aa67236fd84",
+    "evaluation_source_sha256": "198fdd476505ab38437f8668945d24c39dfb344a5d8fd96a4bb2c9d3a7400d05",
     "source_files": [
       "src/deepretina/__init__.py",
       "src/deepretina/__main__.py",
@@ -91,7 +91,7 @@
     "scripts/compare_reviewed_test.py": "9bccff93fca25155b151dbdfe13065417a85618ff460eacad7352d9c42920a2a",
     "src/deepretina/validation_evidence.py": "04d5bbe06c764656a83a076b00ab66ada3c27362c23dc9f6a2274cbf625946c2",
     "src/deepretina/heldout.py": "fa2e6dd5a5fe3e04644171ee23a18f8556704dc2d649f502817dba347303a915",
-    "src/deepretina/selection.py": "d30dd504c9fd35bce46acbbf27c94fd982048102fb2c4c1beccbe4bab4b5c94f",
+    "src/deepretina/selection.py": "5142ddc475fbc0455a09c6c6725fcf027924670a685cde53d85dd6bfe247c8fa",
     "src/deepretina/unified.py": "5b35c3c0141fdaa84976f2081f163b2cd47b7f5624015ad5d9392b19a90d8412",
     "src/deepretina/inference_tta.py": "ed8324662243f4b1a3d1bb302a91153522e70c66d0ffca64213c7e592ac1c697"
   },
@@ -202,7 +202,14 @@
   "actual_NN_forward": false,
   "actual_VAL_or_TEST_scoring": false,
   "selection_artifact_created": false,
-  "test_count": 160,
+  "test_count": 161,
   "tests": "106 initial passes +1 corrected import pass +3 additional checks +50 comparator/operator-order checks; no actual data or network forwards",
-  "fresh_actual_VAL_required": true
+  "fresh_actual_VAL_required": true,
+  "pre_header_fix_evaluation_source_sha256": "5e84b23517e85ef11d71562d92dce5546d424a9e42dbec05ecd69aa67236fd84",
+  "header_followup": {
+    "reproduced_before_fix": "header-only rot90_ccw=true accepted as1 with unchanged strict metrics descriptor; regression failed DID NOT RAISE",
+    "fix": "non-none canonical JSON entire evidence header binding before ordinary equality; NONE path unchanged",
+    "after_fix": "18 focused checks passed in6.90s,26deselected; includes newnegative, bothfamilies/allmodes positives, source/protocol negatives andNONEschema",
+    "actual_NN_or_TEST": false
+  }
 }

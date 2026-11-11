@@ -851,6 +851,11 @@ def _context(
         and evidence["kind"] == evidence_kind(tta),
         "Require freshly enriched VAL evidence; thin historical reports are not eligible",
     )
+    if tta != "none":
+        require(
+            canonical(evidence["inference_protocol"]) == canonical(protocol),
+            "VAL TTA header differs in value or JSON type from requested protocol",
+        )
     identity = {
         "sha256": best["checkpoint_sha256"],
         "epoch": best["epoch"],
