@@ -1,0 +1,83 @@
+{
+  "reference_source_commit": "193662c",
+  "candidate_source_commit": "d14aa14",
+  "reference_report_sha256": "53b5c0a64a8aeccb96774c965025093607299bd378a18406206d308ca40a04c6",
+  "candidate_report_sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+  "photos": 770,
+  "same_policy_and_four_model_hashes": true,
+  "same_evaluator_script_bytes": true,
+  "same_annotation_inventory_and_gt_count_support": true,
+  "changed_photo_head_pairs": [
+    {
+      "photo_id": "sha256:1f2d7acc660629400ff0fc28e520e9adc49f551950bad0bceb9f95e6f6c4d12e",
+      "dataset": "hrf",
+      "head": "artery",
+      "count_delta": {
+        "tp": -2,
+        "fp": 8,
+        "fn": 2
+      }
+    },
+    {
+      "photo_id": "sha256:1f2d7acc660629400ff0fc28e520e9adc49f551950bad0bceb9f95e6f6c4d12e",
+      "dataset": "hrf",
+      "head": "vein",
+      "count_delta": {
+        "tp": -17,
+        "fp": 1,
+        "fn": 17
+      }
+    },
+    {
+      "photo_id": "sha256:7ace2185c49d4a429262579d7776d7d1d8c82f7869a847867c3b0cc865330f78",
+      "dataset": "hrf",
+      "head": "artery",
+      "count_delta": {
+        "tp": -5,
+        "fp": 2,
+        "fn": 5
+      }
+    },
+    {
+      "photo_id": "sha256:7ace2185c49d4a429262579d7776d7d1d8c82f7869a847867c3b0cc865330f78",
+      "dataset": "hrf",
+      "head": "vein",
+      "count_delta": {
+        "tp": -1,
+        "fp": 5,
+        "fn": 1
+      }
+    }
+  ],
+  "changed_conditional_av_photos": [
+    {
+      "photo_id": "sha256:1f2d7acc660629400ff0fc28e520e9adc49f551950bad0bceb9f95e6f6c4d12e",
+      "dataset": "hrf",
+      "count_delta": {
+        "correct": -8,
+        "end_to_end_correct": -19
+      }
+    },
+    {
+      "photo_id": "sha256:7ace2185c49d4a429262579d7776d7d1d8c82f7869a847867c3b0cc865330f78",
+      "dataset": "hrf",
+      "count_delta": {
+        "correct": -10,
+        "end_to_end_correct": -6
+      }
+    }
+  ],
+  "macro_dataset_head_dice_difference": -2.001368433313111e-06,
+  "conditional_av_accuracy_difference": -6.853790374572455e-06,
+  "scope": "Actual full VAL before/after independently golden-verified MATLAB nearest-coordinate fix. Numerical operator fidelity improves; no predictive-quality improvement claim. No TEST evaluation.",
+  "conditional_av_count_delta": {
+    "correct": -18,
+    "scored_pixels": 0,
+    "eligible_pixels": 0,
+    "end_to_end_correct": -25
+  },
+  "changed_production_paths": [
+    "src/deepretina/legacy/matlab_resize.py"
+  ],
+  "same_runtime_versions": true
+}
