@@ -58,7 +58,12 @@ def task_flags(row, target, valid, fov):
     return tasks, positive
 
 
-def exposure(rows, flags, positives, budget, frozen_method=None):
+def exposure(
+    rows, flags, positives, budget, frozen_method=None, *, vascular_priority=1.0, av_probability=0.5
+):
+    """Analytic research scenarios only; never used by the production sampler."""
+    if vascular_priority not in {1, 1.5, 2} or av_probability not in {0.5, 0.75}:
+        raise ValueError("Only the six predeclared research scenarios are allowed")
     grouped = defaultdict(list)
     for row in rows:
         grouped[row["photo_id"]].append(row)
@@ -82,7 +87,9 @@ def exposure(rows, flags, positives, budget, frozen_method=None):
             options = by_task[task]
             if not options:
                 continue
-            task_probability = 1.0 if task == "disc_cup" else 1.0 / len(vascular)
+            task_probability = 1.0
+            if task != "disc_cup" and len(vascular) == 2:
+                task_probability = av_probability if task == "av" else 1 - av_probability
             for row in options:
                 chance = task_probability / len(options)
                 for name in flags[row["id"]]:
@@ -105,6 +112,13 @@ def exposure(rows, flags, positives, budget, frozen_method=None):
             math.isclose(a, b, rel_tol=1e-14, abs_tol=1e-14) for a, b in zip(weights, original)
         ) or len(original) != len(weights):
             raise ValueError("Weights differ from frozen sampling_weights")
+    weights = [
+        sum(
+            (vascular_priority if key[1] in {"vessel", "av"} else 1.0) / populations[key]
+            for key in keys
+        )
+        for keys in memberships
+    ]
     total_weight = sum(weights)
     extras = budget - len(groups)
     expected = [1 + extras * w / total_weight for w in weights]
@@ -154,7 +168,11 @@ def exposure(rows, flags, positives, budget, frozen_method=None):
         "weighted_extra_draws": extras,
         "membership_keys": len(populations),
         "sum_weights": total_weight,
-        "weights_match_frozen_method": frozen_method is not None,
+        "base_weights_match_frozen_method": frozen_method is not None,
+        "weights_match_frozen_method": frozen_method is not None and vascular_priority == 1,
+        "observer_policy_matches_frozen": av_probability == 0.5,
+        "vascular_priority": vascular_priority,
+        "av_probability_when_both_bundles_exist": av_probability,
         "tasks": task_report,
         "sampling_sources": source_report,
         "expected_selected_annotation_bundles_by_source": {
@@ -175,7 +193,16 @@ def main():
     ]:
         p.add_argument("--" + key, required=True)
     p.add_argument("--epoch-samples", type=int, default=8192)
+    p.add_argument(
+        "--scenario-grid",
+        action="store_true",
+        help="Six predeclared analytic scenarios; no runtime sampling changes",
+    )
+    p.add_argument("--reference-report", type=Path)
+    p.add_argument("--expected-reference-sha256")
     a = p.parse_args()
+    if a.scenario_grid and (not a.reference_report or not a.expected_reference_sha256):
+        p.error("--scenario-grid requires a byte-pinned previous reference report")
     start = time.monotonic()
     if a.output.exists():
         raise FileExistsError(a.output)
@@ -275,6 +302,45 @@ def main():
         },
         "elapsed_seconds": time.monotonic() - start,
     }
+    if a.scenario_grid:
+        reference_raw = a.reference_report.read_bytes()
+        if sha(reference_raw) != a.expected_reference_sha256:
+            raise ValueError("Previous report fingerprint mismatch")
+        reference = json.loads(reference_raw)
+        for pin in [
+            "manifest_sha256",
+            "parent_manifest_sha256",
+            "cache_index_sha256",
+            "frozen_unified_sha256",
+        ]:
+            if result[pin] != reference[pin]:
+                raise ValueError("Previous report input identity differs")
+        for name in ("v1", "v2"):
+            for key in (
+                "tasks",
+                "sampling_sources",
+                "expected_selected_annotation_bundles_by_source",
+            ):
+                if result["reports"][name][key] != reference["reports"][name][key]:
+                    raise ValueError(
+                        "Baseline expectations do not reproduce previous reference exactly"
+                    )
+        result["reference_report_sha256"] = sha(reference_raw)
+        result["baseline_expectations_reproduced_exactly"] = True
+        result["scenarios"] = [
+            exposure(
+                train_rows(rows),
+                flags,
+                positives,
+                a.epoch_samples,
+                namespace["sampling_weights"],
+                vascular_priority=priority,
+                av_probability=probability,
+            )
+            for priority in (1.0, 1.5, 2.0)
+            for probability in (0.5, 0.75)
+        ]
+        result["elapsed_seconds"] = time.monotonic() - start
     with a.output.open("x") as f:
         json.dump(result, f, indent=2, allow_nan=False)
         f.write("\n")
