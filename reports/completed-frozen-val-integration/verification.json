@@ -1,0 +1,23 @@
+{
+  "utc": "2026-11-11T00:55:04.140564+00:00",
+  "scope": "Root independent integrated targeted CPU gate verification; no GT/model/TEST execution",
+  "tests": [
+    "tests/test_frozen_completed_val_comparison.py",
+    "tests/test_completed_val_comparison.py",
+    "tests/test_reviewed_test_comparison.py",
+    "tests/test_pool_completion_adapter.py"
+  ],
+  "result": {
+    "passed": 105,
+    "seconds": 5.97
+  },
+  "environment": {
+    "cuda_visible_devices": "",
+    "cpu_affinity": "0",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "nice": 10
+  },
+  "changes": "New flat-frozen-original route keeps existing old completed-VAL gate unchanged, each pipeline bound to its own pinned reviewed context; actual E60 coverage adapter remains separate."
+}
