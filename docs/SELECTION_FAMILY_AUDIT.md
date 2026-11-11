@@ -1,7 +1,7 @@
 # Final selection / freeze / TEST audit: source0b and source72
 
 Audited HPO commit `317c3030afbb25dcb23b65090a712c5a92faa7c5`.
-**No TEST evaluation, training, NN forward, real GT decoding, selection artifact
+**No TEST evaluation, training, NN forward, real GT decoding, real selection artifact
 creation or implementation change occurred.** CPU probes in
 `reports/selection-family-audit-20261111/probes.json` exercise actual rejection
 paths and synthetic metadata subgates, not merely string searches.
