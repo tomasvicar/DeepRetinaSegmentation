@@ -31,6 +31,7 @@ def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums()
         "unified-full-data-baseline",
         "unified-v2-control",
         "unified-v2-vascular2",
+        "unified-v3-tpe-preview",
     }
     for name, info in catalog.items():
         with bundled_checkpoint(name) as checkpoint:
@@ -94,6 +95,18 @@ def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums()
             )
             assert saved["val_selection_score"] == info["validation"]["training_score"]
             assert saved["geometry_policy"]["sha256"] == info["geometry_policy_sha256"]
+
+        if name == "unified-v3-tpe-preview":
+            assert saved["epoch"] == info["selected_epoch"] == 58
+            assert info["completed_epochs"] == 60
+            assert "training_state" not in saved and info["optimizer_state_present"] is False
+            assert saved["config"]["mixed_precision"] == info["training_mixed_precision"] == "bf16"
+            assert saved["coverage"]["contributing_annotation_records"] == 5700
+            assert min(saved["coverage"]["annotation_visits"].values()) == 1
+            assert saved["coverage"]["seen_photos"] == 2529
+            assert min(saved["coverage"]["photo_visits"].values()) == 60
+            assert saved["val_selection_score"] == info["validation"]["training_score"]
+            assert info["default_tta"] == "none" and info["default_threshold"] == 0.5
 
 
 def test_cli_predicts_without_dataset_or_external_checkpoint(tmp_path, capsys):

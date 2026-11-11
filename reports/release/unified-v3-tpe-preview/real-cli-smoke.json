@@ -1,0 +1,116 @@
+{
+  "kind": "actual_bundled_TPE_preview_public_CLI_RAW_TRAIN_smoke",
+  "observed_CLI_returncode": 0,
+  "model": "unified-v3-tpe-preview",
+  "checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+  "input_membership": {
+    "archive": "DRIONS-DB.zip",
+    "member": "images/image_001.jpg",
+    "encoded_image_sha256": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1",
+    "shape_HWC": [
+      400,
+      600,
+      3
+    ],
+    "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "record_ids": [
+      "drions_image_001_expert1_disc_cup",
+      "drions_image_001_expert2_disc_cup"
+    ],
+    "partition": "train"
+  },
+  "explicit_field_of_view_degrees": 30,
+  "tta": "rot4",
+  "probability_shape_CHW": [
+    5,
+    400,
+    600
+  ],
+  "dtype": "float32",
+  "finite": true,
+  "AV_conditional_sum1": true,
+  "AV_exclusive_and_inside_vessel": true,
+  "Cup_inside_disc": true,
+  "original_geometry_restored": true,
+  "all_output_files_exist": true,
+  "CPU_threads": 1,
+  "interop_threads": 1,
+  "affinity": [
+    4
+  ],
+  "nice": 17,
+  "I_O": "idle",
+  "CUDA_visible_devices": "",
+  "CUDA_initialized": false,
+  "GT_arrays_read": false,
+  "TEST_evaluated": false,
+  "quality_evaluation_performed": false,
+  "runtime": "existing locked Python environment and explicit preview PYTHONPATH; no installation",
+  "preprocessing": {
+    "profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "field_of_view_degrees": 30.0,
+    "normalized": false,
+    "normalization": "RGB/255-0.5",
+    "fov_source": "automatic original Python thresholds",
+    "geometry": {
+      "original_shape": [
+        400,
+        600
+      ],
+      "crop_position": [
+        0,
+        399,
+        0,
+        599
+      ],
+      "rescale_factor": 1.25,
+      "prepared_shape": [
+        500,
+        750
+      ]
+    },
+    "geometry_policy": {
+      "policy_id": "corpusv2_nominal_fov_20261110_v1",
+      "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+      "dataset": "drions",
+      "native_shape_hw": [
+        400,
+        600
+      ],
+      "policy_applied": false,
+      "declared_rule": {
+        "alternatives_degrees": [
+          25.0,
+          30.0,
+          45.0
+        ],
+        "camera": "unspecified analog fundus camera",
+        "confidence": "low",
+        "evidence_ids": [
+          "drions_creator"
+        ],
+        "field_of_view_degrees": 30.0,
+        "nominal_assumption": true,
+        "per_image_angle_measured": false,
+        "qualification": "Research scale convention for the disc-centered low-resolution scan, not measured FoV.30 avoids an unsupported45degree default and greater upsampling; neither is proven correct. Do not fit angle from disc GT.",
+        "sources": [
+          "https://www.ia.uned.es/~ejcarmona/DRIONS-DB_2.html"
+        ],
+        "status": "research_nominal_unknown_camera",
+        "policy_id": "corpusv2_nominal_fov_20261110_v1",
+        "native_shape_hw": [
+          400,
+          600
+        ],
+        "camera_attribution_method": "dataset_acquisition_description_or_explicit_nominal_research_policy"
+      },
+      "unseen_native_shape": false,
+      "selection": "explicit_field_of_view_degrees_override",
+      "field_of_view_degrees": 30.0,
+      "override_measurement_claim": false,
+      "unseen_native_shape_fallback": false
+    }
+  },
+  "command_shape": "uv run deepretina predict --model unified-v3-tpe-preview --input TRAINimage --dataset drions --field-of-view-degrees30 --output NEW --device cpu --tta rot4"
+}

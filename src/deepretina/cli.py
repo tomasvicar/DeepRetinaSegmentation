@@ -88,6 +88,11 @@ def parser() -> argparse.ArgumentParser:
     joint.add_argument("--config", type=Path, help="Flat JSON or TOML UnifiedConfig settings")
     joint.add_argument("--resume", type=Path, help="Resume a unified last.pt checkpoint")
     joint.add_argument("--device")
+    joint.add_argument(
+        "--mixed-precision",
+        choices=["none", "bf16"],
+        help="Override unified training precision; CPU/Pascal require none",
+    )
     joint.add_argument("--stop-after-epoch", type=int)
     joint.add_argument("--expected-content-sha256", help="Optional externally pinned corpus hash")
     joint.add_argument(

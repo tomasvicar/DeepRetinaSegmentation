@@ -415,6 +415,112 @@
       "training_corpus": "v2: 21 supervised TRAIN sources, 2,529 photos / 5,700 annotation records, manifest 17a2277c",
       "vascular_sampling_weight": 2.0,
       "checkpoint_bytes": 5453234
+    },
+    "unified-v3-tpe-preview": {
+      "filename": "unified-v3-tpe-preview.pt",
+      "sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+      "family": "unified",
+      "status": "experimental_completed_first_TPE_BEST58_preview_TEST_pending_not_final_selection",
+      "channels": [
+        "vessel",
+        "artery",
+        "vein",
+        "disc",
+        "cup"
+      ],
+      "selected_epoch": 58,
+      "completed_epochs": 60,
+      "selection_policy": "validation_best_macro_dataset_mean_dice",
+      "training_photos": 2529,
+      "training_annotation_records": 5700,
+      "training_dataset_count": 21,
+      "minimum_photo_visits": 60,
+      "minimum_annotation_visits": 1,
+      "parameters": 1965637,
+      "checkpoint_bytes": 8894002,
+      "optimizer_state_present": false,
+      "training_source_commit": "72fb321187eca517823083aca80cedace9605570",
+      "training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+      "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+      "prepared_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+      "geometry_policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+      "preprocessing_profile": "legacy25_raw",
+      "pixels_per_degree": 25,
+      "training_mixed_precision": "bf16",
+      "inference_precision": "float32_no_autocast",
+      "default_threshold": 0.5,
+      "default_tta": "none",
+      "validation": {
+        "training_score": 0.8108955347037143,
+        "fresh_none": {
+          "source_commit": "72fb321187eca517823083aca80cedace9605570",
+          "report_sha256": "9964f0913ae5f9ffba4a4307c8cda413cee46fa0bb5f722521f7d16f6eda04fe",
+          "macro_dataset_mean_dice": 0.8108954341052297,
+          "pooled_dice": {
+            "artery": 0.7303083854889679,
+            "cup": 0.8807832791528426,
+            "disc": 0.9326709308282606,
+            "vein": 0.7921165424588689,
+            "vessel": 0.7628821971219713
+          },
+          "conditional_av_accuracy": 0.8249115480275553,
+          "split": "val",
+          "photos": 770,
+          "test_evaluated": false
+        },
+        "separate_same_device_TTA_study": {
+          "source_commit": "1f723ad92898fad8b04a6ef8b39065f021f52a9c",
+          "report_sha256": "2e8f6019dd2c6d941cfe6507e29a6515df448355ac3ca746c5241510b9f20248",
+          "modes": {
+            "none": {
+              "macro_dataset_mean_dice": 0.810897419452556,
+              "pooled_dice": {
+                "artery": 0.7303235526119429,
+                "cup": 0.8807839788066061,
+                "disc": 0.9326714922143646,
+                "vein": 0.7921104712255727,
+                "vessel": 0.7628790161588007
+              },
+              "conditional_av_accuracy": 0.8249195441163256
+            },
+            "flips2": {
+              "macro_dataset_mean_dice": 0.8150869038070979,
+              "pooled_dice": {
+                "artery": 0.7389243111582987,
+                "cup": 0.8835704253611557,
+                "disc": 0.9347826168799217,
+                "vein": 0.7991309639546706,
+                "vessel": 0.7647538359981452
+              },
+              "conditional_av_accuracy": 0.8332183419614939
+            },
+            "rot4": {
+              "macro_dataset_mean_dice": 0.818055220843706,
+              "pooled_dice": {
+                "artery": 0.7439885483114569,
+                "cup": 0.8852065890779593,
+                "disc": 0.9371288239422132,
+                "vein": 0.8032398419647118,
+                "vessel": 0.7669531192212905
+              },
+              "conditional_av_accuracy": 0.8361133068624719
+            },
+            "dihedral8": {
+              "macro_dataset_mean_dice": 0.818853781624647,
+              "pooled_dice": {
+                "artery": 0.7455660253510299,
+                "cup": 0.8851796666632553,
+                "disc": 0.9374106798188229,
+                "vein": 0.8044427123350801,
+                "vessel": 0.7671471332825353
+              },
+              "conditional_av_accuracy": 0.8378096199801697
+            }
+          },
+          "exploratory_VAL_only": true
+        }
+      },
+      "limitations": "Defaultnone; optionalTTA has separately measured quality/cost. Vessel still below original reference; adverse RIMONE cup deltas. Adaptive VAL evidence is not finalselection/TEST. Original aliases unchanged."
     }
   },
   "aliases": {

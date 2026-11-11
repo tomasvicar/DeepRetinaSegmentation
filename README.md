@@ -3,7 +3,8 @@
 **Status:** original trained models are bundled with verified prepared-input
 inference. Three additional single-dataset pilots remain explicitly preliminary.
 Completed corpus-v1 and corpus-v2 control baselines are bundled, alongside an
-[experimental vascular-sampling preview](docs/UNIFIED_V2_VASCULAR2.md).
+[experimental vascular-sampling preview](docs/UNIFIED_V2_VASCULAR2.md) and a
+[completed TPE BEST58 preview](docs/UNIFIED_V3_TPE_PREVIEW.md).
 V2 uses 21 TRAIN sources, 2,529 photos and all 5,700 annotation variants;
 its fixed terminal E60 is not an optimized/final model. Model optimization and TEST remain pending.
 See the [current status and remaining work](docs/STATUS.md) and the
@@ -73,6 +74,19 @@ This E59 preview used all 21 TRAIN sources and all 5,700 variants. Vessel Dice
 still regresses against the original reference; it is not final or TEST-qualified.
 See [its model card and per-task results](docs/UNIFIED_V2_VASCULAR2.md).
 
+The first completed TPE run also has an explicit preview (BEST58, after 60 epochs):
+
+```bash
+uv run deepretina predict --model unified-v3-tpe-preview \
+  --input /path/to/fundus.jpg --dataset drive \
+  --output predictions/tpe-preview --device cpu
+```
+
+Optional `--tta rot4` explores four-view inference at higher cost. Default `none`
+remains unchanged. Vessel quality still trails the original reference; TEST and
+final selection remain pending. See [the model card, training recipe and separate
+quality/cost evidence](docs/UNIFIED_V3_TPE_PREVIEW.md).
+
 For the original models, add `--device cpu` to work without a GPU and
 `--dataset drive` (or the correct
 source name) to select source-specific geometry. For an unknown source, supply
@@ -136,6 +150,7 @@ and [preprocessing evidence](docs/LEGACY_PREPROCESSING.md).
 | `unified-full-data-baseline` | Corpus-v1 completed60-epoch five-output baseline (17 TRAIN sources, 2,221 photos); selected E56 on validation, no TEST yet |
 | `unified-v2-control` | Corpus-v2 fixed terminal E60: 21 TRAIN sources, 2,529 photos / all 5,700 variants; VAL only, lower vessel Dice than original reference; not optimized/final |
 | `unified-v2-vascular2` | Experimental V2 vascular-sampling preview: completed 60-epoch run, VAL-selected E59 with all 5,700 variants; vessel regression remains, no TEST |
+| `unified-v3-tpe-preview` | First completed TPE run, VAL-best E58 with all 5,700 variants; optional TTA, vessel regression remains, no TEST |
 | `legacy-vessels` | Original trained vessel network |
 | `legacy-disc-0`, `legacy-disc-1` | Two original trained disc networks |
 | `legacy-av` | Original trained A/V classifier; requires vessel support |

@@ -14,8 +14,9 @@ Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad,
 | Unified baseline V1 | Dokončených 60 epoch, 2 221 TRAIN fotografií a 5 281 anotovaných variant ze 17 zdrojů. Vybrán checkpoint E56; není finálním modelem na širším V2. |
 | Unified control V2 | Pevný terminální E60, 21 zdrojů, všech 2 529 TRAIN fotografií / 5 700 anotovaných variant skutečně přispělo. Čerstvá VAL; cévní regrese vůči původní sestavě, není optimalizovaný finální model. |
 | Unified vascular2 preview | Dokončený běh 60 epoch; přibalený VAL-best E59 už pokrývá všech 2 529 fotografií / 5 700 variant. Macro 0,80390, conditional A/V 0,81026; vessel 0,75671 stále pod původním 0,77012. Experimentální, bez TEST. |
+| Unified TPE preview | První dokončený TPE běh, BEST58 po 60 epochách; všech 2 529 fotografií / 5 700 variant. Čerstvá NONE macro 0,8108954, vessel 0,7628822, conditional A/V 0,8249115. Volitelné rot4/dihedral8 mají samostatné měření kvality i ceny; stále cévní regrese a TEST pending. [Karta a recept](UNIFIED_V3_TPE_PREVIEW.md). |
 | Piloty | Tři starší pokusy na jednotlivých databázích, jasně označené jako piloty. |
-| Instalace a kontrola | `uv`, ověřený wheel a izolovaná instalace; předchozí integrační kontrola 2 605 CPU testů; přidání V2 ověřuje 59 cílených testů, CPU RAW smoke a wheel s deseti modely. Vascular2 preview přidává 45 cílených CPU testů, RAW TRAIN smoke a wheel s jedenácti modely; všech deset dřívějších vah zachovalo původní bajty. |
+| Instalace a kontrola | `uv`, ověřený wheel a izolovaná instalace; předchozí integrační kontrola 2 605 CPU testů; přidání V2 ověřuje 59 cílených testů, CPU RAW smoke a wheel s deseti modely. Vascular2 preview přidává 45 cílených CPU testů, RAW TRAIN smoke a wheel s jedenácti modely; všech deset dřívějších vah zachovalo původní bajty. TPE preview má 32 cílených testů, skutečný RAW TRAIN rot4 smoke a wheel s dvanácti modely; všech jedenáct starších checkpointů i aliasy zůstaly přesně stejné. |
 
 Začněte [instalací a predikcí](../README.md#install),
 [přípravou celého korpusu](UNIFIED_QUICKSTART.md),

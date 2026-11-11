@@ -50,8 +50,8 @@ def train_from_args(args):
     allowed = {field.name for field in fields(UnifiedConfig)}
     if set(settings) - allowed:
         raise ValueError(f"Unknown unified settings: {sorted(set(settings) - allowed)}")
-    for name in ("device", "purpose", "epochs", "epoch_samples", "max_steps"):
-        if getattr(args, name) is not None:
+    for name in ("device", "purpose", "epochs", "epoch_samples", "max_steps", "mixed_precision"):
+        if getattr(args, name, None) is not None:
             settings[name] = getattr(args, name)
     config = UnifiedConfig(**settings)
     config.validate()
