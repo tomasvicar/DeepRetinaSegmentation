@@ -58,8 +58,10 @@ control dokončil všech 60 epoch a prošel přísnou QA: přispělo všech 2 52
 (minimálně 66 návštěv) a všech 5 700 variant (minimálně 2 příspěvky). Vydává se
 pevný terminální E60 `unified-v2-control`, nikoli VAL-best E52, který měl jen
 5 699 přispívajících variant. [Model card](UNIFIED_V2_CONTROL.md) rozlišuje role.
-Další cévně vážený experiment je samostatný probíhající výzkum, nikoli součást této
-kontrolní varianty.
+Samostatný cévně vážený experiment dokončil 11. 11. všech 60 epoch
+(491 520 vzorků); původní supervisor zaznamenal návratový kód 0. Následuje
+nezávislá kontrola checkpointů, pokrytí dat a čerstvá VAL. Jeho kvalita zatím
+není vyhodnocená a není součástí této kontrolní varianty.
 
 Čerstvý E60 na 770 VAL fotografiích má macro Dice 0,78876 proti původní sestavě
 0,66703, ale pooled vessel Dice 0,75047 proti 0,77012: přetrvává doložená cévní
