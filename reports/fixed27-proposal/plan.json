@@ -1,0 +1,54 @@
+{
+  "kind": "pre_outcome_fixed27_proposal_plan",
+  "actual_qualified_observations_consumed": 0,
+  "actual_proposal_created": false,
+  "parent_protocol_sha256": "053f05c094d052f98069358effc56522b743b8a25c85c3afcb9a6a75aef79200",
+  "public_core_commit": "8777d6cca60f7ced08798ad2af7fabf626421d05",
+  "source_commit": "72fb321187eca517823083aca80cedace9605570",
+  "training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+  "decision_gate": {
+    "earliest_utc": "2026-11-11T10:35:00Z",
+    "genuinely_free_own_Ada_required": true,
+    "minimum_unique_qualified_configurations": 4,
+    "prefer_observations": 8,
+    "do_not_wait_for8_if4plus_ready_after_gate": true,
+    "inventory_max_age_seconds": 300,
+    "import_all_available_qualified": true,
+    "include_control_and_running60_parent_trials": true,
+    "selection_by_outcome_for_import": false
+  },
+  "sampler": {
+    "name": "native Optuna5 TPESampler",
+    "seed": 42,
+    "constant_liar": true,
+    "multivariate": true,
+    "n_startup_trials": 4,
+    "n_ei_candidates": 24,
+    "ask_calls": 1
+  },
+  "fixed_fidelity": {
+    "actual_epoch": 27,
+    "scheduler_T_max": 60,
+    "steps": 55296,
+    "delivered_samples": 221184,
+    "threshold": 0.5,
+    "value": "native source8777 actual LAST worst-six-ratio",
+    "not_macro_best_or_early_rung": true
+  },
+  "space": "all six immutable V3 SEARCH parameters/ranges, including base_channels12/16",
+  "deduplication": "exact six-parameter digest; earliest original parent trial number; retain all origins",
+  "parent_states_modified": false,
+  "new_study_observation_state": "COMPLETE at its separately defined fixed27 fidelity; original parent states retained in user_attrs",
+  "new_proposal_state": "RUNNING, explicitly unevaluated proposal only",
+  "future_config": "native V3 config factory, workers8, BF16, epochs60, full12/16space",
+  "future_training_deadline_utc": "2026-11-11T18:30:00Z",
+  "final_candidate_requires": [
+    "fresh full 60 epochs",
+    "all 5,700 annotation contribution",
+    "fresh VAL",
+    "final protocol freeze",
+    "heldout TEST"
+  ],
+  "qualification": "Four or five observations across six dimensions are statistically thin; fixed-27 is a proposal proxy, not broad optimality or final-model evidence",
+  "no_model_GT_GPU_job_or_active_DB_side_effects_now": true
+}
