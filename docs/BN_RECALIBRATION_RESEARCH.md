@@ -138,3 +138,21 @@ that does not mint a final-selection artifact. This proposed producer has NOT
 been run on real VAL arrays. Additional synthetic tests reject changed
 parameters, stale scores, wrong derived SHA, missing coverage and changed recipe.
 Combined prototype/producer tests:15 pass in2.14s; no quality measurement yet.
+
+## Actual reviewed TRAIN calibration
+
+The once-only CPU4 calibration completed successfully in709.9437s. It delivered
+8192 samples covering every2529 TRAIN photo, minimum calibration visits1.
+Independent parent-versus-derived byte checks confirmed all non-BN states are
+bitidentical;54 BN state keys changed and every BN batch counter is2048. The
+parent retains actual60-gradient-epoch/all5700-annotation history; calibration
+adds zero gradient updates. Derived SHA is
+eecfebac1f9ee77f26de49654d1caf0dd1c5e35a733900bfce85afc3970cabe3.
+The original parent was unchanged and the derived model/sidecar/original terminal
+were copied offhost to an immutable backup outside Git/OwnCloud. No model binary
+is added to this research branch. Clean aggregate evidence is in
+`reports/bn-recalibration-control60/actual-train8192/summary.json`.
+
+This successful statistics pass establishes no quality improvement. Root then
+approved a separate once-only research VAL770 run with its own20min CPU budget;
+that report and any paired comparisons remain distinct from this TRAIN summary.
