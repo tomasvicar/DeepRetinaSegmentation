@@ -119,6 +119,16 @@ def channels(target, valid):
     ]
 
 
+def av_supports(target, valid):
+    known = valid[1] & valid[2]
+    scoring = known & ((target[1] > 0) ^ (target[2] > 0))
+    return {
+        "AV_class_validity_pixels_including_background": int(known.sum()),
+        "AV_conditional_scoring_pixels": int(scoring.sum()),
+        "AV_unknown_vessel_pixels": int(((target[0] > 0) & valid[0] & ~known).sum()),
+    }
+
+
 def project(prepared, target, valid, annotation_fov):
     geometry = prepared.geometry
     target = np.stack([geometry.prepare_mask(a) for a in target]).astype(np.float32)
@@ -297,10 +307,7 @@ class Replay:
                 "actual25_reference_exact": ppd == 25,
             }
             if task == "av":
-                data["AV_unknown_vessel_pixels"] = int(
-                    ((projected[0] > 0) & allowed[0] & ~(allowed[1] & allowed[2])).sum()
-                )
-                data["AV_conditional_known_pixels"] = int((allowed[1] & allowed[2]).sum())
+                data.update(av_supports(projected, allowed))
             row_report["grids"][str(ppd)] = data
         self.seen.add(ident)
         self.report.append(row_report)

@@ -141,3 +141,15 @@ def test_common_grid_regrids_joint_AV_not_conditional_class_probabilities():
     assert mapped[2, 0, 0] == pytest.approx(0.82, abs=1e-6)
     with pytest.raises(ValueError, match="geometry"):
         m.regrid35_to25(values, prepared((1, 2), 35), prepared((1, 1), 25, crop=(0, 0, 0, 0)))
+
+
+def test_AV_conditional_support_excludes_background_unknown_and_crossings():
+    target = np.array([[[0, 1, 1, 1]], [[0, 1, 0, 1]], [[0, 0, 0, 1]]], dtype=np.float32)
+    valid = np.ones_like(target, bool)
+    valid[1:, 0, 2] = False
+    actual = m.av_supports(target, valid)
+    assert actual == {
+        "AV_class_validity_pixels_including_background": 3,
+        "AV_conditional_scoring_pixels": 1,
+        "AV_unknown_vessel_pixels": 1,
+    }
