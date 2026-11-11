@@ -9,12 +9,14 @@
   "GPU_used": false,
   "source_edited": false,
   "finding": {
-    "status": "reported_to_author",
+    "status": "resolved_fail_closed_by_author_7ce20ef",
     "files": [
       "scripts/benchmark_strong_pipeline.py:155",
       "scripts/benchmark_latency.py:150"
     ],
     "impact": "Future nonraw checkpoint silently receives raw tensor and omits full preprocessing cost; old RAW measurements unaffected"
   },
-  "processed_cache_implemented_in_reviewed_snapshot": false
+  "processed_cache_implemented_in_reviewed_snapshot": false,
+  "followup_commit": "7ce20ef6cd56061a0b75228afb8b1c55b21ed4d3",
+  "followup_review": "Static guard/control-flow review; no new NN"
 }

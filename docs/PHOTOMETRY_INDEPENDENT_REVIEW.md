@@ -61,3 +61,15 @@ immutable processed-RGB cache must distinguish already processed entries from
 old raw derivatives, bind canonical RGB/FOV bytes plus profile/backend/source,
 and demonstrate cached/uncached equality without a second CLAHE application.
 That cache and actual model-quality gains remain outside this review.
+
+## Follow-up7ce20ef
+
+Static review confirms7ce20ef6cd56061a0b75228afb8b1c55b21ed4d3 resolves the
+silent RAW bypass by adding an explicit raw-only admission guard to both helpers.
+The strong operation rejects nonraw before image preparation or unified forward;
+the older latency wrapper checks the loaded checkpoint config before its unified
+operation. Missing historical fields retain raw. The scripts do not claim to
+benchmark the new profiles; those require a separately reviewed complete timing
+protocol. This resolves the correctness finding without changing prior RAW
+measurements. The author's53 benchmark cases are separate evidence; no model
+forward was rerun for this static follow-up.
