@@ -40,3 +40,15 @@ source-bound evidence before actual curated final eligibility can be claimed.
 Evaluation-source SHA256 at original proposal commit `13c3ae9`, before the
 action-scoped checker-message clarification follow-up:
 `3665df1838168e46ec6fb21dbf3af2d6318be4a11082ce21b42b45cb0b5ec613`.
+
+## Independent root integration checks
+
+After integration,105 focused checker/context/TTA tests passed in22.54s on one
+CPU core with CUDA hidden. The genuine original LC BEST60 then passed the actual
+new adapter CLI with observed exit0 in118.04s, peak710544KiB. It retained its
+own2529-photo/5700-annotation coverage and exact original curated index, raw QA,
+config and nonraw descriptor. The adapter rechecked encoded canonical bytes;
+no image/GT decoding, NN forward, actual selection, fresh VAL or TEST occurred.
+The sanitized [actual result](root-genuine-LC-eligibility.json) preserves the
+operation's source/model/index identities. This is functional provenance evidence,
+not a quality gain or permission to reuse historical VAL as freshly typed evidence.
