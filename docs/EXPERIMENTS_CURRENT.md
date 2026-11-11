@@ -41,10 +41,13 @@ internal VAL score is not used as a model-quality claim. Six observations do not
 establish optimality.
 [Native continuation provenance](../reports/tpe72-completed-fresh-val/next-native-TPE-proposal).
 
-At20:04UTC the same Ada run had completed E58/118,784 updates; its original
-observer/supervisor and resumed NN were independently observed alive. This remains
-unfinished training, not a new quality result. No additional Optuna proposal has
-been asked and trial6 has not yet been told.
+The same Ada run [completed60 with actual original exits0 and generic QA0](../reports/next-native-tpe72-completed-20261111)
+at20:08:57UTC. BEST52 and LAST60 each independently cover2529photos/5700annotations.
+The genuine fixed-LAST27 proxy.943596514663 was then told to native auxiliary
+trial6 with actual CLI0, below prior trial5.975134762451; the auxiliary study now
+has7 COMPLETE observations (5 imported,2 native), previous6 and sampler unchanged.
+No new ask or main-study mutation occurred. Fresh final-role VAL is pending;
+saved training-time macro scores do not establish new quality.
 
 The [native V3 trial4 BEST54 TTA sweep](../reports/v3-trial4-inference-tta-val)
 completed all four modes on all 770 VAL with observed child and external supervisor
