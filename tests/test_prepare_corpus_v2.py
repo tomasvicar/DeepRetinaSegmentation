@@ -301,3 +301,130 @@ def test_bridge_of_two_old_training_groups_requires_review():
     new = [row("n1", "new:patient", "a", "train"), row("n2", "new:patient", "b", "train")]
     with pytest.raises(ValueError, match="multiple frozen parent split groups"):
         v2.resolve_partitions(parent, copy.deepcopy(parent) + new)
+
+
+def test_python_copy_fallback_preserves_bytes_metadata_and_internal_aliases(tmp_path, monkeypatch):
+    import errno
+
+    fcntl = pytest.importorskip("fcntl")
+
+    parent = tmp_path / "parent"
+    parent.mkdir()
+    (parent / "images").mkdir()
+    source = parent / "images/photo"
+    source.write_bytes(b"pixels" * 100)
+    source.chmod(0o444)
+    os.utime(source, ns=(1_700_000_000_000_000_000, 1_700_000_000_000_000_000))
+    os.link(source, parent / "images/alias")
+    (parent / "images").chmod(0o555)
+    parent.chmod(0o555)
+    monkeypatch.setattr(
+        fcntl, "ioctl", lambda *a: (_ for _ in ()).throw(OSError(errno.EOPNOTSUPP, "fixture"))
+    )
+    child = tmp_path / "child"
+    receipt = v2.copy_parent_tree(parent, child)
+    assert receipt["reflink_files"] == 0
+    assert receipt["copy2_files"] == 1 and receipt["internal_hardlinks"] == 1
+    assert (child / "images/photo").read_bytes() == source.read_bytes()
+    assert (child / "images/photo").stat().st_mtime_ns == source.stat().st_mtime_ns
+    assert (child / "images/photo").stat().st_mode & 0o777 == 0o444
+    assert (child / "images/photo").stat().st_ino != source.stat().st_ino
+    assert (child / "images/photo").stat().st_ino == (child / "images/alias").stat().st_ino
+    (child / "images/new").write_bytes(b"append")
+    assert parent.stat().st_mode & 0o777 == 0o555
+    assert (parent / "images").stat().st_mode & 0o777 == 0o555
+    (child / "images/photo").chmod(0o644)
+    (child / "images/photo").write_bytes(b"changed")
+    assert source.read_bytes() == b"pixels" * 100
+    assert (child / "images/alias").read_bytes() == b"changed"
+
+
+def test_python_copy_nonlinux_and_unavailable_internal_hardlinks(tmp_path, monkeypatch):
+    import errno
+
+    parent = tmp_path / "parent"
+    parent.mkdir()
+    (parent / "photo").write_bytes(b"pixels")
+    os.link(parent / "photo", parent / "alias")
+    with monkeypatch.context() as local:
+        local.setattr(v2.sys, "platform", "win32")
+        local.setattr(
+            v2.os, "link", lambda *a: (_ for _ in ()).throw(OSError(errno.EPERM, "fixture"))
+        )
+        receipt = v2.copy_parent_tree(parent, tmp_path / "child")
+    assert receipt["copy2_files"] == 2 and receipt["internal_hardlinks"] == 0
+    assert receipt["reflink_files"] == 0
+    assert (tmp_path / "child/alias").read_bytes() == b"pixels"
+    assert (tmp_path / "child/alias").stat().st_ino != (parent / "alias").stat().st_ino
+
+
+@pytest.mark.parametrize(
+    "kind", ["file-link", "dir-link", "root-link", "fifo", "existing", "nested", "destination-link"]
+)
+def test_python_copy_rejects_unsafe_paths_without_mutation(tmp_path, kind):
+    parent = tmp_path / "parent"
+    parent.mkdir()
+    (parent / "data").write_bytes(b"untouched")
+    output = tmp_path / "output"
+    if kind == "file-link":
+        (parent / "link").symlink_to(parent / "data")
+    elif kind == "dir-link":
+        (parent / "link").symlink_to(tmp_path, target_is_directory=True)
+    elif kind == "root-link":
+        alias = tmp_path / "parent-link"
+        alias.symlink_to(parent, target_is_directory=True)
+        parent = alias
+    elif kind == "fifo":
+        if not hasattr(os, "mkfifo"):
+            pytest.skip("FIFO creation is unavailable on this platform")
+        os.mkfifo(parent / "pipe")
+    elif kind == "existing":
+        output.mkdir()
+        (output / "sentinel").write_bytes(b"keep")
+    elif kind == "nested":
+        output = parent / "nested"
+    else:
+        output.symlink_to(tmp_path / "missing", target_is_directory=True)
+    with pytest.raises(ValueError):
+        v2.copy_parent_tree(parent, output)
+    assert (parent / "data").read_bytes() == b"untouched"
+    if kind == "existing":
+        assert (output / "sentinel").read_bytes() == b"keep"
+    else:
+        assert not output.exists()
+
+
+def test_reflink_real_error_does_not_hide_disk_full(tmp_path, monkeypatch):
+    import errno
+
+    fcntl = pytest.importorskip("fcntl")
+
+    source = tmp_path / "source"
+    source.write_bytes(b"pixels")
+    monkeypatch.setattr(
+        fcntl, "ioctl", lambda *a: (_ for _ in ()).throw(OSError(errno.ENOSPC, "fixture"))
+    )
+    with pytest.raises(OSError) as error:
+        v2._copy_independent_file(source, tmp_path / "destination")
+    assert error.value.errno == errno.ENOSPC
+    assert source.read_bytes() == b"pixels"
+
+
+def test_missing_inode_identity_never_merges_unrelated_files(tmp_path, monkeypatch):
+    parent = tmp_path / "parent"
+    parent.mkdir()
+    (parent / "first").write_bytes(b"one")
+    (parent / "second").write_bytes(b"two")
+    original_lstat = Path.lstat
+
+    def zero_inode(path):
+        values = list(original_lstat(path))
+        values[1] = 0
+        return os.stat_result(values)
+
+    with monkeypatch.context() as local:
+        local.setattr(Path, "lstat", zero_inode)
+        receipt = v2.copy_parent_tree(parent, tmp_path / "child")
+    assert receipt["internal_hardlinks"] == 0
+    assert (tmp_path / "child/first").read_bytes() == b"one"
+    assert (tmp_path / "child/second").read_bytes() == b"two"

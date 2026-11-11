@@ -7,13 +7,15 @@ exactly preserved; all changes are confined to a new output directory.
 from __future__ import annotations
 
 import argparse
+import errno
 import hashlib
 import importlib.metadata
 import importlib.util
 import json
 import math
+import os
 import shutil
-import subprocess
+import stat
 import sys
 from collections import Counter
 from copy import deepcopy
@@ -43,21 +45,116 @@ def write_json(path, value):
     tmp.replace(path)
 
 
+def _checked_tree(parent):
+    """Reject links and special files before fingerprinting or opening data."""
+    if not parent.is_dir():
+        raise ValueError("Parent must be a directory")
+    paths = [parent, *sorted(parent.rglob("*"))]
+    for path in paths:
+        mode = path.lstat().st_mode
+        if not (stat.S_ISDIR(mode) or stat.S_ISREG(mode)):
+            raise ValueError(f"Parent contains a symlink or special file: {path}")
+    return paths
+
+
+def _copy_independent_file(source, destination):
+    """Create a new inode, optionally sharing Linux CoW extents, then copy metadata."""
+    cloned = False
+    # Exclusive creation protects existing destinations even on the copy fallback.
+    with destination.open("xb") as target:
+        if sys.platform == "linux":
+            import fcntl
+
+            with source.open("rb") as original:
+                try:
+                    fcntl.ioctl(target.fileno(), 0x40049409, original.fileno())  # FICLONE
+                    cloned = True
+                except OSError as exc:
+                    if exc.errno not in {
+                        errno.EOPNOTSUPP,
+                        errno.ENOTTY,
+                        errno.EXDEV,
+                        errno.EINVAL,
+                        errno.ENOSYS,
+                        errno.EPERM,
+                    }:
+                        raise
+    if cloned:
+        shutil.copystat(source, destination, follow_symlinks=False)
+    else:
+        shutil.copy2(source, destination, follow_symlinks=False)
+    return "reflink" if cloned else "copy2"
+
+
+def copy_parent_tree(parent, output):
+    """Python-only copy; preserve source aliases only within the independent clone.
+
+    Ownership and all platform-specific ACLs are not promised. copy2/copystat
+    preserve mode and timestamps where supported; output directories gain owner
+    access so appending to a read-only parent remains possible.
+    """
+    parent, output = Path(parent), Path(output)
+    if parent.is_symlink() or output.is_symlink():
+        raise ValueError("Parent and output must not be symlinks")
+    parent, output = parent.resolve(), output.resolve()
+    if output.exists() or output.is_relative_to(parent) or parent.is_relative_to(output):
+        raise ValueError("Choose a new independent copy destination")
+    paths = _checked_tree(parent)
+    output.mkdir(parents=True, exist_ok=False)
+    aliases = {}
+    directories = []
+    receipt = {"reflink_files": 0, "copy2_files": 0, "internal_hardlinks": 0}
+    for source in paths:
+        destination = output / source.relative_to(parent)
+        source_stat = source.lstat()
+        if stat.S_ISDIR(source_stat.st_mode):
+            if source != parent:
+                destination.mkdir()
+            directories.append((source, destination))
+            continue
+        if not stat.S_ISREG(source_stat.st_mode):
+            raise ValueError(f"Parent changed file type during copy: {source}")
+        # Some filesystems do not expose meaningful inode numbers. Never merge
+        # unrelated files under an unavailable/zero identity.
+        identity = (
+            (source_stat.st_dev, source_stat.st_ino)
+            if source_stat.st_ino and source_stat.st_nlink > 1
+            else None
+        )
+        previous = aliases.get(identity) if identity is not None else None
+        if previous is not None:
+            try:
+                os.link(previous, destination)  # Both paths are in the NEW clone.
+            except OSError as exc:
+                if exc.errno not in {errno.EPERM, errno.EOPNOTSUPP, errno.EXDEV, errno.ENOSYS}:
+                    raise
+            else:
+                receipt["internal_hardlinks"] += 1
+                continue
+        method = _copy_independent_file(source, destination)
+        receipt[method + "_files"] += 1
+        if identity is not None:
+            aliases.setdefault(identity, destination)
+    for source, destination in reversed(directories):
+        shutil.copystat(source, destination, follow_symlinks=False)
+        destination.chmod(destination.stat().st_mode | 0o700)
+    receipt["metadata_policy"] = (
+        "copy2/copystat mode and timestamps; owner-accessible directories; ownership/ACL parity not guaranteed"
+    )
+    return receipt
+
+
 def clone_parent(parent, output, expected=PARENT_FINGERPRINT):
     """CoW copies share disk extents, never writable parent inodes."""
-    parent, output = Path(parent).resolve(), Path(output).resolve()
+    parent, output = Path(parent), Path(output)
+    if parent.is_symlink() or output.is_symlink():
+        raise ValueError("Parent and output must not be symlinks")
+    parent, output = parent.resolve(), output.resolve()
     if output.exists() or output.is_relative_to(parent) or parent.is_relative_to(output):
         raise ValueError("Choose a new independent corpus-v2 output directory")
-    if parent.is_symlink():
-        raise ValueError("Parent must resolve to a local canonical directory")
+    _checked_tree(parent)
     verify_prepared_content(parent / "manifest.json", expected=expected)
-    for path in parent.rglob("*"):
-        if path.is_symlink():
-            raise ValueError(f"Parent contains a symlink: {path}")
-    output.mkdir(parents=True)
-    subprocess.run(
-        ["cp", "-a", "--reflink=auto", "--", str(parent) + "/.", str(output)], check=True
-    )
+    copy_receipt = copy_parent_tree(parent, output)
     count = 0
     for path in parent.rglob("*"):
         if not path.is_file():
@@ -88,7 +185,8 @@ def clone_parent(parent, output, expected=PARENT_FINGERPRINT):
     (output / "_SUCCESS").unlink()
     (output / "integrity.json").unlink()
     return {
-        "method": "cp-a-reflink-auto; copy fallback permitted",
+        "method": "python-independent-tree-copy",
+        **copy_receipt,
         "parent_files_checked_distinct_inode": count,
         "parent_fingerprint": expected,
     }

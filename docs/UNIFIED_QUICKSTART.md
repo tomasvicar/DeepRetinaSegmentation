@@ -57,8 +57,9 @@ documented assumptions; this is research calibration, not a measured acquisition
 angle for every photograph.
 
 The intermediate parent remains available for diagnosis and occupies additional
-space. On Linux, the append step uses GNU `cp --reflink=auto`; without CoW it
-makes an independent ordinary copy. Budget roughly 10 GB of output space plus
+space. The Python copier uses optional Linux CoW cloning where supported and
+otherwise makes an independent ordinary copy. No external copy command is required.
+Budget roughly 10 GB of output space plus
 RAW archives and the uv environment. CPU preparation may take hours, especially
 RIGA. Interrupted/failed builds are not resumed or overwritten: inspect the
 error, retain the failed artifacts if needed, and choose new output paths.

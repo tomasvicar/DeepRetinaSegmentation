@@ -53,6 +53,7 @@ the scratch five-output original-topology preset. CLI help was executed.
 
 No complete 21-source rebuild was repeated during this usability audit. The new
 workflow is tested composition, not a claim of historical canonical identity.
-Platform copying currently requires GNU `cp`; output size and CPU duration are
+A subsequent Python-only copier followup removes the external GNU copy dependency;
+see `python-corpus-copy-20261111.md`. Output size and CPU duration remain
 estimates, not a new measured full-build result. Existing skimage deprecation
 warnings remain; no label or geometry algorithms were changed here.
