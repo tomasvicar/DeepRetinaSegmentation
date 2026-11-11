@@ -44,3 +44,17 @@ other random operations. No guarantee of contribution by epoch 60 follows.
 
 The strict completion gate still requires all 5,700 records to have actual positive
 visit counters. Neither sampler nor data nor gate was changed.
+
+## Future experiment, not a change to this run
+
+A separate recipe could retain photo coverage-first sampling and maintain an
+explicit observer-cycle counter per photo and task. The twelve-variant aliased
+photo would then have predictable observer scheduling rather than relying on
+independent random selection. Actual crop support and successful-update counters
+would still be required; merely scheduling a record is not contribution.
+
+Such an experiment requires a new source/recipe identity and declared seed/RNG
+lineage, with measured validation quality and a matched compute budget. It must
+not relabel current random-sampling receipts as cyclic or migrate the running
+checkpoint silently. The current frozen source, sampler, counters and completion
+gate remain unchanged. Future actual visits must be observed, not predicted.
