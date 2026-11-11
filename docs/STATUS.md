@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 11. 11. 2026, 15:10 UTC, po dokončení vascular4, TPE a měření inference. Celkový cíl není dokončený.**
+**Snímek: 11. 11. 2026, po přibalení dokončeného TPE preview a ověření TTA. Celkový cíl není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
