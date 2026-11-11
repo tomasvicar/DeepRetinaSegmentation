@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11, 15:05 UTC access observation**, with completed reports
+Snapshot: **2026-11-11, 15:29 UTC**, with completed reports
 reviewed for this update. A last observed scheduler state is not a claim about
 current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -20,6 +20,18 @@ alone supervise each output. Recovered patient/photo aliases remain grouped;
 unknown patient identity is not thereby resolved. No new TEST evaluation is
 reported here. Conditional A/V accuracy scores reference class-labeled vessel
 pixels and does not measure vessel discovery by itself.
+
+One further genuine native TPE proposal now continues the same auxiliary study
+after all six completed E27 observations. Width16/BatchNorm/basic stays fixed in
+this suggestion; LR becomes0.000411624945, weight decay0.0000823809785 and vascular
+sampling1.05918806. It is distinct from all five patch/photometry arms. No second
+full training has started; six observations do not establish optimality.
+[Native continuation provenance](../reports/tpe72-completed-fresh-val/next-native-TPE-proposal).
+
+A separate TPE BEST58 TTA sweep actually started on Old at15:28UTC, with its
+first child verified live, all770 VAL planned per case and a90min cap. Results
+are pending. This extends the completed vascular4 TTA experiment below; it does
+not reuse its scores or change a released inference default. No TEST is involved.
 
 ## Completed full60 models: keep roles and evidence distinct
 
