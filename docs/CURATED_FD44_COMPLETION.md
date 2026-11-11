@@ -116,7 +116,11 @@ optimizer, wrong horizon, malformed/nonfinite
 state, and zero/missing/foreign BEST annotation visits. A regression confirms
 that the existing final-selection gate still rejects `curated_fd44`.
 
-The original raw256 small-record schemas informed this adapter. Actual complete
-checkpoint re-audit has **not** been executed in this implementation task; that
-is the next separately reviewed CPU-only step. No new quality measurement,
-model promotion, source freeze or TEST execution is implied.
+The original raw256 small-record schemas informed this adapter. A subsequent
+root-reviewed real CPU re-audit under source `3efbd8a` passed both roles with
+externally observed CLI exit 0: BEST52 and LAST60 each independently cover all
+2529 photos and 5700 annotations. BEST took 3.275 seconds, LAST 3.414 seconds;
+peak RSS was approximately 581032 KiB. See the sanitized
+[genuine audit summary](../reports/curated-fd44-completion/genuine-raw256-two-role-audit.json).
+Original inputs/source remained unchanged. This is a completion audit, not a
+fresh quality measurement, model promotion, selection admission or TEST result.
