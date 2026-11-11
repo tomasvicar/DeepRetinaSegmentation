@@ -1,0 +1,1855 @@
+{
+  "schema_version": 1,
+  "kind": "existing_public_VAL_candidate_overview_not_selection_or_new_analysis",
+  "snapshot_base_commit": "069ef42e0a967870cf2dc394a914e86e43ceb4bb",
+  "scope": "Nine unsorted candidate/protocol rows; no new NN/model/GT/data/statistical bootstrap, freeze or TEST. Full-precision stored metrics and integer counts copied from existing JSON; README values are display-rounded.",
+  "candidates": [
+    {
+      "id": "original182",
+      "label": "Original reviewed composed reference",
+      "source": {
+        "path": "reports/frozen-original-val-nearest/validation.json",
+        "sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836"
+      },
+      "original_whole_report_sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+      "checkpoint": {
+        "component_sha256": {
+          "av": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+          "disc": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+          "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+          "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01"
+        }
+      },
+      "role": "frozen_original_reference",
+      "completion_family": null,
+      "threshold": null,
+      "TTA": "none",
+      "evaluation_context": {
+        "evaluation_source_commit": "d14aa14",
+        "evaluation_source_sha256": "fc9ea3b740d428c48ddf9deed8524ef115b303bbbda2f0875b614818ccb0332c",
+        "scope": "composed original reference, historical exposure/preprocessing/backend qualifications"
+      },
+      "inference_protocol": {
+        "av": "vesclass_matlab_provided_fov_calibrated; canonical predicted vessel and provided FOV NN-restored to native frame; strict AV ties\u21920; original NN restore_classes then canonical prepare_mask",
+        "cup": "universal/raw cup>0 intersect SAME-forward dedicated disc0/raw>0 in canonical frame before any NN restoration",
+        "gt": "UnifiedDataset full_data: one photo once; deterministic first sorted annotation per task; AV vessel GT priority; unknown validity excluded",
+        "model_sha256": {
+          "av": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+          "disc": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+          "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+          "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01"
+        },
+        "name": "original-raw-vessel-calibrated-provided-fov-av-disc0-universal-cup-in-disc0-v1",
+        "single_net": "raw RGB/255 minus0.5; native checkpoint tiling; strict logits>0"
+      },
+      "VAL_photos": 770,
+      "pooled_head_counts_and_metrics": {
+        "vessel": {
+          "dice": 0.7701233997938133,
+          "fn": 1347170,
+          "fp": 1723029,
+          "iou": 0.6261794066695012,
+          "precision": 0.7490438922564375,
+          "recall": 0.7924236968295373,
+          "tp": 5142829,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.689521829787506,
+          "fn": 386865,
+          "fp": 342012,
+          "iou": 0.5261604851271197,
+          "precision": 0.7029523932772321,
+          "recall": 0.6765948518003317,
+          "tp": 809359,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.6972863687090058,
+          "fn": 584055,
+          "fp": 150499,
+          "iou": 0.535256830020265,
+          "precision": 0.8489730096417074,
+          "recall": 0.5915870662769395,
+          "tp": 846005,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.8948079084718797,
+          "fn": 1880332,
+          "fp": 846577,
+          "iou": 0.8096401660227701,
+          "precision": 0.9319728388595586,
+          "recall": 0.8604934129646696,
+          "tp": 11598114,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.4353989841007063,
+          "fn": 135394,
+          "fp": 7304851,
+          "iou": 0.2782811590151307,
+          "precision": 0.2819846016220893,
+          "recall": 0.95493194221979,
+          "tp": 2868818,
+          "valid_pixels": 517984979
+        }
+      },
+      "conditional_AV_accuracy": 0.748566415513326,
+      "conditional_AV_labeled_pixels": 2626284,
+      "macro_dataset_mean_dice": 0.6670295852091139,
+      "macro_dataset_channel_dice": {
+        "artery": 0.6808690952407886,
+        "cup": 0.4385515405086113,
+        "disc": 0.7295300905977455,
+        "vein": 0.6995405927524971,
+        "vessel": 0.786656606945927
+      },
+      "own_TRAIN_coverage": null,
+      "existing_paired_vessel_vs_original": null,
+      "measured_parameter_count": {
+        "value": 5943312,
+        "source": {
+          "path": "reports/benchmark/tpe72-tta-cpu-drive21/results.json",
+          "sha256": "a7fa3038defe4704ae2d877b2ddf833f8d90c5d24e8e7015008fc482666634a9"
+        },
+        "binding": "same four checkpoint SHAs; timing reference528233 is distinct from VAL reference182ad"
+      },
+      "measured_CPU_example_modes": []
+    },
+    {
+      "id": "firstTPE58-none",
+      "label": "First TPE BEST58 none / .5",
+      "source": {
+        "path": "reports/native-TPE6-matched-fresh-VAL-20261111/reports-runtime-redacted/first_TPE-best-validation.json",
+        "sha256": "3f77d1916c150dbb3f9d139c2777860f8bad7c43b3df23d17f7491e7386b2191"
+      },
+      "original_whole_report_sha256": "9964f0913ae5f9ffba4a4307c8cda413cee46fa0bb5f722521f7d16f6eda04fe",
+      "checkpoint": {
+        "epoch": 58,
+        "sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+        "steps": 118784,
+        "training_selection_score": 0.8108955347037143
+      },
+      "role": "training_best",
+      "completion_family": "standalone_72",
+      "threshold": 0.5,
+      "TTA": "none",
+      "evaluation_context": {
+        "evaluation_source_sha256": "b269a5e5214b8422a5b8028ff6922ff5c19137d7e0354afcd8fbef1c74e3662f",
+        "training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+        "device_class": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "cpu_intra_threads": 8,
+        "cpu_interop_threads": 1,
+        "python": "3.12.13",
+        "torch": "2.6.0+cu124",
+        "reported_kind": "unified_validation_evidence",
+        "qualification": "public report/export retained in its original role; not a newly generated final-gate artifact"
+      },
+      "inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "VAL_photos": 770,
+      "pooled_head_counts_and_metrics": {
+        "vessel": {
+          "dice": 0.7628821971219713,
+          "fn": 1629046,
+          "fp": 1392701,
+          "iou": 0.6166609156761008,
+          "precision": 0.7772980404736175,
+          "recall": 0.748991332664304,
+          "tp": 4860953,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.7303083854889679,
+          "fn": 425504,
+          "fp": 143726,
+          "iou": 0.5751856412552707,
+          "precision": 0.8428272418491634,
+          "recall": 0.6442940452624257,
+          "tp": 770720,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.7921165424588689,
+          "fn": 363342,
+          "fp": 196558,
+          "iou": 0.6557888822083612,
+          "precision": 0.8444061313600512,
+          "recall": 0.7459253457896872,
+          "tp": 1066718,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9326709308282606,
+          "fn": 1078738,
+          "fp": 711520,
+          "iou": 0.8738363432301388,
+          "precision": 0.9457320092366635,
+          "recall": 0.9199656993098463,
+          "tp": 12399708,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.8807832791528426,
+          "fn": 373374,
+          "fp": 338810,
+          "iou": 0.78696401040735,
+          "precision": 0.8859090370306515,
+          "recall": 0.8757164940423645,
+          "tp": 2630838,
+          "valid_pixels": 517984979
+        }
+      },
+      "conditional_AV_accuracy": 0.8249115480275553,
+      "conditional_AV_labeled_pixels": 2626284,
+      "macro_dataset_mean_dice": 0.8108954341052297,
+      "macro_dataset_channel_dice": {
+        "artery": 0.7056337435543023,
+        "cup": 0.8707098521979181,
+        "disc": 0.9178213611353493,
+        "vein": 0.7729456755613154,
+        "vessel": 0.7873665380772635
+      },
+      "own_TRAIN_coverage": {
+        "coverage": {
+          "epoch": 58,
+          "eligible_annotation_records": 5700,
+          "contributing_annotation_records": 5700,
+          "all_eligible_annotations_contributed": true,
+          "missing_annotation_ids": [],
+          "eligible_photos": 2529,
+          "seen_photos": 2529,
+          "minimum_photo_visits": 60,
+          "annotation_visits_sha256": "8d94745dee0c093f0d3885f14376c42ce5a6aa8709a9b03a095f2c278e9abd22",
+          "photo_visits_sha256": "32738d5a40732c3837c9e6461e8b61fd25cb23e3b19b10733f01b68736c159c3"
+        },
+        "provenance": {
+          "path": "reports/tpe72-completed-fresh-val/completion-and-fresh-validation-summary.json",
+          "sha256": "166e3e42ca1849e15e65a8a83d29f5ee030e9fa63b624d57005f6bc4dbab1776"
+        }
+      },
+      "existing_paired_vessel_vs_original": {
+        "source": {
+          "path": "reports/tpe72-completed-fresh-val/best-vs-original.json",
+          "sha256": "a8550877888ee8269bce1da68f3e7db52085fad0f86b9e4f6d22d49a22220b4f"
+        },
+        "comparison_view_reference_sha256": "d121e07b45c148ccba48b807d829c88b9e424eb779cf33cc71b0f6cd603d48d5",
+        "comparison_view_candidate_sha256": "99df4ba67aca2c44c2b17377ee1993e1f9478d07b8865578b785b91c484ad275",
+        "original_input_pins": {
+          "manifest": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+          "candidate": "9964f0913ae5f9ffba4a4307c8cda413cee46fa0bb5f722521f7d16f6eda04fe",
+          "qa": "9efabed486f54addb039c4356bf4e54272e0ca70cd7583433555a6f3cc21204d",
+          "protocol": "9177511b7ee6895cbb3e9eea5bd75272d7e86e2c2af764f44c1600faa1fc0c65",
+          "terminal": "158cff1371fb249fe96d6ef2d6632f1a4f4593646572910702a7be224376e6d3",
+          "original": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+          "control_terminal60": "b3b7d7e947d85b1c7d0334c8234cf44cc79c19bd1d1498ba4a101f74c0b157d7",
+          "vascular2_best": "ddc9677f100a61d2d0bc8d7fa0ee3f9212e5142c1329d7f96e9ce6698f6a3fc1"
+        },
+        "pooled_dice": {
+          "reference": 0.7701233997938133,
+          "candidate": 0.7628821971219713,
+          "candidate_minus_reference": -0.007241202671842029,
+          "paired_percentile_95ci": [
+            -0.014590512444533781,
+            -0.0006930859232211164
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "bootstrap": {
+          "draws": 2000,
+          "seed": 42,
+          "unit": "reviewed split_group_id",
+          "stratification": "signature of canonical datasets in the whole group"
+        },
+        "qualification": "Copied existing exploratory paired interval; no CI recomputed, no transfer across contexts or thresholds."
+      },
+      "measured_parameter_count": {
+        "value": 1965637,
+        "source": {
+          "path": "reports/benchmark/tpe72-tta-cpu-drive21/results.json",
+          "sha256": "a7fa3038defe4704ae2d877b2ddf833f8d90c5d24e8e7015008fc482666634a9"
+        },
+        "binding": "same exact checkpoint SHA20d4caab, independent of TTA operator count"
+      },
+      "measured_CPU_example_modes": [
+        "none"
+      ]
+    },
+    {
+      "id": "firstTPE58-rot4-half",
+      "label": "First TPE BEST58 rot4 / .5",
+      "source": {
+        "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/threshold-0.50.json",
+        "sha256": "122e485f594d0b56351a4ae8ad0b9ee6e2921c941d59fa1e9fb70042b55e195c"
+      },
+      "original_whole_report_sha256": "122e485f594d0b56351a4ae8ad0b9ee6e2921c941d59fa1e9fb70042b55e195c",
+      "checkpoint": {
+        "sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+        "epoch": 58
+      },
+      "role": "training_best",
+      "completion_family": "standalone_72",
+      "threshold": 0.5,
+      "TTA": "rot4",
+      "evaluation_context": {
+        "evaluation_source_commit": "318e342fe12d579a004ae7143fcf5e6155328a0b",
+        "evaluation_source_sha256": "198fdd476505ab38437f8668945d24c39dfb344a5d8fd96a4bb2c9d3a7400d05",
+        "training_source_commit": "72fb321187eca517823083aca80cedace9605570",
+        "device_class": "NVIDIA GeForce GTX1060 6GB",
+        "cpu_intra_threads": 2,
+        "cpu_interop_threads": 1,
+        "precision": "FP32/noautocast",
+        "reported_kind": "standalone72_BEST58_scalar_threshold_VAL_ablation",
+        "ordinary_freeze_evidence": false,
+        "context_provenance": {
+          "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/export-provenance.json",
+          "sha256": "93ec97c3c6f0aa9ae5b5f6db1da3004d9b9175b4b3a6a0c6486f3043a0eb5881"
+        }
+      },
+      "inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "tta": {
+          "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+          "domain": "full_prepared_RGB01_before_tiling",
+          "geometry_restoration": "once_after_all_views",
+          "inverse": "undo_horizontal_flip_then_inverse_rot90_before_combination",
+          "mode": "rot4",
+          "operators": [
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 0
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 1
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 2
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 3
+            }
+          ],
+          "precision": "float32_no_autocast",
+          "version": 1
+        },
+        "version": 1,
+        "view_size": null
+      },
+      "VAL_photos": 770,
+      "pooled_head_counts_and_metrics": {
+        "vessel": {
+          "dice": 0.7669531192212905,
+          "fn": 1606300,
+          "fp": 1361628,
+          "iou": 0.6219983450563813,
+          "precision": 0.7819765081956477,
+          "recall": 0.7524961097836841,
+          "tp": 4883699,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.7439885483114569,
+          "fn": 408557,
+          "fp": 133526,
+          "iou": 0.5923421695807483,
+          "precision": 0.8550510045126266,
+          "recall": 0.6584611243379166,
+          "tp": 787667,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.8032398419647118,
+          "fn": 346030,
+          "fp": 185054,
+          "iou": 0.6711786288769709,
+          "precision": 0.8541830170422131,
+          "recall": 0.7580311315609135,
+          "tp": 1084030,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9371288239422132,
+          "fn": 1058621,
+          "fp": 607850,
+          "iou": 0.8816955855535054,
+          "precision": 0.9533416361706905,
+          "recall": 0.9214582304221125,
+          "tp": 12419825,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.8852065890779593,
+          "fn": 366384,
+          "fp": 317762,
+          "iou": 0.7940543785110901,
+          "precision": 0.892487794315179,
+          "recall": 0.8780432273088583,
+          "tp": 2637828,
+          "valid_pixels": 517984979
+        }
+      },
+      "conditional_AV_accuracy": 0.8361133068624719,
+      "conditional_AV_labeled_pixels": 2626284,
+      "macro_dataset_mean_dice": 0.818055220843706,
+      "macro_dataset_channel_dice": {
+        "artery": 0.718312826884427,
+        "cup": 0.8731187602870205,
+        "disc": 0.9234529154318215,
+        "vein": 0.7835276039569936,
+        "vessel": 0.791863997658267
+      },
+      "own_TRAIN_coverage": {
+        "coverage": {
+          "epoch": 58,
+          "eligible_annotation_records": 5700,
+          "contributing_annotation_records": 5700,
+          "all_eligible_annotations_contributed": true,
+          "missing_annotation_ids": [],
+          "eligible_photos": 2529,
+          "seen_photos": 2529,
+          "minimum_photo_visits": 60,
+          "annotation_visits_sha256": "8d94745dee0c093f0d3885f14376c42ce5a6aa8709a9b03a095f2c278e9abd22",
+          "photo_visits_sha256": "32738d5a40732c3837c9e6461e8b61fd25cb23e3b19b10733f01b68736c159c3"
+        },
+        "provenance": {
+          "path": "reports/tpe72-completed-fresh-val/completion-and-fresh-validation-summary.json",
+          "sha256": "166e3e42ca1849e15e65a8a83d29f5ee030e9fa63b624d57005f6bc4dbab1776"
+        }
+      },
+      "existing_paired_vessel_vs_original": null,
+      "measured_parameter_count": {
+        "value": 1965637,
+        "source": {
+          "path": "reports/benchmark/tpe72-tta-cpu-drive21/results.json",
+          "sha256": "a7fa3038defe4704ae2d877b2ddf833f8d90c5d24e8e7015008fc482666634a9"
+        },
+        "binding": "same exact checkpoint SHA20d4caab, independent of TTA operator count"
+      },
+      "measured_CPU_example_modes": [
+        "rot4"
+      ]
+    },
+    {
+      "id": "firstTPE58-rot4-035",
+      "label": "First TPE BEST58 rot4 / .35",
+      "source": {
+        "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/threshold-0.35.json",
+        "sha256": "1414f2eb8c751187ab86ca30d8991597903219aa0c3123fe02d2c30d0eee67af"
+      },
+      "original_whole_report_sha256": "1414f2eb8c751187ab86ca30d8991597903219aa0c3123fe02d2c30d0eee67af",
+      "checkpoint": {
+        "sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+        "epoch": 58
+      },
+      "role": "training_best",
+      "completion_family": "standalone_72",
+      "threshold": 0.35,
+      "TTA": "rot4",
+      "evaluation_context": {
+        "evaluation_source_commit": "318e342fe12d579a004ae7143fcf5e6155328a0b",
+        "evaluation_source_sha256": "198fdd476505ab38437f8668945d24c39dfb344a5d8fd96a4bb2c9d3a7400d05",
+        "training_source_commit": "72fb321187eca517823083aca80cedace9605570",
+        "device_class": "NVIDIA GeForce GTX1060 6GB",
+        "cpu_intra_threads": 2,
+        "cpu_interop_threads": 1,
+        "precision": "FP32/noautocast",
+        "reported_kind": "standalone72_BEST58_scalar_threshold_VAL_ablation",
+        "ordinary_freeze_evidence": false,
+        "context_provenance": {
+          "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/export-provenance.json",
+          "sha256": "93ec97c3c6f0aa9ae5b5f6db1da3004d9b9175b4b3a6a0c6486f3043a0eb5881"
+        }
+      },
+      "inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.35,
+        "tile_size": 512,
+        "tta": {
+          "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+          "domain": "full_prepared_RGB01_before_tiling",
+          "geometry_restoration": "once_after_all_views",
+          "inverse": "undo_horizontal_flip_then_inverse_rot90_before_combination",
+          "mode": "rot4",
+          "operators": [
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 0
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 1
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 2
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 3
+            }
+          ],
+          "precision": "float32_no_autocast",
+          "version": 1
+        },
+        "version": 1,
+        "view_size": null
+      },
+      "VAL_photos": 770,
+      "pooled_head_counts_and_metrics": {
+        "vessel": {
+          "dice": 0.7694639263038319,
+          "fn": 1341694,
+          "fp": 1743233,
+          "iou": 0.6253078985263625,
+          "precision": 0.7470473209318442,
+          "recall": 0.7932674565897467,
+          "tp": 5148305,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.7596587175184912,
+          "fn": 376071,
+          "fp": 142890,
+          "iou": 0.6124594321319917,
+          "precision": 0.8516265628845233,
+          "recall": 0.6856182454122305,
+          "tp": 820153,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.8147933461586275,
+          "fn": 312564,
+          "fp": 195461,
+          "iou": 0.687469432877213,
+          "precision": 0.8511291687389609,
+          "recall": 0.7814329468693622,
+          "tp": 1117496,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9369022101499204,
+          "fn": 890323,
+          "fp": 805228,
+          "iou": 0.8812944764771304,
+          "precision": 0.9398785262926358,
+          "recall": 0.9339446847210724,
+          "tp": 12588123,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.8843386152646732,
+          "fn": 312486,
+          "fp": 391608,
+          "iou": 0.792658621481704,
+          "precision": 0.8729920274611832,
+          "recall": 0.8959840384100722,
+          "tp": 2691726,
+          "valid_pixels": 517984979
+        }
+      },
+      "conditional_AV_accuracy": 0.8361133068624719,
+      "conditional_AV_labeled_pixels": 2626284,
+      "macro_dataset_mean_dice": 0.8220991565639174,
+      "macro_dataset_channel_dice": {
+        "artery": 0.7322967445017665,
+        "cup": 0.8720144471983462,
+        "disc": 0.9204309142865414,
+        "vein": 0.7944864232224461,
+        "vessel": 0.7912672536104874
+      },
+      "own_TRAIN_coverage": {
+        "coverage": {
+          "epoch": 58,
+          "eligible_annotation_records": 5700,
+          "contributing_annotation_records": 5700,
+          "all_eligible_annotations_contributed": true,
+          "missing_annotation_ids": [],
+          "eligible_photos": 2529,
+          "seen_photos": 2529,
+          "minimum_photo_visits": 60,
+          "annotation_visits_sha256": "8d94745dee0c093f0d3885f14376c42ce5a6aa8709a9b03a095f2c278e9abd22",
+          "photo_visits_sha256": "32738d5a40732c3837c9e6461e8b61fd25cb23e3b19b10733f01b68736c159c3"
+        },
+        "provenance": {
+          "path": "reports/tpe72-completed-fresh-val/completion-and-fresh-validation-summary.json",
+          "sha256": "166e3e42ca1849e15e65a8a83d29f5ee030e9fa63b624d57005f6bc4dbab1776"
+        }
+      },
+      "existing_paired_vessel_vs_original": {
+        "source": {
+          "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/selected-vs-original-paired.json",
+          "sha256": "4d623604d19e52d58a3032cf34e87f4875cc3a0612b32696abef02a7170ffd93"
+        },
+        "comparison_view_reference_sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+        "comparison_view_candidate_sha256": "1414f2eb8c751187ab86ca30d8991597903219aa0c3123fe02d2c30d0eee67af",
+        "original_input_pins": null,
+        "pooled_dice": {
+          "candidate": 0.7694639263038319,
+          "candidate_minus_reference": -0.0006594734899814103,
+          "defined_bootstrap_draws": 2000,
+          "paired_percentile_95ci": [
+            -0.006530227710522102,
+            0.005516923026149264
+          ],
+          "reference": 0.7701233997938133
+        },
+        "bootstrap": {
+          "draws": 2000,
+          "seed": 42,
+          "stratification": "signature of canonical datasets in the whole group",
+          "unit": "reviewed split_group_id"
+        },
+        "qualification": "Copied existing exploratory paired interval; no CI recomputed, no transfer across contexts or thresholds."
+      },
+      "measured_parameter_count": {
+        "value": 1965637,
+        "source": {
+          "path": "reports/benchmark/tpe72-tta-cpu-drive21/results.json",
+          "sha256": "a7fa3038defe4704ae2d877b2ddf833f8d90c5d24e8e7015008fc482666634a9"
+        },
+        "binding": "same exact checkpoint SHA20d4caab, independent of TTA operator count"
+      },
+      "measured_CPU_example_modes": []
+    },
+    {
+      "id": "V3trial4-rot4-half",
+      "label": "Native V3 trial4 BEST54 rot4 / .5",
+      "source": {
+        "path": "reports/native-v3-best54-rot4-thresholds/threshold-0.50.json",
+        "sha256": "b144770164c4e914fb46f76d9511e94dd9479a488e7a2cc5677bf62b4f01e728"
+      },
+      "original_whole_report_sha256": "b144770164c4e914fb46f76d9511e94dd9479a488e7a2cc5677bf62b4f01e728",
+      "checkpoint": {
+        "sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+        "epoch": 54
+      },
+      "role": "training_best",
+      "completion_family": "pool_72_v3",
+      "threshold": 0.5,
+      "TTA": "rot4",
+      "evaluation_context": {
+        "evaluation_source_commit": "318e342fe12d579a004ae7143fcf5e6155328a0b",
+        "evaluation_source_sha256": "198fdd476505ab38437f8668945d24c39dfb344a5d8fd96a4bb2c9d3a7400d05",
+        "training_source_commit": "72fb321187eca517823083aca80cedace9605570",
+        "device_class": "NVIDIA GeForce GTX1060 6GB",
+        "cpu_intra_threads": 2,
+        "cpu_interop_threads": 1,
+        "precision": "FP32/noautocast",
+        "reported_kind": "native_pool72_BEST54_scalar_threshold_VAL_ablation",
+        "ordinary_freeze_evidence": false,
+        "context_provenance": {
+          "path": "reports/native-v3-best54-rot4-thresholds/completion-provenance.json",
+          "sha256": "9779eb33342c9c517d3e4c90def8d5f4d210b3b0cb1bfaed3f16d5853a8fdf80"
+        }
+      },
+      "inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "tta": {
+          "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+          "domain": "full_prepared_RGB01_before_tiling",
+          "geometry_restoration": "once_after_all_views",
+          "inverse": "undo_horizontal_flip_then_inverse_rot90_before_combination",
+          "mode": "rot4",
+          "operators": [
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 0
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 1
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 2
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 3
+            }
+          ],
+          "precision": "float32_no_autocast",
+          "version": 1
+        },
+        "version": 1,
+        "view_size": null
+      },
+      "VAL_photos": 770,
+      "pooled_head_counts_and_metrics": {
+        "vessel": {
+          "dice": 0.767487140245717,
+          "fn": 1615527,
+          "fp": 1337949,
+          "iou": 0.6227011216732661,
+          "precision": 0.7846332371872415,
+          "recall": 0.7510743838327247,
+          "tp": 4874472,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.7542238143839431,
+          "fn": 361546,
+          "fp": 182441,
+          "iou": 0.6054248131344453,
+          "precision": 0.8206296411727635,
+          "recall": 0.6977606200845327,
+          "tp": 834678,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.7954063885333276,
+          "fn": 385174,
+          "fp": 152355,
+          "iou": 0.6603109803686138,
+          "precision": 0.8727449193604295,
+          "recall": 0.7306588534746794,
+          "tp": 1044886,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9400399184299921,
+          "fn": 895027,
+          "fp": 710230,
+          "iou": 0.8868635100272921,
+          "precision": 0.9465737360750235,
+          "recall": 0.9335956830631662,
+          "tp": 12583419,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.880924936436304,
+          "fn": 311768,
+          "fp": 416110,
+          "iou": 0.7871902119157203,
+          "precision": 0.8661403340588583,
+          "recall": 0.8962230361905218,
+          "tp": 2692444,
+          "valid_pixels": 517984979
+        }
+      },
+      "conditional_AV_accuracy": 0.8324716595768012,
+      "conditional_AV_labeled_pixels": 2626284,
+      "macro_dataset_mean_dice": 0.8194117715244763,
+      "macro_dataset_channel_dice": {
+        "artery": 0.7291258271258173,
+        "cup": 0.8727449909520958,
+        "disc": 0.9288437317190266,
+        "vein": 0.7740437124204542,
+        "vessel": 0.7923005954049885
+      },
+      "own_TRAIN_coverage": {
+        "reported_TRAIN_photos": 2529,
+        "reported_own_annotation_records": 5700,
+        "selected_role_eligibility_sha256": "44f33b0377a149ff87af6f4afdb3fa0680d98db7c7e5d5574f714e3dd70aa9c1",
+        "provenance": {
+          "path": "reports/native-v3-best54-rot4-thresholds/completion-provenance.json",
+          "sha256": "9779eb33342c9c517d3e4c90def8d5f4d210b3b0cb1bfaed3f16d5853a8fdf80"
+        },
+        "qualification": "original selected-role eligibility proof, not a new eligibility run"
+      },
+      "existing_paired_vessel_vs_original": null,
+      "measured_parameter_count": null,
+      "measured_CPU_example_modes": []
+    },
+    {
+      "id": "V3trial4-rot4-040",
+      "label": "Native V3 trial4 BEST54 rot4 / .4",
+      "source": {
+        "path": "reports/native-v3-best54-rot4-thresholds/threshold-0.40.json",
+        "sha256": "a49a01ce9b05b11b4355566671daf3413b3c767d556aebd464cfeaa44713ce11"
+      },
+      "original_whole_report_sha256": "a49a01ce9b05b11b4355566671daf3413b3c767d556aebd464cfeaa44713ce11",
+      "checkpoint": {
+        "sha256": "21c1b3c6126494b8534a022b2256ada38687c9194120f7be63bf66879687bdfb",
+        "epoch": 54
+      },
+      "role": "training_best",
+      "completion_family": "pool_72_v3",
+      "threshold": 0.4,
+      "TTA": "rot4",
+      "evaluation_context": {
+        "evaluation_source_commit": "318e342fe12d579a004ae7143fcf5e6155328a0b",
+        "evaluation_source_sha256": "198fdd476505ab38437f8668945d24c39dfb344a5d8fd96a4bb2c9d3a7400d05",
+        "training_source_commit": "72fb321187eca517823083aca80cedace9605570",
+        "device_class": "NVIDIA GeForce GTX1060 6GB",
+        "cpu_intra_threads": 2,
+        "cpu_interop_threads": 1,
+        "precision": "FP32/noautocast",
+        "reported_kind": "native_pool72_BEST54_scalar_threshold_VAL_ablation",
+        "ordinary_freeze_evidence": false,
+        "context_provenance": {
+          "path": "reports/native-v3-best54-rot4-thresholds/completion-provenance.json",
+          "sha256": "9779eb33342c9c517d3e4c90def8d5f4d210b3b0cb1bfaed3f16d5853a8fdf80"
+        }
+      },
+      "inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.4,
+        "tile_size": 512,
+        "tta": {
+          "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+          "domain": "full_prepared_RGB01_before_tiling",
+          "geometry_restoration": "once_after_all_views",
+          "inverse": "undo_horizontal_flip_then_inverse_rot90_before_combination",
+          "mode": "rot4",
+          "operators": [
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 0
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 1
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 2
+            },
+            {
+              "horizontal_flip_after_rotation": false,
+              "rot90_ccw": 3
+            }
+          ],
+          "precision": "float32_no_autocast",
+          "version": 1
+        },
+        "version": 1,
+        "view_size": null
+      },
+      "VAL_photos": 770,
+      "pooled_head_counts_and_metrics": {
+        "vessel": {
+          "dice": 0.7694102903208369,
+          "fn": 1437247,
+          "fp": 1591339,
+          "iou": 0.6252370585167951,
+          "precision": 0.7604880788056636,
+          "recall": 0.7785443418404224,
+          "tp": 5052752,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.764300152211072,
+          "fn": 338834,
+          "fp": 189981,
+          "iou": 0.6185160203577393,
+          "precision": 0.8186115521625098,
+          "recall": 0.7167470306564657,
+          "tp": 857390,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.8031327968679575,
+          "fn": 365385,
+          "fp": 156570,
+          "iou": 0.6710291624386278,
+          "precision": 0.8717947668158313,
+          "recall": 0.7444967344027523,
+          "tp": 1064675,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9396172555157357,
+          "fn": 799138,
+          "fp": 830486,
+          "iou": 0.8861114162818021,
+          "precision": 0.9385271159575046,
+          "recall": 0.9407099305068255,
+          "tp": 12679308,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.8781911606017158,
+          "fn": 278286,
+          "fp": 477909,
+          "iou": 0.7828349445639597,
+          "precision": 0.8508322057783875,
+          "recall": 0.9073680552504284,
+          "tp": 2725926,
+          "valid_pixels": 517984979
+        }
+      },
+      "conditional_AV_accuracy": 0.8324716595768012,
+      "conditional_AV_labeled_pixels": 2626284,
+      "macro_dataset_mean_dice": 0.8221488668590636,
+      "macro_dataset_channel_dice": {
+        "artery": 0.7388552301999961,
+        "cup": 0.8708675679197445,
+        "disc": 0.9272214700981073,
+        "vein": 0.7819068862149845,
+        "vessel": 0.7918931798624853
+      },
+      "own_TRAIN_coverage": {
+        "reported_TRAIN_photos": 2529,
+        "reported_own_annotation_records": 5700,
+        "selected_role_eligibility_sha256": "44f33b0377a149ff87af6f4afdb3fa0680d98db7c7e5d5574f714e3dd70aa9c1",
+        "provenance": {
+          "path": "reports/native-v3-best54-rot4-thresholds/completion-provenance.json",
+          "sha256": "9779eb33342c9c517d3e4c90def8d5f4d210b3b0cb1bfaed3f16d5853a8fdf80"
+        },
+        "qualification": "original selected-role eligibility proof, not a new eligibility run"
+      },
+      "existing_paired_vessel_vs_original": {
+        "source": {
+          "path": "reports/native-v3-best54-rot4-thresholds/selected-vs-original-paired.json",
+          "sha256": "4101208a64ca70ff9fc6e7591326bb8619c1c5b38e984f6937f5153fc6b1a51d"
+        },
+        "comparison_view_reference_sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+        "comparison_view_candidate_sha256": "a49a01ce9b05b11b4355566671daf3413b3c767d556aebd464cfeaa44713ce11",
+        "original_input_pins": null,
+        "pooled_dice": {
+          "candidate": 0.7694102903208369,
+          "candidate_minus_reference": -0.0007131094729764254,
+          "defined_bootstrap_draws": 2000,
+          "paired_percentile_95ci": [
+            -0.0072531842256876615,
+            0.0063468650070214105
+          ],
+          "reference": 0.7701233997938133
+        },
+        "bootstrap": {
+          "draws": 2000,
+          "seed": 42,
+          "stratification": "signature of canonical datasets in the whole group",
+          "unit": "reviewed split_group_id"
+        },
+        "qualification": "Copied existing exploratory paired interval; no CI recomputed, no transfer across contexts or thresholds."
+      },
+      "measured_parameter_count": null,
+      "measured_CPU_example_modes": []
+    },
+    {
+      "id": "TPE6-BEST52",
+      "label": "Native TPE6 BEST52 none / .5",
+      "source": {
+        "path": "reports/native-TPE6-matched-fresh-VAL-20261111/reports-runtime-redacted/next_TPE6-best-validation.json",
+        "sha256": "597f2847f6619c01476eb39265d5b788ff2dcd65a02c9f7f0778e366ec12cb6a"
+      },
+      "original_whole_report_sha256": "7a2ea96f79258a09ea6e9431ea0548b4f73de2641688a779242a1c72a743707f",
+      "checkpoint": {
+        "epoch": 52,
+        "sha256": "8a030d9649737f1f4103535749158c2ca17b69146e783eeb4ab21aa5ab61abee",
+        "steps": 106496,
+        "training_selection_score": 0.8088528865756807
+      },
+      "role": "training_best",
+      "completion_family": "standalone_72",
+      "threshold": 0.5,
+      "TTA": "none",
+      "evaluation_context": {
+        "evaluation_source_sha256": "b269a5e5214b8422a5b8028ff6922ff5c19137d7e0354afcd8fbef1c74e3662f",
+        "training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+        "device_class": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "cpu_intra_threads": 8,
+        "cpu_interop_threads": 1,
+        "python": "3.12.13",
+        "torch": "2.6.0+cu124",
+        "reported_kind": "unified_validation_evidence",
+        "qualification": "public report/export retained in its original role; not a newly generated final-gate artifact"
+      },
+      "inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "VAL_photos": 770,
+      "pooled_head_counts_and_metrics": {
+        "vessel": {
+          "dice": 0.7617090054674086,
+          "fn": 1613517,
+          "fp": 1437574,
+          "iou": 0.6151292457351071,
+          "precision": 0.7723216265424316,
+          "recall": 0.7513840911223562,
+          "tp": 4876482,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.7226586041283845,
+          "fn": 414397,
+          "fp": 185701,
+          "iou": 0.5657521211353728,
+          "precision": 0.8080665365756856,
+          "recall": 0.65357909555401,
+          "tp": 781827,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.7798460038861783,
+          "fn": 392788,
+          "fp": 192865,
+          "iou": 0.6391373600135558,
+          "precision": 0.8432166498528213,
+          "recall": 0.7253346013453981,
+          "tp": 1037272,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9377034166867347,
+          "fn": 1027899,
+          "fp": 626412,
+          "iou": 0.8827133885360633,
+          "precision": 0.9520980374718617,
+          "recall": 0.9237375733077834,
+          "tp": 12450547,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.8780050836177046,
+          "fn": 349964,
+          "fp": 387628,
+          "iou": 0.782539270720317,
+          "precision": 0.8725694275506299,
+          "recall": 0.8835088868561872,
+          "tp": 2654248,
+          "valid_pixels": 517984979
+        }
+      },
+      "conditional_AV_accuracy": 0.8069786055125797,
+      "conditional_AV_labeled_pixels": 2626284,
+      "macro_dataset_mean_dice": 0.8088528334149482,
+      "macro_dataset_channel_dice": {
+        "artery": 0.704139980480622,
+        "cup": 0.8692787275138681,
+        "disc": 0.921437385886924,
+        "vein": 0.7642453849138053,
+        "vessel": 0.785162688279521
+      },
+      "own_TRAIN_coverage": {
+        "reported_own_TRAIN_photos": 2529,
+        "reported_own_annotation_records": 5700,
+        "original_full60_QA_sha256": "00f1148aa25cb429a6745a071c6da0d388d82505e9060e18f1d4c4b33a56a477",
+        "provenance": {
+          "path": "reports/native-TPE6-matched-fresh-VAL-20261111/export-provenance.json",
+          "sha256": "67b35319f8668748abeabefa081f22923d35c67184c175a111be0c478d7724ce"
+        }
+      },
+      "existing_paired_vessel_vs_original": null,
+      "measured_parameter_count": null,
+      "measured_CPU_example_modes": []
+    },
+    {
+      "id": "raw256-BEST52",
+      "label": "Curated raw256 BEST52 none / .5",
+      "source": {
+        "path": "reports/curated-raw256-fresh-val-20261111/raw256-BEST52-fresh.json",
+        "sha256": "f00a117b2f45f0c0ad02d6a7cd16e10f9566b9beffab38322c7e6397c516d5f0"
+      },
+      "original_whole_report_sha256": "a626ae45aca5ab5c2e66d2a02ff7c51c0826265a27c85558ab01fa7c027645aa",
+      "checkpoint": {
+        "epoch": 52,
+        "sha256": "132c787964da763d6eaa50c8fe08223c2b38726a3e7828a0b81654fd388c7130",
+        "steps": 106496,
+        "training_selection_score": 0.801233054810338
+      },
+      "role": "training_best",
+      "completion_family": "curated_fd44",
+      "threshold": 0.5,
+      "TTA": "none",
+      "evaluation_context": {
+        "evaluation_source_sha256": "1475c26493210c53ac6bf84ed4ff82cac017e93f0738f9ee67df735842fa422b",
+        "training_source_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747",
+        "device_class": "NVIDIA GeForce GTX 1060 6GB",
+        "cpu_intra_threads": 2,
+        "cpu_interop_threads": 1,
+        "python": "3.12.14",
+        "torch": "2.6.0+cu124",
+        "reported_kind": "scientific_export_of_actual_VAL_counts",
+        "qualification": "public report/export retained in its original role; not a newly generated final-gate artifact"
+      },
+      "inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "VAL_photos": 770,
+      "pooled_head_counts_and_metrics": {
+        "vessel": {
+          "dice": 0.7594373456329585,
+          "fn": 1690538,
+          "fp": 1350058,
+          "iou": 0.6121716972210789,
+          "precision": 0.780461203551042,
+          "recall": 0.7395164467667869,
+          "tp": 4799461,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.7078468357250308,
+          "fn": 451120,
+          "fp": 163941,
+          "iou": 0.5478041267052159,
+          "precision": 0.8196557926175272,
+          "recall": 0.6228799957198652,
+          "tp": 745104,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.7758791646463308,
+          "fn": 379565,
+          "fp": 227328,
+          "iou": 0.6338256340699945,
+          "precision": 0.8220974266389007,
+          "recall": 0.7345810665286772,
+          "tp": 1050495,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9332228145718763,
+          "fn": 998182,
+          "fp": 787880,
+          "iou": 0.8748057488662463,
+          "precision": 0.9406186728151277,
+          "recall": 0.925942352701491,
+          "tp": 12480264,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.8665701199980693,
+          "fn": 302239,
+          "fp": 529832,
+          "iou": 0.7645555629754468,
+          "precision": 0.8360569403166342,
+          "recall": 0.8993949162043158,
+          "tp": 2701973,
+          "valid_pixels": 517984979
+        }
+      },
+      "conditional_AV_accuracy": 0.8015020462371929,
+      "conditional_AV_labeled_pixels": 2626284,
+      "macro_dataset_mean_dice": 0.8012318632503567,
+      "macro_dataset_channel_dice": {
+        "artery": 0.6872344249145392,
+        "cup": 0.855473213335526,
+        "disc": 0.919568318771737,
+        "vein": 0.759181221833896,
+        "vessel": 0.7847021373960854
+      },
+      "own_TRAIN_coverage": {
+        "reported_own_TRAIN_photos": 2529,
+        "reported_own_annotation_records": 5700,
+        "minimum_photo_visits": 53,
+        "provenance": {
+          "path": "reports/curated-raw256-fresh-val-20261111/selected-role-TRAIN-coverage.json",
+          "sha256": "6ad70b7720b8db738b53f7768beb10e04f3a7631c25e5d40aec3e8c930fe8f5d"
+        }
+      },
+      "existing_paired_vessel_vs_original": null,
+      "measured_parameter_count": null,
+      "measured_CPU_example_modes": []
+    },
+    {
+      "id": "LC384-BEST60",
+      "label": "Curated LC384 BEST60 none / .5",
+      "source": {
+        "path": "reports/curated-lc384-best60-fresh-val-20261111/lc384-BEST60-fresh.json",
+        "sha256": "d9ec4a089da66e4351e026aec7afb2bcabb12a2948ed1de23515eb5b6666dfdd"
+      },
+      "original_whole_report_sha256": "a0a347f465962de58836d39101e6ad899a2a4644f8164f112fc0d697b59e6446",
+      "checkpoint": {
+        "epoch": 60,
+        "sha256": "dfef53e453c51e87980c5132b8d829f7720b0f32b172982f4e1e1594b7449386",
+        "steps": 122880,
+        "training_selection_score": 0.8060176818157359
+      },
+      "role": "training_best",
+      "completion_family": "curated_fd44",
+      "threshold": 0.5,
+      "TTA": "none",
+      "evaluation_context": {
+        "evaluation_source_sha256": "1475c26493210c53ac6bf84ed4ff82cac017e93f0738f9ee67df735842fa422b",
+        "training_source_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747",
+        "device_class": "NVIDIA GeForce GTX 1060 6GB",
+        "cpu_intra_threads": 2,
+        "cpu_interop_threads": 1,
+        "python": "3.12.14",
+        "torch": "2.6.0+cu124",
+        "reported_kind": "unified_validation_evidence",
+        "qualification": "public report/export retained in its original role; not a newly generated final-gate artifact"
+      },
+      "inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "photometry": {
+          "FOV_provenance": "prepared image-derived/official FOV; canonical photos.json for corpus or prepare_single_net for raw inference; never target validity",
+          "RGB_scaling": "float32/255; RGB_to_HSV; CLAHE_on_V; HSV_to_RGB",
+          "backend_versions": {
+            "numpy": "2.5.4",
+            "opencv-python-headless": "4.14.0.94",
+            "scikit-image": "0.26.0",
+            "scipy": "1.18.1"
+          },
+          "background": {
+            "Gaussian": "skimage gaussian mode nearest, truncate4, channel_axis2",
+            "boundary": "original eroded-FOV EDT/Sobel/OpenCV remap",
+            "formula": "clip((RGB-background)/background+0.5,0,1)",
+            "operator": "legacy Python local_contrast_and_clahe",
+            "sigma": 36.36363636363636
+          },
+          "clip_limit": 0.005,
+          "contract_version": 1,
+          "corpus_FOV_binding": "schema2 prepared_content_fingerprint includes photos.json and every encoded FOV asset",
+          "input": "uint8 RGB HWC",
+          "kernel_rounding": "skimage int truncation toward zero; reject below1",
+          "kernel_size_effective": [
+            113,
+            113
+          ],
+          "kernel_size_requested": 113.63636363636363,
+          "matlab_parity_claim": false,
+          "nbins": 256,
+          "output": "uint8 RGB HWC",
+          "outside_fov": "restore original prepared RGB exactly after operator",
+          "profile": "legacy_lc_clahe_v1",
+          "stage": "full legacy25_raw prepared RGB before crop/augmentation/tiling",
+          "uint8_export": "clip to[0,255], truncate toward zero"
+        },
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "VAL_photos": 770,
+      "pooled_head_counts_and_metrics": {
+        "vessel": {
+          "dice": 0.7455449305116201,
+          "fn": 1624934,
+          "fp": 1695967,
+          "iou": 0.5943177628639064,
+          "precision": 0.7415091101521833,
+          "recall": 0.7496249229006045,
+          "tp": 4865065,
+          "valid_pixels": 60922737
+        },
+        "artery": {
+          "dice": 0.7361244996173545,
+          "fn": 395933,
+          "fp": 177821,
+          "iou": 0.5824343453089237,
+          "precision": 0.8181997562651312,
+          "recall": 0.6690143317639505,
+          "tp": 800291,
+          "valid_pixels": 2626284
+        },
+        "vein": {
+          "dice": 0.7862220938095251,
+          "fn": 394657,
+          "fp": 168406,
+          "iou": 0.647747903302291,
+          "precision": 0.8601057144447334,
+          "recall": 0.7240276631749717,
+          "tp": 1035403,
+          "valid_pixels": 2626284
+        },
+        "disc": {
+          "dice": 0.9390887004560651,
+          "fn": 972845,
+          "fp": 649435,
+          "iou": 0.8851717394844988,
+          "precision": 0.9506322141573766,
+          "recall": 0.9278221688167909,
+          "tp": 12505601,
+          "valid_pixels": 583880677
+        },
+        "cup": {
+          "dice": 0.8594737943063785,
+          "fn": 582113,
+          "fp": 209926,
+          "iou": 0.7535765421397588,
+          "precision": 0.9202416390421824,
+          "recall": 0.8062343802634434,
+          "tp": 2422099,
+          "valid_pixels": 517984979
+        }
+      },
+      "conditional_AV_accuracy": 0.8188501319735413,
+      "conditional_AV_labeled_pixels": 2626284,
+      "macro_dataset_mean_dice": 0.8060216403688077,
+      "macro_dataset_channel_dice": {
+        "artery": 0.7170460828284796,
+        "cup": 0.8563460233346979,
+        "disc": 0.9156450470850828,
+        "vein": 0.7727404637866455,
+        "vessel": 0.768330584809133
+      },
+      "own_TRAIN_coverage": {
+        "coverage": {
+          "annotation_visits_sha256": "2af9373d517d59259492bd9ea19422dc0cd6e777c5c87b2885a55d5c712faf82",
+          "contributing_annotation_records": 5700,
+          "delivered_samples": 491520,
+          "eligible_annotation_ids_sha256": "d7f0f18ccf5b53a4b4ad9abaa092666c905bc7cb65910d0a33aed0b7e719d6b0",
+          "eligible_annotation_records": 5700,
+          "eligible_photo_ids_sha256": "181481016661a2b9610185e9c7d3ee26c6023782a27b8920b5bfd63b36ec55d4",
+          "eligible_photos": 2529,
+          "epoch": 60,
+          "minimum_annotation_visits": 1,
+          "minimum_photo_visits": 62,
+          "photo_visits_sha256": "26de739c1d2544078e0c5fc229cc256a617554b9e4f11ee17fca55190ca4a589",
+          "seen_photos": 2529
+        },
+        "provenance": {
+          "path": "reports/curated-lc384-best60-fresh-val-20261111/selected-role-TRAIN-coverage.json",
+          "sha256": "4d9480e66238b2056df02e4676d54909e2b054b867879dd8c4e6ec01b5a7a202"
+        }
+      },
+      "existing_paired_vessel_vs_original": null,
+      "measured_parameter_count": null,
+      "measured_CPU_example_modes": []
+    }
+  ],
+  "missing_vessel_CIs": "Null means no existing exact-context comparison versus182 was identified among these inputs; intervals versus a parent/none are never relabeled versus original.",
+  "completed_training_scope": "Unified candidates have original completed60 runs and own selected2529-photo/5700-annotation coverage, with evidence retained per row; BEST epochs differ. Original reference has unresolved historical TRAIN exposure/coverage.",
+  "measured_CPU_example": {
+    "source": {
+      "path": "reports/benchmark/tpe72-tta-cpu-drive21/results.json",
+      "sha256": "a7fa3038defe4704ae2d877b2ddf833f8d90c5d24e8e7015008fc482666634a9"
+    },
+    "runtime_source": {
+      "path": "reports/benchmark/tpe72-tta-cpu-drive21/runtime-summary.json",
+      "sha256": "6bcc9d1c062542c808cff7d37e2afd701beec532370c582495fc602e36e113a7"
+    },
+    "original_network_count": 4,
+    "original_networks": [
+      {
+        "role": "dedicated vessel single_net",
+        "checkpoint_sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01"
+      },
+      {
+        "role": "dedicated raw Disc0 single_net",
+        "checkpoint_sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f"
+      },
+      {
+        "role": "universal single_net; only cup used, clipped by same-forward Disc0",
+        "checkpoint_sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f"
+      },
+      {
+        "role": "one AV classifier; both artery and vein from calibrated vessel/FOV input",
+        "checkpoint_sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b"
+      }
+    ],
+    "exact_original_reference": {
+      "checkpoint_sha256": {
+        "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+        "disc": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+        "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+        "av": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b"
+      },
+      "reference_sha256": "528233fe50876b15f127f8567fc43d7b8a34a8713cfceff54f02956a0a0bfa2c",
+      "reference_manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+      "reference_prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+      "quality_reference_gt_policy": "Untouched historical non-cup components; separately labelled fresh-native or same-forward clipped cup; historical native numeric drift logged separately",
+      "disc_variant": "disc0/raw",
+      "cup_policy": "inside-disc",
+      "cup_decoding": "native universal/raw strictlogit>0 intersect same-forward selected dedicated raw disc strictlogit>0 before nearest restoration",
+      "quality_reference_cup_policy": "inside-disc",
+      "parameters": 5943312,
+      "checkpoint_bytes": 25068700,
+      "av_profile": "vesclass_matlab_provided_fov_calibrated"
+    },
+    "TPE_checkpoint": {
+      "sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+      "epoch": 58,
+      "parameters": 1965637,
+      "checkpoint_bytes": 8894002,
+      "floating_model_dtypes": [
+        "torch.float32"
+      ],
+      "model_tensor_bytes": 7874468,
+      "optimizer_or_training_state_present": false,
+      "training_mixed_precision": "bf16",
+      "inference_precision": "FP32/no_autocast",
+      "compression_or_quantization_applied": false,
+      "checkpoint_ZIP_compression_methods": [
+        "stored"
+      ],
+      "original_checkpoint_training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28"
+    },
+    "timings": {
+      "original": {
+        "seconds": [
+          59.59454836510122,
+          59.80121077201329,
+          59.330615994054824
+        ],
+        "median_seconds": 59.59454836510122,
+        "baseline_allocated_bytes": null,
+        "peak_allocated_bytes": null,
+        "peak_working_bytes": null,
+        "warmup_calls": 1,
+        "measured_calls": 3
+      },
+      "none": {
+        "seconds": [
+          8.806915962137282,
+          8.748764059972018,
+          8.70102441799827
+        ],
+        "median_seconds": 8.748764059972018,
+        "baseline_allocated_bytes": null,
+        "peak_allocated_bytes": null,
+        "peak_working_bytes": null,
+        "warmup_calls": 1,
+        "measured_calls": 3
+      },
+      "rot4": {
+        "seconds": [
+          33.19967217091471,
+          33.49377097096294,
+          33.0150297570508
+        ],
+        "median_seconds": 33.19967217091471,
+        "baseline_allocated_bytes": null,
+        "peak_allocated_bytes": null,
+        "peak_working_bytes": null,
+        "warmup_calls": 1,
+        "measured_calls": 3
+      },
+      "dihedral8": {
+        "seconds": [
+          66.34664281201549,
+          64.1757137128152,
+          65.53144277702086
+        ],
+        "median_seconds": 65.53144277702086,
+        "baseline_allocated_bytes": null,
+        "peak_allocated_bytes": null,
+        "peak_working_bytes": null,
+        "warmup_calls": 1,
+        "measured_calls": 3
+      }
+    },
+    "ratio_original_median_over_each": {
+      "original": 1.0,
+      "none": 6.8117676915945795,
+      "rot4": 1.7950342418534575,
+      "dihedral8": 0.9094038806360378
+    },
+    "precision": "FP32/noautocast",
+    "TPE_threshold": 0.5,
+    "tile_size": 512,
+    "overlap": 64,
+    "photographs": 1,
+    "partition": "TRAIN",
+    "cpu_model": "AMD Ryzen 5 1600 Six-Core Processor",
+    "cpu_intra_threads": 1,
+    "cpu_interop_threads": 1,
+    "OpenCV_threads": 1,
+    "warmup_each": 1,
+    "measured_calls_each": 3,
+    "order": [
+      "original",
+      "none",
+      "rot4",
+      "dihedral8"
+    ],
+    "scope": "Resident preprocessing/inference/decoding/original-frame restoration; excludes fileIO/model loading and any command-line startup measurement",
+    "not_measured_for": [
+      "rot4 threshold.35",
+      "native V3 trial4",
+      "TPE6",
+      "raw256",
+      "LC384"
+    ],
+    "qualifications": [
+      "One selected TRAIN photograph/shape and three measured samples per pipeline do not establish general latency/throughput.",
+      "Fixed order and warm caches; external system load may affect times.",
+      "No annotation/GT/TEST array or extra image was opened; output shape/hash/finite checks measure identity, not quality.",
+      "The composed528 original CPU reference differs from the flatd14 VAL comparison provenance.",
+      "Dihedral8 was slower than original on this photograph; do not attach none timing to TTA quality.",
+      "VAL quality comes only from the separately reported exploratory770-photo TTA experiment; this timing run scores no quality.",
+      "No CLI startup, model loading, compression, quantization, optimizer removal, default promotion or final model/TEST selection was measured."
+    ]
+  },
+  "pending_as_of_snapshot": [
+    {
+      "candidate": "curated raw384",
+      "status": "unfinished; no final candidate ranking or selection"
+    },
+    {
+      "candidate": "curated raw512",
+      "status": "unfinished; no final candidate ranking or selection"
+    },
+    {
+      "candidate": "curated CLAHE384",
+      "status": "unfinished; no final candidate ranking or selection"
+    },
+    {
+      "candidate": "native auxiliary Ada trial7",
+      "status": "unfinished; no final candidate ranking or selection"
+    }
+  ],
+  "qualifications": [
+    "Different source/backend/runtime contexts are explicit; pooled scores are not an isolated-factor experiment.",
+    "Macro dataset/head score is not the mean of the pooled columns.",
+    "Threshold calibration is adaptive VAL tuning, exploratory and uncorrected; paired CIs preserve original qualifications and do not prove independent patients or seed robustness.",
+    "Original182 and resident timing reference528233 are distinct evidence contexts despite matching model component hashes.",
+    "No default promotion, all-task superiority, clinical claim, final selection or TEST permission."
+  ],
+  "inputs": [
+    {
+      "path": "reports/frozen-original-val-nearest/validation.json",
+      "sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836"
+    },
+    {
+      "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/export-provenance.json",
+      "sha256": "93ec97c3c6f0aa9ae5b5f6db1da3004d9b9175b4b3a6a0c6486f3043a0eb5881"
+    },
+    {
+      "path": "reports/native-v3-best54-rot4-thresholds/completion-provenance.json",
+      "sha256": "9779eb33342c9c517d3e4c90def8d5f4d210b3b0cb1bfaed3f16d5853a8fdf80"
+    },
+    {
+      "path": "reports/tpe72-completed-fresh-val/completion-and-fresh-validation-summary.json",
+      "sha256": "166e3e42ca1849e15e65a8a83d29f5ee030e9fa63b624d57005f6bc4dbab1776"
+    },
+    {
+      "path": "reports/native-TPE6-matched-fresh-VAL-20261111/export-provenance.json",
+      "sha256": "67b35319f8668748abeabefa081f22923d35c67184c175a111be0c478d7724ce"
+    },
+    {
+      "path": "reports/curated-raw256-fresh-val-20261111/selected-role-TRAIN-coverage.json",
+      "sha256": "6ad70b7720b8db738b53f7768beb10e04f3a7631c25e5d40aec3e8c930fe8f5d"
+    },
+    {
+      "path": "reports/curated-lc384-best60-fresh-val-20261111/selected-role-TRAIN-coverage.json",
+      "sha256": "4d9480e66238b2056df02e4676d54909e2b054b867879dd8c4e6ec01b5a7a202"
+    },
+    {
+      "path": "reports/native-TPE6-matched-fresh-VAL-20261111/reports-runtime-redacted/first_TPE-best-validation.json",
+      "sha256": "3f77d1916c150dbb3f9d139c2777860f8bad7c43b3df23d17f7491e7386b2191"
+    },
+    {
+      "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/threshold-0.50.json",
+      "sha256": "122e485f594d0b56351a4ae8ad0b9ee6e2921c941d59fa1e9fb70042b55e195c"
+    },
+    {
+      "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/threshold-0.35.json",
+      "sha256": "1414f2eb8c751187ab86ca30d8991597903219aa0c3123fe02d2c30d0eee67af"
+    },
+    {
+      "path": "reports/native-v3-best54-rot4-thresholds/threshold-0.50.json",
+      "sha256": "b144770164c4e914fb46f76d9511e94dd9479a488e7a2cc5677bf62b4f01e728"
+    },
+    {
+      "path": "reports/native-v3-best54-rot4-thresholds/threshold-0.40.json",
+      "sha256": "a49a01ce9b05b11b4355566671daf3413b3c767d556aebd464cfeaa44713ce11"
+    },
+    {
+      "path": "reports/native-TPE6-matched-fresh-VAL-20261111/reports-runtime-redacted/next_TPE6-best-validation.json",
+      "sha256": "597f2847f6619c01476eb39265d5b788ff2dcd65a02c9f7f0778e366ec12cb6a"
+    },
+    {
+      "path": "reports/curated-raw256-fresh-val-20261111/raw256-BEST52-fresh.json",
+      "sha256": "f00a117b2f45f0c0ad02d6a7cd16e10f9566b9beffab38322c7e6397c516d5f0"
+    },
+    {
+      "path": "reports/curated-lc384-best60-fresh-val-20261111/lc384-BEST60-fresh.json",
+      "sha256": "d9ec4a089da66e4351e026aec7afb2bcabb12a2948ed1de23515eb5b6666dfdd"
+    },
+    {
+      "path": "reports/tpe72-completed-fresh-val/best-vs-original.json",
+      "sha256": "a8550877888ee8269bce1da68f3e7db52085fad0f86b9e4f6d22d49a22220b4f"
+    },
+    {
+      "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/selected-vs-original-paired.json",
+      "sha256": "4d623604d19e52d58a3032cf34e87f4875cc3a0612b32696abef02a7170ffd93"
+    },
+    {
+      "path": "reports/native-v3-best54-rot4-thresholds/selected-vs-original-paired.json",
+      "sha256": "4101208a64ca70ff9fc6e7591326bb8619c1c5b38e984f6937f5153fc6b1a51d"
+    },
+    {
+      "path": "reports/benchmark/tpe72-tta-cpu-drive21/results.json",
+      "sha256": "a7fa3038defe4704ae2d877b2ddf833f8d90c5d24e8e7015008fc482666634a9"
+    },
+    {
+      "path": "reports/benchmark/tpe72-tta-cpu-drive21/runtime-summary.json",
+      "sha256": "6bcc9d1c062542c808cff7d37e2afd701beec532370c582495fc602e36e113a7"
+    },
+    {
+      "path": "scripts/benchmark_strong_pipeline.py",
+      "git_commit": "64e834db7df98fc47f7aefe6d59e210a70961bae",
+      "sha256": "3a0324e09c128b36381b1ab219c88c8f10e06090918c10023901588da7ac1aae"
+    }
+  ]
+}
