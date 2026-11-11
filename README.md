@@ -3,7 +3,8 @@
 **Status:** original trained models are bundled with verified prepared-input
 inference. Three additional single-dataset pilots remain explicitly preliminary.
 A completed corpus-v1 unified baseline is bundled (17 TRAIN sources, 2,221 photos); model optimization and final comparison remain in progress.
-The agreed deliverable is recorded in [GOAL.md](docs/GOAL.md).
+See the [current status and remaining work](docs/STATUS.md) and the
+[agreed deliverable](docs/GOAL.md).
 
 A Python package for retinal **vessel segmentation**, **artery/vein classification**,
 and **optic disc/cup segmentation**, with one workflow from dataset ZIPs to predictions.
