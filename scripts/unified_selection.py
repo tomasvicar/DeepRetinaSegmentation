@@ -25,6 +25,21 @@ def main():
             "training-summary",
         ):
             cmd.add_argument("--" + option, type=Path, required=True)
+        for option in (
+            "completion-family",
+            "checkpoint-role",
+            "completion-qa",
+            "expected-qa-sha256",
+        ):
+            cmd.add_argument("--" + option, required=True)
+        for option in (
+            "best-checkpoint",
+            "reviewed-protocol",
+            "expected-protocol-sha256",
+            "original-terminal",
+            "expected-terminal-sha256",
+        ):
+            cmd.add_argument("--" + option)
         cmd.add_argument("--cpu-threads", type=int, choices=[1, 2], default=2)
         cmd.add_argument("--threshold", type=float, default=0.5)
         cmd.add_argument("--tile-size", type=int)

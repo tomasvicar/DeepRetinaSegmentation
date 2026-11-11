@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 import torch
+
 from deepretina.heldout import evaluate_reviewed_heldout
 from deepretina.selection import SelectionError
 
@@ -31,6 +32,16 @@ def main(argv=None):
         action="store_true",
         help="Explicit stage2 execution request; never changes the metadata-only stage1 receipt",
     )
+    for option in ("completion-family", "checkpoint-role", "completion-qa", "expected-qa-sha256"):
+        parser.add_argument("--" + option, required=True)
+    for option in (
+        "best-checkpoint",
+        "reviewed-protocol",
+        "expected-protocol-sha256",
+        "original-terminal",
+        "expected-terminal-sha256",
+    ):
+        parser.add_argument("--" + option)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--cpu-threads", type=int, default=1)
     args = vars(parser.parse_args(argv))

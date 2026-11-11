@@ -1,7 +1,8 @@
 # Explicit reviewed unified held-out execution
 
 `unified_test.py` is a separate stage2 route. It evaluates only the test partition
-of a complete frozen selection checked by the existing stage1 metadata gate.
+of a complete schema2 frozen selection checked by the typed stage1 gate.
+Historical schema1 selections cannot authorize new execution.
 The general `deepretina evaluate --split test` route remains blocked.
 
 The stage1 artifact and receipt retain `test_evaluation_enabled: false`: they
@@ -33,7 +34,11 @@ two synthetic all-five-head test photos, plus fresh synthetic VAL evidence.
 uv run python scripts/unified_test.py \
   --execute-reviewed-heldout \
   --selection review/selection.json --expected-selection-sha256 REVIEWED_SHA \
-  --checkpoint RUN/best.pt --run-dir RUN \
+  --checkpoint RUN/best.pt --best-checkpoint RUN/best.pt --run-dir RUN \
+  --completion-family standalone_0b --checkpoint-role training_best \
+  --completion-qa QA.json --expected-qa-sha256 QA_SHA \
+  --reviewed-protocol protocol.json --expected-protocol-sha256 PROTOCOL_SHA \
+  --original-terminal terminal.json --expected-terminal-sha256 TERMINAL_SHA \
   --manifest DATA/manifest.json --validation-evidence reports/fresh-selected-val.json \
   --output reports/final-heldout.json --device cpu --cpu-threads 1
 ```
@@ -83,3 +88,26 @@ Unsigned records, local time and device observations cannot prove historical
 blindness, authenticate a reviewer, attest the hardware, or prevent an operator
 with data access from inspecting held-out labels. Cross-hardware bitwise
 agreement is not claimed. Those limitations stay explicit in the report.
+
+## Schema2 selected roles and completion inputs
+
+The API `evaluate_reviewed_heldout` and CLI require the same explicit original
+completion family, selected role, QA path and external QA SHA used during freeze.
+Standalone families also require original protocol and supervisor terminal paths
+and their external SHA pins; genuine pool6b uses its typed original receipt in
+the QA. The gate reconstructs these observations from actual input bytes at each
+execution boundary. A saved eligibility JSON or a matching filename alone is
+insufficient. `fixed_terminal60` must pass separate true BEST and selected LAST
+paths; LAST retains its own epoch60 score.
+
+Both the stage2 report and frozen schema2 artifact carry the selected role and
+typed eligibility proof. `compare_reviewed_test.py` checks their exact agreement,
+own selected TRAIN coverage derived from manifest IDs, original family/source
+pins and retained true BEST provenance. It reads historical schema1 reports for
+metadata comparison only; that reader does not grant execution permission.
+
+The source72 V3 pool final60 adapter remains mandatory and currently fails closed.
+Its native rung evidence/COMPLETE receipt must not be relabeled standalone.
+This implementation does not run real TEST, create an actual model selection,
+or retrospectively enrich older VAL. Final-source fresh VAL and root review are
+still required before invoking this route.

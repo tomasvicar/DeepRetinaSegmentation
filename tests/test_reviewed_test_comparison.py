@@ -425,3 +425,135 @@ def test_existing_metric_identity_cannot_be_silently_retagged(case):
     save(case, "candidate")
     with pytest.raises(ValueError, match="contradicts reviewed wrapper"):
         run(case)
+
+
+def typed_case(case, role="training_best", family="standalone_0b"):
+    """Structurally complete synthetic schema2 reports; no checkpoint/GT loading."""
+    v, p = case
+    selected, candidate = v["selection"], v["candidate"]
+    selected["schema_version"] = candidate["schema_version"] = 2
+    cp = selected["checkpoint"]
+    if role == "fixed_terminal60":
+        cp.update(sha256="f" * 64, epoch=60, steps=122880, training_selection_score=0.65)
+    cfg = cp["configuration"]["values"]
+    cfg.update(vascular_sampling_weight=2.0, mixed_precision="none")
+    cp["configuration"]["sha256"] = m.sha(m.canonical(cfg))
+    kind, commit, execution, training = m.PROFILES[family]
+    selected["source"]["training_source_sha256"] = training
+    groups = m.inventory(m.canonical(v["manifest"]))[0]
+    photos = sorted(groups["train"])
+    records = sorted(r["id"] for rs in groups["train"].values() for r in rs)
+
+    def coverage(epoch):
+        return {
+            "epoch": epoch,
+            "eligible_photos": len(photos),
+            "seen_photos": len(photos),
+            "eligible_annotation_records": len(records),
+            "contributing_annotation_records": len(records),
+            "minimum_photo_visits": epoch,
+            "minimum_annotation_visits": 1,
+            "delivered_samples": epoch * 8192,
+            "eligible_photo_ids_sha256": m.sha(m.canonical(photos) + b"\n"),
+            "eligible_annotation_ids_sha256": m.sha(m.canonical(records) + b"\n"),
+            "photo_visits_sha256": "a" * 64,
+            "annotation_visits_sha256": "b" * 64,
+        }
+
+    completion = selected["training_completion"]
+    raw = {**cfg, "device": "cuda:0"}
+    proof = {
+        "schema_version": 1,
+        "kind": "checked_freeze_eligibility",
+        "family": family,
+        "checkpoint_role": role,
+        "selection_created": False,
+        "test_evaluation_enabled": False,
+        "original_qa_kind": kind,
+        "original_qa_sha256": "7" * 64,
+        "input_sha256": {"qa": "7" * 64},
+        "source_profile": {
+            "commit": commit,
+            "execution_code_sha256": execution,
+            "training_source_sha256": training,
+        },
+        "checkpoint_sha256": cp["sha256"],
+        "checkpoint_epoch": cp["epoch"],
+        "checkpoint_steps": cp["steps"],
+        "selected_training_score": cp["training_selection_score"],
+        "training_completion": copy.deepcopy(completion),
+        "canonical_data": copy.deepcopy(selected["canonical_data"]),
+        "training_best": {"epoch": 56, "score": 0.7, "sha256": "e" * 64},
+        "raw_training_configuration": raw,
+        "raw_training_configuration_sha256": m.sha(m.canonical(raw)),
+        "actual_evaluation_source": {
+            k: x for k, x in selected["source"].items() if k != "training_source_sha256"
+        },
+        "terminal_coverage": coverage(60),
+        "selected_checkpoint_coverage": coverage(cp["epoch"]),
+        "original_completion": {
+            "kind": "original_standalone_supervisor_terminal",
+            "sha256": "8" * 64,
+            "reviewed_protocol_sha256": "9" * 64,
+        },
+    }
+    if family == "pool_6b":
+        proof["original_completion"] = {
+            "kind": "original_pool_COMPLETE_receipt",
+            "sha256": "8" * 64,
+            "original_task_sha256": "9" * 64,
+            "original_decision_sha256": "a" * 64,
+        }
+    selected.update(checkpoint_role=role, freeze_eligibility=proof)
+    candidate.update(
+        checkpoint_role=role,
+        freeze_eligibility=copy.deepcopy(proof),
+        source=copy.deepcopy(selected["source"]),
+        configuration=copy.deepcopy(cp["configuration"]),
+        checkpoint={
+            k: cp[k] for k in ("sha256", "epoch", "steps", "lineage", "training_selection_score")
+        },
+    )
+    for name in ("selection", "candidate"):
+        save(case, name)
+    pin = m.sha(p["selection"].read_bytes())
+    v["candidate"]["selection_sha256"] = v["policy"]["selected_unified_selection_sha256"] = pin
+    save(case, "candidate")
+    save(case, "policy")
+    v["original"]["reviewed_policy_sha256"] = m.sha(p["policy"].read_bytes())
+    save(case, "original")
+    return groups
+
+
+@pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
+@pytest.mark.parametrize("family", ["pool_6b", "standalone_0b", "standalone_72"])
+def test_schema2_typed_roles_and_families_compare_metadata(case, role, family):
+    typed_case(case, role, family)
+    assert run(case)["photos"] == 2
+
+
+@pytest.mark.parametrize(
+    "mutation", ["role", "source", "qa", "coverage", "own_score", "raw_config", "terminal"]
+)
+def test_schema2_cannot_retag_role_or_completion(case, mutation):
+    groups = typed_case(case, "fixed_terminal60")
+    selected, candidate = case[0]["selection"], case[0]["candidate"]
+    proof = selected["freeze_eligibility"]
+    if mutation == "role":
+        candidate["checkpoint_role"] = "training_best"
+    if mutation == "source":
+        proof["source_profile"]["training_source_sha256"] = "0" * 64
+    if mutation == "qa":
+        proof["original_qa_sha256"] = "0" * 64
+    if mutation == "coverage":
+        proof["selected_checkpoint_coverage"]["contributing_annotation_records"] = 0
+    if mutation == "own_score":
+        proof["selected_training_score"] = 0.7
+    if mutation == "raw_config":
+        proof["raw_training_configuration"]["mixed_precision"] = "bf16"
+    if mutation == "terminal":
+        proof["original_completion"]["kind"] = "original_pool_COMPLETE_receipt"
+    if mutation != "role":
+        candidate["freeze_eligibility"] = copy.deepcopy(proof)
+    with pytest.raises(ValueError):
+        m.check_v2_eligibility(selected, candidate, groups)

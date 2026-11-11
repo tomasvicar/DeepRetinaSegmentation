@@ -39,7 +39,7 @@ def no_forward_or_cuda(monkeypatch):
 
 
 @pytest.fixture
-def case(tmp_path):
+def case(tmp_path, monkeypatch):
     root = tmp_path / "canonical"
     root.mkdir()
     rows, photos = [], []
@@ -298,7 +298,48 @@ def case(tmp_path):
     }
     evidence_path = tmp_path / "enriched-val.json"
     evidence_path.write_bytes(s.canonical(evidence))
+    # Isolate selection/source/GT/TOCTOU tests from the fixed full-corpus typed
+    # checker. Real profile/coverage checks have independent unit and actual-artifact
+    # proofs; this tiny synthetic fixture cannot claim corpusv2 completion.
+    from deepretina import freeze_eligibility as eligibility
+
+    def synthetic_eligibility(**inputs):
+        selected_raw, selected = s.checkpoint_snapshot(inputs["checkpoint"])
+        _, original_best = s.checkpoint_snapshot(inputs["best_checkpoint"])
+        _, terminal_last = s.checkpoint_snapshot(inputs["last_checkpoint"])
+        identity, parts = s.data_identity(inputs["manifest"], selected)
+        completed = s.completion_evidence(
+            original_best,
+            terminal_last,
+            Path(inputs["metrics_csv"]).read_bytes(),
+            Path(inputs["training_summary"]).read_bytes(),
+            parts["train"],
+        )
+        proof = {
+            "original_qa_sha256": inputs["expected_qa_sha256"],
+            "checkpoint_role": inputs["checkpoint_role"],
+            "family": inputs["family"],
+            "checkpoint_sha256": s.digest(selected_raw),
+            "checkpoint_epoch": selected["epoch"],
+            "checkpoint_steps": selected["steps"],
+            "selected_training_score": selected["val_selection_score"],
+            "source_profile": {"training_source_sha256": selected["training_source_sha256"]},
+            "actual_evaluation_source": s.evaluation_source_identity(),
+            "canonical_data": identity,
+            "training_completion": completed,
+            "scope": "synthetic mocked eligibility boundary only",
+        }
+        return eligibility.CheckedFreezeEligibility(selected_raw, s.canonical(proof))
+
+    monkeypatch.setattr(eligibility, "check_freeze_eligibility", synthetic_eligibility)
+    qa_path = tmp_path / "synthetic-qa.json"
+    qa_path.write_bytes(s.canonical({"fixture": True}))
     return {
+        "completion_family": "pool_6b",
+        "checkpoint_role": "training_best",
+        "completion_qa": qa_path,
+        "expected_qa_sha256": s.digest(qa_path.read_bytes()),
+        "best_checkpoint": best_path,
         "checkpoint": best_path,
         "last_checkpoint": last_path,
         "manifest": manifest,
@@ -360,7 +401,7 @@ def test_snapshot_retained_even_when_same_checkpoint_path_is_replaced(case, tmp_
     case["checkpoint"].write_bytes(case["last_checkpoint"].read_bytes())
     assert checked.checkpoint_snapshot == original
     assert torch.load(io.BytesIO(original), weights_only=True)["epoch"] == 5
-    with pytest.raises(s.SelectionError, match="checkpoint/configuration"):
+    with pytest.raises(s.SelectionError, match="checkpoint/configuration|completed-run selection"):
         check(case, path, expected)
 
 
@@ -683,7 +724,7 @@ def test_full_canonical_fingerprint_repeated_after_val_gt_read(case, tmp_path, m
 
     monkeypatch.setattr(s, "verify_prepared_content", observe)
     create(case, tmp_path)
-    assert len(calls) == 2 and calls[0] == calls[1]
+    assert len(calls) >= 3 and len(set(calls)) == 1
 
 
 def _replace_av_counts(case, artery, vein, conditional):
@@ -751,3 +792,35 @@ def test_legitimate_exclusive_av_decoder_counts_accepted(case, tmp_path, artery,
     _replace_av_counts(case, artery, vein, conditional)
     path, expected = create(case, tmp_path)
     assert check(case, path, expected).test_evaluation_enabled is False
+
+
+@pytest.mark.parametrize(
+    "omit", ["completion_family", "checkpoint_role", "completion_qa", "expected_qa_sha256"]
+)
+def test_no_compatible_loader_untyped_fallback(case, tmp_path, monkeypatch, omit):
+    args = {k: v for k, v in case.items() if k != omit}
+    monkeypatch.setattr(
+        s, "checkpoint_snapshot", lambda _: pytest.fail("Must reject before weights")
+    )
+    with pytest.raises(s.SelectionError, match="typed|externally pinned"):
+        s.create_selection(
+            output=tmp_path / "denied.json", reviewer="fixture", rationale="fixture", **args
+        )
+    assert not (tmp_path / "denied.json").exists()
+
+
+def test_historical_selection_not_upgraded_for_execution(tmp_path):
+    old = tmp_path / "historical.json"
+    raw = s.canonical({"schema_version": 1})
+    old.write_bytes(raw)
+    with pytest.raises(s.SelectionError, match="Historical schema1"):
+        s.check_selection(selection=old, expected_selection_sha256=s.digest(raw))
+    assert old.read_bytes() == raw
+
+
+def test_checked_eligibility_proof_cannot_be_mutated():
+    from deepretina.freeze_eligibility import CheckedFreezeEligibility
+
+    checked = CheckedFreezeEligibility(b"snapshot", s.canonical({"family": "pool_6b"}))
+    checked.proof["family"] = "standalone_72"
+    assert checked.proof["family"] == "pool_6b"
