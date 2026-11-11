@@ -55,3 +55,27 @@ def test_unknown_av_and_absent_cup_do_not_create_sampling_tasks():
     support = np.ones_like(disc)
     support[1] = False
     assert audit.task_flags({"id": "disc", "task": "disc_cup"}, disc, support, fov)[0] == {"disc"}
+
+
+def test_scenarios_separate_vascular_weight_from_av_bundle_choice():
+    rows = [
+        {"id": "a", "dataset": "drive", "photo_id": "same", "task": "vessels"},
+        {"id": "b", "dataset": "rite", "photo_id": "same", "task": "av"},
+        {"id": "c", "dataset": "refuge", "photo_id": "disc", "task": "disc_cup"},
+    ]
+    flags = {"a": {"vessel"}, "b": {"vessel", "av"}, "c": {"disc", "cup"}}
+    baseline = audit.exposure(rows, flags, flags, 8192)
+    explicit = audit.exposure(rows, flags, flags, 8192, vascular_priority=1, av_probability=0.5)
+    assert baseline == explicit
+    more_av = audit.exposure(rows, flags, flags, 8192, vascular_priority=1, av_probability=0.75)
+    assert more_av["tasks"]["av"]["expected_selected_supervision_total"] == 3072
+    for task in ("vessel", "disc", "cup"):
+        assert more_av["tasks"][task] == baseline["tasks"][task]
+    more_vascular = audit.exposure(
+        rows, flags, flags, 8192, vascular_priority=2, av_probability=0.5
+    )
+    assert more_vascular["tasks"]["vessel"]["expected_selected_supervision_total"] == 5461
+    assert more_vascular["tasks"]["av"]["expected_selected_supervision_total"] == 2730.5
+    assert more_vascular["tasks"]["disc"]["expected_selected_supervision_total"] == 2731
+    with pytest.raises(ValueError, match="predeclared"):
+        audit.exposure(rows, flags, flags, 8192, vascular_priority=3)
