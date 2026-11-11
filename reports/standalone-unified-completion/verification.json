@@ -1,0 +1,44 @@
+{
+  "base_commit": "0b8762e667c997a2dfd129dc65988c1f26f6b2ad",
+  "verifier": "scripts/verify_unified_completion.py",
+  "verifier_sha256": "70877eca7e6ddff220271688de11219f58aaebbeff1011b2dc1d09a7f4e10199",
+  "future_output_family": "standalone_unified_completion_qa",
+  "original_protocol_family": "reviewed_standalone_unified_protocol",
+  "original_supervisor_family": "bounded_unified_supervisor_terminal",
+  "tests": {
+    "passed": 96,
+    "new_tests": 31,
+    "duration_seconds": 15.56,
+    "full_suite_run": false,
+    "cpu_affinity": [
+      0
+    ],
+    "nice": 10,
+    "threads": 1,
+    "CUDA_VISIBLE_DEVICES": "",
+    "log_sha256": "0580e7db846fef26e99d21ffd5967a178f64df099cb1dc76d600618cf34abc3b"
+  },
+  "ruff": "PASS",
+  "reused_selection_apis": [
+    "checkpoint_snapshot",
+    "config_identity",
+    "data_identity",
+    "completion_evidence"
+  ],
+  "existing_selection_gate_modified": false,
+  "existing_fixed6b_pool_adapter_modified": false,
+  "actual_completion_report_produced": false,
+  "model_forward_performed": false,
+  "gt_array_decode_performed_by_verifier": false,
+  "test_evaluation_performed": false,
+  "synthetic_positive_qualification": "Synthetic safe weights/optimizer metadata only; canonical encoded image/NPZ files deliberately invalid, with Module forward/CUDA/np.load forbidden. Production canonical pins are not overridable; only synthetic tests monkeypatch manifest/content constants.",
+  "actual_negative_fixture": "tests/reference/standalone_completion/actual-e027-stripped.json",
+  "source_guard_scope": "Actual Git working tree/HEAD/tracked-clean plus exact source execution/training bytes; no SIF/fake-Git fallback",
+  "external_protocol_requirement": "Create and externally review protocol only after the final actual training source commit; verifier never emits original protocol or supervisor terminal",
+  "qualifications": [
+    "New own-host standalone family only; never masquerades as a pool receipt or Optuna decision",
+    "All5700 actual eligible annotation IDs positive and all2529 photos min60/exact491520 required",
+    "Cache identity checks do not repeat cache-payload audit; canonical encoded bytes are hashed without GT decoding",
+    "No installation, live source/run/data mutation, GPU allocation/training, TEST evaluation or stable merge"
+  ]
+}
