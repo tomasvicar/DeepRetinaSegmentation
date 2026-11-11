@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 11. 11. 2026, po dokončení vascular4 a zahájení skutečného TPE běhu. Celkový cíl není dokončený.**
+**Snímek: 11. 11. 2026, 15:10 UTC, po dokončení vascular4, TPE a měření inference. Celkový cíl není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -102,26 +102,47 @@ Cévní Dice 0,76039 stále zaostává za původní sítí 0,77012. Tento kandid
 proto nenahrazuje výchozí model ani nedokládá zlepšení všech úloh a zdrojů.
 [Párové výsledky obou rolí checkpointu](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/vascular4-paired-val).
 
-Skutečný návrh Optuna TPE z pěti dokončených srovnatelných pozorování E27
-již trénuje na Adě. Pevný milník E27 prošel dílčí kontrolou; stejný běh
-pokračuje do E60. Dílčí pokrytí 5 686 z 5 700 anotovaných variant ještě
-nesplňuje podmínku finálního modelu. Nejde o dokončenou optimalizaci ani
-o konečný výběr. [Původ skutečného návrhu](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/fixed27-proposal).
+Skutečný návrh Optuna TPE z pěti srovnatelných pozorování E27 dokončil
+na Adě všech 60 epoch. LAST E60 i BEST E58 prošly kontrolou všech 2 529
+fotografií / 5 700 variant a samostatnou čerstvou VAL na 770 snímcích.
+BEST má macro Dice 0,81090, vessel Dice 0,76288 a conditional A/V 0,82491.
+Proti původní síti přetrvává cévní rozdíl −0,00724 (95% párový interval
+[−0,01459; −0,00069]); nejde o zlepšení všech úloh ani konečný výběr.
+Výsledek E27 byl samostatně zapsán do pomocné Optuna studie; výsledek E60
+jej nenahrazuje. [Původ skutečného návrhu](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/fixed27-proposal)
+a [čerstvá měření dokončeného modelu](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/tpe72-fresh-val-20261111/reports/tpe72-completed-fresh-val).
 
-Současné V3/TPE běhy drží patch 384 a vstup raw25 pevné. Navazující
-kontrolované porovnání připravuje patch 256/384/512 se stejným batchem 4
+Dokončené V3/TPE běhy držely patch 384 a vstup raw25 pevné. Navazující
+kontrolované porovnání zahrnuje patch 256/384/512 se stejným batchem 4
 a dvě fotometrické varianty při patchi 384: CLAHE a korekci osvětlení s CLAHE.
 Implementace opt-in předzpracování je na samostatné experimentální větvi;
-připravuje se ověřovaná cache pouze pro TRAIN/VAL. Celé trénovací srovnání
-zatím spuštěné není. Předzpracování se aplikuje na celý snímek před výřezem
+obě úplné cache 3 299 TRAIN/VAL snímků jsou sestavené a ověřené. Všech pět
+úloh bylo skutečně přijato PBS; při poslední společné kontrole ve 14:07 UTC
+čekaly ve frontě. Kontrola v 15:05 selhala kvůli vypršení přihlášení, takže
+aktuální stav není potvrzený a výsledek trénovacího srovnání zatím nemáme.
+Předzpracování se aplikuje na celý snímek před výřezem
 a stejně při predikci, s původními pixely mimo FOV. Vyšší fyzické rozlišení
-by vyžadovalo novou přípravu z RAW; zvětšení existující cache je nenahrazuje.
+vyžaduje novou přípravu z RAW; zvětšení existující cache je nenahrazuje.
+Přímá příprava 35 pixelů/stupeň už prošla malou kontrolou tří TRAIN fotografií
+a sedmi anotovaných záznamů včetně aliasů, stereo výřezu a chybějící anotace.
+Nejde o dokončenou přípravu ani trénování celého korpusu při tomto rozlišení.
 
-Na Oldu začalo samostatné měření vlivu velikosti a překryvu inference dlaždic
+Na Oldu skončilo samostatné měření vlivu velikosti a překryvu inference dlaždic
 nad totožnými vahami vascular4 BEST E55 a všemi 770 VAL snímky. Vlastní
 baseline 512/64 se porovnává s 512/192, 768/192 a 1024/256. Jde o ladění
-predikce, nikoli o experiment s velikostí trénovacího patche. Výsledky dalších
-variant ještě nejsou uzavřené; TEST se pro ladění nepoužívá.
+predikce, nikoli o experiment s velikostí trénovacího patche. Největší dlaždice
+zvýšila macro jen nepatrně a zhoršila cévy; výchozí 512/64 proto zůstává.
+[Úplné výsledky](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/vascular4-inference-tiling-val).
+
+Další dokončené měření porovnalo žádné TTA, dvě zrcadlení, čtyři rotace a všech
+osm transformací nad totožným vascular4 BEST E55 a všemi 770 VAL snímky.
+Osm transformací zvýšilo macro Dice z 0,80597 na 0,81308
+(párový rozdíl 0,00711; 95% interval [0,00497; 0,00942]) a conditional A/V
+z 0,82288 na 0,83544. Celá invokace trvala 1 002 s proti 205 s bez TTA.
+Na DRHAGIS se bodové A/V výsledky zhoršily; jde o průzkumné výsledky na VAL,
+nikoli nezávislé potvrzení generalizace. TTA kód a výsledky zůstávají na
+[samostatné větvi](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiment/inference-tta-science/reports/inference-tta-vascular4);
+nejsou součástí výchozí predikce tohoto vydání. TEST se pro ladění nepoužívá.
 
 Volitelný BF16 TRAIN je již také v předatelné větvi. Na skutečné CUDA Adě
 prošel krátký nezávislý krok s bitově shodnými vahami, stavem optimalizátoru,
