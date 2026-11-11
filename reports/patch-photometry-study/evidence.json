@@ -1,0 +1,120 @@
+{
+  "kind": "read_only_patch_photometry_study_evidence",
+  "scope": "No model forward, array decode, GPU/job action, source/data/TEST mutation; source code and saved metadata read only.",
+  "document_base_commit": "c5d47ad9e09bccc516759f87aac6ebb0c0823af7",
+  "frozen_ml_source": "72fb321187eca517823083aca80cedace9605570",
+  "examined_source_file_sha256": {
+    "src/deepretina/unified.py": "ac7685cf4b02a5bb88954e718c8478f25e848686e2435aaf785cdd62e6c3ef1e",
+    "src/deepretina/legacy/preprocessing.py": "28068cbd23ebd76d36f7d12339d9ffa8d84e8816876646fa7725998e1d00e015",
+    "src/deepretina/geometry_policy.py": "1a1659ba5bed18497afa32765e7501096f06685804b4545dfe6a3b91f785427f",
+    "scripts/prepare_corpus_v2.py": "253ba473645a6bf4064a77bb9ed9c37b0bea02e14b1f4c76b947e882ef3e9497"
+  },
+  "native_tpe_proposal_sha256": "89f304fa69749c25999f06d70638ee4e011c7066223fe03478f1dad258affaef",
+  "fixed_params": {
+    "lr": 0.000287722894608172,
+    "weight_decay": 5.52164819184925e-06,
+    "vascular_sampling_weight": 2.553934065831788,
+    "base_channels": 16,
+    "norm": "batch",
+    "augmentation": "basic"
+  },
+  "common_config": {
+    "architecture": "compact_unet",
+    "epochs": 60,
+    "epoch_samples": 8192,
+    "batch_size": 4,
+    "depth": 4,
+    "scheduler": "cosine",
+    "min_lr_ratio": 0.05,
+    "seed": 42,
+    "sampling": "dataset_task_balanced",
+    "coverage_first": true,
+    "foreground_probability": 0.5,
+    "mixed_precision": "bf16",
+    "tile_size": 512,
+    "overlap": 64,
+    "bce_weight": 1.0,
+    "dice_weight": 1.0,
+    "av_weight": 1.0,
+    "vessel_loss_weight": 1.0,
+    "vessel_pos_weight": 1.0
+  },
+  "historical_geometry256b8": {
+    "source": "6b3dfad605a256e904a877efcdcc1f3cc6135dd0",
+    "declared_changes": {
+      "patch_size": 256,
+      "batch_size": 8
+    },
+    "actual_rung": 3,
+    "actual_decision": "pruned",
+    "objective": "best-so-far macro_dataset_mean_dice; not V3 six-ratio LAST",
+    "value": 0.5743060213174622,
+    "can_identify_patch_only_effect": false
+  },
+  "runtime_anchor": {
+    "original_receipt_sha256": "5a49312ef7df0f1312303a0df3c9ce227442ffded4a28394e655766399aa9068",
+    "csv_sha256": "5d8b629dbd386630ce5c7b4c0baed6c51d06d3ccb29cd73503b8641a72c610ae",
+    "rung": 27,
+    "device_family": "NVIDIA A40",
+    "width": 16,
+    "norm": "batch",
+    "patch": 384,
+    "batch": 4,
+    "source72": true,
+    "mean_train_seconds": 225.80802817695292,
+    "mean_validation_seconds": 120.95751596065841,
+    "baseline_candidate_is_not_new_tpe_candidate": true
+  },
+  "patch_scenarios": [
+    {
+      "patch": 256,
+      "batch": 4,
+      "samples_per_epoch": 8192,
+      "nominal_updates_per_epoch": 2048,
+      "nominal_context_degrees": 10.24,
+      "presented_pixels_per_epoch": 536870912,
+      "train_pixel_ratio_vs384": 0.4444444444444444,
+      "extrapolated_epoch_seconds": 221.3166395948597,
+      "extrapolated_full60_hours": 3.6886106599143287
+    },
+    {
+      "patch": 384,
+      "batch": 4,
+      "samples_per_epoch": 8192,
+      "nominal_updates_per_epoch": 2048,
+      "nominal_context_degrees": 15.36,
+      "presented_pixels_per_epoch": 1207959552,
+      "train_pixel_ratio_vs384": 1.0,
+      "extrapolated_epoch_seconds": 346.7655441376113,
+      "extrapolated_full60_hours": 5.779425735626855
+    },
+    {
+      "patch": 512,
+      "batch": 4,
+      "samples_per_epoch": 8192,
+      "nominal_updates_per_epoch": 2048,
+      "nominal_context_degrees": 20.48,
+      "presented_pixels_per_epoch": 2147483648,
+      "train_pixel_ratio_vs384": 1.7777777777777777,
+      "extrapolated_epoch_seconds": 522.3940104974636,
+      "extrapolated_full60_hours": 8.706566841624392
+    }
+  ],
+  "five_arm_simple_gpu_hours": 29.733454708419288,
+  "forecast_excludes": [
+    "CPU photometry overhead",
+    "staging/support scans",
+    "milestone/QA",
+    "hardware differences",
+    "memory admission/OOM",
+    "loader bottlenecks"
+  ],
+  "photometry_names": [
+    "raw",
+    "clahe_hsv_v1",
+    "legacy_lc_clahe_v1"
+  ],
+  "outside_fov": "restore original prepared raw RGB after either operator; raw unchanged",
+  "photometry_implementation_status": "independent agent implementing; exact descriptor/backend/effective kernel rules and admission evidence required before any future NN",
+  "quality_claim": false
+}
