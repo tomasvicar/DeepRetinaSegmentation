@@ -124,3 +124,13 @@ peak RSS was approximately 581032 KiB. See the sanitized
 [genuine audit summary](../reports/curated-fd44-completion/genuine-raw256-two-role-audit.json).
 Original inputs/source remained unchanged. This is a completion audit, not a
 fresh quality measurement, model promotion, selection admission or TEST result.
+
+The same unchanged `3efbd8a` checker subsequently passed genuine **LC384** BEST60
+and LAST60, each with actual observed CLI exit 0 and independently complete own
+2529-photo/5700-annotation coverage. The full original LC descriptor, backend and
+immutable nonraw cache were retained. Runs took 3.203s / 4.224s, with peak RSS
+581108 / 581080 KiB. The
+[LC audit summary](../reports/curated-fd44-completion/genuine-lc384-two-role-audit.json)
+exports only scientific/proof identities and derived counts. This was neither
+photometric processing nor a new VAL/quality measurement; the existing gates
+remain closed to the new family.

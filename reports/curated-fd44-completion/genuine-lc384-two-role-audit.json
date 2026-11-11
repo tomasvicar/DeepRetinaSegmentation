@@ -1,0 +1,211 @@
+{
+  "kind": "genuine_curated_fd44_LC384_two_role_CPU_completion_reaudit_summary",
+  "checker_source_commit": "3efbd8a1762746cdafda6de5849c67a83ca62184",
+  "checker_module_sha256": "5f22ede503b895a9d05d53fa8ba406757cd73ce7de4b0863a8563bb8a8727725",
+  "corpus_manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "corpus_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+  "both_roles_PASS": true,
+  "roles": {
+    "training_best": {
+      "checkpoint_sha256": "dfef53e453c51e87980c5132b8d829f7720b0f32b172982f4e1e1594b7449386",
+      "checkpoint_epoch": 60,
+      "checkpoint_steps": 122880,
+      "selected_training_score": 0.8060176818157359,
+      "selected_training_metric": "macro_dataset_mean_dice",
+      "selected_checkpoint_coverage": {
+        "annotation_visits_sha256": "2af9373d517d59259492bd9ea19422dc0cd6e777c5c87b2885a55d5c712faf82",
+        "contributing_annotation_records": 5700,
+        "delivered_samples": 491520,
+        "eligible_annotation_ids_sha256": "d7f0f18ccf5b53a4b4ad9abaa092666c905bc7cb65910d0a33aed0b7e719d6b0",
+        "eligible_annotation_records": 5700,
+        "eligible_photo_ids_sha256": "181481016661a2b9610185e9c7d3ee26c6023782a27b8920b5bfd63b36ec55d4",
+        "eligible_photos": 2529,
+        "epoch": 60,
+        "minimum_annotation_visits": 1,
+        "minimum_photo_visits": 62,
+        "photo_visits_sha256": "26de739c1d2544078e0c5fc229cc256a617554b9e4f11ee17fca55190ca4a589",
+        "seen_photos": 2529
+      },
+      "terminal_coverage": {
+        "annotation_visits_sha256": "2af9373d517d59259492bd9ea19422dc0cd6e777c5c87b2885a55d5c712faf82",
+        "contributing_annotation_records": 5700,
+        "delivered_samples": 491520,
+        "eligible_annotation_ids_sha256": "d7f0f18ccf5b53a4b4ad9abaa092666c905bc7cb65910d0a33aed0b7e719d6b0",
+        "eligible_annotation_records": 5700,
+        "eligible_photo_ids_sha256": "181481016661a2b9610185e9c7d3ee26c6023782a27b8920b5bfd63b36ec55d4",
+        "eligible_photos": 2529,
+        "epoch": 60,
+        "minimum_annotation_visits": 1,
+        "minimum_photo_visits": 62,
+        "photo_visits_sha256": "26de739c1d2544078e0c5fc229cc256a617554b9e4f11ee17fca55190ca4a589",
+        "seen_photos": 2529
+      },
+      "source_profile": {
+        "commit": "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+        "execution_sha256": "fcb186c98b812e9ead0fe19bec9f7e06063d31a7c7c020a785169b6c13c761ee",
+        "training_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747"
+      },
+      "original_receipt_sha256": "d5ccb080d41194a877b6cb8d069b72fb9f2ddf3612d216bd11977f42bb44b565",
+      "original_index_sha256": "a2b3c45f8759b0c13eb9ddb1d0da89215c4335b9fcc2c82aa81696c24a3a1713",
+      "original_photometric_descriptor": {
+        "FOV_provenance": "prepared image-derived/official FOV; canonical photos.json for corpus or prepare_single_net for raw inference; never target validity",
+        "RGB_scaling": "float32/255; RGB_to_HSV; CLAHE_on_V; HSV_to_RGB",
+        "backend_versions": {
+          "numpy": "2.5.4",
+          "opencv-python-headless": "4.14.0.94",
+          "scikit-image": "0.26.0",
+          "scipy": "1.18.1"
+        },
+        "background": {
+          "Gaussian": "skimage gaussian mode nearest, truncate4, channel_axis2",
+          "boundary": "original eroded-FOV EDT/Sobel/OpenCV remap",
+          "formula": "clip((RGB-background)/background+0.5,0,1)",
+          "operator": "legacy Python local_contrast_and_clahe",
+          "sigma": 36.36363636363636
+        },
+        "clip_limit": 0.005,
+        "contract_version": 1,
+        "corpus_FOV_binding": "schema2 prepared_content_fingerprint includes photos.json and every encoded FOV asset",
+        "input": "uint8 RGB HWC",
+        "kernel_rounding": "skimage int truncation toward zero; reject below1",
+        "kernel_size_effective": [
+          113,
+          113
+        ],
+        "kernel_size_requested": 113.63636363636363,
+        "matlab_parity_claim": false,
+        "nbins": 256,
+        "output": "uint8 RGB HWC",
+        "outside_fov": "restore original prepared RGB exactly after operator",
+        "profile": "legacy_lc_clahe_v1",
+        "stage": "full legacy25_raw prepared RGB before crop/augmentation/tiling",
+        "uint8_export": "clip to[0,255], truncate toward zero"
+      },
+      "portable_photometry_cache": {
+        "canonical_fingerprint": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+        "coverage": "train_val",
+        "descriptor_sha256": "c86d71a2221ed77cf3be6ed159a3aaa321fbb0aa51a9eb27888d9af476070572",
+        "fallback": false,
+        "fingerprint": "b2e42864c0e53b8fec30f55114e30f1ebbb624dd7fbefeccd31c7206cc324b01",
+        "kind": "full_prepared_photometry_RGB",
+        "operator_source_sha256": "196da8626c87d6b07bed6508252dd37328ee79846c4040c1403f9a090002708e",
+        "schema": 1
+      },
+      "PBS_actual_F_Exit0_checked_separately": true,
+      "native_envelope_supplied_or_fabricated": false,
+      "selection_created": false,
+      "test_evaluation_enabled": false,
+      "TTA_admission_enabled": false,
+      "fresh_sourcecompatible_VAL_required": true,
+      "prior_blindness_proven": false,
+      "proof_sha256": "ab6db3f35a3b5b012660585c901d7d13bac5707229d8b0a7acdd1df64c3e40a5",
+      "observed_cli_returncode": 0,
+      "observed_cli_returncode_is_actual": true,
+      "elapsed_seconds": 3.2029624530114233,
+      "peak_rss_KiB": 581108,
+      "source_and_input_bytes_unchanged": true
+    },
+    "fixed_terminal60": {
+      "checkpoint_sha256": "690723829ba12142ae0af0c4f6775796ea42e2631f3ef160cdbe0c94880e7e20",
+      "checkpoint_epoch": 60,
+      "checkpoint_steps": 122880,
+      "selected_training_score": 0.8060176818157359,
+      "selected_training_metric": "macro_dataset_mean_dice",
+      "selected_checkpoint_coverage": {
+        "annotation_visits_sha256": "2af9373d517d59259492bd9ea19422dc0cd6e777c5c87b2885a55d5c712faf82",
+        "contributing_annotation_records": 5700,
+        "delivered_samples": 491520,
+        "eligible_annotation_ids_sha256": "d7f0f18ccf5b53a4b4ad9abaa092666c905bc7cb65910d0a33aed0b7e719d6b0",
+        "eligible_annotation_records": 5700,
+        "eligible_photo_ids_sha256": "181481016661a2b9610185e9c7d3ee26c6023782a27b8920b5bfd63b36ec55d4",
+        "eligible_photos": 2529,
+        "epoch": 60,
+        "minimum_annotation_visits": 1,
+        "minimum_photo_visits": 62,
+        "photo_visits_sha256": "26de739c1d2544078e0c5fc229cc256a617554b9e4f11ee17fca55190ca4a589",
+        "seen_photos": 2529
+      },
+      "terminal_coverage": {
+        "annotation_visits_sha256": "2af9373d517d59259492bd9ea19422dc0cd6e777c5c87b2885a55d5c712faf82",
+        "contributing_annotation_records": 5700,
+        "delivered_samples": 491520,
+        "eligible_annotation_ids_sha256": "d7f0f18ccf5b53a4b4ad9abaa092666c905bc7cb65910d0a33aed0b7e719d6b0",
+        "eligible_annotation_records": 5700,
+        "eligible_photo_ids_sha256": "181481016661a2b9610185e9c7d3ee26c6023782a27b8920b5bfd63b36ec55d4",
+        "eligible_photos": 2529,
+        "epoch": 60,
+        "minimum_annotation_visits": 1,
+        "minimum_photo_visits": 62,
+        "photo_visits_sha256": "26de739c1d2544078e0c5fc229cc256a617554b9e4f11ee17fca55190ca4a589",
+        "seen_photos": 2529
+      },
+      "source_profile": {
+        "commit": "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+        "execution_sha256": "fcb186c98b812e9ead0fe19bec9f7e06063d31a7c7c020a785169b6c13c761ee",
+        "training_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747"
+      },
+      "original_receipt_sha256": "d5ccb080d41194a877b6cb8d069b72fb9f2ddf3612d216bd11977f42bb44b565",
+      "original_index_sha256": "a2b3c45f8759b0c13eb9ddb1d0da89215c4335b9fcc2c82aa81696c24a3a1713",
+      "original_photometric_descriptor": {
+        "FOV_provenance": "prepared image-derived/official FOV; canonical photos.json for corpus or prepare_single_net for raw inference; never target validity",
+        "RGB_scaling": "float32/255; RGB_to_HSV; CLAHE_on_V; HSV_to_RGB",
+        "backend_versions": {
+          "numpy": "2.5.4",
+          "opencv-python-headless": "4.14.0.94",
+          "scikit-image": "0.26.0",
+          "scipy": "1.18.1"
+        },
+        "background": {
+          "Gaussian": "skimage gaussian mode nearest, truncate4, channel_axis2",
+          "boundary": "original eroded-FOV EDT/Sobel/OpenCV remap",
+          "formula": "clip((RGB-background)/background+0.5,0,1)",
+          "operator": "legacy Python local_contrast_and_clahe",
+          "sigma": 36.36363636363636
+        },
+        "clip_limit": 0.005,
+        "contract_version": 1,
+        "corpus_FOV_binding": "schema2 prepared_content_fingerprint includes photos.json and every encoded FOV asset",
+        "input": "uint8 RGB HWC",
+        "kernel_rounding": "skimage int truncation toward zero; reject below1",
+        "kernel_size_effective": [
+          113,
+          113
+        ],
+        "kernel_size_requested": 113.63636363636363,
+        "matlab_parity_claim": false,
+        "nbins": 256,
+        "output": "uint8 RGB HWC",
+        "outside_fov": "restore original prepared RGB exactly after operator",
+        "profile": "legacy_lc_clahe_v1",
+        "stage": "full legacy25_raw prepared RGB before crop/augmentation/tiling",
+        "uint8_export": "clip to[0,255], truncate toward zero"
+      },
+      "portable_photometry_cache": {
+        "canonical_fingerprint": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+        "coverage": "train_val",
+        "descriptor_sha256": "c86d71a2221ed77cf3be6ed159a3aaa321fbb0aa51a9eb27888d9af476070572",
+        "fallback": false,
+        "fingerprint": "b2e42864c0e53b8fec30f55114e30f1ebbb624dd7fbefeccd31c7206cc324b01",
+        "kind": "full_prepared_photometry_RGB",
+        "operator_source_sha256": "196da8626c87d6b07bed6508252dd37328ee79846c4040c1403f9a090002708e",
+        "schema": 1
+      },
+      "PBS_actual_F_Exit0_checked_separately": true,
+      "native_envelope_supplied_or_fabricated": false,
+      "selection_created": false,
+      "test_evaluation_enabled": false,
+      "TTA_admission_enabled": false,
+      "fresh_sourcecompatible_VAL_required": true,
+      "prior_blindness_proven": false,
+      "proof_sha256": "52377022adcf61c3a2479e5005aac1332eba5543e22a614bab85e2bb8bd1c80c",
+      "observed_cli_returncode": 0,
+      "observed_cli_returncode_is_actual": true,
+      "elapsed_seconds": 4.224287112010643,
+      "peak_rss_KiB": 581080,
+      "source_and_input_bytes_unchanged": true
+    }
+  },
+  "scope": "Independent CPU weights_only load, strict known architecture state and finite optimizer/horizon/history/full own-weight coverage with original full nonraw photometric/cache binding. No forward, photometric processing, GT decode, new quality measurement, selection, TTA admission or TEST. Saved training scores are historical VAL metadata. Private operational records remain private.",
+  "operational_details_exported": false,
+  "model_binaries_exported": false
+}
