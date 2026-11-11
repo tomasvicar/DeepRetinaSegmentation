@@ -1,0 +1,40 @@
+# Optional native CUDA BF16 derivative of the measured vascular2 recipe.
+# New sampling recipe/source, not a quality claim or live study continuation.
+architecture = "compact_unet"
+preprocessing_profile = "legacy25_raw"
+pixels_per_degree = 25.0
+purpose = "full_data"
+epochs = 60
+epoch_samples = 8192
+coverage_first = true
+batch_size = 4
+patch_size = 384
+base_channels = 12
+depth = 4
+norm = "batch"
+lr = 0.0003
+weight_decay = 0.00001
+scheduler = "cosine"
+min_lr_ratio = 0.05
+seed = 42
+workers = 2
+device = "auto"
+sampling = "dataset_task_balanced"
+vascular_sampling_weight = 2.0
+train_view = "patch"
+view_size = 512
+foreground_probability = 0.5
+augmentation = "mild"
+bce_weight = 1.0
+dice_weight = 1.0
+av_weight = 1.0
+vessel_loss_weight = 1.0
+vessel_pos_weight = 1.0
+tile_size = 512
+overlap = 64
+require_all_heads = true
+selection_metric = "macro_dataset_mean_dice"
+allow_historical_exposure = false
+
+# Research only: requires native CUDA BF16; no speed/quality claim.
+mixed_precision = "bf16"

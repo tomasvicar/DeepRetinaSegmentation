@@ -213,7 +213,10 @@ A colleague can rebuild all 21 training sources directly from shared RAW archive
 [retraining scope](docs/RETRAINING.md) for the original-topology option and native
 architecture limitations.
 The public entry point is `uv run deepretina train-unified`; a starting preset is
-`configs/unified.toml`. Validate a checkpoint with `deepretina evaluate --split val`
+`configs/unified.toml`. Optional native CUDA BF16 uses
+`configs/unified-v2-vascular2-bf16.toml`; float32 remains the default and inference
+precision. Native GPU training-step validation of this stable port is still pending;
+see [precision requirements and scope](docs/UNIFIED_TRAIN_BF16.md). Validate a checkpoint with `deepretina evaluate --split val`
 and predict with `deepretina predict --checkpoint ...`. Experimental unified
 test evaluation remains blocked until final selection is frozen and reviewed.
 
