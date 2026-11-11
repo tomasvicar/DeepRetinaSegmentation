@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11 22:06 UTC; TPE6 fresh VAL and LC BEST assessed; four training jobs still active**. Completed VAL and
+Snapshot: **2026-11-11 22:19 UTC; raw384 completed60, three other training jobs still active**. Completed VAL and
 CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
 claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -27,6 +27,11 @@ alone supervise each output. Recovered patient/photo aliases remain grouped;
 unknown patient identity is not thereby resolved. No new TEST evaluation is
 reported here. Conditional A/V accuracy scores reference class-labeled vessel
 pixels and does not measure vessel discovery by itself.
+
+The [compact all-head comparison](../reports/all-head-candidate-comparison-20261111)
+puts nine completed model/protocol results side by side, with full-precision
+counts, input hashes and separate speed evidence. It is an overview of existing
+VAL evidence, not a frozen selection or a new evaluation.
 
 One further genuine native TPE proposal now continues the same auxiliary study
 after all six completed E27 observations. Width16/BatchNorm/basic stays fixed in
@@ -147,8 +152,12 @@ This partial inference outcome is distinct from successful full60 training.
 No automatic retry, budget change, LAST metric or promotion is claimed. Full
 counts, descriptor/config, source adverse intervals and outcome are published.
 
-Raw384, raw512 and CLAHE384 remain unfinished; their last actual scheduler/progress
-snapshot21:57UTC was R/E56, R/E39 and R/E40. No new Meta job was submitted.
+Raw384 completed60 with actual PBSF/Exit0 at22:19UTC. Its original BEST59 and
+LAST60 bytes now match the published HOST copy proof in independent read-only
+controller and Old backups. Original producer QA reports each role's full5700
+annotation coverage; independent CPU re-audits and fresh typed VAL remain pending.
+No fresh raw384 quality result or promotion is claimed. Raw512 and CLAHE384 were
+still R/E42/E42 at that observation. No new Meta job was submitted.
 Current elapsed scheduler time is not model quality, and unfinished arms are not
 ranked. Product `for_Leipzig` supports saved full-image photometry profiles without
 stripping config fields. Real TRAIN inference parity checks for the existing TPE
@@ -305,9 +314,9 @@ Cache construction is not measured training quality or loader-speed benefit.
 All five original scheduler submissions were accepted with observed submission
 exit0. The15:05UTC SSH255/expired-credential observation failure was retained;
 it did not establish a job state or trigger a restart. Authentication was later
-restored. Raw256 and LC now genuinely finished PBSF/Exit0, with actual audits and
-fresh-VAL outcomes described above. At21:57UTC raw384/raw512/CLAHE384 were still
-R/E56/E39/E40. No cancellation, replacement submission or own-GPU raw512 fallback
+restored. Raw256, LC and now raw384 genuinely finished PBSF/Exit0. Raw256 and LC
+have the actual audits/fresh-VAL outcomes above; raw384's follow-up is pending.
+At22:19UTC raw512/CLAHE384 remained R/E42/E42. No cancellation, replacement submission or own-GPU raw512 fallback
 was made. Operator handles, commands, original allocation accounting and the
 access-failure evidence remain in the private workflow repository. This document
 does not perform a scheduler action or claim those unfinished models complete.
