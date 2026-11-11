@@ -13,6 +13,7 @@ from unittest.mock import patch
 
 import calibrate_vascular2_thresholds as counters
 import numpy as np
+import torch
 
 from deepretina import selection as gate
 from deepretina import unified as u
