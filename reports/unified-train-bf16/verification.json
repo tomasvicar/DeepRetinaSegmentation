@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "parent_commit": "0b8762e667c997a2dfd129dc65988c1f26f6b2ad",
+  "scope": "isolated research preparation; no actual GPU benchmark/full training/real VAL or TEST",
+  "execution_code_sha256": "35e5b0d5f334577d4153debf8095da66c346e9f4689b2d7efff79532e8a61cfe",
+  "training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+  "unified_sha256": "ac7685cf4b02a5bb88954e718c8478f25e848686e2435aaf785cdd62e6c3ef1e",
+  "tests": "173 passed,21 existing worker/fork warnings,15.39s; CUDA blocked,CPU1 affinity,nice10,math threads1",
+  "ruff": "pass",
+  "default_parity": "Pinned original0b two optimizer steps: state_dict and entire training_state including optimizer/scheduler/coverage/RNG bitwise equal",
+  "bf16_cpu_tests": "native-device admission mocked only for tiny actual CPU-BF16 training; FP32 VAL/master weights/optimizer, finite states; not CUDA evidence",
+  "new_preset_only_difference": {
+    "mixed_precision": "bf16"
+  },
+  "gpu_benchmark_performed": false,
+  "quality_or_speed_claim": false,
+  "completion_gates_modified": false,
+  "live_source_or_jobs_modified": false,
+  "source_pin_test_change": "Training-loop source-segment equality intentionally superseded by pinned actual functional default parity; frozen data/observer/crop/augmentation/loss/architecture hashes retained."
+}

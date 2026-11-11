@@ -15,6 +15,7 @@ import math
 import random
 import time
 from collections import Counter, OrderedDict, defaultdict
+from contextlib import nullcontext
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -75,8 +76,11 @@ class UnifiedConfig:
     purpose: str = "functionality"
     max_steps: int | None = None
     vascular_sampling_weight: float = 1.0
+    mixed_precision: str = "none"
 
     def validate(self):
+        if self.mixed_precision not in ("none", "bf16"):
+            raise ValueError("mixed_precision must be none or bf16")
         if self.architecture not in {
             "compact_unet",
             "compact_unet_av_residual",
@@ -139,6 +143,23 @@ class UnifiedConfig:
             raise ValueError("purpose must be functionality or full_data")
         if self.max_steps is not None and self.max_steps < 1:
             raise ValueError("max_steps must be positive or null")
+
+
+def _validate_training_precision(config, device):
+    if config.mixed_precision == "bf16":
+        if device.type != "cuda":
+            raise ValueError("bf16 training requires a native BF16 CUDA device")
+        with torch.cuda.device(device):
+            if not torch.cuda.is_bf16_supported(including_emulation=False):
+                raise ValueError("CUDA device lacks native BF16 support")
+
+
+def _precision_context(config, device, *, training):
+    if config.mixed_precision == "none":
+        return nullcontext()
+    return torch.autocast(
+        device_type=torch.device(device).type, dtype=torch.bfloat16, enabled=training
+    )
 
 
 def _write_json(path, value):
@@ -754,7 +775,19 @@ def restore_probabilities(probability, geometry):
 
 @torch.inference_mode()
 def predict_probabilities(model, image, device, config=None, tile_size=512, overlap=64):
-    """C=5 probabilities at prepared geometry; artery/vein are conditional softmax."""
+    """C=5 probabilities; BF16 training never enables reduced-precision inference."""
+    settings = (
+        asdict(config)
+        if isinstance(config, UnifiedConfig)
+        else config or getattr(model, "unified_config", {})
+    )
+    precision = settings.get("mixed_precision", "none")
+    with _precision_context(UnifiedConfig(mixed_precision=precision), device, training=False):
+        return _predict_probabilities(model, image, device, config, tile_size, overlap)
+
+
+def _predict_probabilities(model, image, device, config=None, tile_size=512, overlap=64):
+    """Existing float32 prediction arithmetic, shared by old and new checkpoints."""
     if image.ndim != 3 or image.shape[0] != 3 or not image.is_floating_point():
         raise ValueError("Expected prepared RGB CHW float in[0,1]")
     if not torch.isfinite(image).all() or image.min() < 0 or image.max() > 1:
@@ -1270,6 +1303,8 @@ def train_unified(
     optimizer/scheduler and RNG state. best.pt is an inference-only checkpoint.
     """
     config.validate()
+    if config.mixed_precision != "none":
+        _validate_training_precision(config, resolve_device(config.device))
     manifest = Path(manifest)
     output = Path(output)
     derived_cache = None
@@ -1475,16 +1510,18 @@ def train_unified(
             for image, target, valid, indices, traces in loader:
                 image, target, valid = image.to(device), target.to(device), valid.to(device)
                 optimizer.zero_grad(set_to_none=True)
-                loss, components = unified_loss(
-                    model(image - 0.5),
-                    target,
-                    valid,
-                    bce_weight=config.bce_weight,
-                    dice_weight=config.dice_weight,
-                    av_weight=config.av_weight,
-                    vessel_loss_weight=config.vessel_loss_weight,
-                    vessel_pos_weight=config.vessel_pos_weight,
-                )
+                with _precision_context(config, device, training=True):
+                    logits = model(image - 0.5)
+                    loss, components = unified_loss(
+                        logits.float() if config.mixed_precision == "bf16" else logits,
+                        target,
+                        valid,
+                        bce_weight=config.bce_weight,
+                        dice_weight=config.dice_weight,
+                        av_weight=config.av_weight,
+                        vessel_loss_weight=config.vessel_loss_weight,
+                        vessel_pos_weight=config.vessel_pos_weight,
+                    )
                 if not components:
                     continue
                 if not torch.isfinite(loss):
@@ -1508,18 +1545,19 @@ def train_unified(
                 raise ValueError("No supervised pixels were sampled in this epoch")
             train_seconds = time.perf_counter() - train_started
             val_started = time.perf_counter()
-            metrics = (
-                validation_fn(model, manifest, split="val", device=device, config=config)
-                if validation_fn is not None
-                else evaluate_unified_model(
-                    model,
-                    manifest,
-                    split="val",
-                    device=device,
-                    config=config,
-                    **({"derived_cache": derived_cache} if derived_cache is not None else {}),
+            with _precision_context(config, device, training=False):
+                metrics = (
+                    validation_fn(model, manifest, split="val", device=device, config=config)
+                    if validation_fn is not None
+                    else evaluate_unified_model(
+                        model,
+                        manifest,
+                        split="val",
+                        device=device,
+                        config=config,
+                        **({"derived_cache": derived_cache} if derived_cache is not None else {}),
+                    )
                 )
-            )
             score = metrics[config.selection_metric]
             if score is None or not math.isfinite(score):
                 raise ValueError(f"Undefined unified validation metric: {config.selection_metric}")
