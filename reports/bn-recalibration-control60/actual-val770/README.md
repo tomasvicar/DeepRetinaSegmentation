@@ -1,9 +1,9 @@
 # Measured TRAIN-only BN recalibration, exploratory VAL770 result
 
-The fixed parent gradient60/all5700 model was recalibrated using TRAIN only;
+The fixed parent gradient60/all 5700 model was recalibrated using TRAIN only;
 all learned parameters/non-BN states remained byte-identical. See the separate
 TRAIN summary. A once-only actual frozen6b CPU4 evaluation then measured the
-exact derived artifact on all770 VAL photos, threshold0.5, with unchanged
+exact derived artifact on all 770 VAL photos, threshold 0.5, with unchanged
 inference config and canonical/GT support. No TEST was evaluated.
 
 | Pooled metric | Original d14 pipeline | Parent terminal60 | Derived BN |
@@ -17,8 +17,8 @@ inference config and canonical/GT support. No TEST was evaluated.
 | End-to-end A/V accuracy |0.630307|0.642235|0.649706|
 | Macro across datasets/heads |0.667030|0.788763|0.792075|
 
-Against parent terminal60, paired grouped/source-stratified2000-draw seed42
-bootstrap macro difference is+0.00331242, descriptive95%CI
+Against parent terminal60, paired grouped/source-stratified 2000-draw seed42
+bootstrap macro difference is+0.00331242, descriptive 95% CI
 [+0.00220383,+0.00553789]. Pooled vessel difference is+0.00478292,
 CI[+0.00381753,+0.00586108], primarily fewer false positives; vessel recall
 changes slightly downward. Vein/disc/cup pooled Dice also improve. Pooled artery
@@ -38,16 +38,16 @@ largely by disc/cup and vein; the original's historical training exposure remain
 incompletely recoverable.
 
 Largest remaining source vessel regressions (original→BN, VAL photos):
-DRHAGIS0.793068→0.758500 (8); CHASEDB10.790873→0.764374 (6);
-HRF0.807503→0.785539 (9); RITE0.813105→0.791698 (4);
-ARIA0.732888→0.711485 (28). Exact existing source intervals are in
+DRHAGIS 0.793068→0.758500 (8); CHASEDB1 0.790873→0.764374 (6);
+HRF 0.807503→0.785539 (9); RITE 0.813105→0.791698 (4);
+ARIA 0.732888→0.711485 (28). Exact existing source intervals are in
 `largest-vessel-regressions.json`; no extra inference/bootstrap was run to rank them.
 
 ## Actual supervisor defect and evidence boundary
 
-The completed producer's ORIGINAL report has a nested`metrics` object, not the
+The completed producer's ORIGINAL report has a nested `metrics` object, not the
 flat shape initially described in preparation notes. The private supervisor
-incorrectly checked top-level`photos` AFTER the producer returned successfully
+incorrectly checked top-level `photos` AFTER the producer returned successfully
 and crashed with KeyError. No NN run was repeated. The original report, failed
 supervisor traceback and sealed deployed helpers were preserved; no original
 terminal receipt was fabricated. Producer return0 is explicitly **INFERRED**

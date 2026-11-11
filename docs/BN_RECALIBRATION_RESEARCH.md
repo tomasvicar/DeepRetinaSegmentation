@@ -1,6 +1,13 @@
-# TRAIN-only BatchNorm recalibration: prepared controlled research
+# TRAIN-only BatchNorm recalibration: measured research
 
-This branch implements one controlled post-training statistics intervention for the fixed compact base12/depth4/batch4 model. After root review, actual TRAIN8192 calibration completed; its independent byte/coverage checks are recorded below. A separately authorized fresh research VAL770 run now measured a modest improvement over terminal60; exact results and the supervisor postcheck defect are documented in the linked actual report. This remains exploratory VAL, not independent/TEST quality. Original checkpoints and frozen source6b are untouched; no TEST evaluation is authorized.
+The TRAIN-only statistics update modestly improved this fixed compact model on
+770 VAL photographs: macro Dice 0.788763 → 0.792075 and pooled vessel Dice
+0.750472 → 0.755255. All learned parameters stayed bit-identical. Vessel quality
+still falls below the original reference (0.770123). These are exploratory VAL
+results; no TEST evaluation or final selection occurred.
+
+Actual calibration, fresh VAL and the supervisor postcheck failure are recorded
+below. Original checkpoints and the frozen training source remain unchanged.
 
 ## Actual E52 versus E60 metadata observation
 
@@ -15,7 +22,7 @@ All model state shapes/dtypes and configurations match. Parent last SHA:
 | BN running mean/variance buffers |0.1113289343|23.6400681|
 | BN batch counters |0.1538461538|16384|
 
-All2208 BN-stat elements changed. The larger relative buffer drift is consistent
+All 2208 BN-stat elements changed. The larger relative buffer drift is consistent
 with a BN-statistics hypothesis, but these heterogeneous quantities do not prove
 causality. Parameters also changed. The proposed intervention holds parameters
 fixed and is an empirical diagnostic; only fresh VAL can establish its measured
@@ -131,15 +138,16 @@ per-photo/header counts and source/runtime/parent/calibration provenance,
 inherited training score and no standard `unified_validation_evidence` receipt.
 Generic metadata-only paired counts comparison consumes an explicit derived metrics view retaining the full original wrapper SHA; that does not mint a final-selection artifact. Root reviewed and authorized one actual fresh VAL run only after successful TRAIN calibration; actual completion/results and explicit metadata recovery are recorded separately below. Additional synthetic tests reject changed
 parameters, stale scores, wrong derived SHA, missing coverage and changed recipe.
-Combined prototype/producer tests:15 pass in2.14s; no quality measurement yet.
+The 15 synthetic prototype/producer tests passed in 2.14 s. They check behavior;
+actual quality measurements are reported separately below.
 
 ## Actual reviewed TRAIN calibration
 
-The once-only CPU4 calibration completed successfully in709.9437s. It delivered
-8192 samples covering every2529 TRAIN photo, minimum calibration visits1.
+The once-only CPU4 calibration completed successfully in 709.9437 s. It delivered
+8,192 samples covering all 2,529 TRAIN photos, minimum calibration visits 1.
 Independent parent-versus-derived byte checks confirmed all non-BN states are
-bitidentical;54 BN state keys changed and every BN batch counter is2048. The
-parent retains actual60-gradient-epoch/all5700-annotation history; calibration
+bit-identical; 54 BN state keys changed and every BN batch counter is 2048. The
+parent retains actual 60-gradient-epoch/all 5700-annotation history; calibration
 adds zero gradient updates. Derived SHA is
 eecfebac1f9ee77f26de49654d1caf0dd1c5e35a733900bfce85afc3970cabe3.
 The original parent was unchanged and the derived model/sidecar/original terminal
@@ -148,23 +156,23 @@ is added to this research branch. Clean aggregate evidence is in
 `reports/bn-recalibration-control60/actual-train8192/summary.json`.
 
 This successful statistics pass establishes no quality improvement. Root then
-approved a separate once-only research VAL770 run with its own20min CPU budget;
+approved a separate once-only research VAL770 run with its own 20-minute CPU budget;
 that report and any paired comparisons remain distinct from this TRAIN summary.
 
 
 ## Actual fresh VAL measurement and recovery
 
 [The complete actual result](../reports/bn-recalibration-control60/actual-val770/README.md)
-records770 photos and a modest macro gain0.788763→0.792075 over the fixed parent,
-with descriptive paired95%CI for the difference[0.002204,0.005538]. Pooled vessel
-rises0.750472→0.755255 but remains below originald14's0.770123. Conditional A/V
+records 770 photos and a modest macro gain 0.788763→0.792075 over the fixed parent,
+with descriptive paired 95% CI for the difference [0.002204,0.005538]. Pooled vessel
+rises 0.750472→0.755255 but remains below original d14's0.770123. Conditional A/V
 is effectively unchanged versus parent. All task/source counts and remaining
 regressions are published. No TEST/final selection is performed.
 
 The producer succeeded but its private supervisor crashed afterward because
-it expected a flat field while the actual report nests`metrics`. The original
+it expected a flat field while the actual report nests `metrics`. The original
 report/trace/helpers and absent original terminal are preserved; explicit NEW
-posthoc recovery marks inferred childexit0 and failed supervisor honestly. No
+posthoc recovery marks inferred child exit 0 and failed supervisor honestly. No
 forward was repeated or fake original terminal/score added. Earlier flat-shape
 claims in preparation notes were incorrect and are corrected here. The future
 private postcheck is fixed and tested against the actual nested schema.
