@@ -230,11 +230,12 @@ def test_masks_unknown_heads_and_unused_av_logit_have_exact_zero_gradient():
     logits = torch.randn(1, 3, 8, 8, requires_grad=True)
     target = torch.zeros(1, 5, 8, 8)
     valid = torch.zeros_like(target, dtype=torch.bool)
-    target[0, 1, 2, 3] = 1
-    valid[0, 1:3, 2, 3] = True
+    target[0, 0:2, 2, 3] = 1
+    valid[0, :3, 2, 3] = True
     loss = m.native_loss(logits, target, valid, "av")
     loss.backward()
     assert torch.count_nonzero(logits.grad[:, 0]) == 0
+    assert torch.count_nonzero(logits.grad[:, 1:3, 2, 3]) == 2
     mask = torch.ones_like(logits.grad, dtype=torch.bool)
     mask[:, :, 2, 3] = False
     assert torch.count_nonzero(logits.grad[mask]) == 0
@@ -391,3 +392,62 @@ def test_native_cli_parser_is_stdlib_only(monkeypatch):
     parser = namespace["add_cli_args"](argparse.ArgumentParser())
     args = parser.parse_args(["--manifest", "manifest.json", "--output", "new-run", "--task", "av"])
     assert args.task == "av"
+
+
+def test_native_av_loss_uses_only_valid_positive_supplied_vessels():
+    logits = torch.zeros(1, 3, 2, 3, requires_grad=True)
+    target = torch.zeros(1, 5, 2, 3)
+    valid = torch.zeros_like(target, dtype=torch.bool)
+    valid[:, :3] = True
+    # Two actual supported classes: artery top-left and vein bottom-right.
+    target[:, 0] = 1
+    target[0, 1, 0, 0] = 1
+    target[0, 2, 1, 2] = 1
+    # A labelled artery with unknown vessel validity must not supervise.
+    target[0, 1, 0, 1] = 1
+    valid[0, 0, 0, 1] = False
+    # A labelled vein on a vessel-negative input must not supervise either.
+    target[0, 2, 0, 2] = 1
+    target[0, 0, 0, 2] = 0
+    # Crossing/ambiguous and unknown class pixels also remain excluded.
+    target[0, 1:3, 1, 0] = 1
+    target[0, 1, 1, 1] = 1
+    valid[0, 2, 1, 1] = False
+    expected = torch.tensor([[True, False, False], [False, False, True]])
+    assert torch.equal(m.av_known(target[0], valid[0]), expected)
+    assert torch.equal(m.av_known(target, valid)[0], expected)
+    loss = m.native_loss(logits, target, valid, "av")
+    torch.testing.assert_close(loss, torch.tensor(0.6931471805599453))
+    loss.backward()
+    assert torch.count_nonzero(logits.grad[:, 0]) == 0
+    assert torch.count_nonzero(logits.grad[0, 1:3, ~expected]) == 0
+    assert torch.count_nonzero(logits.grad[0, 1:3, expected]) == 4
+    assert logits.grad[0, 1, 0, 0] < 0 < logits.grad[0, 2, 0, 0]
+    assert logits.grad[0, 2, 1, 2] < 0 < logits.grad[0, 1, 1, 2]
+
+
+def test_native_av_loss_with_no_valid_positive_vessel_is_differentiable_zero():
+    logits = torch.zeros(1, 3, 2, 2, requires_grad=True)
+    target = torch.zeros(1, 5, 2, 2)
+    target[:, 1] = 1
+    valid = torch.ones_like(target, dtype=torch.bool)
+    loss = m.native_loss(logits, target, valid, "av")
+    assert loss.item() == 0
+    loss.backward()
+    assert torch.count_nonzero(logits.grad) == 0
+
+
+def test_native_av_fully_supported_loss_and_gradient_preserve_existing_ce():
+    logits = torch.tensor([[[[0.2, -0.3]], [[0.4, -0.2]], [[-0.5, 0.7]]]], requires_grad=True)
+    target = torch.zeros(1, 5, 1, 2)
+    target[:, 0] = 1
+    target[0, 1, 0, 0] = 1
+    target[0, 2, 0, 1] = 1
+    valid = torch.ones_like(target, dtype=torch.bool)
+    classes = torch.tensor([[[0, 1]]])
+    reference = torch.nn.functional.cross_entropy(logits[:, 1:3], classes)
+    actual = m.native_loss(logits, target, valid, "av")
+    assert torch.equal(actual, reference)
+    expected_grad = torch.autograd.grad(reference, logits, retain_graph=True)[0]
+    actual_grad = torch.autograd.grad(actual, logits)[0]
+    assert torch.equal(actual_grad, expected_grad)
