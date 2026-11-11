@@ -114,3 +114,36 @@ probe (not720 permutations), and test very narrow/small frames independently.
 Recheck complete raw automatic preparation and DRIVE/HRF before considering any
 runtime activation. Any later activation needs its own reviewed numerical gate;
 this research branch deliberately leaves all shipping behavior unchanged.
+
+## Bounded followup: terminal Gy and the full-auto first divergence
+
+The one permitted fresh public-operator batch (`generate_followup_probe.m`,
+seed61112, 14 tiny/random shapes) distinguishes direct-small and terminal-vector
+behavior. The terminal horizontal filter associates its replicated left edge as
+`left + (2*middle + right)` while its interior/right edge uses
+`(left + 2*middle) + right`. `candidate_followup.py` applies this only in the
+already evidenced terminal block. It exactly matches both gradients at16x16,
+but tiny/direct shapes and the vector-body Gy left column remain counterexamples.
+See `followup-metrics.json`; no production Sobel change is proposed.
+
+Replaying the **actual complete** retained DiaRet automatic chain reproduced the
+historical74165 unequal stored12 values/max271. Original processing FOV and
+radius717 matched, but the resized FOV differed at TWO pixels. The previous
+isolated photometry comparison had deliberately supplied the reference resized
+FOV, so its improvement did not establish complete-chain fidelity.
+
+`nearest_research.py` preserves the one-based inverse coordinate expression
+already used by the bicubic resize, then rounds nearest by floor(position+.5).
+There is no epsilon, threshold snapping or image-specific branch. Algebraic
+reassociation matters at exact half-pixel ties. All24 retained synthetic nearest
+fixtures and all5 source-auto resized FOVs match MATLAB with this expression;
+the current production expression misses two DiaRet pixels. See
+`nearest-comparison.json` (real photos/masks stay outside Git).
+
+`full-auto-nearest.json` records the SAME raw DiaRet input with no labels/model
+forward: current74165/max271; research Sobel alone73865/max271;
+nearest-only265/max7; nearest plus research Sobel3/max1. The remaining3 stored12
+values are unresolved; this is measured improvement on one complete chain,
+not a universal parity certificate. The production module is unchanged in this
+research commit. Research tests:37 passed0.16s, Ada CPU0 nice15, CUDA hidden.
+The original CPU validation and GPU training sources were not modified.

@@ -39,3 +39,29 @@ def test_tiny_counterexample_and_remaining_gy_error_are_retained():
 def test_constant_has_zero_gradients_without_epsilon_or_bin_adjustment():
     x, y = candidate(np.full((33, 35), 10, np.float32))
     assert np.count_nonzero(x) == np.count_nonzero(y) == 0
+
+
+@pytest.mark.parametrize("index", range(24))
+def test_research_nearest_replays_all_retained_synthetic_oracles(index):
+    from nearest_research import resize
+
+    with np.load(ROOT / "tests/reference/matlab_sobel/nearest.npz", allow_pickle=False) as ref:
+        expected = ref[f"{index}_expected"]
+        assert np.array_equal(resize(ref[f"{index}_input"], expected.shape), expected)
+
+
+@pytest.mark.parametrize("index", range(10, 14))
+def test_terminal_border_followup_independent_oracle_does_not_regress(index):
+    from candidate_followup import candidate as followup
+
+    with np.load(ROOT / "tests/reference/matlab_sobel/followup.npz", allow_pickle=False) as ref:
+        a = ref[f"{index}_input"]
+        x, y = followup(a)
+        assert np.array_equal(x, ref[f"{index}_gx"])
+        assert np.count_nonzero(y != ref[f"{index}_gy"]) <= np.count_nonzero(
+            candidate(a)[1] != ref[f"{index}_gy"]
+        )
+        if index == 10:
+            assert np.array_equal(y, ref[f"{index}_gy"])
+        else:
+            assert np.count_nonzero(y != ref[f"{index}_gy"]) > 0
