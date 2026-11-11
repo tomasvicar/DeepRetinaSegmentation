@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11 19:49 UTC; V3 TTA/threshold and raw256 fresh VAL complete**. Completed VAL and
+Snapshot: **2026-11-11 20:07 UTC; LC training and own-role audit complete**. Completed VAL and
 CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
 claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -41,7 +41,7 @@ internal VAL score is not used as a model-quality claim. Six observations do not
 establish optimality.
 [Native continuation provenance](../reports/tpe72-completed-fresh-val/next-native-TPE-proposal).
 
-At19:48UTC the same Ada run had completed E54/110,592 updates; its original
+At20:04UTC the same Ada run had completed E58/118,784 updates; its original
 observer/supervisor and resumed NN were independently observed alive. This remains
 unfinished training, not a new quality result. No additional Optuna proposal has
 been asked and trial6 has not yet been told.
@@ -84,7 +84,10 @@ CI[.000349697,.003582857], while cup loses.00273378 with entirely negative CI.
 DRHAGIS/CHASE vessel and G1020/RIM disc also regress. Vessel still falls below
 the original.77012340 point reference; its difference interval crosses zero.
 This does not justify a default, final selection or TEST. A first-TPE BEST58
-threshold followup is being prepared separately; it has not started.
+threshold followup actually launched separately at20:02:06UTC on the local Old GPU.
+Observer/controller/NN and actualFP32/CPU2inter1 runtime were independently
+checked alive; all770 VAL completion is not yet established. It uses the original
+standalone BEST58 chain, not the V3 completion family.
 
 ## Completed patch256 and pending patch/photometry arms
 
@@ -102,15 +105,26 @@ prevent an isolated causal patch-size claim. Raw256 is not promoted or bundled.
 Saved/fresh BEST counts have small numeric drift (macro−1.19e−6), with identical
 GT support; the report preserves this distinction.
 
-MetaCentrum authentication was renewed and independently checked. At19:48UTC
-PBS still listed raw384, raw512, CLAHE384 and legacy-LC384 as active allocations;
-no new job was submitted. Raw256 is the completed fifth arm. Current elapsed
-scheduler time is not model quality, and unfinished arms are not ranked. Product
-`for_Leipzig` now supports their saved full-image photometry profiles without
-stripping config fields. Real TRAIN inference parity checks for the existing
-TPE and genuine raw256 checkpoint were bitwise exact (max probability error0).
-An independent curated completion adapter is under review; it does not yet admit
-this family to final selection or TEST.
+MetaCentrum authentication was renewed and independently checked. LC384 finished
+PBS Exit0 at19:57:52UTC, allocation3h24m40s. The original completion receipt and
+all60 history rows are preserved. Both BEST and LAST are E60 with their own
+2529-photo/5700-annotation coverage, independently rechecked on CPU with actual
+CLI exits0; finite state, optimizer/horizon and the complete nonraw configuration,
+operator/backend/cache were retained. See the [genuine LC audit](../reports/curated-fd44-completion/genuine-lc384-two-role-audit.json).
+The original saved macro.806017682 is historical training-time VAL, not a fresh
+independent comparison. Both original checkpoints are byte-verified in controller
+and Old backups; they are not bundled or promoted. Fresh LC VAL is being prepared.
+
+Raw384, raw512 and CLAHE384 remain unfinished; their last actual scheduler/progress
+snapshot19:55UTC was R/E34, R/E24 and R/E25. No new Meta job was submitted.
+Current elapsed scheduler time is not model quality, and unfinished arms are not
+ranked. Product `for_Leipzig` supports saved full-image photometry profiles without
+stripping config fields. Real TRAIN inference parity checks for the existing TPE
+and genuine raw256 checkpoint were bitwise exact (max probability error0).
+The reviewed independent curated completion adapter and compatible HPO photometry
+port are integrated. This proves completion compatibility; it does not yet admit
+curated models to final selection, TTA or TEST. Raw protocol schemas and existing
+completion-family gates remain unchanged; no source/model has been frozen here.
 
 The separate [TPE BEST58 TTA sweep](../reports/tpe72-inference-tta-val) completed
 all four770-VAL cases with observed child and parent exits0, unchanged inputs and
