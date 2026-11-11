@@ -1,0 +1,89 @@
+{
+  "kind": "isolated_HPO_photometry_preparation_synthetic_only",
+  "base_commit": "7718e94d7e1bb4bc907ff9a71e15f2ad780cded3",
+  "reviewed_product_authority": "1fb4a0c304578c092f4e0c03c4684e4bb104fd70",
+  "operator_authority": "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+  "operator_fingerprint": "196da8626c87d6b07bed6508252dd37328ee79846c4040c1403f9a090002708e",
+  "code_sha256": {
+    "scripts/benchmark_latency.py": "32eb082a60999598a9483efb6541066b15a7b7b4783c02101e4c2b15d3450ab3",
+    "scripts/benchmark_strong_pipeline.py": "23887431c11ec581dd97046fb2b71c8b0ae316cb4c07ccaff0fa3a32a6d6cc8b",
+    "scripts/unified_validation.py": "307ee5558bc977771299b9a9f99090edabdae0300259c24a1c6fd460dfaaf346",
+    "src/deepretina/cli.py": "3dbc4a6ce754dfe2ff4095b24e9313a6ff77dca5435957dc8a62b1bbd5b5895b",
+    "src/deepretina/selection.py": "39b19f7e742e2a562fa5853ce358445793a3f69f1f3cabe5830862e48460fd4e",
+    "src/deepretina/unified.py": "ff862e9e16727c0a2910c598f77d7db9f4d61c50e8dbabd6665660a8fd70fc59",
+    "src/deepretina/unified_cli.py": "5bc357dc2928fcb63bff897fd9fe3a97623d659f51098c38337161df29966e2c",
+    "src/deepretina/validation_evidence.py": "c188e44ee32dc17abcbe06a37e34c9d4026f9066a35d6b1db469645505748d05",
+    "src/deepretina/photometry.py": "bdc142c31018d04f16288b0495023ba5fe48c0092e3593366204b3bb301735d3",
+    "src/deepretina/photometry_cache.py": "f0f58f1e68a7e6ce480bb2e63854030b152626021b8688755754bd54fbd34771",
+    "tests/test_hpo_photometry.py": "4274c871511b2a760ba8cd59dde3f130f1a1af9d47650ef5da88e851f26fc46a",
+    "tests/test_unified_photometry.py": "d690fc6a0393ca8345c5ebadb63c82a402402f2bf76583bf93e70258efa6b5e4",
+    "tests/test_photometry_cache.py": "207f1bc50362d274076045e475c091734ebbf97908fa177e131c90fde32563b3"
+  },
+  "byte_unchanged_gate_files": {
+    "src/deepretina/completion_profiles.py": "a3354f17cfcc54e096b486d67810a447cb0d4c5458e68201f420a2f3c348766d",
+    "src/deepretina/freeze_eligibility.py": "f48214846cb5222a8a4d7723304bb33c88a49562dcd89462bd71b89ff80c11d5",
+    "src/deepretina/v3_completion.py": "f4b1674e254c2058874df5a21064d0f6318d8449022be2fa461881e15f062841",
+    "src/deepretina/heldout.py": "fa2e6dd5a5fe3e04644171ee23a18f8556704dc2d649f502817dba347303a915",
+    "src/deepretina/inference_tta.py": "ed8324662243f4b1a3d1bb302a91153522e70c66d0ffca64213c7e592ac1c697",
+    "src/deepretina/model.py": "4224bd92ef27fd25edd75a1c753d52d04e10dfaa1f43135f914f728ebd59bcc0",
+    "src/deepretina/unified_av.py": "538b01de1b6430775fd94b18ff99a75d33311b68a37c21eb4e89e494d7c5ef3c"
+  },
+  "unchanged_core_AST": [
+    "build_unified",
+    "predict_probabilities",
+    "_predict_probabilities",
+    "_joint_probabilities",
+    "_conditional_probabilities",
+    "_tta_transform",
+    "_tta_inverse",
+    "decode_probabilities",
+    "restore_probabilities"
+  ],
+  "actual_test_commands": [
+    {
+      "scope": "operator/cache/HPO/TTA",
+      "passed": 106,
+      "seconds": 15.48,
+      "observed_exit": 0
+    },
+    {
+      "scope": "fresh producer and selection/TTA after typed header followup",
+      "passed": 92,
+      "seconds": 18.73,
+      "observed_exit": 0
+    },
+    {
+      "scope": "final HPO integration plus mocked benchmark input scope",
+      "passed": 33,
+      "seconds": 3.4,
+      "observed_exit": 0
+    }
+  ],
+  "CPU_protocol": {
+    "cores": 1,
+    "affinity": [
+      6
+    ],
+    "nice": 17,
+    "IO": "idle",
+    "CUDA_VISIBLE_DEVICES": "",
+    "max_seconds_per_command": 60
+  },
+  "raw_historical_protocol_and_config_identity_preserved": true,
+  "nonraw_metrics_protocol_header_canonical_JSON_types_bound": true,
+  "existing_completion_families_only": [
+    "standalone_0b",
+    "standalone_72",
+    "pool_6b",
+    "pool_72_v3"
+  ],
+  "curated_admission_added": false,
+  "source_or_model_frozen": false,
+  "real_checkpoint_forward_or_GT_or_GPU_or_TEST": false,
+  "actual_NN_scope": "existing tiny generated-data CPU fixtures only; new integration paths use mocked arithmetic/evidence",
+  "original_saved_fields_stripped": false,
+  "model_default_promoted": false,
+  "benchmark_run": false,
+  "ruff_pass": true,
+  "diff_check_pass": true
+}

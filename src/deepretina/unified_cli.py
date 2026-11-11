@@ -65,6 +65,15 @@ def train_from_args(args):
             expected_content_sha256=content_pin,
             derived_cache_root=args.derived_cache,
             expected_cache_fingerprint=cache_pin,
+            **(
+                {
+                    "photometry_cache_root": args.photometry_cache,
+                    "expected_photometry_cache_fingerprint": args.expected_photometry_cache_fingerprint,
+                }
+                if getattr(args, "photometry_cache", None) is not None
+                or getattr(args, "expected_photometry_cache_fingerprint", None) is not None
+                else {}
+            ),
         )
     return {"checkpoint": str(path), "purpose": config.purpose, "experimental": True}
 

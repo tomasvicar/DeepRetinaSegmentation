@@ -35,6 +35,8 @@ from .unified import (
     inference_config,
     load_unified,
     map_record_targets,
+    photometry_contract,
+    validate_saved_photometry,
 )
 
 VERSION = 1
@@ -185,6 +187,10 @@ def evaluation_source_identity():
 def config_identity(payload):
     config = asdict(UnifiedConfig(**payload["config"]))
     config.pop("device")  # Hardware choice is not a training hyperparameter.
+    if "photometric_profile" not in payload["config"]:
+        config.pop(
+            "photometric_profile"
+        )  # Keep historical raw identity; never strip a saved field.
     return {"values": config, "sha256": digest(canonical(config))}
 
 
@@ -194,6 +200,10 @@ def inference_protocol(payload, *, threshold=0.5, tile_size=None, overlap=None, 
         "Threshold must be finite and in (0,1)",
     )
     config = inference_config(payload, tile_size=tile_size, overlap=overlap)
+    try:
+        validate_saved_photometry(payload, config.photometric_profile, config.pixels_per_degree)
+    except (ValueError, TypeError) as error:
+        raise SelectionError(str(error)) from error
     return {
         "version": VERSION,
         "geometry": "canonical_prepared",
@@ -222,7 +232,24 @@ def inference_protocol(payload, *, threshold=0.5, tile_size=None, overlap=None, 
         "annotation_policy": POLICY,
         "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
         **protocol_extension(tta),
+        **(
+            {
+                "photometry": photometry_contract(
+                    config.photometric_profile, config.pixels_per_degree
+                )
+            }
+            if config.photometric_profile != "raw"
+            else {}
+        ),
     }
+
+
+def _require_opt_in_header_types(actual, expected):
+    if "tta" in expected or "photometry" in expected:
+        require(
+            canonical(actual) == canonical(expected),
+            "VAL TTA header/photometry header differs in value or JSON type from requested protocol",
+        )
 
 
 def checkpoint_snapshot(path):
@@ -473,6 +500,11 @@ def validate_metrics(metrics, groups, protocol, config, root, *, expected_split=
         require_metric_extension(metrics, protocol)
     except (ValueError, TypeError) as error:
         raise SelectionError(str(error)) from error
+    require(
+        canonical({"photometry": metrics["photometry"]} if "photometry" in metrics else {})
+        == canonical({"photometry": protocol["photometry"]} if "photometry" in protocol else {}),
+        "VAL photometry descriptor differs from checked inference protocol",
+    )
     require(
         metrics.get("family") == "unified"
         and metrics.get("split") == expected_split
@@ -851,11 +883,7 @@ def _context(
         and evidence["kind"] == evidence_kind(tta),
         "Require freshly enriched VAL evidence; thin historical reports are not eligible",
     )
-    if tta != "none":
-        require(
-            canonical(evidence["inference_protocol"]) == canonical(protocol),
-            "VAL TTA header differs in value or JSON type from requested protocol",
-        )
+    _require_opt_in_header_types(evidence["inference_protocol"], protocol)
     identity = {
         "sha256": best["checkpoint_sha256"],
         "epoch": best["epoch"],

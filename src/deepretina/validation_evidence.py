@@ -19,6 +19,7 @@ from .completion_profiles import PROFILES
 from .inference_tta import evidence_kind, protocol_extension
 from .unified import (
     UnifiedConfig,
+    VerifiedPhotometryCache,
     evaluate_unified_model,
     inference_config,
     load_unified,
@@ -87,6 +88,8 @@ def produce_validation_evidence(
     tile_size=None,
     overlap=None,
     tta="none",
+    photometry_cache_root=None,
+    expected_photometry_cache_fingerprint=None,
 ):
     """Evaluate an eligible full-data E1..60 snapshot, then write fresh evidence.
 
@@ -95,6 +98,10 @@ def produce_validation_evidence(
     inputs, and there is intentionally no split argument.
     """
     protocol_extension(tta)
+    gate.require(
+        (photometry_cache_root is None) == (expected_photometry_cache_fingerprint is None),
+        "Photometry cache requires its runtime directory and external fingerprint together",
+    )
     output, manifest = Path(output), Path(manifest)
     gate.require(
         not output.exists() and not output.is_symlink(),
@@ -116,6 +123,15 @@ def produce_validation_evidence(
         payload, threshold=threshold, tile_size=tile_size, overlap=overlap, tta=tta
     )
     config = inference_config(payload, tile_size=tile_size, overlap=overlap)
+    photometry_cache = None
+    if photometry_cache_root is not None:
+        photometry_cache = VerifiedPhotometryCache(
+            photometry_cache_root,
+            manifest,
+            config.photometric_profile,
+            expected_fingerprint=expected_photometry_cache_fingerprint,
+            expected_canonical_fingerprint=payload["prepared_content_sha256"],
+        )
     canonical_before = gate._canonical_metadata(manifest)
     data, groups = gate.data_identity(manifest, payload)
     source = {
@@ -132,6 +148,8 @@ def produce_validation_evidence(
         "Evaluated snapshot differs",
     )
     runtime = evaluation_runtime(actual_device)
+    if photometry_cache is not None:
+        runtime["photometry_cache"] = photometry_cache.identity
     gate._finish_canonical_read(manifest, payload["prepared_content_sha256"], canonical_before)
     gate.require(
         gate.evaluation_source_identity() == source_before,
@@ -147,6 +165,7 @@ def produce_validation_evidence(
             config=config,
             threshold=threshold,
             **({"tta": tta} if tta != "none" else {}),
+            **({"photometry_cache": photometry_cache} if photometry_cache is not None else {}),
         )
     runtime["evaluation_finished_at_utc"] = datetime.now(UTC).isoformat()
     # Recompute provenance from this actual evaluation, never retrofit a thin

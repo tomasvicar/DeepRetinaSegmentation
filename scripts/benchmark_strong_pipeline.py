@@ -25,6 +25,7 @@ from deepretina.legacy.checkpoints import load_single_net
 from deepretina.legacy.matlab_av import prepare_vesclass_matlab_calibrated
 from deepretina.legacy.preprocessing import prepare_single_net
 from deepretina.legacy.single_net import tiled_logits
+from deepretina.photometry import apply as apply_photometry
 from deepretina.unified import (
     UnifiedConfig,
     decode_probabilities,
@@ -154,7 +155,13 @@ def original_operation(rgb, fov, models, av, device, kwargs, *, cup_policy="nati
 
 def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5):
     prepared = prepare_single_net(rgb, fov=fov, normalized=False, **kwargs)
-    image = torch.from_numpy(prepared.image.transpose(2, 0, 1).copy()).float() / 255
+    processed = apply_photometry(
+        prepared.image,
+        config.photometric_profile,
+        fov=prepared.fov,
+        pixels_per_degree=config.pixels_per_degree,
+    )
+    image = torch.from_numpy(processed.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(
         model, image, device, config, config.tile_size, config.overlap
     )
