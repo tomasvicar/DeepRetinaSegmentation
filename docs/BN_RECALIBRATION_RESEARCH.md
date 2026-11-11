@@ -1,9 +1,6 @@
 # TRAIN-only BatchNorm recalibration: prepared controlled research
 
-This branch prepares one possible post-training statistics intervention for the
-fixed compact base12/depth4/batch4 model. It does not launch the actual8192-image
-calibration or claim improved quality. Original checkpoints and frozen source6b
-are untouched. No VAL/TEST arrays or model predictions were examined here.
+This branch implements one controlled post-training statistics intervention for the fixed compact base12/depth4/batch4 model. After root review, actual TRAIN8192 calibration completed; its independent byte/coverage checks are recorded below. A separately authorized fresh research VAL770 run now measured a modest improvement over terminal60; exact results and the supervisor postcheck defect are documented in the linked actual report. This remains exploratory VAL, not independent/TEST quality. Original checkpoints and frozen source6b are untouched; no TEST evaluation is authorized.
 
 ## Actual E52 versus E60 metadata observation
 
@@ -86,10 +83,10 @@ calibration provenance. Do not restore fake score fields, relabel the derived
 SHA as original QA.last, or claim inherited QA certifies modified BN buffers.
 No calibration registry, final-selection adapter or TEST route is added here.
 
-## Future execution, only after root operational review
+## Reviewed execution recipe
 
 The explicit execution flag below is an operational guard under existing user
-authorization, not a new user permission flow. It has NOT been run on real data.
+authorization, not a new user permission flow. Preparation at16141a5 used synthetic tests only; root subsequently approved the actual TRAIN run documented below.
 Use an owned process group/deadline wrapper; CPU4 on physical cores8,10,12,14,
 nice15/ioniceidle. Stop the owned group on timeout and preserve partial evidence;
 full8192 CPU throughput is not measured by these tests.
@@ -108,17 +105,16 @@ PYTHONDONTWRITEBYTECODE=1 taskset -c 8,10,12,14 nice -n 15 ionice -c 3 \
 
 Output directory and checkpoint/
 JSON files are exclusive. The script checks parent bytes and frozen source
-again after the pass; it never overwrites the parent. Actual full calibration
-and any fresh VAL remain pending review. Tiny synthetic CPU tests only cover
+again after the pass; it never overwrites the parent. The actual full calibration subsequently completed after review; fresh VAL is a separate reviewed research run. Tiny synthetic CPU tests only cover
 buffer-only changes, cumulative averaging, centering/delivered coverage,
 mode/momentum cleanup on failure, rejection of non-BN side effects, exact repeat,
 modified updater rejection and stale-score/predict-only lineage semantics.
 
 Prepared verification:9 tiny CPU tests passed in1.91s, including safe unified
 checkpoint save/load with odd rectangular prediction equality. Ruff check/format
-and syntax compilation pass. No actual8192-sample calibration was executed.
+and syntax compilation pass. Those tests were synthetic only; actual TRAIN execution is recorded separately below.
 
-## Prepared honest research VAL producer (not executed)
+## Reviewed honest research VAL producer
 
 `scripts/validate_bn_recalibration.py` is a separate proposed research route for
 root review. It never restores a parent validation score or invokes a final
@@ -129,13 +125,11 @@ state byte against the parent. Only then does it use frozen6b
 `evaluate_unified_model(..., split='val', threshold=.5)` with the original config
 and pinned cache18c. Full770 photo identity/source/data leases are retained.
 
-The FLAT output has `kind=bn_recalibration_research_validation`, actual fresh
+The ORIGINAL output is a research wrapper with nested `metrics`, `kind=bn_recalibration_research_validation` and actual fresh
 per-photo/header counts and source/runtime/parent/calibration provenance,
 `selection_authorized=false`, `test_evaluation_enabled=false`. It contains no
 inherited training score and no standard `unified_validation_evidence` receipt.
-Generic metadata-only paired counts comparison can consume the flat metrics;
-that does not mint a final-selection artifact. This proposed producer has NOT
-been run on real VAL arrays. Additional synthetic tests reject changed
+Generic metadata-only paired counts comparison consumes an explicit derived metrics view retaining the full original wrapper SHA; that does not mint a final-selection artifact. Root reviewed and authorized one actual fresh VAL run only after successful TRAIN calibration; actual completion/results and explicit metadata recovery are recorded separately below. Additional synthetic tests reject changed
 parameters, stale scores, wrong derived SHA, missing coverage and changed recipe.
 Combined prototype/producer tests:15 pass in2.14s; no quality measurement yet.
 
@@ -156,3 +150,21 @@ is added to this research branch. Clean aggregate evidence is in
 This successful statistics pass establishes no quality improvement. Root then
 approved a separate once-only research VAL770 run with its own20min CPU budget;
 that report and any paired comparisons remain distinct from this TRAIN summary.
+
+
+## Actual fresh VAL measurement and recovery
+
+[The complete actual result](../reports/bn-recalibration-control60/actual-val770/README.md)
+records770 photos and a modest macro gain0.788763→0.792075 over the fixed parent,
+with descriptive paired95%CI for the difference[0.002204,0.005538]. Pooled vessel
+rises0.750472→0.755255 but remains below originald14's0.770123. Conditional A/V
+is effectively unchanged versus parent. All task/source counts and remaining
+regressions are published. No TEST/final selection is performed.
+
+The producer succeeded but its private supervisor crashed afterward because
+it expected a flat field while the actual report nests`metrics`. The original
+report/trace/helpers and absent original terminal are preserved; explicit NEW
+posthoc recovery marks inferred childexit0 and failed supervisor honestly. No
+forward was repeated or fake original terminal/score added. Earlier flat-shape
+claims in preparation notes were incorrect and are corrected here. The future
+private postcheck is fixed and tested against the actual nested schema.
