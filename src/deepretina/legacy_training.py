@@ -116,7 +116,13 @@ def av_input(image, target, valid, *, record_id):
 
 
 def av_known(target, valid):
-    return valid[1] & valid[2] & ((target[1] >= 0.5) ^ (target[2] >= 0.5))
+    return (
+        valid[0]
+        & (target[0] >= 0.5)
+        & valid[1]
+        & valid[2]
+        & ((target[1] >= 0.5) ^ (target[2] >= 0.5))
+    )
 
 
 class NativeDataset:

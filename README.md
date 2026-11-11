@@ -116,6 +116,10 @@ and ground-truth masks are not distributed.
 
 ## Prepare data
 
+For complete 21-source retraining from RAW archives, follow the
+[reproducible preparation quickstart](docs/UNIFIED_QUICKSTART.md). The smaller
+conversion example below selects only its named datasets.
+
 The team shares the `fundus_databases` folder through ownCloud. Set `--data-root` to
 your local copy of that folder (on the author's machines,
 `/var/home/tom/ownCloud/fundus_databases`). Keep source archives outside Git.
@@ -175,6 +179,22 @@ The public entry point is `uv run deepretina train-unified`; a starting preset i
 `configs/unified.toml`. Validate a checkpoint with `deepretina evaluate --split val`
 and predict with `deepretina predict --checkpoint ...`. Experimental unified
 test evaluation remains blocked until final selection is frozen and reviewed.
+
+## Retrain the original architectures
+
+`train-legacy` constructs fresh native vessel/disc/universal/A/V networks;
+it preserves all bundled original weights. The explicit new training recipe
+uses the shared canonical data and records coverage and preprocessing:
+
+```bash
+uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json \
+  --config configs/native-legacy-vessel.toml --device cuda:0 \
+  --output runs/native-vessel
+```
+
+See [native training and prediction](docs/NATIVE_LEGACY_RETRAINING.md) for all four
+presets and the AV supplied-vessel contract. This retrains the original
+architectures; historical training settings and quality are not claimed reproduced.
 
 ## Train the pilot architecture
 

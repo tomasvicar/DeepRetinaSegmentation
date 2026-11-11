@@ -17,9 +17,9 @@ the same stdlib-only `legacy_training_cli.add_cli_args`/`train_from_args` API.
 Parser construction/help does not import Torch; runtime imports are lazy.
 
 ```bash
-uv run python -m deepretina.legacy_training_cli \
+uv run deepretina train-legacy \
   --manifest /prepared/manifest.json \
-  --config configs/native-legacy-vessel.toml \
+  --config configs/native-legacy-vessel.toml --device cuda:0 \
   --output /runs/new-native-vessel
 ```
 
@@ -80,6 +80,44 @@ Deployment requires a separately supplied vessel mask and the new saved-profile
 prediction route. GT-vessel training versus an imperfect deployment vessel mask is
 a distribution difference to measure. No historically exposed vessel model is
 silently used for retraining or selected as a new inference default.
+
+## Predict a freshly trained checkpoint
+
+Native vessel/disc/universal checkpoints use the regular prediction command:
+
+```bash
+uv run deepretina predict --checkpoint runs/native-vessel/best.pt \
+  --input /path/to/fundus.jpg --dataset drive --fov /path/to/fov.png \
+  --output predictions/native-vessel --device cpu
+```
+
+The checkpoint carries its declared raw profile and any portable camera policy.
+`--normalized` / `--no-normalized` explicitly override single-net normalization;
+the override is recorded. Older converted checkpoints keep their existing raw
+default and historical-provenance qualifications.
+
+A retrained AV checkpoint uses its saved `legacy25_raw_av4` profile automatically.
+Supply the original-frame vessel mask from your separately chosen segmentation:
+
+```bash
+uv run deepretina predict --checkpoint runs/native-av/best.pt \
+  --input /path/to/fundus.jpg --dataset drive --fov /path/to/fov.png \
+  --vessel-mask predictions/native-vessel/vessel.png \
+  --output predictions/native-av --device cpu
+```
+
+No vessel model is selected implicitly for this new recipe. RGB and the vessel
+mask receive the same canonical crop/rescale; input vessel support is limited to
+the FOV. The full crop enters the unchanged network, then nearest classes and
+vessel support return through the recorded crop geometry. Conditional
+probabilities return linearly, are gated by restored support and sum to one on
+that support. Outputs include `classes.png`, artery/vein masks, overlay,
+probabilities, vessel support and explicit geometry/profile metadata.
+
+Historical `--av-raw-*`, DICOM and historical prepared-input modes are rejected
+for this newly trained profile. Those modes remain available for the original
+v9 checkpoint. This separation prevents applying incompatible photometry or
+stretching a canonical crop across the original photograph.
 
 ## Eligibility, coverage and checkpoint selection
 

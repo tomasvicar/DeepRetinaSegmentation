@@ -126,6 +126,9 @@ def test_actual_native_av_prediction_restores_crop_and_requires_explicit_vessel(
         assert np.isfinite(data["probability"]).all()
         assert not data["vessel_support"][0, 0]
         assert not data["probability"][:, :4].any()
+        np.testing.assert_allclose(
+            data["probability"].sum(axis=0)[data["vessel_support"]], 1, atol=1e-6
+        )
     assert np.asarray(Image.open(output / "classes.png")).shape == (48, 64)
 
 
@@ -209,3 +212,80 @@ def test_tampered_native_policy_rejected_before_device_or_output(tmp_path, monke
     with pytest.raises(ValueError, match="hash"):
         (load_single_net if family == "single" else load_av)(path, device="cuda:0")
     assert not (tmp_path / "output").exists()
+
+
+def test_canonical_raw_prediction_works_through_the_public_cli(tmp_path):
+    from deepretina.cli import dispatch, parser
+
+    save_images(tmp_path)
+    checkpoint = tmp_path / "av.pt"
+    torch.save(av_payload(), checkpoint)
+    base = [
+        "predict",
+        "--checkpoint",
+        str(checkpoint),
+        "--input",
+        str(tmp_path / "image.png"),
+        "--output",
+        str(tmp_path / "cli"),
+        "--device",
+        "cpu",
+    ]
+    with pytest.raises(ValueError, match="saved recipe"):
+        dispatch(parser().parse_args(base + ["--av-raw-matlab"]))
+    assert not (tmp_path / "cli").exists()
+    result = dispatch(
+        parser().parse_args(
+            base
+            + [
+                "--vessel-mask",
+                str(tmp_path / "vessel.png"),
+                "--fov",
+                str(tmp_path / "fov.png"),
+                "--field-of-view-degrees",
+                "2.56",
+            ]
+        )
+    )
+    assert Path(result["classes"]).is_file()
+
+
+def test_public_native_training_dispatch_is_the_shared_stdlib_api(tmp_path, monkeypatch):
+    from deepretina.cli import dispatch, parser
+
+    sentinel = {"checkpoint": "fresh-native.pt"}
+    captured = []
+
+    def train(args):
+        captured.append(args)
+        return sentinel
+
+    monkeypatch.setattr("deepretina.legacy_training_cli.train_from_args", train)
+    args = parser().parse_args(
+        [
+            "train-legacy",
+            "--manifest",
+            str(tmp_path / "manifest.json"),
+            "--output",
+            str(tmp_path / "run"),
+            "--task",
+            "universal",
+        ]
+    )
+    assert dispatch(args) == sentinel
+    assert captured == [args] and args.task == "universal"
+
+
+def test_native_av_class_loss_requires_valid_paired_positive_vessel_support():
+    from deepretina.legacy_training import av_known
+
+    target = torch.zeros((5, 2, 3))
+    valid = torch.ones_like(target, dtype=torch.bool)
+    target[0, 0] = 1
+    target[1, 0] = 1
+    target[1, 1] = 1  # inconsistent positive class without paired vessel is not scored
+    target[2, 0, 1] = 1  # ambiguous crossing remains a vessel, not a class target
+    valid[0, 0, 2] = False
+    expected = torch.zeros((2, 3), dtype=torch.bool)
+    expected[0, 0] = True
+    assert torch.equal(av_known(target, valid), expected)

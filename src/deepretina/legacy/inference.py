@@ -244,10 +244,14 @@ def predict_legacy(
         result = predict_av_input(model, inputs, device=device)
         geometry = prepared_image.geometry
         classes = geometry.restore(result["prepared_classes"], order=0).astype(np.uint8)
-        prepared_probability = result["prepared_conditional_probabilities"] * (inputs[3] != 0)[None]
-        probability = np.stack([geometry.restore(p, order=1) for p in prepared_probability])
+        conditional = np.stack(
+            [
+                geometry.restore(p, order=1, fill=0.5)
+                for p in result["prepared_conditional_probabilities"]
+            ]
+        )
         support = geometry.restore(inputs[3] != 0, order=0).astype(bool)
-        probability *= support[None]
+        probability = conditional * support[None]
         metadata.update(
             channels=["artery", "vein"],
             shape=list(image.shape[:2]),
@@ -275,7 +279,7 @@ def predict_legacy(
             ["artery", "vein"],
             np.stack([classes == 1, classes == 2]),
             metadata,
-            arrays={"vessel_support": support},
+            arrays={"vessel_support": support, "conditional_probability": conditional},
             classes=classes,
         )
     if dicom_paths is None and not prepared and prepared_inputs is None:

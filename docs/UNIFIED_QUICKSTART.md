@@ -40,7 +40,7 @@ uv run python scripts/prepare_training_data.py \
   --parent-output data/rebuilt-parent17 \
   --output data/rebuilt-training21 \
   --biomisa-label-policy named_cup_is_disc_named_disc_is_cup
-uv run python -m deepretina.unified inspect data/rebuilt-training21/manifest.json
+uv run deepretina inspect data/rebuilt-training21/manifest.json
 ```
 
 The command prepares all 17 base sources, repairs known patient identities,
@@ -101,8 +101,9 @@ updates. `--device cpu` is available; GPU time varies considerably by hardware.
 For the original universal backbone topology trained from scratch, use
 `configs/unified_legacy_topology.toml` with a new run directory. This is a
 five-output extension using the modern objective, not a replay of the historical
-three-output training. Native single-net and four-input VesClass retraining are
-not yet exposed. See the explicit [retraining scope](RETRAINING.md).
+three-output training. Exact native single-net and four-input AV architecture retraining is available
+through `train-legacy`, with separately declared training/input recipes. See
+[native retraining](NATIVE_LEGACY_RETRAINING.md) and the [route comparison](RETRAINING.md).
 
 ## Validate and predict
 

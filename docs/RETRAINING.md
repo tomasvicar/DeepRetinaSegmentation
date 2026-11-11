@@ -11,15 +11,21 @@ Neither MATLAB nor the unavailable large pretraining database is used.
 | `deepretina train-unified`, `configs/unified.toml` | All five outputs, partial labels, all suitable training sources | New compact RGB network and explicit modern training protocol |
 | Same command, `configs/unified_legacy_topology.toml` | All five outputs from scratch | Original universal backbone topology, expanded output layer, modern objective and padding |
 | `deepretina train --task ...` | Separate task models | Earlier small modern models; not the recommended all-source five-head route |
-| Native bundled `legacy_single_net` checkpoints | Inference and safe conversion | Original three-/one-output architecture and source-specific preprocessing |
-| Native bundled four-input `legacy_av` checkpoints | Inference and safe conversion | Original VesClass topology and internal normalization |
+| `deepretina train-legacy --task vessel/disc/universal` | Fresh one-/three-output native models | Exact original constructor and native tiling, explicit new canonical raw training recipe |
+| `deepretina train-legacy --task av` | Fresh four-input, three-logit native AV model | Exact original constructor/internal normalization, explicit canonical raw AV recipe |
 
-The last two rows do **not** currently provide native-architecture retraining
-entrypoints. Historical optimizer, sampling, and photometric preprocessing are
-not reproduced by selecting `legacy_universal`. A native VesClass trainer would
-also need a paired vessel-input/AV-label preparation contract; its fourth channel
-cannot be silently replaced by an independent RGB student's output during
-training. This remains a concrete gap relative to exact historical retraining.
+Native training uses freshly initialized original architectures with a new explicit
+training recipe. It preserves the shipped original weights and their historical
+preprocessing paths. The AV recipe uses full canonical RGB plus its paired vessel
+support; it does not relabel canonical crops as historical MATLAB/DICOM inputs.
+See [native retraining and prediction](NATIVE_LEGACY_RETRAINING.md) for all four
+presets, coverage, partial labels and supplied-vessel inference.
+
+```bash
+uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json \
+  --config configs/native-legacy-vessel.toml --device cuda:0 \
+  --output runs/native-vessel
+```
 
 For a fresh original-topology experiment:
 

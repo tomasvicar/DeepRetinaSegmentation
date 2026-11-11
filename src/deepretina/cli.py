@@ -73,6 +73,13 @@ def parser() -> argparse.ArgumentParser:
     train.add_argument("--loss", choices=["bce", "bce_dice"])
     train.add_argument("--device", help="auto, cpu, cuda, cuda:0, ...")
 
+    native = commands.add_parser(
+        "train-legacy", help="Retrain the exact native original architectures from scratch"
+    )
+    from .legacy_training_cli import add_cli_args
+
+    add_cli_args(native)
+
     joint = commands.add_parser(
         "train-unified", help="Experimental five-output training with partial supervision"
     )
@@ -240,6 +247,10 @@ def dispatch(args: argparse.Namespace):
         return {"checkpoint": str(train(args.manifest, args.output, config))}
     if args.command == "train-unified":
         from .unified_cli import train_from_args
+
+        return train_from_args(args)
+    if args.command == "train-legacy":
+        from .legacy_training_cli import train_from_args
 
         return train_from_args(args)
     if args.command == "models":
