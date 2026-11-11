@@ -299,6 +299,10 @@ def dispatch(args: argparse.Namespace):
 
 
 def _apply_model(args, checkpoint: Path):
+    if args.command == "predict":
+        from .prediction_output import check_prediction_output
+
+        check_prediction_output(args.output)
     import torch
 
     family = torch.load(checkpoint, map_location="cpu", weights_only=True).get("family")

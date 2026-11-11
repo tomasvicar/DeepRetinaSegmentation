@@ -291,8 +291,9 @@ def predict_legacy(
     if dicom_paths is None and not prepared and prepared_inputs is None:
         raise ValueError(
             "Legacy A/V requires already-preprocessed RGB with prepared=True and vessel_mask_path, "
-            "or dicom_paths=(red,green,blue,vessel). Raw MATLAB CLAHE preprocessing has no "
-            "independent golden validation; a raw photograph is not accepted as prepared input."
+            "or dicom_paths=(red,green,blue,vessel). Raw photographs require an explicit raw A/V "
+            "profile: use predict_raw_av or CLI --av-raw-proxy, --av-raw-matlab or "
+            "--av-raw-matlab-source; see docs/MATLAB_AV_PROFILE.md for validation limits."
         )
     if normalized or fov_path is not None or field_of_view_degrees is not None:
         raise ValueError(

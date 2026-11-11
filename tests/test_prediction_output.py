@@ -1,5 +1,7 @@
 """A second model must not leave a mixture of old and new prediction files."""
 
+from argparse import Namespace
+
 import numpy as np
 import pytest
 
@@ -51,3 +53,14 @@ def test_output_file_is_preserved(tmp_path):
     with pytest.raises(FileExistsError, match="new or empty"):
         check_prediction_output(output)
     assert output.read_bytes() == b"preserve"
+
+
+def test_cli_checks_output_before_reading_checkpoint_family(tmp_path):
+    from deepretina.cli import _apply_model
+
+    output = tmp_path / "prediction"
+    output.mkdir()
+    (output / "cup.png").write_bytes(b"previous prediction")
+    with pytest.raises(FileExistsError, match="new or empty"):
+        _apply_model(Namespace(command="predict", output=output), tmp_path / "missing.pt")
+    assert (output / "cup.png").read_bytes() == b"previous prediction"
