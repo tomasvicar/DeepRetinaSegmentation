@@ -1,0 +1,801 @@
+{
+  "frozen_source": "6b3dfad605a256e904a877efcdcc1f3cc6135dd0",
+  "stable_source": "f1c4c991f93560305bf34a6ed940db366f787934",
+  "scope": "E2 compact_unet on CPU, same pinned environment; TRAIN raw image plus synthetic inputs only",
+  "checkpoint_sha256": "34e69e9d601092db1bbd71872009a24b183333da296f451113a1303da69eb2d7",
+  "image_sha256": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1",
+  "all_observed_compact_outputs_bitwise_equal": true,
+  "source_files": {
+    "src/deepretina/model.py": {
+      "frozen_sha256": "4224bd92ef27fd25edd75a1c753d52d04e10dfaa1f43135f914f728ebd59bcc0",
+      "stable_sha256": "6325174276d544e9d212776274150089783b410bdd23ca9ac06d5f2baeb9b79f",
+      "byte_identical": false
+    },
+    "src/deepretina/unified.py": {
+      "frozen_sha256": "3260a00bc03b44544556adf5090a412318963fe1b121f7627f265c2fe3aae72d",
+      "stable_sha256": "cf2b43c480679186c1f4d8ad1f4575a4ff5648c668c406baebfe25f54e6e3858",
+      "byte_identical": false
+    },
+    "src/deepretina/geometry_policy.py": {
+      "frozen_sha256": "1a1659ba5bed18497afa32765e7501096f06685804b4545dfe6a3b91f785427f",
+      "stable_sha256": "1a1659ba5bed18497afa32765e7501096f06685804b4545dfe6a3b91f785427f",
+      "byte_identical": true
+    },
+    "src/deepretina/dataset.py": {
+      "frozen_sha256": "e9bb4c29c6acdb93f9c820c1746425f167e251b08d4feb0d517905a1c00bb10e",
+      "stable_sha256": "e9bb4c29c6acdb93f9c820c1746425f167e251b08d4feb0d517905a1c00bb10e",
+      "byte_identical": true
+    },
+    "src/deepretina/inference.py": {
+      "frozen_sha256": "40781766023998164892377ae9238cde61cfbb810994efc3c3891725eaab683a",
+      "stable_sha256": "40781766023998164892377ae9238cde61cfbb810994efc3c3891725eaab683a",
+      "byte_identical": true
+    },
+    "src/deepretina/legacy/preprocessing.py": {
+      "frozen_sha256": "28068cbd23ebd76d36f7d12339d9ffa8d84e8816876646fa7725998e1d00e015",
+      "stable_sha256": "28068cbd23ebd76d36f7d12339d9ffa8d84e8816876646fa7725998e1d00e015",
+      "byte_identical": true
+    },
+    "src/deepretina/legacy/single_net.py": {
+      "frozen_sha256": "c53689b9d83f9b5b2cef4cb6bd3d0a92190ea3e164c7ae4ed5af1290ecb28749",
+      "stable_sha256": "c53689b9d83f9b5b2cef4cb6bd3d0a92190ea3e164c7ae4ed5af1290ecb28749",
+      "byte_identical": true
+    },
+    "src/deepretina/legacy/matlab_resize.py": {
+      "frozen_sha256": "0d7d2a60322b021563ecb4cb257ae1b63e2537d8cfc0966e2694d1b17da00846",
+      "stable_sha256": "b78ce9033d7d8eb927dce86222011f9fac8c28baa4d70f12e4ea3f6f0c4e81d5",
+      "byte_identical": false
+    }
+  },
+  "unified_function_ast_identical": {
+    "_activation": true,
+    "_conditional_probabilities": true,
+    "_joint_probabilities": true,
+    "restore_probabilities": true,
+    "predict_probabilities": true,
+    "decode_probabilities": true,
+    "evaluate_unified_model": true,
+    "load_unified": true,
+    "inference_config": true,
+    "predict_unified": true
+  },
+  "numeric_cases": {
+    "synthetic_intermediates": {
+      "logits_64x64": {
+        "shape": [
+          5,
+          64,
+          64
+        ],
+        "dtype": "float32",
+        "array_equal": true,
+        "left_sha256": "36f170ecc6fa4e2e42fb48f1f8d5a279f4158f827cc1f43e3a937685d6ccb184",
+        "right_sha256": "36f170ecc6fa4e2e42fb48f1f8d5a279f4158f827cc1f43e3a937685d6ccb184",
+        "maximum_absolute_difference": 0.0
+      },
+      "probability_64x64": {
+        "shape": [
+          5,
+          64,
+          64
+        ],
+        "dtype": "float32",
+        "array_equal": true,
+        "left_sha256": "e71529d7e417f7863c5c110c39c56b01af75420a4f01143383e28552513dce4b",
+        "right_sha256": "e71529d7e417f7863c5c110c39c56b01af75420a4f01143383e28552513dce4b",
+        "maximum_absolute_difference": 0.0
+      },
+      "logits_37x53": {
+        "shape": [
+          5,
+          37,
+          53
+        ],
+        "dtype": "float32",
+        "array_equal": true,
+        "left_sha256": "6d4bd83832f30d2fac64be188f64d7df4b8b36ed97cec3802ec5e0a0e6d059c5",
+        "right_sha256": "6d4bd83832f30d2fac64be188f64d7df4b8b36ed97cec3802ec5e0a0e6d059c5",
+        "maximum_absolute_difference": 0.0
+      },
+      "probability_37x53": {
+        "shape": [
+          5,
+          37,
+          53
+        ],
+        "dtype": "float32",
+        "array_equal": true,
+        "left_sha256": "717fa3deeb5954bdb658660cb15c4b70930002e717765a82ff43b79ddd1b446e",
+        "right_sha256": "717fa3deeb5954bdb658660cb15c4b70930002e717765a82ff43b79ddd1b446e",
+        "maximum_absolute_difference": 0.0
+      },
+      "logits_17x19": {
+        "shape": [
+          5,
+          17,
+          19
+        ],
+        "dtype": "float32",
+        "array_equal": true,
+        "left_sha256": "3e34df261912e60ce88f7fb799f3717bb597b6b35e20874ffe942cd538fc3af1",
+        "right_sha256": "3e34df261912e60ce88f7fb799f3717bb597b6b35e20874ffe942cd538fc3af1",
+        "maximum_absolute_difference": 0.0
+      },
+      "probability_17x19": {
+        "shape": [
+          5,
+          17,
+          19
+        ],
+        "dtype": "float32",
+        "array_equal": true,
+        "left_sha256": "293a5afd1ff8c466aec3ab206fd5f2a21da6bbe2d62437590ff37eeba51b7ab2",
+        "right_sha256": "293a5afd1ff8c466aec3ab206fd5f2a21da6bbe2d62437590ff37eeba51b7ab2",
+        "maximum_absolute_difference": 0.0
+      }
+    },
+    "actual_train_drions": {
+      "probability": {
+        "shape": [
+          5,
+          400,
+          600
+        ],
+        "dtype": "float32",
+        "array_equal": true,
+        "left_sha256": "fcca37c29c827eb54c3df12d32d1c0dc5c4b0a06f7b2a3a5e14f6717f8fa0786",
+        "right_sha256": "fcca37c29c827eb54c3df12d32d1c0dc5c4b0a06f7b2a3a5e14f6717f8fa0786",
+        "maximum_absolute_difference": 0.0
+      },
+      "channels": {
+        "shape": [
+          5
+        ],
+        "dtype": "<U6",
+        "array_equal": true,
+        "left_sha256": "eef8c78dcbe42ff03669d99e18e3b34fe8038e8cf67c8ef9654b2338830539c1",
+        "right_sha256": "eef8c78dcbe42ff03669d99e18e3b34fe8038e8cf67c8ef9654b2338830539c1"
+      },
+      "supervised_channels": {
+        "shape": [
+          5
+        ],
+        "dtype": "bool",
+        "array_equal": true,
+        "left_sha256": "377a23f52c6b357696238c3318f677a082dd3430bb6691042bd550a5cda28ebb",
+        "right_sha256": "377a23f52c6b357696238c3318f677a082dd3430bb6691042bd550a5cda28ebb"
+      },
+      "fov": {
+        "shape": [
+          400,
+          600
+        ],
+        "dtype": "bool",
+        "array_equal": true,
+        "left_sha256": "3454435ac58f469e87a1fcb2c3564f8324d612e67e23ab30e2590a8c40cb3d44",
+        "right_sha256": "3454435ac58f469e87a1fcb2c3564f8324d612e67e23ab30e2590a8c40cb3d44"
+      },
+      "conditional_channels": {
+        "shape": [
+          2
+        ],
+        "dtype": "int64",
+        "array_equal": true,
+        "left_sha256": "0c730b69905c5ef7a4ca5269f72365400bde2dd2c04eaf9bbb3d1c4a265a0131",
+        "right_sha256": "0c730b69905c5ef7a4ca5269f72365400bde2dd2c04eaf9bbb3d1c4a265a0131",
+        "maximum_absolute_difference": 0.0
+      }
+    },
+    "synthetic_raw_drions": {
+      "probability": {
+        "shape": [
+          5,
+          67,
+          91
+        ],
+        "dtype": "float32",
+        "array_equal": true,
+        "left_sha256": "efc4af5294e2c9f83f302043e566ab83d807c35f6aa8b9ddb32c4ca929133e40",
+        "right_sha256": "efc4af5294e2c9f83f302043e566ab83d807c35f6aa8b9ddb32c4ca929133e40",
+        "maximum_absolute_difference": 0.0
+      },
+      "channels": {
+        "shape": [
+          5
+        ],
+        "dtype": "<U6",
+        "array_equal": true,
+        "left_sha256": "eef8c78dcbe42ff03669d99e18e3b34fe8038e8cf67c8ef9654b2338830539c1",
+        "right_sha256": "eef8c78dcbe42ff03669d99e18e3b34fe8038e8cf67c8ef9654b2338830539c1"
+      },
+      "supervised_channels": {
+        "shape": [
+          5
+        ],
+        "dtype": "bool",
+        "array_equal": true,
+        "left_sha256": "377a23f52c6b357696238c3318f677a082dd3430bb6691042bd550a5cda28ebb",
+        "right_sha256": "377a23f52c6b357696238c3318f677a082dd3430bb6691042bd550a5cda28ebb"
+      },
+      "fov": {
+        "shape": [
+          67,
+          91
+        ],
+        "dtype": "bool",
+        "array_equal": true,
+        "left_sha256": "706a2953f23682462ec921fcee95a086076e81fbb48fe0d28a18a40fc8f0d9cd",
+        "right_sha256": "706a2953f23682462ec921fcee95a086076e81fbb48fe0d28a18a40fc8f0d9cd"
+      },
+      "conditional_channels": {
+        "shape": [
+          2
+        ],
+        "dtype": "int64",
+        "array_equal": true,
+        "left_sha256": "0c730b69905c5ef7a4ca5269f72365400bde2dd2c04eaf9bbb3d1c4a265a0131",
+        "right_sha256": "0c730b69905c5ef7a4ca5269f72365400bde2dd2c04eaf9bbb3d1c4a265a0131",
+        "maximum_absolute_difference": 0.0
+      }
+    }
+  },
+  "output_images": {
+    "actual-drions": {
+      "vessel": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "abaf835339e9393256c1401801dd5e15ef8987de8d123a2461536984a1ea00e5"
+      },
+      "artery": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "b825f3905fb2be4f84af855fefc1fe39643796fbb2ae5780a2a7114582722558"
+      },
+      "vein": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "44985a77d86dc073b895adc66c0482ab34f8cf7b0374be70ce4f4dcf6322f2fe"
+      },
+      "disc": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "7c869a07f152a437ec4f52c0de6247cb1599c557462903a5bf39c8da564a4a3c"
+      },
+      "cup": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "1b643ff8dd3d21ba2597ed40a75921094b377e8f3f43bfe75e1172ae48b93c88"
+      },
+      "av": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "462c21ac959abb06f341159da393ce2217ee801ecc4edca46f811a3cfd892564"
+      },
+      "overlay": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "6dbedb659cb1af61aeba35f44903c80ddd1bbc2949556014d2e61f2b83a6b91c"
+      }
+    },
+    "synthetic-drions": {
+      "vessel": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "c3896208cb162069622baab0afef4a8a88d1c46718908a227db8d9566f1996f0"
+      },
+      "artery": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "8aa9eee7bd4b820b71844540cd76d98ffa98bdd5397bbe7922465a6650b146ee"
+      },
+      "vein": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "3ab820b5ee52a60da2b9e91ba88baa6444fbb5adeb2401611205d6e1c0f57283"
+      },
+      "disc": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "2fcb89c465db5439536fb5dbdb9adbfd1e7ca5337ee021854ad82e4ecb37d37d"
+      },
+      "cup": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "e740aab75d0b5a644a1a5d725bdd5c1255b24d615857c60aff94148541f17e5e"
+      },
+      "av": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "eca387c2235ae6df39bfc2715d7d92bbaed36baf49816b114eca6cf170fa6dbe"
+      },
+      "overlay": {
+        "pixel_equal": true,
+        "png_bytes_equal": true,
+        "sha256": "7d12f17be461df7f95366b5758ce3a288d841bc13d3d687e545d769ca5e3c4f0"
+      }
+    }
+  },
+  "retained_e2_smoke_comparison": {
+    "probability": {
+      "shape": [
+        5,
+        400,
+        600
+      ],
+      "dtype": "float32",
+      "array_equal": true,
+      "left_sha256": "fcca37c29c827eb54c3df12d32d1c0dc5c4b0a06f7b2a3a5e14f6717f8fa0786",
+      "right_sha256": "fcca37c29c827eb54c3df12d32d1c0dc5c4b0a06f7b2a3a5e14f6717f8fa0786",
+      "maximum_absolute_difference": 0.0
+    },
+    "channels": {
+      "shape": [
+        5
+      ],
+      "dtype": "<U6",
+      "array_equal": true,
+      "left_sha256": "eef8c78dcbe42ff03669d99e18e3b34fe8038e8cf67c8ef9654b2338830539c1",
+      "right_sha256": "eef8c78dcbe42ff03669d99e18e3b34fe8038e8cf67c8ef9654b2338830539c1"
+    },
+    "supervised_channels": {
+      "shape": [
+        5
+      ],
+      "dtype": "bool",
+      "array_equal": true,
+      "left_sha256": "377a23f52c6b357696238c3318f677a082dd3430bb6691042bd550a5cda28ebb",
+      "right_sha256": "377a23f52c6b357696238c3318f677a082dd3430bb6691042bd550a5cda28ebb"
+    },
+    "fov": {
+      "shape": [
+        400,
+        600
+      ],
+      "dtype": "bool",
+      "array_equal": true,
+      "left_sha256": "3454435ac58f469e87a1fcb2c3564f8324d612e67e23ab30e2590a8c40cb3d44",
+      "right_sha256": "3454435ac58f469e87a1fcb2c3564f8324d612e67e23ab30e2590a8c40cb3d44"
+    },
+    "conditional_channels": {
+      "shape": [
+        2
+      ],
+      "dtype": "int64",
+      "array_equal": true,
+      "left_sha256": "0c730b69905c5ef7a4ca5269f72365400bde2dd2c04eaf9bbb3d1c4a265a0131",
+      "right_sha256": "0c730b69905c5ef7a4ca5269f72365400bde2dd2c04eaf9bbb3d1c4a265a0131",
+      "maximum_absolute_difference": 0.0
+    }
+  },
+  "nearest_counterexample_outside_compact_route": {
+    "synthetic_only": true,
+    "input_shape": [
+      1152,
+      11
+    ],
+    "output_shape": [
+      1005,
+      11
+    ],
+    "mask_rule": "(row+column)%2==0",
+    "changed_pixels": 22,
+    "changed_zero_based_rows": [
+      502,
+      837
+    ],
+    "compact_inference_dependency": false
+  },
+  "worker_receipts": [
+    {
+      "source_root": "/var/home/tom/code/DeepRetinaSegmentation_v2_training_6b3dfad",
+      "package_path": "/var/home/tom/code/DeepRetinaSegmentation_v2_training_6b3dfad/src/deepretina/__init__.py",
+      "checkpoint_sha256": "34e69e9d601092db1bbd71872009a24b183333da296f451113a1303da69eb2d7",
+      "image_sha256": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1",
+      "architecture": {
+        "name": "compact_unet",
+        "base_channels": 12,
+        "depth": 4,
+        "normalization": "batch",
+        "outputs": 5
+      },
+      "configuration": {
+        "architecture": "compact_unet",
+        "legacy_initialization": null,
+        "allow_historical_exposure": false,
+        "preprocessing_profile": "legacy25_raw",
+        "pixels_per_degree": 25.0,
+        "epochs": 60,
+        "epoch_samples": 8192,
+        "coverage_first": true,
+        "batch_size": 4,
+        "patch_size": 384,
+        "base_channels": 12,
+        "depth": 4,
+        "norm": "batch",
+        "lr": 0.0003,
+        "weight_decay": 1e-05,
+        "scheduler": "cosine",
+        "min_lr_ratio": 0.05,
+        "seed": 42,
+        "workers": 2,
+        "device": "cuda:0",
+        "sampling": "dataset_task_balanced",
+        "train_view": "patch",
+        "view_size": 512,
+        "foreground_probability": 0.5,
+        "augmentation": "mild",
+        "bce_weight": 1.0,
+        "dice_weight": 1.0,
+        "av_weight": 1.0,
+        "vessel_loss_weight": 1.0,
+        "vessel_pos_weight": 1.0,
+        "tile_size": 512,
+        "overlap": 64,
+        "require_all_heads": true,
+        "selection_metric": "macro_dataset_mean_dice",
+        "purpose": "full_data",
+        "max_steps": null
+      },
+      "checkpoint_training_source_sha256": "9075246883f938ba80b4fe282b365da10ddb8c834bd3106d846465ac79ce9473",
+      "geometry_policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+      "checkpoint_epoch": 2,
+      "torch": "2.6.0+cu124",
+      "numpy": "2.5.4",
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "cuda_init_blocked": true,
+      "real_case_scope": "Existing TRAIN DRIONS input only; no labels opened",
+      "actual_preprocessing": {
+        "profile": "legacy25_raw",
+        "pixels_per_degree": 25.0,
+        "field_of_view_degrees": 30.0,
+        "normalized": false,
+        "normalization": "RGB/255-0.5",
+        "fov_source": "automatic original Python thresholds",
+        "geometry": {
+          "original_shape": [
+            400,
+            600
+          ],
+          "crop_position": [
+            0,
+            399,
+            0,
+            599
+          ],
+          "rescale_factor": 1.25,
+          "prepared_shape": [
+            500,
+            750
+          ]
+        },
+        "geometry_policy": {
+          "policy_id": "corpusv2_nominal_fov_20261110_v1",
+          "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+          "dataset": "drions",
+          "native_shape_hw": [
+            400,
+            600
+          ],
+          "policy_applied": true,
+          "declared_rule": {
+            "alternatives_degrees": [
+              25.0,
+              30.0,
+              45.0
+            ],
+            "camera": "unspecified analog fundus camera",
+            "confidence": "low",
+            "evidence_ids": [
+              "drions_creator"
+            ],
+            "field_of_view_degrees": 30.0,
+            "nominal_assumption": true,
+            "per_image_angle_measured": false,
+            "qualification": "Research scale convention for the disc-centered low-resolution scan, not measured FoV.30 avoids an unsupported45degree default and greater upsampling; neither is proven correct. Do not fit angle from disc GT.",
+            "sources": [
+              "https://www.ia.uned.es/~ejcarmona/DRIONS-DB_2.html"
+            ],
+            "status": "research_nominal_unknown_camera",
+            "policy_id": "corpusv2_nominal_fov_20261110_v1",
+            "native_shape_hw": [
+              400,
+              600
+            ],
+            "camera_attribution_method": "dataset_acquisition_description_or_explicit_nominal_research_policy"
+          },
+          "unseen_native_shape": false,
+          "selection": "checkpoint_recorded_geometry_policy",
+          "field_of_view_degrees": 30.0,
+          "unseen_native_shape_fallback": false
+        }
+      },
+      "synthetic_preprocessing": {
+        "profile": "legacy25_raw",
+        "pixels_per_degree": 25.0,
+        "field_of_view_degrees": 30.0,
+        "normalized": false,
+        "normalization": "RGB/255-0.5",
+        "fov_source": "provided original-frame mask",
+        "geometry": {
+          "original_shape": [
+            67,
+            91
+          ],
+          "crop_position": [
+            0,
+            66,
+            0,
+            90
+          ],
+          "rescale_factor": 8.241758241758241,
+          "prepared_shape": [
+            552,
+            750
+          ]
+        },
+        "geometry_policy": {
+          "policy_id": "corpusv2_nominal_fov_20261110_v1",
+          "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+          "dataset": "drions",
+          "native_shape_hw": [
+            67,
+            91
+          ],
+          "policy_applied": true,
+          "declared_rule": {
+            "alternatives_degrees": [
+              25.0,
+              30.0,
+              45.0
+            ],
+            "camera": "unspecified analog fundus camera",
+            "confidence": "low",
+            "evidence_ids": [
+              "drions_creator"
+            ],
+            "field_of_view_degrees": 30.0,
+            "nominal_assumption": true,
+            "per_image_angle_measured": false,
+            "qualification": "Research scale convention for the disc-centered low-resolution scan, not measured FoV.30 avoids an unsupported45degree default and greater upsampling; neither is proven correct. Do not fit angle from disc GT.",
+            "sources": [
+              "https://www.ia.uned.es/~ejcarmona/DRIONS-DB_2.html"
+            ],
+            "status": "research_nominal_unknown_camera",
+            "policy_id": "corpusv2_nominal_fov_20261110_v1",
+            "native_shape_hw": [
+              67,
+              91
+            ],
+            "camera_attribution_method": "dataset_acquisition_description_or_explicit_nominal_research_policy"
+          },
+          "unseen_native_shape": false,
+          "selection": "checkpoint_recorded_geometry_policy",
+          "field_of_view_degrees": 30.0,
+          "unseen_native_shape_fallback": false
+        }
+      },
+      "synthetic_generation": "NumPy default_rng717 uint8[0,256),67x91 RGB; provided all-ones synthetic FOV",
+      "source_and_input_unchanged": true
+    },
+    {
+      "source_root": "/var/home/tom/code/DeepRetinaSegmentation_v2_inference_parity",
+      "package_path": "/var/home/tom/code/DeepRetinaSegmentation_v2_inference_parity/src/deepretina/__init__.py",
+      "checkpoint_sha256": "34e69e9d601092db1bbd71872009a24b183333da296f451113a1303da69eb2d7",
+      "image_sha256": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1",
+      "architecture": {
+        "name": "compact_unet",
+        "base_channels": 12,
+        "depth": 4,
+        "normalization": "batch",
+        "outputs": 5
+      },
+      "configuration": {
+        "architecture": "compact_unet",
+        "legacy_initialization": null,
+        "allow_historical_exposure": false,
+        "preprocessing_profile": "legacy25_raw",
+        "pixels_per_degree": 25.0,
+        "epochs": 60,
+        "epoch_samples": 8192,
+        "coverage_first": true,
+        "batch_size": 4,
+        "patch_size": 384,
+        "base_channels": 12,
+        "depth": 4,
+        "norm": "batch",
+        "lr": 0.0003,
+        "weight_decay": 1e-05,
+        "scheduler": "cosine",
+        "min_lr_ratio": 0.05,
+        "seed": 42,
+        "workers": 2,
+        "device": "cuda:0",
+        "sampling": "dataset_task_balanced",
+        "train_view": "patch",
+        "view_size": 512,
+        "foreground_probability": 0.5,
+        "augmentation": "mild",
+        "bce_weight": 1.0,
+        "dice_weight": 1.0,
+        "av_weight": 1.0,
+        "vessel_loss_weight": 1.0,
+        "vessel_pos_weight": 1.0,
+        "tile_size": 512,
+        "overlap": 64,
+        "require_all_heads": true,
+        "selection_metric": "macro_dataset_mean_dice",
+        "purpose": "full_data",
+        "max_steps": null
+      },
+      "checkpoint_training_source_sha256": "9075246883f938ba80b4fe282b365da10ddb8c834bd3106d846465ac79ce9473",
+      "geometry_policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+      "checkpoint_epoch": 2,
+      "torch": "2.6.0+cu124",
+      "numpy": "2.5.4",
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "cuda_init_blocked": true,
+      "real_case_scope": "Existing TRAIN DRIONS input only; no labels opened",
+      "actual_preprocessing": {
+        "profile": "legacy25_raw",
+        "pixels_per_degree": 25.0,
+        "field_of_view_degrees": 30.0,
+        "normalized": false,
+        "normalization": "RGB/255-0.5",
+        "fov_source": "automatic original Python thresholds",
+        "geometry": {
+          "original_shape": [
+            400,
+            600
+          ],
+          "crop_position": [
+            0,
+            399,
+            0,
+            599
+          ],
+          "rescale_factor": 1.25,
+          "prepared_shape": [
+            500,
+            750
+          ]
+        },
+        "geometry_policy": {
+          "policy_id": "corpusv2_nominal_fov_20261110_v1",
+          "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+          "dataset": "drions",
+          "native_shape_hw": [
+            400,
+            600
+          ],
+          "policy_applied": true,
+          "declared_rule": {
+            "alternatives_degrees": [
+              25.0,
+              30.0,
+              45.0
+            ],
+            "camera": "unspecified analog fundus camera",
+            "confidence": "low",
+            "evidence_ids": [
+              "drions_creator"
+            ],
+            "field_of_view_degrees": 30.0,
+            "nominal_assumption": true,
+            "per_image_angle_measured": false,
+            "qualification": "Research scale convention for the disc-centered low-resolution scan, not measured FoV.30 avoids an unsupported45degree default and greater upsampling; neither is proven correct. Do not fit angle from disc GT.",
+            "sources": [
+              "https://www.ia.uned.es/~ejcarmona/DRIONS-DB_2.html"
+            ],
+            "status": "research_nominal_unknown_camera",
+            "policy_id": "corpusv2_nominal_fov_20261110_v1",
+            "native_shape_hw": [
+              400,
+              600
+            ],
+            "camera_attribution_method": "dataset_acquisition_description_or_explicit_nominal_research_policy"
+          },
+          "unseen_native_shape": false,
+          "selection": "checkpoint_recorded_geometry_policy",
+          "field_of_view_degrees": 30.0,
+          "unseen_native_shape_fallback": false
+        }
+      },
+      "synthetic_preprocessing": {
+        "profile": "legacy25_raw",
+        "pixels_per_degree": 25.0,
+        "field_of_view_degrees": 30.0,
+        "normalized": false,
+        "normalization": "RGB/255-0.5",
+        "fov_source": "provided original-frame mask",
+        "geometry": {
+          "original_shape": [
+            67,
+            91
+          ],
+          "crop_position": [
+            0,
+            66,
+            0,
+            90
+          ],
+          "rescale_factor": 8.241758241758241,
+          "prepared_shape": [
+            552,
+            750
+          ]
+        },
+        "geometry_policy": {
+          "policy_id": "corpusv2_nominal_fov_20261110_v1",
+          "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+          "dataset": "drions",
+          "native_shape_hw": [
+            67,
+            91
+          ],
+          "policy_applied": true,
+          "declared_rule": {
+            "alternatives_degrees": [
+              25.0,
+              30.0,
+              45.0
+            ],
+            "camera": "unspecified analog fundus camera",
+            "confidence": "low",
+            "evidence_ids": [
+              "drions_creator"
+            ],
+            "field_of_view_degrees": 30.0,
+            "nominal_assumption": true,
+            "per_image_angle_measured": false,
+            "qualification": "Research scale convention for the disc-centered low-resolution scan, not measured FoV.30 avoids an unsupported45degree default and greater upsampling; neither is proven correct. Do not fit angle from disc GT.",
+            "sources": [
+              "https://www.ia.uned.es/~ejcarmona/DRIONS-DB_2.html"
+            ],
+            "status": "research_nominal_unknown_camera",
+            "policy_id": "corpusv2_nominal_fov_20261110_v1",
+            "native_shape_hw": [
+              67,
+              91
+            ],
+            "camera_attribution_method": "dataset_acquisition_description_or_explicit_nominal_research_policy"
+          },
+          "unseen_native_shape": false,
+          "selection": "checkpoint_recorded_geometry_policy",
+          "field_of_view_degrees": 30.0,
+          "unseen_native_shape_fallback": false
+        }
+      },
+      "synthetic_generation": "NumPy default_rng717 uint8[0,256),67x91 RGB; provided all-ones synthetic FOV",
+      "source_and_input_unchanged": true
+    }
+  ],
+  "qualifications": [
+    "Not GPU/backend/version-wide proof or proof for all future checkpoints",
+    "No validation/test GT or quality metric read/calculated",
+    "Inference compatibility does not permit cross-source training resume; frozen training hash remains authoritative",
+    "Modified nearest helper affects separately selected original MATLAB mask routes; no such route used by compact inference"
+  ],
+  "execution_constraints": {
+    "launch_cpu_affinity": [
+      0
+    ],
+    "launch_nice": 10,
+    "OMP_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "CUDA_VISIBLE_DEVICES": "",
+    "PYTHONDONTWRITEBYTECODE": 1,
+    "python": "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python",
+    "worker_source_package_selection": "Separate subprocesses with source-specific PYTHONPATH; asserted imported package path; both torch intra/inter-op threads observed1"
+  },
+  "frozen_source_post_audit": {
+    "commit": "6b3dfad605a256e904a877efcdcc1f3cc6135dd0",
+    "tracked_status": ""
+  },
+  "unchanged_snapshot_input_sha256": {
+    "best.pt": "34e69e9d601092db1bbd71872009a24b183333da296f451113a1303da69eb2d7",
+    "input.jpg": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1"
+  }
+}
