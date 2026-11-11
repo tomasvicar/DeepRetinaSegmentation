@@ -14,6 +14,13 @@ needs no MATLAB. The original stored-input arithmetic is numerically checked;
 calibrated raw A/V retains measured photometric differences and unresolved
 historical training-file exposure. See the product's `docs/MATLAB_AV_PROFILE.md`.
 
+The completed first TPE BEST58 is now also available there as
+`unified-v3-tpe-preview`, with exact original20d4caab… weights and optional
+`--tta rot4`. The [model card and retraining recipe](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/for_Leipzig/docs/UNIFIED_V3_TPE_PREVIEW.md)
+keep it explicitly experimental, with no TEST/default-winner claim. It is not the
+later native trial6 currently training on Ada. All eleven previous model blobs
+and original aliases remain unchanged.
+
 Canonical V2 has **2,529 TRAIN photographs / 5,700 annotation records from21
 sources**, **770 VAL** photographs and856 TEST photographs. Supported annotations
 alone supervise each output. Recovered patient/photo aliases remain grouped;
