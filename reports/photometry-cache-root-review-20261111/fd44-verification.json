@@ -1,0 +1,39 @@
+{
+  "observed_utc": "2026-11-11T12:54:29.427781+00:00",
+  "source_commit": "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+  "execution_sha256": "fcb186c98b812e9ead0fe19bec9f7e06063d31a7c7c020a785169b6c13c761ee",
+  "training_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747",
+  "operator_sha256": "196da8626c87d6b07bed6508252dd37328ee79846c4040c1403f9a090002708e",
+  "verification": {
+    "independent_root_run": true,
+    "returncode": 0,
+    "passed": 204,
+    "seconds": 28.51,
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_MKL_OPENBLAS_THREADS": 1,
+    "scope": [
+      "unified_photometry",
+      "photometry_cache",
+      "strong_pipeline_benchmark",
+      "unified_hpo",
+      "unified_cli",
+      "validation_evidence",
+      "unified",
+      "unified_selection",
+      "derived_cache"
+    ],
+    "warnings": "22 existing morphology deprecation and multiprocessing fork warnings; no failed tests"
+  },
+  "review_findings_resolved": [
+    "Explicit cache descriptor/config physical-scale agreement",
+    "Nonraw primitive benchmark uses saved config/tiles and declares model-only timing",
+    "Full-pipeline benchmark applies photometry once inside timed operation",
+    "Reject changing attached-cache profile/physical scale before an existing Tensor LRU hit"
+  ],
+  "boundaries": {
+    "full_corpus_cache_built": false,
+    "new_training_arm_launched": false,
+    "TEST_evaluation": false,
+    "model_quality_improvement_proven": false
+  }
+}
