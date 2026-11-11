@@ -23,6 +23,14 @@ Začněte [instalací a predikcí](../README.md#install),
 [nativním trénováním](NATIVE_LEGACY_RETRAINING.md) nebo
 [přehledem modelů](../README.md#predict-immediately-with-included-models).
 
+Nové trénování původních architektur má také [kontrolu na skutečných datech](../reports/native-legacy-real-smoke/README.md):
+vessel320, disc192, disc256 a universal288 dokončily po jedné epoše na samostatné
+čtyřfotografové TRAIN/VAL podmnožině, se skutečnými aktualizacemi parametrů,
+celosnímkovou validací a ověřeným načtením checkpointů. Nejde o plné přeučení ani
+měření kvality. Celosnímkový A/V pokus na CPU zastavil limit RSS3GiB; úspěšná
+kontrola A/V na skutečných datech čeká na vhodné volné GPU. Původní váhy,
+produkční architektury, konfigurace a počet dvanácti dodávaných modelů zůstaly stejné.
+
 Každá predikce vyžaduje nový nebo prázdný výstupní adresář. Opakované použití
 zaplněného adresáře nyní skončí před načtením modelu a nezmění dřívější soubory;
 předchozí chování mohlo například ponechat starou cup masku vedle nové cévní
