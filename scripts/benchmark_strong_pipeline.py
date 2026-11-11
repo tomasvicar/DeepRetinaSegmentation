@@ -16,7 +16,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
-from benchmark_latency import measure, require_raw_photometry
+from benchmark_latency import measure
 from PIL import Image
 
 from deepretina.inference import resolve_device
@@ -25,6 +25,8 @@ from deepretina.legacy.checkpoints import load_single_net
 from deepretina.legacy.matlab_av import prepare_vesclass_matlab_calibrated
 from deepretina.legacy.preprocessing import prepare_single_net
 from deepretina.legacy.single_net import tiled_logits
+from deepretina.photometry import apply as apply_photometry
+from deepretina.photometry import contract as photometry_contract
 from deepretina.unified import (
     UnifiedConfig,
     decode_probabilities,
@@ -153,9 +155,14 @@ def original_operation(rgb, fov, models, av, device, kwargs, *, cup_policy="nati
 
 
 def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5):
-    require_raw_photometry(vars(config))
     prepared = prepare_single_net(rgb, fov=fov, normalized=False, **kwargs)
-    image = torch.from_numpy(prepared.image.transpose(2, 0, 1).copy()).float() / 255
+    processed = apply_photometry(
+        prepared.image,
+        getattr(config, "photometric_profile", "raw"),
+        fov=prepared.fov,
+        pixels_per_degree=getattr(config, "pixels_per_degree", 25.0),
+    )
+    image = torch.from_numpy(processed.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(
         model, image, device, config, config.tile_size, config.overlap
     )
@@ -268,6 +275,8 @@ def benchmark(args):
             "parameters": sum(p.numel() for p in model.parameters()),
             "checkpoint_bytes": args.unified.stat().st_size,
             "config": payload["config"],
+            "photometry": photometry_contract(config.photometric_profile, config.pixels_per_degree),
+            "photometry_timing_scope": "exactly once per whole raw-photo operation, inside timed geometry+model+restoration; training cache not used",
             "checkpoint_epoch": payload.get("epoch"),
             "timing": unified_timing,
         },

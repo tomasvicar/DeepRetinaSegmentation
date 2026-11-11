@@ -413,25 +413,56 @@ def test_failed_augmented_crop_falls_back_to_same_photometric_native_image(corpu
 
 
 @pytest.mark.parametrize("profile", p.PROFILES[1:])
-def test_older_latency_protocols_fail_closed_instead_of_skipping_photometry(profile, monkeypatch):
-    import sys
+def test_benchmarks_apply_shared_full_image_profile_once_in_declared_scope(
+    corpus, profile, monkeypatch
+):
     from pathlib import Path
 
-    sys.path.insert(0, str(Path(__file__).parents[1] / "scripts"))
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1] / "scripts"))
     import benchmark_latency as latency
     import benchmark_strong_pipeline as strong
 
-    with pytest.raises(ValueError, match="raw photometry only"):
-        latency.require_raw_photometry({"photometric_profile": profile})
+    _, raw, fov, _ = corpus
+    geometry = ImageGeometry(
+        raw.shape[:2], (0, raw.shape[0] - 1, 0, raw.shape[1] - 1), 1.0, raw.shape[:2]
+    )
+    prepared = SimpleNamespace(image=raw, fov=fov, geometry=geometry)
+    config = u.UnifiedConfig(photometric_profile=profile, tile_size=96, overlap=16)
+    model = SimpleNamespace(supervised_channels=[True] * 5)
+    expected = (
+        torch.from_numpy(p.apply(raw, profile, fov=fov).transpose(2, 0, 1).copy()).float() / 255
+    )
+    calls = []
+    predictions = []
 
-    def forbidden(*a, **k):
-        raise AssertionError("nonraw benchmark reached preparation or NN")
+    def transform(image, selected, **kwargs):
+        calls.append(selected)
+        assert image is raw and kwargs["fov"] is fov
+        return p.apply(image, selected, **kwargs)
 
-    monkeypatch.setattr(strong, "prepare_single_net", forbidden)
-    monkeypatch.setattr(strong, "predict_probabilities", forbidden)
-    with pytest.raises(ValueError, match="raw photometry only"):
-        strong.unified_operation(
-            None, None, None, u.UnifiedConfig(photometric_profile=profile), "cpu", {}
-        )
-    latency.require_raw_photometry({})
-    latency.require_raw_photometry({"photometric_profile": "raw"})
+    def predict(model, image, device, cfg, tile, overlap):
+        assert torch.equal(image, expected)
+        assert (tile, overlap) == (96, 16) and cfg.photometric_profile == profile
+        predictions.append(True)
+        return np.zeros((5, *raw.shape[:2]), np.float32)
+
+    for module in (latency, strong):
+        monkeypatch.setattr(module, "prepare_single_net", lambda *a, **k: prepared)
+        monkeypatch.setattr(module, "apply_photometry", transform)
+        monkeypatch.setattr(module, "predict_probabilities", predict)
+    for _ in range(3):
+        strong.unified_operation(raw, fov, model, config, "cpu", {})
+    assert len(calls) == 3 and len(predictions) == 3
+    calls.clear()
+    predictions.clear()
+    operation, scope = latency.unified_timing_operation(
+        raw, {}, model, {"config": asdict(config)}, "cpu"
+    )
+    assert len(calls) == 1 and not predictions
+    for _ in range(3):
+        operation()
+    assert len(calls) == 1 and len(predictions) == 3
+    assert scope["photometry"] == p.contract(profile)
+    assert scope["preprocessing_once_seconds"] >= 0
+    assert scope["tile_size"] == 96 and scope["overlap"] == 16
+    assert "excluded" in scope["timing_scope"]

@@ -128,8 +128,11 @@ TPE patch 384/raw is a reference candidate; neither patch nor photometry was
 optimized by its six-parameter search. Any GPU-hour estimate remains provisional
 until the precomputed-cache pipeline is admitted and a complete epoch is measured.
 
-The two older raw-photo latency protocols (`benchmark_latency.py` and
-`benchmark_strong_pipeline.py`) now explicitly refuse nonraw profiles. They must
-not silently benchmark raw inputs for a photometric model or omit transformation
-cost. A future cache-aware timing protocol needs separate review; existing raw
-model timing results are unaffected.
+The full-pipeline benchmark applies the same shared full-image profile once
+inside each timed operation. The primitive latency benchmark applies it once
+before model-only timing, reports preparation time and the descriptor, and uses
+saved tile settings. Its nonraw model-only scope cannot establish full-pipeline
+speedup against a complete original pipeline. Training-cache lookup is never
+used to hide raw-inference preprocessing cost. See
+[the immutable cache prototype](UNIFIED_PHOTOMETRY_CACHE.md) for bounded evidence
+and the remaining whole-build/epoch admission steps.

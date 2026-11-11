@@ -24,20 +24,15 @@ from deepretina.legacy.av import load_av, predict_av_input
 from deepretina.legacy.checkpoints import load_single_net
 from deepretina.legacy.preprocessing import prepare_single_net, prepare_vesclass_raw_proxy
 from deepretina.legacy.single_net import tiled_logits
+from deepretina.photometry import apply as apply_photometry
+from deepretina.photometry import contract as photometry_contract
 from deepretina.unified import (
     decode_probabilities,
+    inference_config,
     load_unified,
     predict_probabilities,
     restore_probabilities,
 )
-
-
-def require_raw_photometry(settings):
-    """Existing latency protocols are raw-only; never silently skip photometry."""
-    if settings.get("photometric_profile", "raw") != "raw":
-        raise ValueError(
-            "This benchmark supports raw photometry only; nonraw needs a reviewed full-image photometry timing protocol"
-        )
 
 
 def file_sha256(path):
@@ -77,6 +72,62 @@ def measure(operation, device, *, warmup=1, repeats=3):
         "peak_working_bytes": None if peak is None else peak - baseline,
         "warmup_calls": warmup,
         "measured_calls": repeats,
+    }
+
+
+def unified_timing_operation(rgb, kwargs, model, payload, device):
+    """Primitive nonraw scope is model-only after one explicitly measured transform."""
+    profile = payload["config"].get("photometric_profile", "raw")
+    descriptor = photometry_contract(profile, payload["config"].get("pixels_per_degree", 25.0))
+    if profile == "raw":
+
+        @torch.inference_mode()
+        def raw_operation():
+            prepared = prepare_single_net(rgb, **kwargs)
+            image = torch.from_numpy(prepared.image.transpose(2, 0, 1).copy()).float() / 255
+            probability = predict_probabilities(model, image, device)
+            return decode_probabilities(
+                restore_probabilities(probability, prepared.geometry),
+                supported=model.supervised_channels,
+            )
+
+        return raw_operation, {
+            "photometry": descriptor,
+            "timing_scope": "geometry+model+restore/decode; raw legacy timing preserved",
+            "preprocessing_once_seconds": None,
+        }
+    config = inference_config(payload)
+    started = time.perf_counter()
+    prepared = prepare_single_net(rgb, **kwargs)
+    processed = apply_photometry(
+        prepared.image,
+        profile,
+        fov=prepared.fov,
+        pixels_per_degree=payload["config"].get("pixels_per_degree", 25.0),
+    )
+    image = torch.from_numpy(processed.transpose(2, 0, 1).copy()).float() / 255
+    pre_seconds = time.perf_counter() - started
+
+    @torch.inference_mode()
+    def model_only():
+        probability = predict_probabilities(
+            model, image, device, config, config.tile_size, config.overlap
+        )
+        probability[[0, 3, 4]] *= prepared.fov[None]
+        restored = restore_probabilities(probability, prepared.geometry)
+        domain = prepared.geometry.restore(prepared.fov.astype(np.uint8), order=0) > 0
+        restored[[0, 3, 4]] *= domain[None]
+        restored[1:3, ~domain] = 0.5
+        return decode_probabilities(restored, supported=model.supervised_channels)
+
+    return model_only, {
+        "photometry": descriptor,
+        "timing_scope": "model+restore/decode only; full-frame geometry/photometry/tensor conversion excluded and reported separately",
+        "preprocessing_once_seconds": pre_seconds,
+        "preprocessing_calls_outside_model_timing": 1,
+        "tile_size": config.tile_size if config.train_view == "patch" else None,
+        "overlap": config.overlap if config.train_view == "patch" else None,
+        "train_view": config.train_view,
     }
 
 
@@ -153,28 +204,28 @@ def benchmark(
     if device.type == "cuda":
         torch.cuda.empty_cache()
     model, payload, _ = load_unified(unified_path, device)
-    require_raw_photometry(payload["config"])
 
-    @torch.inference_mode()
-    def unified():
-        prepared = prepare_single_net(rgb, **kwargs)
-        image = torch.from_numpy(prepared.image.transpose(2, 0, 1).copy()).float() / 255
-        probability = predict_probabilities(model, image, device)
-        restored = restore_probabilities(probability, prepared.geometry)
-        return decode_probabilities(restored, supported=model.supervised_channels)
+    unified, timing_scope = unified_timing_operation(rgb, kwargs, model, payload, device)
 
+    if payload["config"].get("photometric_profile", "raw") != "raw":
+        report["scope"] = (
+            "single photograph; original full pipeline versus unified model+restore/decode only, with unified full-image preprocessing measured separately; unlike timing scopes"
+        )
     report["unified"] = {
         "checkpoint_sha256": file_sha256(unified_path),
         "parameters": sum(p.numel() for p in model.parameters()),
         "checkpoint_bytes": Path(unified_path).stat().st_size,
         "purpose": payload["config"]["purpose"],
+        **timing_scope,
         "timing": measure(unified, device, warmup=warmup, repeats=repeats),
     }
     report["limitations"] = [
         "One photograph cannot establish general speed or model quality",
         "Original A/V raw preprocessing is an uncertified proxy",
         "Original raw/normalized training profile remains historically uncertain",
-        "CPU preprocessing included in latency; other system load may affect results",
+        "For nonraw unified profiles, geometry/photometry is measured once separately and unified timing is model+restore/decode only; never infer full-pipeline speedup from unlike scopes"
+        if payload["config"].get("photometric_profile", "raw") != "raw"
+        else "CPU preprocessing included in latency; other system load may affect results",
         "CUDA peak reports Torch allocation, not total process or device memory",
     ]
     return report

@@ -1,0 +1,42 @@
+{
+  "scope": "Prototype only; no whole corpus cache, GPU training, TEST pixels or quality claim",
+  "tests": {
+    "passed": 202,
+    "seconds": 27.8,
+    "CPU_threads": 1,
+    "suite": [
+      "test_unified_photometry",
+      "test_photometry_cache",
+      "test_strong_pipeline_benchmark",
+      "test_unified_hpo",
+      "test_unified_cli",
+      "test_validation_evidence",
+      "test_unified",
+      "test_unified_selection",
+      "test_derived_cache"
+    ]
+  },
+  "proof_source_training_sha256": "7856a9c7f9ff921f16b82f7fabc7a3a24b2acf6231593832467f0d28bcc854bc",
+  "operator_sha256": "196da8626c87d6b07bed6508252dd37328ee79846c4040c1403f9a090002708e",
+  "no_memmap_or_persistent_RGB_array_cache": true,
+  "final_Tensor_LRU_limit_bytes_per_Dataset": 134217728,
+  "memory_test": "24 RGB reads; weakrefs released; repeated Tensor reads obey cache size limit",
+  "capacity": {
+    "TRAIN_VAL_photos": 3299,
+    "RGB_payload_bytes_per_profile": 8586029301,
+    "NPY_header_bytes_per_profile": 422272,
+    "recommended_free_bytes_two_profiles": 22000000000
+  },
+  "provisional_CPU1_operator_minutes": {
+    "clahe": 34,
+    "LC_CLAHE": [
+      80,
+      84
+    ]
+  },
+  "cost_qualification": "Add decoding, canonical/hash scans, writes and at least 25\u201350% margin; actual whole build and worker epoch timings pending",
+  "benchmarks": {
+    "strong_pipeline": "Shared transform once inside each timed operation; training cache never used",
+    "primitive_latency": "For nonraw, shared transform once outside timed model+restore/decode; explicit descriptor, saved tiles and preparation seconds; unlike full scopes cannot establish pipeline speedup"
+  }
+}

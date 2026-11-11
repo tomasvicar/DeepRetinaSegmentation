@@ -84,6 +84,8 @@ def produce_validation_evidence(
     threshold=0.5,
     tile_size=None,
     overlap=None,
+    photometry_cache_root=None,
+    expected_photometry_cache_fingerprint=None,
 ):
     """Evaluate an eligible full-data E1..60 snapshot, then write fresh evidence.
 
@@ -108,6 +110,25 @@ def produce_validation_evidence(
         payload, threshold=threshold, tile_size=tile_size, overlap=overlap
     )
     config = inference_config(payload, tile_size=tile_size, overlap=overlap)
+    photometry_cache = None
+    if photometry_cache_root is not None or expected_photometry_cache_fingerprint is not None:
+        gate.require(
+            photometry_cache_root is not None and expected_photometry_cache_fingerprint is not None,
+            "Photometry cache requires runtime path and external fingerprint",
+        )
+        from .photometry_cache import VerifiedPhotometryCache
+
+        photometry_cache = VerifiedPhotometryCache(
+            photometry_cache_root,
+            manifest,
+            config.photometric_profile,
+            expected_fingerprint=expected_photometry_cache_fingerprint,
+            expected_canonical_fingerprint=payload["prepared_content_sha256"],
+        )
+        gate.require(
+            payload.get("photometry_cache") in (None, photometry_cache.identity),
+            "Checkpoint photometry cache identity differs",
+        )
     canonical_before = gate._canonical_metadata(manifest)
     data, groups = gate.data_identity(manifest, payload)
     source = {
@@ -129,6 +150,8 @@ def produce_validation_evidence(
         gate.evaluation_source_identity() == source_before,
         "Source/runtime changed before VAL evaluation",
     )
+    if photometry_cache is not None:
+        runtime["photometry_cache"] = photometry_cache.identity
     runtime["evaluation_started_at_utc"] = datetime.now(UTC).isoformat()
     with torch.inference_mode():
         metrics = evaluate_unified_model(
@@ -138,6 +161,7 @@ def produce_validation_evidence(
             device=actual_device,
             config=config,
             threshold=threshold,
+            **({"photometry_cache": photometry_cache} if photometry_cache is not None else {}),
         )
     runtime["evaluation_finished_at_utc"] = datetime.now(UTC).isoformat()
     # Recompute provenance from this actual evaluation, never retrofit a thin

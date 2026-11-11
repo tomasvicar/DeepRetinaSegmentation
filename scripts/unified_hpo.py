@@ -15,6 +15,7 @@ from pathlib import Path
 
 from deepretina.derived_cache import VerifiedCache
 from deepretina.integrity import verify_prepared_content
+from deepretina.photometry_cache import VerifiedPhotometryCache
 from deepretina.unified import UnifiedConfig, train_unified
 
 REQUIRED_SOURCES = frozenset(
@@ -182,6 +183,7 @@ def run_trial(
     final=False,
     stop_after_epoch=None,
     derived_cache_root=None,
+    photometry_cache_root=None,
 ):
     plan = json.loads(Path(plan_path).read_text())
     if plan.get("schema_version") != 1 or plan.get("purpose") != "full_data_validation_search":
@@ -196,6 +198,19 @@ def run_trial(
     cache_identity = plan.get("derived_cache")
     if bool(cache_identity) != bool(derived_cache_root):
         raise ValueError("Runtime cache presence differs from its explicit frozen plan")
+    photo_identity = plan.get("photometry_caches", {}).get(config.photometric_profile)
+    if bool(photo_identity) != bool(photometry_cache_root):
+        raise ValueError("Photometry cache runtime presence differs from frozen per-profile plan")
+    if photo_identity:
+        photo_cache = VerifiedPhotometryCache(
+            photometry_cache_root,
+            manifest,
+            config.photometric_profile,
+            expected_fingerprint=photo_identity["fingerprint"],
+            expected_canonical_fingerprint=plan["prepared_content_sha256"],
+        )
+        if photo_cache.identity != photo_identity:
+            raise ValueError("Frozen portable photometry cache identity differs")
     if config.legacy_initialization is not None:
         raise ValueError("Independent full-data search excludes historical teacher initialization")
     if device is not None:
@@ -232,6 +247,14 @@ def run_trial(
         expected_content_sha256=plan["prepared_content_sha256"],
         derived_cache_root=derived_cache_root,
         expected_cache_fingerprint=cache_identity["fingerprint"] if cache_identity else None,
+        **(
+            {
+                "photometry_cache_root": photometry_cache_root,
+                "expected_photometry_cache_fingerprint": photo_identity["fingerprint"],
+            }
+            if photo_identity
+            else {}
+        ),
     )
     return {
         "trial": trial,
@@ -262,6 +285,7 @@ def main():
     run.add_argument("--final", action="store_true")
     run.add_argument("--stop-after-epoch", type=int)
     run.add_argument("--derived-cache", type=Path)
+    run.add_argument("--photometry-cache", type=Path)
     args = parser.parse_args()
     try:
         if args.command == "plan":
@@ -288,6 +312,11 @@ def main():
                         final=args.final,
                         stop_after_epoch=args.stop_after_epoch,
                         derived_cache_root=args.derived_cache,
+                        **(
+                            {"photometry_cache_root": args.photometry_cache}
+                            if args.photometry_cache is not None
+                            else {}
+                        ),
                     )
                 )
             )
