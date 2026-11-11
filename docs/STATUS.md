@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 11. 11. 2026, po vydání kontrolního V2 a cévně váženého preview. Celkový cíl není dokončený.**
+**Snímek: 11. 11. 2026, po dokončení vascular4 a zahájení skutečného TPE běhu. Celkový cíl není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -92,10 +92,47 @@ resident medián 6,03 s proti 63,32 s původních čtyř sítí; parametrů je 1
 proti 5,94 mil. Jde o konkrétní příklad včetně předzpracování a obnovy geometrie,
 bez načítání modelů/souborů. [Rozsah měření](UNIFIED_V2_VASCULAR2.md#size-and-measured-cpu-example).
 
+## Další optimalizace: stav 11. 11.
+
+Sampling s cévní vahou 4 dokončil všech 60 epoch. Čerstvá VAL jeho BEST E55
+proti přibalenému vascular2 BEST E59 zlepšila cévní Dice o 0,00367
+(95% párový interval [0,00203; 0,00564]) a conditional A/V o 0,01263.
+Macro zlepšení má interval protínající nulu a na G1020 se disk/cup zhoršily.
+Cévní Dice 0,76039 stále zaostává za původní sítí 0,77012. Tento kandidát
+proto nenahrazuje výchozí model ani nedokládá zlepšení všech úloh a zdrojů.
+[Párové výsledky obou rolí checkpointu](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/vascular4-paired-val).
+
+Skutečný návrh Optuna TPE z pěti dokončených srovnatelných pozorování E27
+již trénuje na Adě. Pevný milník E27 prošel dílčí kontrolou; stejný běh
+pokračuje do E60. Dílčí pokrytí 5 686 z 5 700 anotovaných variant ještě
+nesplňuje podmínku finálního modelu. Nejde o dokončenou optimalizaci ani
+o konečný výběr. [Původ skutečného návrhu](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/fixed27-proposal).
+
+Současné V3/TPE běhy drží patch 384 a vstup raw25 pevné. Navazující
+kontrolované porovnání připravuje patch 256/384/512 se stejným batchem 4
+a dvě fotometrické varianty při patchi 384: CLAHE a korekci osvětlení s CLAHE.
+Implementace opt-in předzpracování je na samostatné experimentální větvi;
+připravuje se ověřovaná cache pouze pro TRAIN/VAL. Celé trénovací srovnání
+zatím spuštěné není. Předzpracování se aplikuje na celý snímek před výřezem
+a stejně při predikci, s původními pixely mimo FOV. Vyšší fyzické rozlišení
+by vyžadovalo novou přípravu z RAW; zvětšení existující cache je nenahrazuje.
+
+Na Oldu začalo samostatné měření vlivu velikosti a překryvu inference dlaždic
+nad totožnými vahami vascular4 BEST E55 a všemi 770 VAL snímky. Vlastní
+baseline 512/64 se porovnává s 512/192, 768/192 a 1024/256. Jde o ladění
+predikce, nikoli o experiment s velikostí trénovacího patche. Výsledky dalších
+variant ještě nejsou uzavřené; TEST se pro ladění nepoužívá.
+
+Volitelný BF16 TRAIN je již také v předatelné větvi. Na skutečné CUDA Adě
+prošel krátký nezávislý krok s bitově shodnými vahami, stavem optimalizátoru,
+loss, predikcí a CUDA RNG vůči připnutému experimentálnímu zdroji. Toto je
+ověření portu, nikoli měření přínosu BF16 pro kvalitu plného modelu.
+[Rozsah ověření](UNIFIED_TRAIN_BF16.md).
+
 ## Co zbývá k dokončení cíle
 
 1. Dokončit a zkontrolovat skutečné trénovací běhy včetně pokrytí všech vhodných TRAIN dat.
-2. Porovnávat další kandidáty párově po úlohách a zdrojích; optimalizací řešit zbývající cévní regresi.
+2. Porovnávat další kandidáty párově po úlohách a zdrojích; kontrolovaně změřit patch, preprocessing a inference dlaždice a řešit zbývající cévní regresi.
 3. Zmrazit vybraný checkpoint, konfiguraci, prahy a inference protokol; poté provést samostatný TEST.
 4. Doložit kvalitu, velikost a rychlost vybraného modelu a předat jeho váhy vedle původních sítí.
 
