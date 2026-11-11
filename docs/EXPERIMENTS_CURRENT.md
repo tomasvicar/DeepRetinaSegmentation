@@ -102,10 +102,15 @@ CI[.000349697,.003582857], while cup loses.00273378 with entirely negative CI.
 DRHAGIS/CHASE vessel and G1020/RIM disc also regress. Vessel still falls below
 the original.77012340 point reference; its difference interval crosses zero.
 This does not justify a default, final selection or TEST. A first-TPE BEST58
-threshold followup actually launched separately at20:02:06UTC on the local Old GPU.
-Observer/controller/NN and actualFP32/CPU2inter1 runtime were independently
-checked alive; all770 VAL completion is not yet established. It uses the original
-standalone BEST58 chain, not the V3 completion family.
+[first-TPE BEST58 rot4 threshold study](../reports/first-TPE-BEST58-rot4-threshold-20261111)
+completed all770 VAL with actual child/outer exits0. The declared worst-six rule
+chose.35: vessel.7694639263, macro.82209916, conditionalAV.8361133069.
+Vessel change versus same-forward.5 is+.00251081 with an interval crossing zero;
+versus original it remains−.00065947[−.00653023,+.00551692]. ConditionalAV is
+exactly invariant over all8thresholds; source regressions and all paired intervals
+are retained. Worst-six point.999143678 remains below1. This distinct standalone
+model is not the V3 trial4; no default, equivalence or TEST claim follows.
+
 
 ## Completed patch256 and pending patch/photometry arms
 
@@ -141,7 +146,7 @@ No automatic retry, budget change, LAST metric or promotion is claimed. Full
 counts, descriptor/config, source adverse intervals and outcome are published.
 
 Raw384, raw512 and CLAHE384 remain unfinished; their last actual scheduler/progress
-snapshot19:55UTC was R/E34, R/E24 and R/E25. No new Meta job was submitted.
+snapshot20:27UTC was R/E39, R/E27 and R/E29. No new Meta job was submitted.
 Current elapsed scheduler time is not model quality, and unfinished arms are not
 ranked. Product `for_Leipzig` supports saved full-image photometry profiles without
 stripping config fields. Real TRAIN inference parity checks for the existing TPE
