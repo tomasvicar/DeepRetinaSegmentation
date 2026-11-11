@@ -110,3 +110,10 @@ cannot establish full-pipeline speedup over an original complete pipeline.
 [Port verification](../reports/product-unified-photometry) covers synthetic arrays,
 cache interoperability, default raw RNG/masks and joint TTA integration. It does
 not train or evaluate a real model, decode real GT, or establish real-image parity.
+
+## Actual checkpoint compatibility check
+
+[Two real TRAIN CPU parity checks](../reports/product-photometry-real-train-parity)
+matched probabilities and masks bitwise for the existing TPE preview and original
+fd44 raw256 checkpoint. This verifies the scoped raw compatibility paths;
+nonraw operational model parity and quality are separate measurements.

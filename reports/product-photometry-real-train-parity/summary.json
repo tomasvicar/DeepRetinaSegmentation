@@ -1,0 +1,123 @@
+{
+  "kind": "bounded_single_real_TRAIN_photo_CPU_checkpoint_probability_mask_parity_not_quality",
+  "A": {
+    "checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+    "reference_source_commit": "48dd08145adcde655672072b544cde9bc6b166df",
+    "candidate_source_commit": "1fb4a0c304578c092f4e0c03c4684e4bb104fd70",
+    "role": "TPE_BEST58_original20d_preview",
+    "input_scope": "rawRGB_and_officialFOV_then_actual_public_preparation_and_original_geometry_restore",
+    "probabilities": {
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "bitwise_equal": true,
+      "different_values": 0,
+      "max_abs_error": 0.0,
+      "reference_sha256": "d10b2990765ed8ca83c6d7eb3248af44f1194d4ed43dbea18181df627359ba5c",
+      "candidate_sha256": "d10b2990765ed8ca83c6d7eb3248af44f1194d4ed43dbea18181df627359ba5c"
+    },
+    "masks": {
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "all_bits_equal": true,
+      "different_bits": 0,
+      "reference_sha256": "32590cf934ec802bf7010933361ecb06fcc078aacc178252f6a8811a904811c3",
+      "candidate_sha256": "32590cf934ec802bf7010933361ecb06fcc078aacc178252f6a8811a904811c3"
+    },
+    "preprocessing_metadata_exact": true,
+    "inference_metadata_exact": true,
+    "actual_child_exit": 0,
+    "seconds_including_imports": 27.313744549872354,
+    "sampled_owned_group_peak_RSS_bytes": 803672064
+  },
+  "B": {
+    "checkpoint_sha256": "132c787964da763d6eaa50c8fe08223c2b38726a3e7828a0b81654fd388c7130",
+    "reference_source_commit": "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+    "candidate_source_commit": "1fb4a0c304578c092f4e0c03c4684e4bb104fd70",
+    "role": "genuine_raw256_BEST52_original132c",
+    "input_scope": "same_TRAIN_photo_canonical_full_prepared_RGB_image_FOV_source_saved_config_then_original_geometry_restore",
+    "prepared_probabilities": {
+      "shape": [
+        5,
+        1031,
+        1033
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "bitwise_equal": true,
+      "different_values": 0,
+      "max_abs_error": 0.0,
+      "reference_sha256": "d7d51bf4a9c825d05a04872cd225b8f7033f396dfe0a077a384b26dade342ded",
+      "candidate_sha256": "d7d51bf4a9c825d05a04872cd225b8f7033f396dfe0a077a384b26dade342ded"
+    },
+    "restored_probabilities": {
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "bitwise_equal": true,
+      "different_values": 0,
+      "max_abs_error": 0.0,
+      "reference_sha256": "dab1953544e81f08a41032078b17a1c30002d1ac915436e84f141a0ddd16b8cc",
+      "candidate_sha256": "dab1953544e81f08a41032078b17a1c30002d1ac915436e84f141a0ddd16b8cc"
+    },
+    "masks": {
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "all_bits_equal": true,
+      "different_bits": 0,
+      "reference_sha256": "40bb8d297125ec64e3568dc20dc4fed38feceaaed713c570b0bd92e2f0d12de2",
+      "candidate_sha256": "40bb8d297125ec64e3568dc20dc4fed38feceaaed713c570b0bd92e2f0d12de2"
+    },
+    "saved_config_exact": true,
+    "actual_child_exit": 0,
+    "actual_external_observer_exit": 0,
+    "seconds_including_imports": 24.919416608987376,
+    "sampled_owned_group_peak_RSS_bytes": 812232704
+  },
+  "resource_protocol": {
+    "CPU_cores": 1,
+    "affinity": [
+      6
+    ],
+    "intra_threads": 1,
+    "interop_threads": 1,
+    "nice": 17,
+    "IO": "idle",
+    "CUDA_VISIBLE_DEVICES": "",
+    "max_seconds_per_case": 120,
+    "owned_RSS_cap_bytes": 2684354560,
+    "minimum_MemAvailable_bytes": 2684354560,
+    "limits_not_triggered": true
+  },
+  "runtime": {
+    "torch": "2.6.0+cu124",
+    "numpy": "2.5.4",
+    "python": "3.12.13"
+  },
+  "canonical_manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "canonical_content_metadata_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+  "original_inputs_models_source_bytes_unchanged": true,
+  "arrays_not_in_Git_temporary_removed": true,
+  "actual_GT_VAL_TEST_decoded": false,
+  "GPU_used": false,
+  "qualifications": [
+    "One actual DRIVE TRAIN photograph, two specific original checkpoints; probability/mask functionality parity, not segmentation quality or corpus-wide guarantees.",
+    "A initial bookkeeping failure after forwards and B first pre-NN framed-pixel-hash failure are preserved; each renewed attempt had explicit parent authorization, no blind automatic retry.",
+    "A successful child0 belongs to a run whose outer observer1 came from B preflight; B successful renewed separate run has actual outer0.",
+    "No LC operational model parity, nonraw model quality, training, TEST, threshold selection, release/model promotion or benchmark latency inference is established."
+  ]
+}
