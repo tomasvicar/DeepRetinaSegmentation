@@ -30,6 +30,14 @@ záznamy jsou zachované v [historii práce](PROGRESS_HISTORY_2026-11.md).
 - Dopracovat a měřit augmentace, sampling, architekturu, optimalizátor/scheduler,
   hyperparametry a dostatečný trénovací rozpočet. Hodnotit také jednoduchost,
   počet parametrů, paměť a rychlost predikce.
+- Výslovně porovnat velikost patche a fotometrické předzpracování: raw proti
+  CLAHE a zdůvodněné korekci nerovnoměrného osvětlení. Současná V3/TPE studie
+  má patch384 a raw25 pevné, takže tyto volby dosud neoptimalizuje. Starší
+  pokus256/batch8 není izolovaným důkazem vlivu patche. Navazující porovnání
+  má držet batch a optimizer nastavení, uvést počet aktualizací i pixelový
+  rozpočet/čas a zachovat shodný preprocessing při trénování i predikci.
+  Fyzické rozlišení a velikost kontextu rozlišovat; interpolace již zmenšené
+  cache nenahrazuje přípravu vyššího rozlišení přímo z RAW dat.
 - Zachovat nezávislé TRAIN/VAL/TEST skupiny mezi úlohami, anotátory, známými
   pacienty a sdílenými fotografiemi. Neznámou pacientskou nezávislost nepředstírat.
   TEST nepoužívat pro ladění; vyhodnotit jej až po zmrazení výběru a protokolu.
