@@ -23,6 +23,9 @@ Evidence in this directory:
 - `package-check.json`: 59 focused CPU tests and one built wheel with all 10 model SHA checks.
 - `real-cli-smoke.json`: actual raw TRAIN DRIONS CPU CLI, original-frame output
   checks and file hashes only; no raw photograph, prediction image or GT scoring.
+- `real-gpu-cli-smoke.json`: one GTX 1070 raw TRAIN CLI check; finite outputs and
+  hierarchy pass, zero binary-mask disagreements with CPU on this case, explicitly
+  non-bitwise floating probabilities. No training, GT score or other GPU used.
 - `release-plan.json`: prior draft ownership/gates completed with actual pins;
   root review and completed fast-forward are explicit.
 

@@ -1,0 +1,73 @@
+{
+  "status": "PASS_ONE_RAW_TRAIN_GPU_FUNCTIONAL_SMOKE",
+  "source_commit": "7897c490f5ade5ad532b9d6186de723dc6fb3615",
+  "model": "unified-v2-control",
+  "checkpoint_sha256": "10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2",
+  "input_encoded_sha256": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1",
+  "input_membership": "same independently verified DRIONS TRAIN image001 as CPU release smoke",
+  "input_shape_hw": [
+    400,
+    600
+  ],
+  "device": "cuda:0",
+  "gpu_name": "NVIDIA GeForce GTX 1070",
+  "gpu_compute_capability": [
+    6,
+    1
+  ],
+  "gpu_identity_sha256": "62d0195ba9eb415d63cb00476f069fb33ff776a86bbfcd57df4c63b7e38e9342",
+  "nvml_and_torch_identity_match": true,
+  "driver": "580.178.04",
+  "torch": "2.6.0+cu124",
+  "cuda_runtime": "12.4",
+  "cpu_numerical_threads": 1,
+  "interop_threads": 1,
+  "nice": 15,
+  "owned_timeout_seconds": 90,
+  "real_cli_calls": 1,
+  "probabilities_finite_and_in_unit_interval": true,
+  "conditional_probabilities_sum_to_one": true,
+  "all_original_frame_outputs": true,
+  "av_exclusive_and_subset_vessel": true,
+  "cup_subset_disc": true,
+  "all_output_paths_existed_at_capture": true,
+  "comparison_to_saved_cpu": {
+    "available": true,
+    "same_checkpoint_and_geometry": true,
+    "arrays_bitwise_equal": false,
+    "per_channel_max_abs_error": {
+      "vessel": 5.841255187988281e-06,
+      "artery": 2.1457672119140625e-06,
+      "vein": 2.1457672119140625e-06,
+      "disc": 2.5033950805664062e-06,
+      "cup": 1.3113021850585938e-06
+    },
+    "per_channel_mean_abs_error": {
+      "vessel": 5.866546359811764e-08,
+      "artery": 2.1363626956372173e-07,
+      "vein": 2.1352913393002382e-07,
+      "disc": 1.580264363809647e-09,
+      "cup": 3.604611609198116e-10
+    },
+    "mask_disagreement_pixels": {
+      "vessel": 0,
+      "artery": 0,
+      "vein": 0,
+      "disc": 0,
+      "cup": 0
+    },
+    "comparison_semantics": "NPZ probability arrays and decoded PNG masks, never container ZIP byte equality",
+    "no_numeric_tolerance_promoted_to_bitwise_parity": true
+  },
+  "no_gt_scoring": true,
+  "no_test_or_training": true,
+  "no_generic_quality_speed_or_backend_parity_claim": true,
+  "private_process_details_published": false,
+  "observed_single_cli_wall_seconds_not_a_benchmark": 2.239012093981728,
+  "cpu_release_proof_sha256": "21916b23c8b77845190c336428ba33345c018a6ebb1b3060b0d77c51a294b267",
+  "photo_id": "sha256:d0d30763e7b390dd94bc084e2e8dbeedce22cd0cac1688cade051eb3324b5db2",
+  "train_membership_manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "preflight_target_idle_and_free_at_least_6GiB": true,
+  "target_idle_again_and_no_compute_actor_after_exit": true,
+  "normal_exit_without_timeout_cleanup_needed": true
+}
