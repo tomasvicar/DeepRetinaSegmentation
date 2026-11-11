@@ -70,7 +70,7 @@ def cpu_and_reader_guard(monkeypatch):
 
 
 @pytest.fixture
-def selected(case, tmp_path, monkeypatch, cpu_and_reader_guard):
+def selected(case, tmp_path, monkeypatch, cpu_and_reader_guard, request):
     root = case["manifest"].parent
     rows = json.loads(case["manifest"].read_text())
     photos = json.loads((root / "photos.json").read_text())
@@ -101,6 +101,9 @@ def selected(case, tmp_path, monkeypatch, cpu_and_reader_guard):
         payload = torch.load(case[key], map_location="cpu", weights_only=True)
         payload.update(manifest_sha256=manifest_sha, prepared_content_sha256=content)
         torch.save(payload, case[key])
+    if getattr(request, "param", "training_best") == "fixed_terminal60":
+        case["checkpoint"] = case["last_checkpoint"]
+        case["checkpoint_role"] = "fixed_terminal60"
     evidence = tmp_path / "actual-fresh-val.json"
     produce_validation_evidence(
         checkpoint=case["checkpoint"], manifest=case["manifest"], output=evidence, device="cpu"
@@ -609,4 +612,32 @@ def test_actual_backend_mismatch_refused_before_test_read(
     )
     with pytest.raises(gate.SelectionError, match="source/data/inference protocol"):
         run(selected, tmp_path)
+    assert cpu_and_reader_guard["test_reads"] == 0
+
+
+@pytest.mark.parametrize("selected", ["fixed_terminal60"], indirect=True)
+def test_terminal_role_executes_own_snapshot_and_score(selected, tmp_path):
+    report = run(selected, tmp_path)
+    assert report["checkpoint_role"] == "fixed_terminal60"
+    assert report["checkpoint"]["epoch"] == 60
+    assert report["checkpoint"]["sha256"] == gate.digest(selected["last_checkpoint"].read_bytes())
+    assert report["checkpoint"]["training_selection_score"] == 0.16
+    assert report["training_completion"]["best_epoch"] == 5
+    assert report["training_completion"]["best_training_selection_score"] == 0.8
+
+
+@pytest.mark.parametrize(
+    "key,value",
+    [
+        ("checkpoint_role", "fixed_terminal60"),
+        ("completion_family", "standalone_72"),
+        ("expected_qa_sha256", "0" * 64),
+    ],
+)
+def test_changed_typed_request_rejects_before_test_gt(
+    selected, tmp_path, key, value, cpu_and_reader_guard
+):
+    changed = {**selected, key: value}
+    with pytest.raises(gate.SelectionError, match="role/family|family/role"):
+        run(changed, tmp_path)
     assert cpu_and_reader_guard["test_reads"] == 0

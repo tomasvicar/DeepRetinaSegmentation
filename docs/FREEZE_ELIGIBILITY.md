@@ -1,9 +1,10 @@
-# Typed freeze eligibility — experimental first pass
+# Typed freeze eligibility and schema2 review integration
 
-This branch adds loader compatibility and a separate CPU eligibility check. It
-**does not create a selection, authorize TEST or implement V3 pool completion**.
-Do not deploy this intermediate branch before the fail-closed selection wiring:
-the compatible loader also makes older untyped gate code parse the new configs.
+This experimental branch adds source-compatible loading, typed CPU eligibility
+and fail-closed schema2 create/check/reviewed execution interfaces. No actual
+model selection or TEST evaluation was performed during implementation. V3 pool
+completion still requires its own adapter. The earlier compatibility-only commit
+is not independently deployable: consume the complete reviewed integration.
 
 `check_freeze_eligibility` / `scripts/check_freeze_eligibility.py` require explicit
 family, selected role, BEST/LAST snapshots, actual manifest, original metrics CSV

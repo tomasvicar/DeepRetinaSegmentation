@@ -824,3 +824,13 @@ def test_checked_eligibility_proof_cannot_be_mutated():
     checked = CheckedFreezeEligibility(b"snapshot", s.canonical({"family": "pool_6b"}))
     checked.proof["family"] = "standalone_72"
     assert checked.proof["family"] == "pool_6b"
+
+
+def test_malformed_typed_eligibility_is_rejected(case, tmp_path):
+    path, _ = create(case, tmp_path)
+    artifact = json.loads(path.read_text())
+    artifact["freeze_eligibility"] = []
+    raw = s.canonical(artifact)
+    path.write_bytes(raw)
+    with pytest.raises(s.SelectionError, match="Invalid typed eligibility"):
+        check(case, path, s.digest(raw))

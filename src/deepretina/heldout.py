@@ -70,6 +70,10 @@ def evaluate_reviewed_heldout(
         "New final execution requires typed schema2 selection; historical schema1 stays immutable",
     )
     gate.require(
+        isinstance(artifact.get("freeze_eligibility"), dict),
+        "Invalid typed eligibility record",
+    )
+    gate.require(
         checkpoint_role == artifact.get("checkpoint_role")
         and completion_family == artifact.get("freeze_eligibility", {}).get("family")
         and completion_qa is not None
