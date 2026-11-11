@@ -1,11 +1,12 @@
 # Independent curated fd44 completion check
 
-This adapter checks the original five-arm patch/photometry study's completion
-records and checkpoint bytes. It does **not** admit the family to final selection,
-fresh validation, TTA or TEST. Existing `standalone_0b`, `standalone_72`, native
-V3 pool and historical completion routes are unchanged. A source-compatible
-fresh validation producer and a separately reviewed selection integration remain
-necessary.
+This checker checks the original five-arm patch/photometry study's completion
+records and checkpoint bytes. The completion check itself performs no inference,
+selection or TEST action. The separate [explicit final-eligibility adapter](CURATED_FD44_SELECTION_PROPOSAL.md)
+requires the externally pinned original index and source-compatible fresh evidence
+for the integrated curated route. Existing `standalone_0b`, `standalone_72`, native
+V3 pool and historical completion routes are unchanged. This integration proposal
+does not claim an actual final freeze or TEST result.
 
 The accepted training source is `fd44cdfa83d1df9ccc42960df6d1d2018db29900`,
 with its original execution/training digests. The three reviewed study contracts
@@ -106,15 +107,17 @@ agree with the independently loaded role bytes.
 
 ## Verification scope of this implementation
 
-28 focused CPU tests passed in 8.53 seconds. They use tiny constructed weights
+At the original independent-checker implementation, 28 focused CPU tests passed in 8.53 seconds. They use tiny constructed weights
 and synthetic metadata, with NN forward and CUDA initialization prohibited.
 Synthetic trust-anchor substitutions are explicit fixtures, not claims of a
 real fd44 completion. Cases cover both roles, all five arms, full-config and
 nonraw cache/backend binding, changed task/study/source/receipt, worker-success
 versus nonterminal PBS state, distinct raw/canonical dependency hashes, stale
 optimizer, wrong horizon, malformed/nonfinite
-state, and zero/missing/foreign BEST annotation visits. A regression confirms
-that the existing final-selection gate still rejects `curated_fd44`.
+state, and zero/missing/foreign BEST annotation visits. Its original regression confirmed
+that the then-existing final-selection gate rejected `curated_fd44`. The separate
+integrated adapter now requires the distinct original index and fresh evidence;
+the checker alone still creates no selection or inference permission.
 
 The original raw256 small-record schemas informed this adapter. A subsequent
 root-reviewed real CPU re-audit under source `3efbd8a` passed both roles with

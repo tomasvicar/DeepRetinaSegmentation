@@ -31,9 +31,11 @@ All captured original inputs are checked unchanged across the operation.
 
 The standardized outer `checked_freeze_eligibility` proof is explicitly marked
 `explicit_original_curated_fd44_final_adapter` and retains the complete checker
-proof under `original_curated_completion`. Historical boundary fields inside that
-original proof remain unchanged; the outer adapter supplies the new integration.
-No original proof is relabeled or edited.
+proof under `original_curated_completion`. The checker action flags remain false: checking completion itself creates no
+selection or inference permission. Newly generated proofs describe the separate
+adapter and fresh-evidence requirements. The nested proof is retained exactly as
+returned by the checker; historical proof files remain byte-unchanged. No original
+proof file is relabeled or edited.
 
 Only this known original family is admitted:
 

@@ -712,7 +712,7 @@ def check_curated_completion(
         "TTA_admission_enabled": False,
         "fresh_sourcecompatible_VAL_required": True,
         "prior_blindness_proven": False,
-        "remaining_integration": "Independent completion only; no current selection/TTA/TEST path accepts this proof",
+        "remaining_integration": "Completion check only; final selection/TTA/TEST require the separate explicit adapter and fresh evidence",
     }
     snapshots = (
         (

@@ -37,5 +37,6 @@ actual VAL/TEST evaluation, final freeze, default promotion or operational sourc
 change was performed. The proposal still requires independent review and fresh
 source-bound evidence before actual curated final eligibility can be claimed.
 
-Actual evaluation-source SHA256 for this proposal source:
+Evaluation-source SHA256 at original proposal commit `13c3ae9`, before the
+action-scoped checker-message clarification follow-up:
 `3665df1838168e46ec6fb21dbf3af2d6318be4a11082ce21b42b45cb0b5ec613`.
