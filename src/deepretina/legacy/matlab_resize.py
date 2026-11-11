@@ -77,12 +77,16 @@ def imresize_nearest_mask(mask, shape):
         or not np.equal(dimensions, np.floor(dimensions)).all()
     ):
         raise ValueError("shape must contain two positive integers")
-    rows = np.floor((np.arange(int(dimensions[0])) + 0.5) * mask.shape[0] / dimensions[0]).astype(
-        np.int64
-    )
-    columns = np.floor(
-        (np.arange(int(dimensions[1])) + 0.5) * mask.shape[1] / dimensions[1]
-    ).astype(np.int64)
+    # Match the one-based inverse map used by MATLAB's resampling path.
+    # Reassociating this as (u - .5) * input / output changes half-pixel
+    # ties in float64 (e.g. 1152 -> 1005 at output row 838).
+    indices = []
+    for input_length, output_length in zip(mask.shape, dimensions):
+        scale = output_length / input_length
+        u = np.arange(1, int(output_length) + 1, dtype=np.float64)
+        position = u / scale + 0.5 * (1 - 1 / scale) - 1
+        indices.append(np.floor(position + 0.5).astype(np.int64))
+    rows, columns = indices
     return mask[
         np.clip(rows, 0, mask.shape[0] - 1)[:, None],
         np.clip(columns, 0, mask.shape[1] - 1)[None, :],
