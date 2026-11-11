@@ -1,0 +1,20 @@
+{
+  "feature_commit": "2476e4c71e35d5949da50043726e733ef78d8ee1",
+  "review_scope": "Read-only source and14 pure preprocessing/cache tests; no model forward",
+  "tests_passed": 14,
+  "tests_deselected": 6,
+  "seconds": 4.05,
+  "actual_GT_scored": false,
+  "TEST_evaluated": false,
+  "GPU_used": false,
+  "source_edited": false,
+  "finding": {
+    "status": "reported_to_author",
+    "files": [
+      "scripts/benchmark_strong_pipeline.py:155",
+      "scripts/benchmark_latency.py:150"
+    ],
+    "impact": "Future nonraw checkpoint silently receives raw tensor and omits full preprocessing cost; old RAW measurements unaffected"
+  },
+  "processed_cache_implemented_in_reviewed_snapshot": false
+}
