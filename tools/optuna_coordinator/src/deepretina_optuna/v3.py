@@ -269,6 +269,13 @@ def objective_metrics(metrics):
             c["end_to_end_correct"] <= c["correct"] <= c["scored_pixels"] <= c["eligible_pixels"],
             "Impossible conditional counts",
         )
+        artery, vein = p["channels"]["artery"], p["channels"]["vein"]
+        require(
+            c["end_to_end_correct"] == artery["tp"] + vein["tp"]
+            and c["eligible_pixels"] == artery["tp"] + artery["fn"] + vein["tp"] + vein["fn"]
+            and c["correct"] <= c["eligible_pixels"] - artery["fp"] - vein["fp"],
+            "Conditional AV and class-count evidence disagree",
+        )
         correct += c["correct"]
         scored += c["scored_pixels"]
     require(

@@ -42,7 +42,7 @@ def metrics(scale=1):
                 c["dice"] = v3._dice(c)
             c = p["av_conditional_counts"]
             c["correct"] = int(c["correct"] * scale)
-            c["end_to_end_correct"] = min(c["end_to_end_correct"], c["correct"])
+            c["end_to_end_correct"] = p["channels"]["artery"]["tp"] + p["channels"]["vein"]["tp"]
         for name, c in m["channels"].items():
             for key in ("tp", "fp", "fn", "valid_pixels"):
                 c[key] = sum(p["channels"][name][key] for p in m["per_photo"])
@@ -361,6 +361,7 @@ def test_artery_alone_can_be_objective_bottleneck():
         c["tp"] = int(old * 0.1)
         c["fn"] += old - c["tp"]
         c["dice"] = v3._dice(c)
+        p["av_conditional_counts"]["end_to_end_correct"] = c["tp"] + p["channels"]["vein"]["tp"]
     pooled = m["channels"]["artery"]
     for k in ("tp", "fp", "fn", "valid_pixels"):
         pooled[k] = sum(p["channels"]["artery"][k] for p in m["per_photo"])
@@ -395,3 +396,11 @@ def test_actual_last_binding_and_derived_evidence_tampering_rejected(
             q["last_validation_metrics_sha256"] = digest(m)
         with pytest.raises(ValueError):
             c.report(r)
+
+
+def test_conditional_av_cannot_disagree_with_actual_class_true_positives():
+    m = metrics()
+    row = next(p for p in m["per_photo"] if p["av_conditional_counts"]["end_to_end_correct"] > 0)
+    row["av_conditional_counts"]["end_to_end_correct"] -= 1
+    with pytest.raises(ValueError, match="class-count evidence"):
+        v3.objective_score(m)
