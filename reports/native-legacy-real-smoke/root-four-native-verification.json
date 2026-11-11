@@ -1,0 +1,202 @@
+{
+  "kind": "four_original_production_single_net_real_smoke_verification",
+  "scope": "one-epoch functional only; no new quality or all-data training claim",
+  "cases": {
+    "vessel": {
+      "architecture": {
+        "filters": 32,
+        "in_size": 3,
+        "out_size": 1,
+        "do": 0.0,
+        "depth": 4
+      },
+      "channels": [
+        "vessel"
+      ],
+      "steps": 2,
+      "coverage": {
+        "eligible_photos": 1,
+        "seen_photos": 1,
+        "eligible_annotation_records": 2,
+        "contributing_annotation_records": 2,
+        "photo_visits": {
+          "sha256:77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925": 2
+        },
+        "annotation_visits": {
+          "drive_21_training_vessels": 1,
+          "rite_21_training_av": 1
+        },
+        "counting": "actual selected-head support delivered to successful optimizer steps",
+        "all_eligible_annotations_contributed": true,
+        "all_eligible_photos_seen": true
+      },
+      "changed_parameter_tensors_vs_same_seed_fresh": 74,
+      "reloaded_real_TRAIN_crop_finite_shape": [
+        1,
+        1,
+        64,
+        64
+      ],
+      "last_sha256": "8aaf75ea0f6967611488c78c9e29cca7a85c4e8c6027ee15b9c8fc756b8997df",
+      "finite_model_and_optimizer": true,
+      "actual_exit": {
+        "kind": "actual_external_native_vessel_real_CPU_smoke_exit",
+        "observed_returncode": true,
+        "returncode": 0,
+        "elapsed_seconds": 42.55642905202694,
+        "peak_RSS_KiB": 1318536,
+        "stop_reason": null,
+        "final_quality_or_full_data_training": false
+      }
+    },
+    "disc": {
+      "architecture": {
+        "filters": 32,
+        "in_size": 3,
+        "out_size": 1,
+        "do": 0.0,
+        "depth": 4
+      },
+      "channels": [
+        "disc"
+      ],
+      "steps": 1,
+      "coverage": {
+        "eligible_photos": 1,
+        "seen_photos": 1,
+        "eligible_annotation_records": 1,
+        "contributing_annotation_records": 1,
+        "photo_visits": {
+          "sha256:09d878203a87c968f5540f1371ee50ae1ccb495b43f10be601f2929e595f70d4": 1
+        },
+        "annotation_visits": {
+          "drishti_drishtiGS_002_disc_cup": 1
+        },
+        "counting": "actual selected-head support delivered to successful optimizer steps",
+        "all_eligible_annotations_contributed": true,
+        "all_eligible_photos_seen": true
+      },
+      "changed_parameter_tensors_vs_same_seed_fresh": 74,
+      "reloaded_real_TRAIN_crop_finite_shape": [
+        1,
+        1,
+        64,
+        64
+      ],
+      "last_sha256": "d7e61c6a9e99eadf71afcf08fc14ff33499270800d25a82ec658f53ac44ef645",
+      "finite_model_and_optimizer": true,
+      "actual_exit": {
+        "kind": "actual_external_native_real_CPU_smoke_exit",
+        "preset": "disc",
+        "observed_returncode": true,
+        "returncode": 0,
+        "elapsed_seconds": 12.021989170927554,
+        "peak_RSS_KiB": 734680,
+        "stop_reason": null,
+        "final_quality_or_full_data_training": false
+      }
+    },
+    "disc256": {
+      "architecture": {
+        "filters": 32,
+        "in_size": 3,
+        "out_size": 1,
+        "do": 0.0,
+        "depth": 4
+      },
+      "channels": [
+        "disc"
+      ],
+      "steps": 1,
+      "coverage": {
+        "eligible_photos": 1,
+        "seen_photos": 1,
+        "eligible_annotation_records": 1,
+        "contributing_annotation_records": 1,
+        "photo_visits": {
+          "sha256:09d878203a87c968f5540f1371ee50ae1ccb495b43f10be601f2929e595f70d4": 1
+        },
+        "annotation_visits": {
+          "drishti_drishtiGS_002_disc_cup": 1
+        },
+        "counting": "actual selected-head support delivered to successful optimizer steps",
+        "all_eligible_annotations_contributed": true,
+        "all_eligible_photos_seen": true
+      },
+      "changed_parameter_tensors_vs_same_seed_fresh": 74,
+      "reloaded_real_TRAIN_crop_finite_shape": [
+        1,
+        1,
+        64,
+        64
+      ],
+      "last_sha256": "d8c91b19f3669964d0aefa4508241619fcf90ded884bbf4231e00af5ff56ed1e",
+      "finite_model_and_optimizer": true,
+      "actual_exit": {
+        "kind": "actual_external_native_real_CPU_smoke_exit",
+        "preset": "disc256",
+        "observed_returncode": true,
+        "returncode": 0,
+        "elapsed_seconds": 13.019721529912204,
+        "peak_RSS_KiB": 965620,
+        "stop_reason": null,
+        "final_quality_or_full_data_training": false
+      }
+    },
+    "universal": {
+      "architecture": {
+        "filters": 32,
+        "in_size": 3,
+        "out_size": 3,
+        "do": 0.0,
+        "depth": 4
+      },
+      "channels": [
+        "vessel",
+        "disc",
+        "cup"
+      ],
+      "steps": 3,
+      "coverage": {
+        "eligible_photos": 2,
+        "seen_photos": 2,
+        "eligible_annotation_records": 3,
+        "contributing_annotation_records": 3,
+        "photo_visits": {
+          "sha256:77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925": 2,
+          "sha256:09d878203a87c968f5540f1371ee50ae1ccb495b43f10be601f2929e595f70d4": 1
+        },
+        "annotation_visits": {
+          "drive_21_training_vessels": 1,
+          "drishti_drishtiGS_002_disc_cup": 1,
+          "rite_21_training_av": 1
+        },
+        "counting": "actual selected-head support delivered to successful optimizer steps",
+        "all_eligible_annotations_contributed": true,
+        "all_eligible_photos_seen": true
+      },
+      "changed_parameter_tensors_vs_same_seed_fresh": 74,
+      "reloaded_real_TRAIN_crop_finite_shape": [
+        1,
+        3,
+        64,
+        64
+      ],
+      "last_sha256": "1a7324704902b8547d1e91643b365f2ec3c4cd2499255e7d4d6f1e75207319d8",
+      "finite_model_and_optimizer": true,
+      "actual_exit": {
+        "kind": "actual_external_native_real_CPU_smoke_exit",
+        "preset": "universal",
+        "observed_returncode": true,
+        "returncode": 0,
+        "elapsed_seconds": 44.06465921201743,
+        "peak_RSS_KiB": 1199484,
+        "stop_reason": null,
+        "final_quality_or_full_data_training": false
+      }
+    }
+  },
+  "subset_fingerprint_after": "560fa031276c92932636ecfc6eddb91541c5b31eab10e6b08d025f718c4e9716",
+  "cuda_initialized": false,
+  "TEST_evaluation": false
+}

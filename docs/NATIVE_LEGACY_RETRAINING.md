@@ -182,3 +182,12 @@ checkpoints and produce finite native logits. Production default metadata/shapes
 masked gradients, observer pairing, coverage, heldout isolation, constant-channel
 rejection and geometry-policy capture are checked. No real corpus, GPU training,
 TEST scoring, active frozen source or bundled model is modified by this change.
+
+An additional [real-data functional check](../reports/native-legacy-real-smoke/README.md)
+now runs the exact production vessel320, disc192, disc256 and universal288 presets
+for one epoch on a separate four-photo TRAIN/VAL subset. All four completed actual
+optimizer updates and full-frame VAL, saved/reloaded finite checkpoints and changed
+parameters versus their same-seed fresh initialization. No custom small architecture,
+original-weight initialization or TEST input was used. This is a bounded code-path
+check, not full-corpus retraining or evidence of model quality. Real full-frame A/V
+verification remains separate and pending.
