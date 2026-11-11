@@ -108,3 +108,20 @@ with a fresh output path and these additional arguments:
 
 The flags extend only `scripts/audit_sampling_exposure.py`, an analysis helper.
 They are not training CLI settings and do not implement a production sampler.
+
+## Shared verified TRAIN task flags
+
+`taskflags.json` retains the last TRAIN-only scan's reusable per-record task
+availability, with manifest/index/frozen-source pins. It contains5,700 records
+and no images, masks, coordinates, logits or GT arrays. Exact file-byte SHA256:
+`62a4dd1497b8455ac499952b1191fd7fee1e72f4913f8c2ae492ced088049c17`.
+The adjacent sidecar and provenance record pin the file, support-only semantics,
+CPU/IO limits and final26.96-second scan. This was the last repeated label scan;
+further sampler metadata checks should reuse these flags and the pinned manifest.
+
+The research helper can produce this artifact with `--task-flags-output PATH`.
+The output is exclusively created, tied to the same input byte pins, and restricted
+to eligible TRAIN IDs. A fixture includes a nonexistent heldout mask to ensure
+that export does not decode it. Metadata export does not update any production
+sampler or model. Grouping/photo/source identity still comes from the byte-pinned
+manifest, not inferred from record-name prefixes.
