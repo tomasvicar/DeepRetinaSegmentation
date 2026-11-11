@@ -41,6 +41,21 @@ internal VAL score is not used as a model-quality claim. Six observations do not
 establish optimality.
 [Native continuation provenance](../reports/tpe72-completed-fresh-val/next-native-TPE-proposal).
 
+At17:35UTC the same actual Ada run had completed E18/36,864 updates; its
+observer, supervisor and NN were independently observed alive. This remains
+unfinished training, not a new quality result.
+
+A fresh native V3 trial4 BEST54 validation sweep actually started on the local
+GTX1060 at17:37:11UTC. Four modes (none/flips2/rot4/dihedral8) each evaluate all770
+VAL photos under final source318e342, FP32, tile512/overlap64 and threshold.5.
+Its unchanged5400s envelope includes60s cleanup reserve; LAST60 none is optional
+only if budget permits. This is separate from the completed first-TPE sweep
+below. No result or completion is claimed yet. Original pool completion evidence
+is preserved; no standalone receipt is fabricated. The
+[reviewed TTA selection route](FINAL_SELECTION_TTA.md) binds the exact inference
+descriptor to fresh validation and later frozen execution. No selection or
+TEST evaluation has been performed by adding that route.
+
 The separate [TPE BEST58 TTA sweep](../reports/tpe72-inference-tta-val) completed
 all four770-VAL cases with observed child and parent exits0, unchanged inputs and
 read-only reports. Fresh same-device none macro.810897 improved to.815087 with
