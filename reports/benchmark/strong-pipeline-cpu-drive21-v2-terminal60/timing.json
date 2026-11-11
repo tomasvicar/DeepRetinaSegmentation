@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "accuracy_claim": false,
+  "scope": "one raw photo, CPU preprocessing + model inference + original-frame mask restoration; excludes file IO/model loading",
+  "script_sha256": "3a0324e09c128b36381b1ab219c88c8f10e06090918c10023901588da7ac1aae",
+  "input_sha256": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+  "fov_sha256": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7",
+  "input_shape": [
+    584,
+    565,
+    3
+  ],
+  "dataset": "drive",
+  "field_of_view_degrees": null,
+  "device": "cpu",
+  "device_name": "",
+  "torch": "2.6.0+cu124",
+  "cpu_threads": 1,
+  "original": {
+    "checkpoint_sha256": {
+      "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+      "disc": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+      "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "av": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b"
+    },
+    "reference_sha256": "528233fe50876b15f127f8567fc43d7b8a34a8713cfceff54f02956a0a0bfa2c",
+    "reference_manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+    "reference_prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
+    "quality_reference_gt_policy": "Untouched historical non-cup components; separately labelled fresh-native or same-forward clipped cup; historical native numeric drift logged separately",
+    "disc_variant": "disc0/raw",
+    "cup_policy": "inside-disc",
+    "cup_decoding": "native universal/raw strictlogit>0 intersect same-forward selected dedicated raw disc strictlogit>0 before nearest restoration",
+    "quality_reference_cup_policy": "inside-disc",
+    "parameters": 5943312,
+    "checkpoint_bytes": 25068700,
+    "av_profile": "vesclass_matlab_provided_fov_calibrated",
+    "timing": {
+      "seconds": [
+        61.22781012393534,
+        60.01321833697148,
+        60.577180969994515
+      ],
+      "median_seconds": 60.577180969994515,
+      "baseline_allocated_bytes": null,
+      "peak_allocated_bytes": null,
+      "peak_working_bytes": null,
+      "warmup_calls": 1,
+      "measured_calls": 3
+    }
+  },
+  "unified": {
+    "threshold": 0.5,
+    "checkpoint_sha256": "10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2",
+    "parameters": 1106597,
+    "checkpoint_bytes": 14385264,
+    "config": {
+      "architecture": "compact_unet",
+      "legacy_initialization": null,
+      "allow_historical_exposure": false,
+      "preprocessing_profile": "legacy25_raw",
+      "pixels_per_degree": 25.0,
+      "epochs": 60,
+      "epoch_samples": 8192,
+      "coverage_first": true,
+      "batch_size": 4,
+      "patch_size": 384,
+      "base_channels": 12,
+      "depth": 4,
+      "norm": "batch",
+      "lr": 0.0003,
+      "weight_decay": 1e-05,
+      "scheduler": "cosine",
+      "min_lr_ratio": 0.05,
+      "seed": 42,
+      "workers": 2,
+      "device": "cuda:0",
+      "sampling": "dataset_task_balanced",
+      "train_view": "patch",
+      "view_size": 512,
+      "foreground_probability": 0.5,
+      "augmentation": "mild",
+      "bce_weight": 1.0,
+      "dice_weight": 1.0,
+      "av_weight": 1.0,
+      "vessel_loss_weight": 1.0,
+      "vessel_pos_weight": 1.0,
+      "tile_size": 512,
+      "overlap": 64,
+      "require_all_heads": true,
+      "selection_metric": "macro_dataset_mean_dice",
+      "purpose": "full_data",
+      "max_steps": null
+    },
+    "checkpoint_epoch": 60,
+    "timing": {
+      "seconds": [
+        5.4591798761393875,
+        5.442199445096776,
+        5.429427380906418
+      ],
+      "median_seconds": 5.442199445096776,
+      "baseline_allocated_bytes": null,
+      "peak_allocated_bytes": null,
+      "peak_working_bytes": null,
+      "warmup_calls": 1,
+      "measured_calls": 3
+    }
+  },
+  "limitations": [
+    "One photograph cannot establish general speed or quality; repeat on representative geometries",
+    "Historical original exposure and preprocessing provenance remain unresolved",
+    "Calibrated AV photometry retains documented numerical residuals",
+    "Original single-net preparation is shared across three networks; individual native tiles are retained",
+    "Original threshold is strict logit>0, AV retains original tie0; declared optional cup policy is identical in selected quality reference and timed pipeline",
+    "Inside-disc is an added postprocessing variant, not a modification of original weights/defaults; completed paired VAL evidence includes TP losses and backend numeric drift",
+    "Unified retains its configured inference geometry, vessel gating and cup containment",
+    "Torch CUDA allocation excludes external/process memory; other CPU/GPU load affects timings",
+    "Checkpoint epoch/purpose do not establish final model selection or sufficient convergence"
+  ]
+}
