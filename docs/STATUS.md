@@ -27,9 +27,16 @@ Nové trénování původních architektur má také [kontrolu na skutečných d
 vessel320, disc192, disc256 a universal288 dokončily po jedné epoše na samostatné
 čtyřfotografové TRAIN/VAL podmnožině, se skutečnými aktualizacemi parametrů,
 celosnímkovou validací a ověřeným načtením checkpointů. Nejde o plné přeučení ani
-měření kvality. Celosnímkový A/V pokus na CPU zastavil limit RSS3GiB; úspěšná
-kontrola A/V na skutečných datech čeká na vhodné volné GPU. Původní váhy,
-produkční architektury, konfigurace a počet dvanácti dodávaných modelů zůstaly stejné.
+měření kvality. Celosnímkový A/V pokus na CPU zastavil limit RSS 3 GiB; tento
+neúspěšný výsledek zůstává zachovaný. Následný samostatný běh na GTX1060 6GB
+skutečně dokončil jeden FP32 krok na plném TRAIN snímku a celosnímkovou VAL,
+poté bezpečné načtení a konečné CUDA výstupy; všech 54 parametrických tenzorů
+se změnilo proti čerstvé inicializaci se stejným seedem. Všech pět nativních
+presetů tak má funkční kontrolu na reálných datech. A/V pokrývá jedinou vhodnou
+TRAIN fotografii/anotaci, nikoli celý korpus; paměťový peak je pouze z verifikace,
+ne z trénování. [Podrobný GPU důkaz](../reports/native-legacy-real-smoke/av-GPU-functional-proof.json).
+Původní váhy, produkční architektury, konfigurace a počet dvanácti dodávaných
+modelů zůstaly stejné; jednokrokové kontrolní váhy se nevydávají.
 
 Každá predikce vyžaduje nový nebo prázdný výstupní adresář. Opakované použití
 zaplněného adresáře nyní skončí před načtením modelu a nezmění dřívější soubory;
