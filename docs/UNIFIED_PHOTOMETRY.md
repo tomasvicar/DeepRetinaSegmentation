@@ -127,3 +127,9 @@ RNG path. Keep inference tile 512 / overlap 64 and threshold 0.5 fixed. Current
 TPE patch 384/raw is a reference candidate; neither patch nor photometry was
 optimized by its six-parameter search. Any GPU-hour estimate remains provisional
 until the precomputed-cache pipeline is admitted and a complete epoch is measured.
+
+The two older raw-photo latency protocols (`benchmark_latency.py` and
+`benchmark_strong_pipeline.py`) now explicitly refuse nonraw profiles. They must
+not silently benchmark raw inputs for a photometric model or omit transformation
+cost. A future cache-aware timing protocol needs separate review; existing raw
+model timing results are unaffected.

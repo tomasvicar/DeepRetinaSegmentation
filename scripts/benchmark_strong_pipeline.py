@@ -16,7 +16,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
-from benchmark_latency import measure
+from benchmark_latency import measure, require_raw_photometry
 from PIL import Image
 
 from deepretina.inference import resolve_device
@@ -153,6 +153,7 @@ def original_operation(rgb, fov, models, av, device, kwargs, *, cup_policy="nati
 
 
 def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5):
+    require_raw_photometry(vars(config))
     prepared = prepare_single_net(rgb, fov=fov, normalized=False, **kwargs)
     image = torch.from_numpy(prepared.image.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(

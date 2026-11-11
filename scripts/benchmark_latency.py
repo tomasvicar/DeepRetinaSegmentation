@@ -32,6 +32,14 @@ from deepretina.unified import (
 )
 
 
+def require_raw_photometry(settings):
+    """Existing latency protocols are raw-only; never silently skip photometry."""
+    if settings.get("photometric_profile", "raw") != "raw":
+        raise ValueError(
+            "This benchmark supports raw photometry only; nonraw needs a reviewed full-image photometry timing protocol"
+        )
+
+
 def file_sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -145,6 +153,7 @@ def benchmark(
     if device.type == "cuda":
         torch.cuda.empty_cache()
     model, payload, _ = load_unified(unified_path, device)
+    require_raw_photometry(payload["config"])
 
     @torch.inference_mode()
     def unified():

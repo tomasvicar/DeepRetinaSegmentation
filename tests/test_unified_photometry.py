@@ -410,3 +410,28 @@ def test_failed_augmented_crop_falls_back_to_same_photometric_native_image(corpu
         / 255
     )
     assert torch.equal(image, full[:, 20:52, :32]) and valid.any()
+
+
+@pytest.mark.parametrize("profile", p.PROFILES[1:])
+def test_older_latency_protocols_fail_closed_instead_of_skipping_photometry(profile, monkeypatch):
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).parents[1] / "scripts"))
+    import benchmark_latency as latency
+    import benchmark_strong_pipeline as strong
+
+    with pytest.raises(ValueError, match="raw photometry only"):
+        latency.require_raw_photometry({"photometric_profile": profile})
+
+    def forbidden(*a, **k):
+        raise AssertionError("nonraw benchmark reached preparation or NN")
+
+    monkeypatch.setattr(strong, "prepare_single_net", forbidden)
+    monkeypatch.setattr(strong, "predict_probabilities", forbidden)
+    with pytest.raises(ValueError, match="raw photometry only"):
+        strong.unified_operation(
+            None, None, None, u.UnifiedConfig(photometric_profile=profile), "cpu", {}
+        )
+    latency.require_raw_photometry({})
+    latency.require_raw_photometry({"photometric_profile": "raw"})
