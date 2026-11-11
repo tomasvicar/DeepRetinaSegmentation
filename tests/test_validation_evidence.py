@@ -10,9 +10,10 @@ from pathlib import Path
 import numpy as np
 import pytest
 import torch
+from test_unified_selection import case as _canonical_case
+
 from deepretina import selection as gate
 from deepretina import validation_evidence as producer
-from test_unified_selection import case as _canonical_case
 
 case = _canonical_case  # Reuse the canonical fixture without its module's no-forward guard.
 
@@ -285,3 +286,23 @@ def test_snapshot_is_read_once_and_all_loads_are_safe(case, tmp_path, monkeypatc
     produce(case, tmp_path)
     assert calls == [case["checkpoint"]]
     assert flags == [True, True]
+
+
+@pytest.mark.parametrize("tta", ["flips2", "rot4", "dihedral8"])
+def test_tta_report_is_explicit_experiment_and_rejected_for_standalone_selection(
+    case, tmp_path, tta
+):
+    result = produce(case, tmp_path, tta=tta)
+    assert result["kind"] == "experimental_unified_tta_validation_evidence"
+    assert result["inference_protocol"]["tta"] == result["metrics"]["tta"]
+    assert result["inference_protocol"]["tta"]["mode"] == tta
+    assert result["inference_protocol"]["tta"]["original_standalone_certification"] is False
+    inputs = {**case, "validation_evidence": tmp_path / "fresh-val.json"}
+    with pytest.raises(gate.SelectionError, match="evidence"):
+        gate.create_selection(
+            output=tmp_path / "selection.json",
+            reviewer="synthetic reviewer",
+            rationale="fixture only",
+            **inputs,
+        )
+    assert not (tmp_path / "selection.json").exists()

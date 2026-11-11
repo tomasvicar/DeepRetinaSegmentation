@@ -18,6 +18,7 @@ def main(argv=None):
     parser.add_argument("--threshold", type=float, default=0.5)
     parser.add_argument("--tile-size", type=int)
     parser.add_argument("--overlap", type=int)
+    parser.add_argument("--tta", choices=["none", "flips2", "rot4", "dihedral8"], default="none")
     parser.add_argument("--photometry-cache")
     parser.add_argument("--expected-photometry-cache-fingerprint")
     args = parser.parse_args(argv)
@@ -33,6 +34,7 @@ def main(argv=None):
             threshold=args.threshold,
             tile_size=args.tile_size,
             overlap=args.overlap,
+            **({"tta": args.tta} if args.tta != "none" else {}),
             **(
                 {
                     "photometry_cache_root": args.photometry_cache,
