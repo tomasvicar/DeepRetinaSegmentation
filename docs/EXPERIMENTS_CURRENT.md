@@ -1,144 +1,166 @@
-# Current full-data experiments
+# Current full-data research evidence
 
-Snapshot: **2026-11-11, 12:40 UTC**. This is a record of observed results and
-prepared next steps, not proof that a process is still running. The final
-optimized model and held-out TEST comparison are **not finished**.
+Snapshot: **2026-11-11, 15:05 UTC access observation**, with completed reports
+reviewed for this update. A last observed scheduler state is not a claim about
+current execution. The final optimized model, selection freeze and held-out TEST
+comparison are **not finished**. No released default is changed by this overview.
 
-## Use the released models
+## Product and common data
 
-For installation, prediction and original verified models, use
-[`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig).
-It includes the original five checkpoints and explicitly identified unified
-baselines/previews. Installation uses `uv`; inference needs no MATLAB.
-This research branch is not a substitute for the product branch.
+Use [`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig)
+for installation, prediction and the original verified checkpoints plus explicitly
+identified unified baselines/previews. This research branch is separate. Inference
+needs no MATLAB. The original stored-input arithmetic is numerically checked;
+calibrated raw A/V retains measured photometric differences and unresolved
+historical training-file exposure. See the product's `docs/MATLAB_AV_PROFILE.md`.
 
-The original models remain the quality reference. The original stored-input
-arithmetic is numerically checked. The calibrated Python raw A/V profile has
-measured MATLAB references and saved-model sensitivity checks, with remaining
-photometric differences and unresolved historical training-file provenance.
-See the product branch's `docs/MATLAB_AV_PROFILE.md`.
+Canonical V2 has **2,529 TRAIN photographs / 5,700 annotation records from21
+sources**, **770 VAL** photographs and856 TEST photographs. Supported annotations
+alone supervise each output. Recovered patient/photo aliases remain grouped;
+unknown patient identity is not thereby resolved. No new TEST evaluation is
+reported here. Conditional A/V accuracy scores reference class-labeled vessel
+pixels and does not measure vessel discovery by itself.
 
-## Data and completed comparisons
+## Completed full60 models: keep roles and evidence distinct
 
-The current V2 preparation contains **2,529 TRAIN photos / 5,700 annotation
-records from 21 sources**, 770 VAL photos and 856 TEST photos. Partially labeled
-records supervise only their supported outputs. Splits retain recovered
-patient/alias groups; collections without recoverable patient identity are
-TRAIN-only. This does not establish complete patient independence or resolve
-the original models' unknown historical exposure.
+| Model and role | VAL evidence | Macro dataset Dice | Pooled vessel Dice | Conditional AV |
+| --- | --- | ---: | ---: | ---: |
+| V3 control0 BEST59 | Saved native counts, typed pool eligibility | .801281 | .760570 | .801055 |
+| V3 control0 LAST60 | Saved native counts, typed pool eligibility | .801188 | .758714 | .808460 |
+| V3 trial4 BEST54 | Saved native counts, typed pool eligibility | .815057 | .763145 | .823922 |
+| V3 trial4 LAST60 | Saved native counts, typed pool eligibility | .804570 | .750500 | .823318 |
+| Auxiliary TPE candidate BEST58 | Independently fresh VAL770 | .810895 | .762882 | .824912 |
+| Auxiliary TPE candidate LAST60 | Independently fresh VAL770 | .808833 | .760803 | .821755 |
 
-| Model role | Full training | Fresh VAL pooled vessel Dice | Fresh VAL conditional A/V accuracy |
-| --- | --- | ---: | ---: |
-| Original reference | Historical training unavailable | 0.77012340 | 0.74856642 |
-| V2 control LAST E60 | All 2,529 photos / 5,700 records | 0.75047217 | 0.78803663 |
-| Vascular sampling2 LAST E60 | All 2,529 photos / 5,700 records | 0.75622289 | 0.80210746 |
-| Vascular sampling2 BEST E59 | Completed E60 run; BEST itself covers all records | 0.75671283 | 0.81025700 |
-| Vascular sampling4 LAST E60 | All 2,529 photos / 5,700 records | 0.75318596 | 0.82312537 |
-| Vascular sampling4 BEST E55 | Completed E60 run; BEST itself covers all records | 0.76038707 | 0.82288321 |
+Both V3 runs genuinely completed60 with their own full5,700-annotation/2,529-photo
+coverage in BEST and LAST. Their [typed eligibility](../reports/v3-control0-final60-eligibility)
+and [trial4 eligibility](../reports/v3-trial4-final60-eligibility) bind the original
+pool receipts, scheduler/trainer exits and source. Control0 LAST auditor exit is
+**unknown** despite its checked emitted proof; do not invent an observed0.
+Control0 BEST and both trial4 audits have separate observed0 exits. These saved
+native count views are **not** new enriched final-runtime evaluations.
+[All12 saved-count comparisons](../reports/v3-completed-native-val-comparison)
+retain support checks, source/head regressions and paired uncertainty.
 
-These roles are separate: `validation.json` beside the original training run is
-the BEST sidecar, not a fresh LAST evaluation. LAST-to-LAST is the matched-budget
-comparison. Artery/vein discrimination accuracy is conditional on the reference
-class-labeled vessel support; it does not by itself measure vessel discovery.
+The standalone [TPE candidate completed60 and received fresh BEST/LAST VAL770](../reports/tpe72-completed-fresh-val).
+Original trainer, generic completion QA, both fresh validation CLIs and their
+supervisor have observed0 exits. BEST58 and LAST60 each cover every selected
+annotation. The fixed27 post-startup proposal used five imported observations in
+six dimensions; this is actual native TPE, not evidence of convergence. Its
+[auxiliary Optuna trial now has a genuine COMPLETE27 proxy result](../reports/tpe72-completed-fresh-val/auxiliary-fixed27-result)
+(.97513476245,5,686/5,700 annotations at27, cosine horizon60). That bookkeeping
+value is neither the later full60 result nor macro-BEST; the main V3 study was
+not modified and no additional proposal was asked.
 
-Evidence: [corrected original VAL](../reports/frozen-original-val-nearest),
-[control terminal VAL](../reports/v2-control60-terminal-val), and
-[vascular2 paired VAL](../reports/vascular2-paired-val). The vascular2 LAST versus
-control LAST vessel Dice gain is 0.00575 (paired 95% interval
-[0.00226, 0.00934]); it still trails the original vessel model. These intervals
-describe the recorded validation groups, not seed variability or independence
-of every patient. No all-task improvement is claimed.
+Fresh TPE counts differ slightly from saved counts: LAST changes6 photos/7
+head-photo entries, macro−4.29046e−8; BEST changes5 photos/7 entries,
+macro−1.00598e−7. All GT supports and attribution remain exact. Actual fresh flags,
+cache/backend distinctions and integer deltas are disclosed; no counterfactual
+forward was run to assign a cause. Use the fresh counts for those fresh reports.
 
-Sampling4 also completed training, independent safe checkpoint checks and fresh
-LAST/BEST VAL. Its BEST versus sampling2 BEST vessel gain is 0.00367
-(paired 95% interval [0.00203, 0.00564]); conditional A/V improves by 0.01263.
-Macro gain has an interval crossing zero, while G1020 disc/cup regress.
-Sampling4 still trails the original vessel model and does not replace a
-released default. All eight matched-role comparisons, including adverse
-results, are in [the paired reports](../reports/vascular4-paired-val).
+The frozen original vessel reference is .77012340. Every V3/TPE vessel value above
+still falls below it. TPE BEST's vessel difference is−.007241 with exploratory
+paired95% interval[−.014591,−.000693]. Its macro difference against trial4 BEST is
+−.004162[−.012850,−.000147], while its LAST improves on trial4 LAST in vessel Dice.
+These are different roles/configurations/environments, not a causal single-factor
+experiment. A macro-BEST cannot replace the study's fixed-LAST worst-of-six
+objective. None establishes superiority over all original heads.
 
-Eight [thresholds](../reports/vascular2-thresholds) and TRAIN-only
-[BatchNorm recalibration](../reports/vascular2-bn-recalibration) were actually
-evaluated. Neither justified replacing the parent/default threshold0.5.
-Rejected changes remain documented. A bounded CPU benchmark of the shipped
-vascular2 BEST is in
-[the measured comparison](../reports/benchmark/strong-pipeline-cpu-drive21-vascular2-best59):
-6.03s versus63.32s resident median on one DRIVE TRAIN photo/one CPU thread,
-1.11M versus5.94M parameters. It is not a general throughput claim.
+Earlier [control LAST60](../reports/v2-control60-terminal-val),
+[vascular2 BEST/LAST](../reports/vascular2-paired-val),
+[vascular4 BEST/LAST](../reports/vascular4-paired-val), and the
+[corrected original](../reports/frozen-original-val-nearest) remain separate
+references. Sampling4 BEST55 improved vessel over sampling2 BEST59, but its macro
+interval crossed zero and G1020 disc/cup regressed. The
+[threshold study](../reports/vascular2-thresholds) and
+[TRAIN-only BatchNorm recalibration](../reports/vascular2-bn-recalibration) did not
+justify a new default. The single-photo
+[CPU benchmark](../reports/benchmark/strong-pipeline-cpu-drive21-vascular2-best59)
+is a scoped latency/size measurement, not general throughput or quality evidence.
 
-## Current search and frozen source families
+## Completed inference experiments on the same vascular4 BEST55
 
-| Family | Frozen source | Scientific role |
-| --- | --- | --- |
-| Vascular sampling2/4 | `0b8762e667c997a2dfd129dc65988c1f26f6b2ad` | FP32, width12/depth4/BatchNorm, mild augmentation; weight4 changes only vascular sampling relative to weight2 |
-| V3 adaptive | `72fb321187eca517823083aca80cedace9605570` | Native CUDA BF16 training; FP32 parameters/loss/VAL/inference; width12/16, BatchNorm/GroupNorm, basic/mild/strong augmentations, LR, weight decay and vascular sampling search |
-| Native Optuna core | `8777d6cca60f7ced08798ad2af7fabf626421d05` | Typed rung validation, native Optuna5 TPE and staged promotion |
+The [four tiling protocols](../reports/vascular4-inference-tiling-val) completed on
+all770 VAL photographs with observed child and parent exits0. None had a macro
+interval excluding zero;1024/256 reduced vessel Dice by .00075635 with an entirely
+negative paired interval. No tiling default was promoted.
 
-All new full-budget runs retain 60 epochs ×8,192 samples, batch4, patch384,
-seed42 and the original 60-epoch cosine horizon. The live V3 study uses epochs
-3/9 as diagnostics, first pruning at27 and final60, with protected control.
-The source72 configuration fields are not supported by this branch's older
-trainer merely because this overview is present: execute from the specified
-frozen source and its own dependencies. Do not alter a live checkout to make
-an old loader accept a new checkpoint. Product BF16 compatibility has now passed
-an actual independent native CUDA synthetic training-step parity check on Ada;
-this does not establish full-training quality or general GPU equivalence.
+The separate [spatial TTA experiment](../reports/inference-tta-vascular4) also
+completed all four cases with observed child/parent exits0, unchanged inputs and
+read-only reports. FP32, tile512/overlap64, threshold.5, one GTX1060, CPU2/inter-op1:
 
-At this snapshot two MetaCentrum allocations remain running: protected control
-and trial4, both continuing beyond validated E27 toward E60. Three other
-qualified E27 configurations were genuinely pruned; their allocations ended.
-Those main-study suggestions were **startup exploration**, not learned TPE.
-The own-Ada sampling4 run is complete. Exact access scripts, PBS job handles, allocation
-usage and failure records are kept in the private `metacentrum-workflows` repo.
+| Mode | Macro Dice | Change vs fresh none [paired95% CI] | Conditional AV | Invocation seconds |
+| --- | ---: | --- | ---: | ---: |
+| none | .805973 | reference | .822879 | 204.60 |
+| flips2 | .809128 | +.003156[.001669,.004872] | .829177 | 324.17 |
+| rot4 | .812370 | +.006397[.004181,.008699] | .834518 | 553.15 |
+| dihedral8 | .813082 | +.007110[.004973,.009423] | .835442 | 1001.73 |
 
-## Next TPE stage and final selection
+All five pooled and macro-head point estimates improved, but DRHAGIS AV regressed
+in every ensemble. Dihedral8 artery difference is−.000791
+[−.024093,.012267], vein−.003535[−.012605,.009922], with3 supported
+photos/groups and1,951 defined draws. Those adverse outcomes accompany the gain.
+Full-frame preparation/photometry occurs once; inverse-aligned **joint** AV,
+vessel, disc and cup probabilities are averaged before conditional recovery.
+Fresh none matches the prior same-device512/64 count/support traces and protocol;
+no raw mask/probability bitwise claim is made. Fixed order/warm filesystem qualifies
+timing. TTA source/API remains on the separate
+[`experiment/inference-tta-science` branch](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiment/inference-tta-science);
+this branch imports **reports only**, not that feature. Default remains `none`.
+No TTA result is retagged as original-protocol standalone certification.
 
-The main study requires eight COMPLETE/PRUNED startup observations. RUNNING and
-failed trials do not satisfy that requirement. Its time budget cannot justify
-calling startup suggestions optimized models.
+## Patch/photometry preparation and last observed scheduler state
 
-A [separate fixed27 proposal](../reports/fixed27-proposal) was actually made
-after verifying Ada was free. It imported all five then-available unique
-qualified E27 LAST observations, including promoted controls, into a new native
-Optuna5 study, and made one post-startup TPE proposal across the original
-six-parameter space with startup4. Parent trial states and the live scientific
-protocol stayed unchanged. This proposal has been training on Ada since
-10:53 UTC: width16/depth4/BatchNorm, basic augmentation, learning rate
-0.000287722894608172, weight decay 0.00000552164819184925 and vascular sampling
-weight 2.553934065831788. It passed the pinned partial E27 checks and resumed
-the same run toward E60. At E27 only 5,686 annotation variants had contributed;
-partial success does not make this a final eligible model.
-Four or five observations in six dimensions are weak evidence, not proof of
-optimality.
+The [controlled five-arm plan](../reports/patch-photometry-study) fixes the TPE
+configuration, batch4 and60×8,192 samples: raw patches256/384/512, plus384 HSV
+CLAHE and384 illumination correction+CLAHE. Samples/updates are matched; pixel
+exposure, context, memory and compute are not. This historical design document
+predates the subsequent completed builds/submissions recorded below.
 
-The proposal must receive a fresh complete60 run. A stop/resume at27 must keep
-the configuration's `epochs=60`, scheduler horizon and RNG state; a partial27
-completion cannot pass the full-model completion gate. Final eligibility needs
-genuine terminal60, finite weights/optimizer, all5,700 annotation contributions
-in the selected role, independent fresh VAL and correct source/QA bindings.
-Freeze the checkpoint, thresholds and inference protocol before TEST. Do not
-retag a source-specific completion receipt as another model family or select
-on TEST results. The objective remains a better simple unified model alongside
-the original verified models, with measured quality, size and speed.
+Both complete **3,299-photo TRAIN/VAL** caches and encoded archives are now built
+and verified from frozen `fd44cdf`, with actual builder/archive exits0 and
+unchanged canonical metadata. Cache fingerprints are
+`b5e781330d2e28b65d70301384fe1e841b64f0e8f631fe04dac3381847664ec2`
+(CLAHE) and `b2e42864c0e53b8fec30f55114e30f1ebbb624dd7fbefeccd31c7206cc324b01`
+(illumination+CLAHE). The [implementation review](../reports/photometry-cache-root-review-20261111)
+is earlier implementation evidence; subsequent operational completion proof is
+retained privately (summary SHA
+`75389c22e9b535f82a0ce35d7c926027156b3ffea72c5e33124250cdd09d1a54`).
+Cache construction is not measured training quality or loader-speed benefit.
 
-## Controlled patch and photometry study
+All five scheduler submissions were accepted with observed submission exit0 and
+were **last jointly observed Q at14:07 UTC**. Raw512 was separately observed Q at
+**14:51 UTC**. A **15:05 UTC** status attempt failed with SSH255 and expired
+credentials/server-connection error; it returned **no actual job state**. Current
+states are **unknown**, not asserted queued or running. No cancellation was
+attempted and no own-GPU raw512 fallback has started. Operator job handles,
+commands, allocation accounting and access-failure evidence remain in the private
+workflow repository. This documentation update performs no GPU or scheduler action.
 
-The current runs fix patch384 and raw25; they do not optimize these choices.
-The [next study plan](../reports/patch-photometry-study) fixes the actual TPE
-configuration above and batch4, comparing raw patches256/384/512 and, at
-patch384, HSV CLAHE and legacy illumination correction plus CLAHE. Each arm
-retains60×8192 samples and the same cosine horizon. Different patches still
-change pixel/context and compute budgets; these differences must be reported.
+## RAW35 remains a tiny TRAIN-only canary
 
-The opt-in full-frame Python operators are implemented on a separate branch.
-Their immutable TRAIN/VAL RGB cache and shared curated PBS runner are being
-verified; no full-corpus cache build or new patch/photometry training arm has
-been launched at this snapshot. The same operator must be used before TRAIN
-cropping and before VAL/raw inference tiling. A higher physical resolution
-requires re-preparation from RAW, not interpolation of the25ppd cache.
+The [separate RAW35 branch proof](https://github.com/tomasvicar/DeepRetinaSegmentation/blob/484145dc40117c39f46041d48c046b753870d4fd/reports/raw35-train-canary/README.md)
+completed a CPU-only canary on **3 TRAIN photographs /7 annotation rows**, with an
+observed owned child exit0. Exact frozen25 RGB/target/valid/FOV replay preceded
+native RAW→35 preparation. No VAL/TEST pixels, model, GPU or NN were accessed.
+This is not full-corpus35 preparation or native35 trainer/inference support.
+Current unified contracts remain strict25; resizing the25 cache would not add
+native information. A future35 comparison needs an explicit reviewed producer
+and a common frozen25/native VAL GT support grid, not retagged native35 supports.
 
-A separate bounded inference-only study is actually running on Old, using
-sampling4 BEST E55 and all770 VAL photos:512/64 baseline, then512/192,
-768/192 and1024/256. It tests inference tiling, not training patch size. Its
-original reports and actual exits will remain distinct from the original
-512/64 completion evidence. TEST remains unused during tuning.
+## Remaining decision and evidence limits
+
+Source0b vascular baselines, source72 V3/TPE and sourcefd44 photometry are distinct
+frozen families. Execute each from its declared source/runtime; an overview does
+not make an older trainer support new checkpoint fields. Do not alter live or
+frozen checkouts to accommodate a different family.
+
+All paired intervals above are exploratory source-stratified percentile intervals
+from2,000 shared draws, seed42, resampling612 known split groups. Repeated adaptive
+VAL tuning, uncorrected multiple comparisons, unknown patient independence,
+historical original-model exposure and cross-backend numerical differences limit
+interpretation. No training-seed uncertainty or clinical generalization is shown.
+Finish and audit actual arms, retain all heads/sources and adverse outcomes, then
+freeze the selected checkpoint/threshold/inference protocol before the separate
+reviewed TEST gate. No final selection, TEST permission or release promotion is
+created by this snapshot.
