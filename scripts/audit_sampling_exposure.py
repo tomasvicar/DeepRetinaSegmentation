@@ -198,6 +198,11 @@ def main():
         action="store_true",
         help="Six predeclared analytic scenarios; no runtime sampling changes",
     )
+    p.add_argument(
+        "--task-flags-output",
+        type=Path,
+        help="Save reusable TRAIN-only task metadata; no label arrays",
+    )
     p.add_argument("--reference-report", type=Path)
     p.add_argument("--expected-reference-sha256")
     a = p.parse_args()
@@ -206,6 +211,10 @@ def main():
     start = time.monotonic()
     if a.output.exists():
         raise FileExistsError(a.output)
+    if a.task_flags_output and (
+        a.task_flags_output.exists() or a.task_flags_output.resolve() == a.output.resolve()
+    ):
+        raise FileExistsError(a.task_flags_output)
     raw = a.manifest.read_bytes()
     index_raw = (a.cache_root / "index.json").read_bytes()
     code = a.frozen_unified.read_bytes()
@@ -341,6 +350,20 @@ def main():
             for probability in (0.5, 0.75)
         ]
         result["elapsed_seconds"] = time.monotonic() - start
+    if a.task_flags_output:
+        task_metadata = {
+            "schema_version": 1,
+            "scope": "TRAIN-only record task availability; no GT arrays",
+            "manifest_sha256": sha(raw),
+            "cache_index_sha256": sha(index_raw),
+            "frozen_unified_sha256": sha(code),
+            "record_tasks": {key: sorted(value) for key, value in sorted(flags.items())},
+        }
+        with a.task_flags_output.open("x") as f:
+            json.dump(task_metadata, f, sort_keys=True, separators=(",", ":"), allow_nan=False)
+            f.write("\n")
+        result["train_task_flags_sha256"] = sha(a.task_flags_output.read_bytes())
+        result["train_task_flags_records"] = len(flags)
     with a.output.open("x") as f:
         json.dump(result, f, indent=2, allow_nan=False)
         f.write("\n")
