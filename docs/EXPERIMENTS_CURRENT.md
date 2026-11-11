@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11 21:20 UTC; TPE6 fresh VAL and LC BEST assessed; TPE7 training started**. Completed VAL and
+Snapshot: **2026-11-11 22:06 UTC; TPE6 fresh VAL and LC BEST assessed; four training jobs still active**. Completed VAL and
 CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
 claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -61,7 +61,9 @@ The original03UTC start window was missed and its disabled packet/defer retained
 A separate explicitly reviewed own-Ada window ends04UTC/max12h, with the same
 326s/epoch+1800sQA+300scleanup conservative budget. Training actually started
 21:13:51UTC; GPU/config/intra8/inter1/workers8/BF16 were observed. E1/2048updates
-completed with finite loss and236.834s TRAIN+VAL. This is unfinished training,
+completed with finite loss and236.834s TRAIN+VAL. At22:06UTC the same observer,
+supervisor and trainer were live, with E13/26624 updates completed and finite
+loss/VAL. This is unfinished training,
 not a quality result. No extra Meta job, main-study mutation or TEST was used.
 
 The [native V3 trial4 BEST54 TTA sweep](../reports/v3-trial4-inference-tta-val)
@@ -101,7 +103,7 @@ conditionalAV.832471660. Against.5 vessel gains.001923150 with exploratory paire
 CI[.000349697,.003582857], while cup loses.00273378 with entirely negative CI.
 DRHAGIS/CHASE vessel and G1020/RIM disc also regress. Vessel still falls below
 the original.77012340 point reference; its difference interval crosses zero.
-This does not justify a default, final selection or TEST. A first-TPE BEST58
+This does not justify a default, final selection or TEST. The
 [first-TPE BEST58 rot4 threshold study](../reports/first-TPE-BEST58-rot4-threshold-20261111)
 completed all770 VAL with actual child/outer exits0. The declared worst-six rule
 chose.35: vessel.7694639263, macro.82209916, conditionalAV.8361133069.
@@ -146,7 +148,7 @@ No automatic retry, budget change, LAST metric or promotion is claimed. Full
 counts, descriptor/config, source adverse intervals and outcome are published.
 
 Raw384, raw512 and CLAHE384 remain unfinished; their last actual scheduler/progress
-snapshot20:27UTC was R/E39, R/E27 and R/E29. No new Meta job was submitted.
+snapshot21:57UTC was R/E56, R/E39 and R/E40. No new Meta job was submitted.
 Current elapsed scheduler time is not model quality, and unfinished arms are not
 ranked. Product `for_Leipzig` supports saved full-image photometry profiles without
 stripping config fields. Real TRAIN inference parity checks for the existing TPE
@@ -272,9 +274,13 @@ Full-frame preparation/photometry occurs once; inverse-aligned **joint** AV,
 vessel, disc and cup probabilities are averaged before conditional recovery.
 Fresh none matches the prior same-device512/64 count/support traces and protocol;
 no raw mask/probability bitwise claim is made. Fixed order/warm filesystem qualifies
-timing. TTA source/API remains on the separate
-[`experiment/inference-tta-science` branch](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiment/inference-tta-science);
-this branch imports **reports only**, not that feature. Default remains `none`.
+timing. TTA originated on the separate
+[`experiment/inference-tta-science` branch](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiment/inference-tta-science)
+and is now integrated here. The [high-level prediction fix](../reports/highlevel-predict-tta)
+also forwards `--tta` through the public CLI and Python prediction API, recording
+the existing exact descriptor. Root91 merged synthetic/CLI checks passed13.81s;
+no actual model/VAL/TEST or existing low-level operator changed in that fix.
+Default remains `none`.
 No TTA result is retagged as original-protocol standalone certification.
 
 ## Patch/photometry preparation and last observed scheduler state
@@ -296,14 +302,15 @@ retained privately (summary SHA
 `75389c22e9b535f82a0ce35d7c926027156b3ffea72c5e33124250cdd09d1a54`).
 Cache construction is not measured training quality or loader-speed benefit.
 
-All five scheduler submissions were accepted with observed submission exit0 and
-were **last jointly observed Q at14:07 UTC**. Raw512 was separately observed Q at
-**14:51 UTC**. A **15:05 UTC** status attempt failed with SSH255 and expired
-credentials/server-connection error; it returned **no actual job state**. Current
-states are **unknown**, not asserted queued or running. No cancellation was
-attempted and no own-GPU raw512 fallback has started. Operator job handles,
-commands, allocation accounting and access-failure evidence remain in the private
-workflow repository. This documentation update performs no GPU or scheduler action.
+All five original scheduler submissions were accepted with observed submission
+exit0. The15:05UTC SSH255/expired-credential observation failure was retained;
+it did not establish a job state or trigger a restart. Authentication was later
+restored. Raw256 and LC now genuinely finished PBSF/Exit0, with actual audits and
+fresh-VAL outcomes described above. At21:57UTC raw384/raw512/CLAHE384 were still
+R/E56/E39/E40. No cancellation, replacement submission or own-GPU raw512 fallback
+was made. Operator handles, commands, original allocation accounting and the
+access-failure evidence remain in the private workflow repository. This document
+does not perform a scheduler action or claim those unfinished models complete.
 
 ## RAW35 remains a tiny TRAIN-only canary
 
