@@ -33,6 +33,7 @@ from .unified import (
 )
 
 VERSION = 1
+SELECTION_VERSION = 2
 EPOCHS = 60
 COUNT_KEYS = ("tp", "fp", "fn", "valid_pixels")
 SUPPORT = {
@@ -738,12 +739,70 @@ def _context(
     metrics_csv,
     training_summary,
     *,
+    checkpoint_role=None,
+    completion_family=None,
+    completion_qa=None,
+    expected_qa_sha256=None,
+    best_checkpoint=None,
+    reviewed_protocol=None,
+    expected_protocol_sha256=None,
+    original_terminal=None,
+    expected_terminal_sha256=None,
     threshold=0.5,
     tile_size=None,
     overlap=None,
 ):
-    snapshot, best = checkpoint_snapshot(checkpoint)
-    _, last = checkpoint_snapshot(last_checkpoint)
+    from .freeze_eligibility import PROFILES, ROLES, check_freeze_eligibility
+
+    require(
+        completion_family in PROFILES and checkpoint_role in ROLES,
+        "Final selection requires explicit typed completion family and selected role; no untyped fallback",
+    )
+    require(
+        completion_qa is not None and expected_qa_sha256 is not None,
+        "Final selection requires externally pinned original completion QA",
+    )
+    if best_checkpoint is None:
+        require(
+            checkpoint_role == "training_best",
+            "Fixed terminal role requires separate original BEST checkpoint",
+        )
+        best_checkpoint = checkpoint
+    eligible = check_freeze_eligibility(
+        checkpoint=checkpoint,
+        best_checkpoint=best_checkpoint,
+        last_checkpoint=last_checkpoint,
+        manifest=manifest,
+        metrics_csv=metrics_csv,
+        training_summary=training_summary,
+        completion_qa=completion_qa,
+        expected_qa_sha256=expected_qa_sha256,
+        family=completion_family,
+        checkpoint_role=checkpoint_role,
+        reviewed_protocol=reviewed_protocol,
+        expected_protocol_sha256=expected_protocol_sha256,
+        original_terminal=original_terminal,
+        expected_terminal_sha256=expected_terminal_sha256,
+    )
+    snapshot = eligible.checkpoint_snapshot
+    proof = eligible.proof
+    require(
+        proof["checkpoint_role"] == checkpoint_role
+        and proof["family"] == completion_family
+        and proof["checkpoint_sha256"] == digest(snapshot),
+        "Typed eligibility selected snapshot differs",
+    )
+    with torch.device("cpu"), torch.random.fork_rng(devices=[]):
+        _model, best, _device = load_unified(io.BytesIO(snapshot), device="cpu")
+    del _model
+    require(
+        proof["source_profile"]["training_source_sha256"] == best["training_source_sha256"],
+        "Typed eligibility original training source differs",
+    )
+    require(
+        proof["actual_evaluation_source"] == evaluation_source_identity(),
+        "Evaluation source/runtime changed after typed eligibility",
+    )
     canonical_before = _canonical_metadata(manifest)
     data, groups = data_identity(manifest, best)
     config = UnifiedConfig(**best["config"])
@@ -796,12 +855,13 @@ def _context(
     score = validate_metrics(
         evidence["metrics"], groups["val"], protocol, config, Path(manifest).parent
     )
-    completion = completion_evidence(
-        best,
-        last,
-        Path(metrics_csv).read_bytes(),
-        Path(training_summary).read_bytes(),
-        groups["train"],
+    completion = proof["training_completion"]
+    require(
+        proof["canonical_data"] == data
+        and proof["checkpoint_epoch"] == best["epoch"]
+        and proof["checkpoint_steps"] == best["steps"]
+        and proof["selected_training_score"] == best["val_selection_score"],
+        "Typed eligibility data/selected epoch score differs",
     )
     _finish_canonical_read(manifest, best["prepared_content_sha256"], canonical_before)
     require(
@@ -826,6 +886,8 @@ def _context(
         "canonical_data": data,
         "inference_protocol": protocol,
         "training_completion": completion,
+        "checkpoint_role": checkpoint_role,
+        "freeze_eligibility": proof,
         "validation_evidence": {
             "sha256": digest(evidence_snapshot),
             "evaluated_at_utc": evidence["evaluated_at_utc"],
@@ -845,6 +907,12 @@ class CheckedSelection:
     protocol_snapshot: bytes = field(repr=False)
     canonical_data_snapshot: bytes = field(repr=False)
     test_evaluation_enabled: bool = False
+    checkpoint_role: str = "training_best"
+    eligibility_snapshot: bytes = field(repr=False, default=b"{}")
+
+    @property
+    def freeze_eligibility(self):
+        return parse_json(self.eligibility_snapshot)
 
     @property
     def canonical_data(self):
@@ -870,7 +938,7 @@ def create_selection(*, output, reviewer, rationale, **inputs):
         "VAL evidence is dated after the decision",
     )
     artifact = {
-        "schema_version": VERSION,
+        "schema_version": SELECTION_VERSION,
         "kind": "unified_heldout_selection",
         "decision": {
             "recorded_at_utc": now.isoformat(),
@@ -902,6 +970,16 @@ def check_selection(*, selection, expected_selection_sha256, **inputs):
         digest(snapshot) == expected_selection_sha256,
         "Selection differs from externally pinned review digest",
     )
+    require(isinstance(artifact, dict), "Invalid selection artifact fields")
+    if artifact.get("schema_version") == 1:
+        raise SelectionError(
+            "Historical schema1 selection stays immutable; new final execution requires typed schema2"
+        )
+    require(
+        type(artifact.get("schema_version")) is int
+        and artifact["schema_version"] == SELECTION_VERSION,
+        "Invalid selection artifact fields/schema: require typed schema2",
+    )
     exact(
         artifact,
         (
@@ -913,6 +991,8 @@ def check_selection(*, selection, expected_selection_sha256, **inputs):
             "canonical_data",
             "inference_protocol",
             "training_completion",
+            "checkpoint_role",
+            "freeze_eligibility",
             "validation_evidence",
             "boundaries",
         ),
@@ -920,9 +1000,16 @@ def check_selection(*, selection, expected_selection_sha256, **inputs):
     )
     require(
         type(artifact["schema_version"]) is int
-        and artifact["schema_version"] == VERSION
+        and artifact["schema_version"] == SELECTION_VERSION
         and artifact["kind"] == "unified_heldout_selection",
         "Unsupported frozen selection schema",
+    )
+    require(
+        inputs.get("checkpoint_role") == artifact["checkpoint_role"]
+        and inputs.get("completion_family") == artifact["freeze_eligibility"].get("family")
+        and inputs.get("expected_qa_sha256")
+        == artifact["freeze_eligibility"].get("original_qa_sha256"),
+        "Requested typed family/role/external QA pin differs from frozen decision",
     )
     decision = artifact["decision"]
     exact(decision, ("recorded_at_utc", "reviewer", "rationale"), "decision")
@@ -958,4 +1045,6 @@ def check_selection(*, selection, expected_selection_sha256, **inputs):
         weights,
         canonical(context["inference_protocol"]),
         canonical(context["canonical_data"]),
+        checkpoint_role=context["checkpoint_role"],
+        eligibility_snapshot=canonical(context["freeze_eligibility"]),
     )

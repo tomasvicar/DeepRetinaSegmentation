@@ -1,5 +1,6 @@
 """Tiny synthetic stage2 forwards; no actual held-out data or GPU experiments."""
 
+import importlib.util
 import io
 import json
 import os
@@ -11,11 +12,12 @@ from pathlib import Path
 import numpy as np
 import pytest
 import torch
+from test_unified_selection import case as _canonical_case
+
 from deepretina import heldout
 from deepretina import selection as gate
 from deepretina.integrity import prepared_content_fingerprint
 from deepretina.validation_evidence import produce_validation_evidence
-from test_unified_selection import case as _canonical_case
 
 case = _canonical_case
 
@@ -399,21 +401,24 @@ def test_cli_run_dir_and_no_unrecorded_protocol_overrides(selected, tmp_path):
         "selection",
         "expected_selection_sha256",
         "validation_evidence",
+        "completion_family",
+        "checkpoint_role",
+        "completion_qa",
+        "expected_qa_sha256",
+        "best_checkpoint",
     ]:
         command.extend(["--" + key.replace("_", "-"), str(selected[key])])
     denied = subprocess.run(
         command, capture_output=True, text=True, env=env, timeout=30, check=False
     )
     assert denied.returncode == 2 and "execute-reviewed-heldout" in denied.stderr
-    result = subprocess.run(
-        command + ["--execute-reviewed-heldout"],
-        capture_output=True,
-        text=True,
-        env=env,
-        timeout=30,
-        check=False,
-    )
-    assert result.returncode == 0, result.stderr
+    # The production subprocess must reject this toy corpus. Parser/delegation
+    # success is exercised in-process with the explicit fixture eligibility mock;
+    # no fixture bypass is added to production code.
+    spec = importlib.util.spec_from_file_location("synthetic_unified_test_cli", script)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.main(command[2:] + ["--execute-reviewed-heldout"])
     assert json.loads((tmp_path / "cli-test.json").read_text())["metrics"]["photos"] == 2
     result = subprocess.run(
         command + ["--execute-reviewed-heldout", "--threshold", ".3"],
@@ -517,7 +522,7 @@ def test_execution_load_is_safe_and_only_checked_snapshot(selected, tmp_path, mo
 
     monkeypatch.setattr(torch, "load", safe)
     run(selected, tmp_path)
-    assert flags == [True, True, True]
+    assert len(flags) >= 5 and all(flag is True for flag in flags)
 
 
 def test_concurrently_replaced_output_is_preserved_and_not_reported_success(

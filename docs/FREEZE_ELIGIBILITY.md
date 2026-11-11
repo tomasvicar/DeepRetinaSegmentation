@@ -55,15 +55,16 @@ model forward. Ten additional metadata invariant tests reject missing/zero/forei
 annotations, deficient photo/sample budgets, unsupported family/role and wrong
 external pins. Real inputs and historical outcomes were not modified.
 
-## Mandatory next integrations
+## Integrated selection and remaining scope
 
-1. Wire typed eligibility into create/check with explicit selected role, frozen
-   inference/source leases and a separately versioned selection schema. No new
-   source0b/72 path may fall back to the weak untyped historical completion gate.
-2. Preserve old schema1 bytes as historical records; do not relabel them. Update
-   the explicit reviewed stage2 API and metadata comparator deliberately for the
-   new selection/role schema, without running TEST during implementation.
-3. Add the **genuine source72 V3 final60 pool adapter**: original typed
+Schema2 create/check and the explicit reviewed stage2 API now rebuild this typed
+gate with externally pinned original inputs and the explicit selected role.
+Historical schema1 is never rewritten and is rejected for new execution. The
+metadata comparator supports both schema2 roles and preserves a historical
+schema1 reader. No compatible-source path can fall back to untyped completion.
+See [selection](HELDOUT_SELECTION.md) and [reviewed execution](REVIEWED_HELDOUT.md).
+
+Still required: the **genuine source72 V3 final60 pool adapter**: original typed
    `v3_rung_evidence`, COMPLETE receipt, actual task/lease/plan/runtime/PBS pins,
    native V3 validation and independent terminal milestones. It must support
    selection among actual Meta candidates, not just a future standalone TPE run.

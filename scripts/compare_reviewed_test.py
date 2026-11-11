@@ -15,6 +15,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from deepretina.comparison import CHANNELS, compare_reports
+from deepretina.completion_profiles import PROFILES, ROLES
 
 TASK_CHANNELS = {
     "vessels": ("vessel",),
@@ -156,6 +157,108 @@ def check_photo_inventory(report, groups):
         require(set(photo["channels"]) == set(CHANNELS), "Missing TEST output counts")
 
 
+def check_v2_eligibility(selection, candidate, groups):
+    proof = selection["freeze_eligibility"]
+    role = selection["checkpoint_role"]
+    cp = selection["checkpoint"]
+    completion = selection["training_completion"]
+    require(
+        candidate.get("checkpoint_role") == role and candidate.get("freeze_eligibility") == proof,
+        "Stage2 selected role/typed eligibility differs from frozen decision",
+    )
+    require(
+        proof.get("schema_version") == 1
+        and proof.get("kind") == "checked_freeze_eligibility"
+        and proof.get("family") in PROFILES
+        and proof.get("checkpoint_role") == role
+        and proof.get("selection_created") is False
+        and proof.get("test_evaluation_enabled") is False,
+        "Require typed eligibility schema and explicit completion family",
+    )
+    kind, commit, execution, training = PROFILES[proof["family"]]
+    require(
+        proof["original_qa_kind"] == kind
+        and digest_value(proof["original_qa_sha256"])
+        and proof["input_sha256"]["qa"] == proof["original_qa_sha256"]
+        and proof["source_profile"]
+        == {
+            "commit": commit,
+            "execution_code_sha256": execution,
+            "training_source_sha256": training,
+        }
+        and selection["source"]["training_source_sha256"] == training,
+        "Typed original family/source/QA pin differs",
+    )
+    require(
+        proof["checkpoint_sha256"] == cp["sha256"]
+        and proof["checkpoint_epoch"] == cp["epoch"]
+        and proof["checkpoint_steps"] == cp["steps"]
+        and proof["selected_training_score"] == cp["training_selection_score"]
+        and proof["training_completion"] == completion
+        and proof["canonical_data"] == selection["canonical_data"],
+        "Typed selected bytes/own epoch score/completion/data differs",
+    )
+    require(
+        proof["training_best"]["epoch"] == completion["best_epoch"]
+        and proof["training_best"]["score"] == completion["best_training_selection_score"]
+        and digest_value(proof["training_best"]["sha256"]),
+        "True original BEST provenance differs",
+    )
+    require(
+        proof["raw_training_configuration_sha256"]
+        == sha(canonical(proof["raw_training_configuration"])),
+        "Original raw training configuration hash differs",
+    )
+    # Explicit known compatibility defaults, never deletion/relabeling of saved fields.
+    normalized = {k: v for k, v in proof["raw_training_configuration"].items() if k != "device"}
+    normalized.setdefault("vascular_sampling_weight", 1.0)
+    normalized.setdefault("mixed_precision", "none")
+    require(
+        normalized == cp["configuration"]["values"], "Raw training versus runtime config differs"
+    )
+    require(
+        proof["actual_evaluation_source"]
+        == {k: v for k, v in selection["source"].items() if k != "training_source_sha256"},
+        "Eligibility evaluation runtime differs from frozen source lease",
+    )
+    photos = sorted(groups["train"])
+    records = sorted({r["id"] for rows in groups["train"].values() for r in rows})
+    for name, epoch in (("terminal_coverage", 60), ("selected_checkpoint_coverage", cp["epoch"])):
+        view = proof[name]
+        require(
+            view["epoch"] == epoch
+            and view["eligible_photos"] == view["seen_photos"] == len(photos)
+            and view["eligible_annotation_records"]
+            == view["contributing_annotation_records"]
+            == len(records)
+            and type(view["minimum_photo_visits"]) is int
+            and view["minimum_photo_visits"] >= epoch
+            and type(view["minimum_annotation_visits"]) is int
+            and view["minimum_annotation_visits"] >= 1
+            and view["delivered_samples"] == epoch * 8192
+            and view["eligible_photo_ids_sha256"] == sha(canonical(photos) + b"\n")
+            and view["eligible_annotation_ids_sha256"] == sha(canonical(records) + b"\n")
+            and digest_value(view["photo_visits_sha256"])
+            and digest_value(view["annotation_visits_sha256"]),
+            "Typed terminal/selected OWN full TRAIN coverage differs",
+        )
+    terminal = proof["original_completion"]
+    require(digest_value(terminal["sha256"]), "Original completion outcome byte pin missing")
+    if proof["family"] == "pool_6b":
+        require(
+            terminal["kind"] == "original_pool_COMPLETE_receipt"
+            and digest_value(terminal["original_task_sha256"])
+            and digest_value(terminal["original_decision_sha256"]),
+            "Original pool completion provenance differs",
+        )
+    else:
+        require(
+            terminal["kind"] == "original_standalone_supervisor_terminal"
+            and digest_value(terminal["reviewed_protocol_sha256"]),
+            "Original standalone outcome provenance differs",
+        )
+
+
 def checked_candidate(
     original, policy, candidate, selection, *, manifest_bytes, policy_sha, selection_sha
 ):
@@ -164,7 +267,9 @@ def checked_candidate(
         "Unsupported original policy",
     )
     require(
-        selection["schema_version"] == 1 and selection["kind"] == "unified_heldout_selection",
+        type(selection.get("schema_version")) is int
+        and selection["schema_version"] in (1, 2)
+        and selection["kind"] == "unified_heldout_selection",
         "Unsupported unified selection",
     )
     require(
@@ -182,7 +287,7 @@ def checked_candidate(
         "Require policy-bound original TEST report",
     )
     require(
-        candidate["schema_version"] == 1
+        candidate["schema_version"] == selection["schema_version"]
         and candidate["kind"] == "unified_reviewed_heldout_evaluation",
         "Require reviewed stage2 unified TEST wrapper",
     )
@@ -257,7 +362,14 @@ def checked_candidate(
     require(digest_value(checkpoint["sha256"]), "Invalid selected checkpoint SHA")
     require(
         candidate["checkpoint"]
-        == {k: checkpoint[k] for k in ("sha256", "epoch", "steps", "lineage")}
+        == {
+            k: checkpoint[k]
+            for k in (
+                ("sha256", "epoch", "steps", "lineage", "training_selection_score")
+                if selection["schema_version"] == 2
+                else ("sha256", "epoch", "steps", "lineage")
+            )
+        }
         and candidate["configuration"] == checkpoint["configuration"],
         "Selected checkpoint/configuration differs",
     )
@@ -285,13 +397,27 @@ def checked_candidate(
         == completion["last_epoch"]
         == 60
         and completion["last_steps"] == 60 * 8192 // config["batch_size"]
-        and completion["best_epoch"] == checkpoint["epoch"]
         and type(checkpoint["epoch"]) is int
         and 1 <= checkpoint["epoch"] <= 60
-        and checkpoint["steps"] == checkpoint["epoch"] * 8192 // config["batch_size"]
-        and completion["best_training_selection_score"] == checkpoint["training_selection_score"],
+        and checkpoint["steps"] == checkpoint["epoch"] * 8192 // config["batch_size"],
         "Actual completed60/best checkpoint metadata differs",
     )
+    role = selection.get("checkpoint_role", "training_best")
+    require(role in ROLES, "Unknown selected checkpoint role")
+    if selection["schema_version"] == 1 or role == "training_best":
+        require(
+            completion["best_epoch"] == checkpoint["epoch"]
+            and completion["best_training_selection_score"]
+            == checkpoint["training_selection_score"],
+            "Macro BEST completion/selected epoch score differs",
+        )
+    else:
+        require(
+            checkpoint["epoch"] == 60
+            and checkpoint["sha256"] == completion["last_checkpoint_sha256"]
+            and checkpoint["steps"] == completion["last_steps"],
+            "Fixed terminal role must select actual LAST60 bytes",
+        )
     require(
         all(
             digest_value(completion[k])
@@ -338,6 +464,8 @@ def checked_candidate(
         "Require frozen-protocol TEST metrics",
     )
     groups, counts, original_inventory, unified_inventory = inventory(manifest_bytes)
+    if selection["schema_version"] == 2:
+        check_v2_eligibility(selection, candidate, groups)
     data = selection["canonical_data"]
     require(
         data["manifest_sha256"] == sha(manifest_bytes)

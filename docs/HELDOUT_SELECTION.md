@@ -9,7 +9,10 @@ receipt; running inference/prediction is not part of these metadata scripts.
 
 ## What is bound
 
-Version1 `unified_heldout_selection` records contain these mandatory objects:
+New records use **schema2** (`SELECTION_VERSION=2`). Existing schema1 bytes remain
+historical and are rejected for new execution; no silent upgrade is available.
+Enriched VAL and inference evidence retain their independent schema1. Schema2
+`unified_heldout_selection` records contain these mandatory objects:
 
 | Object | Checked contents |
 | --- | --- |
@@ -19,6 +22,8 @@ Version1 `unified_heldout_selection` records contain these mandatory objects:
 | `canonical_data` | Manifest-byte SHA, re-read schema2 prepared-content fingerprint, portable split/source/photo/record inventory SHA and eligible split sizes |
 | `inference_protocol` | Canonical prepared geometry, RGB/255−0.5, legacy25/25pixels per degree, five channels, tiled/whole geometry, threshold, float32/no-autocast, AV joint fusion/argmax/vessel gating, cup containment, GT/source and aggregation policy |
 | `validation_evidence` | Actual enriched VAL-report SHA, evaluation UTC time, selected metric and final-protocol score |
+| `checkpoint_role` | Explicit `training_best` or `fixed_terminal60`; own score/coverage, never borrowed from another epoch |
+| `freeze_eligibility` | Rebuilt typed original-family QA, external byte pins, genuine terminal/protocol or pool receipt, actual selected and terminal full5700-annotation coverage |
 | `training_completion` | Last checkpoint SHA/epoch60, full60-row metric and summary SHAs, best epoch/score, actual optimizer-step/scheduler and coverage consistency |
 | `boundaries` | Explicitly false test enablement, prior-blindness proof and authenticated reviewer identity |
 
@@ -39,9 +44,13 @@ checkout cannot create this record.
 Planned training must be60 epochs and `last.pt` must actually declare completed
 E60, with an agreeing completed-budget summary, optimizer step history, scheduler,
 full60-row CSV history and all eligible training-photo/family coverage. No early
-stop exception or `max_steps` functionality run is accepted. The chosen `best.pt`
-may come from an earlier epoch, but must agree with the completed run's maximum
-training-validation score and recorded steps. Historical/teacher initialization,
+stop exception or `max_steps` functionality run is accepted. For `training_best`, the chosen `best.pt` may come from an earlier epoch, but
+must agree with the completed run's maximum training-validation score and
+recorded steps. `fixed_terminal60` instead selects actual LAST60 and its own
+score; the genuine BEST checkpoint and score remain separate. Both roles require
+all5700 selected annotation visits and2529 eligible photos in their own weights.
+The [typed family gate](FREEZE_ELIGIBILITY.md) is mandatory for every creation
+and check; source compatibility alone never enables an untyped fallback. Historical/teacher initialization,
 unknown exposure lineage, unsupported heads, nonfinite weights/optimizer and
 functionality/pilot checkpoints are rejected.
 
@@ -96,7 +105,11 @@ is minted as part of this change.
 
 ```bash
 uv run python scripts/unified_selection.py create \
-  --checkpoint RUN/best.pt --last-checkpoint RUN/last.pt \
+  --checkpoint RUN/best.pt --best-checkpoint RUN/best.pt --last-checkpoint RUN/last.pt \
+  --completion-family standalone_0b --checkpoint-role training_best \
+  --completion-qa QA.json --expected-qa-sha256 QA_SHA \
+  --reviewed-protocol protocol.json --expected-protocol-sha256 PROTOCOL_SHA \
+  --original-terminal terminal.json --expected-terminal-sha256 TERMINAL_SHA \
   --manifest DATA/manifest.json --validation-evidence fresh-enriched-val.json \
   --metrics-csv RUN/metrics.csv --training-summary RUN/training_summary.json \
   --reviewer REVIEWER --rationale 'Frozen validation choice and tradeoff' \
@@ -107,7 +120,11 @@ Record the emitted selection SHA in the review. Then the same explicit inputs:
 
 ```bash
 uv run python scripts/unified_selection.py check \
-  --checkpoint RUN/best.pt --last-checkpoint RUN/last.pt \
+  --checkpoint RUN/best.pt --best-checkpoint RUN/best.pt --last-checkpoint RUN/last.pt \
+  --completion-family standalone_0b --checkpoint-role training_best \
+  --completion-qa QA.json --expected-qa-sha256 QA_SHA \
+  --reviewed-protocol protocol.json --expected-protocol-sha256 PROTOCOL_SHA \
+  --original-terminal terminal.json --expected-terminal-sha256 TERMINAL_SHA \
   --manifest DATA/manifest.json --validation-evidence fresh-enriched-val.json \
   --metrics-csv RUN/metrics.csv --training-summary RUN/training_summary.json \
   --selection review/selection.json --expected-selection-sha256 REVIEWED_SHA

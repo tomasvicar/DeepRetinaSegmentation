@@ -31,6 +31,15 @@ def evaluate_reviewed_heldout(
     output,
     execute_reviewed_heldout=False,
     device="cpu",
+    checkpoint_role=None,
+    completion_family=None,
+    completion_qa=None,
+    expected_qa_sha256=None,
+    best_checkpoint=None,
+    reviewed_protocol=None,
+    expected_protocol_sha256=None,
+    original_terminal=None,
+    expected_terminal_sha256=None,
 ):
     """Verify the complete selection before any test GT decoding/CUDA/forward.
 
@@ -56,6 +65,17 @@ def evaluate_reviewed_heldout(
         "Selection differs from externally pinned review digest",
     )
     gate.require(isinstance(artifact, dict), "Invalid selection artifact fields")
+    gate.require(
+        artifact.get("schema_version") == gate.SELECTION_VERSION,
+        "New final execution requires typed schema2 selection; historical schema1 stays immutable",
+    )
+    gate.require(
+        checkpoint_role == artifact.get("checkpoint_role")
+        and completion_family == artifact.get("freeze_eligibility", {}).get("family")
+        and completion_qa is not None
+        and expected_qa_sha256 is not None,
+        "Explicit original completion inputs and frozen selected role/family are required",
+    )
     frozen = artifact.get("inference_protocol")
     gate.require(isinstance(frozen, dict), "Missing frozen inference protocol")
     checked = gate.check_selection(
@@ -70,6 +90,15 @@ def evaluate_reviewed_heldout(
         threshold=frozen.get("threshold"),
         tile_size=frozen.get("tile_size"),
         overlap=frozen.get("overlap"),
+        checkpoint_role=checkpoint_role,
+        completion_family=completion_family,
+        completion_qa=completion_qa,
+        expected_qa_sha256=expected_qa_sha256,
+        best_checkpoint=best_checkpoint,
+        reviewed_protocol=reviewed_protocol,
+        expected_protocol_sha256=expected_protocol_sha256,
+        original_terminal=original_terminal,
+        expected_terminal_sha256=expected_terminal_sha256,
     )
     # False is the documented stage1 boundary, not an implicit permission bit.
     # The separate reviewed stage2 request above enables this execution only.
@@ -143,8 +172,10 @@ def evaluate_reviewed_heldout(
     )
     lease()
     report = {
-        "schema_version": 1,
+        "schema_version": gate.SELECTION_VERSION,
         "kind": "unified_reviewed_heldout_evaluation",
+        "checkpoint_role": checked.checkpoint_role,
+        "freeze_eligibility": checked.freeze_eligibility,
         "execution_context": {
             "route": "explicit_reviewed_stage2_script",
             "explicit_execution_requested": True,
@@ -162,6 +193,7 @@ def evaluate_reviewed_heldout(
             "epoch": payload["epoch"],
             "steps": payload["steps"],
             "lineage": payload["lineage"],
+            "training_selection_score": payload["val_selection_score"],
         },
         "configuration": gate.config_identity(payload),
         "source": {**source_before, "training_source_sha256": payload["training_source_sha256"]},
