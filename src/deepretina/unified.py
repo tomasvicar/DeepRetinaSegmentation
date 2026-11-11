@@ -1020,7 +1020,9 @@ def predict_unified(
     field angle/official FOV can be supplied exactly as for the reference model.
     """
     from .legacy.preprocessing import prepare_single_net
+    from .prediction_output import check_prediction_output
 
+    output = check_prediction_output(output)
     model, payload, device = load_unified(checkpoint, device)
     with Image.open(image_path) as photo:
         original = np.asarray(photo.convert("RGB")).copy()
@@ -1049,7 +1051,7 @@ def predict_unified(
     probability[list(SEGMENTATION_CHANNELS)] *= domain[None]
     probability[1:3, ~domain] = 0.5
     masks = decode_probabilities(probability, threshold, payload["supervised_channels"])
-    output = Path(output)
+    output = check_prediction_output(output)
     output.mkdir(parents=True, exist_ok=True)
     paths = {"probabilities": str(output / "probabilities.npz")}
     np.savez_compressed(

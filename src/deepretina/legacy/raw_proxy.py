@@ -17,6 +17,7 @@ import numpy as np
 from PIL import Image
 
 from ..bundled import bundled_checkpoint
+from ..prediction_output import check_prediction_output
 from .inference import predict_legacy
 from .preprocessing import DATASET_FOV_DEGREES, prepare_vesclass_raw_proxy
 
@@ -38,6 +39,7 @@ def predict_raw_av(
     threshold=0.5,
     preprocessing_profile="proxy",
 ):
+    output = check_prediction_output(output)
     if preprocessing_profile not in {"proxy", "matlab", "matlab_source"}:
         raise ValueError("Choose raw A/V preprocessing_profile=proxy, matlab or matlab_source")
     if preprocessing_profile == "matlab":

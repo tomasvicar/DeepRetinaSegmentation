@@ -46,6 +46,9 @@ uv run deepretina predict --model legacy-vessels --input /path/to/fundus.jpg --o
 uv run deepretina predict --model legacy-universal --input /path/to/fundus.jpg --output predictions/disc_cup
 ```
 
+Use a new or empty output directory for each prediction. A populated directory
+is rejected so that masks from different photographs or models cannot get mixed.
+
 For all five outputs in one RGB-network pass, use the separate V2 control:
 
 ```bash

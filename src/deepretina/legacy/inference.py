@@ -15,6 +15,7 @@ from torch.nn import functional as F
 
 from ..geometry_policy import prediction_geometry, validate_geometry_policy
 from ..inference import resolve_device
+from ..prediction_output import check_prediction_output
 from .av import load_av, predict_av_input, restore_classes
 from .checkpoints import load_single_net
 from .preprocessing import load_vesclass_dicoms, prepare_single_net, stack_vesclass_inputs
@@ -49,7 +50,7 @@ def _resize_continuous_chw(array, shape, mode="bilinear"):
 
 
 def _save(output, image, probability, channels, masks, metadata, *, arrays=None, classes=None):
-    output = Path(output)
+    output = check_prediction_output(output)
     output.mkdir(parents=True, exist_ok=True)
     paths = {"probabilities": str(output / "probabilities.npz")}
     np.savez_compressed(
@@ -103,6 +104,7 @@ def predict_legacy(
     means full-frame (height,width) resize only; cropped inputs need external
     geometry restoration. No raw MATLAB A/V preprocessing parity is claimed.
     """
+    output = check_prediction_output(output)
     if not 0 < threshold < 1:
         raise ValueError("threshold must lie strictly between zero and one")
     checkpoint_bytes = Path(checkpoint).read_bytes()

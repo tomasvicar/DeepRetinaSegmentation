@@ -14,6 +14,7 @@ from torch.nn import functional as F
 
 from .dataset import letterbox_geometry, whole_view
 from .model import CHANNELS, UNet
+from .prediction_output import check_prediction_output
 
 
 def resolve_device(device: str) -> torch.device:
@@ -133,6 +134,7 @@ def predict(
     overlap: int = 64,
     threshold: float = 0.5,
 ) -> dict:
+    output = check_prediction_output(output)
     model, saved, device = load_checkpoint(checkpoint, device)
     with Image.open(image_path) as im:
         image = np.asarray(im.convert("RGB"))
@@ -153,7 +155,7 @@ def predict(
     masks = binary_masks(probability, task, threshold)
     supported = np.asarray(model.supervised_channels, dtype=bool)
     masks[~supported] = False
-    output = Path(output)
+    output = check_prediction_output(output)
     output.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(
         output / "probabilities.npz",

@@ -22,6 +22,11 @@ Začněte [instalací a predikcí](../README.md#install),
 [nativním trénováním](NATIVE_LEGACY_RETRAINING.md) nebo
 [přehledem modelů](../README.md#predict-immediately-with-included-models).
 
+Každá predikce vyžaduje nový nebo prázdný výstupní adresář. Opakované použití
+zaplněného adresáře nyní skončí před načtením modelu a nezmění dřívější soubory;
+předchozí chování mohlo například ponechat starou cup masku vedle nové cévní
+predikce. Opravu ověřilo 66 cílených CPU testů exportu, původních modelů a CLI.
+
 ## Co je skutečně změřené
 
 Připravené vstupy původních sítí zachovávají ověřenou numeriku. Celý raw A/V
