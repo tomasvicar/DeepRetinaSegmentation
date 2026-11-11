@@ -1,0 +1,62 @@
+{
+  "status": "PASS_FUNCTIONAL_COMPATIBILITY_NO_QUALITY_CLAIM",
+  "stable_base": "61540077ef1939115735f760b3c2e48fa2f88746",
+  "frozen_reference_source": "0b8762e667c997a2dfd129dc65988c1f26f6b2ad",
+  "audit_approved_snapshot_sha256": "1f8f9a942b4c7286819ee84f667e4b37cce7db5432d1702cda50f0701eedb62d",
+  "snapshot_epoch": 60,
+  "snapshot_copy_independent_readonly": true,
+  "checkpoint_safe_load_weights_only_cpu": true,
+  "checkpoint_config_vascular_sampling_weight": 2.0,
+  "architecture": {
+    "name": "compact_unet",
+    "base_channels": 12,
+    "depth": 4,
+    "norm": "batch"
+  },
+  "state_dict_tensors": 128,
+  "finite_state_dict": true,
+  "checkpoint_training_source_sha256": "85441afac96f47165df55505d06a08742183b9686fb1c608225166810a23a00f",
+  "photo_membership": {
+    "source_archive": "DRIONS-DB.zip",
+    "source_member": "images/image_001.jpg",
+    "encoded_image_sha256": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1",
+    "photo_id": "sha256:d0d30763e7b390dd94bc084e2e8dbeedce22cd0cac1688cade051eb3324b5db2",
+    "image_shape_hwc": [
+      400,
+      600,
+      3
+    ],
+    "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "record_ids": [
+      "drions_image_001_expert1_disc_cup",
+      "drions_image_001_expert2_disc_cup"
+    ],
+    "split": "train",
+    "ground_truth_masks_read": false
+  },
+  "device": "cpu",
+  "torch_threads": 1,
+  "interop_threads": 1,
+  "probability_array_shape": [
+    5,
+    400,
+    600
+  ],
+  "finite_probabilities": true,
+  "probability_array_bitwise_equal_to_frozen0b": true,
+  "max_absolute_probability_difference": 0.0,
+  "mask_differing_pixels": {
+    "vessel": 0,
+    "artery": 0,
+    "vein": 0,
+    "disc": 0,
+    "cup": 0,
+    "av": 0
+  },
+  "av_exclusive_and_subset_of_vessel": true,
+  "cup_subset_of_disc": true,
+  "ground_truth_decoded": false,
+  "test_evaluation_performed": false,
+  "training_performed": false,
+  "weights_published_or_registered": false
+}
