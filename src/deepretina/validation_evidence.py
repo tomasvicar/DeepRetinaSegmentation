@@ -20,6 +20,7 @@ from .unified import (
     evaluate_unified_model,
     inference_config,
     load_unified,
+    tile_batch_protocol,
     tta_protocol,
 )
 
@@ -88,6 +89,7 @@ def produce_validation_evidence(
     photometry_cache_root=None,
     expected_photometry_cache_fingerprint=None,
     tta="none",
+    tile_batch_size=1,
 ):
     """Evaluate an eligible full-data E1..60 snapshot, then write fresh evidence.
 
@@ -96,6 +98,7 @@ def produce_validation_evidence(
     inputs, and there is intentionally no split argument.
     """
     tta_metadata = tta_protocol(tta)
+    batching_metadata = tile_batch_protocol(tile_batch_size)
     output, manifest = Path(output), Path(manifest)
     gate.require(
         not output.exists() and not output.is_symlink(),
@@ -113,6 +116,7 @@ def produce_validation_evidence(
         payload, threshold=threshold, tile_size=tile_size, overlap=overlap
     )
     protocol.update(tta_metadata)
+    protocol.update(batching_metadata)
     config = inference_config(payload, tile_size=tile_size, overlap=overlap)
     photometry_cache = None
     if photometry_cache_root is not None or expected_photometry_cache_fingerprint is not None:
@@ -166,6 +170,7 @@ def produce_validation_evidence(
             config=config,
             threshold=threshold,
             **({"tta": tta} if tta != "none" else {}),
+            **({"tile_batch_size": tile_batch_size} if tile_batch_size != 1 else {}),
             **({"photometry_cache": photometry_cache} if photometry_cache is not None else {}),
         )
     runtime["evaluation_finished_at_utc"] = datetime.now(UTC).isoformat()
@@ -193,8 +198,10 @@ def produce_validation_evidence(
     evidence = {
         "schema_version": gate.VERSION,
         "kind": "unified_validation_evidence"
-        if tta == "none"
-        else "experimental_unified_tta_validation_evidence",
+        if tta == "none" and tile_batch_size == 1
+        else "experimental_unified_tta_validation_evidence"
+        if tta != "none"
+        else "experimental_unified_tile_batch_validation_evidence",
         "checkpoint": {
             "sha256": gate.digest(snapshot),
             "epoch": payload["epoch"],

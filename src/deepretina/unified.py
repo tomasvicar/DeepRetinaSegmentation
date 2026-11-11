@@ -862,6 +862,24 @@ def tta_protocol(tta):
     }
 
 
+def tile_batch_protocol(tile_batch_size):
+    """Research inference option only; batch1 keeps the original report schema."""
+    if type(tile_batch_size) is not int or tile_batch_size not in (1, 2, 4):
+        raise ValueError("tile_batch_size must be one of1,2,4 (not bool)")
+    if tile_batch_size == 1:
+        return {}
+    return {
+        "tile_batching": {
+            "size": tile_batch_size,
+            "grouping": "consecutive tiles of identical spatial shape within one prepared TTA view",
+            "accumulation": "original y_then_x enumeration; positive Hann; sequential float32 jointAV",
+            "precision": "float32_no_autocast",
+            "experimental": True,
+            "original_standalone_certification": False,
+        }
+    }
+
+
 def _tta_transform(image, rotation, flip):
     image = torch.rot90(image, rotation, (-2, -1))
     return image.flip(-1) if flip else image
@@ -875,26 +893,37 @@ def _tta_inverse(probability, rotation, flip):
 
 @torch.inference_mode()
 def predict_probabilities(
-    model, image, device, config=None, tile_size=512, overlap=64, *, tta="none"
+    model, image, device, config=None, tile_size=512, overlap=64, *, tta="none", tile_batch_size=1
 ):
     """C=5 probabilities from full prepared, already profile-processed RGB01.
 
     Photometry belongs before crop/tiling, never independently to inference tiles.
     """
     tta_protocol(tta)
+    tile_batch_protocol(tile_batch_size)
     settings = (
         asdict(config)
         if isinstance(config, UnifiedConfig)
         else config or getattr(model, "unified_config", {})
     )
+    if tile_batch_size != 1 and settings.get("train_view", "patch") == "whole":
+        raise ValueError("Tile batching is unsupported for whole-view inference")
+    predict = _predict_probabilities if tile_batch_size == 1 else _predict_probabilities_batched
+    options = {} if tile_batch_size == 1 else {"tile_batch_size": tile_batch_size}
     precision = settings.get("mixed_precision", "none")
     with _precision_context(UnifiedConfig(mixed_precision=precision), device, training=False):
         if tta == "none":
-            return _predict_probabilities(model, image, device, config, tile_size, overlap)
+            return predict(model, image, device, config, tile_size, overlap, **options)
         joint = None
         for rotation, flip in TTA_OPERATORS[tta]:
-            prediction = _predict_probabilities(
-                model, _tta_transform(image, rotation, flip), device, config, tile_size, overlap
+            prediction = predict(
+                model,
+                _tta_transform(image, rotation, flip),
+                device,
+                config,
+                tile_size,
+                overlap,
+                **options,
             )
             aligned = _tta_inverse(_joint_probabilities(prediction), rotation, flip)
             if joint is None:
@@ -949,6 +978,56 @@ def _predict_probabilities(model, image, device, config=None, tile_size=512, ove
     return _conditional_probabilities(result / weights[None])
 
 
+def _predict_probabilities_batched(
+    model, image, device, config, tile_size, overlap, *, tile_batch_size
+):
+    """Bounded same-shape forwards; accumulation order/math matches the batch1 reference."""
+    tile_batch_protocol(tile_batch_size)
+    if image.ndim != 3 or image.shape[0] != 3 or not image.is_floating_point():
+        raise ValueError("Expected prepared RGB CHW float in[0,1]")
+    if not torch.isfinite(image).all() or image.min() < 0 or image.max() > 1:
+        raise ValueError("Expected prepared RGB/255 in[0,1]")
+    cfg = (
+        asdict(config)
+        if isinstance(config, UnifiedConfig)
+        else config or getattr(model, "unified_config", {})
+    )
+    if cfg.get("train_view", "patch") == "whole":
+        raise ValueError("Tile batching is unsupported for whole-view inference")
+    if tile_size < 32 or not 0 <= overlap < tile_size:
+        raise ValueError("Invalid tiling geometry")
+    model.eval()
+    h, w = image.shape[-2:]
+    result = np.zeros((5, h, w), np.float32)
+    weights = np.zeros((h, w), np.float32)
+    pending = []
+
+    def flush():
+        if not pending:
+            return
+        batch = torch.stack([tile for _, _, tile in pending]).to(device) - 0.5
+        probability = _activation(model(batch).float()).cpu().numpy()
+        for (y, x, _), prediction in zip(pending, probability, strict=True):
+            th, tw = prediction.shape[-2:]
+            wy = np.maximum(np.hanning(th), 0.05) if th > 1 else np.ones(1)
+            wx = np.maximum(np.hanning(tw), 0.05) if tw > 1 else np.ones(1)
+            weight = (wy[:, None] * wx[None]).astype(np.float32)
+            result[:, y : y + th, x : x + tw] += prediction * weight
+            weights[y : y + th, x : x + tw] += weight
+        pending.clear()
+
+    for y in tile_starts(h, tile_size, overlap):
+        for x in tile_starts(w, tile_size, overlap):
+            tile = image[:, y : y + tile_size, x : x + tile_size]
+            if pending and tile.shape != pending[0][2].shape:
+                flush()
+            pending.append((y, x, tile))
+            if len(pending) == tile_batch_size:
+                flush()
+    flush()
+    return _conditional_probabilities(result / weights[None])
+
+
 def decode_probabilities(probability, threshold=0.5, supported=None):
     if probability.shape[0] != 5 or not 0 < threshold < 1:
         raise ValueError("Expected5channels and threshold in(0,1)")
@@ -989,8 +1068,10 @@ def evaluate_unified_model(
     photometry_cache=None,
     *,
     tta="none",
+    tile_batch_size=1,
 ):
     tta_protocol(tta)
+    tile_batch_protocol(tile_batch_size)
     cfg = (
         UnifiedConfig(**config)
         if isinstance(config, dict)
@@ -1024,6 +1105,7 @@ def evaluate_unified_model(
             cfg.tile_size,
             cfg.overlap,
             **({"tta": tta} if tta != "none" else {}),
+            **({"tile_batch_size": tile_batch_size} if tile_batch_size != 1 else {}),
         )
         masks = decode_probabilities(probability, threshold, supported)
         t, v = target.numpy() >= 0.5, valid.numpy()
@@ -1116,6 +1198,7 @@ def evaluate_unified_model(
         "per_photo": per_photo,
         "threshold": threshold,
         **tta_protocol(tta),
+        **tile_batch_protocol(tile_batch_size),
     }
 
 
@@ -1174,6 +1257,7 @@ def predict_unified(
     tile_size=None,
     overlap=None,
     tta="none",
+    tile_batch_size=1,
 ):
     """Complete raw-photo prediction with the verified legacy25_raw geometry.
 
@@ -1183,6 +1267,7 @@ def predict_unified(
     from .legacy.preprocessing import prepare_single_net
 
     tta_protocol(tta)
+    tile_batch_protocol(tile_batch_size)
     model, payload, device = load_unified(checkpoint, device)
     with Image.open(image_path) as photo:
         original = np.asarray(photo.convert("RGB")).copy()
@@ -1216,6 +1301,7 @@ def predict_unified(
         config.tile_size,
         config.overlap,
         **({"tta": tta} if tta != "none" else {}),
+        **({"tile_batch_size": tile_batch_size} if tile_batch_size != 1 else {}),
     )
     probability[list(SEGMENTATION_CHANNELS)] *= prepared.fov[None]
     probability = restore_probabilities(probability, prepared.geometry)
@@ -1305,6 +1391,7 @@ def predict_unified(
             },
         },
         **tta_protocol(tta),
+        **tile_batch_protocol(tile_batch_size),
         "outputs": paths,
     }
     _write_json(output / "prediction.json", metadata)
