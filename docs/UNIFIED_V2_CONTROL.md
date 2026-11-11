@@ -84,6 +84,13 @@ GT scoring. All five masks/probabilities kept 400×600 geometry, probabilities w
 finite, A/V exclusive and inside vessel, and cup inside disc. This is a release
 functionality check, not an accuracy or speed benchmark.
 
+A separate GPU release check used the same verified DRIONS TRAIN photograph on
+GTX 1070 (PyTorch 2.6 / CUDA 12.4). All five original-frame outputs were finite
+and satisfied the hierarchy checks. Binary masks matched the saved CPU outputs
+exactly in this case; probability arrays differed by up to 5.84×10⁻⁶. This is
+bounded functional agreement, not general CPU/GPU bit parity, quality or speed
+evidence. [GPU release proof](../reports/release/v2-control-preview/real-gpu-cli-smoke.json).
+
 A separate one-photo CPU timing on DRIVE TRAIN image 21 measured medians of
 60.58 s for the four-network original pipeline and 5.44 s for this control
 (Ryzen 1600, one CPU thread, one warmup and three repeats). This does not establish
