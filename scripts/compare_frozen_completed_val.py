@@ -75,7 +75,7 @@ def check_inventory(report, groups):
         require(set(photo["channels"]) == set(CHANNELS), "Missing VAL head counts")
 
 
-def checked(original, evidence, completion, manifest_bytes):
+def checked(original, evidence, completion, manifest_bytes, *, checkpoint_role="best"):
     require(
         original.get("schema_version") == 1
         and original.get("family") == "frozen_original_reference"
@@ -110,7 +110,19 @@ def checked(original, evidence, completion, manifest_bytes):
     )
     for report in (original, candidate):
         check_inventory(report, groups["val"])
-    verify_completion(completion, evidence, expected_train_photo_count=counts["train"])
+    if checkpoint_role == "best":
+        verify_completion(completion, evidence, expected_train_photo_count=counts["train"])
+    elif checkpoint_role == "fixed_terminal60":
+        from deepretina.completion_roles import verify_terminal60
+
+        require(
+            completion["geometry_policy_sha256"] == original["geometry_policy_sha256"]
+            and digest_value(completion["geometry_policy_sha256"]),
+            "Terminal geometry policy differs",
+        )
+        verify_terminal60(completion, evidence, groups["train"])
+    else:
+        raise ValueError("Unsupported checkpoint comparison role")
     require(
         all(
             type(completion[k]) is int
@@ -207,6 +219,7 @@ def compare(
     trusted_candidate_context_sha256,
     repeats=2000,
     seed=42,
+    checkpoint_role="best",
 ):
     paths = {
         k: Path(v)
@@ -252,7 +265,18 @@ def compare(
         values["candidate_context"]["completion_qa_sha256"] == sha(blobs["completion_qa"]),
         "Externally reviewed completion QA differs",
     )
-    derived = checked(original, evidence, values["completion_qa"], blobs["manifest"])
+    require(
+        checkpoint_role in {"best", "fixed_terminal60"}
+        and values["candidate_context"].get("checkpoint_role", "best") == checkpoint_role,
+        "External candidate context must bind explicit checkpoint role",
+    )
+    derived = checked(
+        original,
+        evidence,
+        values["completion_qa"],
+        blobs["manifest"],
+        checkpoint_role=checkpoint_role,
+    )
     with tempfile.TemporaryDirectory(prefix="retina-frozen-val-") as directory:
         root = Path(directory)
         for name, raw in [
@@ -275,7 +299,16 @@ def compare(
         "Inputs changed during comparison",
     )
     result.update(
-        kind="completed_val_frozen_original_comparison",
+        kind="completed_val_fixed_terminal60_frozen_original_comparison"
+        if checkpoint_role == "fixed_terminal60"
+        else "completed_val_frozen_original_comparison",
+        checkpoint_role=checkpoint_role,
+        baseline_only=checkpoint_role == "fixed_terminal60",
+        selection_authorized=False,
+        original_completion_checkpoint_sha256=copy.deepcopy(
+            values["completion_qa"]["checkpoint_sha256"]
+        ),
+        original_completion_best_epoch=values["completion_qa"]["best_epoch"],
         reference_family=original["family"],
         input_artifact_sha256={k: sha(v) for k, v in blobs.items()},
         reference_policy=copy.deepcopy(original["policy_spec"]),
@@ -297,6 +330,10 @@ def compare(
         "This original flat report is not the older composed cup-clipped report family.",
         "External contexts bind declared reviewed bytes; reviewer identity is not authenticated by hashes.",
     ]
+    if checkpoint_role == "fixed_terminal60":
+        result["qualifications"].append(
+            "Fixed terminal60 all-annotation baseline; not the VAL-selected best checkpoint or a final selection/TEST authorization. Original best/last QA identities are preserved."
+        )
     return result
 
 
