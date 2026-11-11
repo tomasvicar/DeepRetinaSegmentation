@@ -1,8 +1,11 @@
 # Full-data unified model search
 
-This is the experimental branch, separate from the original models shipped on
-`for_Leipzig`. No full-data unified quality improvement has been established yet.
-The three single-dataset pilots and their old LR searches are preliminary only.
+This page preserves the **historical V1 search on 17 sources**. Its commands,
+candidate list and progress statements describe that study, not the current V2/V3
+search. Start with [the current experiment overview](EXPERIMENTS_CURRENT.md) for
+completed full-data results, frozen scientific sources and the next TPE stage.
+Single-dataset pilots remain preliminary. No new model has established an
+improvement over the original models in every task.
 
 Prepare all 17 supervised sources with `scripts/prepare_unified_data.py`, then
 run its `--audit-existing` integrity check. A completed preparation marker,
