@@ -25,3 +25,10 @@ combined attempt with outer exit1; successful raw256 ran separately with outer
 exit0. Corrected checks preserved original inputs and source bytes. The private
 operations repository retains complete original attempts and resource observers;
 this report exports numerical evidence without operator host paths.
+
+After integration,73 existing TTA/CLI/output regression tests also passed in7.24s
+on one CPU core with CUDA hidden (`test_unified_tta.py`, `test_unified_cli.py`,
+`test_prediction_output.py`). Four existing scikit-image deprecation warnings
+remain in the unchanged legacy morphology operators; those operators were not
+replaced during this compatibility port. The three new photometry test modules
+had separately passed67 focused checks before integration.
