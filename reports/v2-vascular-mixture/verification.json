@@ -1,0 +1,62 @@
+{
+  "base_commit": "1d310a7a878b4428dec196959bc657d54f778b41",
+  "scope": "Research-only scalar sampling ablation; no live run/orchestration/stable merge",
+  "unified_py_sha256": "ee24b935d1825fffa276c5e89f26ad5144fb935d5330e13359d2398080556ae3",
+  "training_source_sha256": "85441afac96f47165df55505d06a08742183b9686fb1c608225166810a23a00f",
+  "execution_code_sha256": "3ffe949e787045546a9470750b1aedc27c8ae9bee3603db568f719e4b407f24e",
+  "hashes_scope": "Exact HPO training file tuple and code_digest algorithm; package code only, presets separately hashed",
+  "presets_sha256": {
+    "unified-v2-control384.toml": "1b67d6114bc263a9bc28e65e52f39e4fd16f04e72acd0f8bb144fcf435367e52",
+    "unified-v2-vascular2.toml": "5eda06e2502afef37a260d88c6923d20bd10cbe0105621cf519cb486a6d13ad0"
+  },
+  "tests": {
+    "passed": 132,
+    "warnings": 25,
+    "duration_seconds": 12.1,
+    "full_suite_run": false,
+    "new_tests": 41,
+    "cpu_affinity": [
+      0
+    ],
+    "nice": 10,
+    "threads": 1,
+    "CUDA_VISIBLE_DEVICES": "",
+    "log_sha256": "48ffe7cf58dc05208cc99ae2f44f98bdd881a2da7fba5b382c68fde99b6def5c"
+  },
+  "ruff": "PASS",
+  "actual_train_flags_audit": {
+    "records": 5700,
+    "photos": 2529,
+    "default_float64_bits_identical": true,
+    "sampler_epochs_per_seed": 3,
+    "seeds": [
+      0,
+      42,
+      717
+    ],
+    "draws_per_epoch": 8192,
+    "rng_states_identical": true,
+    "python_hash_seed": 42,
+    "priority2_key_oracle_identical": true,
+    "weights_sum_default": 35.0,
+    "weights_sum_priority2": 50.0
+  },
+  "unchanged_source_segments": [
+    "CoverageSampler",
+    "UnifiedDataset.sample",
+    "UnifiedDataset.__getitem__",
+    "unified_loss",
+    "build_unified",
+    "train_unified"
+  ],
+  "augment_py_unchanged": true,
+  "existing_6b_protocol_adapter_changed": false,
+  "qualifications": [
+    "Expected opportunities are not actual training contributions or quality evidence",
+    "No new AV probability, observer cycle, quota, architecture, loss, scheduler or augmentation change",
+    "Full60 E60 result and separate future authorization required before any GPU experiment",
+    "Existing actual6b studies/checkpoints/source remain untouched; new recipe needs its own pinned completion contract"
+  ],
+  "recipe": "unified_v2_vascular_weight_v1",
+  "default_positional_config_api_preserved": true
+}

@@ -74,6 +74,7 @@ class UnifiedConfig:
     selection_metric: str = "mean_dice"
     purpose: str = "functionality"
     max_steps: int | None = None
+    vascular_sampling_weight: float = 1.0
 
     def validate(self):
         if self.architecture not in {
@@ -108,6 +109,16 @@ class UnifiedConfig:
             "dataset_task_balanced",
         }:
             raise ValueError("Unsupported source/task sampling policy")
+        priority = self.vascular_sampling_weight
+        if (
+            isinstance(priority, bool)
+            or not isinstance(priority, (int, float))
+            or not math.isfinite(priority)
+            or priority <= 0
+        ):
+            raise ValueError("vascular_sampling_weight must be finite and positive, never bool")
+        if priority != 1 and self.sampling != "dataset_task_balanced":
+            raise ValueError("Nondefault vascular_sampling_weight requires dataset_task_balanced")
         if self.augmentation not in {"basic", "mild", "strong"}:
             raise ValueError("Unsupported augmentation profile")
         if not 0 <= self.foreground_probability <= 1 or not 0 <= self.min_lr_ratio <= 1:
@@ -447,6 +458,11 @@ class UnifiedDataset(torch.utils.data.Dataset):
         return self._support_summary
 
     def sampling_weights(self):
+        if (
+            self.config.vascular_sampling_weight != 1
+            and self.config.sampling != "dataset_task_balanced"
+        ):
+            raise ValueError("Nondefault vascular_sampling_weight requires dataset_task_balanced")
         self.support_summary()
         policy = self.config.sampling
         memberships = []
@@ -466,7 +482,17 @@ class UnifiedDataset(torch.utils.data.Dataset):
                 keys = {(source, task) for task in tasks}
             memberships.append(keys)
         populations = Counter(key for keys in memberships for key in keys)
-        return [sum(1 / populations[key] for key in keys) for keys in memberships]
+        if self.config.vascular_sampling_weight == 1:
+            # Preserve the frozen6b expression and summation/RNG path exactly.
+            return [sum(1 / populations[key] for key in keys) for keys in memberships]
+        return [
+            sum(
+                (self.config.vascular_sampling_weight if key[1] in {"vessel", "av"} else 1)
+                / populations[key]
+                for key in keys
+            )
+            for keys in memberships
+        ]
 
     def __getitem__(self, index):
         image, target, valid, trace = self.sample(
