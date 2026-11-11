@@ -1005,6 +1005,10 @@ def check_selection(*, selection, expected_selection_sha256, **inputs):
         "Unsupported frozen selection schema",
     )
     require(
+        isinstance(artifact["freeze_eligibility"], dict),
+        "Invalid typed eligibility record",
+    )
+    require(
         inputs.get("checkpoint_role") == artifact["checkpoint_role"]
         and inputs.get("completion_family") == artifact["freeze_eligibility"].get("family")
         and inputs.get("expected_qa_sha256")
