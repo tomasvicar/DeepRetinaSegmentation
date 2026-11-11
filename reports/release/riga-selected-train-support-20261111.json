@@ -1,0 +1,363 @@
+{
+  "observed_utc": "2026-11-11T00:51:21.042000+00:00",
+  "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "source_commit": "6b3dfad605a256e904a877efcdcc1f3cc6135dd0",
+  "unified_module_sha256": "3260a00bc03b44544556adf5090a412318963fe1b121f7627f265c2fe3aae72d",
+  "coverage_file_sha256": "9d32706697cc5d8a88a97566718cc9878366a311792662894621ba8ecb4a3ad3",
+  "coverage_top_level": {
+    "eligible_photos": 2529,
+    "seen_photos": 2529,
+    "eligible_annotation_records": 5700,
+    "contributing_annotation_records": 5698,
+    "by_dataset": {
+      "aria": {
+        "eligible_photos": 87,
+        "seen_photos": 87
+      },
+      "avrdb": {
+        "eligible_photos": 59,
+        "seen_photos": 59
+      },
+      "biomisa": {
+        "eligible_photos": 45,
+        "seen_photos": 45
+      },
+      "chasedb1": {
+        "eligible_photos": 16,
+        "seen_photos": 16
+      },
+      "drhagis": {
+        "eligible_photos": 23,
+        "seen_photos": 23
+      },
+      "drions": {
+        "eligible_photos": 110,
+        "seen_photos": 110
+      },
+      "drishti": {
+        "eligible_photos": 40,
+        "seen_photos": 40
+      },
+      "drive": {
+        "eligible_photos": 16,
+        "seen_photos": 16
+      },
+      "erlangen": {
+        "eligible_photos": 63,
+        "seen_photos": 63
+      },
+      "g1020": {
+        "eligible_photos": 609,
+        "seen_photos": 609
+      },
+      "gamma": {
+        "eligible_photos": 99,
+        "seen_photos": 99
+      },
+      "hrf": {
+        "eligible_photos": 27,
+        "seen_photos": 27
+      },
+      "idrid_disc": {
+        "eligible_photos": 54,
+        "seen_photos": 54
+      },
+      "iostar": {
+        "eligible_photos": 18,
+        "seen_photos": 18
+      },
+      "onhsd": {
+        "eligible_photos": 53,
+        "seen_photos": 53
+      },
+      "refuge": {
+        "eligible_photos": 400,
+        "seen_photos": 400
+      },
+      "riga": {
+        "eligible_photos": 510,
+        "seen_photos": 510
+      },
+      "rimone": {
+        "eligible_photos": 95,
+        "seen_photos": 95
+      },
+      "rite": {
+        "eligible_photos": 16,
+        "seen_photos": 16
+      },
+      "stare": {
+        "eligible_photos": 12,
+        "seen_photos": 12
+      },
+      "uoadr": {
+        "eligible_photos": 193,
+        "seen_photos": 193
+      }
+    },
+    "counting": "actual supervised samples delivered to successful optimizer updates"
+  },
+  "last_metrics_row": {
+    "epoch": "32",
+    "steps": "65536",
+    "lr": "0.00015004212623538057",
+    "train_loss": "0.3081420489870652",
+    "val_mean_dice": "0.7863306828740588",
+    "val_macro_dataset_mean_dice": "0.7745953855270041",
+    "val_selection_score": "0.7745953855270041",
+    "train_seconds": "165.52293429599376",
+    "validation_seconds": "64.15883746201871"
+  },
+  "scope": "Read-only three explicitly TRAIN masks and live coverage metadata; no Torch import/model/Dataset execution",
+  "records": [
+    {
+      "id": "riga_BinRushed2_image44_observer4_disc_cup",
+      "dataset": "riga",
+      "split": "train",
+      "source_id": "riga:BinRushed2_image44",
+      "photo_id": "sha256:2a8010dcbd12fbee118faa1452706e18c8d435c32d11f114acfa843fbe496d39",
+      "image": "images/2a8010dcbd12fbee118faa1452706e18c8d435c32d11f114acfa843fbe496d39_5a480d610c3d.png",
+      "mask": "masks/riga_BinRushed2_image44_observer4_disc_cup.npz",
+      "original_size": [
+        1584,
+        2376
+      ],
+      "quality": {
+        "method": "green-difference>15;8-connected closed outlines; nested filled areas",
+        "closing_diamond_radius": 0,
+        "cup_pixels_outside_disc": 0
+      },
+      "mask_sha256": "6eef310df5ad63c0b643b351b1de9a1e655252eedc796ac634d06909a61c6d7a",
+      "shape": [
+        2,
+        676,
+        677
+      ],
+      "channels": [
+        {
+          "channel": "disc",
+          "valid_pixels": 360052,
+          "positive_pixels": 9760,
+          "positive_bbox_xyxy": [
+            344,
+            266,
+            448,
+            385
+          ],
+          "finite": true,
+          "values": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "channel": "cup",
+          "valid_pixels": 360052,
+          "positive_pixels": 3740,
+          "positive_bbox_xyxy": [
+            360,
+            290,
+            423,
+            365
+          ],
+          "finite": true,
+          "values": [
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "cup_outside_disc_valid_pixels": 0,
+      "observer_options": 12,
+      "sibling_ids": [
+        "riga_BinRushed2_image44_observer1_disc_cup",
+        "riga_BinRushed2_image44_observer2_disc_cup",
+        "riga_BinRushed2_image44_observer3_disc_cup",
+        "riga_BinRushed2_image44_observer4_disc_cup",
+        "riga_BinRushed2_image44_observer5_disc_cup",
+        "riga_BinRushed2_image44_observer6_disc_cup",
+        "riga_BinRushed3_image24_observer1_disc_cup",
+        "riga_BinRushed3_image24_observer2_disc_cup",
+        "riga_BinRushed3_image24_observer3_disc_cup",
+        "riga_BinRushed3_image24_observer4_disc_cup",
+        "riga_BinRushed3_image24_observer5_disc_cup",
+        "riga_BinRushed3_image24_observer6_disc_cup"
+      ],
+      "actual_annotation_visits": 0,
+      "actual_photo_visits": 56,
+      "sibling_annotation_visits": {
+        "riga_BinRushed2_image44_observer1_disc_cup": 4,
+        "riga_BinRushed2_image44_observer2_disc_cup": 6,
+        "riga_BinRushed2_image44_observer3_disc_cup": 7,
+        "riga_BinRushed2_image44_observer4_disc_cup": 0,
+        "riga_BinRushed2_image44_observer5_disc_cup": 4,
+        "riga_BinRushed2_image44_observer6_disc_cup": 5,
+        "riga_BinRushed3_image24_observer1_disc_cup": 6,
+        "riga_BinRushed3_image24_observer2_disc_cup": 9,
+        "riga_BinRushed3_image24_observer3_disc_cup": 6,
+        "riga_BinRushed3_image24_observer4_disc_cup": 3,
+        "riga_BinRushed3_image24_observer5_disc_cup": 4,
+        "riga_BinRushed3_image24_observer6_disc_cup": 2
+      },
+      "iid_uniform_zero_selection_probability_at_observed_photo_visits": 0.007653156426891254
+    },
+    {
+      "id": "riga_MagrabiFemale_image15_observer3_disc_cup",
+      "dataset": "riga",
+      "split": "train",
+      "source_id": "riga:MagrabiFemale_image15",
+      "photo_id": "sha256:870b2d6e241062bdf982b26b8e7ff4a2bac007efc8cb06ba12a251efd284d39b",
+      "image": "images/870b2d6e241062bdf982b26b8e7ff4a2bac007efc8cb06ba12a251efd284d39b_5b85ca0c0a9a.png",
+      "mask": "masks/riga_MagrabiFemale_image15_observer3_disc_cup.npz",
+      "original_size": [
+        1936,
+        2743
+      ],
+      "quality": {
+        "method": "green-difference>15;8-connected closed outlines; nested filled areas",
+        "closing_diamond_radius": 0,
+        "cup_pixels_outside_disc": 0
+      },
+      "mask_sha256": "0324742ecaacba276220533e38630f54577c67eb85cbc968b65313bfe0d206a0",
+      "shape": [
+        2,
+        787,
+        1102
+      ],
+      "channels": [
+        {
+          "channel": "disc",
+          "valid_pixels": 788446,
+          "positive_pixels": 14956,
+          "positive_bbox_xyxy": [
+            868,
+            433,
+            1000,
+            573
+          ],
+          "finite": true,
+          "values": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "channel": "cup",
+          "valid_pixels": 788446,
+          "positive_pixels": 4054,
+          "positive_bbox_xyxy": [
+            905,
+            461,
+            979,
+            530
+          ],
+          "finite": true,
+          "values": [
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "cup_outside_disc_valid_pixels": 0,
+      "observer_options": 6,
+      "sibling_ids": [
+        "riga_MagrabiFemale_image15_observer1_disc_cup",
+        "riga_MagrabiFemale_image15_observer2_disc_cup",
+        "riga_MagrabiFemale_image15_observer3_disc_cup",
+        "riga_MagrabiFemale_image15_observer4_disc_cup",
+        "riga_MagrabiFemale_image15_observer5_disc_cup",
+        "riga_MagrabiFemale_image15_observer6_disc_cup"
+      ],
+      "actual_annotation_visits": 2,
+      "actual_photo_visits": 51,
+      "sibling_annotation_visits": {
+        "riga_MagrabiFemale_image15_observer1_disc_cup": 10,
+        "riga_MagrabiFemale_image15_observer2_disc_cup": 13,
+        "riga_MagrabiFemale_image15_observer3_disc_cup": 2,
+        "riga_MagrabiFemale_image15_observer4_disc_cup": 7,
+        "riga_MagrabiFemale_image15_observer5_disc_cup": 6,
+        "riga_MagrabiFemale_image15_observer6_disc_cup": 13
+      },
+      "iid_uniform_zero_selection_probability_at_observed_photo_visits": 9.157068259764377e-05
+    },
+    {
+      "id": "riga_MagrabiaMale_image33_observer3_disc_cup",
+      "dataset": "riga",
+      "split": "train",
+      "source_id": "riga:MagrabiaMale_image33",
+      "photo_id": "sha256:1a7aa2712dcea7cfaa2dcea64e980c7c05bb522e12ea9dfac84177d0ffb3ae95",
+      "image": "images/1a7aa2712dcea7cfaa2dcea64e980c7c05bb522e12ea9dfac84177d0ffb3ae95_c019c88a3964.png",
+      "mask": "masks/riga_MagrabiaMale_image33_observer3_disc_cup.npz",
+      "original_size": [
+        1936,
+        2743
+      ],
+      "quality": {
+        "method": "green-difference>15;8-connected closed outlines; nested filled areas",
+        "closing_diamond_radius": 0,
+        "cup_pixels_outside_disc": 0
+      },
+      "mask_sha256": "b1c5326efed28c8c00b0c2382504b0335b8dd40295798e5df7acd538c1708f0d",
+      "shape": [
+        2,
+        787,
+        1103
+      ],
+      "channels": [
+        {
+          "channel": "disc",
+          "valid_pixels": 786526,
+          "positive_pixels": 11303,
+          "positive_bbox_xyxy": [
+            135,
+            403,
+            245,
+            533
+          ],
+          "finite": true,
+          "values": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "channel": "cup",
+          "valid_pixels": 786526,
+          "positive_pixels": 1220,
+          "positive_bbox_xyxy": [
+            175,
+            450,
+            213,
+            492
+          ],
+          "finite": true,
+          "values": [
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "cup_outside_disc_valid_pixels": 0,
+      "observer_options": 6,
+      "sibling_ids": [
+        "riga_MagrabiaMale_image33_observer1_disc_cup",
+        "riga_MagrabiaMale_image33_observer2_disc_cup",
+        "riga_MagrabiaMale_image33_observer3_disc_cup",
+        "riga_MagrabiaMale_image33_observer4_disc_cup",
+        "riga_MagrabiaMale_image33_observer5_disc_cup",
+        "riga_MagrabiaMale_image33_observer6_disc_cup"
+      ],
+      "actual_annotation_visits": 0,
+      "actual_photo_visits": 46,
+      "sibling_annotation_visits": {
+        "riga_MagrabiaMale_image33_observer1_disc_cup": 22,
+        "riga_MagrabiaMale_image33_observer2_disc_cup": 4,
+        "riga_MagrabiaMale_image33_observer3_disc_cup": 0,
+        "riga_MagrabiaMale_image33_observer4_disc_cup": 8,
+        "riga_MagrabiaMale_image33_observer5_disc_cup": 9,
+        "riga_MagrabiaMale_image33_observer6_disc_cup": 3
+      },
+      "iid_uniform_zero_selection_probability_at_observed_photo_visits": 0.00022785716092136888
+    }
+  ]
+}
