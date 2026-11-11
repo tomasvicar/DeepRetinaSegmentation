@@ -627,3 +627,33 @@ def test_public_cache_requires_external_pins_without_creating_output(tmp_path):
             ]
         )
     assert exc.value.code == 2 and not output.exists()
+
+
+def test_public_unified_predict_and_val_share_opt_in_tta(trained, tmp_path, capsys):
+    checkpoint, manifest = trained
+    main(predict_args(checkpoint, manifest, tmp_path / "tta-prediction") + ["--tta", "flips2"])
+    paths = json.loads(capsys.readouterr().out)
+    prediction = json.loads(Path(paths["metadata"]).read_text())
+    assert prediction["tta"]["mode"] == "flips2"
+    report = tmp_path / "tta-val.json"
+    main(
+        [
+            "evaluate",
+            "--checkpoint",
+            str(checkpoint),
+            "--manifest",
+            str(manifest),
+            "--split",
+            "val",
+            "--device",
+            "cpu",
+            "--output",
+            str(report),
+            "--tta",
+            "flips2",
+        ]
+    )
+    evaluation = json.loads(capsys.readouterr().out)
+    assert evaluation["tta"] == evaluation["inference"]["tta"] == prediction["tta"]
+    assert evaluation["split"] == "val" and evaluation["test_evaluation_performed"] is False
+    assert json.loads(report.read_text()) == evaluation

@@ -20,6 +20,7 @@ from .unified import (
     evaluate_unified_model,
     inference_config,
     load_unified,
+    tta_protocol,
 )
 
 
@@ -86,6 +87,7 @@ def produce_validation_evidence(
     overlap=None,
     photometry_cache_root=None,
     expected_photometry_cache_fingerprint=None,
+    tta="none",
 ):
     """Evaluate an eligible full-data E1..60 snapshot, then write fresh evidence.
 
@@ -93,6 +95,7 @@ def produce_validation_evidence(
     actually completed last60 checkpoint. No historical reports are accepted as
     inputs, and there is intentionally no split argument.
     """
+    tta_metadata = tta_protocol(tta)
     output, manifest = Path(output), Path(manifest)
     gate.require(
         not output.exists() and not output.is_symlink(),
@@ -109,6 +112,7 @@ def produce_validation_evidence(
     protocol = gate.inference_protocol(
         payload, threshold=threshold, tile_size=tile_size, overlap=overlap
     )
+    protocol.update(tta_metadata)
     config = inference_config(payload, tile_size=tile_size, overlap=overlap)
     photometry_cache = None
     if photometry_cache_root is not None or expected_photometry_cache_fingerprint is not None:
@@ -161,6 +165,7 @@ def produce_validation_evidence(
             device=actual_device,
             config=config,
             threshold=threshold,
+            **({"tta": tta} if tta != "none" else {}),
             **({"photometry_cache": photometry_cache} if photometry_cache is not None else {}),
         )
     runtime["evaluation_finished_at_utc"] = datetime.now(UTC).isoformat()
@@ -187,7 +192,9 @@ def produce_validation_evidence(
     )
     evidence = {
         "schema_version": gate.VERSION,
-        "kind": "unified_validation_evidence",
+        "kind": "unified_validation_evidence"
+        if tta == "none"
+        else "experimental_unified_tta_validation_evidence",
         "checkpoint": {
             "sha256": gate.digest(snapshot),
             "epoch": payload["epoch"],

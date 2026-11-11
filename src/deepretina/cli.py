@@ -122,6 +122,12 @@ def parser() -> argparse.ArgumentParser:
         cmd.add_argument(
             "--overlap", type=int, help="Override overlap; unified uses checkpoint default"
         )
+        cmd.add_argument(
+            "--tta",
+            choices=["none", "flips2", "rot4", "dihedral8"],
+            default="none",
+            help="Opt-in experimental unified inference ensemble",
+        )
         cmd.add_argument("--threshold", type=float, default=0.5)
     predict.add_argument("--dataset", help="Camera/dataset profile, e.g. drive, hrf, drishti")
     predict.add_argument(
@@ -291,6 +297,8 @@ def _apply_model(args, checkpoint: Path):
         from .unified_cli import apply_unified
 
         return apply_unified(args, checkpoint)
+    if getattr(args, "tta", "none") != "none":
+        raise ValueError("--tta requires a unified checkpoint")
     if family in {"legacy_single_net", "legacy_av"}:
         return _apply_legacy(args, checkpoint, family)
     if args.command == "predict" and (args.av_raw_proxy or args.av_raw_matlab):
