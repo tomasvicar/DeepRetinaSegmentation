@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "kind": "completed_val_original_context",
+  "report_sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+  "reviewed_at_utc": "2026-11-11T01:49:28.730484+00:00",
+  "rationale": "Root reviewed actual terminal full770 VAL, frozen d14aa14 source, unchanged four original weights/evaluator/runtime/canonical inventory, independently MATLAB-golden-verified nearest-only production delta, and all count/paired comparisons against193662c. This is reviewed VAL context only, no TEST authorization or reviewer identity authentication.",
+  "bindings": {
+    "source": {
+      "runtime": {
+        "evaluation_source_sha256": "fc9ea3b740d428c48ddf9deed8524ef115b303bbbda2f0875b614818ccb0332c",
+        "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+        "runtime": {
+          "cuda_matmul_allow_tf32": false,
+          "cudnn_allow_tf32": true,
+          "cudnn_benchmark": false,
+          "cudnn_deterministic": false,
+          "default_dtype": "torch.float32",
+          "deterministic_algorithms": false,
+          "deterministic_warn_only": false,
+          "float32_matmul_precision": "highest",
+          "installed_distributions": {
+            "Pillow": "13.0.0",
+            "h5py": "3.16.0",
+            "numpy": "2.5.4",
+            "opencv-python": null,
+            "opencv-python-headless": "4.14.0.94",
+            "pydicom": "3.0.2",
+            "scikit-image": "0.26.0",
+            "scipy": "1.18.1",
+            "torch": "2.6.0+cu124"
+          },
+          "numpy": "2.5.4",
+          "python": "3.12.13",
+          "torch": "2.6.0+cu124"
+        },
+        "source_files": [
+          "src/deepretina/__init__.py",
+          "src/deepretina/__main__.py",
+          "src/deepretina/adapters/__init__.py",
+          "src/deepretina/adapters/additional.py",
+          "src/deepretina/adapters/auxiliary.py",
+          "src/deepretina/adapters/biomisa.py",
+          "src/deepretina/adapters/core.py",
+          "src/deepretina/adapters/labels.py",
+          "src/deepretina/adapters/segmentation.py",
+          "src/deepretina/augment.py",
+          "src/deepretina/bundled.py",
+          "src/deepretina/cli.py",
+          "src/deepretina/comparison.py",
+          "src/deepretina/dataset.py",
+          "src/deepretina/derived_cache.py",
+          "src/deepretina/engine.py",
+          "src/deepretina/geometry_policy.py",
+          "src/deepretina/heldout.py",
+          "src/deepretina/inference.py",
+          "src/deepretina/integrity.py",
+          "src/deepretina/legacy/__init__.py",
+          "src/deepretina/legacy/av.py",
+          "src/deepretina/legacy/checkpoints.py",
+          "src/deepretina/legacy/inference.py",
+          "src/deepretina/legacy/matlab_av.py",
+          "src/deepretina/legacy/matlab_clahe.py",
+          "src/deepretina/legacy/matlab_fov.py",
+          "src/deepretina/legacy/matlab_resize.py",
+          "src/deepretina/legacy/preprocessing.py",
+          "src/deepretina/legacy/raw_proxy.py",
+          "src/deepretina/legacy/single_net.py",
+          "src/deepretina/model.py",
+          "src/deepretina/prepare.py",
+          "src/deepretina/selection.py",
+          "src/deepretina/sources.py",
+          "src/deepretina/unified.py",
+          "src/deepretina/unified_av.py",
+          "src/deepretina/unified_cli.py",
+          "src/deepretina/unified_legacy.py",
+          "src/deepretina/val_bridge.py",
+          "src/deepretina/validation_evidence.py",
+          "pyproject.toml",
+          "uv.lock"
+        ],
+        "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation"
+      },
+      "scripts": {
+        "compose_original_disc_reference.py": "28654e8c43973167031279f60a247cc6e298f1541e47828947d2657a0f12acdc",
+        "evaluate_original.py": "8d0217743223001ed66724d3a070a8280727e0d055a0567572764da3647157fc",
+        "evaluate_original_frozen.py": "44f1faf4ff41b3dd60b8d6dea747a577bcfd2bb77b1f2366e153bc688fb27a61"
+      }
+    },
+    "policy_spec": {
+      "av": "vesclass_matlab_provided_fov_calibrated; canonical predicted vessel and provided FOV NN-restored to native frame; strict AV ties\u21920; original NN restore_classes then canonical prepare_mask",
+      "cup": "universal/raw cup>0 intersect SAME-forward dedicated disc0/raw>0 in canonical frame before any NN restoration",
+      "gt": "UnifiedDataset full_data: one photo once; deterministic first sorted annotation per task; AV vessel GT priority; unknown validity excluded",
+      "model_sha256": {
+        "av": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+        "disc": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+        "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+        "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01"
+      },
+      "name": "original-raw-vessel-calibrated-provided-fov-av-disc0-universal-cup-in-disc0-v1",
+      "single_net": "raw RGB/255 minus0.5; native checkpoint tiling; strict logits>0"
+    },
+    "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "prepared_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+    "eligible_photo_counts": {
+      "test": 856,
+      "train": 2529,
+      "val": 770
+    },
+    "inventory_sha256": "218f59302f9834fd72839f00c253116e1ff59984ea6731dbb51de85c0e605537",
+    "geometry_policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+    "photos_sha256": "765709a1ddc08035565ebf3d54d414dd1f53a9882a5cfa9c0fd03811b8e48a4d"
+  }
+}
