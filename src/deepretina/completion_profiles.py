@@ -20,6 +20,7 @@ PROFILES = {
         "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
     ),
 }
+PROFILES["pool_72_v3"] = ("v3_rung_evidence", *PROFILES["standalone_72"][1:])
 ROLES = {"training_best": "best.pt", "fixed_terminal60": "last.pt"}
 VERIFIER = "4b568b7e5e66229e378fd8712000af90a05190364563bad6311687e419eb56fe"
 MANIFEST = "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767"

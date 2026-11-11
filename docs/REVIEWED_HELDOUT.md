@@ -106,8 +106,9 @@ own selected TRAIN coverage derived from manifest IDs, original family/source
 pins and retained true BEST provenance. It reads historical schema1 reports for
 metadata comparison only; that reader does not grant execution permission.
 
-The source72 V3 pool final60 adapter remains mandatory and currently fails closed.
-Its native rung evidence/COMPLETE receipt must not be relabeled standalone.
+The [source72 V3 pool adapter](FREEZE_V3_POOL.md) requires its original native
+rung/COMPLETE receipt and externally pinned original input index. It must not be
+relabeled standalone. Actual partial rungs fail closed.
 This implementation does not run real TEST, create an actual model selection,
 or retrospectively enrich older VAL. Final-source fresh VAL and root review are
 still required before invoking this route.

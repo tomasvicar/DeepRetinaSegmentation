@@ -40,6 +40,8 @@ def evaluate_reviewed_heldout(
     expected_protocol_sha256=None,
     original_terminal=None,
     expected_terminal_sha256=None,
+    original_pool_evidence=None,
+    expected_pool_evidence_sha256=None,
 ):
     """Verify the complete selection before any test GT decoding/CUDA/forward.
 
@@ -103,6 +105,8 @@ def evaluate_reviewed_heldout(
         expected_protocol_sha256=expected_protocol_sha256,
         original_terminal=original_terminal,
         expected_terminal_sha256=expected_terminal_sha256,
+        original_pool_evidence=original_pool_evidence,
+        expected_pool_evidence_sha256=expected_pool_evidence_sha256,
     )
     # False is the documented stage1 boundary, not an implicit permission bit.
     # The separate reviewed stage2 request above enables this execution only.

@@ -54,7 +54,7 @@ def test_partial_or_false_own_coverage_rejected(coverage_case, case):
 
 
 @pytest.mark.parametrize(
-    "family,role", [("pool_72_v3", "training_best"), ("pool_6b", "best"), ("standalone_0b", "last")]
+    "family,role", [("pool_72_retagged", "training_best"), ("pool_6b", "best"), ("standalone_0b", "last")]
 )
 def test_unsupported_family_or_ambiguous_role_rejects_before_any_file(family, role, monkeypatch):
     monkeypatch.setattr(f.gate, "json_snapshot", lambda _: pytest.fail("No file should be read"))

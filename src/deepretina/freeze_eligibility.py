@@ -319,135 +319,9 @@ def _pool(qa, best, last):
     }
 
 
-@dataclass(frozen=True)
-class CheckedFreezeEligibility:
-    checkpoint_snapshot: bytes = field(repr=False)
-    proof_snapshot: bytes = field(repr=False)
-
-    @property
-    def proof(self):
-        return gate.parse_json(self.proof_snapshot)
-
-
-def check_freeze_eligibility(
-    *,
-    checkpoint,
-    best_checkpoint,
-    last_checkpoint,
-    manifest,
-    metrics_csv,
-    training_summary,
-    completion_qa,
-    expected_qa_sha256,
-    family,
-    checkpoint_role,
-    reviewed_protocol=None,
-    expected_protocol_sha256=None,
-    original_terminal=None,
-    expected_terminal_sha256=None,
+def _verify_original_coverage(
+    qa, family, terminal_coverage, selected_coverage, last, checkpoint_role
 ):
-    """Check exact own-weight coverage/provenance; does not create a selection.
-
-    Explicit V3 pool72 support is still required separately. The original V3 rung
-    receipt must never be repackaged into a standalone terminal/QA family.
-    """
-    gate.require(
-        family in PROFILES, "Unknown completion family; V3 pool72 adapter is not implemented"
-    )
-    gate.require(
-        checkpoint_role in ROLES, "Require explicit training_best or fixed_terminal60 role"
-    )
-    source_before = gate.evaluation_source_identity()
-    paths = {
-        "selected": Path(checkpoint),
-        "best": Path(best_checkpoint),
-        "last": Path(last_checkpoint),
-        "manifest": Path(manifest),
-        "csv": Path(metrics_csv),
-        "summary": Path(training_summary),
-        "qa": Path(completion_qa),
-    }
-    qa_raw, qa = _pinned_json(completion_qa, expected_qa_sha256, "completion QA")
-    best_raw, best = gate.checkpoint_snapshot(best_checkpoint)
-    last_raw, last = gate.checkpoint_snapshot(last_checkpoint)
-    gate.require(
-        last["epoch"] == 60, "Require actual completed60 LAST; partial72/E3 is not eligible"
-    )
-    selected_raw, selected = gate.checkpoint_snapshot(checkpoint)
-    wanted = best if checkpoint_role == "training_best" else last
-    gate.require(
-        gate.digest(selected_raw) == wanted["checkpoint_sha256"],
-        "Selected checkpoint bytes do not match the explicit BEST/LAST role",
-    )
-    gate.require(
-        best["config"] == last["config"] == selected["config"],
-        "Raw original training config differs",
-    )
-    profile = PROFILES[family]
-    gate.require(
-        all(p["training_source_sha256"] == profile[3] for p in (best, last, selected)),
-        "Raw checkpoint training source differs from explicit family",
-    )
-    for p in (best, last, selected):
-        gate.require(
-            p["manifest_sha256"] == MANIFEST
-            and p["prepared_content_sha256"] == CONTENT
-            and p.get("geometry_policy", {}).get("sha256") == GEOMETRY,
-            "Raw corpus/geometry profile differs",
-        )
-    manifest_raw = paths["manifest"].read_bytes()
-    gate.require(gate.digest(manifest_raw) == MANIFEST, "Actual manifest bytes differ")
-    groups = _groups(manifest_raw)
-    terminal_coverage = _coverage(last, groups["train"], "Terminal LAST60")
-    selected_coverage = _coverage(selected, groups["train"], "Selected " + checkpoint_role)
-    csv_bytes, summary_bytes = paths["csv"].read_bytes(), paths["summary"].read_bytes()
-    completion = gate.completion_evidence(best, last, csv_bytes, summary_bytes, groups["train"])
-    _optimizer(last_raw, last)
-    gate.require(
-        gate._finite(best.get("validation_metrics"))
-        and gate._finite(last.get("validation_metrics")),
-        "Nonfinite original validation metadata",
-    )
-    _common_qa(qa, profile, best, last, csv_bytes, summary_bytes)
-    if family == "pool_6b":
-        gate.require(
-            reviewed_protocol is None and original_terminal is None,
-            "Pool proof cannot be supplied as a standalone protocol/terminal",
-        )
-        original = _pool(qa, best, last)
-    else:
-        gate.require(
-            all(
-                v is not None
-                for v in (
-                    reviewed_protocol,
-                    expected_protocol_sha256,
-                    original_terminal,
-                    expected_terminal_sha256,
-                )
-            ),
-            "Standalone family requires original reviewed protocol and supervisor terminal pins",
-        )
-        protocol_raw, protocol = _pinned_json(
-            reviewed_protocol, expected_protocol_sha256, "standalone protocol"
-        )
-        terminal_raw, terminal = _pinned_json(
-            original_terminal, expected_terminal_sha256, "standalone terminal"
-        )
-        paths.update(protocol=Path(reviewed_protocol), terminal=Path(original_terminal))
-        original = _standalone(
-            qa, profile, best, last, protocol, protocol_raw, terminal, terminal_raw
-        )
-        for name, raw in (
-            ("best.pt", best_raw),
-            ("last.pt", last_raw),
-            ("metrics.csv", csv_bytes),
-            ("training_summary.json", summary_bytes),
-        ):
-            gate.require(
-                terminal["artifact_sha256"][name] == gate.digest(raw),
-                "Original terminal artifact bytes differ: " + name,
-            )
     gate.require(
         qa["eligible_photos"] == 2529
         and qa["eligible_annotation_records"] == qa["contributing_annotation_records"] == 5700
@@ -489,6 +363,177 @@ def check_freeze_eligibility(
             == terminal_coverage["eligible_annotation_ids_sha256"],
             "Original pool exact TRAIN identity sets differ",
         )
+
+
+@dataclass(frozen=True)
+class CheckedFreezeEligibility:
+    checkpoint_snapshot: bytes = field(repr=False)
+    proof_snapshot: bytes = field(repr=False)
+
+    @property
+    def proof(self):
+        return gate.parse_json(self.proof_snapshot)
+
+
+def check_freeze_eligibility(
+    *,
+    checkpoint,
+    best_checkpoint,
+    last_checkpoint,
+    manifest,
+    metrics_csv,
+    training_summary,
+    completion_qa,
+    expected_qa_sha256,
+    family,
+    checkpoint_role,
+    reviewed_protocol=None,
+    expected_protocol_sha256=None,
+    original_terminal=None,
+    expected_terminal_sha256=None,
+    original_pool_evidence=None,
+    expected_pool_evidence_sha256=None,
+):
+    """Check exact own-weight coverage/provenance; does not create a selection.
+
+    V3 pool72 requires its genuine native original COMPLETE receipt and externally
+    pinned original input index; never repackage it as standalone completion.
+    """
+    gate.require(family in PROFILES, "Unknown explicit completion family")
+    gate.require(
+        checkpoint_role in ROLES, "Require explicit training_best or fixed_terminal60 role"
+    )
+    source_before = gate.evaluation_source_identity()
+    paths = {
+        "selected": Path(checkpoint),
+        "best": Path(best_checkpoint),
+        "last": Path(last_checkpoint),
+        "manifest": Path(manifest),
+        "csv": Path(metrics_csv),
+        "summary": Path(training_summary),
+        "qa": Path(completion_qa),
+    }
+    qa_raw, qa = _pinned_json(completion_qa, expected_qa_sha256, "completion QA")
+    if family == "pool_72_v3":
+        gate.require(
+            qa.get("status") == "COMPLETE"
+            and qa.get("actual_epoch") == qa.get("target_epoch") == 60,
+            "Original V3 pool receipt must actually complete60; partial rung is ineligible",
+        )
+    best_raw, best = gate.checkpoint_snapshot(best_checkpoint)
+    last_raw, last = gate.checkpoint_snapshot(last_checkpoint)
+    gate.require(
+        last["epoch"] == 60, "Require actual completed60 LAST; partial72/E3 is not eligible"
+    )
+    selected_raw, selected = gate.checkpoint_snapshot(checkpoint)
+    wanted = best if checkpoint_role == "training_best" else last
+    gate.require(
+        gate.digest(selected_raw) == wanted["checkpoint_sha256"],
+        "Selected checkpoint bytes do not match the explicit BEST/LAST role",
+    )
+    gate.require(
+        best["config"] == last["config"] == selected["config"],
+        "Raw original training config differs",
+    )
+    profile = PROFILES[family]
+    gate.require(
+        all(p["training_source_sha256"] == profile[3] for p in (best, last, selected)),
+        "Raw checkpoint training source differs from explicit family",
+    )
+    for p in (best, last, selected):
+        gate.require(
+            p["manifest_sha256"] == MANIFEST
+            and p["prepared_content_sha256"] == CONTENT
+            and p.get("geometry_policy", {}).get("sha256") == GEOMETRY,
+            "Raw corpus/geometry profile differs",
+        )
+    manifest_raw = paths["manifest"].read_bytes()
+    gate.require(gate.digest(manifest_raw) == MANIFEST, "Actual manifest bytes differ")
+    groups = _groups(manifest_raw)
+    terminal_coverage = _coverage(last, groups["train"], "Terminal LAST60")
+    selected_coverage = _coverage(selected, groups["train"], "Selected " + checkpoint_role)
+    csv_bytes, summary_bytes = paths["csv"].read_bytes(), paths["summary"].read_bytes()
+    completion = gate.completion_evidence(best, last, csv_bytes, summary_bytes, groups["train"])
+    _optimizer(last_raw, last)
+    gate.require(
+        gate._finite(best.get("validation_metrics"))
+        and gate._finite(last.get("validation_metrics")),
+        "Nonfinite original validation metadata",
+    )
+    if family != "pool_72_v3":
+        _common_qa(qa, profile, best, last, csv_bytes, summary_bytes)
+    if family == "pool_72_v3":
+        from .v3_completion import verify_original_pool
+
+        gate.require(
+            original_pool_evidence is not None,
+            "V3 requires original externally pinned pool evidence index",
+        )
+        index_raw, index = _pinned_json(
+            original_pool_evidence, expected_pool_evidence_sha256, "original V3 evidence index"
+        )
+        gate.require(
+            reviewed_protocol is None and original_terminal is None,
+            "V3 pool must not be relabeled standalone",
+        )
+        original, pool_snapshots = verify_original_pool(
+            qa,
+            index,
+            best,
+            last,
+            {
+                "best.pt": best_raw,
+                "last.pt": last_raw,
+                "metrics.csv": csv_bytes,
+                "training_summary.json": summary_bytes,
+            },
+            return_snapshots=True,
+        )
+        original["sha256"] = gate.digest(qa_raw)
+        paths["pool_index"] = Path(original_pool_evidence)
+    elif family == "pool_6b":
+        gate.require(
+            reviewed_protocol is None and original_terminal is None,
+            "Pool proof cannot be supplied as a standalone protocol/terminal",
+        )
+        original = _pool(qa, best, last)
+    else:
+        gate.require(
+            all(
+                v is not None
+                for v in (
+                    reviewed_protocol,
+                    expected_protocol_sha256,
+                    original_terminal,
+                    expected_terminal_sha256,
+                )
+            ),
+            "Standalone family requires original reviewed protocol and supervisor terminal pins",
+        )
+        protocol_raw, protocol = _pinned_json(
+            reviewed_protocol, expected_protocol_sha256, "standalone protocol"
+        )
+        terminal_raw, terminal = _pinned_json(
+            original_terminal, expected_terminal_sha256, "standalone terminal"
+        )
+        paths.update(protocol=Path(reviewed_protocol), terminal=Path(original_terminal))
+        original = _standalone(
+            qa, profile, best, last, protocol, protocol_raw, terminal, terminal_raw
+        )
+        for name, raw in (
+            ("best.pt", best_raw),
+            ("last.pt", last_raw),
+            ("metrics.csv", csv_bytes),
+            ("training_summary.json", summary_bytes),
+        ):
+            gate.require(
+                terminal["artifact_sha256"][name] == gate.digest(raw),
+                "Original terminal artifact bytes differ: " + name,
+            )
+    if family != "pool_72_v3":
+        _verify_original_coverage(
+            qa, family, terminal_coverage, selected_coverage, last, checkpoint_role
+        )
     # Actual source/canonical operation lease; encoded TEST bytes may be hashed,
     # but this route never decodes GT arrays or calls any prediction/evaluator.
     canonical_before = gate._canonical_metadata(manifest)
@@ -506,6 +551,11 @@ def check_freeze_eligibility(
         gate.evaluation_source_identity() == source_before,
         "Evaluation code/runtime changed during eligibility",
     )
+    if family == "pool_72_v3":
+        gate.require(
+            all(path.read_bytes() == raw for path, raw in pool_snapshots),
+            "Original V3 inputs changed during complete eligibility operation",
+        )
     snapshots = {
         "selected": selected_raw,
         "best": best_raw,
@@ -515,7 +565,9 @@ def check_freeze_eligibility(
         "summary": summary_bytes,
         "qa": qa_raw,
     }
-    if family != "pool_6b":
+    if family == "pool_72_v3":
+        snapshots["pool_index"] = index_raw
+    elif family != "pool_6b":
         snapshots.update(protocol=protocol_raw, terminal=terminal_raw)
     gate.require(
         all(paths[k].read_bytes() == v for k, v in snapshots.items()),
@@ -554,13 +606,13 @@ def check_freeze_eligibility(
         },
         "actual_evaluation_source": source_before,
         "canonical_data": data,
-        "original_qa_kind": qa["kind"],
+        "original_qa_kind": qa["checkpoint_qa"]["kind"] if family == "pool_72_v3" else qa["kind"],
         "original_qa_sha256": gate.digest(qa_raw),
         "original_completion": original,
         "input_sha256": {k: gate.digest(v) for k, v in snapshots.items()},
         "selection_created": False,
         "test_evaluation_enabled": False,
         "prior_blindness_proven": False,
-        "remaining_integration": "Genuine final60 V3 pool72 adapter remains mandatory; this eligibility receipt alone is not a selection or execution permit",
+        "remaining_integration": "This eligibility receipt alone is not a selection or execution permit",
     }
     return CheckedFreezeEligibility(selected_raw, gate.canonical(proof))
