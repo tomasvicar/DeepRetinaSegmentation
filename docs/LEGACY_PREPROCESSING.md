@@ -127,11 +127,15 @@ It is not an inverse for `single_net`'s cropped inputs.
 
 The MATLAB normalization uses `imgaussfilt` and `adapthisteq` with computed tile
 counts; the supplied Python version uses scikit-image Gaussian and kernel-size
-CLAHE. They are not numerically interchangeable by assertion. No original retinal
-HDF5/prepared DICOM input archive or MATLAB runtime was found in the available
-workspace, so MATLAB pixel parity is not certified. The stored-DICOM tensor loading
-is tested exactly; any standalone raw RGB AV reproduction must identify its Python
-preprocessing provenance and retain the full-frame geometry or invert its own crop.
+CLAHE. They are not numerically interchangeable by assertion. The original retinal
+HDF5/prepared DICOM training archive remains unavailable. MATLAB was subsequently
+installed and used to generate references for the separate
+[calibrated Python profile](MATLAB_AV_PROFILE.md), including actual saved-model
+sensitivity checks. Those checks document small photometric residuals and do not
+certify universal pixel parity or historical training-file provenance. The
+stored-DICOM tensor loading is tested exactly; standalone raw RGB AV reproduction
+must identify its preprocessing profile and retain the full-frame geometry or
+invert its own crop.
 
 ### Explicit raw RGB AV proxy
 

@@ -115,9 +115,12 @@ That temporary environment resolved PyTorch 2.6.0+cu124 and torchvision
 The parity report identifies exact source/model hashes, dtype, input shapes,
 seed, software version and output hashes. This validates model arithmetic and
 stored-input inference. It does **not** certify the raw MATLAB CLAHE/resampling
-pipeline: original preprocessed DICOM/MATLAB goldens were not supplied. Prepared
-DICOM mode retains the exact old input contract; raw-image surrogate preprocessing
-must be labeled accordingly.
+pipeline: that report tests stored-input inference, and original preprocessed
+training DICOM files were not supplied. Separately generated MATLAB goldens and
+saved-model sensitivity checks for the explicit calibrated raw profile are recorded
+in [MATLAB_AV_PROFILE.md](MATLAB_AV_PROFILE.md), with measured residuals and scope
+limits. Prepared DICOM mode retains the exact old input contract; raw-image
+preprocessing must identify its actual profile.
 
 ## Explicit calibrated raw CLI profile
 
