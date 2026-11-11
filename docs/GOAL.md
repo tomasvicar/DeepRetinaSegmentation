@@ -4,6 +4,38 @@ Výslovné zadání uživatele: **mít oboje** — původní ověřené modely a
 nové jednodušší jednotné řešení s prokazatelně lepšími výsledky. Přístup do
 repozitáře a ke sdíleným datům v ownCloudu mají i kolegové. Zdrojový ZIP nevytvářet.
 
+## Aktuální stav: 11. 11. 2026, 00:55 UTC
+
+`for_Leipzig` obsahuje původní modely, plný baseline V1 a nově i přípravu všech
+21 trénovacích zdrojů přímo z RAW archivů v ownCloudu. Není nutný neveřejný
+mezilehlý korpus. Kopírování dat je celé v Pythonu, s ověřenou nezávislostí
+výsledku na rodičovských souborech. Nový `train-legacy` umožňuje čerstvě učit
+původní architektury cév, disku, universal a A/V; jde o výslovně nové trénovací
+recepty, nikoli o reprodukci nedoloženého historického optimalizátoru. Viz
+[NATIVE_LEGACY_RETRAINING.md](NATIVE_LEGACY_RETRAINING.md) a
+[UNIFIED_QUICKSTART.md](UNIFIED_QUICKSTART.md).
+
+Integrační kontrola prošla 2 605 CPU testy, ověřením wheelu a zachováním všech
+9 přibalených checkpointů. Oprava MATLAB nearest resize přesně odpovídá 24
+syntetickým a 5 skutečným FOV referencím. Zbývající fotometrické rozdíly jsou
+zdokumentované; úplnou shodu celého raw MATLAB řetězce netvrdíme.
+
+Čerstvé měření původní sestavy na všech 770 VAL fotografiích přesně zopakovalo
+všechny dřívější počty TP/FP/FN a podmíněné A/V. Průměr Dice přes datasety a
+úlohy je 0,66703, pooled Dice cév 0,77012. Důkaz je na experimentální větvi v
+`reports/frozen-original-val-reproduction/`. Po opravě nearest resize probíhá
+samostatné měření s vlastní identitou zdrojů, které tento starší report nepřepisuje.
+
+Kontrolovaná Optuna studie běží na třech vlastních GPU. Control prošel 27 epoch
+z plánovaných 60; dvě varianty pokračují nebo se prověřují, jedna slabší byla
+ukončena po třech epochách. Všech 2 529 fotografií a 21 zdrojů přispělo, ale
+v poslední kontrole E31 zatím přispělo 5 697 z 5 700 anotovaných variant.
+Dokončení proto vyžaduje skutečný plný rozpočet a kontrolu všech anotací, čerstvý
+párový VAL, zmrazení výběru a teprve potom nezávislý TEST. **Nový finální V2
+model ani jeho TEST výsledek zatím nejsou hotové. Celkový cíl zůstává aktivní.**
+
+Následující časové aktualizace zachovávají historii práce.
+
 ## Aktuální stav: 10. 11. 2026, 22:50 UTC
 
 Předatelná větev zachovává pět původních modelů, tři označené piloty a úplný
