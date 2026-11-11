@@ -1,0 +1,196 @@
+{
+  "kind": "actual_product_wheel_import_and_resource_verification",
+  "source_commit": "5d50fc523858909cf3ea482f4c018fd529ff48a8",
+  "scope": "One uv wheel build, isolated no-deps target installation and metadata/help checks outsidecheckout. No checkpoint Tensor load, model forward, GT/dataset decode or CUDA operation. No source/default/registry/model-byte changes.",
+  "wheel": {
+    "wheel_filename": "deepretina-0.1.0-py3-none-any.whl",
+    "wheel_sha256": "e533d5aa77978a2b95905415b7ebd62a7a944611f4ece984748b70115f192ff1",
+    "wheel_bytes": 62181241,
+    "runtime_Python_files_byte_exact": 45,
+    "required_modules": [
+      "photometry.py",
+      "photometry_cache.py",
+      "unified.py",
+      "unified_cli.py",
+      "legacy_training.py",
+      "legacy_training_cli.py",
+      "bundled.py"
+    ],
+    "TTA_location": "inline unified.py, as in actualproductsource",
+    "registry_sha256": "008dc4d16da175f96b053bb0125b89218462074c9fd6d3a4ce67cc7784d44e34",
+    "aliases": {
+      "vessels": "legacy-vessels",
+      "disc_cup": "legacy-universal",
+      "av": "legacy-av"
+    },
+    "weights": {
+      "pilot-vessels": {
+        "filename": "vessels.pt",
+        "sha256": "38a4125d213b49526c6cf1fbd6dfde1e19394a1969d3724be0737b7bffda4544",
+        "bytes": 1971502,
+        "source_and_wheel_registry_match": true
+      },
+      "pilot-av": {
+        "filename": "av.pt",
+        "sha256": "0a8c85dd4888a4aab1ffded7a9e2ac4b254745a15c03a465ff2106e34a1c0eb7",
+        "bytes": 1971694,
+        "source_and_wheel_registry_match": true
+      },
+      "legacy-universal": {
+        "filename": "legacy-single-net-universal.pt",
+        "sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+        "bytes": 5802105,
+        "source_and_wheel_registry_match": true
+      },
+      "legacy-vessels": {
+        "filename": "legacy-single-net-vessels.pt",
+        "sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01",
+        "bytes": 5346739,
+        "source_and_wheel_registry_match": true
+      },
+      "legacy-disc-0": {
+        "filename": "legacy-single-net-disc-0.pt",
+        "sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+        "bytes": 5767664,
+        "source_and_wheel_registry_match": true
+      },
+      "legacy-disc-1": {
+        "filename": "legacy-single-net-disc-1.pt",
+        "sha256": "8ebf60971813bbaecc9602663034d75cfe7f5c3c9587b7b2a27d056c1cae3605",
+        "bytes": 5767664,
+        "source_and_wheel_registry_match": true
+      },
+      "legacy-av": {
+        "filename": "legacy-av-v9.pt",
+        "sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+        "bytes": 8152192,
+        "source_and_wheel_registry_match": true
+      },
+      "pilot-disc-cup": {
+        "filename": "disc_cup.pt",
+        "sha256": "36f72fd4817d432d6e953bbec39604374d40b25c0a0ffad7723b0b28ca55e22a",
+        "bytes": 1971630,
+        "source_and_wheel_registry_match": true
+      },
+      "unified-full-data-baseline": {
+        "filename": "unified-full-data-baseline.pt",
+        "sha256": "bfe957460dfed168f2344b1b84ef99b7f502e9dbc8ce1fd4d68632c3234708b1",
+        "bytes": 5401330,
+        "source_and_wheel_registry_match": true
+      },
+      "unified-v2-control": {
+        "filename": "unified-v2-control.pt",
+        "sha256": "10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2",
+        "bytes": 14385264,
+        "source_and_wheel_registry_match": true
+      },
+      "unified-v2-vascular2": {
+        "filename": "unified-v2-vascular2.pt",
+        "sha256": "81113e7e74d86a3d51994754895d18e90b2ee8d54d5a8660a8d5535096451b7b",
+        "bytes": 5453234,
+        "source_and_wheel_registry_match": true
+      },
+      "unified-v3-tpe-preview": {
+        "filename": "unified-v3-tpe-preview.pt",
+        "sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+        "bytes": 8894002,
+        "source_and_wheel_registry_match": true
+      }
+    },
+    "weight_count": 12,
+    "only_one_wheel_and_no_sdist_or_sourceZIP": true,
+    "entrypoints": "[console_scripts]\ndeepretina = deepretina.cli:main\n"
+  },
+  "generator": "hatchling 1.33.0",
+  "actual_commands": {
+    "build": {
+      "tool": "uv build --wheel",
+      "observed_returncode": 0,
+      "seconds": 5.023543014889583
+    },
+    "install": {
+      "tool": "uv pip install --offline --no-deps --link-mode copy --target ISOLATED_HOME_TARGET WHEEL",
+      "observed_returncode": 0,
+      "seconds": 0.6722450510133058,
+      "runtime_dependencies_not_installed_or_updated": true
+    },
+    "outside_target_check": {
+      "observed_returncode": 0,
+      "seconds": 2.9727623788639903,
+      "all_module_origins_under_target": true,
+      "module_names": [
+        "deepretina",
+        "deepretina.cli",
+        "deepretina.bundled",
+        "deepretina.photometry",
+        "deepretina.photometry_cache",
+        "deepretina.unified",
+        "deepretina.unified_cli",
+        "deepretina.legacy_training",
+        "deepretina.legacy_training_cli"
+      ],
+      "target_distribution_metadata_verified": true
+    }
+  },
+  "CPU_policy": {
+    "one_affinity_core": true,
+    "nice": 17,
+    "IO": "idle",
+    "CUDA_VISIBLE_DEVICES": "empty",
+    "fresh_temp_cache_output_target_under_HOME": true
+  },
+  "CLI_and_profiles": {
+    "CLI_help": {
+      "main": {
+        "exit_code": 0,
+        "sha256": "dc0f3ec33ce0c45942a49266927dc4be87cc09b3d38e8ad1c70834857baa2d0a"
+      },
+      "train-unified": {
+        "exit_code": 0,
+        "sha256": "3ae9a956d85da036fab2770d8476b07aa0cb11a0c0b40868b6118a667e0a5a8a"
+      },
+      "predict": {
+        "exit_code": 0,
+        "sha256": "53fa5faab9c9634a70519e5e8800320ee401355ab2d49540233b132e632c474b"
+      }
+    },
+    "console_entrypoint_help_exit0": true,
+    "model_catalog_equal_source": true,
+    "model_count": 12,
+    "aliases": {
+      "vessels": "legacy-vessels",
+      "disc_cup": "legacy-universal",
+      "av": "legacy-av"
+    },
+    "default_photometric_profile": "raw",
+    "raw_returns_same_sentinel_without_FOV": true,
+    "optin_profile_backend_imports": {
+      "clahe_hsv_v1": {
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "scikit-image": "0.26.0",
+        "opencv-python-headless": "4.14.0.94"
+      },
+      "legacy_lc_clahe_v1": {
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "scikit-image": "0.26.0",
+        "opencv-python-headless": "4.14.0.94"
+      }
+    },
+    "photometry_cache_CLI_flags_parse": true,
+    "checkpoint_load_NN_forward_and_CUDA_functions_trapped": true,
+    "no_GT_or_dataset_read": true
+  },
+  "all12_target_weight_SHAs_equal_source_registry_wheel": true,
+  "existing_runtime_42_distribution_METADATA_files_unchanged": true,
+  "whole_source_Python_files_byte_exact": true,
+  "source_and_model_defaults_unchanged": true,
+  "archive_or_binary_committed_or_published": false,
+  "limits": [
+    "Existing runtime dependencies supplied; no from-scratch dependency solve/download tested",
+    "No NN numerical parity, speed, quality or GPU compatibility claim from this packaging check",
+    "Only the recorded Python/runtime/platform was exercised; no wider platform-support claim"
+  ],
+  "handoff": "Git repository; verification wheel/target are local throwaway artifacts and are not published"
+}
