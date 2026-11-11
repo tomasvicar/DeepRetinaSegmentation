@@ -41,7 +41,7 @@ future paired evaluation must retain all 770 VAL photos/993 records/612 known
 clusters and exact common 25 supports under a new reviewed producer lineage.
 
 Current unified CLI/trainer/cache remain strict 25. This helper does not add
-native35 training/inference support or change any running 25 experiment. No full
+native 35 training/inference support or change any running 25 experiment. No full
 corpus, GPU, training, TEST scoring or quality improvement is claimed.
 
 CPU scope: Ada core 14 only, nice 19/idle IO, existing Python 3.12.13 runtime,
@@ -55,3 +55,51 @@ missing-channel preservation and joint A/V regridding.
 
 Documentation correction to the earlier 21-source list: STARE contributes 12 TRAIN
 photos/24 TRAIN vessel records. No existing corpus is changed by that correction.
+
+## Actual authorized canary completed
+
+The immutable source actually executed was 9b850d80c6b8c09991388e529e6ebdeb06f2823f,
+script SHA 40b5dbb40269895a34940436244b860e36dad6d5e6e18f30e736f2192c99e4d0,
+packet SHA c6f77ac363e94abea249113c4d4ee18fb1eaa82f63d7a6333ddb06a671f7050f.
+Actual CPU-only launch 14:08:56 UTC; owned child 2283237 exited 0 at 14:09:02 UTC,
+observed by a separate parent. Producer took 4.436 s (6.413 s including imports/
+launch), kernel peak RSS 888,668,160 B; sampled owned-process-tree peak 845,668,352 B.
+The 3 GiB RSS watchdog did not trigger. No RLIMIT_AS was used, no retry occurred.
+Seven synthetic tests passed in 1.98 s before the real TRAIN run.
+
+Every source RGB emission and all frozen 25 RGB/target/valid/FOV arrays matched
+exactly, including DRIVE/RITE shared geometry and RIM observer variants.
+Direct35 output shapes were 1443×1454 (DRIVE/RITE), 465×350 (RIM stereo-left crop),
+and 1525×1575 (UoA). The source RIM targets actually contain 0/1 after the preserved
+>127 decoder; .37 preservation is synthetic evidence, not invented soft real GT.
+UoA cup remains entirely invalid at both resolutions. DRIVE and RITE retain
+their distinct binary vessel annotations rather than replacing one with the
+other. Positive supports below are valid-intersected source labels, not scores:
+
+| Row |25ppd valid-positive counts |35ppd valid-positive counts |
+|---|---:|---:|
+| DRIVE37 vessel |106615|209718|
+| RITE37 vessel/artery/vein |106398 /41627 /56569|209290 /81789 /111461|
+| RIM average disc/cup |2121 /427|4162 /844|
+| RIM expert1 disc/cup |2095 /368|4105 /732|
+| RIM expert2 disc/cup |2158 /488|4227 /962|
+| UoA53 vessel |67163|131932|
+| UoA53 disc/cup |36315 /0|71168 /0|
+
+RITE unknown vessel support was 8202 at 25 and 16040 at 35; conditional scoring
+support (known exclusive artery/vein labels, excluding background/crossings)
+was 98196 and 193250 respectively. Different grid counts are expected; these
+native 35 supports must NOT be compared as paired VAL denominators against 25.
+The canary evaluates no model and demonstrates no quality improvement.
+
+The public `actual-TRAIN-proof.json` is a metadata projection with metrics and
+resource SHA preserved; only its scope prose is clarified and source/observer
+provenance added. Original report SHA:
+`fad593236278670a937f9dc83d233164bd707c5e1672fa7b390f2a5826ce78a1`.
+Original report/launch/exit/observer bytes and copy verification are retained in
+the private operations repository. PNG/NPZ arrays remain outside Git. The 17
+actual archive resources exactly matched the pre-decode allowlist and historical
+ZIP CRC/size inventory; actual encoded resource SHAs are recorded. Historical
+CRC metadata is not a historical cryptographic hash, and the equality claim is
+explicitly the verified decoded/prepared 25 replay for these seven rows.
+No VAL/TEST image or GT array, checkpoint, GPU or NN was accessed.
