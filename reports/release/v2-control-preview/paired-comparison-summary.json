@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "kind": "completed_val_fixed_terminal60_frozen_original_comparison",
+  "checkpoint_role": "fixed_terminal60",
+  "baseline_only": true,
+  "selection_authorized": false,
+  "split": "val",
+  "photos": 770,
+  "split_groups": 612,
+  "bootstrap": {
+    "draws": 2000,
+    "seed": 42,
+    "unit": "reviewed split_group_id",
+    "stratification": "signature of canonical datasets in the whole group"
+  },
+  "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "reference_checkpoint_sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+  "candidate_checkpoint_sha256": "10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2",
+  "macro_dataset_mean_dice": {
+    "reference": 0.6670295852091139,
+    "candidate": 0.7887627334285886,
+    "candidate_minus_reference": 0.12173314821947467,
+    "paired_percentile_95ci": [
+      0.11424707410291139,
+      0.13093477989099206
+    ],
+    "defined_bootstrap_draws": 2000
+  },
+  "channels": {
+    "vessel": {
+      "pooled_dice": {
+        "reference": 0.7701233997938133,
+        "candidate": 0.7504721656517305,
+        "candidate_minus_reference": -0.019651234142082807,
+        "paired_percentile_95ci": [
+          -0.023920071573738624,
+          -0.015335250766586572
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.786656606945927,
+        "candidate": 0.7697073866409276,
+        "candidate_minus_reference": -0.016949220304999346,
+        "paired_percentile_95ci": [
+          -0.021570267474341147,
+          -0.012454118332278349
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "artery": {
+      "pooled_dice": {
+        "reference": 0.689521829787506,
+        "candidate": 0.6771091345930581,
+        "candidate_minus_reference": -0.012412695194447876,
+        "paired_percentile_95ci": [
+          -0.02530743211460367,
+          0.000962235966566797
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.6808690952407886,
+        "candidate": 0.6470801521075569,
+        "candidate_minus_reference": -0.033788943133231775,
+        "paired_percentile_95ci": [
+          -0.055916928019422885,
+          -0.01630919805613066
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "vein": {
+      "pooled_dice": {
+        "reference": 0.6972863687090058,
+        "candidate": 0.7543140406068415,
+        "candidate_minus_reference": 0.05702767189783564,
+        "paired_percentile_95ci": [
+          0.044978634851272514,
+          0.06876200643901646
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.6995405927524971,
+        "candidate": 0.7380671496198877,
+        "candidate_minus_reference": 0.03852655686739059,
+        "paired_percentile_95ci": [
+          0.0248463433522193,
+          0.0554952252026074
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "disc": {
+      "pooled_dice": {
+        "reference": 0.8948079084718797,
+        "candidate": 0.934122076215391,
+        "candidate_minus_reference": 0.039314167743511264,
+        "paired_percentile_95ci": [
+          0.03128582445505811,
+          0.049003824131697724
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.7295300905977455,
+        "candidate": 0.9230746414943375,
+        "candidate_minus_reference": 0.19354455089659195,
+        "paired_percentile_95ci": [
+          0.18104556925475143,
+          0.20695079891531187
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "cup": {
+      "pooled_dice": {
+        "reference": 0.4353989841007063,
+        "candidate": 0.872808188045654,
+        "candidate_minus_reference": 0.43740920394494764,
+        "paired_percentile_95ci": [
+          0.4235179265636917,
+          0.45039309818387363
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "macro_dataset_dice": {
+        "reference": 0.4385515405086113,
+        "candidate": 0.8658843372802332,
+        "candidate_minus_reference": 0.4273327967716219,
+        "paired_percentile_95ci": [
+          0.4017537366784084,
+          0.45953944325085583
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    }
+  },
+  "qualifications": [
+    "Validation results used for tuning are exploratory, including their confidence intervals",
+    "Historical original-model exposure and documented preprocessing/backend differences remain qualifications",
+    "Split groups preserve known patients/aliases; opaque patient IDs are not proven independent",
+    "Identical input hashes and valid/positive counts support pairing; this script does not rerun mask inference",
+    "Percentile intervals are conditional on these checkpoints and do not measure training-seed uncertainty",
+    "Aggregate gains cannot establish improvement of each individual task",
+    "VAL pipeline comparison only; no TEST execution or selection authorization.",
+    "Historical original training exposure is incompletely recoverable; source photometry retains measured residuals.",
+    "This original flat report is not the older composed cup-clipped report family.",
+    "External contexts bind declared reviewed bytes; reviewer identity is not authenticated by hashes.",
+    "Fixed terminal60 all-annotation baseline; not the VAL-selected best checkpoint or a final selection/TEST authorization. Original best/last QA identities are preserved."
+  ],
+  "reference_family": "frozen_original_reference",
+  "test_evaluation_enabled": false,
+  "av_accuracy": {
+    "conditional_accuracy": {
+      "reference": 0.748566415513326,
+      "candidate": 0.7880366327480196,
+      "candidate_minus_reference": 0.03947021723469357,
+      "paired_percentile_95ci": [
+        0.026306768289773096,
+        0.05218083360590084
+      ],
+      "defined_bootstrap_draws": 2000
+    },
+    "end_to_end_accuracy": {
+      "reference": 0.6303065471974851,
+      "candidate": 0.6422348078121026,
+      "candidate_minus_reference": 0.011928260614617492,
+      "paired_percentile_95ci": [
+        0.0003920076732835344,
+        0.023185712384212458
+      ],
+      "defined_bootstrap_draws": 2000
+    },
+    "counts": {
+      "reference": {
+        "correct": 1965948,
+        "scored_pixels": 2626284,
+        "eligible_pixels": 2626284,
+        "end_to_end_correct": 1655364
+      },
+      "candidate": {
+        "correct": 2069608,
+        "scored_pixels": 2626284,
+        "eligible_pixels": 2626284,
+        "end_to_end_correct": 1686691
+      }
+    }
+  },
+  "source_comparison_sha256": "ad7d731a5e638aaca3f9fded21d0a37e6670eaf14d06b9e9a8e0d68f0273d5c8"
+}

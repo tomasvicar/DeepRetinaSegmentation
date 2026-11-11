@@ -1,0 +1,164 @@
+{
+  "status": "PASS_REAL_RAW_TRAIN_CPU_CLI",
+  "model": "unified-v2-control",
+  "checkpoint_sha256": "10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2",
+  "checkpoint_epoch": 60,
+  "membership": {
+    "source_archive": "DRIONS-DB.zip",
+    "source_member": "images/image_001.jpg",
+    "encoded_image_sha256": "c510f7c3a90c35a75cde75661668664b1c6d97f3c872476ed668d1ebdb190ff1",
+    "photo_id": "sha256:d0d30763e7b390dd94bc084e2e8dbeedce22cd0cac1688cade051eb3324b5db2",
+    "image_shape_hwc": [
+      400,
+      600,
+      3
+    ],
+    "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "record_ids": [
+      "drions_image_001_expert1_disc_cup",
+      "drions_image_001_expert2_disc_cup"
+    ],
+    "split": "train",
+    "ground_truth_masks_read": false
+  },
+  "device": "cpu",
+  "CUDA_VISIBLE_DEVICES": "",
+  "numerical_threads_env": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1"
+  },
+  "nice": 10,
+  "ionice": "idle",
+  "entrypoint": "python -m deepretina predict",
+  "arguments": [
+    "--model",
+    "unified-v2-control",
+    "--input",
+    "drions-image001.jpg",
+    "--dataset",
+    "drions",
+    "--output",
+    "prediction",
+    "--device",
+    "cpu"
+  ],
+  "source_base_commit": "42aa3e3",
+  "package_source_content_sha256": "5fab891608fa865e21146c597c3b8b2068e352e9f40cafc40c577030044afadd",
+  "preprocessing": {
+    "profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "field_of_view_degrees": 30.0,
+    "normalized": false,
+    "normalization": "RGB/255-0.5",
+    "fov_source": "automatic original Python thresholds",
+    "geometry": {
+      "original_shape": [
+        400,
+        600
+      ],
+      "crop_position": [
+        0,
+        399,
+        0,
+        599
+      ],
+      "rescale_factor": 1.25,
+      "prepared_shape": [
+        500,
+        750
+      ]
+    },
+    "geometry_policy": {
+      "policy_id": "corpusv2_nominal_fov_20261110_v1",
+      "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+      "dataset": "drions",
+      "native_shape_hw": [
+        400,
+        600
+      ],
+      "policy_applied": true,
+      "declared_rule": {
+        "alternatives_degrees": [
+          25.0,
+          30.0,
+          45.0
+        ],
+        "camera": "unspecified analog fundus camera",
+        "confidence": "low",
+        "evidence_ids": [
+          "drions_creator"
+        ],
+        "field_of_view_degrees": 30.0,
+        "nominal_assumption": true,
+        "per_image_angle_measured": false,
+        "qualification": "Research scale convention for the disc-centered low-resolution scan, not measured FoV.30 avoids an unsupported45degree default and greater upsampling; neither is proven correct. Do not fit angle from disc GT.",
+        "sources": [
+          "https://www.ia.uned.es/~ejcarmona/DRIONS-DB_2.html"
+        ],
+        "status": "research_nominal_unknown_camera",
+        "policy_id": "corpusv2_nominal_fov_20261110_v1",
+        "native_shape_hw": [
+          400,
+          600
+        ],
+        "camera_attribution_method": "dataset_acquisition_description_or_explicit_nominal_research_policy"
+      },
+      "unseen_native_shape": false,
+      "selection": "checkpoint_recorded_geometry_policy",
+      "field_of_view_degrees": 30.0,
+      "unseen_native_shape_fallback": false
+    }
+  },
+  "output_shape_hw": [
+    400,
+    600
+  ],
+  "probabilities_finite_in_unit_interval": true,
+  "conditional_probabilities_sum_to_one": true,
+  "av_exclusive_and_subset_of_vessel": true,
+  "cup_subset_of_disc": true,
+  "all_output_paths_existed_at_capture": true,
+  "ground_truth_scoring_performed": false,
+  "test_data_used": false,
+  "files": {
+    "prediction.json": {
+      "bytes": 4154,
+      "sha256": "a00170f1c9fd0d686a650b53989b8535f0ae48d3c34e6c66a5117222d8663818"
+    },
+    "overlay.png": {
+      "bytes": 256844,
+      "sha256": "b7f95f574ec8f94433c15580eb7b155d301ba2101c4d39a594395bf540f8f88a"
+    },
+    "av.png": {
+      "bytes": 11186,
+      "sha256": "803100ef67ed7521ee78448ea6acbe2a4aac5515f3c81b3e9c22ca9a6d16c045"
+    },
+    "cup.png": {
+      "bytes": 525,
+      "sha256": "ce529ce2b7b5cdcc410bf951c3e664111eedbe57672138fbab9eab8e0033f472"
+    },
+    "disc.png": {
+      "bytes": 779,
+      "sha256": "6397626792567b5f4dc72e0636ef2a20945c4c8dfcb8e8d0e8241c46f799f597"
+    },
+    "vein.png": {
+      "bytes": 5668,
+      "sha256": "f4678e7b1efac69e65e133036281d486b1d71c7acdd910f9f05d44c5997d951f"
+    },
+    "artery.png": {
+      "bytes": 5823,
+      "sha256": "b13a859a8256b33834411cc033c82b88e114916a1899d9d4849729ff8d079576"
+    },
+    "vessel.png": {
+      "bytes": 8132,
+      "sha256": "3cb98a2912e13838fcd870b1b998fd4a306bbde18a4992c63e1a12244154576f"
+    },
+    "probabilities.npz": {
+      "bytes": 4407469,
+      "sha256": "0d20a0ee731c50bfe6826ee3f61b6d62b485f9a02301efabf87364d5bf9cd91a"
+    }
+  },
+  "image_or_output_arrays_committed": false,
+  "wall_time_measured": false
+}

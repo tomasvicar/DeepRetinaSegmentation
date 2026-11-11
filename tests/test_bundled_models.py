@@ -12,7 +12,13 @@ from deepretina.cli import main
 
 
 def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums():
-    catalog = model_catalog()["models"]
+    registry = model_catalog()
+    catalog = registry["models"]
+    assert registry["aliases"] == {
+        "vessels": "legacy-vessels",
+        "disc_cup": "legacy-universal",
+        "av": "legacy-av",
+    }
     assert set(catalog) == {
         "legacy-vessels",
         "legacy-universal",
@@ -23,6 +29,7 @@ def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums()
         "pilot-av",
         "pilot-disc-cup",
         "unified-full-data-baseline",
+        "unified-v2-control",
     }
     for name, info in catalog.items():
         with bundled_checkpoint(name) as checkpoint:
@@ -39,6 +46,31 @@ def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums()
             assert saved["config"]["preprocessing_profile"] == info["preprocessing_profile"]
             assert info["completed_epochs"] == 60
             assert info["default_threshold"] == 0.5
+        if name == "unified-v2-control":
+            assert saved["epoch"] == info["selected_epoch"] == info["completed_epochs"] == 60
+            assert info["selection_policy"] == "fixed_terminal_epoch_complete_annotation_coverage"
+            assert info["best_validation_epoch"] == 52
+            assert saved["coverage"]["seen_photos"] == info["training_photos"] == 2529
+            assert (
+                saved["coverage"]["contributing_annotation_records"]
+                == info["training_annotation_records"]
+                == 5700
+            )
+            assert (
+                min(saved["coverage"]["annotation_visits"].values())
+                == info["minimum_annotation_visits"]
+                == 2
+            )
+            assert (
+                min(saved["coverage"]["photo_visits"].values())
+                == info["minimum_photo_visits"]
+                == 66
+            )
+            assert saved["geometry_policy"]["sha256"] == info["geometry_policy_sha256"]
+            assert info["default_threshold"] == 0.5
+            assert saved["manifest_sha256"] == info["manifest_sha256"]
+            assert saved["prepared_content_sha256"] == info["prepared_content_sha256"]
+            assert saved["val_selection_score"] == info["validation"]["training_score"]
 
 
 def test_cli_predicts_without_dataset_or_external_checkpoint(tmp_path, capsys):

@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 11. 11. 2026, aktualizace po 02:11 UTC. Celkový cíl není dokončený.**
+**Snímek: 11. 11. 2026, po dokončení E60 a čerstvé VAL kontrolního V2. Celkový cíl není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -12,8 +12,9 @@ Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad,
 | Predikce | Python CLI, masky, pravděpodobnosti, overlay a metadata v původní geometrii. Rodiny mají výslovné vstupní profily. |
 | Nové trénování | Příprava 21 zdrojů z RAW dat v ownCloudu, unified trainer a čerstvé trénování původních architektur. Nativní recepty nejsou reprodukcí neznámého historického optimalizátoru. |
 | Unified baseline V1 | Dokončených 60 epoch, 2 221 TRAIN fotografií a 5 281 anotovaných variant ze 17 zdrojů. Vybrán checkpoint E56; není finálním modelem na širším V2. |
+| Unified control V2 | Pevný terminální E60, 21 zdrojů, všech 2 529 TRAIN fotografií / 5 700 anotovaných variant skutečně přispělo. Čerstvá VAL; cévní regrese vůči původní sestavě, není optimalizovaný finální model. |
 | Piloty | Tři starší pokusy na jednotlivých databázích, jasně označené jako piloty. |
-| Instalace a kontrola | `uv`, ověřený wheel a izolovaná instalace; integrační kontrola 2 605 CPU testů. Všech devět přibalených checkpointů zachovalo původní bajty. |
+| Instalace a kontrola | `uv`, ověřený wheel a izolovaná instalace; předchozí integrační kontrola 2 605 CPU testů; přidání V2 ověřuje 59 cílených testů, CPU RAW smoke a wheel s deseti modely. Původních devět checkpointů zachovalo bajty; samostatně přibyl desátý V2 control. |
 
 Začněte [instalací a predikcí](../README.md#install),
 [přípravou celého korpusu](UNIFIED_QUICKSTART.md),
@@ -53,12 +54,17 @@ předpoklady nových zdrojů jsou výslovné a uložené s daty i checkpointem;
 
 Kontrolovaná studie porovnává control a šest variant loss, geometrie a augmentací
 v etapách 3/9/27/60 na třech vlastních GPU. Při poslední zaznamenané kontrole
-control dokončil 54 epoch; všechny fotografie a zdroje již přispěly, a všech
-5 700 anotovaných variant. Ještě to není dokončený model. Návazná
-validace má samostatnou kontrolu skutečného E60 a úplného pokrytí anotací.
+control dokončil všech 60 epoch a prošel přísnou QA: přispělo všech 2 529 fotografií
+(minimálně 66 návštěv) a všech 5 700 variant (minimálně 2 příspěvky). Vydává se
+pevný terminální E60 `unified-v2-control`, nikoli VAL-best E52, který měl jen
+5 699 přispívajících variant. [Model card](UNIFIED_V2_CONTROL.md) rozlišuje role.
+Další cévně vážený experiment je samostatný probíhající výzkum, nikoli součást této
+kontrolní varianty.
 
-Průběžný checkpoint E25 zlepšuje disk a cup, ale pooled vessel Dice a podmíněné
-A/V zatím zaostávají za původní sestavou. Nelze jej označit za zlepšení všech úloh.
+Čerstvý E60 na 770 VAL fotografiích má macro Dice 0,78876 proti původní sestavě
+0,66703, ale pooled vessel Dice 0,75047 proti 0,77012: přetrvává doložená cévní
+regrese. Artery je nižší v bodovém odhadu (párový interval protíná nulu); vein,
+disk/cup a podmíněná A/V jsou vyšší. Nelze jej označit za zlepšení všech úloh.
 TRAIN audit navíc ukázal přibližně pětinový pokles očekávané cévní/A/V expozice
 po přidání nových disk/cup zdrojů při stejném rozpočtu. Další experiment proto
 má samostatnou implementaci úpravy samplingu na větvi
@@ -72,7 +78,7 @@ má samostatnou implementaci úpravy samplingu na větvi
 3. Zmrazit vybraný checkpoint, konfiguraci, prahy a inference protokol; poté provést samostatný TEST.
 4. Doložit kvalitu, velikost a rychlost vybraného modelu a předat jeho váhy vedle původních sítí.
 
-**Nový finální V2 checkpoint a jeho TEST výsledky zatím nejsou vydané.**
+**Použitelný kontrolní V2 checkpoint je přibalený; optimalizovaný finální model a TEST výsledky zatím nejsou vydané.**
 Podrobný cíl je v [GOAL.md](GOAL.md), historické záznamy v
 [PROGRESS_HISTORY_2026-11.md](PROGRESS_HISTORY_2026-11.md). Operátorské přístupy a
 spotřeba MetaCentra jsou vedené v samostatném soukromém provozním repozitáři.

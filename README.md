@@ -2,7 +2,9 @@
 
 **Status:** original trained models are bundled with verified prepared-input
 inference. Three additional single-dataset pilots remain explicitly preliminary.
-A completed corpus-v1 unified baseline is bundled (17 TRAIN sources, 2,221 photos); model optimization and final comparison remain in progress.
+Completed corpus-v1 and separately named corpus-v2 control baselines are bundled.
+V2 uses 21 TRAIN sources, 2,529 photos and all 5,700 annotation variants;
+its fixed terminal E60 is not an optimized/final model. Model optimization and TEST remain pending.
 See the [current status and remaining work](docs/STATUS.md) and the
 [agreed deliverable](docs/GOAL.md).
 
@@ -12,7 +14,7 @@ The branch preserves five original trained checkpoints and three explicitly name
 pilot checkpoints. Original architectures, weights and prepared-input inference
 have been checked numerically against the historical implementations. The newer
 pilots are small single-dataset experiments; they are not replacements for the
-original models. The separately named full-data unified baseline is also ready for inference.
+original models. Both separately named unified controls are also ready for inference.
 See [the project goal and completion criteria](docs/GOAL.md).
 
 ## Install
@@ -43,7 +45,20 @@ uv run deepretina predict --model legacy-vessels --input /path/to/fundus.jpg --o
 uv run deepretina predict --model legacy-universal --input /path/to/fundus.jpg --output predictions/disc_cup
 ```
 
-Add `--device cpu` to work without a GPU and `--dataset drive` (or the correct
+For all five outputs in one RGB-network pass, use the separate V2 control:
+
+```bash
+uv run deepretina predict --model unified-v2-control \
+  --input /path/to/fundus.jpg --dataset drive \
+  --output predictions/unified-v2 --device cpu
+```
+
+`drive` is an example: choose the photograph's actual source/camera. This is a
+control baseline, not an optimized/final model; vessel quality is lower than the
+original reference. See the [model card and task tradeoffs](docs/UNIFIED_V2_CONTROL.md).
+
+For the original models, add `--device cpu` to work without a GPU and
+`--dataset drive` (or the correct
 source name) to select source-specific geometry. For an unknown source, supply
 `--field-of-view-degrees` explicitly. The original single-net default uses the
 source-inferred raw profile; `--normalized` selects its original local-contrast
@@ -103,6 +118,7 @@ and [preprocessing evidence](docs/LEGACY_PREPROCESSING.md).
 | --- | --- |
 | `legacy-universal` | Original trained single_net: vessel, disc, cup |
 | `unified-full-data-baseline` | Corpus-v1 completed60-epoch five-output baseline (17 TRAIN sources, 2,221 photos); selected E56 on validation, no TEST yet |
+| `unified-v2-control` | Corpus-v2 fixed terminal E60: 21 TRAIN sources, 2,529 photos / all 5,700 variants; VAL only, lower vessel Dice than original reference; not optimized/final |
 | `legacy-vessels` | Original trained vessel network |
 | `legacy-disc-0`, `legacy-disc-1` | Two original trained disc networks |
 | `legacy-av` | Original trained A/V classifier; requires vessel support |

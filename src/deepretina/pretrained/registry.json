@@ -1,6 +1,6 @@
 {
   "format_version": 1,
-  "description": "Original trained models with verified ports, one completed full-data unified baseline, and explicitly named preliminary pilots. Validation evidence is not held-out test evidence.",
+  "description": "Original trained models with verified ports, completed corpus-v1 and fixed-terminal corpus-v2 control baselines, and explicitly named preliminary pilots. Validation evidence is not held-out test evidence.",
   "models": {
     "pilot-vessels": {
       "filename": "vessels.pt",
@@ -311,8 +311,58 @@
       "source_commit": "3157bb957fcf6e6f632a5c49d6df2c8a78ea3747",
       "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
       "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e",
-      "limitations": "Single-seed validation-selected baseline. HPO ongoing; no held-out test evaluation or claim of superiority across all tasks. Missing labels are ignored; A/V probabilities are conditional and cup decoding is constrained inside disc. Covers the prepared17-source corpusv1. Additional available DRIONS-DB/GAMMA annotation archives are under corpusv2 audit and were not used to train this checkpoint.",
+      "limitations": "Single-seed validation-selected baseline. HPO ongoing; no held-out test evaluation or claim of superiority across all tasks. Missing labels are ignored; A/V probabilities are conditional and cup decoding is constrained inside disc. Covers the prepared17-source corpusv1. DRIONS-DB, GAMMA, IDRiD disc and explicitly corrected BIOMISA annotations are prepared in separate corpusv2; they were not used to train this V1 checkpoint.",
       "training_corpus": "v1: 17 registered supervised sources, manifest529edba7"
+    },
+    "unified-v2-control": {
+      "filename": "unified-v2-control.pt",
+      "sha256": "10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2",
+      "family": "unified",
+      "task": "unified",
+      "channels": [
+        "vessel",
+        "artery",
+        "vein",
+        "disc",
+        "cup"
+      ],
+      "status": "fixed terminal60 corpus-v2 full-annotation-coverage control baseline; validation only, optimization ongoing, TEST pending",
+      "selection_policy": "fixed_terminal_epoch_complete_annotation_coverage",
+      "selected_epoch": 60,
+      "completed_epochs": 60,
+      "best_validation_epoch": 52,
+      "training_photos": 2529,
+      "training_annotation_records": 5700,
+      "training_sources": 21,
+      "minimum_photo_visits": 66,
+      "minimum_annotation_visits": 2,
+      "preprocessing_profile": "legacy25_raw",
+      "pixels_per_degree": 25,
+      "default_threshold": 0.5,
+      "validation": {
+        "metric": "macro_dataset_mean_dice",
+        "training_score": 0.788762631632258,
+        "fresh_score": 0.7887627334285886,
+        "threshold": 0.5,
+        "photos": 770,
+        "fresh_validation_sha256": "b3b7d7e947d85b1c7d0334c8234cf44cc79c19bd1d1498ba4a101f74c0b157d7",
+        "pooled_dice": {
+          "vessel": 0.7504721656517305,
+          "artery": 0.6771091345930581,
+          "vein": 0.7543140406068415,
+          "disc": 0.934122076215391,
+          "cup": 0.872808188045654
+        },
+        "conditional_av_accuracy": 0.7880366327480196
+      },
+      "source_commit": "6b3dfad605a256e904a877efcdcc1f3cc6135dd0",
+      "training_source_sha256": "9075246883f938ba80b4fe282b365da10ddb8c834bd3106d846465ac79ce9473",
+      "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+      "prepared_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+      "geometry_policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+      "training_cache_fingerprint": "18c3af6ce64e23c896d7befc52e5ba8e8ebda8e4058c2f156574fa755480766e",
+      "limitations": "Single-seed fixed-terminal control baseline, not optimized/final or superior on every task. E60 is published for actual contribution by all5700 annotations; the VAL-best E52 had only5699 contributors and is not this published model. Fresh VAL vessel Dice is lower than the strongest original vessel reference; artery Dice is also lower in point estimate with a paired interval crossing zero. Disc/cup, vein and conditional A/V gains do not remove these regressions. No heldout TEST evaluation or clinical claim. Known-source camera angles include documented nominal assumptions.",
+      "training_corpus": "v2:21 supervised TRAIN sources,2529photos/5700annotation records, manifest17a2277c"
     }
   },
   "aliases": {

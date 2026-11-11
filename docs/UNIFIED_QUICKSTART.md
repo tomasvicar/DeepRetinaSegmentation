@@ -21,12 +21,29 @@ uv run deepretina predict --model unified-full-data-baseline \
 
 Use your photograph's actual dataset/camera geometry; `drive` above is an example.
 This single RGB model produces vessel, artery, vein, disc and cup masks,
-probabilities, overlay and original-frame metadata. Defaults retain threshold0.5.
-It completed60 epochs on all2221 eligible training photos /5281 annotation records
-from17 sources, without pretraining; selected checkpoint E56 has training VAL
-source-macro Dice0.800123. It has **no held-out TEST results yet**; HPO and measured
+probabilities, overlay and original-frame metadata. Defaults retain threshold 0.5.
+It completed 60 epochs on all 2221 eligible training photos / 5281 annotation records
+from 17 sources, without pretraining; selected checkpoint E56 has training VAL
+source-macro Dice 0.800123. It has **no held-out TEST results yet**; HPO and measured
 comparison continue. [Training CSV and terminal QA](../reports/release/control60-baseline/)
 document provenance. Original models and their aliases remain available.
+
+### Separate 21-source V2 control
+
+```bash
+uv run deepretina predict --model unified-v2-control \
+  --input /path/to/fundus.jpg --dataset drive \
+  --output predictions/unified-v2 --device cpu
+```
+
+This is the fixed terminal E60 control, with actual contribution by all 2,529 TRAIN
+photos and 5,700 annotation variants across 21 sources. It is intentionally distinct
+from the higher-VAL E52 snapshot, which had only 5,699 annotation contributors.
+Fresh 770-photo VAL macro is 0.788763; vessel Dice 0.75047 is lower than the original
+reference 0.77012. Artery's point estimate is also lower, while vein, disc/cup and
+conditional A/V improve on this paired VAL. It is not an all-task win, optimized
+final model or heldout TEST result. Threshold 0.5 and existing aliases are unchanged.
+See the [V2 control model card](UNIFIED_V2_CONTROL.md) for full qualifications.
 
 ## Prepare all 21 annotated training sources from RAW
 
@@ -88,7 +105,7 @@ The preset is a reproducible starting point, not a selected optimum. It keeps a
 60-epoch cosine horizon even when an invocation stops after one epoch. Check
 `coverage.json`, `validation.json` and `metrics.csv` before continuing. Every
 training photo must contribute a supervised crop in a full epoch, followed by
-source/task-balanced extra crops. The8192-sample preset covers the historical2,529-photo V2
+source/task-balanced extra crops. The 8192-sample preset covers the historical 2,529-photo V2
 training corpus; increase `epoch_samples` to at least the number of eligible
 photos for a larger corpus. One epoch need not select every alternative observer.
 
