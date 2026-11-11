@@ -378,6 +378,10 @@ class UnifiedDataset(torch.utils.data.Dataset):
             ):
                 raise ValueError("Photometry cache manifest/profile differs")
             photometry_cache.require_coverage(self.rows)
+            self._photometry_cache_binding = (
+                self.config.photometric_profile,
+                self.config.pixels_per_degree,
+            )
         self._image_cache = OrderedDict()
         self._cache_bytes = 0
         self._cache_limit = 128 * 1024**2
@@ -391,6 +395,12 @@ class UnifiedDataset(torch.utils.data.Dataset):
         return len(self.groups)
 
     def _image(self, index):
+        if (
+            self.photometry_cache is not None
+            and (self.config.photometric_profile, self.config.pixels_per_degree)
+            != self._photometry_cache_binding
+        ):
+            raise ValueError("Photometry cache configuration changed after admission")
         photo_id = self.photo_ids[index]
         key = (
             photo_id

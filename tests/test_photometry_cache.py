@@ -298,3 +298,18 @@ def test_dataset_rejects_cache_descriptor_at_different_physical_scale(tmp_path, 
     cache.index["descriptor"] = p.contract("clahe_hsv_v1", 35)
     with pytest.raises(ValueError, match="manifest/profile"):
         u.UnifiedDataset(manifest, config=config, photometry_cache=cache)
+
+
+@pytest.mark.parametrize("field,value", [("photometric_profile", "raw"), ("pixels_per_degree", 35)])
+def test_mutable_config_cannot_relabel_processed_cache_even_after_LRU_hit(
+    tmp_path, corpus, field, value
+):
+    _, cache = built(tmp_path, corpus)
+    manifest, _, _ = corpus
+    config = u.UnifiedConfig(photometric_profile="clahe_hsv_v1")
+    dataset = u.UnifiedDataset(manifest, config=config, photometry_cache=cache)
+    dataset._image(0)
+    assert dataset._image_cache
+    setattr(config, field, value)
+    with pytest.raises(ValueError, match="configuration changed"):
+        dataset._image(0)

@@ -38,5 +38,12 @@
   "benchmarks": {
     "strong_pipeline": "Shared transform once inside each timed operation; training cache never used",
     "primitive_latency": "For nonraw, shared transform once outside timed model+restore/decode; explicit descriptor, saved tiles and preparation seconds; unlike full scopes cannot establish pipeline speedup"
+  },
+  "followup_mutable_config_guard": {
+    "scope": "Fail closed before Tensor LRU hit when attached-cache profile or physical scale changes",
+    "tests_passed": 35,
+    "seconds": 5.59,
+    "source_training_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747",
+    "original_3_TRAIN_proof_source_unchanged": "Actual proof remains attributed to original f030 input pipeline; this followup only rejects invalid configuration mutation"
   }
 }
