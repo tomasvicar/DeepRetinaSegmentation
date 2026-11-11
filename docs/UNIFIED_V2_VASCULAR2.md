@@ -32,6 +32,10 @@ The unchanged `best.pt` is 5,453,234 bytes, SHA256
 `81113e7e74d86a3d51994754895d18e90b2ee8d54d5a8660a8d5535096451b7b`.
 E59 has 120,832 successful optimizer steps, with minimum actual visits of 64 per
 photo and 2 per annotation. The complete run reached 122,880 steps at E60.
+The network has the same 1,106,597 parameters as the V2 control. File sizes
+reflect different checkpoint roles and saved optimizer state, not architecture
+compression.
+
 The E59 training-selection macro is 0.8038980927; independently produced fresh
 VAL macro is 0.8038980942. The published model is E59, not terminal E60.
 
@@ -68,7 +72,7 @@ is selected here.
 
 Training source is `0b8762e`, with manifest 17a2277c, canonical 00d9ef19 and geometry
 policy 2591d846. See [the compact release evidence](../reports/release/v2-vascular2-preview/README.md)
-and [the full paired validation reports](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/1a2ea5f/reports/vascular2-paired-val).
+and [the full paired validation reports](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/vascular2-paired-val).
 The four newly added disc/cup sources contribute TRAIN data; the fixed VAL domain
 is not an independent heldout assessment of all four new domains.
 

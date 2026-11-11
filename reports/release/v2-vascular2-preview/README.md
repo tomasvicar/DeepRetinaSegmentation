@@ -32,6 +32,6 @@ into stable. No training/inference implementation, thresholds or default aliases
 are changed here. HPO and final candidate selection remain separate.
 
 Full source validation evidence:
-[public paired audit](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/1a2ea5f/reports/vascular2-paired-val).
+[public paired audit](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/vascular2-paired-val).
 Raw photographs, masks, overlays, private operational receipts and Meta endpoints
 are not included in this release evidence.
