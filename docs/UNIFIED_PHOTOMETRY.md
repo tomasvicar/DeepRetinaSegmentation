@@ -107,7 +107,7 @@ The existing primitive latency benchmark recognizes saved nonraw profiles and
 reports preprocessing separately from model timing. Its nonraw model-only scope
 cannot establish full-pipeline speedup over an original complete pipeline.
 
-[Port verification](../reports/product-unified-photometry) covers synthetic arrays,
+[Initial port verification](../reports/product-unified-photometry) covers synthetic arrays,
 cache interoperability, default raw RNG/masks and joint TTA integration. It does
 not train or evaluate a real model, decode real GT, or establish real-image parity.
 
@@ -116,4 +116,7 @@ not train or evaluate a real model, decode real GT, or establish real-image pari
 [Two real TRAIN CPU parity checks](../reports/product-photometry-real-train-parity)
 matched probabilities and masks bitwise for the existing TPE preview and original
 fd44 raw256 checkpoint. This verifies the scoped raw compatibility paths;
-nonraw operational model parity and quality are separate measurements.
+a [separate original LC BEST60 CPU check](../reports/lc-best60-single-train-parity)
+now also matches full-frame processed inputs, probabilities and masks bitwise on
+one actual TRAIN photograph. These are scoped compatibility observations, not
+quality, corpus-wide/cross-device parity, model promotion or TEST selection.

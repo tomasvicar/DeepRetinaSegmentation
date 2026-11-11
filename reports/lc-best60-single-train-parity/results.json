@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "kind": "single_real_TRAIN_checkpoint_CPU_functionality_parity_not_quality",
+  "checkpoint": {
+    "sha256": "dfef53e453c51e87980c5132b8d829f7720b0f32b172982f4e1e1594b7449386",
+    "original_epoch": 60,
+    "role": "original_LC_BEST60",
+    "original_training_source_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747"
+  },
+  "reference_source_commit": "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+  "candidate_source_commit": "1fb4a0c304578c092f4e0c03c4684e4bb104fd70",
+  "input_scope": {
+    "dataset": "DRIVE",
+    "partition": "TRAIN",
+    "photographs": 1,
+    "full_prepared_RGB_shape": [
+      1031,
+      1033,
+      3
+    ],
+    "native_RGB_shape": [
+      584,
+      565,
+      3
+    ],
+    "FOV": "original image-derived/official standalone FOV, never GT mask or validity",
+    "canonical_manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "canonical_content_metadata_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+    "pixel_identity_framing": "SHA256(little-endian int64 HWC shape followed by contiguous uint8 pixel bytes)"
+  },
+  "original_saved_configuration": {
+    "architecture": "compact_unet",
+    "legacy_initialization": null,
+    "allow_historical_exposure": false,
+    "preprocessing_profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "epochs": 60,
+    "epoch_samples": 8192,
+    "coverage_first": true,
+    "batch_size": 4,
+    "patch_size": 384,
+    "base_channels": 16,
+    "depth": 4,
+    "norm": "batch",
+    "lr": 0.000287722894608172,
+    "weight_decay": 5.52164819184925e-06,
+    "scheduler": "cosine",
+    "min_lr_ratio": 0.05,
+    "seed": 42,
+    "workers": 8,
+    "device": "cuda:0",
+    "sampling": "dataset_task_balanced",
+    "train_view": "patch",
+    "view_size": 512,
+    "foreground_probability": 0.5,
+    "augmentation": "basic",
+    "bce_weight": 1.0,
+    "dice_weight": 1.0,
+    "av_weight": 1.0,
+    "vessel_loss_weight": 1.0,
+    "vessel_pos_weight": 1.0,
+    "tile_size": 512,
+    "overlap": 64,
+    "require_all_heads": true,
+    "selection_metric": "macro_dataset_mean_dice",
+    "purpose": "full_data",
+    "max_steps": null,
+    "vascular_sampling_weight": 2.553934065831788,
+    "mixed_precision": "bf16",
+    "photometric_profile": "legacy_lc_clahe_v1"
+  },
+  "original_saved_preprocessing": {
+    "profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "normalized": false,
+    "photometry": {
+      "profile": "legacy_lc_clahe_v1",
+      "contract_version": 1,
+      "stage": "full legacy25_raw prepared RGB before crop/augmentation/tiling",
+      "input": "uint8 RGB HWC",
+      "output": "uint8 RGB HWC",
+      "outside_fov": "restore original prepared RGB exactly after operator",
+      "FOV_provenance": "prepared image-derived/official FOV; canonical photos.json for corpus or prepare_single_net for raw inference; never target validity",
+      "corpus_FOV_binding": "schema2 prepared_content_fingerprint includes photos.json and every encoded FOV asset",
+      "RGB_scaling": "float32/255; RGB_to_HSV; CLAHE_on_V; HSV_to_RGB",
+      "clip_limit": 0.005,
+      "nbins": 256,
+      "kernel_size_requested": 113.63636363636363,
+      "kernel_size_effective": [
+        113,
+        113
+      ],
+      "kernel_rounding": "skimage int truncation toward zero; reject below1",
+      "uint8_export": "clip to[0,255], truncate toward zero",
+      "background": {
+        "operator": "legacy Python local_contrast_and_clahe",
+        "sigma": 36.36363636363636,
+        "formula": "clip((RGB-background)/background+0.5,0,1)",
+        "boundary": "original eroded-FOV EDT/Sobel/OpenCV remap",
+        "Gaussian": "skimage gaussian mode nearest, truncate4, channel_axis2"
+      },
+      "backend_versions": {
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "scikit-image": "0.26.0",
+        "opencv-python-headless": "4.14.0.94"
+      },
+      "matlab_parity_claim": false
+    }
+  },
+  "original_saved_geometry_policy_sha256": "17e4e2b3bf6ae4493186c2486e26337d8e9d2ca418a5cc52cecc099fdc616d72",
+  "original_saved_training_cache_identity": {
+    "schema": 1,
+    "kind": "full_prepared_photometry_RGB",
+    "fingerprint": "b2e42864c0e53b8fec30f55114e30f1ebbb624dd7fbefeccd31c7206cc324b01",
+    "canonical_fingerprint": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+    "descriptor_sha256": "c86d71a2221ed77cf3be6ed159a3aaa321fbb0aa51a9eb27888d9af476070572",
+    "operator_source_sha256": "196da8626c87d6b07bed6508252dd37328ee79846c4040c1403f9a090002708e",
+    "coverage": "train_val",
+    "fallback": false
+  },
+  "inference": {
+    "photometric_profile": "legacy_lc_clahe_v1",
+    "full_prepared_image_photometry_calls_per_source": 1,
+    "training_RGB_cache_lookup_used": false,
+    "outside_FOV_raw_RGB_preserved": true,
+    "precision": "float32_no_autocast",
+    "tta": "none",
+    "tile_size": 512,
+    "overlap": 64,
+    "threshold": 0.5
+  },
+  "matched_network_inputs": {
+    "processed_uint8_framed_sha256": "d925694fc51705d4efc3ec69834becf3edd472def52f87e74adf36c2c7b520e1",
+    "FP32_CHW_sha256": "47613d45e55595f4e3f68e58ff2821f4d06251981920719800e6afb5c757b08c",
+    "full_image_photometry_calls": 1,
+    "full_prepared_shape": [
+      1031,
+      1033,
+      3
+    ],
+    "outside_FOV_raw_exact": true
+  },
+  "network_inputs_exact_between_sources": true,
+  "prepared_probabilities": {
+    "shape": [
+      5,
+      1031,
+      1033
+    ],
+    "dtype": "float32",
+    "finite": true,
+    "bitwise_equal": true,
+    "different_values": 0,
+    "max_abs_error": 0.0,
+    "reference_sha256": "eb8ed5876191ee2498cd1056778c0699285814ddc8d920cb19b1911cb3e351b5",
+    "candidate_sha256": "eb8ed5876191ee2498cd1056778c0699285814ddc8d920cb19b1911cb3e351b5"
+  },
+  "native_restored_probabilities": {
+    "shape": [
+      5,
+      584,
+      565
+    ],
+    "dtype": "float32",
+    "finite": true,
+    "bitwise_equal": true,
+    "different_values": 0,
+    "max_abs_error": 0.0,
+    "reference_sha256": "51dd0ef07804653aed17531b23ff8ef7d662c88720d3875c8424446b74cd6040",
+    "candidate_sha256": "51dd0ef07804653aed17531b23ff8ef7d662c88720d3875c8424446b74cd6040"
+  },
+  "all_five_native_mask_planes": {
+    "shape": [
+      5,
+      584,
+      565
+    ],
+    "all_bits_equal": true,
+    "different_bits": 0,
+    "reference_sha256": "7b91decb6624b244b45b15b8d55d59f83760c917f83a2ac266d90cf5b164fdb3",
+    "candidate_sha256": "7b91decb6624b244b45b15b8d55d59f83760c917f83a2ac266d90cf5b164fdb3"
+  },
+  "saved_configuration_preprocessing_geometry_training_cache_exact": true,
+  "runtime": {
+    "python": "3.12.13",
+    "torch": "2.6.0+cu124",
+    "numpy": "2.5.4",
+    "threads": 1,
+    "interop": 1,
+    "opencv_threads": 1,
+    "execution_device": "cpu"
+  },
+  "resource_scope": {
+    "CPU_cores": 1,
+    "CUDA_VISIBLE_DEVICES": "",
+    "maximum_seconds": 120,
+    "owned_RSS_limit_bytes": 2684354560,
+    "minimum_MemAvailable_bytes": 2684354560,
+    "observed_seconds_including_imports_both_sources": 29.402133556082845,
+    "sampled_owned_group_peak_RSS_bytes": 862760960,
+    "limit_error": null,
+    "nice": 17,
+    "IO": "idle"
+  },
+  "actual_observed_child_exit": 0,
+  "actual_numeric_child_exit_observed": true,
+  "actual_external_observer_exit": 0,
+  "actual_numeric_external_exit_observed": true,
+  "source_model_input_and_helper_SHA_unchanged": true,
+  "arrays_transient_not_published": true,
+  "GT_VAL_TEST_decoded": false,
+  "GPU_used": false,
+  "retry_performed": false,
+  "model_promotion_selection_or_source_freeze_created": false,
+  "qualifications": [
+    "One specific checkpoint and one actual TRAIN photograph; exact compatibility of these input/probability/mask paths is not quality, generalization or corpus-wide parity.",
+    "Timing includes imports, loading, full-image LC and both source predictions; it is a resource-bound observation, not resident latency or a speedup benchmark.",
+    "FP32 CPU parity does not establish bitwise equivalence on another device/backend/library version.",
+    "Original training BF16 metadata and GPU device setting are preserved; actual inference is CPU FP32 with one thread and no training/cache lookup.",
+    "Original curated completion/source metadata are not retagged as standalone QA, admitted selection evidence or TEST permission."
+  ],
+  "matched_network_input_tensor_stage": "processed uint8 RGB to FP32 RGB/255; existing shared predictor centers tiles by subtracting0.5"
+}
