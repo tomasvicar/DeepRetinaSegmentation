@@ -1,0 +1,123 @@
+{
+  "status": "PRE_DECODE_PLAN_ONLY",
+  "base_source_commit": "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+  "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "photos_sha256": "765709a1ddc08035565ebf3d54d414dd1f53a9882a5cfa9c0fd03811b8e48a4d",
+  "photo_ids": [
+    "sha256:00ae0718507542427abed32506bca5de853dfc9a89a0d8c85272d28bfdeec400",
+    "sha256:032b428eac5d8fd1cb5fee4897749914d6ee19fb8851e6e0eb54ef20143d0493",
+    "sha256:04ddfc23f162d135569b49322c9cceafc0c20a0677280d6e18256b451d0a431c"
+  ],
+  "annotation_ids": [
+    "drive_37_training_vessels",
+    "rimone_N-86-R_average_disc_cup",
+    "rimone_N-86-R_expert1_disc_cup",
+    "rimone_N-86-R_expert2_disc_cup",
+    "rite_37_training_av",
+    "uoadr_53_disc_cup_disc_cup",
+    "uoadr_53_vessels"
+  ],
+  "resources_exact_allowlist": {
+    "DRIVE.zip": [
+      "training/images/37_training.tif",
+      "training/1st_manual/37_manual1.gif",
+      "training/mask/37_training_mask.gif"
+    ],
+    "RITE.zip": [
+      "RITE/AV_groundTruth/training/images/37_training.tif",
+      "RITE/AV_groundTruth/training/vessel/37_training.png",
+      "RITE/AV_groundTruth/training/av/37_training.png"
+    ],
+    "RIM-ONE.zip": [
+      "RIM-ONE r3/Healthy/Stereo Images/N-86-R.jpg",
+      "RIM-ONE r3/Healthy/Average_masks/N-86-R-Disc-Avg.png",
+      "RIM-ONE r3/Healthy/Average_masks/N-86-R-Cup-Avg.png",
+      "RIM-ONE r3/Healthy/Expert1_masks/N-86-R-1-Disc-exp1.png",
+      "RIM-ONE r3/Healthy/Expert1_masks/N-86-R-1-Cup-exp1.png",
+      "RIM-ONE r3/Healthy/Expert2_masks/N-86-R-1-Disc-exp2.png",
+      "RIM-ONE r3/Healthy/Expert2_masks/N-86-R-1-Cup-exp2.png"
+    ],
+    "UoA_DR.zip": [
+      "53/53.jpg",
+      "53/53.1.jpg",
+      "53/53.2.jpg",
+      "53/53.3.jpg"
+    ]
+  },
+  "decode_order": [
+    "drive",
+    "rite",
+    "rimone",
+    "uoadr"
+  ],
+  "canonical_owners": {
+    "sha256:00ae0718507542427abed32506bca5de853dfc9a89a0d8c85272d28bfdeec400": {
+      "dataset": "rimone",
+      "resource": "RIM-ONE r3/Healthy/Stereo Images/N-86-R.jpg",
+      "source_id": "rimone:N-86",
+      "source_split": "unsplit",
+      "official_split": null,
+      "declared_field_of_view_degrees": 20.0
+    },
+    "sha256:032b428eac5d8fd1cb5fee4897749914d6ee19fb8851e6e0eb54ef20143d0493": {
+      "dataset": "uoadr",
+      "resource": "53/53.jpg",
+      "source_id": "uoadr:53",
+      "source_split": "unsplit",
+      "official_split": null,
+      "declared_field_of_view_degrees": 45.0,
+      "split_policy": "train_only_without_patient_crosswalk",
+      "split_policy_evidence": {
+        "reason": "The source paper states that patient information is unavailable after de-identification",
+        "source": "UoA_DR.zip/Comparative Analysis of University of Auckland DR Database.pdf"
+      }
+    },
+    "sha256:04ddfc23f162d135569b49322c9cceafc0c20a0677280d6e18256b451d0a431c": {
+      "dataset": "drive",
+      "resource": "training/images/37_training.tif",
+      "source_id": "drive:37",
+      "source_split": "train",
+      "official_split": "train",
+      "declared_field_of_view_degrees": 45.0
+    }
+  },
+  "reference_TRAIN_assets": {
+    "RGB": [
+      "images/00ae0718507542427abed32506bca5de853dfc9a89a0d8c85272d28bfdeec400.png",
+      "images/00ae0718507542427abed32506bca5de853dfc9a89a0d8c85272d28bfdeec400_498e06ae5819.png",
+      "images/032b428eac5d8fd1cb5fee4897749914d6ee19fb8851e6e0eb54ef20143d0493.png",
+      "images/032b428eac5d8fd1cb5fee4897749914d6ee19fb8851e6e0eb54ef20143d0493_11ff14a73b38.png",
+      "images/04ddfc23f162d135569b49322c9cceafc0c20a0677280d6e18256b451d0a431c.png",
+      "images/04ddfc23f162d135569b49322c9cceafc0c20a0677280d6e18256b451d0a431c_1a50c31a089b.png"
+    ],
+    "FOV": [
+      "fovs/00ae0718507542427abed32506bca5de853dfc9a89a0d8c85272d28bfdeec400.png",
+      "fovs/032b428eac5d8fd1cb5fee4897749914d6ee19fb8851e6e0eb54ef20143d0493.png",
+      "fovs/04ddfc23f162d135569b49322c9cceafc0c20a0677280d6e18256b451d0a431c.png"
+    ],
+    "NPZ": [
+      "masks/drive_37_training_vessels.npz",
+      "masks/rimone_N-86-R_average_disc_cup.npz",
+      "masks/rimone_N-86-R_expert1_disc_cup.npz",
+      "masks/rimone_N-86-R_expert2_disc_cup.npz",
+      "masks/rite_37_training_av.npz",
+      "masks/uoadr_53_disc_cup_disc_cup.npz",
+      "masks/uoadr_53_vessels.npz"
+    ]
+  },
+  "runtime_budget": {
+    "CPU": 1,
+    "affinity": [
+      6
+    ],
+    "nice": 19,
+    "ionice": "idle",
+    "CUDA_VISIBLE_DEVICES": "",
+    "memory_limit_bytes": 3221225472,
+    "owned_wall_limit_seconds": 180,
+    "kill_grace_seconds": 15
+  },
+  "future_local_output_only": "Fresh model_backups/raw35-train-canary-20261111 leaf; outside OwnCloud and canonical/frozen sources",
+  "scope": "Exactly17 selected archive resources,4 RGB decodes for3 unique TRAIN photos,7 annotation emissions independently RGB-hashed; exact25 replay then directRAW35, no wholeadapter scan/decode, no VAL/TEST pixels, no model/GPU/training",
+  "reference_source_root_paths_not_public": true
+}
