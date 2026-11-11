@@ -557,3 +557,27 @@ def test_schema2_cannot_retag_role_or_completion(case, mutation):
         candidate["freeze_eligibility"] = copy.deepcopy(proof)
     with pytest.raises(ValueError):
         m.check_v2_eligibility(selected, candidate, groups)
+
+
+def test_schema2_raw_6b_config_uses_only_explicit_compatibility_defaults(case):
+    groups = typed_case(case, family="pool_6b")
+    selected, candidate = case[0]["selection"], case[0]["candidate"]
+    proof = selected["freeze_eligibility"]
+    values = selected["checkpoint"]["configuration"]["values"]
+    values["vascular_sampling_weight"] = 1.0
+    selected["checkpoint"]["configuration"]["sha256"] = m.sha(m.canonical(values))
+    candidate["configuration"] = copy.deepcopy(selected["checkpoint"]["configuration"])
+    for key in ("vascular_sampling_weight", "mixed_precision"):
+        proof["raw_training_configuration"].pop(key)
+    proof["raw_training_configuration_sha256"] = m.sha(
+        m.canonical(proof["raw_training_configuration"])
+    )
+    candidate["freeze_eligibility"] = copy.deepcopy(proof)
+    m.check_v2_eligibility(selected, candidate, groups)
+    proof["raw_training_configuration"]["vascular_sampling_weight"] = 2.0
+    proof["raw_training_configuration_sha256"] = m.sha(
+        m.canonical(proof["raw_training_configuration"])
+    )
+    candidate["freeze_eligibility"] = copy.deepcopy(proof)
+    with pytest.raises(ValueError, match="Raw training versus runtime config"):
+        m.check_v2_eligibility(selected, candidate, groups)

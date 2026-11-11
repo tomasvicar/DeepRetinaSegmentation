@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "kind": "actual_cpu_freeze_eligibility_checks",
+  "source_commit": "1e8c60f",
+  "evaluation_source_sha256": "27c344ce1019ddea72678a6327258003d59fa9e7931d78133431a04f8df35c13",
+  "checks": [
+    {
+      "proof": "standalone0b-best59.json",
+      "proof_sha256": "a0d138142a5f9e15ad88ac149f4e9afdf57fcfe148c2400df2ae2a32b7592412",
+      "outcome": "PASS",
+      "selected_checkpoint_sha256": "81113e7e74d86a3d51994754895d18e90b2ee8d54d5a8660a8d5535096451b7b",
+      "checkpoint_role": "training_best",
+      "checkpoint_epoch": 59,
+      "family": "standalone_0b",
+      "seconds": 139.22117351205088
+    },
+    {
+      "proof": "pool6b-fixed-terminal60.json",
+      "proof_sha256": "dc3c9b34db3e77e7c7f291f16d8470ae6bbfbc865d12cffbe2ed6fdf8c03c5c3",
+      "outcome": "PASS",
+      "selected_checkpoint_sha256": "10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2",
+      "checkpoint_role": "fixed_terminal60",
+      "checkpoint_epoch": 60,
+      "family": "pool_6b",
+      "seconds": 144.34947870788164
+    }
+  ],
+  "negative_checks": "negative-real-artifacts.json",
+  "test_evaluation_performed": false,
+  "real_validation_forward_performed": false,
+  "real_gt_arrays_decoded": false,
+  "model_selection_created": false,
+  "original_artifacts_modified": false,
+  "scope": "Actual encoded corpus-byte and typed original completion audits, not final-source enriched VAL or a model selection",
+  "tests": {
+    "distinct_targeted_synthetic_cpu_cases": 205,
+    "main_batch_passed": 199,
+    "main_batch_seconds": 34.04,
+    "additional_focused_cases_passed": 6,
+    "ruff": "PASS"
+  },
+  "remaining_mandatory_integration": "Genuine source72 V3 pool final60 adapter; do not relabel pool QA as standalone"
+}
