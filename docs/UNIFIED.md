@@ -1,13 +1,24 @@
 # Experimental unified RGB model
 
+This guide covers the shared workflow and its initial corpus-v1 baseline.
+The later corpus-v2 models have completed training on **21 TRAIN sources,
+2,529 photographs and all5,700 annotation records**, including the recovered
+DRIONS-DB/GAMMA annotations. Their configuration and results are documented in
+[the V2 control card](UNIFIED_V2_CONTROL.md) and
+[the completed TPE preview card](UNIFIED_V3_TPE_PREVIEW.md).
+The TPE preview has1,965,637 parameters (base width16/depth4/BatchNorm);
+the width12 parameter count below describes the earlier baseline.
+Final model optimization and TEST evaluation remain pending; consult
+[current status](STATUS.md).
+
 This branch implements one shared network with five logits: vessel, artery
 conditional on vessel, vein conditional on vessel, disc, cup. The default compact
 UNet has 1,106,597 parameters (base width12, depth4, BatchNorm). This is a verified training/prediction pipeline for an experimental model.
 The bundled `unified-full-data-baseline` completed60 epochs on all2,221 eligible
 TRAIN photographs in the prepared17-source corpusv1, with all5,281 annotation records contributing.
 An archive-level audit found additional DRIONS-DB/GAMMA annotations outside the
-registeredv1 corpus; these are being prepared separately for corpusv2 and were
-not used in this checkpoint.
+registeredv1 corpus; they were subsequently recovered for corpusv2 and were
+not used in this earlier checkpoint.
 Its validation-selected checkpoint is epoch56; optimization continues and a final
 new model has not yet been selected. Functional tests and short screens do not establish final quality. Published original
 models remain the reference until the full-data comparison is complete.

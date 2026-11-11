@@ -11,6 +11,22 @@ commands and currently supported adapters are documented in the main README and
 This document separates reasons for changing the code from evidence that a model
 has improved.
 
+## Current model families
+
+The original migration also introduced single-dataset pilots. Their architecture
+and normalization below describe those pilots, not every model now in the package.
+
+| Family | Input and purpose | Authoritative guide |
+| --- | --- | --- |
+| Original trained models | Original architecture and model-specific preprocessing; A/V also consumes a vessel mask | [Original models](LEGACY_MODELS.md), [preprocessing](LEGACY_PREPROCESSING.md), [native retraining](NATIVE_LEGACY_RETRAINING.md) |
+| Single-dataset pilots | RGB normalized to `[-1,1]`; task-specific scratch experiments | [Pilot experiments](EXPERIMENTS.md) |
+| Unified corpus models | Five outputs, partial supervision, `RGB/255 - 0.5`; current V2/TPE models use raw25 geometry | [Unified workflow](UNIFIED.md), [completed TPE preview](UNIFIED_V3_TPE_PREVIEW.md) |
+
+Use the selected checkpoint's configuration and documented preparation workflow.
+Do not transfer a pilot's normalization or resize policy to an original or
+unified model. The [current status](STATUS.md) distinguishes delivered previews
+from the unfinished optimization and final TEST evaluation.
+
 ## What to keep from the original work
 
 Keep source images, annotation provenance, official benchmark splits, distinction
@@ -41,14 +57,16 @@ do not delete historical branches, rewrite history or delete external data.
 | Exploratory inference scripts | One prediction implementation shared by evaluation and CLI, stable shapes, probability files and readable overlays |
 | PBS/Conda/batch files | `pyproject.toml`, `uv.lock` and documented CPU/GPU invocation |
 
-This is a functional rewrite, not bitwise reproduction of MATLAB. The new RGB
-U-Net starts from random weights, uses geometric channel growth, GroupNorm/SiLU
+The initial pilot path is a functional rewrite, not bitwise reproduction of MATLAB.
+Its RGB U-Net starts from random weights, uses geometric channel growth, GroupNorm/SiLU
 blocks and bilinear decoder upsampling. The old custom network used linear
 channel growth, BatchNorm/ReLU and transposed convolution; master also supported
 EfficientNet-B2. The historical A/V network consumed RGB plus a supplied vessel
-mask. Those saved weights cannot be loaded directly into this architecture.
+mask. Those saved weights cannot be loaded directly into the pilot architecture;
+the package now preserves their original architectures through a separate legacy
+path, with numerical checks described in [LEGACY_MODELS.md](LEGACY_MODELS.md).
 
-New RGB normalization is `[-1,1]`, with image dimensions capped during preparation.
+Pilot RGB normalization is `[-1,1]`, with image dimensions capped during preparation.
 This differs from camera-angle resampling, MATLAB FOV heuristics, historical
 contrast normalization and old `[-0.5,0.5]` inputs. Manifests record
 `preparation_max_size`; training checks one matching policy across train and
@@ -126,14 +144,22 @@ If binary exports enforce cup-within-disc or A/V-within-vessels, report that
 policy and apply the same policy to baseline and candidate. Preserve raw
 probabilities so other policies can be compared without rerunning the network.
 
-Legacy text scores cannot establish a new model's improvement: source lists,
+Legacy text scores alone cannot establish a new model's improvement: source lists,
 preprocessed files, original architecture and validation logic differ, and the
-historical code contains the defects recorded in `REPOSITORY_MAP.md`. A matching
-reproduction could become a separate project after recovery of those artifacts.
-The controlled single-seed pilot now recorded in EXPERIMENTS.md compares losses only.
+historical code contains the defects recorded in `REPOSITORY_MAP.md`. Use actual
+matched evaluation reports and the documented legacy numerical checks rather
+than substituting historical text scores for a new measurement.
+The controlled single-seed pilot recorded in EXPERIMENTS.md compares losses only.
 It does not establish superiority over historical architectures or external cohorts.
+Subsequent corpus-wide measured comparisons are linked from [STATUS.md](STATUS.md)
+and the individual model cards; their explicit support and limitations govern
+those results.
 
-## Follow-up experiment priorities
+## Historical pilot follow-up priorities
+
+These priorities record the initial pilot stage. Current corpus-wide training,
+patch/photometry studies and HPO progress are tracked in [STATUS.md](STATUS.md)
+and on the separate `experiments/leipzig-hpo` branch.
 
 - Extend the completed 30-epoch scratch pilots with additional seeds, datasets and
   budgets; inspect validation predictions and the recorded unstable disc/cup curves.
