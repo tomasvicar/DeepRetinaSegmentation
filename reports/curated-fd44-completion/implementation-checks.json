@@ -1,0 +1,27 @@
+{
+  "kind": "curated_fd44_adapter_synthetic_CPU_verification",
+  "tests_passed": 26,
+  "test_seconds": 7.52,
+  "command": "CUDA_VISIBLE_DEVICES='' PYTHONPATH=src python -m pytest -q tests/test_curated_completion.py",
+  "test_resources": {
+    "cpu_affinity": [
+      4
+    ],
+    "nice": 17,
+    "io_class": "idle",
+    "torch_threads": 1
+  },
+  "ruff": "PASS",
+  "diff_check": "PASS",
+  "files_sha256": {
+    "src/deepretina/curated_completion.py": "ef3e088e1275293525101c82a4f41d1277730f0118a736adeb59cbcc6d7a6107",
+    "scripts/check_curated_completion.py": "55ee3dec7faa64add75b13fd60b049afade3450f07ce56cd9d91fbc9f3ec517a",
+    "tests/test_curated_completion.py": "2843ceb161be98c6e1c2eae4b94c681a0dad82e644b2fbc9b8839b5c869ab4c5"
+  },
+  "actual_checkpoint_reaudit_executed": false,
+  "real_model_or_GT_read": false,
+  "NN_forward_or_CUDA": false,
+  "selection_TTA_TEST_enabled": false,
+  "fixture_trust_anchors": "Explicit monkeypatched synthetic anchors only; production identities remain fixed",
+  "next_step": "External review, then separate genuine fd44 CPU checkpoint re-audit; fresh source-compatible VAL and selection integration not implemented"
+}
