@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11 22:19 UTC; raw384 completed60, three other training jobs still active**. Completed VAL and
+Snapshot: **2026-11-11 22:37 UTC; raw384 fresh VAL completed, three other training jobs still active**. Completed VAL and
 CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
 claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -155,9 +155,17 @@ counts, descriptor/config, source adverse intervals and outcome are published.
 Raw384 completed60 with actual PBSF/Exit0 at22:19UTC. Its original BEST59 and
 LAST60 bytes now match the published HOST copy proof in independent read-only
 controller and Old backups. Original producer QA reports each role's full5700
-annotation coverage; independent CPU re-audits and fresh typed VAL remain pending.
-No fresh raw384 quality result or promotion is claimed. Raw512 and CLAHE384 were
-still R/E42/E42 at that observation. No new Meta job was submitted.
+annotation coverage. Both independent current6d/f13 CPU audits subsequently
+returned0. [Actual typed raw384 fresh VAL](../reports/curated-raw384-typed-fresh-VAL-20261111)
+then completed both770-photo roles with child0 and external observer0 at22:37:38,
+source/index unchanged. BEST59 macro.814371243, vessel.759770007 and conditionalAV
+.830904426; LAST60 macro.813495710/vessel.759789448/AV.831970191. Against parent
+first-TPE NONE, BEST vessel change is−.00310901[−.00558518,−.00122038], while
+conditionalAV improves+.00598488[+.00070005,+.01084244] and disc improves. This is
+a tradeoff, not all-task improvement. Worst-six vsoriginal182 remains.9865562
+(BEST)/.9865814(LAST), bottleneck vessel. Full counts, all source regressions,
+saved/fresh drift and cross-evaluator qualifications are retained. No promotion.
+Raw512 and CLAHE384 were still R/E42/E42 at22:19UTC. No new Meta job was submitted.
 Current elapsed scheduler time is not model quality, and unfinished arms are not
 ranked. Product `for_Leipzig` supports saved full-image photometry profiles without
 stripping config fields. Real TRAIN inference parity checks for the existing TPE
