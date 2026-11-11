@@ -30,6 +30,11 @@ CACHE = "18c3af6ce64e23c896d7befc52e5ba8e8ebda8e4058c2f156574fa755480766e"
 GPU = "GPU-d0675605-e6c2-1c85-9799-08b279aab0ff"
 CPU_LIMIT = 2 * 1024**3
 
+TRAIN_SOURCE = "72fb321187eca517823083aca80cedace9605570"
+TRAIN_EXECUTION = "347f78ffd2f4a352c0870faad34327945f7d1c64b865dacb7b7d86e5ca4e0aaa"
+TRAIN_HASH = "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28"
+SIF = "7a30b914ec3bb17c3a548932e8940f6e4f5c61824b34ca9b30ce1b83f98343b7"
+
 
 def require(ok, message):
     if not ok:
@@ -150,9 +155,85 @@ def diagnostic(model, optimizer, batch, config):
     }, vector
 
 
+def executable_digest(root):
+    h = hashlib.sha256()
+    for path in sorted(
+        [
+            *root.glob("src/**/*.py"),
+            *root.glob("scripts/*.py"),
+            root / "pyproject.toml",
+            root / "uv.lock",
+        ]
+    ):
+        h.update(path.relative_to(root).as_posix().encode() + b"\0" + path.read_bytes())
+    return h.hexdigest()
+
+
+def pbs_context(args):
+    """Explicit PBS proof; does not reserve hardware or authenticate its author."""
+    require(
+        args.source_root is not None and args.pbs_proof is not None and args.pbs_proof_sha256,
+        "PBS requires explicit frozen source and externally pinned proof",
+    )
+    proof_path = Path(args.pbs_proof)
+    require(
+        not proof_path.is_symlink() and not proof_path.stat().st_mode & 0o222,
+        "Immutable PBS host witness required",
+    )
+    raw = proof_path.read_bytes()
+    require(digest(raw) == args.pbs_proof_sha256, "PBS proof original bytes differ")
+    proof = json.loads(raw)
+    b = proof["bindings"]
+    e = proof["execution"]
+    root = args.source_root.resolve()
+    require(
+        proof["kind"] == "verified_host_source_attestation"
+        and proof["schema_version"] == 1
+        and b["source_commit"] == TRAIN_SOURCE
+        and b["execution_code_sha256"] == TRAIN_EXECUTION
+        and b["training_source_sha256"] == TRAIN_HASH
+        and b["image_sha256"] == SIF
+        and b["git_status_porcelain"] == ""
+        and b["container_source"] == str(root)
+        and root.samefile(b["host_source"]),
+        "PBS genuine host source/SIF binding differs",
+    )
+    require(
+        e["kind"] == "pbs_bf16_core_benchmark"
+        and os.environ.get("PBS_JOBID") == e["pbs_job_id"]
+        and e["pbs_job_id"]
+        and os.environ.get("RETINA_ORIGINAL_PBS_CUDA_MASK") == e["original_cuda_visible_devices"]
+        and e["original_cuda_visible_devices"]
+        and e["parent_sha256"] == PARENT
+        and e["benchmark_helper_sha256"] == digest(Path(__file__).read_bytes())
+        and e["torch_threads"] == 8
+        and e["torch_interop_threads"] == 1,
+        "PBS allocation/helper/runtime proof differs",
+    )
+    require(
+        args.expected_gpu_uuid.lower().removeprefix("gpu-")
+        == e["gpu_uuid"].lower().removeprefix("gpu-")
+        and os.environ.get("CUDA_VISIBLE_DEVICES", "").lower().removeprefix("gpu-")
+        == e["gpu_uuid"].lower().removeprefix("gpu-"),
+        "PBS actual assigned UUID visibility required",
+    )
+    require(
+        executable_digest(root) == TRAIN_EXECUTION and u._training_source_sha256() == TRAIN_HASH,
+        "Actual container training source differs",
+    )
+    return {"root": root, "proof": proof, "proof_raw": raw, "proof_sha256": args.pbs_proof_sha256}
+
+
 def admission(args):
     require(args.execute, "Dry by default: --execute requires prior exclusive-GPU review by root")
-    require(socket.gethostname().split(".")[0] == "ada", "Own Ada only")
+    if args.execution_target == "ada":
+        require(socket.gethostname().split(".")[0] == "ada", "Own Ada only")
+        require(
+            args.source_root is None and args.pbs_proof is None and args.pbs_proof_sha256 is None,
+            "PBS source/proof flags require explicit PBS target",
+        )
+    else:
+        pbs_context(args)  # Complete proof before CUDA initialization or data reads.
     require(
         32 <= args.batches <= 64 and 5 <= args.warmup <= 10, "Require32–64 batches and5–10 warmup"
     )
@@ -261,23 +342,27 @@ def run_leg(model, optimizer, initial, batches, config, device, warmup, end):
 
 def benchmark(args):
     device, gpu = admission(args)  # No report or inputs read on unsupported admission.
-    torch.set_num_threads(20)
-    torch.set_num_interop_threads(20)
+    torch.set_num_threads(20 if args.execution_target == "ada" else 8)
+    torch.set_num_interop_threads(20 if args.execution_target == "ada" else 1)
     started, end = time.monotonic(), time.monotonic() + args.max_seconds
-    root = Path(__file__).resolve().parents[1]
+    context = pbs_context(args) if args.execution_target == "pbs" else None
+    root = context["root"] if context else Path(__file__).resolve().parents[1]
     require(
         Path(u.__file__).resolve() == root / "src/deepretina/unified.py",
         "Imported training package differs from actual source",
     )
-    commit = subprocess.check_output(
-        ["git", "-C", str(root), "rev-parse", "HEAD"], text=True
-    ).strip()
-    require(
-        not subprocess.check_output(
-            ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=no"], text=True
-        ),
-        "Clean Git source required",
-    )
+    if context:
+        commit = context["proof"]["bindings"]["source_commit"]
+    else:
+        commit = subprocess.check_output(
+            ["git", "-C", str(root), "rev-parse", "HEAD"], text=True
+        ).strip()
+        require(
+            not subprocess.check_output(
+                ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=no"], text=True
+            ),
+            "Clean Git source required",
+        )
     require(
         not any(
             args.output.resolve().is_relative_to(p.resolve())
@@ -374,7 +459,17 @@ def benchmark(args):
         legs.append(leg)
         vectors.append(vector)
     reference, difference = vectors[0].double(), vectors[1].double() - vectors[0].double()
+    if context:
+        require(
+            args.pbs_proof.read_bytes() == context["proof_raw"]
+            and executable_digest(root) == TRAIN_EXECUTION,
+            "PBS witness/source changed during benchmark",
+        )
     report = {
+        "execution_target": args.execution_target,
+        "pbs_host_witness_sha256": context["proof_sha256"] if context else None,
+        "pbs_execution_provenance": context["proof"]["execution"] if context else None,
+        "host_identity_authenticated": False,
         "schema_version": 1,
         "kind": "train_core_step_precision_benchmark",
         "completed": True,
@@ -440,6 +535,10 @@ def benchmark(args):
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--execute", action="store_true")
+    p.add_argument("--execution-target", choices=("ada", "pbs"), default="ada")
+    p.add_argument("--source-root", type=Path)
+    p.add_argument("--pbs-proof", type=Path)
+    p.add_argument("--pbs-proof-sha256")
     p.add_argument("--parent", type=Path, required=True)
     p.add_argument("--manifest", type=Path, required=True)
     p.add_argument("--cache", type=Path, required=True)
