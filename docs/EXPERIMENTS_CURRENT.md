@@ -33,6 +33,14 @@ first child verified live, all770 VAL planned per case and a90min cap. Results
 are pending. This extends the completed vascular4 TTA experiment below; it does
 not reuse its scores or change a released inference default. No TEST is involved.
 
+The completed TPE BEST58 also has its own measured CPU example: median8.4163s
+versus59.6351s for the selected original four-network pipeline within the same
+run, one DRIVE TRAIN21 raw photo/official FOV and one CPU thread. Parameters:
+1,965,637 versus5,943,312. This is default `none` inference, not the ongoing TTA
+experiment's latency or a general throughput claim. All samples, actual exit0,
+FP32 checkpoint metadata and scope are in
+[the TPE benchmark](../reports/benchmark/strong-pipeline-cpu-drive21-tpe72-best58).
+
 ## Completed full60 models: keep roles and evidence distinct
 
 | Model and role | VAL evidence | Macro dataset Dice | Pooled vessel Dice | Conditional AV |
