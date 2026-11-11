@@ -1,0 +1,107 @@
+{
+  "kind": "partial_v2_e027_best_e025_diagnostic",
+  "utc": "2026-11-11T00:58:34.639328+00:00",
+  "candidate_file_sha256": "e66d0d5c0f40913c23df4d48a563a3b419d2c3f0de457e956a34e1383ac695bf",
+  "reference_file_sha256": "53b5c0a64a8aeccb96774c965025093607299bd378a18406206d308ca40a04c6",
+  "actual_run_epoch": 27,
+  "candidate_best_epoch": 25,
+  "completed_budget": false,
+  "test_evaluation_performed": false,
+  "scope": "Simple arithmetic on saved full VAL counts, exploratory partial checkpoint only; not completed-VAL gate, not paired confidence intervals or final selected quality. Reference source193662c before nearest correction.",
+  "pooled": {
+    "vessel": {
+      "candidate": {
+        "tp": 4985494,
+        "fp": 1929495,
+        "fn": 1504505,
+        "valid_pixels": 60922737,
+        "dice": 0.7438267009265507
+      },
+      "original": {
+        "tp": 5142829,
+        "fp": 1723029,
+        "fn": 1347170,
+        "valid_pixels": 60922737,
+        "dice": 0.7701233997938133
+      },
+      "dice_difference": -0.026296698867262602
+    },
+    "artery": {
+      "candidate": {
+        "tp": 744383,
+        "fp": 284331,
+        "fn": 451841,
+        "valid_pixels": 2626284,
+        "dice": 0.6691269599422546
+      },
+      "original": {
+        "tp": 809366,
+        "fp": 342002,
+        "fn": 386858,
+        "valid_pixels": 2626284,
+        "dice": 0.6895286744885823
+      },
+      "dice_difference": -0.020401714546327776
+    },
+    "vein": {
+      "candidate": {
+        "tp": 937414,
+        "fp": 224679,
+        "fn": 492646,
+        "valid_pixels": 2626284,
+        "dice": 0.7232705785499545
+      },
+      "original": {
+        "tp": 846023,
+        "fp": 150493,
+        "fn": 584037,
+        "valid_pixels": 2626284,
+        "dice": 0.6972977561799012
+      },
+      "dice_difference": 0.025972822370053272
+    },
+    "disc": {
+      "candidate": {
+        "tp": 12438933,
+        "fp": 823744,
+        "fn": 1039513,
+        "valid_pixels": 583880677,
+        "dice": 0.9303224101695355
+      },
+      "original": {
+        "tp": 11598114,
+        "fp": 846577,
+        "fn": 1880332,
+        "valid_pixels": 583880677,
+        "dice": 0.8948079084718797
+      },
+      "dice_difference": 0.0355145016976558
+    },
+    "cup": {
+      "candidate": {
+        "tp": 2668395,
+        "fp": 472049,
+        "fn": 335817,
+        "valid_pixels": 517984979,
+        "dice": 0.8685254308784739
+      },
+      "original": {
+        "tp": 2868818,
+        "fp": 7304851,
+        "fn": 135394,
+        "valid_pixels": 517984979,
+        "dice": 0.4353989841007063
+      },
+      "dice_difference": 0.43312644677776757
+    }
+  },
+  "macro_dataset_head_dice": {
+    "candidate": 0.773799340626128,
+    "original": 0.6670315865775472
+  },
+  "conditional_av_accuracy": {
+    "candidate": 0.7404393431936531,
+    "original": 0.7485732693037006
+  },
+  "conclusion": "Partial candidate improves disc, cup and pooled vein; vessel, artery and conditional A/V remain below original reference. Macro improvement does not satisfy all-task improvement. Wait actualcompletedruns; preserve originalmodels."
+}
