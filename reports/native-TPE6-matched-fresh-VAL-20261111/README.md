@@ -30,3 +30,5 @@ The two configurations differ in learning rate, weight decay and vascular sampli
 Saved BEST versus fresh BEST has tiny actual numerical drift: macro−5.3161e−8, vessel+5.9490e−8, cup−1.4522e−7, conditionalAV unchanged. Actual per-photo confusion counts differ on3 vessel,2 disc and1 cup photos; artery/vein/AV counts match. All photo/record/source/GT supports match. The saved sidecar is not relabeled as fresh.
 
 Original wrapped reports and their byte SHAs are preserved. Separate derived metric views are explicitly labeled and hashed for the existing comparison API; they are not replacements for original producer evidence.
+
+Public report copies redact only the physical GPU UUID and reformat JSON; complete original byte SHAs and exported-copy SHAs distinguish them. All scientific counts, full configurations, source and data identities are preserved. Original byte-identical wrapped reports remain in private evidence.
