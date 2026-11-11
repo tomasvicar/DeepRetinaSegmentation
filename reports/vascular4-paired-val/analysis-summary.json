@@ -1,0 +1,669 @@
+{
+  "kind": "actual_standalone_paired_VAL_counts_analysis",
+  "source_commit": "c5d47ad9e09bccc516759f87aac6ebb0c0823af7",
+  "analysis_helper_sha256": "c854bad81f3d4968c42a44c1dffba9d317988c0e169c857eb7e4a24151a6aa7a",
+  "CPU_affinity": [
+    6
+  ],
+  "nice": 17,
+  "OMP_MKL_OPENBLAS_threads": 1,
+  "CUDA_VISIBLE_DEVICES": "",
+  "bootstrap": {
+    "draws": 2000,
+    "seed": 42,
+    "photos": 770,
+    "known_split_groups": 612
+  },
+  "observed_numeric_analysis_returncodes": {
+    "fixed_terminal60": 0,
+    "best": 0
+  },
+  "wall_time_not_measured": true,
+  "original_private_input_manifest_sha256": {
+    "fixed_terminal60": "4f214a28752a8803d1ad6e0713c55d0b33534ee5cea7e770d69618efd53fb96a",
+    "best": "2e67ce5aa9ba9204955fc4c4ad7e8c401984328019d62483c3f02b48c8450d5c"
+  },
+  "new_NN_forward_model_GT_or_TEST_access": false,
+  "public_projection_qualification": "Counts preserve exact native per-photo values; runtime metadata omitted. Projection bytes have own SHA; do not relabel as native producer bytes. Original native report hashes remain explicit.",
+  "model_selection_authorized": false,
+  "comparisons": {
+    "fixed_terminal60": {
+      "control_terminal60": {
+        "macro": {
+          "reference": 0.7887627334285886,
+          "candidate": 0.8008346170097285,
+          "candidate_minus_reference": 0.012071883581139864,
+          "paired_percentile_95ci": [
+            0.00426990071142185,
+            0.01879527774583092
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "pooled": {
+          "vessel": {
+            "reference": 0.7504721656517305,
+            "candidate": 0.753185955428742,
+            "candidate_minus_reference": 0.0027137897770115327,
+            "paired_percentile_95ci": [
+              -0.0002855889975368786,
+              0.005146212439448674
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "artery": {
+            "reference": 0.6771091345930581,
+            "candidate": 0.7247777499306735,
+            "candidate_minus_reference": 0.04766861533761535,
+            "paired_percentile_95ci": [
+              0.03943271421558508,
+              0.0557744227119731
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "vein": {
+            "reference": 0.7543140406068415,
+            "candidate": 0.7865606649446043,
+            "candidate_minus_reference": 0.03224662433776282,
+            "paired_percentile_95ci": [
+              0.026896666632585154,
+              0.03765329160532546
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "disc": {
+            "reference": 0.934122076215391,
+            "candidate": 0.9262441272329744,
+            "candidate_minus_reference": -0.00787794898241656,
+            "paired_percentile_95ci": [
+              -0.022582150591518975,
+              0.002195273130623737
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "cup": {
+            "reference": 0.872808188045654,
+            "candidate": 0.8502348575818598,
+            "candidate_minus_reference": -0.022573330463794172,
+            "paired_percentile_95ci": [
+              -0.06599975200424134,
+              0.007804105670933841
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "conditional_AV": {
+          "reference": 0.7880366327480196,
+          "candidate": 0.8231253741027246,
+          "candidate_minus_reference": 0.035088741354704966,
+          "paired_percentile_95ci": [
+            0.02910543141854422,
+            0.04131259961273157
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "worst6": null,
+        "epoch_matching": "LAST60_vs_LAST60"
+      },
+      "original": {
+        "macro": {
+          "reference": 0.6670295852091139,
+          "candidate": 0.8008346170097285,
+          "candidate_minus_reference": 0.13380503180061454,
+          "paired_percentile_95ci": [
+            0.12365236986483587,
+            0.14525757440249185
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "pooled": {
+          "vessel": {
+            "reference": 0.7701233997938133,
+            "candidate": 0.753185955428742,
+            "candidate_minus_reference": -0.016937444365071275,
+            "paired_percentile_95ci": [
+              -0.02274760311637625,
+              -0.011601458577871612
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "artery": {
+            "reference": 0.689521829787506,
+            "candidate": 0.7247777499306735,
+            "candidate_minus_reference": 0.035255920143167474,
+            "paired_percentile_95ci": [
+              0.02364043646985835,
+              0.04708324856767658
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "vein": {
+            "reference": 0.6972863687090058,
+            "candidate": 0.7865606649446043,
+            "candidate_minus_reference": 0.08927429623559846,
+            "paired_percentile_95ci": [
+              0.07887966443684954,
+              0.10006207559959435
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "disc": {
+            "reference": 0.8948079084718797,
+            "candidate": 0.9262441272329744,
+            "candidate_minus_reference": 0.0314362187610947,
+            "paired_percentile_95ci": [
+              0.023620947460076903,
+              0.03801268598227124
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "cup": {
+            "reference": 0.4353989841007063,
+            "candidate": 0.8502348575818598,
+            "candidate_minus_reference": 0.41483587348115347,
+            "paired_percentile_95ci": [
+              0.37330404650956794,
+              0.4469426125065703
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "conditional_AV": {
+          "reference": 0.748566415513326,
+          "candidate": 0.8231253741027246,
+          "candidate_minus_reference": 0.07455895858939854,
+          "paired_percentile_95ci": [
+            0.06310189466310279,
+            0.08681082377767914
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "worst6": {
+          "ratios": {
+            "vessel": 0.978006843618041,
+            "artery": 1.0511309702174803,
+            "vein": 1.1280310360876347,
+            "disc": 1.035131807020772,
+            "cup": 1.9527717992681475,
+            "conditional_av": 1.0996023292579458
+          },
+          "minimum_ratio": 0.978006843618041,
+          "bottleneck": "vessel",
+          "definition": "min(candidate/reference for five pooled Dice heads plus conditional AV accuracy)",
+          "bootstrap_ci_for_minimum_ratio": null
+        },
+        "epoch_matching": "different_checkpoint_role_or_original_reference"
+      },
+      "vascular2_best": {
+        "macro": {
+          "reference": 0.8038980941929544,
+          "candidate": 0.8008346170097285,
+          "candidate_minus_reference": -0.003063477183225971,
+          "paired_percentile_95ci": [
+            -0.009968614373972434,
+            0.0028755644792825665
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "pooled": {
+          "vessel": {
+            "reference": 0.7567128270323407,
+            "candidate": 0.753185955428742,
+            "candidate_minus_reference": -0.003526871603598658,
+            "paired_percentile_95ci": [
+              -0.007471861388160098,
+              9.033852123470097e-06
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "artery": {
+            "reference": 0.7180475758373055,
+            "candidate": 0.7247777499306735,
+            "candidate_minus_reference": 0.006730174093367958,
+            "paired_percentile_95ci": [
+              0.0010448768188529133,
+              0.01266047810576122
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "vein": {
+            "reference": 0.7794767492848733,
+            "candidate": 0.7865606649446043,
+            "candidate_minus_reference": 0.007083915659730988,
+            "paired_percentile_95ci": [
+              0.0022632329351837204,
+              0.012169046665839912
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "disc": {
+            "reference": 0.9335905761900962,
+            "candidate": 0.9262441272329744,
+            "candidate_minus_reference": -0.007346448957121776,
+            "paired_percentile_95ci": [
+              -0.016438140244734674,
+              -0.00025813552440504797
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "cup": {
+            "reference": 0.8748712664808148,
+            "candidate": 0.8502348575818598,
+            "candidate_minus_reference": -0.02463640889895502,
+            "paired_percentile_95ci": [
+              -0.06455905161676435,
+              0.0038038558971614216
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "conditional_AV": {
+          "reference": 0.8102570019083999,
+          "candidate": 0.8231253741027246,
+          "candidate_minus_reference": 0.012868372194324684,
+          "paired_percentile_95ci": [
+            0.008063436749173699,
+            0.01829550605278936
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "worst6": null,
+        "epoch_matching": "different_checkpoint_role_or_original_reference"
+      },
+      "vascular2_terminal60": {
+        "macro": {
+          "reference": 0.7984004479079542,
+          "candidate": 0.8008346170097285,
+          "candidate_minus_reference": 0.0024341691017742972,
+          "paired_percentile_95ci": [
+            -0.0033071701221715406,
+            0.008039784164119306
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "pooled": {
+          "vessel": {
+            "reference": 0.7562228917066749,
+            "candidate": 0.753185955428742,
+            "candidate_minus_reference": -0.003036936277932889,
+            "paired_percentile_95ci": [
+              -0.007063027401837086,
+              0.0006138239416089988
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "artery": {
+            "reference": 0.6993480167742091,
+            "candidate": 0.7247777499306735,
+            "candidate_minus_reference": 0.02542973315646435,
+            "paired_percentile_95ci": [
+              0.01727299358182146,
+              0.03332180337578818
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "vein": {
+            "reference": 0.7733384631896293,
+            "candidate": 0.7865606649446043,
+            "candidate_minus_reference": 0.013222201754975016,
+            "paired_percentile_95ci": [
+              0.0071752694092832746,
+              0.019476241156751513
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "disc": {
+            "reference": 0.9342927439810783,
+            "candidate": 0.9262441272329744,
+            "candidate_minus_reference": -0.008048616748103865,
+            "paired_percentile_95ci": [
+              -0.014915469516910427,
+              -0.0025740511250836617
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "cup": {
+            "reference": 0.8763157312794102,
+            "candidate": 0.8502348575818598,
+            "candidate_minus_reference": -0.02608087369755041,
+            "paired_percentile_95ci": [
+              -0.06010110717520362,
+              -0.001583435564786723
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "conditional_AV": {
+          "reference": 0.8021074643869437,
+          "candidate": 0.8231253741027246,
+          "candidate_minus_reference": 0.02101790971578088,
+          "paired_percentile_95ci": [
+            0.014953163901497526,
+            0.02730581384175317
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "worst6": null,
+        "epoch_matching": "LAST60_vs_LAST60"
+      }
+    },
+    "best": {
+      "control_terminal60": {
+        "macro": {
+          "reference": 0.7887627334285886,
+          "candidate": 0.8059766802564676,
+          "candidate_minus_reference": 0.017213946827879023,
+          "paired_percentile_95ci": [
+            0.009650241750090698,
+            0.023058576178102197
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "pooled": {
+          "vessel": {
+            "reference": 0.7504721656517305,
+            "candidate": 0.7603870737813844,
+            "candidate_minus_reference": 0.009914908129653899,
+            "paired_percentile_95ci": [
+              0.007014844298323078,
+              0.01300422471338954
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "artery": {
+            "reference": 0.6771091345930581,
+            "candidate": 0.7312395642538977,
+            "candidate_minus_reference": 0.054130429660839585,
+            "paired_percentile_95ci": [
+              0.04605540173394371,
+              0.062314538220131825
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "vein": {
+            "reference": 0.7543140406068415,
+            "candidate": 0.7926067901690764,
+            "candidate_minus_reference": 0.03829274956223494,
+            "paired_percentile_95ci": [
+              0.03323424276111593,
+              0.04353471407051084
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "disc": {
+            "reference": 0.934122076215391,
+            "candidate": 0.9305108925869275,
+            "candidate_minus_reference": -0.0036111836284634657,
+            "paired_percentile_95ci": [
+              -0.015682157893170505,
+              0.004489760277844696
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "cup": {
+            "reference": 0.872808188045654,
+            "candidate": 0.8600398450274969,
+            "candidate_minus_reference": -0.012768343018157102,
+            "paired_percentile_95ci": [
+              -0.04898629784748317,
+              0.011116263792686638
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "conditional_AV": {
+          "reference": 0.7880366327480196,
+          "candidate": 0.8228832068428243,
+          "candidate_minus_reference": 0.03484657409480474,
+          "paired_percentile_95ci": [
+            0.029775517602551767,
+            0.040173673424467746
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "worst6": null,
+        "epoch_matching": "different_checkpoint_role_or_original_reference"
+      },
+      "original": {
+        "macro": {
+          "reference": 0.6670295852091139,
+          "candidate": 0.8059766802564676,
+          "candidate_minus_reference": 0.1389470950473537,
+          "paired_percentile_95ci": [
+            0.12904615439397726,
+            0.1503032270625237
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "pooled": {
+          "vessel": {
+            "reference": 0.7701233997938133,
+            "candidate": 0.7603870737813844,
+            "candidate_minus_reference": -0.009736326012428909,
+            "paired_percentile_95ci": [
+              -0.01447382488529161,
+              -0.005032158687703644
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "artery": {
+            "reference": 0.689521829787506,
+            "candidate": 0.7312395642538977,
+            "candidate_minus_reference": 0.04171773446639171,
+            "paired_percentile_95ci": [
+              0.030704793738140577,
+              0.05355813035603198
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "vein": {
+            "reference": 0.6972863687090058,
+            "candidate": 0.7926067901690764,
+            "candidate_minus_reference": 0.09532042146007058,
+            "paired_percentile_95ci": [
+              0.0850976553699683,
+              0.10589162062564772
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "disc": {
+            "reference": 0.8948079084718797,
+            "candidate": 0.9305108925869275,
+            "candidate_minus_reference": 0.0357029841150478,
+            "paired_percentile_95ci": [
+              0.02973925828966604,
+              0.0412304805081649
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "cup": {
+            "reference": 0.4353989841007063,
+            "candidate": 0.8600398450274969,
+            "candidate_minus_reference": 0.42464086092679054,
+            "paired_percentile_95ci": [
+              0.38868487969290066,
+              0.45107183600366646
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "conditional_AV": {
+          "reference": 0.748566415513326,
+          "candidate": 0.8228832068428243,
+          "candidate_minus_reference": 0.07431679132949831,
+          "paired_percentile_95ci": [
+            0.06344818736038763,
+            0.08558916132276115
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "worst6": {
+          "ratios": {
+            "vessel": 0.9873574468519777,
+            "artery": 1.0605024129246903,
+            "vein": 1.1367019717258378,
+            "disc": 1.0399001660323053,
+            "cup": 1.9752913452562686,
+            "conditional_av": 1.0992788212099203
+          },
+          "minimum_ratio": 0.9873574468519777,
+          "bottleneck": "vessel",
+          "definition": "min(candidate/reference for five pooled Dice heads plus conditional AV accuracy)",
+          "bootstrap_ci_for_minimum_ratio": null
+        },
+        "epoch_matching": "different_checkpoint_role_or_original_reference"
+      },
+      "vascular2_best": {
+        "macro": {
+          "reference": 0.8038980941929544,
+          "candidate": 0.8059766802564676,
+          "candidate_minus_reference": 0.002078586063513188,
+          "paired_percentile_95ci": [
+            -0.004229400608773745,
+            0.007304537907790413
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "pooled": {
+          "vessel": {
+            "reference": 0.7567128270323407,
+            "candidate": 0.7603870737813844,
+            "candidate_minus_reference": 0.003674246749043708,
+            "paired_percentile_95ci": [
+              0.0020300594896293404,
+              0.005638321808686878
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "artery": {
+            "reference": 0.7180475758373055,
+            "candidate": 0.7312395642538977,
+            "candidate_minus_reference": 0.013191988416592193,
+            "paired_percentile_95ci": [
+              0.006256957311006131,
+              0.02062540731705647
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "vein": {
+            "reference": 0.7794767492848733,
+            "candidate": 0.7926067901690764,
+            "candidate_minus_reference": 0.013130040884203109,
+            "paired_percentile_95ci": [
+              0.0077599034604315335,
+              0.01899784984586928
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "disc": {
+            "reference": 0.9335905761900962,
+            "candidate": 0.9305108925869275,
+            "candidate_minus_reference": -0.0030796836031686814,
+            "paired_percentile_95ci": [
+              -0.009822786971824708,
+              0.0019822291090449227
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "cup": {
+            "reference": 0.8748712664808148,
+            "candidate": 0.8600398450274969,
+            "candidate_minus_reference": -0.01483142145331795,
+            "paired_percentile_95ci": [
+              -0.04769488506006679,
+              0.007009212226110419
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "conditional_AV": {
+          "reference": 0.8102570019083999,
+          "candidate": 0.8228832068428243,
+          "candidate_minus_reference": 0.012626204934424456,
+          "paired_percentile_95ci": [
+            0.007818633111795703,
+            0.01864612006180779
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "worst6": null,
+        "epoch_matching": "different_checkpoint_role_or_original_reference"
+      },
+      "vascular2_terminal60": {
+        "macro": {
+          "reference": 0.7984004479079542,
+          "candidate": 0.8059766802564676,
+          "candidate_minus_reference": 0.007576232348513456,
+          "paired_percentile_95ci": [
+            0.0024116557861508874,
+            0.012617168145830176
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "pooled": {
+          "vessel": {
+            "reference": 0.7562228917066749,
+            "candidate": 0.7603870737813844,
+            "candidate_minus_reference": 0.004164182074709477,
+            "paired_percentile_95ci": [
+              0.0022654823791463745,
+              0.00641686868271446
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "artery": {
+            "reference": 0.6993480167742091,
+            "candidate": 0.7312395642538977,
+            "candidate_minus_reference": 0.03189154747968859,
+            "paired_percentile_95ci": [
+              0.021714968369107062,
+              0.041846203884705134
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "vein": {
+            "reference": 0.7733384631896293,
+            "candidate": 0.7926067901690764,
+            "candidate_minus_reference": 0.019268326979447137,
+            "paired_percentile_95ci": [
+              0.012690053100497992,
+              0.026112168934776806
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "disc": {
+            "reference": 0.9342927439810783,
+            "candidate": 0.9305108925869275,
+            "candidate_minus_reference": -0.0037818513941507703,
+            "paired_percentile_95ci": [
+              -0.007968528835778272,
+              -0.0005270144101180472
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "cup": {
+            "reference": 0.8763157312794102,
+            "candidate": 0.8600398450274969,
+            "candidate_minus_reference": -0.01627588625191334,
+            "paired_percentile_95ci": [
+              -0.043000478311222765,
+              0.0012147354814558908
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "conditional_AV": {
+          "reference": 0.8021074643869437,
+          "candidate": 0.8228832068428243,
+          "candidate_minus_reference": 0.020775742455880652,
+          "paired_percentile_95ci": [
+            0.01402316131694028,
+            0.02784590177056204
+          ],
+          "defined_bootstrap_draws": 2000
+        },
+        "worst6": null,
+        "epoch_matching": "different_checkpoint_role_or_original_reference"
+      }
+    }
+  }
+}
