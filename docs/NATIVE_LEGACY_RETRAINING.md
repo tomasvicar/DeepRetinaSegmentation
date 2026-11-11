@@ -191,5 +191,14 @@ parameters versus their same-seed fresh initialization. No custom small architec
 original-weight initialization or TEST input was used. This is a bounded code-path
 check, not full-corpus retraining or evidence of model quality. A real full-frame
 A/V CPU attempt was stopped by its3GiB resource cap before completion. Its actual
-nonzero result is retained in the same report; successful full-frame A/V
-verification remains pending on a suitable free GPU.
+nonzero result is retained in the same report. A later separately authorized
+GTX1060 6GB GPU run completed the unchanged production A/V recipe: one fresh
+FP32 update on the full 1031×1033 TRAIN frame and full 1033×1040 VAL, followed
+by independent safe CUDA checkpoint reload and finite full-frame logits. All 54
+trainable parameter tensors changed versus the same-seed fresh constructor;
+weights and optimizer were finite. Thus all five native production presets now
+have bounded real-data functional evidence. This uses one eligible A/V TRAIN
+photo/record, not all 2,529/5,700. The measured 1,404,493,824-byte CUDA peak is
+verification only; training peak and general 6GB fit are not established.
+No one-step weights are released, and the original CPU resource defer remains
+preserved. See the [scientific GPU proof](../reports/native-legacy-real-smoke/av-GPU-functional-proof.json).

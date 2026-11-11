@@ -1,0 +1,243 @@
+{
+  "kind": "scientific_native_production_AV_real_GPU_functional_smoke",
+  "scope": "One real TRAIN photo/AV observer and one full VAL frame; code-path evidence only, not quality/full-corpus training or released weights",
+  "source_commit": "d028314d6a26c6790d82bdc97219027184c051df",
+  "execution_sha256": "3891751d50628db4458c9ac17a71955736901401cc7364f86ca8b480c1243c59",
+  "helper_sha256": "30aeb61f484b1f639d7316d9b92db8e481f614567a620ec86ec05f13a16ba715",
+  "run_identity": {
+    "manifest_sha256": "fccc6df3e54fcca6aabb80f53dea8bc60462dd89b980ad801ce6f2facba64f73",
+    "prepared_content_sha256": "560fa031276c92932636ecfc6eddb91541c5b31eab10e6b08d025f718c4e9716",
+    "training_source_sha256": "1fc56554e797199dd9b125ac1ec4fc573d9162800954719cb53553d5d9d4602b",
+    "training_recipe": {
+      "name": "native_legacy_canonical_fresh_v1",
+      "historical_optimizer_reproduction": false,
+      "fresh_initialization": true,
+      "config": {
+        "task": "av",
+        "epochs": 1,
+        "epoch_samples": null,
+        "batch_size": 1,
+        "patch_size": null,
+        "lr": 0.0001,
+        "weight_decay": 0.0,
+        "seed": 42,
+        "device": "cuda:0",
+        "architecture": null
+      },
+      "architecture_matches_original_default": true,
+      "selection_metric": "minimum observer-cycled masked VAL loss",
+      "av_gt_vessel_training_input": true
+    },
+    "lineage": {
+      "initialization": "fresh_native_constructor",
+      "loaded_checkpoint": null,
+      "historical_tensor_transfer": false
+    },
+    "seed": 42,
+    "architecture": {
+      "encoder_channels": [
+        4,
+        32,
+        64,
+        128,
+        256
+      ],
+      "decoder_channels": [
+        256,
+        128,
+        64,
+        32
+      ],
+      "head_channels": 128,
+      "num_classes": 3
+    },
+    "preprocessing": {
+      "profile": "legacy25_raw_av4",
+      "normalization": "internal per-image/channel torch.mean and sample torch.std(correction1); no epsilon",
+      "pixels_per_degree": 25,
+      "normalized": false,
+      "expects_preprocessed_input": true,
+      "input_values": "canonical RGB/255-0.5 plus same-observer GT binary vessel",
+      "training_recipe": "native_legacy_canonical_fresh_v1",
+      "historical_preprocessing_reproduction": false
+    },
+    "eligibility": {
+      "train": {
+        "eligible_photos": 1,
+        "eligible_annotation_records": 1,
+        "excluded_no_selected_support": []
+      },
+      "val": {
+        "eligible_photos": 1,
+        "eligible_annotation_records": 1,
+        "excluded_no_selected_support": []
+      }
+    }
+  },
+  "train_runtime": {
+    "device_name": "NVIDIA GeForce GTX 1060 6GB",
+    "torch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "phase": "train",
+    "dtype": "float32",
+    "cpu_threads": 2,
+    "interop_threads": 1,
+    "affinity": [
+      2,
+      3
+    ]
+  },
+  "summary": {
+    "completed_epochs": 1,
+    "planned_epochs": 1,
+    "completed_budget": true,
+    "steps": 1,
+    "best_validation_loss": 0.6858412623405457,
+    "recipe": "native_legacy_canonical_fresh_v1",
+    "test_evaluation_performed": false
+  },
+  "metrics": {
+    "epoch": 1,
+    "steps": 1,
+    "train_loss": 0.6903879642486572,
+    "val_loss": 0.6858412623405457
+  },
+  "actual_prepared_train_shape": [
+    1,
+    4,
+    1031,
+    1033
+  ],
+  "actual_prepared_val_shape": [
+    1,
+    4,
+    1033,
+    1040
+  ],
+  "verification": {
+    "kind": "native_production_AV_GPU_functional_verification",
+    "architecture": {
+      "encoder_channels": [
+        4,
+        32,
+        64,
+        128,
+        256
+      ],
+      "decoder_channels": [
+        256,
+        128,
+        64,
+        32
+      ],
+      "head_channels": 128,
+      "num_classes": 3
+    },
+    "preprocessing": {
+      "profile": "legacy25_raw_av4",
+      "normalization": "internal per-image/channel torch.mean and sample torch.std(correction1); no epsilon",
+      "pixels_per_degree": 25,
+      "normalized": false,
+      "expects_preprocessed_input": true,
+      "input_values": "canonical RGB/255-0.5 plus same-observer GT binary vessel",
+      "training_recipe": "native_legacy_canonical_fresh_v1",
+      "historical_preprocessing_reproduction": false
+    },
+    "changed_parameter_tensors_vs_seed42": 54,
+    "full_VAL_logits_shape": [
+      1,
+      3,
+      1033,
+      1040
+    ],
+    "logits_device": "cuda:0",
+    "logits_dtype": "torch.float32",
+    "VAL_annotation_ids": [
+      "rite_27_training_av"
+    ],
+    "coverage": {
+      "eligible_photos": 1,
+      "seen_photos": 1,
+      "eligible_annotation_records": 1,
+      "contributing_annotation_records": 1,
+      "photo_visits": {
+        "sha256:77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925": 1
+      },
+      "annotation_visits": {
+        "rite_21_training_av": 1
+      },
+      "counting": "actual selected-head support delivered to successful optimizer steps",
+      "all_eligible_annotations_contributed": true,
+      "all_eligible_photos_seen": true
+    },
+    "finite_model_optimizer": true,
+    "last_sha256": "ba317014b4370f58345af99b17fbad065df39293cf42f74193cd32fd14925f28",
+    "device_name": "NVIDIA GeForce GTX 1060 6GB",
+    "peak_allocated_bytes": 1404493824,
+    "quality_or_full_data_claim": false,
+    "TEST_evaluation": false
+  },
+  "memory_measurement_scope": "peak_allocated_bytes is VERIFY only; no training peak measured; this photo fit this6GB allocation, not a general capacity claim",
+  "original_artifact_sha256": {
+    "runs/attempt01/train-observed-exit.json": "88c5b6b007bd9385b0f6e74b78ac3551f9b47d225c41a2cdad063379bd050ac7",
+    "observer-train/observed-exit.json": "7ed31898c46a091001b7918376eb7cbe21a3638efe529d84dd61d47b9a30a1c0",
+    "runs/attempt01/verify-observed-exit.json": "75beeb3de7dc9ee1dc770c788f48f74cb06d28b4d446a020083c73f2ea8b1e0e",
+    "observer-verify/observed-exit.json": "e113cf7d2a316f12a6611e6095b15ec98f20802bcd5eae0db50014a04a9e1dba",
+    "runs/attempt01/safe-GPU-verification.json": "7a182f844f4cc8e24f41a93a67e536a1e1f4fc9ce85c72f126ea34214fdb5f25",
+    "runs/attempt01/av/run.json": "c759959f857e87917e6fd430c3192b6e734a9fe5ead41dccb1107fb7aa333332",
+    "runs/attempt01/av/training_summary.json": "087d1f5f85932b15a713df8c88370acb11770c0948ee5e8bdc35fcbde7cd78ab",
+    "runs/attempt01/av/metrics.csv": "32c54c44aaad192e40e41e1eb4689ccee1fa136b7dd6081847186202037267f9",
+    "runs/attempt01/train-actual-runtime.json": "9b01955e2c99519002b15b1aac4e85ce890b082ec9fb9923581d5edff3288a0a"
+  },
+  "phases": {
+    "train": {
+      "original_observed_child": {
+        "kind": "actual_observed_native_AV_GPU_smoke_exit",
+        "phase": "train",
+        "status": "completed",
+        "returncode": 0,
+        "observed_returncode": true,
+        "timed_out": false,
+        "automatic_retry": false,
+        "source_and_data_unchanged": true,
+        "elapsed_seconds": 4.75350805092603
+      },
+      "original_observed_external_supervisor": {
+        "returncode": 0,
+        "observed_returncode": true,
+        "timed_out": false,
+        "interrupted_signal": null,
+        "cleanup_escalated": false,
+        "cleanup_error": null,
+        "error": null,
+        "completed_utc": "2026-11-11T18:53:25.185686+00:00"
+      }
+    },
+    "verify": {
+      "original_observed_child": {
+        "kind": "actual_observed_native_AV_GPU_smoke_exit",
+        "phase": "verify",
+        "status": "completed",
+        "returncode": 0,
+        "observed_returncode": true,
+        "timed_out": false,
+        "automatic_retry": false,
+        "source_and_data_unchanged": true,
+        "elapsed_seconds": 2.652429298032075
+      },
+      "original_observed_external_supervisor": {
+        "returncode": 0,
+        "observed_returncode": true,
+        "timed_out": false,
+        "interrupted_signal": null,
+        "cleanup_escalated": false,
+        "cleanup_error": null,
+        "error": null,
+        "completed_utc": "2026-11-11T18:54:52.209866+00:00"
+      }
+    }
+  },
+  "TEST_evaluation": false,
+  "released_weights": false,
+  "no_weight_copy_or_additional_NN_during_export": true
+}
