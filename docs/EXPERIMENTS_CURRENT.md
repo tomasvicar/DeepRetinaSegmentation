@@ -56,6 +56,16 @@ is preserved; no standalone receipt is fabricated. The
 descriptor to fresh validation and later frozen execution. No selection or
 TEST evaluation has been performed by adding that route.
 
+The first required fresh V3 BEST54 `none` case subsequently finished with actual
+child exit0 in220.33s:770VAL, macro.8150589336, vessel.7631446114 and
+conditionalAV.8239173677 (report SHA
+`f5fcdecf46591edf2d4c9b445e8147424f976e6ae363fa805873c173ee0e6db7`).
+GT supports match the saved native sidecar exactly; per-photo counts do not.
+The macro difference from the saved sidecar is only+0.0000016722 and is not
+attributed to a causal backend change. This actual fresh `none` is the matched
+control for the remaining modes. The full sweep is still running; no aggregate
+completion or final winner is claimed.
+
 The separate [TPE BEST58 TTA sweep](../reports/tpe72-inference-tta-val) completed
 all four770-VAL cases with observed child and parent exits0, unchanged inputs and
 read-only reports. Fresh same-device none macro.810897 improved to.815087 with
