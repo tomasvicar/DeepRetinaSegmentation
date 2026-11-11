@@ -1,4 +1,4 @@
-# Stable BF16 compatibility port: bounded CPU evidence
+# Stable BF16 compatibility port: bounded CPU and CUDA evidence
 
 The production diff ports only the original source 72 BF16 precision feature.
 No coordinator, private launcher, model, dataset or alias changes are included.
@@ -21,9 +21,17 @@ prediction matched frozen 72 probabilities/masks bitwise. The old bundled V2
 control's probabilities also matched its saved CPU reference bitwise. All eleven
 old model files, registry entries and aliases remained byte-identical.
 
-No GT arrays or TEST were decoded/scored for this real-photo check. Native CUDA
-BF16 training of this port remains **PENDING**; real source 72 A100 training is not
-misreported as a new port GPU test. Native hardware detection alone does not prove
-binary architecture compatibility. See the user-facing precision documentation.
+No GT arrays or TEST were decoded/scored for this real-photo check.
+`root-cpu-verification.json` records the independent61-test CPU check.
+`native-cuda/verification.json` and the two runtime reports record the actual
+RTX4070TiSUPER CUDA smoke: BF16 forward/backward/AdamW step, finite FP32 master
+parameters/gradients/optimizer and FP32 prediction inside outer BF16 autocast.
+Port and frozen72 model/optimizer/loss/prediction/CUDA-RNG outputs are bitwise
+equal in separate fresh processes. Observed outer returncode0; synthetic check
+elapsed4.096s. No dataset, GT, TEST or saved checkpoint was opened. Synthetic
+tensor snapshots remain outside Git. This is operator compatibility, not a full
+BF16 training completion, accuracy result, throughput benchmark or general GPU
+architecture guarantee. Native hardware detection alone does not prove binary
+compatibility. See the user-facing precision documentation.
 No model images, probability arrays, optimizer snapshots or private operational
 endpoints are included in these reports.

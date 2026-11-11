@@ -38,10 +38,14 @@ with that binary. This feature does not upgrade Torch/CUDA, install a runtime or
 promise Blackwell support. Use a compatible runtime/device; the private operational
 launcher guard is not imported into this public package.
 
-The source 72 AMP implementation has actual native CUDA training evidence, but
-that does **not** count as a native CUDA training-step test of this stable port.
-At this commit, a native CUDA BF16 step on the port remains **PENDING** until a
-compatible GPU is free. CPU tests cover admission/context behavior, tiny operator
+This port also passed an actual bounded CUDA BF16 forward/backward/AdamW step on
+an RTX 4070 Ti SUPER with Torch2.6.0+cu124. Separate fresh processes for the port
+and frozen source72 produced bitwise-equal model/optimizer states, loss, FP32
+prediction and CUDA RNG. The synthetic two-image check took4.10s; it is not a
+completed training run, quality result or throughput benchmark. All inspected
+master parameters, gradients and optimizer tensors were finite FP32; actual
+training logits were BF16. See the [native evidence](../reports/release/bf16-compatibility/native-cuda/verification.json).
+CPU tests cover admission/context behavior, tiny operator
 emulation, float32 weights/optimizer states, exact default model/optimizer/RNG
 parity against frozen stable, resume rejection and public CLI parsing. CPU
 emulation tests bypass only admission and do not authorize CPU BF16 training.
@@ -50,6 +54,7 @@ One immutable actual source 72 E3 BF16 checkpoint was safely loaded on CPU and
 predicted a verified TRAIN photograph. Original-frame probabilities and masks
 matched frozen 72 bitwise; the existing bundled V2 default also matched its saved
 CPU output bitwise. This is model handover evidence, not E60 completion, model
-quality, GPU throughput or native BF16 validation of the port. No checkpoint was
+quality or GPU throughput. The separate native check above supplies the CUDA
+operator evidence. No checkpoint was
 added to the registry. All eleven existing model bytes and aliases are unchanged.
 See [the bounded compatibility evidence](../reports/release/bf16-compatibility/README.md).

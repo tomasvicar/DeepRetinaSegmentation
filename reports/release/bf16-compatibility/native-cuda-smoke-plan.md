@@ -1,7 +1,7 @@
-# Prepared native CUDA BF16 check — not executed
+# Native CUDA BF16 check — preparation and actual outcome
 
 This harness is ready for an owner-approved idle Ada GPU. **No GPU action was
-performed during preparation.** Weight4 training currently owns that GPU; do not
+performed during preparation.** Weight4 training owned that GPU then; do not
 run this command until root independently confirms it has finished and the
 physical GPU is free. This check does not submit a Meta job or access any dataset,
 GT, TEST labels or existing model checkpoint.
@@ -71,3 +71,14 @@ Preparation verification: three CPU-only harness tests pass, checking that missi
 `--execute` cannot dispatch a worker, optimizer/dtype drift is detected, and empty,
 nonfinite or reduced-precision master tensors fail. Ruff passes. Actual native
 CUDA training-step validation of this product port remains **PENDING**.
+
+## Actual execution after weight4 completion
+
+Root executed the bounded check only after the original weight4 training and
+its independent LAST/BEST VAL finished with observed exit0 and the pinned
+desktop-process GPU guard passed. The shared standalone lock was held across
+the entire smoke. Outer owned invocation returned0; both separate source
+workers and all exact comparisons passed in4.096s on the RTX4070TiSUPER.
+Actual source/runtime reports are in `native-cuda/`; no synthetic tensors,
+dataset/GT arrays or existing model weights were published or scored.
+The earlier PENDING statements record preparation time, not the actual result.
