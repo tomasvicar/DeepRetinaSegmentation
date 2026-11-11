@@ -81,3 +81,65 @@ Do not decode VAL/TEST labels or invoke epoch validation for this benchmark.
 CPU tests are admission/default-parity/operator/serialization checks, not an Ada
 performance proxy. The CPU BF16 operator smoke exercises finite float32 gradients
 and unknown-head zero gradients; production CPU BF16 training remains forbidden.
+
+## Reusable benchmark entry point (prepared, not executed)
+
+`scripts/benchmark_unified_bf16.py` implements that core diagnostic. It is dry by
+rejection unless `--execute` is explicit. **Root must first use the existing private
+exclusive-GPU admission/owned process supervision; this public script does not
+replace that guard, reserve the GPU, stop another process or launch a worker.**
+No invocation is authorized while the current Ada run is active. Its native-Ada,
+single-visible-device, BF16 capability and expected GPU UUID checks happen before
+input reading/report creation. Actual clean Git commit and executable/training
+hashes are recorded. CPU execution is explicitly forbidden for timing.
+
+After a separately reviewed idle launch, the command shape is:
+
+```sh
+CUDA_VISIBLE_DEVICES=GPU-d0675605-e6c2-1c85-9799-08b279aab0ff \
+OMP_NUM_THREADS=20 MKL_NUM_THREADS=20 OPENBLAS_NUM_THREADS=20 PYTHONPATH=src \
+/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python \
+  scripts/benchmark_unified_bf16.py --execute \
+  --parent /absolute/immutable-control-e060/last.pt \
+  --manifest /absolute/canonical/manifest.json --cache /absolute/cache \
+  --output /absolute/new-benchmark/report.json --batches 32 --warmup 5 --max-seconds 900
+```
+
+Replace paths only after root reviews them. Parent SHA is hard-pinned to actual
+terminal60 `10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2`;
+loading uses that same verified byte snapshot with safe CPU torch.load. Architecture
+is strict-loaded into the vascular2 model. Model/Adam states must be finite and
+float32. **The parent's Adam state, including its terminal LR and moments, is
+preserved exactly**, not silently changed to fresh optimizer state or preset LR;
+actual parameter groups are included beside the performance configuration. This
+is numerical/compute comparison only, not a supported warm-start training recipe.
+
+The script preloads32–64 augmented TRAIN batches once through `VerifiedCache18c`
+and the existing train dataset/sampler. Only TRAIN labels are decoded; canonical
+verification may read encoded bytes from other splits. Ordered photo IDs,
+contributing annotation IDs and exact tensor hashes are retained. Shared batch
+tensors are capped at2GiB (dataset scratch/cache and interpreter RAM are additional).
+No DataLoader workers run during timed legs. Both Torch thread pools are20.
+With coverage-first and at most256 photos, these batches are the shuffled initial
+coverage pass, not a representative complete8192-sample weighted epoch. Preload
+uses one CPU producer (workers0); it is not a claim to reproduce the live two-worker
+augmentation stream or measure its pipeline throughput.
+
+Leg order is FP32/BF16/BF16/FP32. Each leg warms5–10 steps, then restores exact
+parent parameters, BN buffers, Adam state and Python/NumPy/Torch CPU/CUDA RNG.
+A first diagnostic is performed and undone with another full reset before measured
+steps. Same-start state hashes must equal the immutable CPU initial snapshot. Last
+diagnostics run outside measured bulk. Loss/gradient/state finiteness and nonzero
+global gradients are required; first-gradient differences are reported honestly.
+Only one GPU model/optimizer exists; variant models are never saved.
+
+H2D and forward/loss/backward/update durations are CUDA-synchronized separately.
+First/last diagnostics, evidence hashes and preload are excluded from core timing.
+Peak allocated memory and extra working allocation are reported; reserved memory
+also reflects warmup/allocator history and should not be treated as independent
+cold-process peaks. Per-leg seconds/losses, throughput and p10/median/p90 are
+retained. The900s default /1200s maximum budget is checked between preload batches,
+warmup and measured steps; root's existing owned supervisor must enforce an outer
+hard timeout for a hung device call. A failed admission or diagnostic produces no
+successful report. No final checkpoint, selection, completion QA, VAL or TEST score
+is generated, and core timing is not full-epoch throughput.
