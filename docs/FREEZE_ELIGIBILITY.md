@@ -75,3 +75,20 @@ Still required: the **genuine source72 V3 final60 pool adapter**: original typed
 
 No source0b/72 live run imports this worktree. Production aliases and model cards
 are unchanged. No final decision or TEST authorization is created by these checks.
+
+## Schema2 integration validation
+
+The six targeted test modules contain205 distinct synthetic CPU cases. The main
+199-case batch passed in34.04seconds; the six additional malformed-proof,
+fixed-terminal, changed-request and explicit-default cases passed in focused
+runs. Ruff passed. Toy stage2 tests deliberately isolate the fixed full-corpus
+eligibility boundary with an explicit in-process mock; no fixture bypass exists
+in production. The typed coverage/profile checker has separate synthetic tests
+and actual completed-artifact proofs.
+
+Final integration proofs are saved separately under
+`reports/freeze-eligibility-schema2-actual-20261111`; the earlier first-pass proofs
+are retained without retagging their source identity. These prove CPU eligibility
+only. They are neither enriched final-source VAL nor a model selection, and must
+not be substituted for either. A later final source merge changes the evaluation
+identity and requires rebuilding its own operation-scoped evidence.
