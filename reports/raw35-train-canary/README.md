@@ -103,3 +103,10 @@ ZIP CRC/size inventory; actual encoded resource SHAs are recorded. Historical
 CRC metadata is not a historical cryptographic hash, and the equality claim is
 explicitly the verified decoded/prepared 25 replay for these seven rows.
 No VAL/TEST image or GT array, checkpoint, GPU or NN was accessed.
+
+The report's `native_channels` field records the adapter's target/valid arrays
+before separately supplied annotation FOV intersection. For example, RIM's raw
+valid array spans the stereo canvas while its separate FOV restricts the left
+half. Effective supervision/sampling counts are the `grids[25/35].channels`
+values AFTER both canonical and annotation FOV intersections. Exact 25 validity
+was compared on that effective grid, not inferred from raw target nonzero pixels.
