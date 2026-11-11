@@ -113,8 +113,8 @@ metadata/tensors and deliberately invalid encoded image/NPZ bytes, with model
 forward, CUDA and `np.load` forbidden. The stripped actual E27 pool receipt is a
 negative fixture only. Evidence is under `reports/standalone-unified-completion/`.
 
-Verification: **96 bounded CPU tests pass** (31 new verifier tests plus existing
-selection/flat-comparison tests),15.56seconds; Ruff passes. No full suite was run.
+Verification: **97 bounded CPU tests pass** (32 new verifier tests plus existing
+selection/flat-comparison tests),15.71seconds; Ruff passes. No full suite was run.
 Tests cover real safe checkpoint loading, cached/canonical identity, E27/pool
 rejection, source Git/byte pins, original supervisor SHA/artifact binding, missing
 annotation IDs, stale optimizer state, moment shape, malformed schedule/config,

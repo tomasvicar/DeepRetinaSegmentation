@@ -1,14 +1,14 @@
 {
   "base_commit": "0b8762e667c997a2dfd129dc65988c1f26f6b2ad",
   "verifier": "scripts/verify_unified_completion.py",
-  "verifier_sha256": "70877eca7e6ddff220271688de11219f58aaebbeff1011b2dc1d09a7f4e10199",
+  "verifier_sha256": "4b568b7e5e66229e378fd8712000af90a05190364563bad6311687e419eb56fe",
   "future_output_family": "standalone_unified_completion_qa",
   "original_protocol_family": "reviewed_standalone_unified_protocol",
   "original_supervisor_family": "bounded_unified_supervisor_terminal",
   "tests": {
-    "passed": 96,
-    "new_tests": 31,
-    "duration_seconds": 15.56,
+    "passed": 97,
+    "new_tests": 32,
+    "duration_seconds": 15.71,
     "full_suite_run": false,
     "cpu_affinity": [
       0
@@ -16,7 +16,7 @@
     "nice": 10,
     "threads": 1,
     "CUDA_VISIBLE_DEVICES": "",
-    "log_sha256": "0580e7db846fef26e99d21ffd5967a178f64df099cb1dc76d600618cf34abc3b"
+    "log_sha256": "d3b967d6712ea72ea076e5674616a4edd2267e5a99aadae57a105e24f40e302b"
   },
   "ruff": "PASS",
   "reused_selection_apis": [
@@ -40,5 +40,7 @@
     "All5700 actual eligible annotation IDs positive and all2529 photos min60/exact491520 required",
     "Cache identity checks do not repeat cache-payload audit; canonical encoded bytes are hashed without GT decoding",
     "No installation, live source/run/data mutation, GPU allocation/training, TEST evaluation or stable merge"
-  ]
+  ],
+  "best_vs_last_coverage_disclosed": true,
+  "selected_best_partial_annotation_regression": "Best5699/5700 + terminal last5700/5700 passes runQA and sets selected_best_full_annotations=false"
 }
