@@ -549,3 +549,22 @@ def test_cache_fallback_is_not_allowed_in_reviewed_protocol(case):
     rebind(case)
     with pytest.raises(ValueError, match="pinned V2 cache"):
         run(case)
+
+
+def test_run_completion_can_pass_with_partial_selected_best_but_must_disclose_it(case):
+    path = case["run"] / "best.pt"
+    best = torch.load(path, weights_only=True)
+    best["coverage"]["annotation_visits"].pop("r0")
+    best["coverage"]["contributing_annotation_records"] = 5699
+    torch.save(best, path)
+    rebind(case)
+    result = run(case)
+    assert result["terminal"] is True and result["all_eligible_annotations_contributed"] is True
+    assert result["annotation_coverage_scope"] == "terminal_last_checkpoint_run_completion"
+    assert result["selected_best_full_annotations"] is False
+    assert result["best_checkpoint_coverage"]["epoch"] == 56
+    assert result["best_checkpoint_coverage"]["contributing_annotation_records"] == 5699
+    assert result["best_checkpoint_coverage"]["missing_annotation_ids"] == ["r0"]
+    assert result["last_checkpoint_coverage"]["epoch"] == 60
+    assert result["last_checkpoint_coverage"]["contributing_annotation_records"] == 5700
+    assert result["last_checkpoint_coverage"]["all_eligible_annotations_contributed"] is True

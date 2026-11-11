@@ -224,6 +224,36 @@ def optimizer_binding(gate, snapshot, last, config):
     require(gate._finite(last["training_state"]), "Nonfinite last optimizer/scheduler/RNG state")
 
 
+def coverage_view(coverage, *, epoch, record_ids, photo_ids):
+    """Disclose the coverage of this exact checkpoint, not another epoch."""
+    require(isinstance(coverage, dict), "Checkpoint lacks actual coverage provenance")
+    annotations, photos = coverage.get("annotation_visits", {}), coverage.get("photo_visits", {})
+    require(
+        set(annotations) <= record_ids
+        and set(photos) <= photo_ids
+        and all(type(value) is int and value > 0 for value in annotations.values())
+        and all(type(value) is int and value > 0 for value in photos.values())
+        and coverage.get("eligible_annotation_records") == len(record_ids)
+        and coverage.get("contributing_annotation_records") == len(annotations)
+        and coverage.get("eligible_photos") == len(photo_ids)
+        and coverage.get("seen_photos") == len(photos),
+        "Checkpoint coverage identity/count provenance differs",
+    )
+    missing = sorted(record_ids - set(annotations))
+    return {
+        "epoch": epoch,
+        "eligible_annotation_records": len(record_ids),
+        "contributing_annotation_records": len(annotations),
+        "all_eligible_annotations_contributed": not missing,
+        "missing_annotation_ids": missing,
+        "eligible_photos": len(photo_ids),
+        "seen_photos": len(photos),
+        "minimum_photo_visits": min(photos.values()) if photos else 0,
+        "annotation_visits_sha256": sha(canonical(annotations)),
+        "photo_visits_sha256": sha(canonical(photos)),
+    }
+
+
 def verify(
     *,
     source,
@@ -369,6 +399,13 @@ def verify(
             best["epoch"] == scores.index(max(scores)) + 1,
             "Best checkpoint is not first strict maximum",
         )
+        record_ids, photo_ids = {row["id"] for row in rows}, set(groups["train"])
+        best_coverage = coverage_view(
+            best.get("coverage"), epoch=best["epoch"], record_ids=record_ids, photo_ids=photo_ids
+        )
+        last_coverage = coverage_view(
+            last.get("coverage"), epoch=last["epoch"], record_ids=record_ids, photo_ids=photo_ids
+        )
         optimizer_binding(gate, last_raw, last, config)
         run_metadata = gate.parse_json(raw["run.json"])
         for key in [
@@ -420,6 +457,10 @@ def verify(
         "contributing_annotation_records": 5700,
         "minimum_annotation_visits": min(annotations.values()),
         "all_eligible_annotations_contributed": True,
+        "annotation_coverage_scope": "terminal_last_checkpoint_run_completion",
+        "best_checkpoint_coverage": best_coverage,
+        "last_checkpoint_coverage": last_coverage,
+        "selected_best_full_annotations": best_coverage["all_eligible_annotations_contributed"],
         "by_dataset": coverage["by_dataset"],
         "checkpoint_sha256": {name: sha(raw[name]) for name in ["best.pt", "last.pt"]},
         "sidecar_sha256": {name: sha(raw[name]) for name in ARTIFACTS if not name.endswith(".pt")},

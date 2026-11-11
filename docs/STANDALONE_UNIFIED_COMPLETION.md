@@ -95,6 +95,16 @@ AdamW parameter IDs/moment shapes/dtypes/step counters must match the safely loa
 model, with completed cosine60/minLR. No partial-coverage tolerance is inherited
 from a looser generic helper. Unsupported optimizer layouts fail conservatively.
 
+**Run completion refers to the terminal last checkpoint.** A VAL-selected earlier
+best checkpoint can have fewer contributing annotation IDs. The output explicitly
+separates `best_checkpoint_coverage` from `last_checkpoint_coverage`, including epoch,
+actual counts/ID-map hashes and missing annotation IDs. `selected_best_full_annotations`
+is true only when that exact selected best checkpoint has all eligible positive
+annotation IDs. An earlier best with5699/5700 and a last60 with5700/5700 passes run
+completion but discloses the selected-best flag as false. It cannot be described
+as a fully annotation-exposed selected artifact merely because the run finished.
+This verifier neither chooses another checkpoint nor changes any selection policy.
+
 The output preserves original protocol/terminal text and original byte SHAs, all
 artifact hashes, Git/source pins, typed completion and full TRAIN counts. It makes
 no quality, full blindness, selection or TEST authorization claim. A real E60
@@ -109,3 +119,6 @@ Tests cover real safe checkpoint loading, cached/canonical identity, E27/pool
 rejection, source Git/byte pins, original supervisor SHA/artifact binding, missing
 annotation IDs, stale optimizer state, moment shape, malformed schedule/config,
 nonfinite weights and preservation of existing/dangling-symlink outputs.
+
+The functional verifier tests use the actual source Git guard and therefore run
+from a clean committed checkout; they do not disable that production guard.
