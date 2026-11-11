@@ -1,6 +1,6 @@
 # Actual original-curated raw384 typed fresh VAL
 
-Root launched the exact reviewed True profile1da5d3fc at22:30:09UTC. The original e3b observer recorded actual exit0 at22:37:38.062341UTC, with no timeout/error/cleanup. Both original typed worker cases returned observed0 and completed all770VAL photos; supervisor elapsed448.32165s, source/index/all inputs unchanged. No retry, budget extension, GPU reuse, TEST, DB/study/PBS mutation, model/default promotion or checkpoint release occurred.
+Root launched the exact reviewed True profile1da5d3fc at22:30:09UTC. The original e3b observer recorded actual exit0 at22:37:38.062341UTC, with no timeout/error/cleanup. Both original typed worker cases returned observed0 and completed all770VAL photos; supervisor elapsed448.32165s, source/index/all inputs unchanged. No retry, budget extension, additional GPU operation, TEST, DB/study/PBS mutation, model/default promotion or checkpoint release occurred.
 
 Original stopped fd44 checkpoints are BEST59 f6ef880c…d2bbf8b and LAST60 e25f35cc…50e59. Both actual selected roles have their own2529 TRAIN photos and5700 contributed annotation IDs, positive visits, independently checked by current6d/f13 CPU proof and again by the typed fresh producer. The full original configuration, raw photometry/cacheNone, geometry/source/lineage and original curated index are retained. These are genuine curated_fd44 results, not a nativeV3 or standalone72 envelope.
 
