@@ -122,7 +122,13 @@ def test_bad_nonraw_descriptor_fails_before_model_or_GT(change, tmp_path, monkey
 @pytest.mark.parametrize("mode", ["none", "rot4"])
 def test_curated_source_still_has_no_new_TTA_completion_admission(case, tmp_path, mode):
     # This synthetic checkpoint's arbitrary new training identity cannot enter any typed completion gate.
-    assert set(PROFILES) == {"standalone_0b", "standalone_72", "pool_6b", "pool_72_v3"}
+    assert set(PROFILES) == {
+        "standalone_0b",
+        "standalone_72",
+        "pool_6b",
+        "pool_72_v3",
+        "curated_fd44",
+    }
     if mode == "none":
         return
     p = torch.load(case["checkpoint"], weights_only=True)

@@ -599,13 +599,13 @@ def test_saved_nonraw_identity_cannot_be_silently_replaced(case, monkeypatch, ba
         m.check_curated_completion(**bind(case))
 
 
-def test_independent_adapter_does_not_admit_current_final_gate():
+def test_final_adapter_requires_distinct_original_index_before_reading_inputs():
     from deepretina.completion_profiles import PROFILES
     from deepretina.freeze_eligibility import check_freeze_eligibility
 
-    assert m.FAMILY not in PROFILES
+    assert PROFILES[m.FAMILY][3] == m.SOURCE["training_sha256"]
     missing = Path("must-not-be-read")
-    with pytest.raises(gate.SelectionError, match="Unknown explicit completion family"):
+    with pytest.raises(gate.SelectionError, match="requires original curated index"):
         check_freeze_eligibility(
             checkpoint=missing,
             best_checkpoint=missing,
@@ -637,3 +637,123 @@ def test_raw_dependency_cannot_be_replaced_with_canonical_hash(case):
     case["raw"]["task60"] = blob(task)
     with pytest.raises(gate.SelectionError, match="frozen input dependency"):
         m.check_curated_completion(**write(case))
+
+
+# The existing fixture executes the genuine checker over tiny constructed weights.
+# Canonical asset traversal is mocked here: this task performs no real GT decode.
+def final_args(case, monkeypatch, role="training_best"):
+    from deepretina.freeze_eligibility import check_freeze_eligibility
+
+    index = gate.parse_json(case["index"].read_bytes())["files"]
+    monkeypatch.setattr(gate, "_canonical_metadata", lambda manifest: {"synthetic": True})
+    monkeypatch.setattr(gate, "data_identity", lambda manifest, selected: ({"synthetic": True}, {}))
+    monkeypatch.setattr(gate, "_finish_canonical_read", lambda *args: None)
+    args = {
+        "checkpoint": index["best" if role == "training_best" else "last"]["path"],
+        "best_checkpoint": index["best"]["path"],
+        "last_checkpoint": index["last"]["path"],
+        "manifest": case["manifest"],
+        "metrics_csv": index["csv"]["path"],
+        "training_summary": index["summary"]["path"],
+        "completion_qa": index["qa60"]["path"],
+        "expected_qa_sha256": index["qa60"]["sha256"],
+        "family": m.FAMILY,
+        "checkpoint_role": role,
+        "original_curated_index": case["index"],
+        "expected_curated_index_sha256": gate.digest(case["index"].read_bytes()),
+    }
+    return check_freeze_eligibility, args
+
+
+@pytest.mark.parametrize("pretty", [False, True])
+@pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
+def test_final_adapter_preserves_original_chain_and_own_role(case, monkeypatch, pretty, role):
+    case["original_pretty_json"] = pretty
+    case["args"] = bind(case)
+    operation, args = final_args(case, monkeypatch, role)
+    original = m.check_curated_completion(**dict(case["args"], checkpoint_role=role)).proof
+    result = operation(**args)
+    assert result.proof["original_curated_completion"] == original
+    assert result.proof["raw_training_configuration"] == case["values"]["best"]["config"]
+    assert result.proof["checkpoint_epoch"] == (52 if role == "training_best" else 60)
+    assert result.proof["source_profile"]["training_source_sha256"] == m.SOURCE["training_sha256"]
+    assert result.proof["selection_created"] is False
+    assert result.proof["test_evaluation_enabled"] is False
+
+
+@pytest.mark.parametrize(
+    "key",
+    [
+        "checkpoint",
+        "best_checkpoint",
+        "last_checkpoint",
+        "metrics_csv",
+        "training_summary",
+        "completion_qa",
+    ],
+)
+def test_final_adapter_rejects_foreign_path_even_identical_bytes(case, monkeypatch, key):
+    operation, args = final_args(case, monkeypatch)
+    foreign = case["root"] / ("foreign-" + key)
+    foreign.write_bytes(Path(args[key]).read_bytes())
+    args[key] = foreign
+    with pytest.raises(gate.SelectionError, match="path differs"):
+        operation(**args)
+
+
+@pytest.mark.parametrize("key", ["expected_qa_sha256", "expected_curated_index_sha256"])
+def test_final_adapter_requires_both_external_pins(case, monkeypatch, key):
+    operation, args = final_args(case, monkeypatch)
+    args[key] = "0" * 64
+    with pytest.raises(gate.SelectionError):
+        operation(**args)
+
+
+def test_final_adapter_rejects_wrong_role_and_native_envelope(case, monkeypatch):
+    operation, args = final_args(case, monkeypatch)
+    with pytest.raises(gate.SelectionError, match="path differs"):
+        operation(**dict(args, checkpoint_role="fixed_terminal60"))
+    with pytest.raises(gate.SelectionError, match="cannot use standalone/native"):
+        operation(**dict(args, original_pool_evidence="foreign"))
+
+
+def test_final_adapter_partial_BEST_cannot_borrow_LAST(case, monkeypatch):
+    case["values"]["best"]["coverage"]["annotation_visits"].pop("train-a0")
+    case["values"]["best"]["coverage"]["contributing_annotation_records"] = 5699
+    bind(case)
+    operation, args = final_args(case, monkeypatch)
+    with pytest.raises(gate.SelectionError):
+        operation(**args)
+
+
+@pytest.mark.parametrize("family", ["standalone_0b", "standalone_72", "pool_6b", "pool_72_v3"])
+def test_old_family_rejects_curated_index_before_any_read(family):
+    from deepretina.freeze_eligibility import check_freeze_eligibility
+
+    with pytest.raises(gate.SelectionError, match="require the explicit curated_fd44 family"):
+        check_freeze_eligibility(
+            checkpoint="unread",
+            best_checkpoint="unread",
+            last_checkpoint="unread",
+            manifest="unread",
+            metrics_csv="unread",
+            training_summary="unread",
+            completion_qa="unread",
+            expected_qa_sha256="0" * 64,
+            family=family,
+            checkpoint_role="training_best",
+            original_curated_index="foreign-index",
+            expected_curated_index_sha256="a" * 64,
+        )
+
+
+def test_final_adapter_rejects_original_chain_drift_after_checker(case, monkeypatch):
+    operation, args = final_args(case, monkeypatch)
+
+    def changed(manifest, payload):
+        Path(args["metrics_csv"]).write_bytes(b"changed after original completion checker")
+        return {"synthetic": True}, {}
+
+    monkeypatch.setattr(gate, "data_identity", changed)
+    with pytest.raises(gate.SelectionError, match="chain changed"):
+        operation(**args)

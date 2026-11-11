@@ -553,6 +553,7 @@ def history(best, last, model, r):
 class CheckedCuratedCompletion:
     checkpoint_snapshot: bytes = field(repr=False)
     proof_snapshot: bytes = field(repr=False)
+    input_snapshots: tuple = field(default=(), repr=False, compare=False)
 
     @property
     def proof(self):
@@ -560,7 +561,13 @@ class CheckedCuratedCompletion:
 
 
 def check_curated_completion(
-    *, original_index, expected_index_sha256, manifest, checkpoint_role, family
+    *,
+    original_index,
+    expected_index_sha256,
+    manifest,
+    checkpoint_role,
+    family,
+    capture_snapshots=False,
 ):
     gate.require(
         family == FAMILY and checkpoint_role in ("training_best", "fixed_terminal60"),
@@ -707,4 +714,13 @@ def check_curated_completion(
         "prior_blindness_proven": False,
         "remaining_integration": "Independent completion only; no current selection/TTA/TEST path accepts this proof",
     }
-    return CheckedCuratedCompletion(raw[selected_key], gate.canonical(proof))
+    snapshots = (
+        (
+            *((paths[key], value) for key, value in raw.items()),
+            (Path(original_index), index_raw),
+            (manifest_path, manifest_raw),
+        )
+        if capture_snapshots
+        else ()
+    )
+    return CheckedCuratedCompletion(raw[selected_key], gate.canonical(proof), snapshots)

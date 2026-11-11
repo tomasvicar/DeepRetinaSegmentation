@@ -792,6 +792,8 @@ def _context(
     expected_terminal_sha256=None,
     original_pool_evidence=None,
     expected_pool_evidence_sha256=None,
+    original_curated_index=None,
+    expected_curated_index_sha256=None,
     threshold=0.5,
     tile_size=None,
     overlap=None,
@@ -801,8 +803,8 @@ def _context(
 
     protocol_extension(tta)
     require(
-        tta == "none" or completion_family in {"standalone_72", "pool_72_v3"},
-        "Reviewed TTA currently requires original standalone_72 or pool_72_v3 completion family",
+        tta == "none" or completion_family in {"standalone_72", "pool_72_v3", "curated_fd44"},
+        "Reviewed TTA requires an explicitly supported original completion family",
     )
     require(
         completion_family in PROFILES and checkpoint_role in ROLES,
@@ -812,6 +814,11 @@ def _context(
         completion_qa is not None and expected_qa_sha256 is not None,
         "Final selection requires externally pinned original completion QA",
     )
+    if completion_family == "curated_fd44":
+        require(
+            original_curated_index is not None and expected_curated_index_sha256 is not None,
+            "Curated final/TTA context requires externally pinned original curated index",
+        )
     if best_checkpoint is None:
         require(
             checkpoint_role == "training_best",
@@ -835,6 +842,8 @@ def _context(
         expected_terminal_sha256=expected_terminal_sha256,
         original_pool_evidence=original_pool_evidence,
         expected_pool_evidence_sha256=expected_pool_evidence_sha256,
+        original_curated_index=original_curated_index,
+        expected_curated_index_sha256=expected_curated_index_sha256,
     )
     snapshot = eligible.checkpoint_snapshot
     proof = eligible.proof
@@ -874,6 +883,7 @@ def _context(
             "inference_protocol",
             "evaluated_at_utc",
             "metrics",
+            *(("original_curated_completion",) if completion_family == "curated_fd44" else ()),
         ),
         "enriched validation evidence",
     )
@@ -884,6 +894,12 @@ def _context(
         "Require freshly enriched VAL evidence; thin historical reports are not eligible",
     )
     _require_opt_in_header_types(evidence["inference_protocol"], protocol)
+    if completion_family == "curated_fd44":
+        require(
+            canonical(evidence["original_curated_completion"])
+            == canonical(proof["original_curated_completion"]),
+            "VAL original curated completion binding differs",
+        )
     identity = {
         "sha256": best["checkpoint_sha256"],
         "epoch": best["epoch"],
@@ -1070,6 +1086,12 @@ def check_selection(*, selection, expected_selection_sha256, **inputs):
         == artifact["freeze_eligibility"].get("original_qa_sha256"),
         "Requested typed family/role/external QA pin differs from frozen decision",
     )
+    if inputs.get("completion_family") == "curated_fd44":
+        require(
+            inputs.get("expected_curated_index_sha256")
+            == artifact["freeze_eligibility"].get("input_sha256", {}).get("curated_index"),
+            "Requested external curated index pin differs from frozen decision",
+        )
     decision = artifact["decision"]
     exact(decision, ("recorded_at_utc", "reviewer", "rationale"), "decision")
     require(
@@ -1087,7 +1109,12 @@ def check_selection(*, selection, expected_selection_sha256, **inputs):
     )
     for key, value in context.items():
         require(
-            artifact[key] == value, f"Frozen {key} differs from actual requested inputs/evidence"
+            (
+                canonical(artifact[key]) == canonical(value)
+                if inputs.get("completion_family") == "curated_fd44"
+                else artifact[key] == value
+            ),
+            f"Frozen {key} differs from actual requested inputs/evidence",
         )
     require(
         artifact["boundaries"]

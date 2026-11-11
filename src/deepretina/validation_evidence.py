@@ -90,6 +90,9 @@ def produce_validation_evidence(
     tta="none",
     photometry_cache_root=None,
     expected_photometry_cache_fingerprint=None,
+    original_curated_index=None,
+    expected_curated_index_sha256=None,
+    checkpoint_role=None,
 ):
     """Evaluate an eligible full-data E1..60 snapshot, then write fresh evidence.
 
@@ -114,9 +117,50 @@ def produce_validation_evidence(
     source_before = gate.evaluation_source_identity()
     snapshot, payload = gate.checkpoint_snapshot(checkpoint)
     gate.canonical({"training_selection_score": payload["val_selection_score"]})
+    curated = None
+    if any(
+        x is not None
+        for x in (original_curated_index, expected_curated_index_sha256, checkpoint_role)
+    ):
+        from .curated_completion import SOURCE, check_curated_completion
+
+        gate.require(
+            payload["training_source_sha256"] == SOURCE["training_sha256"],
+            "Original curated index requires known fd44 source",
+        )
+        gate.require(
+            original_curated_index is not None
+            and expected_curated_index_sha256 is not None
+            and checkpoint_role in {"training_best", "fixed_terminal60"},
+            "Curated producer requires original index, external SHA and selected role",
+        )
+        from .freeze_eligibility import _pinned_json
+
+        _, index = _pinned_json(
+            original_curated_index, expected_curated_index_sha256, "curated index"
+        )
+        key = "best" if checkpoint_role == "training_best" else "last"
+        spec = index["files"][key]
+        gate.require(
+            not Path(checkpoint).is_symlink()
+            and Path(checkpoint).resolve(strict=True) == Path(spec["path"]).resolve(strict=True)
+            and gate.digest(snapshot) == spec["sha256"],
+            "Curated producer selected path/role differs",
+        )
+        curated = check_curated_completion(
+            original_index=original_curated_index,
+            expected_index_sha256=expected_curated_index_sha256,
+            manifest=manifest,
+            checkpoint_role=checkpoint_role,
+            family="curated_fd44",
+            capture_snapshots=True,
+        )
+        gate.require(curated.checkpoint_snapshot == snapshot, "Curated producer snapshot differs")
     gate.require(
-        tta == "none" or payload["training_source_sha256"] == PROFILES["standalone_72"][3],
-        "Reviewed TTA producer requires source72 checkpoint; completion eligibility is checked separately",
+        tta == "none"
+        or payload["training_source_sha256"] == PROFILES["standalone_72"][3]
+        or curated is not None,
+        "Reviewed TTA producer requires source72 or typed original curated fd44 completion",
     )
     configuration = gate.config_identity(payload)
     protocol = gate.inference_protocol(
@@ -205,6 +249,15 @@ def produce_validation_evidence(
         "evaluated_at_utc": datetime.now(UTC).isoformat(),
         "metrics": metrics,
     }
+    if curated is not None:
+        gate.require(
+            all(
+                not path.is_symlink() and path.read_bytes() == raw
+                for path, raw in curated.input_snapshots
+            ),
+            "Original curated inputs changed during VAL evaluation",
+        )
+        evidence["original_curated_completion"] = curated.proof
     serialized = gate.canonical(evidence) + b"\n"
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("xb") as stream:

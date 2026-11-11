@@ -21,6 +21,13 @@ PROFILES = {
     ),
 }
 PROFILES["pool_72_v3"] = ("v3_rung_evidence", *PROFILES["standalone_72"][1:])
+# Distinct original curated chain; never a native/standalone receipt alias.
+PROFILES["curated_fd44"] = (
+    "curated_unified_rung_evidence_v1",
+    "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+    "fcb186c98b812e9ead0fe19bec9f7e06063d31a7c7c020a785169b6c13c761ee",
+    "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747",
+)
 ROLES = {"training_best": "best.pt", "fixed_terminal60": "last.pt"}
 VERIFIER = "4b568b7e5e66229e378fd8712000af90a05190364563bad6311687e419eb56fe"
 MANIFEST = "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767"

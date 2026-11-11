@@ -40,6 +40,8 @@ def main(argv=None):
         "expected-protocol-sha256",
         "original-terminal",
         "original-pool-evidence",
+        "original-curated-index",
+        "expected-curated-index-sha256",
         "expected-pool-evidence-sha256",
         "expected-terminal-sha256",
     ):

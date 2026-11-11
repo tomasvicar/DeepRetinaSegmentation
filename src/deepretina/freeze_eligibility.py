@@ -375,6 +375,153 @@ class CheckedFreezeEligibility:
         return gate.parse_json(self.proof_snapshot)
 
 
+def _curated_final_adapter(
+    *,
+    checkpoint,
+    best_checkpoint,
+    last_checkpoint,
+    manifest,
+    metrics_csv,
+    training_summary,
+    completion_qa,
+    expected_qa_sha256,
+    checkpoint_role,
+    original_curated_index,
+    expected_curated_index_sha256,
+):
+    """Bind caller paths to the original index, then adapt the existing checked proof."""
+    from .curated_completion import FAMILY, SOURCE, check_curated_completion
+
+    gate.require(
+        original_curated_index is not None and expected_curated_index_sha256 is not None,
+        "Curated final eligibility requires original curated index and external SHA",
+    )
+    index_raw, index = _pinned_json(
+        original_curated_index, expected_curated_index_sha256, "original curated input index"
+    )
+    gate.require(
+        not Path(original_curated_index).is_symlink(), "Original curated index symlink forbidden"
+    )
+    selected_key = "best" if checkpoint_role == "training_best" else "last"
+    bindings = {
+        "selected": (checkpoint, selected_key),
+        "best": (best_checkpoint, "best"),
+        "last": (last_checkpoint, "last"),
+        "csv": (metrics_csv, "csv"),
+        "summary": (training_summary, "summary"),
+        "qa": (completion_qa, "qa60"),
+    }
+    supplied = {}
+    for label, (path, key) in bindings.items():
+        spec = index["files"][key]
+        actual, original = Path(path), Path(spec["path"])
+        gate.require(
+            not actual.is_symlink()
+            and not original.is_symlink()
+            and actual.resolve(strict=True) == original.resolve(strict=True),
+            "Supplied curated " + label + " path differs from original index",
+        )
+        supplied[label] = actual.read_bytes()
+        gate.require(
+            gate.digest(supplied[label]) == spec["sha256"],
+            "Supplied curated " + label + " SHA differs from original index",
+        )
+    gate.require(
+        expected_qa_sha256 == index["files"]["qa60"]["sha256"],
+        "External original curated raw QA pin differs from index",
+    )
+    profile = PROFILES[FAMILY]
+    gate.require(
+        profile[1:] == (SOURCE["commit"], SOURCE["execution_sha256"], SOURCE["training_sha256"]),
+        "Curated adapter source profile differs",
+    )
+    checked = check_curated_completion(
+        original_index=original_curated_index,
+        expected_index_sha256=expected_curated_index_sha256,
+        manifest=manifest,
+        checkpoint_role=checkpoint_role,
+        family=FAMILY,
+        capture_snapshots=True,
+    )
+    original_proof = checked.proof
+    gate.require(
+        checked.checkpoint_snapshot == supplied["selected"], "Curated selected snapshot differs"
+    )
+    best = torch.load(io.BytesIO(supplied["best"]), map_location="cpu", weights_only=True)
+    last = torch.load(io.BytesIO(supplied["last"]), map_location="cpu", weights_only=True)
+    selected = best if checkpoint_role == "training_best" else last
+    before = gate.evaluation_source_identity()
+    canonical_before = gate._canonical_metadata(manifest)
+    data, _ = gate.data_identity(manifest, selected)
+    gate._finish_canonical_read(manifest, CONTENT, canonical_before)
+    gate.require(
+        gate.evaluation_source_identity() == before == original_proof["actual_checker_source"],
+        "Curated evaluation source/runtime changed",
+    )
+    gate.require(
+        all(
+            not path.is_symlink() and path.read_bytes() == raw
+            for path, raw in checked.input_snapshots
+        )
+        and Path(original_curated_index).read_bytes() == index_raw,
+        "Original curated chain changed during complete eligibility operation",
+    )
+    for label, (path, _) in bindings.items():
+        gate.require(Path(path).read_bytes() == supplied[label], "Supplied curated input changed")
+    completion = {
+        "planned_epochs": 60,
+        "completed_epochs": 60,
+        "last_epoch": last["epoch"],
+        "last_checkpoint_sha256": gate.digest(supplied["last"]),
+        "last_steps": last["steps"],
+        "best_epoch": best["epoch"],
+        "best_training_selection_score": best["val_selection_score"],
+        "metrics_csv_sha256": gate.digest(supplied["csv"]),
+        "training_summary_sha256": gate.digest(supplied["summary"]),
+        "coverage_sha256": gate.digest(gate.canonical(last["coverage"])),
+    }
+    proof = {
+        "schema_version": 1,
+        "kind": "checked_freeze_eligibility",
+        "family": FAMILY,
+        "adapter_kind": "explicit_original_curated_fd44_final_adapter",
+        "checkpoint_role": checkpoint_role,
+        "checkpoint_sha256": gate.digest(checked.checkpoint_snapshot),
+        "checkpoint_epoch": selected["epoch"],
+        "checkpoint_steps": selected["steps"],
+        "selected_training_metric": selected["config"]["selection_metric"],
+        "selected_training_score": selected["val_selection_score"],
+        "raw_training_configuration": selected["config"],
+        "raw_training_configuration_sha256": _sha_json(selected["config"]),
+        "training_best": {
+            "sha256": gate.digest(supplied["best"]),
+            "epoch": best["epoch"],
+            "score": best["val_selection_score"],
+        },
+        "training_completion": completion,
+        "terminal_coverage": original_proof["terminal_coverage"],
+        "selected_checkpoint_coverage": original_proof["selected_checkpoint_coverage"],
+        "source_profile": {
+            "commit": SOURCE["commit"],
+            "execution_code_sha256": SOURCE["execution_sha256"],
+            "training_source_sha256": SOURCE["training_sha256"],
+        },
+        "actual_evaluation_source": before,
+        "canonical_data": data,
+        "original_qa_kind": original_proof["original_qa_kind"],
+        "original_qa_sha256": gate.digest(supplied["qa"]),
+        "original_curated_completion": original_proof,
+        "input_sha256": {
+            **{k: gate.digest(v) for k, v in supplied.items()},
+            "curated_index": gate.digest(index_raw),
+        },
+        "selection_created": False,
+        "test_evaluation_enabled": False,
+        "prior_blindness_proven": False,
+    }
+    return CheckedFreezeEligibility(checked.checkpoint_snapshot, gate.canonical(proof))
+
+
 def check_freeze_eligibility(
     *,
     checkpoint,
@@ -393,6 +540,8 @@ def check_freeze_eligibility(
     expected_terminal_sha256=None,
     original_pool_evidence=None,
     expected_pool_evidence_sha256=None,
+    original_curated_index=None,
+    expected_curated_index_sha256=None,
 ):
     """Check exact own-weight coverage/provenance; does not create a selection.
 
@@ -402,6 +551,38 @@ def check_freeze_eligibility(
     gate.require(family in PROFILES, "Unknown explicit completion family")
     gate.require(
         checkpoint_role in ROLES, "Require explicit training_best or fixed_terminal60 role"
+    )
+    if family == "curated_fd44":
+        gate.require(
+            all(
+                x is None
+                for x in (
+                    reviewed_protocol,
+                    expected_protocol_sha256,
+                    original_terminal,
+                    expected_terminal_sha256,
+                    original_pool_evidence,
+                    expected_pool_evidence_sha256,
+                )
+            ),
+            "Curated family cannot use standalone/native envelopes",
+        )
+        return _curated_final_adapter(
+            checkpoint=checkpoint,
+            best_checkpoint=best_checkpoint,
+            last_checkpoint=last_checkpoint,
+            manifest=manifest,
+            metrics_csv=metrics_csv,
+            training_summary=training_summary,
+            completion_qa=completion_qa,
+            expected_qa_sha256=expected_qa_sha256,
+            checkpoint_role=checkpoint_role,
+            original_curated_index=original_curated_index,
+            expected_curated_index_sha256=expected_curated_index_sha256,
+        )
+    gate.require(
+        original_curated_index is None and expected_curated_index_sha256 is None,
+        "Original curated index arguments require the explicit curated_fd44 family",
     )
     source_before = gate.evaluation_source_identity()
     paths = {

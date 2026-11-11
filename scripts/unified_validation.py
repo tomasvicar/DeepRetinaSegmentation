@@ -19,6 +19,9 @@ def main(argv=None):
     parser.add_argument("--tile-size", type=int)
     parser.add_argument("--overlap", type=int)
     parser.add_argument("--tta", choices=["none", "flips2", "rot4", "dihedral8"], default="none")
+    parser.add_argument("--original-curated-index")
+    parser.add_argument("--expected-curated-index-sha256")
+    parser.add_argument("--checkpoint-role", choices=["training_best", "fixed_terminal60"])
     parser.add_argument("--photometry-cache")
     parser.add_argument("--expected-photometry-cache-fingerprint")
     args = parser.parse_args(argv)
@@ -35,6 +38,9 @@ def main(argv=None):
             tile_size=args.tile_size,
             overlap=args.overlap,
             tta=args.tta,
+            original_curated_index=args.original_curated_index,
+            expected_curated_index_sha256=args.expected_curated_index_sha256,
+            checkpoint_role=args.checkpoint_role,
             photometry_cache_root=args.photometry_cache,
             expected_photometry_cache_fingerprint=args.expected_photometry_cache_fingerprint,
         )
