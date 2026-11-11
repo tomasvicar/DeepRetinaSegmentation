@@ -1,0 +1,43 @@
+{
+  "kind": "checkpoint_serialization_role_metadata_audit",
+  "snapshots": {
+    "current_bundled_BEST59": {
+      "checkpoint_sha256": "81113e7e74d86a3d51994754895d18e90b2ee8d54d5a8660a8d5535096451b7b",
+      "checkpoint_bytes": 5453234,
+      "epoch": 59,
+      "steps": 120832,
+      "state_dict_tensor_bytes": 4435364,
+      "floating_state_dtypes": [
+        "torch.float32"
+      ],
+      "training_state_present": false,
+      "optimizer_state_present": false,
+      "architecture": "compact_unet",
+      "base_channels": 12,
+      "depth": 4,
+      "norm": "batch",
+      "state_shape_sha256": "96695b2c25b394a8ef3d24db190a88f0d192834a4e487146685810b5540cb899"
+    },
+    "older_control_LAST60": {
+      "checkpoint_sha256": "10670cffa9c82305558d1f3ab1275b532a287d5c5016546179416b81dc32fab2",
+      "checkpoint_bytes": 14385264,
+      "epoch": 60,
+      "steps": 122880,
+      "state_dict_tensor_bytes": 4435364,
+      "floating_state_dtypes": [
+        "torch.float32"
+      ],
+      "training_state_present": true,
+      "optimizer_state_present": true,
+      "architecture": "compact_unet",
+      "base_channels": 12,
+      "depth": 4,
+      "norm": "batch",
+      "state_shape_sha256": "96695b2c25b394a8ef3d24db190a88f0d192834a4e487146685810b5540cb899"
+    }
+  },
+  "same_architecture_state_shapes": true,
+  "no_forward_or_GT_arrays": true,
+  "cuda_initialized": false,
+  "qualification": "BEST59 has no optimizer, prior controlLAST60 includes training optimizer/RNG. File-size difference between these unified checkpoints is not model compression; parameter counts and dtype are the architectural evidence."
+}

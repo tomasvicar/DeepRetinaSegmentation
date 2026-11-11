@@ -1,0 +1,84 @@
+{
+  "runtime_package_commit": "2139555a4680d0d85cb151971c19aaed8a903d27",
+  "runtime_package_identity_before_after": {
+    "sha256": "8b3dd3d1674bcdcaeacc14f8b3905df0e632a1540e4c302341288476ac6dbfc0",
+    "files": 44,
+    "scheme": "sorted relative path, NUL, exact bytes; allsrc Python+pyproject+uv.lock"
+  },
+  "benchmark_sha256": "3a0324e09c128b36381b1ab219c88c8f10e06090918c10023901588da7ac1aae",
+  "bootstrap_sha256": "6ce8a14b1dc988d8f73e14fd3a7e07f0f6da4852e1abc9e3a9cd166ac330cf50",
+  "python": "3.12.13",
+  "installed_distributions": {
+    "torch": "2.6.0+cu124",
+    "numpy": "2.5.4",
+    "Pillow": "13.0.0",
+    "scipy": "1.18.1",
+    "scikit-image": "0.26.0",
+    "opencv-python-headless": "4.14.0.94",
+    "h5py": "3.16.0",
+    "pydicom": "3.0.2"
+  },
+  "cpu_model": "AMD Ryzen 5 1600 Six-Core Processor",
+  "cpu_affinity": [
+    4
+  ],
+  "cpu_threads": 1,
+  "interop_threads": 1,
+  "cv2_threads": 1,
+  "nice": 17,
+  "cuda_initialized": false,
+  "peak_process_rss_KiB": 2890024,
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "output_checks_original_then_unified": [
+    {
+      "calls": 4,
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "dtype": "bool",
+      "all_finite": true,
+      "mask_sha256": "60054453a1f5522187c1c476567e7fbe747d3d2e42339126adf22b950868872c",
+      "foreground_pixels": [
+        28394,
+        13537,
+        14999,
+        5575,
+        2051
+      ],
+      "validation_outside_measured_clocks": true,
+      "extra_NN_calls": 0
+    },
+    {
+      "calls": 4,
+      "shape": [
+        5,
+        584,
+        565
+      ],
+      "dtype": "bool",
+      "all_finite": true,
+      "mask_sha256": "bb01647e1f8be64f2668a679deb0d934ddc0248e131d00f832e9b024468a5018",
+      "foreground_pixels": [
+        24819,
+        10805,
+        14014,
+        5906,
+        2067
+      ],
+      "validation_outside_measured_clocks": true,
+      "extra_NN_calls": 0
+    }
+  ],
+  "no_extra_NN_calls": true,
+  "instrumentation": "last output reference captured inside each call; shape/finite/hash checks after clocks uniformly for both pipelines",
+  "no_segmentation_GT_or_TEST_arrays_loaded": true,
+  "quality_claim": false
+}
