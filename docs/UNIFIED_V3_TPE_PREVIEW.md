@@ -90,3 +90,31 @@ speed or population latency claim. Full evidence and uncertainty:
 
 `--tta rot4` is an optional quality/cost exploration, not a changed default or a
 final selection. HPO continues; no held-out TEST was used for this release.
+
+## Optional scalar threshold calibration
+
+A later eight-threshold sweep on the same BEST58/rot4 model and all770 VAL
+photographs selected **0.35** by the minimum of six pooled ratios against the
+original reference. It reused the same probabilities for every threshold;
+conditional A/V accuracy therefore stayed unchanged. To try that measured recipe:
+
+```bash
+uv run deepretina predict --model unified-v3-tpe-preview \
+  --input /path/to/fundus.jpg --dataset drive --fov /path/to/fov.png \
+  --tta rot4 --threshold 0.35 --device cpu \
+  --output predictions/tpe-preview-rot4-threshold035
+```
+
+Use the photograph's actual camera/dataset and matching original-frame FOV.
+This exploratory setting achieved pooled vessel Dice **0.7694639**, macro
+source/head Dice **0.8220992** and conditional A/V accuracy **0.8361133**.
+Vessel Dice still trails original0.7701234 by−0.0006595, with paired95% interval
+[−0.0065302,+0.0055169]; this establishes neither superiority nor equivalence.
+Some source/head results regress. Defaults remain threshold0.5/TTA`none`; this
+does not make the preview a final or TEST-qualified model. The CPU timings above
+were measured at0.5 and are not a new timing measurement of0.35.
+
+The [full threshold report](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/first-TPE-BEST58-rot4-threshold-20261111)
+retains all eight settings, counts, source regressions and uncertainty. The
+[all-head comparison](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/all-head-candidate-comparison-20261111)
+keeps the original and other completed candidates separate.
