@@ -108,16 +108,26 @@
   "runtime_budget": {
     "CPU": 1,
     "affinity": [
-      6
+      14
     ],
     "nice": 19,
     "ionice": "idle",
     "CUDA_VISIBLE_DEVICES": "",
     "memory_limit_bytes": 3221225472,
     "owned_wall_limit_seconds": 180,
-    "kill_grace_seconds": 15
+    "kill_grace_seconds": 15,
+    "memory_enforcement": "Actual peak RSS reporting/ceiling; no RLIMIT_AS (mapped Torch libraries need larger virtual space)"
   },
   "future_local_output_only": "Fresh model_backups/raw35-train-canary-20261111 leaf; outside OwnCloud and canonical/frozen sources",
   "scope": "Exactly17 selected archive resources,4 RGB decodes for3 unique TRAIN photos,7 annotation emissions independently RGB-hashed; exact25 replay then directRAW35, no wholeadapter scan/decode, no VAL/TEST pixels, no model/GPU/training",
-  "reference_source_root_paths_not_public": true
+  "reference_source_root_paths_not_public": true,
+  "execution_host": "Ada CPU-only; do not apply Pascal runtime or RSS assumption",
+  "Python": "3.12.13",
+  "replay_backend_versions": {
+    "numpy": "2.5.4",
+    "pillow": "13.0.0",
+    "scipy": "1.18.1",
+    "scikit-image": "0.26.0",
+    "opencv-python-headless": "4.14.0.94"
+  }
 }
