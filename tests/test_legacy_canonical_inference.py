@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 import torch
 from PIL import Image
+from test_legacy_training import manifest as native_manifest_factory
 
 from deepretina.legacy.av import LegacyAVNet, checkpoint_payload, load_av
 from deepretina.legacy.canonical_av import PROFILE, prepare_raw, validate_inputs
@@ -25,6 +26,11 @@ def policy():
         "sha256": hashlib.sha256(raw).hexdigest(),
         "document_json": raw.decode(),
     }
+
+
+@pytest.fixture
+def native_manifest(tmp_path):
+    return native_manifest_factory.__wrapped__(tmp_path)
 
 
 def inputs():
@@ -289,3 +295,69 @@ def test_native_av_class_loss_requires_valid_paired_positive_vessel_support():
     expected = torch.zeros((2, 3), dtype=torch.bool)
     expected[0, 0] = True
     assert torch.equal(av_known(target, valid), expected)
+
+
+@pytest.mark.parametrize("task", ["universal", "av"])
+def test_public_native_training_to_prediction_cycle(tmp_path, native_manifest, task):
+    from deepretina.cli import dispatch, parser
+
+    architecture = (
+        {
+            "encoder_channels": [4, 2, 4],
+            "decoder_channels": [4, 2],
+            "head_channels": 3,
+            "num_classes": 3,
+        }
+        if task == "av"
+        else {"filters": 2, "in_size": 3, "out_size": 3, "do": 0, "depth": 2}
+    )
+    config = {"task": task, "epochs": 1, "architecture": architecture, "device": "cpu"}
+    if task != "av":
+        config["patch_size"] = 32
+    config_path = tmp_path / "tiny.json"
+    config_path.write_text(json.dumps(config))
+    run = tmp_path / ("run-" + task)
+    result = dispatch(
+        parser().parse_args(
+            [
+                "train-legacy",
+                "--manifest",
+                str(native_manifest),
+                "--config",
+                str(config_path),
+                "--output",
+                str(run),
+            ]
+        )
+    )
+    assert result["fresh_initialization"] is True
+    args = [
+        "predict",
+        "--checkpoint",
+        result["checkpoint"],
+        "--device",
+        "cpu",
+        "--input",
+        str(native_manifest.parent / "train-vascular.png"),
+        "--fov",
+        str(native_manifest.parent / "fov.png"),
+        "--field-of-view-degrees",
+        "1.92",
+        "--output",
+        str(tmp_path / ("pred-" + task)),
+    ]
+    if task == "av":
+        row = next(
+            r
+            for r in json.loads(native_manifest.read_text())
+            if r["split"] == "train" and r["task"] == "av"
+        )
+        with np.load(native_manifest.parent / row["mask"]) as labels:
+            mask = (labels["target"][0] >= 0.5) & labels["valid"][0]
+        mask_path = tmp_path / "paired-vessel.png"
+        Image.fromarray(mask.astype(np.uint8) * 255).save(mask_path)
+        args += ["--vessel-mask", str(mask_path)]
+    paths = dispatch(parser().parse_args(args))
+    with np.load(paths["probabilities"], allow_pickle=False) as saved:
+        assert saved["probability"].shape[-2:] == (32, 48)
+        assert np.isfinite(saved["probability"]).all()

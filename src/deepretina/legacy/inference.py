@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import io
 import json
 from dataclasses import asdict
 from pathlib import Path
@@ -103,7 +105,8 @@ def predict_legacy(
     """
     if not 0 < threshold < 1:
         raise ValueError("threshold must lie strictly between zero and one")
-    payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
+    checkpoint_bytes = Path(checkpoint).read_bytes()
+    payload = torch.load(io.BytesIO(checkpoint_bytes), map_location="cpu", weights_only=True)
     family = payload.get("family")
     if payload.get("geometry_policy") is not None:
         validate_geometry_policy(payload["geometry_policy"])
@@ -112,6 +115,7 @@ def predict_legacy(
         "family": family,
         "image": str(image_path) if image_path is not None else None,
         "checkpoint": str(checkpoint),
+        "checkpoint_sha256": hashlib.sha256(checkpoint_bytes).hexdigest(),
         "device": str(device),
         "provenance": payload.get("provenance", {}),
         "checkpoint_preprocessing": payload.get("preprocessing", {}),
@@ -144,7 +148,7 @@ def predict_legacy(
             pixels_per_degree=pixels_per_degree,
             normalized=effective_normalized,
         )
-        model, payload = load_single_net(checkpoint, device)
+        model, payload = load_single_net(io.BytesIO(checkpoint_bytes), device)
         tiling = payload["tiling"]
         logits = tiled_logits(
             model,
@@ -240,7 +244,7 @@ def predict_legacy(
             field_of_view_degrees=field_of_view_degrees,
             pixels_per_degree=pixels_per_degree,
         )
-        model, payload = load_av(checkpoint, device)
+        model, payload = load_av(io.BytesIO(checkpoint_bytes), device)
         result = predict_av_input(model, inputs, device=device)
         geometry = prepared_image.geometry
         classes = geometry.restore(result["prepared_classes"], order=0).astype(np.uint8)
@@ -321,7 +325,7 @@ def predict_legacy(
         if len(original_size) != 2 or any(int(x) != x or x < 1 for x in original_size):
             raise ValueError("original_size must contain positive integer height,width")
         original_size = tuple(int(x) for x in original_size)
-    model, payload = load_av(checkpoint, device)
+    model, payload = load_av(io.BytesIO(checkpoint_bytes), device)
     result = predict_av_input(model, inputs, device=device, original_size=original_size)
     classes = result["classes"]
     shape = classes.shape
