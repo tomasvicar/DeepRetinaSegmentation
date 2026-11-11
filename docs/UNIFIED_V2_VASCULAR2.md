@@ -39,6 +39,26 @@ compression.
 The E59 training-selection macro is 0.8038980927; independently produced fresh
 VAL macro is 0.8038980942. The published model is E59, not terminal E60.
 
+## Train this recipe again
+
+Prepare the full corpus using the [V2 preparation guide](CORPUS_V2_PREPARATION.md).
+Use its reviewed manifest and a new run directory:
+
+```bash
+uv run deepretina train-unified \
+  --manifest /path/to/corpus-v2/manifest.json \
+  --config configs/unified-v2-vascular2.toml \
+  --output runs/vascular2 --device cuda:0
+```
+
+The preset is copied byte-for-byte from the measured training source. Its complete
+configuration matches the bundled checkpoint; `device=auto` in the file is
+resolved by the explicit CLI device above. It starts a new model and optimizer.
+For faster repeated training, build and supply the derived cache as described in
+[the training guide](UNIFIED_QUICKSTART.md); retain the manifest/content/cache
+checks when using the shared reviewed corpus. The exact measured source commit
+is `0b8762e`; another software version or GPU is not a bitwise training guarantee.
+
 ## Validation tradeoffs
 
 On the same 770 VAL photos / 612 reviewed split groups, threshold 0.5:
