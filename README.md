@@ -67,6 +67,11 @@ It requires a supplied FOV and known dataset or explicit camera angle. See
 DRIVE input pair, Python API, probability semantics and benchmark qualifications.
 `fundus.png` and `fov.png` are placeholders; TIFF/GIF paths are also supported.
 
+Optional [per-model unified inference defaults](docs/BUNDLED_INFERENCE_DEFAULTS.md)
+are supported for future reviewed bundled models. None of the current12 entries
+uses them; current defaults remain `none`/`0.5`. Explicit prediction flags always
+win. The Python `predict_bundled_unified` API shares the same resolution.
+
 Use a new or empty output directory for each prediction. A populated directory
 is rejected so that masks from different photographs or models cannot get mixed.
 

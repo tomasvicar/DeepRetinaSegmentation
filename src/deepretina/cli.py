@@ -148,10 +148,10 @@ def parser() -> argparse.ArgumentParser:
         cmd.add_argument(
             "--tta",
             choices=["none", "flips2", "rot4", "dihedral8"],
-            default="none",
-            help="Optional unified full-image inference ensemble (default: none)",
+            default="none" if cmd is evaluate else None,
+            help="Unified ensemble; predict inherits bundled defaults, otherwise none",
         )
-        cmd.add_argument("--threshold", type=float, default=0.5)
+        cmd.add_argument("--threshold", type=float, default=0.5 if cmd is evaluate else None)
     predict.add_argument("--dataset", help="Camera/dataset profile, e.g. drive, hrf, drishti")
     predict.add_argument(
         "--fov", type=Path, help="Original-frame FOV mask (official mask preferred)"
@@ -296,6 +296,18 @@ def dispatch(args: argparse.Namespace):
 
         return model_catalog()
     if args.command in ("evaluate", "predict"):
+        if args.command == "predict":
+            from .bundled_inference import resolve_prediction_options
+
+            resolved = resolve_prediction_options(
+                args.model,
+                tta=args.tta,
+                threshold=args.threshold,
+                tile_size=args.tile_size,
+                overlap=args.overlap,
+            )
+            for key, value in resolved.items():
+                setattr(args, key, value)
         if args.model:
             from .bundled import bundled_checkpoint
 

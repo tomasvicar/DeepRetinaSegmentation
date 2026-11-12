@@ -1,0 +1,38 @@
+{
+  "kind": "bundled_unified_inference_defaults_metadata_routing_verification",
+  "base_commit": "78e7a11",
+  "scope": "Optional per-unified-model four-field inference_defaults, predict CLI and lazy public API only; no real declaration/weight/model/default changes",
+  "actual_tests": {
+    "passed": 34,
+    "seconds": 0.14,
+    "observed_returncode": true,
+    "returncode": 0,
+    "command": "CUDA_VISIBLE_DEVICES= OMP/MKL/OPENBLAS=1 PYTHONPATH=src existingPython -m pytest -q tests/test_bundled_inference_defaults.py",
+    "resources": "CPU1/affinity4/nice17/idleIO",
+    "NN_models_data_GT_GPU_or_TEST": false
+  },
+  "initial_fixture_attempt": {
+    "passed": 23,
+    "failed": 1,
+    "reason": "Mocked evaluate CLI fixture omitted required --output; corrected fixture only, no actual evaluation"
+  },
+  "Ruff": "PASS",
+  "all_existing_12_entries_and_aliases_resolve_previous_defaults": true,
+  "registry_unchanged_sha256": "008dc4d16da175f96b053bb0125b89218462074c9fd6d3a4ce67cc7784d44e34",
+  "pretrained_git_tree_at_base": "d86c907c67f79347a9e69b70459deb1e48c8333e",
+  "no_new_registry_entry_or_default_declaration": true,
+  "runtime_math_modules_changed": false,
+  "source_paths": [
+    "src/deepretina/bundled_inference.py",
+    "src/deepretina/cli.py",
+    "src/deepretina/__init__.py"
+  ],
+  "known_limit": "Tests mock predictor dispatch and inspect metadata arguments; no new forward/schema/quality parity claimed. Actual unified prediction already records resolved threshold/TTA/tiling.",
+  "earlier_selected_run": {
+    "passed": 26,
+    "seconds": 0.13,
+    "observed_returncode": true,
+    "returncode": 0,
+    "qualification": "subset before added explicit-option/old-backend edge checks; do not sum counts"
+  }
+}
