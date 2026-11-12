@@ -31,10 +31,12 @@ záznamy jsou zachované v [historii práce](PROGRESS_HISTORY_2026-11.md).
   hyperparametry a dostatečný trénovací rozpočet. Hodnotit také jednoduchost,
   počet parametrů, paměť a rychlost predikce.
 - Výslovně porovnat velikost patche a fotometrické předzpracování: raw proti
-  CLAHE a zdůvodněné korekci nerovnoměrného osvětlení. Současná V3/TPE studie
-  má patch384 a raw25 pevné, takže tyto volby dosud neoptimalizuje. Starší
-  pokus256/batch8 není izolovaným důkazem vlivu patche. Navazující porovnání
-  má držet batch a optimizer nastavení, uvést počet aktualizací i pixelový
+  CLAHE a zdůvodněné korekci nerovnoměrného osvětlení. První V3/TPE studie
+  měla patch384 a raw25 pevné. Navazující dokončené běhy již porovnaly
+  patch256/384/512 a raw/CLAHE/korekci osvětlení; výsledky a rozdílné rozpočty
+  jsou zaznamenané na výzkumné větvi. Starší
+  pokus256/batch8 není izolovaným důkazem vlivu patche. Kontrolované porovnání
+  musí držet batch a optimizer nastavení, uvést počet aktualizací i pixelový
   rozpočet/čas a zachovat shodný preprocessing při trénování i predikci.
   Fyzické rozlišení a velikost kontextu rozlišovat; interpolace již zmenšené
   cache nenahrazuje přípravu vyššího rozlišení přímo z RAW dat.
