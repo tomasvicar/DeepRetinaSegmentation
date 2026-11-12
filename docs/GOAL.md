@@ -1,10 +1,34 @@
-# Cíl práce: původní reference i nový lepší jednotný model
+# Předání původních modelů a vybraného jednotného modelu
 
 Výslovné zadání uživatele: **mít oboje** — původní ověřené modely a vedle nich
 nové jednodušší jednotné řešení s prokazatelně lepšími výsledky. Přístup do
 repozitáře a ke sdíleným datům v ownCloudu mají i kolegové. Zdrojový ZIP nevytvářet.
 
-## Aktuální stav: 10. 11. 2026, 22:50 UTC
+## Uzavřené předání: 12. 11. 2026
+
+Uživatel výslovně přijal malý kompromis ve skóre cév a požádal dokončit předání.
+**Výzkum je pro toto předání uzavřený.** Finální varianty jsou původní ověřené
+modely a vybraný raw512 BEST50 jednotný model na větvi
+[`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig).
+Nejsou naplánované další experimenty, tréninky ani RAW35 follow-up; historické
+zmínky o běžící práci níže popisují tehdejší stav, nikoli aktivní úkoly.
+
+Vybraný model i jeho skutečný dokončený trénink mají vlastní pokrytí všech
+2 529 TRAIN fotografií / 5 700 anotací z 21 zdrojů. Zmrazené porovnání na
+856 TEST fotografiích doložilo lepší A/V, disk a cup, ale husté cévy mají Dice
+0,776547691 proti původním 0,780767926: rozdíl **−0,004220235**, přibližně
+**−0,422 procentního bodu**. Tento uživatelem přijatý deficit i jeho záporný
+párový interval zůstávají přiznané. Netvrdíme zlepšení všech úloh ani ekvivalenci.
+Úplné důkazy jsou v
+[TEST zprávě předatelné větve](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig/reports/release/selected-raw512-TEST-20261112).
+
+Dokončená [nativní BEST58 kalibrace](../reports/native-topology-BEST58-rot4-scalars-20261112)
+nezlepšila husté cévy proti původním modelům; všech osm jejích párových intervalů
+proti originálu jsou záporné. Vybraný raw512 model ani původní reference se tím
+nemění. Negativní výsledky, omezení a [aktuální dokončená evidence](EXPERIMENTS_CURRENT.md)
+jsou součástí předání. Následující původní zadání a časové záznamy jsou historie.
+
+## Historický stav: 10. 11. 2026, 22:50 UTC
 
 Předatelná větev zachovává pět původních modelů, tři označené piloty a úplný
 baseline **korpusu V1 se 17 zdroji**. Instalovaný balíček i skutečná Python
@@ -118,5 +142,5 @@ nepovažujeme za splněný cíl všech úloh; podrobnosti jsou na experimentáln
 větvi v `reports/unified/paired-epoch3/`.
 
 Provozní MetaCentrum poznámky, PBS skripty a evidence testů jsou vedené samostatně
-v soukromém repozitáři `metacentrum-workflows`. Cíl zůstává aktivní, dokud nejsou
-dokončené obě části a doložené jejich porovnání.
+v soukromém repozitáři `metacentrum-workflows`. Tento historický plán je nahrazený
+výše uvedeným dokončeným předáním a výslovným přijetím kompromisu uživatelem.

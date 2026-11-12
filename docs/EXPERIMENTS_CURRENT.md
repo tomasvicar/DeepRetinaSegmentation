@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-## Current update: 12 November 2026, 19:10 UTC
+## Current update: 12 November 2026, 19:47 UTC
 
 The selected raw512 BEST50 unified model is available beside the original models
 on [`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig).
@@ -9,8 +9,10 @@ Its actual full60 run and selected checkpoint each cover all 2,529 TRAIN photos 
 and fixed TRAIN latency measurements have completed; they are not pending work.
 [The release evidence](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig/reports/release/selected-raw512-TEST-20261112)
 records gains in A/V, disc and cup, but dense-vessel Dice 0.77655 versus original
-0.78077 with a negative paired interval. The wider vessel-improvement goal remains
-open. Follow-ups do not reopen or tune against that TEST result.
+0.78077 with a negative paired interval. The user explicitly accepted this small dense-TEST tradeoff:
+-0.004220235 Dice (about -0.422 percentage points), and requested finalization.
+Research is closed for this handover. The known deficit remains documented; no
+all-head superiority or equivalence is claimed, and the TEST result is not reopened.
 
 The [three-stream tile-blend study](../reports/shared3stream-tile-blend-VAL770-20261112)
 completed all 770 VAL photos. Both logit-blending alternatives lowered the
@@ -35,13 +37,26 @@ against the matched control, while macro change -0.016561 has interval
 Original execution receipts are preserved in the private operations repository.
 
 The native BEST58 checkpoint has independent full TRAIN coverage and passed its
-separate CPU eligibility check. One shared rot4/eight-threshold calibration
-launched on Old at 19:06:56 UTC; the existing 19:10 observer confirms 93/770
-photos processed with the expected physical GPU, FP32 and resource limits.
-It has no completed calibration result or promotion yet. No new TEST,
-Optuna suggestion, product default change or PBS submission occurs in these
-follow-ups. RAW35 producer and common25 bridge code remain isolated experimental
-preparations with synthetic checks, not a completed full-corpus build or training.
+separate CPU eligibility check. Its one shared rot4/eight-scalar VAL calibration
+completed all 770 photos / 993 records with worker, external observer, service and
+transport exits zero at 19:29:11 UTC; whole-service cost was 1335.170 seconds.
+The [byte-exact reports, all-head table and paired intervals](../reports/native-topology-BEST58-rot4-scalars-20261112)
+show no demonstrated dense-vessel improvement. The largest observed dense point
+is 0.750406180 at scalar 0.40, below selected raw512 0.751315957 and original
+0.761326809. Its dense difference against selected is -0.000909777 with interval
+[-0.004145353, +0.001782675]; all eight dense intervals against original are
+negative. Macro at 0.40 is lower than selected by -0.015961880 with interval
+[-0.027188070, -0.010297769]. Higher pooled vessel Dice includes positive-only
+AVRDB and does not replace the dense endpoint. All adverse heads/sources and AV
+results are retained; no model or scalar was promoted.
+
+The selected raw512 model and original models remain the final handover. No new
+TEST, Optuna suggestion, product default change or PBS submission occurred in
+these follow-ups. RAW35 producer and common25 bridge code remain isolated
+experimental preparations with synthetic checks, not a completed full-corpus
+build or training, and are not promised follow-ups. No active or scheduled model
+research remains in this handover; no further experiment is planned. The user
+accepted the existing tradeoff and the selected raw512 plus original models are final.
 
 ## Historical snapshot: 05:29 UTC
 

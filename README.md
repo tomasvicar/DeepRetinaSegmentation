@@ -5,14 +5,18 @@ This `experiments/leipzig-hpo` branch adds the [shared five-output network](docs
 [validation-only hyperparameter search](docs/UNIFIED_HPO.md). Full-data training,
 model selection and the first frozen TEST comparison have completed. The selected
 model improves A/V, disc and cup while retaining a small dense-vessel deficit;
-follow-up experiments remain separate from that frozen result. Original models below remain available here;
+the user has accepted that small vessel tradeoff and explicitly requested finalization.
+Research is closed for this handover; no further experiment is planned. Original models below remain available here;
 the handover branch is [`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig).
 
 **Status, 12 November 2026:** use the handover branch for the verified original
 models and the selected full-data unified model, trained on all 2,529 TRAIN
 photos / 5,700 annotation records / 21 sources. Its
 [frozen TEST report](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig/reports/release/selected-raw512-TEST-20261112)
-includes every head and the vessel regression. This research checkout retains
+includes every head and the vessel regression: dense TEST Dice is lower by
+0.004220235 (0.422 percentage points). This accepted deficit is preserved, with
+no all-head superiority or equivalence claim. The selected raw512 model and
+original models are the final handover. This research checkout retains
 earlier explicitly preliminary pilots and experimental code. Read
 [current evidence](docs/EXPERIMENTS_CURRENT.md) before interpreting older snapshots.
 The agreed deliverable is recorded in [GOAL.md](docs/GOAL.md).
@@ -23,7 +27,7 @@ The branch preserves five original trained checkpoints and three explicitly name
 pilot checkpoints. Original architectures, weights and prepared-input inference
 have been checked numerically against the historical implementations. The newer
 pilots are small single-dataset experiments; they are not replacements for the
-original models. A new unified model is being developed separately.
+original models. The completed selected unified model is an additional final option.
 See [the project goal and completion criteria](docs/GOAL.md).
 
 ## Install
