@@ -203,7 +203,8 @@ def predict_original(
             "masks": "authoritative nearest-restored decisions; not thresholds of exported interpolated scores",
         },
         "scope": "Provided-FOV calibrated benchmark policy; AV vessel roundtrip can differ at boundaries. No extra FOV clipping. Historical raw photometry/training exposure and arbitrary-camera MATLAB parity are not certified.",
-        "reference_script_sha256": "44f1faf4ff41b3dd60b8d6dea747a577bcfd2bb77b1f2366e153bc688fb27a61",
+        "benchmark_script_sha256": "3a0324e09c128b36381b1ab219c88c8f10e06090918c10023901588da7ac1aae",
+        "quality_policy_script_sha256": "44f1faf4ff41b3dd60b8d6dea747a577bcfd2bb77b1f2366e153bc688fb27a61",
     }
     outputs = {}
     if output is not None:
