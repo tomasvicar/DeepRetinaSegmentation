@@ -26,8 +26,11 @@ pooled vessel Dice 0.7629116935; dense-vessel Dice from the 87-photo support is
 dense-vessel Dice 0.7385125867. This small vessel gain accompanies worse other
 heads and does not beat the selected raw512 protocol (dense Dice 0.7513159568).
 The latter comparison also changes checkpoint role and TTA/threshold, so it is
-not an isolated architecture effect. Paired count analysis is being completed;
-the exact original report is SHA256
+not an isolated architecture effect. The completed
+[paired count analysis and byte-exact originals](../reports/native-topology-LAST60-20261112)
+show dense Dice change +0.002402 with a 95% interval [-0.001044, +0.006186]
+against the matched control, while macro change -0.016561 has interval
+[-0.022604, -0.011053]. There is no demonstrated improvement. The exact original report is SHA256
 `669a67e95bbfba07b2a299a9ef61629a09fdfa968e5778a8c4eb032d6b5792ec`.
 Original execution receipts are preserved in the private operations repository.
 
