@@ -1,0 +1,88 @@
+{
+  "status": "PASS",
+  "source_commit": "e249b81e537c296b75d18226a0166b9d341efd4f",
+  "wheel_sha256": "2554769d2795bd98b9862860fe487ba553b2bbf094e23500f28e00b4880e328d",
+  "wheel_bytes": 62185437,
+  "runtime_modules": 46,
+  "bundled_models": 12,
+  "registry_aliases_and_all_blobs_unchanged_vs_product8d3": true,
+  "existing42_dependency_metadata_unchanged": true,
+  "checkpoint_NN_GPU_functions_trapped": true,
+  "GT_dataset_or_inference_access": false,
+  "source_clean_after": true,
+  "runtime_source_byte_equal_after_cherry_pick": true,
+  "product_integration_commit": "b282eeb",
+  "scope": "packaging/import/help only; real TRAIN parity is in separate report",
+  "actual_steps": {
+    "build": {
+      "command": [
+        "taskset",
+        "-c",
+        "4",
+        "nice",
+        "-n",
+        "17",
+        "ionice",
+        "-c",
+        "3",
+        "uv",
+        "build",
+        "--wheel",
+        "--python",
+        "/var/home/tom/code/DeepRetinaSegmentation_clean/.venv/bin/python",
+        "--out-dir",
+        "/var/home/tom/code/.verification/original-wheel-e249-20261112/wheels"
+      ],
+      "returncode": 0,
+      "observed_returncode": true,
+      "elapsed_seconds": 4.172666979022324
+    },
+    "install": {
+      "command": [
+        "taskset",
+        "-c",
+        "4",
+        "nice",
+        "-n",
+        "17",
+        "ionice",
+        "-c",
+        "3",
+        "uv",
+        "pip",
+        "install",
+        "--offline",
+        "--no-deps",
+        "--link-mode",
+        "copy",
+        "--python",
+        "/var/home/tom/code/DeepRetinaSegmentation_clean/.venv/bin/python",
+        "--target",
+        "/var/home/tom/code/.verification/original-wheel-e249-20261112/target",
+        "/var/home/tom/code/.verification/original-wheel-e249-20261112/wheels/deepretina-0.1.0-py3-none-any.whl"
+      ],
+      "returncode": 0,
+      "observed_returncode": true,
+      "elapsed_seconds": 0.6159317221026868
+    },
+    "check": {
+      "command": [
+        "taskset",
+        "-c",
+        "4",
+        "nice",
+        "-n",
+        "17",
+        "ionice",
+        "-c",
+        "3",
+        "/var/home/tom/code/DeepRetinaSegmentation_clean/.venv/bin/python",
+        "/var/home/tom/code/.verification/original-wheel-e249-20261112/verify_installed.py",
+        "/var/home/tom/code/.verification/original-wheel-e249-20261112/plan.json"
+      ],
+      "returncode": 0,
+      "observed_returncode": true,
+      "elapsed_seconds": 2.8229805370792747
+    }
+  }
+}
