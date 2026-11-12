@@ -345,6 +345,10 @@ comparable with historical original-resolution or differently masked evaluations
 
 ## Development and evidence
 
+See [Testing and verification](docs/TESTING.md) for every test module, its purpose
+and reproducible command, plus source-scoped observed results and limitations.
+The inventory is not a claim that the latest full suite has been rerun.
+
 ```bash
 uv run pytest -q
 uv run ruff check src tests scripts

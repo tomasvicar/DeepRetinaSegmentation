@@ -1,0 +1,3423 @@
+{
+  "schema_version": 1,
+  "source_snapshot": "e27a7747c711c4714fd0616422b405a3132a34e6",
+  "method": "stdlib AST only; no imports/collection/execution of test modules",
+  "count_semantics": "Collected-looking top-level test functions and Test-class methods, not parametrized pytest cases or PASS counts",
+  "modules": 61,
+  "test_definitions": 439,
+  "test_modules": [
+    {
+      "path": "tests/test_adapter_coverage.py",
+      "sha256": "23626ecbb55a4bd8b784023c79b9cba4db94c3ddde386b2b79b0d293882065c6",
+      "purpose_docstring": "Prevent legacy dataset migrations from silently disappearing from the CLI.",
+      "definition_count": 3,
+      "command": "uv run --no-sync pytest -q tests/test_adapter_coverage.py",
+      "tests": [
+        {
+          "name": "test_inventory_covers_every_historical_adapter",
+          "line": 64,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_every_migrated_selector_is_exposed_by_prepare",
+          "line": 91,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_sparse_and_unlabelled_sources_do_not_claim_dense_vessel_ground_truth",
+          "line": 96,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_adapters_additional.py",
+      "sha256": "02a614033af1433ebbec3a1d9ed509bb362fa8e6823af9ad35ec06d53c6c1717",
+      "purpose_docstring": "Native annotation semantics, unknown supervision and official split guards.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_adapters_additional.py",
+      "tests": [
+        {
+          "name": "test_drions_two_observers_binary_disc_and_unknown_cup",
+          "line": 32,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_polygon_one_based_xy_and_rejects_bad_points",
+          "line": 58,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_gamma_native_class_encoding_and_only_fundus_resources",
+          "line": 83,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_idrid_train_only_audit_never_opens_test_labels",
+          "line": 102,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_idrid_palette_indices_are_not_thresholded_rendered_red",
+          "line": 144,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_conflicting_transport_aliases_fail_closed",
+          "line": 167,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_adapters_auxiliary.py",
+      "sha256": "3fab0fe31c780c245f3fb107770a3676ef45dc3749228806f169ffc510d40a87",
+      "purpose_docstring": "Adapter contracts: auxiliary labels must never become negative segmentations.",
+      "definition_count": 13,
+      "command": "uv run --no-sync pytest -q tests/test_adapters_auxiliary.py",
+      "tests": [
+        {
+          "name": "test_image_only_collections",
+          "line": 48,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('selector,filename', [('diaretdb0', 'diaretdb0_v_1_1/resources/images/diaretdb0_fundus_images/image111.png'), ('diaretdb1', 'diaretdb1_v_1_1/resources/images/ddb1_fundusimages/image049.png'), ('eophtha', 'e_optha_EX/EX/patient1/abc.jpg'), ('heimed', 'HEI-MED-master/DMED/patient.dcm.jpg'), ('rcrgbma', 'RC-RGB-MA/Original/img-original (1).jpg'), ('ridb', 'RIDB/IM000001_2.JPG')])"
+          ]
+        },
+        {
+          "name": "test_erlangen_exact_visit_green_manual_mask_and_subject_group",
+          "line": 59,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_fire_registration_pair_keeps_original_points",
+          "line": 79,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_idrid_localization_is_not_disc_segmentation",
+          "line": 90,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_inspire_measurements_and_missing_labels_error",
+          "line": 102,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_messidor_grading_table",
+          "line": 112,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_review_keeps_observer_edges_without_filling_vessels",
+          "line": 126,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_roc_preserves_official_test_and_sparse_radius",
+          "line": 143,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_vicavr_keeps_caliber_class_and_coordinates",
+          "line": 158,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_ubmi_optional_dense_mask_and_missing_data",
+          "line": 169,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_every_adapter_rejects_empty_layout",
+          "line": 186,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('selector', list(ADAPTERS))"
+          ]
+        },
+        {
+          "name": "test_diaretdb_lesion_categories_are_not_collapsed",
+          "line": 191,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_duplicate_transport_prefixes_do_not_duplicate_auxiliary_annotations",
+          "line": 200,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_adapters_segmentation.py",
+      "sha256": "6b45fa5ae2d1924b95ab289f7c78812f3abd2b8935641ac0e167932f8f0b0c2a",
+      "purpose_docstring": "Annotation semantics and geometry regressions for legacy adapters.",
+      "definition_count": 10,
+      "command": "uv run --no-sync pytest -q tests/test_adapters_segmentation.py",
+      "tests": [
+        {
+          "name": "test_aria_transport_counters_and_views_join_without_merging_cohorts",
+          "line": 17,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_g1020_requires_unique_complete_patient_crosswalk",
+          "line": 23,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_g1020_missing_cup_is_not_background_supervision",
+          "line": 44,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_g1020_duplicate_disc_labels_resolve_by_nested_geometry",
+          "line": 53,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_onhsd_matlab_center_becomes_zero_based",
+          "line": 68,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_riga_recovers_nested_outlines_and_refuses_open_curves",
+          "line": 77,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_uoadr72_swap_and_timestamp_ignored",
+          "line": 111,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_avrdb_sparse_lines_have_no_unmarked_negative_supervision",
+          "line": 136,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_rimone_keeps_stereo_right_half_unsupervised_and_observers_grouped",
+          "line": 164,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_riga_bounded_gap_repair_preserves_closed_outline_area",
+          "line": 189,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_augment.py",
+      "sha256": "aae4adeb79b75f2c1ace66de24c9a0248ddde5ada2e8c0f9d36e622b359b0763",
+      "purpose_docstring": "Scientific geometry, ignored-support and reproducibility checks for augmentation.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_augment.py",
+      "tests": [
+        {
+          "name": "test_joint_rotation_matches_integer_reference_for_all_channels",
+          "line": 19,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_zoom_out_padding_never_becomes_negative_supervision",
+          "line": 28,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_nearest_targets_and_unknown_av_support_stay_paired",
+          "line": 42,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_seed_reproduces_exact_outputs_and_preserves_input",
+          "line": 65,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('level', ['mild', 'strong'])"
+          ]
+        },
+        {
+          "name": "test_global_torch_seed_controls_helper_and_basic_adds_no_transform",
+          "line": 82,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_invalid_inputs_fail_clearly",
+          "line": 93,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_benchmark_manifest.py",
+      "sha256": "338ab860ef3a67a9e877afb27b5cb850a9320a67bb51d8fb44ae08a2d1558c6d",
+      "purpose_docstring": "Scientific eligibility must not be inferred from missing provenance.",
+      "definition_count": 7,
+      "command": "uv run --no-sync pytest -q tests/test_benchmark_manifest.py",
+      "tests": [
+        {
+          "name": "test_missing_mapping_fails_closed",
+          "line": 39,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_legacy_test_is_gradient_unseen_but_tuning_exposed",
+          "line": 45,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_any_original_training_alias_disqualifies",
+          "line": 51,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unknown_legacy_id_cannot_prove_absence",
+          "line": 56,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_explicit_verified_absence_is_required",
+          "line": 61,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_photo_cross_split_collision_disqualifies",
+          "line": 70,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_patient_id_is_not_a_photo_identity",
+          "line": 82,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_biomisa_policy.py",
+      "sha256": "1f5b53923988d171d2f5ed6c256384516099e44d01749cddd0c7831d661681e4",
+      "purpose_docstring": "Fixed source filename roles must never become per-image area sorting.",
+      "definition_count": 3,
+      "command": "uv run --no-sync pytest -q tests/test_biomisa_policy.py",
+      "tests": [
+        {
+          "name": "test_quarantine_is_default_and_explicit_mapping_preserves_pixels",
+          "line": 37,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_missing_named_disc_becomes_disc_only_not_negative_cup",
+          "line": 57,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_policy_violation_fails_without_sorting_or_clipping",
+          "line": 67,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_bundled_models.py",
+      "sha256": "737bd67775dc69697057076fb7eb59350193eca399c701c144b0596cccb032c2",
+      "purpose_docstring": "The shared package must include usable, intact inference checkpoints.",
+      "definition_count": 3,
+      "command": "uv run --no-sync pytest -q tests/test_bundled_models.py",
+      "tests": [
+        {
+          "name": "test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums",
+          "line": 14,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_predicts_without_dataset_or_external_checkpoint",
+          "line": 112,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_corrupt_model_is_rejected_before_loading",
+          "line": 146,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_cli.py",
+      "sha256": "04541c8e4d0c6ed339359976b0649998475ba28d1a0d381dfb4463a082a3c3a9",
+      "purpose_docstring": null,
+      "definition_count": 2,
+      "command": "uv run --no-sync pytest -q tests/test_cli.py",
+      "tests": [
+        {
+          "name": "test_train_config_explicit_options_override_toml",
+          "line": 8,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_train_rejects_unknown_config_before_execution",
+          "line": 47,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_comparison.py",
+      "sha256": "9ebd181e9745c4582643108e3fe37e7f0736130dd5049fff42afb94b10b3997b",
+      "purpose_docstring": null,
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_comparison.py",
+      "tests": [
+        {
+          "name": "test_aggregate_gain_does_not_hide_av_regression_and_groups_stay_paired",
+          "line": 58,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_rejects_unpaired_or_inconsistent_reports",
+          "line": 84,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('defect', ['duplicate_photo', 'positive_support', 'valid_support', 'source', 'count_type', 'variants', 'split', 'manifest'])"
+          ]
+        },
+        {
+          "name": "test_manifest_group_leakage_is_rejected",
+          "line": 109,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_rejects_summary_counts_that_do_not_match_photo_counts",
+          "line": 123,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('field', ['macro_dataset_mean_dice', 'channels'])"
+          ]
+        },
+        {
+          "name": "test_no_supported_output_has_explicitly_undefined_scores",
+          "line": 132,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_two_eyes_of_one_patient_are_resampled_together",
+          "line": 149,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_corpus_v2_proposal.py",
+      "sha256": "06be600b13f8dc31a38be79f10fd747feff731cb6f9c4fe18f125b2b3bda47b8",
+      "purpose_docstring": "A proposal cannot turn frozen holdout photo/patient aliases into training.",
+      "definition_count": 1,
+      "command": "uv run --no-sync pytest -q tests/test_corpus_v2_proposal.py",
+      "tests": [
+        {
+          "name": "test_proposal_quarantines_v1_holdout_alias_and_preserves_v1",
+          "line": 18,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('alias', ['photo', 'source_group'])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_derived_cache.py",
+      "sha256": "1231bb8dfcbf3f533a4b26998878b30deea0c5ab73488ddff06f80f6e199d986",
+      "purpose_docstring": "Lossless derivatives stay explicit, portable, pinned and fail closed.",
+      "definition_count": 8,
+      "command": "uv run --no-sync pytest -q tests/test_derived_cache.py",
+      "tests": [
+        {
+          "name": "test_binary_soft_fov_and_extra_arrays_are_exact_and_test_is_not_decoded",
+          "line": 94,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_partial_coverage_needs_explicit_fallback_and_never_falls_back_for_corruption",
+          "line": 121,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_external_pins_canonical_modification_and_incomplete_cache_rejected",
+          "line": 148,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_paths_relocation_and_existing_output_are_safe",
+          "line": 174,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_dataset_cached_tensors_annotator_traces_and_rng_are_exact",
+          "line": 203,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('augmentation', ['basic', 'mild', 'strong'])",
+            "pytest.mark.parametrize('view', ['patch', 'whole'])"
+          ]
+        },
+        {
+          "name": "test_negative_zero_is_not_quantized_and_invalid_targets_rejected",
+          "line": 234,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_training_pins_cache_outside_config_and_resume_allows_only_path_relocation",
+          "line": 253,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_capacity_estimate_matches_actual_complete_small_cache",
+          "line": 302,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_engine.py",
+      "sha256": "1abcea44c34bb58cd41c06fc4c9451e4b8c5d2ea15b19120bcb775b88f32d275",
+      "purpose_docstring": null,
+      "definition_count": 9,
+      "command": "uv run --no-sync pytest -q tests/test_engine.py",
+      "tests": [
+        {
+          "name": "test_model_preserves_arbitrary_geometry",
+          "line": 29,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unknown_labels_do_not_contribute_gradient",
+          "line": 35,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_tiling_preserves_pixels_and_has_no_uncovered_edges",
+          "line": 48,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_hierarchy_and_av_conflict_resolution",
+          "line": 62,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_train_save_reload_evaluate_predict",
+          "line": 102,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('task', ['vessels', 'av', 'disc_cup'])"
+          ]
+        },
+        {
+          "name": "test_crop_geometry_alignment_and_seed",
+          "line": 152,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_crop_cache_is_bounded_and_does_not_mutate_source",
+          "line": 164,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_manifest_rejects_source_leakage_between_tasks",
+          "line": 180,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_av_accuracy_support_distinguishes_detection_from_classification",
+          "line": 191,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_geometry_policy.py",
+      "sha256": "0a98fe8813f14169d81af4dcc6eac60d6828e1cc8f002420780f6b8946daf86e",
+      "purpose_docstring": "Portable preparation policy, original native dimensions, and old model paths.",
+      "definition_count": 14,
+      "command": "uv run --no-sync pytest -q tests/test_geometry_policy.py",
+      "tests": [
+        {
+          "name": "test_gamma_uses_exact_original_native_h_w_not_transpose_or_prepared_shape",
+          "line": 67,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('shape,angle,method', [((1934, 1956), 30, 'native_shape_rule'), ((2000, 2992), 45, 'native_shape_rule'), ((1956, 1934), 45, 'explicit_unseen_shape_nominal_fallback'), ((256, 256), 45, 'explicit_unseen_shape_nominal_fallback')])"
+          ]
+        },
+        {
+          "name": "test_declared_flat_rules_retain_nominal_or_reported_qualification",
+          "line": 79,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('name,angle,nominal', [('drions', 30, True), ('idrid_disc', 50, False), ('biomisa', 45, True)])"
+          ]
+        },
+        {
+          "name": "test_explicit_angle_wins_and_metadata_retains_unapplied_camera_rule",
+          "line": 85,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_old_checkpoints_and_legacy_datasets_do_not_gain_new_nominal_defaults",
+          "line": 93,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_embedded_version_or_exact_byte_hash_mismatch_fails",
+          "line": 110,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('change', [lambda x: x.update(format_version=2), lambda x: x.update(format_version=True), lambda x: x.update(document_json=x['document_json'] + ' '), lambda x: x.update(sha256='0' * 64)])"
+          ]
+        },
+        {
+          "name": "test_document_schema_and_coordinate_contract_are_bound",
+          "line": 121,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('key,value', [('schema_version', 2), ('target_pixels_per_degree', 35), ('physical_measurement_claim', True)])"
+          ]
+        },
+        {
+          "name": "test_capture_binds_sidecar_row_identity_rule_and_native_geometry",
+          "line": 143,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_capture_ignores_orphan_sidecar_for_old_manifest_but_rejects_unbound_new_source",
+          "line": 163,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_bad_checkpoint_policy_rejected_before_model_build",
+          "line": 189,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_actual_raw_prediction_uses_embedded_policy_without_external_file_and_restores_native_frame",
+          "line": 200,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_synthetic_training_persists_policy_in_run_best_last_and_checks_resume_binding",
+          "line": 226,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_prediction_rule_matches_unmodified_corpus_preparer",
+          "line": 275,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('dataset,shape', [('gamma', (1934, 1956)), ('gamma', (2000, 2992)), ('gamma', (1956, 1934)), ('gamma', (32, 40)), ('drions', (400, 600)), ('idrid_disc', (2848, 4288)), ('biomisa', (992, 1550))])"
+          ]
+        },
+        {
+          "name": "test_policy_cannot_override_historical_dataset_rules",
+          "line": 288,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_explicit_unknown_gamma_shape_records_unknown_without_claiming_fallback_was_applied",
+          "line": 295,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_hpo.py",
+      "sha256": "d7a276dae45430f3e911fdd978c50decebac64efcaec949456506a4a64b3288d",
+      "purpose_docstring": "Validate search decisions without reading held-out test data or training models.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_hpo.py",
+      "tests": [
+        {
+          "name": "test_promotes_nonbaseline_candidates_and_preserves_baseline",
+          "line": 72,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_baseline_wins_even_if_short_stage_is_bad",
+          "line": 87,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_completed_resume_does_not_train_again",
+          "line": 101,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_baseline_manifest_or_configuration_mismatch_fails_before_training",
+          "line": 114,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_test_evaluation_requires_frozen_selection_and_can_run_only_once",
+          "line": 129,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_invalid_search_rates_fail",
+          "line": 156,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('rates', [(0, 0.001), (0.001, 0.001), (float('nan'), 0.001), (float('inf'), 0.001)])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_hpo_context.py",
+      "sha256": "810737177a377ab43802f01a0ec16b399bc75721db0dcf523dd079b7747b6844",
+      "purpose_docstring": "Context, normalization and crop changes stay opt-in and keep label geometry.",
+      "definition_count": 10,
+      "command": "uv run --no-sync pytest -q tests/test_hpo_context.py",
+      "tests": [
+        {
+          "name": "test_whole_view_geometry_nearest_labels_and_padding",
+          "line": 58,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_whole_inference_exactly_uses_training_view_and_restores_geometry",
+          "line": 70,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_default_dispatch_is_identical_to_original_tiling",
+          "line": 90,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_foreground_probability_one_always_keeps_a_positive_valid_pixel",
+          "line": 98,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_basic_default_crop_draws_and_labels_remain_unchanged",
+          "line": 113,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_whole_train_checkpoint_restore_predict",
+          "line": 127,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('norm', ['group', 'batch'])"
+          ]
+        },
+        {
+          "name": "test_old_checkpoint_absent_new_fields_loads_original_defaults",
+          "line": 165,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_augmentation_rng_does_not_change_basic_crop_sequence",
+          "line": 183,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_balanced_source_sampling_preserves_explicit_budget_and_target_weight",
+          "line": 205,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_explicit_uniform_sampler_uses_requested_number_of_samples",
+          "line": 228,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_integrity.py",
+      "sha256": "c97dcfc031e2f104b8030abfeb1ca7745e82d23336f279374c53bcd08e0c5886",
+      "purpose_docstring": "Data identity must survive relocation and detect annotation changes on resume.",
+      "definition_count": 3,
+      "command": "uv run --no-sync pytest -q tests/test_integrity.py",
+      "tests": [
+        {
+          "name": "test_prepared_identity_is_portable_across_paths_and_timestamps",
+          "line": 52,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_changed_referenced_content_is_detected_even_with_same_timestamp",
+          "line": 61,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('name', ['image.png', 'mask.npz', 'fov.png', 'photos.json'])"
+          ]
+        },
+        {
+          "name": "test_fresh_audit_does_not_silently_replace_frozen_search_data",
+          "line": 78,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_legacy_annotation_completion.py",
+      "sha256": "ceb826c9ab31999cdb082aa7884c6a82130a21fb21405d900aff5eeedaa196a8",
+      "purpose_docstring": "Secondary observers, disc-only annotations and external source overrides.",
+      "definition_count": 4,
+      "command": "uv run --no-sync pytest -q tests/test_legacy_annotation_completion.py",
+      "tests": [
+        {
+          "name": "test_drive_secondary_observer_is_retained_without_duplicate_photo",
+          "line": 19,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_chase_both_observers_share_eye_pair_identity",
+          "line": 40,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_iostar_disc_ignores_all_border_components_and_masks_missing_cup",
+          "line": 57,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_ubmi_source_override_copies_prediction_resource_without_fake_ground_truth",
+          "line": 92,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_legacy_av.py",
+      "sha256": "d8fe26d65ecc94112cd05ba06f998c7ca4d336c5ee9c3b4d3730af275b83082a",
+      "purpose_docstring": "Original A/V topology, safe conversion, decoding and reference-numeric checks.",
+      "definition_count": 10,
+      "command": "uv run --no-sync pytest -q tests/test_legacy_av.py",
+      "tests": [
+        {
+          "name": "test_state_dictionary_roundtrip_preserves_logits",
+          "line": 47,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_stacking_preserves_stored_dicom_values_and_channel_order",
+          "line": 61,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_odd_center_crop_uses_round_half_to_even",
+          "line": 72,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_nearest_class_restoration_matches_original_opencv",
+          "line": 81,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_decoding_ignores_background_logit_preserves_ties_and_vessel_gate",
+          "line": 89,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_constant_channel_is_reported_without_altering_original_math",
+          "line": 107,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_affine_rgb_rescaling_is_invariant_without_quantization",
+          "line": 117,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_conversion_never_executes_unlisted_pickle_globals",
+          "line": 138,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_actual_v9_safe_conversion_and_geometry",
+          "line": 163,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_actual_v9_forward_equals_original_git_source",
+          "line": 219,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_legacy_canonical_inference.py",
+      "sha256": "279c7d48d106795c7c80e6e132f00353f98d1c483dfb5e046741662c5cab1613",
+      "purpose_docstring": "Saved native-training recipes must survive raw-image CLI prediction.",
+      "definition_count": 11,
+      "command": "uv run --no-sync pytest -q tests/test_legacy_canonical_inference.py",
+      "tests": [
+        {
+          "name": "test_raw_canonical_av_matches_training_input_and_masks_fov",
+          "line": 78,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_native_canonical_preparation_uses_portable_camera_policy",
+          "line": 91,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('shape,angle', [((1934, 1956), 30), ((2000, 2992), 45), ((400, 600), 30)])"
+          ]
+        },
+        {
+          "name": "test_actual_native_av_prediction_restores_crop_and_requires_explicit_vessel",
+          "line": 110,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_canonical_profile_rejects_historical_input_modes_before_outputs",
+          "line": 142,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('mode', ['prepared', 'prepared_inputs', 'dicom_paths', 'original_size'])"
+          ]
+        },
+        {
+          "name": "test_new_profile_does_not_modify_original_arithmetic_to_hide_bad_inputs",
+          "line": 162,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', ['constant_rgb', 'empty_vessel', 'full_vessel', 'historical_rgb', 'nonfinite'])"
+          ]
+        },
+        {
+          "name": "test_single_net_uses_saved_normalized_choice_unless_explicit",
+          "line": 180,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_tampered_native_policy_rejected_before_device_or_output",
+          "line": 205,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('family', ['single', 'av'])"
+          ]
+        },
+        {
+          "name": "test_canonical_raw_prediction_works_through_the_public_cli",
+          "line": 223,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_public_native_training_dispatch_is_the_shared_stdlib_api",
+          "line": 259,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_native_av_class_loss_requires_valid_paired_positive_vessel_support",
+          "line": 285,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_public_native_training_to_prediction_cycle",
+          "line": 301,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('task', ['universal', 'av'])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_legacy_cli.py",
+      "sha256": "4c73f8d56ede639ac4aafc34fff584f62bb85c0d40f6f5434ab179c22243c4fb",
+      "purpose_docstring": "Public command-line routes distinguish verified originals from pilot models.",
+      "definition_count": 12,
+      "command": "uv run --no-sync pytest -q tests/test_legacy_cli.py",
+      "tests": [
+        {
+          "name": "test_cli_original_vessel_alias_outputs_native_geometry",
+          "line": 22,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_av_prepared_array_keeps_original_input_values",
+          "line": 50,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_av_raw_proxy_is_explicit_and_marked",
+          "line": 78,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_refuses_to_treat_raw_rgb_as_certified_av_input",
+          "line": 114,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_matlab_profile_bundled_av_canary",
+          "line": 169,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_matlab_rejects_invalid_modes_before_prediction",
+          "line": 205,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize(('remove', 'extra', 'message'), [('--fov', [], 'provided --fov'), ('--field-of-view-degrees', [], 'known --dataset'), ('--fov-diameter-pixels', ['--fov-diameter-pixels', '-1'], 'positive finite'), ('--fov-diameter-pixels', ['--fov-diameter-pixels', 'nan'], 'positive finite'), ('--field-of-view-degrees', ['--field-of-view-degrees', '0'], 'known --dataset'), (None, ['--prepared'], 'prepared input modes'), (None, ['--av-raw-proxy'], 'not allowed with argument'), (None, ['--prepared-array', 'missing.npy'], 'single prepared'), (None, ['--dicoms', 'r', 'g', 'b', 'v'], 'prepared input modes')])"
+          ]
+        },
+        {
+          "name": "test_cli_matlab_rejects_wrong_model",
+          "line": 225,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_matlab_auto_vessel_path_preserves_original_model",
+          "line": 235,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_matlab_geometry_guard_before_vessel_model",
+          "line": 277,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('invalid', ['shape', 'empty', 'tiny'])"
+          ]
+        },
+        {
+          "name": "test_cli_matlab_bundled_av_automatic_fov_calibration",
+          "line": 302,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_matlab_auto_calibration_fails_closed_before_vessel_model",
+          "line": 323,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('invalid', ['empty', 'full', 'special'])"
+          ]
+        },
+        {
+          "name": "test_raw_av_automatic_vessel_pipeline_preserves_tiny_positive_default_logits",
+          "line": 351,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize(('dtype', 'tiny'), [(torch.float32, 1e-08), (torch.float64, 1e-16)])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_legacy_fov_optimization.py",
+      "sha256": "ea233e8b02ccebfb31bea8e9c1262431aa13d8632e8d667bd52127edf11393ab",
+      "purpose_docstring": "The CPU optimization must preserve the historical disk morphology exactly.",
+      "definition_count": 2,
+      "command": "uv run --no-sync pytest -q tests/test_legacy_fov_optimization.py",
+      "tests": [
+        {
+          "name": "test_crosses_reconstruct_the_original_disk",
+          "line": 9,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('radius', [6, 10])"
+          ]
+        },
+        {
+          "name": "test_exact_morphology_including_tiny_empty_full_and_border_masks",
+          "line": 17,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('shape', [(1, 1), (2, 3), (7, 8), (31, 45), (123, 157)])",
+            "pytest.mark.filterwarnings('ignore:.*is deprecated.*:FutureWarning')"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_legacy_inference.py",
+      "sha256": "15ecb674f7ad28db6e5e4cda240b5134711a905b8f2efc1bbe06424baa6fb9ef",
+      "purpose_docstring": "Integration checks using original checkpoints distributed with the package.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_legacy_inference.py",
+      "tests": [
+        {
+          "name": "test_single_net_original_geometry_channels_and_zero_outside_crop",
+          "line": 40,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_av_prepared_outputs_match_original_decoder_and_restore_full_frame",
+          "line": 76,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_av_raw_input_is_rejected_before_outputs_are_created",
+          "line": 115,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_av_empty_mask_and_color_visualization_are_rejected",
+          "line": 124,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_av_stored_dicom_planes_preserve_values_and_decoder",
+          "line": 137,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_single_net_default_strict_logits_and_arbitrary_probability_thresholds",
+          "line": 178,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('threshold', [0.5, 0.3, 0.7])",
+            "pytest.mark.parametrize(('dtype', 'tiny'), [(torch.float32, 1e-08), (torch.float64, 1e-16)])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_legacy_preprocessing.py",
+      "sha256": "e1cbf70f72f038291736d2f59c4e693d228eaec89dbedf1a20298cb87f3cec21",
+      "purpose_docstring": "Golden compatibility with original Python preprocessing and stored DICOM units.",
+      "definition_count": 10,
+      "command": "uv run --no-sync pytest -q tests/test_legacy_preprocessing.py",
+      "tests": [
+        {
+          "name": "test_original_source_numeric_golden",
+          "line": 49,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('normalized,rgb_hash,tensor_hash', [(False, 'b3105bdcf384d777e9e6bdb8c09c321e930d92cf94286a3651b0ea3b8e65e5c1', 'e92764d0e2d1a316afab979500c12126aff13a9a8f329554c0311368816879ee'), (True, '402c8b988f2370a3ea407e670d714a7adc7da7a48d6f04198b08ac1570ee797e', 'b78287aabc0f641d319b0a3c76e32fb28bd3b5da32ed8adafd299c1bd5b24459')])"
+          ]
+        },
+        {
+          "name": "test_scale_uses_original_dimension_and_inverse_pastes_inclusive_crop",
+          "line": 67,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_automatic_fov_uses_largest_component_and_fills_holes",
+          "line": 89,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_uoadr_legacy_timestamp_pixels_are_zeroed_without_mutating_input",
+          "line": 100,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_vesclass_array_stacking_preserves_rgb_units_and_binary_support",
+          "line": 114,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_matlab_quantization_uses_positive_half_up_and4096_white",
+          "line": 127,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_dicom_loader_reproduces_network_predict_without_rescale_or_threshold",
+          "line": 156,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_bad_fov_and_geometry_fail_clearly",
+          "line": 172,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_raw_av_proxy_preserves_full_frame_and_binary_vessel_geometry",
+          "line": 185,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('normalized', [False, True])"
+          ]
+        },
+        {
+          "name": "test_raw_av_proxy_marks_heuristic_diameter_and_requires_discrete_vessels",
+          "line": 221,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_legacy_single_net.py",
+      "sha256": "56425b302d0d8888ba01e7fcca233d57ec10c23bd0da4c20eedf9d2ec37e68e3",
+      "purpose_docstring": "Numerical compatibility with the original architecture and checkpoint format.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_legacy_single_net.py",
+      "tests": [
+        {
+          "name": "test_original_module_names_initialization_and_forward_are_identical",
+          "line": 42,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('depth', [2, 3, 4, 5])",
+            "pytest.mark.parametrize('dropout', [0, 0.15])"
+          ]
+        },
+        {
+          "name": "test_blending_window_and_traversal_match_original_math",
+          "line": 62,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_tiled_logits_blends_before_sigmoid_and_covers_edges",
+          "line": 73,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_trusted_conversion_keeps_exact_outputs_and_exports_original_splits",
+          "line": 86,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_converter_requires_unambiguous_single_output_channel",
+          "line": 124,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_vendored_original_tiler_matches_cleaned_implementation",
+          "line": 141,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_legacy_training.py",
+      "sha256": "5ac9e31ef67721c7f2260bf244c41a753aebde5bd5e4470c5c0066bbd26d1ab1",
+      "purpose_docstring": "CPU-only functional fresh-native training on synthetic prepared photographs.",
+      "definition_count": 18,
+      "command": "uv run --no-sync pytest -q tests/test_legacy_training.py",
+      "tests": [
+        {
+          "name": "test_production_default_is_exact_native_constructor",
+          "line": 132,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('task', ['vessel', 'disc', 'universal', 'av'])"
+          ]
+        },
+        {
+          "name": "test_tiny_native_optimization_validation_safe_load_and_coverage",
+          "line": 153,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('task', ['vessel', 'disc', 'universal', 'av'])"
+          ]
+        },
+        {
+          "name": "test_av_filters_observers_before_sampling_and_preserves_full_frame_and_crossings",
+          "line": 210,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_masks_unknown_heads_and_unused_av_logit_have_exact_zero_gradient",
+          "line": 229,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_av_rejects_constant_channels_without_changing_original_arithmetic",
+          "line": 249,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_invalid_native_recipe_rejected",
+          "line": 268,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('bad', [{'task': 'av', 'patch_size': 32}, {'task': 'av', 'batch_size': 2}, {'task': 'vessel', 'patch_size': 31}])"
+          ]
+        },
+        {
+          "name": "test_preview_policy_and_existing_outputs_fail_before_training_writes",
+          "line": 273,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_shared_api_uses_explicit_config",
+          "line": 293,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_av_factory_default_is_unchanged_and_optional_metadata_is_copied",
+          "line": 305,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unknown_av_labels_never_fall_back_to_vessel_only_observers",
+          "line": 315,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_observer_coverage_pass_cannot_be_replaced_by_smaller_sample_budget",
+          "line": 331,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cross_split_source_identity_leakage_is_rejected",
+          "line": 340,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_optional_av_geometry_policy_is_validated_and_copied",
+          "line": 348,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_exact_nonbinary_constant_rgb_cannot_evade_av_preflight_by_roundoff",
+          "line": 365,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_native_cli_parser_is_stdlib_only",
+          "line": 374,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_native_av_loss_uses_only_valid_positive_supplied_vessels",
+          "line": 397,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_native_av_loss_with_no_valid_positive_vessel_is_differentiable_zero",
+          "line": 429,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_native_av_fully_supported_loss_and_gradient_preserve_existing_ce",
+          "line": 440,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_av.py",
+      "sha256": "2a657828218bd35c69c166c55c25fb2e0d0d2a7afd71ebdd5ff9265aab41f28d",
+      "purpose_docstring": "Public-API MATLAB numerical oracles and strict calibrated profile contracts.",
+      "definition_count": 7,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_av.py",
+      "tests": [
+        {
+          "name": "test_scalar_scale_and_nearest_matlab_goldens",
+          "line": 19,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', METADATA['cases'], ids=lambda case: case['name'])"
+          ]
+        },
+        {
+          "name": "test_fixture_identity",
+          "line": 32,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_matlab_constant_photometric_oracle_and_complete_calibrated_contract",
+          "line": 39,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_bad_resize_scale_rejected",
+          "line": 65,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('scale', [0, -1, np.nan, np.inf])"
+          ]
+        },
+        {
+          "name": "test_calibration_and_threshold_requirements_are_explicit",
+          "line": 70,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_generic_fov_estimate_and_explicit_calibration_prepare_identical_pixels",
+          "line": 87,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_explicit_diameter_bypasses_fov_estimator_even_for_special_source",
+          "line": 115,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_clahe.py",
+      "sha256": "f8a1e42d31b4cbd5239c5850a1f26ddaaa1e60a08bd3ca0b7f2b06fe069cbfbd",
+      "purpose_docstring": "Synthetic MATLAB-oracle comparisons; real-photo arrays remain outside Git.",
+      "definition_count": 7,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_clahe.py",
+      "tests": [
+        {
+          "name": "test_generated_matlab_synthetic_goldens",
+          "line": 23,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', METADATA['cases'], ids=lambda case: case['name'])"
+          ]
+        },
+        {
+          "name": "test_synthetic_fixture_identity_is_recorded",
+          "line": 37,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_histogram_redistribution_preserves_mass_and_cap",
+          "line": 44,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_constant_half_is_not_globally_stretched_to_white",
+          "line": 55,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_av_stage_uses_fixed_source_kernel_and_matlab_rounding",
+          "line": 60,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_undefined_or_unsupported_input_is_rejected",
+          "line": 80,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('image', [np.zeros((2, 2), np.uint8), np.zeros((2, 2, 3)), np.empty((0, 2)), np.array([[np.nan, 0.0]]), np.array([[1.1, 0.0]]), np.array([[-0.1, 0.0]])])"
+          ]
+        },
+        {
+          "name": "test_invalid_parameters_are_rejected",
+          "line": 99,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('kwargs', [{'num_tiles': (1, 2)}, {'num_tiles': (2.5, 2)}, {'num_tiles': (2, 2, 2)}, {'clip_limit': -1}, {'clip_limit': np.nan}, {'clip_limit': 1.1}, {'nbins': 1}, {'nbins': True}, {'nbins': 256.0}])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_firstcut.py",
+      "sha256": "e0b86285b59adff3fd82e1236b538ef3edf3e8a5d55f0b36e78961d988db19f8",
+      "purpose_docstring": "First-cutoff required contract: source oracles, not full-vector certification.",
+      "definition_count": 7,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_firstcut.py",
+      "tests": [
+        {
+          "name": "test_first_cutoff_bitwise_source_required_contract",
+          "line": 26,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', META['cases'], ids=lambda c: f\"{c['name']}-N{c['n']}\")"
+          ]
+        },
+        {
+          "name": "test_explicit_backend_source_fov_stages_and_calibration",
+          "line": 49,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', META['fov_cases'], ids=lambda c: c['name'])"
+          ]
+        },
+        {
+          "name": "test_fractional_failed_search_is_not_rounded",
+          "line": 79,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_invalid_n_rejected",
+          "line": 97,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('n', [True, 0, 2, 6, 3.5])"
+          ]
+        },
+        {
+          "name": "test_invalid_gray_rejected",
+          "line": 106,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('data', [np.array([0, 1], np.float32), np.array([0, np.nan]), np.array([-1.0, 1.0]), np.array([])])"
+          ]
+        },
+        {
+          "name": "test_degenerate_policy_stays_fail_closed",
+          "line": 111,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_no_mixed_oracle_native_backend",
+          "line": 116,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_fov.py",
+      "sha256": "3aa597b0ab2a0a69230fd4ab1f2eba92d1e79e90e900c4095deb93e039c51658",
+      "purpose_docstring": "Synthetic public-MATLAB oracle tests; no MATLAB or real photos at test runtime.",
+      "definition_count": 5,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_fov.py",
+      "tests": [
+        {
+          "name": "test_fixture_integrity",
+          "line": 16,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_default_binary_sobel_and_calibration_against_matlab",
+          "line": 24,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', METADATA['cases'], ids=lambda c: c['name'])"
+          ]
+        },
+        {
+          "name": "test_special_source_branches_fail_closed",
+          "line": 47,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('dataset', ['rimone', 'rim-one', 'erlangen', 'erlangen_videodata', 'roc', 'riga'])"
+          ]
+        },
+        {
+          "name": "test_invalid_mask_rejected",
+          "line": 62,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('mask', [np.ones((2, 3, 4)), np.ones((1, 10)), np.full((10, 10), np.nan), np.array([[0, 0.1, 0.2], [0, 0.2, 0.1]]), np.full((10, 10), -1)])"
+          ]
+        },
+        {
+          "name": "test_even_circle_rounds_positive_half_up_and_modes_choose_smallest",
+          "line": 67,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_fov_automatic.py",
+      "sha256": "04dcc98cd07c6aacf4c479e78eb2dc813495f9da5000baefde8ffc857f4eaac3",
+      "purpose_docstring": "Synthetic MATLAB source-stage goldens; no production profile activation.",
+      "definition_count": 8,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_fov_automatic.py",
+      "tests": [
+        {
+          "name": "test_rgb_double_exact",
+          "line": 33,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', META['rgb'])"
+          ]
+        },
+        {
+          "name": "test_closing_and_four_connected_fill",
+          "line": 38,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', META['morphology'])"
+          ]
+        },
+        {
+          "name": "test_seed_membership_retains_background_label",
+          "line": 46,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', META['components'])"
+          ]
+        },
+        {
+          "name": "test_oracle_edges_only_histogram_counts",
+          "line": 54,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', META['histograms'])"
+          ]
+        },
+        {
+          "name": "test_automatic_source_stages_and_calibration",
+          "line": 65,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', META['automatic'])"
+          ]
+        },
+        {
+          "name": "test_pre_holefill_boundary_changes_source_radius",
+          "line": 97,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unresolved_multithresh_is_explicit",
+          "line": 104,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_reject_invalid_oracle_histogram_edges",
+          "line": 121,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('edges', [np.zeros(251), np.arange(250), np.full(251, np.nan)])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_fov_source.py",
+      "sha256": "ffcd742fb2841c8eb9d9f48f9394bdfe03ebeca61127cb92fa244c3c94f06a2b",
+      "purpose_docstring": "Optional source-special stages; public defaults stay unchanged.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_fov_source.py",
+      "tests": [
+        {
+          "name": "test_fixture_sha256",
+          "line": 21,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_provided_source_branches_match_matlab",
+          "line": 29,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', METADATA['cases'], ids=lambda c: c['name'])"
+          ]
+        },
+        {
+          "name": "test_real_source_shape_calibrations_without_real_photographs",
+          "line": 54,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', [c for c in REPORT['cases'] if c['name'].startswith('real_')], ids=lambda c: c['name'])"
+          ]
+        },
+        {
+          "name": "test_rimone_loader_mask_is_left_frame_not_dense_fov",
+          "line": 66,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_existing_public_generic_guard_is_unchanged",
+          "line": 78,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('dataset', ['rimone', 'erlangen', 'roc', 'riga'])"
+          ]
+        },
+        {
+          "name": "test_invalid_or_not_source_provided_shape_fails",
+          "line": 87,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('mask', [np.zeros((2, 3)), np.ones((1, 8)), np.full((10, 10), np.nan), np.array([[0, 0.3, 0.7]] * 3)])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_nearest_coordinates.py",
+      "sha256": "db69124c76604e022dc8fcc2e595dd8552f6f1a65e7cb60aa5340ed9486f5eb2",
+      "purpose_docstring": "Reference nearest-center coordinates, including the retained DiaRet tie.",
+      "definition_count": 2,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_nearest_coordinates.py",
+      "tests": [
+        {
+          "name": "test_retained_matlab_nearest_goldens",
+          "line": 12,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('index', range(24))"
+          ]
+        },
+        {
+          "name": "test_diaret_reference_half_pixel_source_row_without_photo",
+          "line": 21,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_source_auto.py",
+      "sha256": "ceb7bb4ccf5bb151d5a7a95875aecfdb8931d08dedd778b07a9d8d4014901c3f",
+      "purpose_docstring": "Optional automatic-source composition: no network or actual GT reader.",
+      "definition_count": 5,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_source_auto.py",
+      "tests": [
+        {
+          "name": "test_half_factor_source_masks",
+          "line": 28,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', META['half'], ids=lambda c: c['name'])"
+          ]
+        },
+        {
+          "name": "test_composed_chain_golden_and_no_second_calibration",
+          "line": 50,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', META['chains'], ids=lambda c: c['name'])"
+          ]
+        },
+        {
+          "name": "test_invalid_request_rejected_before_fov",
+          "line": 106,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('changes', [{'pixels_per_degree': 35}, {'pixels_per_degree': True}, {'storage': 'other'}, {'dataset': 'riga'}, {'dataset': 'review'}, {'dataset': 'erlangen'}, {'dataset': 'rimone'}, {'dataset': 'unknown'}, {'field_of_view_degrees': 0}, {'field_of_view_degrees': float('nan')}])"
+          ]
+        },
+        {
+          "name": "test_no_oracle_override_on_native_composed_api",
+          "line": 119,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unambiguous_source_angle_defaults",
+          "line": 128,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('dataset,expected', [('eophtha', 40.0), ('ridb', 45.0), ('diaretdb0', 50.0), ('drishti', 30.0)])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_source_cli.py",
+      "sha256": "386c74e9558699c74cd0144b1d3877578bb2b73fb3d41202471ce83dc6b0fa1d",
+      "purpose_docstring": "Source profile opt-in routing and paired preprocessing, without model forwards.",
+      "definition_count": 7,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_source_cli.py",
+      "tests": [
+        {
+          "name": "test_source_cli_is_mutually_exclusive",
+          "line": 30,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('flag', ['--av-raw-proxy', '--av-raw-matlab'])"
+          ]
+        },
+        {
+          "name": "test_source_cli_forwards_existing_options_without_changing_default",
+          "line": 37,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_raw_source_preparation_reuses_rgb_with_exact_vessel_sampling",
+          "line": 80,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_provided_source_uses_processing_mask_and_explicit_diameter",
+          "line": 117,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_invalid_source_request_never_reaches_model",
+          "line": 166,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('changes', [{'dataset': None}, {'pixels_per_degree': 24}, {'fov_diameter_pixels': float('nan')}, {'dataset': 'rimone'}])"
+          ]
+        },
+        {
+          "name": "test_source_cli_rejects_non_av_family",
+          "line": 182,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('model', ['pilot-vessels', 'unified-full-data-baseline'])"
+          ]
+        },
+        {
+          "name": "test_source_cli_refuses_prepared_mode",
+          "line": 199,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_matlab_threshold_study.py",
+      "sha256": "28f842f413abb4c4fd84bcdb7563c68a1b4233451c23836b474385a201d2c4fd",
+      "purpose_docstring": "Fixed250-bin source goldens and explicitly uncertified threshold candidate.",
+      "definition_count": 4,
+      "command": "uv run --no-sync pytest -q tests/test_matlab_threshold_study.py",
+      "tests": [
+        {
+          "name": "test_implicit250_bitwise_matlab_edges",
+          "line": 22,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', HIST['cases'], ids=lambda c: c['name'])"
+          ]
+        },
+        {
+          "name": "test_local_candidate_keeps_measured_remaining_gap",
+          "line": 38,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', MULTI['cases'], ids=lambda c: f\"{c['name']}-N{c['n']}\")"
+          ]
+        },
+        {
+          "name": "test_adjacent_double_histogram_boundary_is_not_epsilon_smoothed",
+          "line": 62,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unrepresentable_float_range_fails_without_epsilon",
+          "line": 69,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_native_av_real_smoke_wrapper.py",
+      "sha256": "fe911396f1502ea97390643df2ee680adab4aa9679a116375fc679cf9d2d5e37",
+      "purpose_docstring": "Exercise only tiny stdlib child processes; never import Torch or real data.",
+      "definition_count": 5,
+      "command": "uv run --no-sync pytest -q tests/test_native_av_real_smoke_wrapper.py",
+      "tests": [
+        {
+          "name": "test_child_nonzero_is_not_success",
+          "line": 22,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_timeout_stops_owned_child",
+          "line": 37,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_post_spawn_metadata_failure_stops_child_and_preserves_foreign",
+          "line": 55,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_pending_cli_never_enters_worker",
+          "line": 91,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cleanup_has_at_most_two_bounded_waits",
+          "line": 112,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_native_bf16_smoke.py",
+      "sha256": "fdca807c288327983832f95b25395c3a0f668f8955adfe6a0169549a745a2a2f",
+      "purpose_docstring": "CPU-only checks of the explicit GPU smoke harness; no CUDA calls.",
+      "definition_count": 3,
+      "command": "uv run --no-sync pytest -q tests/test_native_bf16_smoke.py",
+      "tests": [
+        {
+          "name": "test_preparation_cannot_dispatch_gpu_worker",
+          "line": 20,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_state_comparison_detects_optimizer_or_dtype_drift",
+          "line": 30,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_fp32_master_check_rejects_nan_bf16_and_empty",
+          "line": 44,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_native_real_smoke_cleanup.py",
+      "sha256": "094318456fec3cb99eddf6846888bd102996d54287581c8a42800968c43eb8d0",
+      "purpose_docstring": "Actual SIGTERM cleanup with owned sleep processes; no trainer/NN/data access.",
+      "definition_count": 1,
+      "command": "uv run --no-sync pytest -q tests/test_native_real_smoke_cleanup.py",
+      "tests": [
+        {
+          "name": "test_monitor_sigterm_reaps_owned_sleep_and_preserves_unrelated",
+          "line": 14,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_original_composed.py",
+      "sha256": "f735123f3fdd5ea81abf5b8acb39f4fec6f403cf83a7544fedd523582e4cc596",
+      "purpose_docstring": "Toy forwards exercise the literal benchmark operation without bundled weights.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_original_composed.py",
+      "tests": [
+        {
+          "name": "test_actual_toy_forward_matches_literal_benchmark_and_exports",
+          "line": 81,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_binary_native_intersection_is_not_interpolated_score_threshold",
+          "line": 114,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_invalid_contract_before_weights",
+          "line": 124,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', ['unknown', 'nan_fov', 'color_fov', 'special', 'tiny', 'diameter'])"
+          ]
+        },
+        {
+          "name": "test_output_guard_precedes_input_and_weights",
+          "line": 145,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_bad_component_bytes_never_load",
+          "line": 153,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_dispatch_and_parser",
+          "line": 167,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_partial_supervision.py",
+      "sha256": "82a435a1c045718acda8365374a70f82deed5fda2821d3815312350ec3f0d2cf",
+      "purpose_docstring": "Partial optic-disc labels must never produce a supposedly trained cup output.",
+      "definition_count": 2,
+      "command": "uv run --no-sync pytest -q tests/test_partial_supervision.py",
+      "tests": [
+        {
+          "name": "test_disc_only_checkpoint_marks_and_suppresses_untrained_cup",
+          "line": 14,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unusable_annotation_is_preserved_but_excluded_from_training",
+          "line": 75,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_photometry_cache.py",
+      "sha256": "207f1bc50362d274076045e475c091734ebbf97908fa177e131c90fde32563b3",
+      "purpose_docstring": "Small immutable RGB derivatives; no full corpus, real-model training or GPU.",
+      "definition_count": 13,
+      "command": "uv run --no-sync pytest -q tests/test_photometry_cache.py",
+      "tests": [
+        {
+          "name": "test_full_toy_cache_matches_uncached_inputs_targets_crop_rng_and_no_double_apply",
+          "line": 56,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('profile', p.PROFILES[1:])"
+          ]
+        },
+        {
+          "name": "test_dependency_descriptor_canonical_external_pin_and_profile_mismatches",
+          "line": 89,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_mapped_bitflip_fails_both_read_and_streaming_audit_without_fallback",
+          "line": 122,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_subset_proof_cannot_be_presented_as_full_cache",
+          "line": 135,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_existing_output_and_unsafe_destination_never_overwrite",
+          "line": 151,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_wrong_source_alias_is_rejected_not_silently_bypassed",
+          "line": 171,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cache_module_is_in_training_fingerprint",
+          "line": 195,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_reader_releases_raw_arrays_and_keeps_only_bounded_tensor_LRU",
+          "line": 206,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_dataset_rejects_cache_descriptor_at_different_physical_scale",
+          "line": 229,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_mutable_config_cannot_relabel_processed_cache_even_after_LRU_hit",
+          "line": 239,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('field,value', [('photometric_profile', 'raw'), ('pixels_per_degree', 35)])"
+          ]
+        },
+        {
+          "name": "test_cache_descriptor_json_boolean_is_not_integer_version",
+          "line": 253,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cached_training_resume_and_relocated_cache_preserve_optimizer_rng",
+          "line": 275,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_public_cli_saves_actual_tiny_photometry_training_and_portable_cache",
+          "line": 340,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_prediction_output.py",
+      "sha256": "4582ff07988670bfbbd31d4ca0566a639f53f86399d9d7986e495febbc0d2cb4",
+      "purpose_docstring": "A second model must not leave a mixture of old and new prediction files.",
+      "definition_count": 5,
+      "command": "uv run --no-sync pytest -q tests/test_prediction_output.py",
+      "tests": [
+        {
+          "name": "test_reusing_universal_output_for_vessel_preserves_entire_first_prediction",
+          "line": 15,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_populated_output_rejected_before_loading_model_or_image",
+          "line": 29,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('predictor', [predict, predict_legacy, predict_raw_av, predict_unified])"
+          ]
+        },
+        {
+          "name": "test_new_and_empty_output_are_accepted_without_creating_files",
+          "line": 40,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_output_file_is_preserved",
+          "line": 50,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cli_checks_output_before_reading_checkpoint_family",
+          "line": 58,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_prepare.py",
+      "sha256": "51e3f6248aa7f7c6803c62a78478607945846ab0fd57437d753dee6f4cc52b2f",
+      "purpose_docstring": "Regression tests for scientific label semantics and source separation.",
+      "definition_count": 12,
+      "command": "uv run --no-sync pytest -q tests/test_prepare.py",
+      "tests": [
+        {
+          "name": "test_unknown_av_pixels_do_not_train_false_negative_classes",
+          "line": 14,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_refuge_disc_includes_cup",
+          "line": 24,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_sources_and_eye_pairs_cannot_leak_between_splits",
+          "line": 29,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_train_only_patient_policy_is_honored_without_forging_an_official_split",
+          "line": 48,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_train_only_policy_cannot_override_a_known_official_alias",
+          "line": 63,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('heldout', ['val', 'test'])"
+          ]
+        },
+        {
+          "name": "test_prepare_drive_deduplicates_export_and_keeps_coordinates",
+          "line": 82,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_preparation_refuses_to_modify_existing_experiment_data",
+          "line": 114,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_photo_hash_uses_original_geometry_and_is_independent_of_memory_layout",
+          "line": 125,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_exact_photo_union_crosses_dataset_ids_and_transitively_keeps_patient_eyes",
+          "line": 136,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_photo_alias_preserves_official_heldout_and_train_only_fails_closed",
+          "line": 174,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('heldout', ['val', 'test'])"
+          ]
+        },
+        {
+          "name": "test_photo_alias_with_official_val_and_test_uses_stricter_test_partition",
+          "line": 193,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_preparation_hashes_raw_rgb_before_resize_and_caches_observer_resources",
+          "line": 202,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_prepare_corpus_v2.py",
+      "sha256": "b814cbcbc08f7ea00e36147af50a76af82584321246eb1fe42b49ec6db6dbd2e",
+      "purpose_docstring": "Parent immutability, alias holdouts and nominal camera provenance for v2.",
+      "definition_count": 15,
+      "command": "uv run --no-sync pytest -q tests/test_prepare_corpus_v2.py",
+      "tests": [
+        {
+          "name": "test_parent_heldout_alias_is_quarantined_without_row_mutation",
+          "line": 33,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_new_alias_cannot_join_two_parent_partitions",
+          "line": 42,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_new_official_test_cannot_move_parent_training_photo",
+          "line": 50,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_new_train_alias_of_official_new_test_is_quarantined",
+          "line": 58,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cloned_parent_has_no_shared_writable_inodes",
+          "line": 66,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_policy_matches_exact_native_shape_and_remains_unmeasured",
+          "line": 100,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unsplit_train_only_alias_is_quarantined",
+          "line": 121,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_tiny_full_append_preserves_parent_bytes_and_prepares_official_test",
+          "line": 132,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('alias_parent', [False, True, 'conflicting_angle'])"
+          ]
+        },
+        {
+          "name": "test_new_parent_train_alias_reuses_frozen_group_id",
+          "line": 287,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_bridge_of_two_old_training_groups_requires_review",
+          "line": 297,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_python_copy_fallback_preserves_bytes_metadata_and_internal_aliases",
+          "line": 306,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_python_copy_nonlinux_and_unavailable_internal_hardlinks",
+          "line": 342,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_python_copy_rejects_unsafe_paths_without_mutation",
+          "line": 364,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('kind', ['file-link', 'dir-link', 'root-link', 'fifo', 'existing', 'nested', 'destination-link'])"
+          ]
+        },
+        {
+          "name": "test_reflink_real_error_does_not_hide_disk_full",
+          "line": 397,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_missing_inode_identity_never_merges_unrelated_files",
+          "line": 413,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_prepare_training_data.py",
+      "sha256": "082df72b95cf367b4ebaab4ea0290a2907283064bd897ccd1d2acab1a1ae30e1",
+      "purpose_docstring": "RAW-only workflow ordering and identity guards, without an author-owned parent.",
+      "definition_count": 5,
+      "command": "uv run --no-sync pytest -q tests/test_prepare_training_data.py",
+      "tests": [
+        {
+          "name": "test_pipeline_pins_actual_audited_parent_after_group_repair",
+          "line": 26,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_fail_before_any_preparation",
+          "line": 97,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('case', ['nested', 'wrong-policy', 'missing-archive'])"
+          ]
+        },
+        {
+          "name": "test_append_cli_exposes_explicit_parent_pin",
+          "line": 113,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_original_topology_preset_is_scratch_and_keeps_complete_budget",
+          "line": 136,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_four_raw_source_fixture_runs_real_prepare_copy_append_and_audit",
+          "line": 151,
+          "docstring": "Real DRIVE/RITE pairing, Drishti disc/cup, and DRIONS polygons; other additions empty in fixture.\n\nThe production call remains fixed to all sources; narrowing is test-only.",
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_prepare_unified_data.py",
+      "sha256": "4eadcbab1606b11cfe2670a1948a2a42b60528150cd8ff92d143d2d75a8ef939",
+      "purpose_docstring": "Canonical physical frames, multi-annotator identity and split-safety regressions.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_prepare_unified_data.py",
+      "tests": [
+        {
+          "name": "test_exact_drive_rite_alias_uses_one_canonical_grid_and_preserves_variants",
+          "line": 35,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_missing_cup_and_positive_only_vessels_stay_unknown",
+          "line": 88,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_patient_and_photo_alias_union_cannot_leak_official_test",
+          "line": 138,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_raw_reader_hook_prepares_portable_paired_core_manifest_without_cap",
+          "line": 178,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_explicit_patient_regroup_preserves_pixels_and_joins_same_eye_captures",
+          "line": 213,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_train_only_source_cannot_pull_an_official_heldout_alias_into_training",
+          "line": 317,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_product_photometry.py",
+      "sha256": "964769ed1d03e89ad8ea14e128eab4404a5e973bd9a2541f70cf8931ec8302c3",
+      "purpose_docstring": "Product photometry integration: synthetic RGB and mocked pointwise inference only.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_product_photometry.py",
+      "tests": [
+        {
+          "name": "test_saved_profile_applied_once_before_all_tta_views",
+          "line": 23,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('profile', photo.PROFILES)",
+            "pytest.mark.parametrize('tta', ['none', 'flips2', 'rot4', 'dihedral8'])",
+            "pytest.mark.parametrize('precision', ['none', 'bf16'])"
+          ]
+        },
+        {
+          "name": "test_train_cli_forwards_pinned_cache_without_changing_saved_config",
+          "line": 101,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_missing_descriptor_or_backend_change_rejected_before_model",
+          "line": 138,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('profile', photo.PROFILES[1:])"
+          ]
+        },
+        {
+          "name": "test_historical_benchmark_never_feeds_raw_rgb_to_saved_photometry",
+          "line": 164,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('profile', photo.PROFILES[1:])"
+          ]
+        },
+        {
+          "name": "test_saved_descriptor_json_types_are_strict_before_model",
+          "line": 208,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('field,value', [('contract_version', True), ('matlab_parity_claim', 0)])"
+          ]
+        },
+        {
+          "name": "test_dropping_saved_profile_field_cannot_relabel_nonraw_weights_as_raw",
+          "line": 229,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_reference_evaluation.py",
+      "sha256": "60500aea83c5bddcb23f5e10cfc8d968d614a25193663f3bfd96e53b0d5cfd3d",
+      "purpose_docstring": "Reference metrics must preserve unknown labels and missed-vessel errors.",
+      "definition_count": 3,
+      "command": "uv run --no-sync pytest -q tests/test_reference_evaluation.py",
+      "tests": [
+        {
+          "name": "test_unknown_cup_predictions_have_no_metric_support",
+          "line": 17,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_missed_vessels_count_as_end_to_end_av_false_negatives",
+          "line": 31,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_task_specific_originals_override_only_their_own_heads",
+          "line": 44,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_refresh_original_av.py",
+      "sha256": "38e32593efa80cec475d51d8aaacce9833a8615f2f4f557f4fa208706d04a4c0",
+      "purpose_docstring": "A new A/V reference must preserve every other original prediction count.",
+      "definition_count": 2,
+      "command": "uv run --no-sync pytest -q tests/test_refresh_original_av.py",
+      "tests": [
+        {
+          "name": "test_refresh_preserves_nonvascular_heads_and_reaggregates_exactly",
+          "line": 64,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_refresh_refuses_missing_or_mismatched_gt",
+          "line": 84,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('defect', ['missing', 'duplicate', 'extra', 'positive', 'valid'])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_sources.py",
+      "sha256": "d803e3bdf27721aa3df7ee0432e4e9b584bbe33d7ef921a394688ea0cf9aec7c",
+      "purpose_docstring": "Resource identity and read-only archive behavior.",
+      "definition_count": 5,
+      "command": "uv run --no-sync pytest -q tests/test_sources.py",
+      "tests": [
+        {
+          "name": "test_zip_transport_prefixes_deduplicate_without_changing_source",
+          "line": 21,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_conflicting_zip_copies_raise_instead_of_selecting_labels",
+          "line": 36,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_ambiguous_basename_requires_qualified_pairing",
+          "line": 45,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_tar_and_gzipped_images_read_without_extraction",
+          "line": 57,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_identical_nested_release_aliases_are_checked_before_resolution",
+          "line": 70,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_tpe_preview_release.py",
+      "sha256": "9b0f89e01d3e8c4cc6c0f6fa37adc861c26c09aa0bae4dd8ece308508d9953b3",
+      "purpose_docstring": "Actual preview bytes/recipe and precision override; no quality evaluation.",
+      "definition_count": 2,
+      "command": "uv run --no-sync pytest -q tests/test_tpe_preview_release.py",
+      "tests": [
+        {
+          "name": "test_preview_recipe_exact_actual_checkpoint_except_portable_device",
+          "line": 16,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_cpu_precision_override_is_forwarded_without_training",
+          "line": 40,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_unified.py",
+      "sha256": "a8680742beee0f2eb087c09a65632ab6c23fa52d3e2a65bb0154cf601295b64a",
+      "purpose_docstring": "Scientific contracts for one partially supervised five-output RGB network.",
+      "definition_count": 25,
+      "command": "uv run --no-sync pytest -q tests/test_unified.py",
+      "tests": [
+        {
+          "name": "test_mapping_never_makes_missing_annotations_negative",
+          "line": 40,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('task,count,indices', [('vessels', 1, [0]), ('av', 3, [0, 1, 2]), ('disc_cup', 2, [3, 4])])"
+          ]
+        },
+        {
+          "name": "test_unknown_heads_and_unclassified_av_pixels_have_zero_logit_gradient",
+          "line": 50,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_all_five_outputs_receive_correctly_masked_gradients_in_one_rgb_model",
+          "line": 77,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_conditional_av_is_offset_invariant_and_has_no_independent_class_cutoff",
+          "line": 98,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_coannotations_are_merged_per_photo_without_merging_patient_eyes",
+          "line": 165,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_incorrect_photo_alias_pixels_and_cross_split_ids_are_rejected",
+          "line": 188,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_checkpoint_roundtrip_and_functionality_label_cover_all_heads",
+          "line": 204,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly",
+          "line": 262,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('augmentation', ['basic', 'mild'])",
+            "pytest.mark.parametrize('workers', [0, 2])"
+          ]
+        },
+        {
+          "name": "test_default_model_is_compact_and_still_shared",
+          "line": 306,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_inference_centers_rgb_only_once_and_rejects_centered_input",
+          "line": 313,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_full_data_rejects_wrong_physical_preprocessing_profile",
+          "line": 332,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_tiled_conditional_fusion_weights_classes_by_vessel_confidence",
+          "line": 346,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_restoration_interpolates_joint_av_not_background_conditional_guesses",
+          "line": 365,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_module_cli_overrides_config_without_starting_unrequested_work",
+          "line": 386,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_full_data_never_accepts_preview_records",
+          "line": 426,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_coverage_sampler_visits_all_photos_then_balances_extras",
+          "line": 436,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_full_data_budget_must_cover_every_photo",
+          "line": 450,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_prefetched_samples_do_not_count_as_delivered_coverage",
+          "line": 461,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_training_uses_each_vascular_observer_bundle_without_inconsistent_av",
+          "line": 485,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_best_checkpoint_uses_declared_selection_metric",
+          "line": 513,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('metric,expected_epoch', [('mean_dice', 1), ('macro_dataset_mean_dice', 2)])"
+          ]
+        },
+        {
+          "name": "test_historical_resume_is_exact_without_original_checkpoint",
+          "line": 546,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_resume_recovers_interrupted_best_csv_and_preserves_stronger_selection",
+          "line": 585,
+          "docstring": "Kill between CSV/best publication and last.pt commit, then replay safely.",
+          "decorators": []
+        },
+        {
+          "name": "test_resume_rejects_unrelated_best_checkpoint",
+          "line": 684,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('field,value', [('manifest_sha256', 'unrelated-data'), ('training_source_sha256', 'unrelated-code'), ('lineage', {'initialization': 'unrelated-source'})])"
+          ]
+        },
+        {
+          "name": "test_resume_refuses_changed_gt_under_unchanged_manifest",
+          "line": 708,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_per_photo_conditional_counts_sum_header_and_include_missed_vessels",
+          "line": 759,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_unified_cli.py",
+      "sha256": "59914c690da2f1ad9bae54d847fdd74dc74b41bb07605fe68636a31442a2191d",
+      "purpose_docstring": "Public unified CLI round trips use generated functionality data, never quality claims.",
+      "definition_count": 14,
+      "command": "uv run --no-sync pytest -q tests/test_unified_cli.py",
+      "tests": [
+        {
+          "name": "test_actual_generated_checkpoint_predicts_five_native_outputs_and_default_tiles",
+          "line": 158,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_public_training_resume_restores_config_and_content_pin_exactly",
+          "line": 195,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('suffix', ['.json', '.toml'])"
+          ]
+        },
+        {
+          "name": "test_public_validation_requires_same_pinned_corpus_and_rejects_test",
+          "line": 237,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unified_prediction_rejects_inapplicable_modes_before_outputs",
+          "line": 291,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('options', [['--normalized'], ['--prepared'], ['--prepared-array', 'missing.npy'], ['--dicoms', 'r', 'g', 'b', 'v'], ['--av-raw-proxy'], ['--av-raw-matlab'], ['--vessel-mask', 'vessel.png'], ['--vessel-checkpoint', 'vessel.pt'], ['--vessel-normalized'], ['--fov-diameter-pixels', '100'], ['--original-size', '64', '64'], ['--pixels-per-degree', '35'], ['--overlap', '32']])"
+          ]
+        },
+        {
+          "name": "test_folder_and_whole_view_override_contract",
+          "line": 302,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_pilot_tile_defaults_remain_512_64",
+          "line": 339,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unified_validation_rejects_unpinned_checkpoint_and_changed_manifest",
+          "line": 366,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_unified_training_rejects_unknown_or_nonobject_config",
+          "line": 397,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_existing_validation_report_is_preserved_before_model_or_evaluator",
+          "line": 418,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_validation_exclusive_write_handles_late_report_and_hashes_loaded_snapshot",
+          "line": 453,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_prediction_hash_and_weights_use_same_snapshot_when_checkpoint_path_replaced",
+          "line": 509,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_public_cached_training_matches_canonical_and_resumes_after_cache_relocation",
+          "line": 546,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_public_cache_requires_external_pins_without_creating_output",
+          "line": 609,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_public_unified_predict_and_val_share_opt_in_tta",
+          "line": 632,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_unified_hpo.py",
+      "sha256": "bc574d81a1f5b5ffc54eef7dde670a4679bca2779b9a539408de6f6acc5fe5fd",
+      "purpose_docstring": "Full-data search guards and unchanged scheduling across screen/resume stages.",
+      "definition_count": 5,
+      "command": "uv run --no-sync pytest -q tests/test_unified_hpo.py",
+      "tests": [
+        {
+          "name": "test_full_search_rejects_previews_and_missing_source",
+          "line": 57,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_full_search_requires_real_support_for_every_validation_head",
+          "line": 67,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_search_keeps_full_scheduler_horizon_and_refuses_source_changes",
+          "line": 78,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_trial_provenance_survives_training_failure",
+          "line": 104,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_independent_search_never_accepts_exposure_qualified_teacher",
+          "line": 122,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_unified_loss_balance.py",
+      "sha256": "a0f7151aca4bb35f523959ce8530c14b7fc5b912e14d667de12628392e4e545f",
+      "purpose_docstring": "Optional v2 vessel emphasis: masked gradients and v1 numerical compatibility.",
+      "definition_count": 7,
+      "command": "uv run --no-sync pytest -q tests/test_unified_loss_balance.py",
+      "tests": [
+        {
+          "name": "test_default_loss_and_gradients_bitwise_equal_v1",
+          "line": 29,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('support', ['vessel', 'disc_cup', 'av', 'all', 'none'])"
+          ]
+        },
+        {
+          "name": "test_vessel_multiplier_acts_on_vessel_only_batches_without_cancelling",
+          "line": 64,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_positive_bce_weight_scales_only_positive_vessel_gradient",
+          "line": 76,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_positive_bce_weight_respects_fractional_targets",
+          "line": 88,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_emphasis_does_not_change_av_disc_cup_gradients_or_unknown_support",
+          "line": 99,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_invalid_vessel_weights_fail_in_config_and_loss",
+          "line": 123,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('knob', ['vessel_loss_weight', 'vessel_pos_weight'])",
+            "pytest.mark.parametrize('value', [0, -1, float('inf'), float('nan'), True, None, '2'])"
+          ]
+        },
+        {
+          "name": "test_old_checkpoint_without_new_fields_loads_exact_model_and_state_keys",
+          "line": 130,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_unified_mixed_precision.py",
+      "sha256": "b9513a4655946a17a6575ab50bb65e5b36ecf06104b89079de2642a7888cea51",
+      "purpose_docstring": "CPU contracts; no real CUDA, real data, or speed/quality claims.",
+      "definition_count": 10,
+      "command": "uv run --no-sync pytest -q tests/test_unified_mixed_precision.py",
+      "tests": [
+        {
+          "name": "test_only_explicit_precision_modes",
+          "line": 28,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('value', [False, True, None, 'fp16', 'BF16', 1, []])"
+          ]
+        },
+        {
+          "name": "test_unsupported_cpu_bf16_fails_before_manifest_or_outputs",
+          "line": 33,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_native_support_checked_on_selected_device",
+          "line": 42,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_none_context_never_calls_autocast_or_cuda",
+          "line": 57,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_bf16_cpu_operator_smoke_keeps_master_weights_gradients_float32",
+          "line": 68,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_bf16_checkpoint_config_loads_on_cpu_and_ignores_outer_autocast",
+          "line": 87,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_default_functional_training_matches_pinned_original_weights_optimizer_rng",
+          "line": 115,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_precision_change_cannot_resume_existing_epoch",
+          "line": 170,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_bf16_loop_cpu_emulation_preserves_fp32_val_and_checkpoint_states",
+          "line": 195,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_public_cli_accepts_bf16_preset_without_dispatching_training",
+          "line": 231,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_unified_photometry.py",
+      "sha256": "d690fc6a0393ca8345c5ebadb63c82a402402f2bf76583bf93e70258efa6b5e4",
+      "purpose_docstring": "Opt-in full-image intensity contracts; synthetic fixtures, no scientific scores.",
+      "definition_count": 13,
+      "command": "uv run --no-sync pytest -q tests/test_unified_photometry.py",
+      "tests": [
+        {
+          "name": "test_full_image_deterministic_geometry_range_outside_and_rng",
+          "line": 64,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('profile', p.PROFILES)"
+          ]
+        },
+        {
+          "name": "test_background_contract_reuses_actual_legacy_operator",
+          "line": 84,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_missing_fov_invalid_profile_and_degenerate_background_fail",
+          "line": 97,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_default_raw_does_not_read_fov_and_retains_crop_rng",
+          "line": 110,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_full_photo_precedes_crop_targets_unchanged_and_cache_separates_profiles",
+          "line": 133,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('profile', p.PROFILES[1:])"
+          ]
+        },
+        {
+          "name": "test_high_level_inference_and_dataset_receive_identical_prepared_pixels",
+          "line": 169,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('profile', p.PROFILES)"
+          ]
+        },
+        {
+          "name": "test_safe_checkpoint_records_and_enforces_photometric_parameters",
+          "line": 215,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('profile', p.PROFILES[1:])"
+          ]
+        },
+        {
+          "name": "test_optin_missing_image_fov_has_no_target_mask_fallback",
+          "line": 247,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_fov_assets_are_in_existing_canonical_byte_fingerprint",
+          "line": 256,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_new_module_is_in_explicit_training_source_fingerprint",
+          "line": 267,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_lossless_raw_derived_cache_and_canonical_reader_match_after_photometry",
+          "line": 286,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('profile', p.PROFILES[1:])"
+          ]
+        },
+        {
+          "name": "test_failed_augmented_crop_falls_back_to_same_photometric_native_image",
+          "line": 321,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_default_raw_step_matches_product_d028_weights_optimizer_and_rng",
+          "line": 349,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_unified_tta.py",
+      "sha256": "1f3954cc45d3646d1ed3ec8406ba02771bff54f0deeca7028b0d9c6864f910e7",
+      "purpose_docstring": "Synthetic CPU contracts for opt-in fixed-weight inference ensembling.",
+      "definition_count": 11,
+      "command": "uv run --no-sync pytest -q tests/test_unified_tta.py",
+      "tests": [
+        {
+          "name": "test_transforms_inverse_odd_asymmetric_rectangles",
+          "line": 32,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('mode', u.TTA_OPERATORS)"
+          ]
+        },
+        {
+          "name": "test_none_exact_old_arithmetic_and_rng",
+          "line": 42,
+          "docstring": null,
+          "decorators": [
+            "torch.inference_mode()",
+            "pytest.mark.parametrize('view', ['patch', 'whole'])"
+          ]
+        },
+        {
+          "name": "test_actual_tiled_ensemble_inverse_alignment_float32_and_no_weight_mutation",
+          "line": 57,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('mode', ['flips2', 'rot4', 'dihedral8'])"
+          ]
+        },
+        {
+          "name": "test_ensemble_weights_joint_av_by_vessel_and_zero_vessel",
+          "line": 69,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_invalid_mode_fails_before_model",
+          "line": 85,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_evaluation_preserves_gt_support_annotation_trace",
+          "line": 91,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_product_preparation_and_original_geometry_restore_once",
+          "line": 118,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('mode', list(u.TTA_OPERATORS))"
+          ]
+        },
+        {
+          "name": "test_tta_fp32_under_ambient_autocast_and_bf16_metadata",
+          "line": 177,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('precision,mode', [(p, m) for p in ['none', 'bf16'] for m in u.TTA_OPERATORS if p == 'bf16' or m != 'none'])"
+          ]
+        },
+        {
+          "name": "test_non_unified_models_reject_explicit_tta_before_inference",
+          "line": 191,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('family', ['legacy_single_net', 'legacy_av', 'pilot_unet'])",
+            "pytest.mark.parametrize('mode', ['flips2', 'rot4', 'dihedral8'])"
+          ]
+        },
+        {
+          "name": "test_tta_preserves_occupied_prediction_output_guard",
+          "line": 205,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('mode', ['flips2', 'rot4', 'dihedral8'])"
+          ]
+        },
+        {
+          "name": "test_whole_view_tta_preserves_pointwise_geometry",
+          "line": 217,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('mode', ['flips2', 'rot4', 'dihedral8'])"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/test_unified_warmstart.py",
+      "sha256": "c94d44c3fd7ba4a0060ad60cedf68e1829c064659e234769589561f9efd651f6",
+      "purpose_docstring": "Original-head fidelity, rectangular geometry, and explicit exposure safeguards.",
+      "definition_count": 6,
+      "command": "uv run --no-sync pytest -q tests/test_unified_warmstart.py",
+      "tests": [
+        {
+          "name": "test_warmstart_needs_explicit_ancestry_permission",
+          "line": 47,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_actual_original_three_logits_are_bitwise_identical_and_av_neutral",
+          "line": 56,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('shape', [(32, 48), (288, 288)])"
+          ]
+        },
+        {
+          "name": "test_student_corrects_rectangular_odd_geometry_without_changing_reference",
+          "line": 75,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('shape', [(33, 49), (32, 47), (1, 3), (17, 16)])"
+          ]
+        },
+        {
+          "name": "test_cold_checkpoint_load_never_reopens_teacher_and_restores_ancestry",
+          "line": 93,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_scratch_original_architecture_has_no_teacher_ancestry_and_all_heads_train",
+          "line": 120,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_wrong_safe_checkpoint_family_is_rejected",
+          "line": 130,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_vascular_sampling_weight.py",
+      "sha256": "8641a899fe01787fecd1ffabe7d6bd5995469327fcc9e97b47a4d8b8143762f7",
+      "purpose_docstring": "Frozen6b bit/RNG compatibility and isolated vascular-key weighting; no GT files.",
+      "definition_count": 10,
+      "command": "uv run --no-sync pytest -q tests/test_vascular_sampling_weight.py",
+      "tests": [
+        {
+          "name": "test_frozen_reference_bytes_match_provenance",
+          "line": 55,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_default_one_weights_are_bitwise_frozen6b_for_all_existing_policies",
+          "line": 64,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('policy', ['uniform', 'dataset_balanced', 'task_balanced', 'dataset_task_balanced'])"
+          ]
+        },
+        {
+          "name": "test_default_weights_and_sampler_preserve_every_draw_and_rng_state",
+          "line": 75,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('seed', [0, 42, 717])",
+            "pytest.mark.parametrize('count', [3, 8, 8192])",
+            "pytest.mark.parametrize('coverage_first', [True, False])"
+          ]
+        },
+        {
+          "name": "test_priority_two_multiplies_only_existing_vascular_key_contributions",
+          "line": 86,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_priority_must_be_numeric_positive_finite_and_not_bool",
+          "line": 116,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('bad', [True, False, float('nan'), float('inf'), -float('inf'), 0, -1, '2', None])"
+          ]
+        },
+        {
+          "name": "test_nondefault_priority_rejected_for_every_other_sampling_policy",
+          "line": 122,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('policy', ['uniform', 'dataset_balanced', 'task_balanced'])"
+          ]
+        },
+        {
+          "name": "test_sampling_owner_alias_conflict_guard_still_applies",
+          "line": 127,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_direct_weight_computation_rejects_mutated_nondefault_policy",
+          "line": 135,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_new_field_is_appended_to_preserve_existing_positional_configuration_api",
+          "line": 142,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_safe_checkpoint_load_accepts_old_and_scalar_configs",
+          "line": 161,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('priority', [None, 1.0, 2.0])"
+          ]
+        }
+      ]
+    }
+  ]
+}
