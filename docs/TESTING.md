@@ -280,3 +280,21 @@ Actual model-format export preflight08:26UTC: [existing bundledTPE BEST58](../re
 All128 model tensors/config preserved, sourceSHA/statunchanged, actualdefault safe
 reload allCPU/CUDAuninitialized. No forward/photos/GT/TEST/finalselection or changed
 registry/blobs; new CPUartifact is a private backup, not a promoted model.
+
+## Selected raw512 deployment addition, 12 November 2026
+
+After the complete b36 CPU suite (2,851 passed), the separately named thirteenth
+model was added without changing production Python. The new registry/default/export
+focused check passed **53 cases**. Actual TRAIN CLI/API and installed-wheel outputs
+match frozen research probabilities bitwise and all five masks pixelwise. These
+scopes are [documented separately](../reports/release/unified-raw512-selected-20261112/README.md);
+the full2,851 suite was not rerun or relabelled after model addition. Root verified
+all50 packaged runtime/data files, three focused test files,13 checkpoint hashes,
+and unchanged prior12 entries/aliases. Ruff check/format passed for the two changed
+test modules.
+
+The [new static inventory](../reports/release/unified-raw512-selected-20261112/test-inventory.json)
+records63 modules and457 definitions at its actual clean source snapshot. This
+stdlib AST scan is not pytest collection or execution. Earlier inventories remain
+unchanged. Held-out quality results and fixed-TRAIN latency remain separate from
+software tests.
