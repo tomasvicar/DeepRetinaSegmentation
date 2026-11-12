@@ -156,6 +156,7 @@ and [preprocessing evidence](docs/LEGACY_PREPROCESSING.md).
 | Included model | Provenance / outputs |
 | --- | --- |
 | `legacy-universal` | Original trained single_net: vessel, disc, cup |
+| `unified-raw512-selected` | Selected raw512 BEST50, all2,529 TRAIN photos/5,700 records/21sources; five outputs, automatic rot4/.35/512/64. Original dense-vessel VAL quality remains higher; frozen TEST in progress. |
 | `unified-full-data-baseline` | Corpus-v1 completed60-epoch five-output baseline (17 TRAIN sources, 2,221 photos); selected E56 on validation, no TEST yet |
 | `unified-v2-control` | Corpus-v2 fixed terminal E60: 21 TRAIN sources, 2,529 photos / all 5,700 variants; VAL only, lower vessel Dice than original reference; not optimized/final |
 | `unified-v2-vascular2` | Experimental V2 vascular-sampling preview: completed 60-epoch run, VAL-selected E59 with all 5,700 variants; vessel regression remains, no TEST |

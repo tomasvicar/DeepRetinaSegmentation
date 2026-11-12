@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 12. 11. 2026 v 13:55 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
+**Snímek: 12. 11. 2026 v 14:08 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -101,10 +101,10 @@ včetně raw DRIONS TRAIN snímku. To je
 [důkaz kompatibility inference](../reports/v2-inference-parity/README.md),
 nikoli důkaz finální kvality nebo obecné shody všech GPU backendů.
 
-## Výzkum: časový snímek 12. 11. v 12:54 UTC
+## Výzkum: dokončené běhy a výběr
 
-Výsledky níže jsou VAL, nikoli TEST; žádný nový kandidát se tím nestává výchozím
-nebo finálním modelem. Dřívější smíšené časové aktualizace zůstávají beze změny
+Výsledky níže jsou VAL. Z nich byl vybrán samostatný raw512 model;
+TEST obou zmrazených sestav nyní běží. Dřívější smíšené časové aktualizace zůstávají beze změny
 v [historickém přehledu](PROGRESS_HISTORY_2026-11.md#archivovaný-výzkumný-přehled-ze-zdroje-5545f3d).
 
 - **Kontrolované raw/photometry běhy:** raw256, raw384, raw512, CLAHE384 a LC384
@@ -129,10 +129,12 @@ v [historickém přehledu](PROGRESS_HISTORY_2026-11.md#archivovaný-výzkumný-p
 - **Šířka24:** pokračování E27→60 úspěšně dokončeno 12:27:45 UTC. BEST58 i
   LAST60 mají vlastní pokrytí všech 2 529 fotografií / 5 700 anotovaných variant;
   kontrola dokončení i nezávislé CPU kontroly obou checkpointů prošly. Váhy jsou
-  zálohované s ověřenými kontrolními součty. Od 12:50:42 UTC běží čerstvá validace
-  obou rolí na všech 770 VAL fotografiích, FP32/NONE/0,5/512/64, ve stejném
-  konečném evaluačním prostředí jako ostatní kandidáti. Výsledná kvalita a finální
-  výběr zatím nejsou doložené; tyto váhy ještě nejsou vydané jako nový model.
+  zálohované s ověřenými kontrolními součty. Čerstvá VAL obou rolí dokončila
+  všech770 snímků s child/outer0 ve13:00UTC. BEST/LAST dense vessel Dice je
+  0,74694/0,74291. Následných osm NONE prahů dokončilo jediný průchod ve13:17UTC;
+  nejlepší dense bod0,74789 při0,40 nepřekonal menší raw512 s rot4/0,35.
+  [Obě role](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/capacity24-completed-standard-f13-VAL-20261112)
+  a [celá křivka s intervaly](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/capacity24-BEST58-NONE-threshold-calibration-20261112).
 - **Raw512/rot4 prahy:** jeden průchod všech 770 VAL fotografií dokončený
   v 10:41:32 UTC, child/outer exit 0. Osm globálních prahů využilo stejné
   pravděpodobnosti; kontrolní 0,35 přesně zopakovalo dřívější výsledky po snímcích,
@@ -140,7 +142,8 @@ v [historickém přehledu](PROGRESS_HISTORY_2026-11.md#archivovaný-výzkumný-p
   Dice o 0,00380 a cup o 0,00366; tyto párové intervaly neprotínají nulu.
   Práh 0,40 přidal jen 0,00034 dense Dice s intervalem protínajícím nulu a snížil
   macro. Všech osm cévních rozdílů vůči původní síti má záporný celý interval.
-  Výchozí chování se nemění a finální výběr čeká na širší model.
+  Po dokončeném porovnání širšího modelu byl zmrazen raw512 s rot4/0,35.
+  Stávající modely a aliasy si ponechávají své výchozí chování.
   [Všechny prahy, úlohy, zdroje a párové intervaly](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/raw512-BEST50-rot4-threshold-calibration-20261112).
 
 Primární doplňková dense analýza vylučuje pouze známý pozitivně anotovaný AVRDB:
@@ -157,7 +160,7 @@ Dosavadní studijní cíle a zdrojové reporty se touto doplňkovou analýzou ne
 Korpus V2 má 21 TRAIN zdrojů / 2 529 fotografií / 5 700 anotovaných variant,
 770 VAL a 856 TEST fotografií; pevné VAL členství zůstalo zachované.
 Geometrické předpoklady jsou výslovné v [datové dokumentaci](CORPUS_V2_PREPARATION.md).
-Výběr a zmrazení přesného protokolu jsou dokončené; následný TEST zatím neběžel.
+Výběr a zmrazení přesného protokolu jsou dokončené; následný TEST právě běží.
 
 ## Co zbývá k dokončení cíle
 
