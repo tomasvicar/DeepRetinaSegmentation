@@ -344,11 +344,43 @@ it did not establish a job state or trigger a restart. Authentication was later
 restored. Raw256, LC, raw384 and CLAHE genuinely finished PBSF/Exit0. Their
 actual role-specific CPU audits and fresh-VAL outcomes are documented above;
 LC's planned LAST fresh VAL did not complete, whereas CLAHE completed both roles.
-Raw512 was last covered by this document as unfinished; its follow-up remains
-separate from the completed CLAHE negative result. No cancellation, replacement submission or own-GPU raw512 fallback
-was made. Operator handles, commands, original allocation accounting and the
+Raw512 subsequently completed PBSF/0 and both own-role CPU/freshVAL audits0,
+as recorded below. No cancellation, replacement submission or own-GPU raw512
+fallback was made. Operator handles, commands, original allocation accounting and the
 access-failure evidence remain in the private workflow repository. This document
-does not perform a scheduler action or claim those unfinished models complete.
+does not perform a scheduler action or promote those completed models.
+
+## Raw512 completed: dense improvement and source tradeoffs
+
+[Both actual BEST50/LAST60 full770 reports and six paired contrasts](../reports/raw512-typed-fresh-val-20261112)
+are now complete, both children/external0. BEST macro.81133053 is lower than
+raw384BEST.81437124, delta−.00304071 CI[−.00652373,−.00015776]. Conditional
+A/V accuracy is higher by.01240841 CI[+.00826228,+.01636069]. Pooled vessel
+Dice.75612576 is lower than raw384 by.00364425, with an interval crossing zero.
+
+The dense supplementary domain gives a different picture: BEST Dice.74722331
+versus raw384.74109829, paired+.00612501 CI[+.00262363,+.01005147], retaining
+87photos/55groups/8sources and excluding only positive-only AVRDB. It remains
+below original182.76132661 by−.01410330 CI[−.01940265,−.00995599]. AVRDB vessel
+and A/V regressions remain explicitly reported: BEST-vessel minus raw384
+−.09404969 CI[−.11884641,−.07430343]. Neither pooled nor dense support alone
+replaces the full result. Both selected roles own2529TRAIN photos/all5700variants.
+
+A separate prospective raw512BEST50 rot4/.35 full770 check is running; it transfers
+the earlier firstTPE setting without a new threshold search. Changing TTA and
+threshold together will not isolate their individual effects. No result,
+default change, candidate promotion, freeze or TEST is implied by its launch.
+
+## Native TPE7 completion and role eligibility
+
+The source72 run genuinely completed60/122880updates/491520samples, generic4b
+finiteQA0 and actual supervisor/outer0. LAST60 covers2529TRAIN photos/all5700
+variants; selected BEST46 covers5699 and misses one RIGA annotator variant.
+That BEST is not treated as fully covered. A distinct LAST-only freshVAL is
+running in the original native source72 context; it cannot be described as a
+completed both-role validation. Original QA flags and historical trial objective
+remain unchanged. Trial7's original LAST27 proxy was recorded after explicit
+LAST60-complete bookkeeping review; no BEST release or new native ask follows.
 
 ## RAW35 remains a tiny TRAIN-only canary
 
