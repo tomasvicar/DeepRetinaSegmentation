@@ -27,7 +27,7 @@ inventory was staged, then the same metadata-only checker completed successfully
 The wheel itself was not rebuilt or changed for this preparation correction.
 
 From HOME **outside the source/build checkouts**, verification checked installed
-module origin, all46 Python module bytes against both staged and controller source,
+module origin, all48 Python module bytes against both staged and controller source,
 all13 actual bundled SHA256 values, unchanged old12/aliases/defaults, exact final
 registry SHA, selected rot4/.35/512/64 defaults and CLI `predict --help` exit0.
 Torch stayed absent from the checker. It read model bytes only for hashes, not
