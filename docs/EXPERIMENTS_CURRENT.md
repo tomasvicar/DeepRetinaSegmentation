@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-11 22:37 UTC; raw384 fresh VAL completed, three other training jobs still active**. Completed VAL and
+Snapshot: **2026-11-12 00:41 UTC; both CLAHE fresh VAL roles completed**. Completed VAL and
 CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
 claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -165,7 +165,26 @@ conditionalAV improves+.00598488[+.00070005,+.01084244] and disc improves. This 
 a tradeoff, not all-task improvement. Worst-six vsoriginal182 remains.9865562
 (BEST)/.9865814(LAST), bottleneck vessel. Full counts, all source regressions,
 saved/fresh drift and cross-evaluator qualifications are retained. No promotion.
-Raw512 and CLAHE384 were still R/E42/E42 at22:19UTC. No new Meta job was submitted.
+[CLAHE384 completed both actual fresh VAL roles](../reports/clahe384-typed-fresh-val-20261112)
+on all770 photographs with observed child and external supervisor exits0 at
+00:41:13UTC, no timeout/retry and source/index unchanged. BEST58 macro Dice
+.801035165 and LAST60 .798671458 are lower than matched raw384 BEST59/LAST60.
+Every pooled segmentation-head Dice **and conditional A/V classification accuracy**
+has a negative paired difference and below-zero95% interval versus the matching
+raw384 role (2000draws/seed42,612known groups). BEST macro change is
+−.0133361[−.0180609,−.0091666]; vessel−.0086405[−.0122613,−.0058781].
+The result does not support promoting this CLAHE recipe. Matched first-TPE
+NONE/.5 comparisons, all source regressions and original182 qualification remain
+explicit; no blanket dominance over historical originals is claimed.
+
+Dense vessel support excludes only positive-only AVRDB:87photos/55groups/8sources.
+CLAHE BEST/LAST dense vessel Dice .7341292/.7316758 trail matched raw384
+.7410983/.7384047 and original182 .7613266. Both CLAHE-minus-raw dense intervals
+are below zero. The all-source objective is unchanged; sparse precision1 is not
+used as dense evidence. Saved/fresh tiny numeric differences and backend/role
+limits are preserved, without a global bit-parity claim. No model/default/TEST
+promotion follows. Raw512 follow-up is tracked separately; this addendum claims
+no completed raw512 result. No new job was submitted by this analysis.
 Current elapsed scheduler time is not model quality, and unfinished arms are not
 ranked. Product `for_Leipzig` supports saved full-image photometry profiles without
 stripping config fields. Real TRAIN inference parity checks for the existing TPE
@@ -322,9 +341,11 @@ Cache construction is not measured training quality or loader-speed benefit.
 All five original scheduler submissions were accepted with observed submission
 exit0. The15:05UTC SSH255/expired-credential observation failure was retained;
 it did not establish a job state or trigger a restart. Authentication was later
-restored. Raw256, LC and now raw384 genuinely finished PBSF/Exit0. Raw256 and LC
-have the actual audits/fresh-VAL outcomes above; raw384's follow-up is pending.
-At22:19UTC raw512/CLAHE384 remained R/E42/E42. No cancellation, replacement submission or own-GPU raw512 fallback
+restored. Raw256, LC, raw384 and CLAHE genuinely finished PBSF/Exit0. Their
+actual role-specific CPU audits and fresh-VAL outcomes are documented above;
+LC's planned LAST fresh VAL did not complete, whereas CLAHE completed both roles.
+Raw512 was last covered by this document as unfinished; its follow-up remains
+separate from the completed CLAHE negative result. No cancellation, replacement submission or own-GPU raw512 fallback
 was made. Operator handles, commands, original allocation accounting and the
 access-failure evidence remain in the private workflow repository. This document
 does not perform a scheduler action or claim those unfinished models complete.
