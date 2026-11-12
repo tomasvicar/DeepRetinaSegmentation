@@ -1,0 +1,1683 @@
+{
+  "kind": "actual_completed_curated_raw512_saved_count_comparison_no_new_forward",
+  "input_pins": {
+    "raw512_BEST50": {
+      "original_sha256": "3be49bbf920c57154a65fe13033d0408dc95dd15e9444d4ca47c743129613386",
+      "derived_count_view_sha256": "c150e09369c566277f125f609301b1e268232ed263b3af79e4be714b7622dffa",
+      "checkpoint_sha256": "521b8881d1b2c69a7395be6687a8b86581838e3f5dbb004a150333d454132cea",
+      "original_evaluation_source": {
+        "evaluation_source_sha256": "f13a23d1af43e2c23e098ce15f1d69f78251817b1a1be86415a48ffe6330b29a",
+        "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+        "runtime": {
+          "cuda_matmul_allow_tf32": false,
+          "cudnn_allow_tf32": true,
+          "cudnn_benchmark": false,
+          "cudnn_deterministic": false,
+          "default_dtype": "torch.float32",
+          "deterministic_algorithms": false,
+          "deterministic_warn_only": false,
+          "float32_matmul_precision": "highest",
+          "installed_distributions": {
+            "Pillow": "13.0.0",
+            "h5py": "3.16.0",
+            "numpy": "2.5.4",
+            "opencv-python": null,
+            "opencv-python-headless": "4.14.0.94",
+            "pydicom": "3.0.2",
+            "scikit-image": "0.26.0",
+            "scipy": "1.18.1",
+            "torch": "2.6.0+cu124"
+          },
+          "numpy": "2.5.4",
+          "python": "3.12.14",
+          "torch": "2.6.0+cu124"
+        },
+        "source_files": [
+          "src/deepretina/__init__.py",
+          "src/deepretina/__main__.py",
+          "src/deepretina/_frozen_v3/__init__.py",
+          "src/deepretina/_frozen_v3/v2.py",
+          "src/deepretina/_frozen_v3/v3.py",
+          "src/deepretina/adapters/__init__.py",
+          "src/deepretina/adapters/additional.py",
+          "src/deepretina/adapters/auxiliary.py",
+          "src/deepretina/adapters/biomisa.py",
+          "src/deepretina/adapters/core.py",
+          "src/deepretina/adapters/labels.py",
+          "src/deepretina/adapters/segmentation.py",
+          "src/deepretina/augment.py",
+          "src/deepretina/bundled.py",
+          "src/deepretina/cli.py",
+          "src/deepretina/comparison.py",
+          "src/deepretina/completion_profiles.py",
+          "src/deepretina/completion_roles.py",
+          "src/deepretina/curated_completion.py",
+          "src/deepretina/dataset.py",
+          "src/deepretina/derived_cache.py",
+          "src/deepretina/engine.py",
+          "src/deepretina/freeze_eligibility.py",
+          "src/deepretina/geometry_policy.py",
+          "src/deepretina/heldout.py",
+          "src/deepretina/inference.py",
+          "src/deepretina/inference_tta.py",
+          "src/deepretina/integrity.py",
+          "src/deepretina/legacy/__init__.py",
+          "src/deepretina/legacy/av.py",
+          "src/deepretina/legacy/checkpoints.py",
+          "src/deepretina/legacy/inference.py",
+          "src/deepretina/legacy/matlab_av.py",
+          "src/deepretina/legacy/matlab_clahe.py",
+          "src/deepretina/legacy/matlab_fov.py",
+          "src/deepretina/legacy/matlab_resize.py",
+          "src/deepretina/legacy/preprocessing.py",
+          "src/deepretina/legacy/raw_proxy.py",
+          "src/deepretina/legacy/single_net.py",
+          "src/deepretina/model.py",
+          "src/deepretina/photometry.py",
+          "src/deepretina/photometry_cache.py",
+          "src/deepretina/prepare.py",
+          "src/deepretina/selection.py",
+          "src/deepretina/sources.py",
+          "src/deepretina/unified.py",
+          "src/deepretina/unified_av.py",
+          "src/deepretina/unified_cli.py",
+          "src/deepretina/unified_legacy.py",
+          "src/deepretina/v3_completion.py",
+          "src/deepretina/val_bridge.py",
+          "src/deepretina/validation_evidence.py",
+          "pyproject.toml",
+          "uv.lock"
+        ],
+        "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation",
+        "training_source_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747"
+      },
+      "original_inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "input_logical_name": "raw512_BEST50",
+      "input_basename": "training_best-fresh-VAL.json"
+    },
+    "raw512_LAST60": {
+      "original_sha256": "04cc7e362ed0121eb642eee8e4e9a2d5d751ca98d7b6d0c908e6165288cab3b5",
+      "derived_count_view_sha256": "befa3ba911a84036983b247e9a08e9e3698a4d638d23876e7be95821a17642fa",
+      "checkpoint_sha256": "6846423c5806be038406e698b54fa91fa8a7efb6264ba3aa4e000cd4db8a04a0",
+      "original_evaluation_source": {
+        "evaluation_source_sha256": "f13a23d1af43e2c23e098ce15f1d69f78251817b1a1be86415a48ffe6330b29a",
+        "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+        "runtime": {
+          "cuda_matmul_allow_tf32": false,
+          "cudnn_allow_tf32": true,
+          "cudnn_benchmark": false,
+          "cudnn_deterministic": false,
+          "default_dtype": "torch.float32",
+          "deterministic_algorithms": false,
+          "deterministic_warn_only": false,
+          "float32_matmul_precision": "highest",
+          "installed_distributions": {
+            "Pillow": "13.0.0",
+            "h5py": "3.16.0",
+            "numpy": "2.5.4",
+            "opencv-python": null,
+            "opencv-python-headless": "4.14.0.94",
+            "pydicom": "3.0.2",
+            "scikit-image": "0.26.0",
+            "scipy": "1.18.1",
+            "torch": "2.6.0+cu124"
+          },
+          "numpy": "2.5.4",
+          "python": "3.12.14",
+          "torch": "2.6.0+cu124"
+        },
+        "source_files": [
+          "src/deepretina/__init__.py",
+          "src/deepretina/__main__.py",
+          "src/deepretina/_frozen_v3/__init__.py",
+          "src/deepretina/_frozen_v3/v2.py",
+          "src/deepretina/_frozen_v3/v3.py",
+          "src/deepretina/adapters/__init__.py",
+          "src/deepretina/adapters/additional.py",
+          "src/deepretina/adapters/auxiliary.py",
+          "src/deepretina/adapters/biomisa.py",
+          "src/deepretina/adapters/core.py",
+          "src/deepretina/adapters/labels.py",
+          "src/deepretina/adapters/segmentation.py",
+          "src/deepretina/augment.py",
+          "src/deepretina/bundled.py",
+          "src/deepretina/cli.py",
+          "src/deepretina/comparison.py",
+          "src/deepretina/completion_profiles.py",
+          "src/deepretina/completion_roles.py",
+          "src/deepretina/curated_completion.py",
+          "src/deepretina/dataset.py",
+          "src/deepretina/derived_cache.py",
+          "src/deepretina/engine.py",
+          "src/deepretina/freeze_eligibility.py",
+          "src/deepretina/geometry_policy.py",
+          "src/deepretina/heldout.py",
+          "src/deepretina/inference.py",
+          "src/deepretina/inference_tta.py",
+          "src/deepretina/integrity.py",
+          "src/deepretina/legacy/__init__.py",
+          "src/deepretina/legacy/av.py",
+          "src/deepretina/legacy/checkpoints.py",
+          "src/deepretina/legacy/inference.py",
+          "src/deepretina/legacy/matlab_av.py",
+          "src/deepretina/legacy/matlab_clahe.py",
+          "src/deepretina/legacy/matlab_fov.py",
+          "src/deepretina/legacy/matlab_resize.py",
+          "src/deepretina/legacy/preprocessing.py",
+          "src/deepretina/legacy/raw_proxy.py",
+          "src/deepretina/legacy/single_net.py",
+          "src/deepretina/model.py",
+          "src/deepretina/photometry.py",
+          "src/deepretina/photometry_cache.py",
+          "src/deepretina/prepare.py",
+          "src/deepretina/selection.py",
+          "src/deepretina/sources.py",
+          "src/deepretina/unified.py",
+          "src/deepretina/unified_av.py",
+          "src/deepretina/unified_cli.py",
+          "src/deepretina/unified_legacy.py",
+          "src/deepretina/v3_completion.py",
+          "src/deepretina/val_bridge.py",
+          "src/deepretina/validation_evidence.py",
+          "pyproject.toml",
+          "uv.lock"
+        ],
+        "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation",
+        "training_source_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747"
+      },
+      "original_inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "input_logical_name": "raw512_LAST60",
+      "input_basename": "fixed_terminal60-fresh-VAL.json"
+    },
+    "TPE5_BEST58_none050": {
+      "original_sha256": "ebd293badea2dba033fb9e6ca5469e6d7947c195fc69b5c1b0caec74e3caf61a",
+      "derived_count_view_sha256": "5e8931e6d93ac41ad9f14a454ce5a005c4d5768e82b23ca53bdce3ffe97ff48b",
+      "checkpoint_sha256": "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4",
+      "original_evaluation_source": {
+        "evaluation_source_sha256": "21d1eb578db6df3e38457ed64c3b46937cd60c523547de13687d7c519d7e04d7",
+        "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+        "runtime": {
+          "cuda_matmul_allow_tf32": false,
+          "cudnn_allow_tf32": true,
+          "cudnn_benchmark": false,
+          "cudnn_deterministic": false,
+          "default_dtype": "torch.float32",
+          "deterministic_algorithms": false,
+          "deterministic_warn_only": false,
+          "float32_matmul_precision": "highest",
+          "installed_distributions": {
+            "Pillow": "13.0.0",
+            "h5py": "3.16.0",
+            "numpy": "2.5.4",
+            "opencv-python": null,
+            "opencv-python-headless": "4.14.0.94",
+            "pydicom": "3.0.2",
+            "scikit-image": "0.26.0",
+            "scipy": "1.18.1",
+            "torch": "2.6.0+cu124"
+          },
+          "numpy": "2.5.4",
+          "python": "3.12.14",
+          "torch": "2.6.0+cu124"
+        },
+        "source_files": [
+          "src/deepretina/__init__.py",
+          "src/deepretina/__main__.py",
+          "src/deepretina/adapters/__init__.py",
+          "src/deepretina/adapters/additional.py",
+          "src/deepretina/adapters/auxiliary.py",
+          "src/deepretina/adapters/biomisa.py",
+          "src/deepretina/adapters/core.py",
+          "src/deepretina/adapters/labels.py",
+          "src/deepretina/adapters/segmentation.py",
+          "src/deepretina/augment.py",
+          "src/deepretina/bundled.py",
+          "src/deepretina/cli.py",
+          "src/deepretina/comparison.py",
+          "src/deepretina/dataset.py",
+          "src/deepretina/derived_cache.py",
+          "src/deepretina/engine.py",
+          "src/deepretina/geometry_policy.py",
+          "src/deepretina/heldout.py",
+          "src/deepretina/inference.py",
+          "src/deepretina/integrity.py",
+          "src/deepretina/legacy/__init__.py",
+          "src/deepretina/legacy/av.py",
+          "src/deepretina/legacy/checkpoints.py",
+          "src/deepretina/legacy/inference.py",
+          "src/deepretina/legacy/matlab_av.py",
+          "src/deepretina/legacy/matlab_clahe.py",
+          "src/deepretina/legacy/matlab_fov.py",
+          "src/deepretina/legacy/matlab_resize.py",
+          "src/deepretina/legacy/preprocessing.py",
+          "src/deepretina/legacy/raw_proxy.py",
+          "src/deepretina/legacy/single_net.py",
+          "src/deepretina/model.py",
+          "src/deepretina/photometry.py",
+          "src/deepretina/photometry_cache.py",
+          "src/deepretina/prepare.py",
+          "src/deepretina/selection.py",
+          "src/deepretina/sources.py",
+          "src/deepretina/unified.py",
+          "src/deepretina/unified_av.py",
+          "src/deepretina/unified_cli.py",
+          "src/deepretina/unified_legacy.py",
+          "src/deepretina/val_bridge.py",
+          "src/deepretina/validation_evidence.py",
+          "pyproject.toml",
+          "uv.lock"
+        ],
+        "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation",
+        "training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28"
+      },
+      "original_inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "input_logical_name": "TPE5_BEST58_none050",
+      "input_basename": "first-TPE-BEST58-runtime-redacted.json"
+    },
+    "TPE5_LAST60_none050": {
+      "original_sha256": "25a00c565ae36de34a9cf0f7e85bf55d2ffc0f836a342125ab8aae03d1c850cd",
+      "derived_count_view_sha256": "d8526998421b21a230326d6068a059d337521dc6342a56972f0337528f18dcee",
+      "checkpoint_sha256": "0841d39ab3d01a9f3d4a50f9460bef48636c4cfd2a21f1281a7d3b6e98dbc5d4",
+      "original_evaluation_source": {
+        "original_report_sha256": "7570255b5eac5855d6bd3a1068ff12effbc66c7f05c6699ba26f82fc25c022be",
+        "original_qa_sha256": "9efabed486f54addb039c4356bf4e54272e0ca70cd7583433555a6f3cc21204d",
+        "checkpoint_role": "fixed_terminal60",
+        "source_training_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+        "source_evaluation_sha256": "b269a5e5214b8422a5b8028ff6922ff5c19137d7e0354afcd8fbef1c74e3662f",
+        "configuration": {
+          "sha256": "53906d54f966db4b40e4436522b51053e4f6a033029231b8f216afbdcd6c4a54",
+          "values": {
+            "allow_historical_exposure": false,
+            "architecture": "compact_unet",
+            "augmentation": "basic",
+            "av_weight": 1.0,
+            "base_channels": 16,
+            "batch_size": 4,
+            "bce_weight": 1.0,
+            "coverage_first": true,
+            "depth": 4,
+            "dice_weight": 1.0,
+            "epoch_samples": 8192,
+            "epochs": 60,
+            "foreground_probability": 0.5,
+            "legacy_initialization": null,
+            "lr": 0.000287722894608172,
+            "max_steps": null,
+            "min_lr_ratio": 0.05,
+            "mixed_precision": "bf16",
+            "norm": "batch",
+            "overlap": 64,
+            "patch_size": 384,
+            "pixels_per_degree": 25.0,
+            "preprocessing_profile": "legacy25_raw",
+            "purpose": "full_data",
+            "require_all_heads": true,
+            "sampling": "dataset_task_balanced",
+            "scheduler": "cosine",
+            "seed": 42,
+            "selection_metric": "macro_dataset_mean_dice",
+            "tile_size": 512,
+            "train_view": "patch",
+            "vascular_sampling_weight": 2.553934065831788,
+            "vessel_loss_weight": 1.0,
+            "vessel_pos_weight": 1.0,
+            "view_size": 512,
+            "weight_decay": 5.52164819184925e-06,
+            "workers": 8
+          }
+        },
+        "inference_protocol": {
+          "activation": [
+            "sigmoid",
+            "conditional_softmax",
+            "conditional_softmax",
+            "sigmoid",
+            "sigmoid"
+          ],
+          "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+          "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+          "av_decoding": "argmax_tie_artery_gated_by_vessel",
+          "av_fusion": "joint_av_mixture_then_conditional",
+          "channels": [
+            "vessel",
+            "artery",
+            "vein",
+            "disc",
+            "cup"
+          ],
+          "cup_containment": "cup_and_disc",
+          "geometry": "canonical_prepared",
+          "metric_support": {
+            "artery": "reference_class_labeled_vessel_pixels",
+            "cup": "annotated_valid_pixels_within_field_of_view",
+            "disc": "annotated_valid_pixels_within_field_of_view",
+            "vein": "reference_class_labeled_vessel_pixels",
+            "vessel": "annotated_valid_pixels_within_field_of_view"
+          },
+          "mode": "tiled",
+          "normalization": "RGB/255-0.5",
+          "overlap": 64,
+          "pixels_per_degree": 25.0,
+          "precision": "float32_no_autocast",
+          "preparation_max_size": null,
+          "preprocessing_profile": "legacy25_raw",
+          "threshold": 0.5,
+          "tile_size": 512,
+          "version": 1,
+          "view_size": null
+        }
+      },
+      "original_inference_protocol": null,
+      "input_logical_name": "TPE5_LAST60_none050",
+      "input_basename": "fixed_terminal60-fresh-counts.json"
+    },
+    "raw384_BEST59": {
+      "original_sha256": "59c19581719b96e53ac32fd88fb55d53dd9295209946b0949e96e14da95396ab",
+      "derived_count_view_sha256": "a4f7614cd161b9624a25be9c666e7f86ff84dfeaf382193a5600181d305fea9c",
+      "checkpoint_sha256": "f6ef880c99148bdd6f7c53164e5f2d47dbef1f301c926910a6ddce880d2bbf8b",
+      "original_evaluation_source": {
+        "evaluation_source_sha256": "f13a23d1af43e2c23e098ce15f1d69f78251817b1a1be86415a48ffe6330b29a",
+        "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+        "runtime": {
+          "cuda_matmul_allow_tf32": false,
+          "cudnn_allow_tf32": true,
+          "cudnn_benchmark": false,
+          "cudnn_deterministic": false,
+          "default_dtype": "torch.float32",
+          "deterministic_algorithms": false,
+          "deterministic_warn_only": false,
+          "float32_matmul_precision": "highest",
+          "installed_distributions": {
+            "Pillow": "13.0.0",
+            "h5py": "3.16.0",
+            "numpy": "2.5.4",
+            "opencv-python": null,
+            "opencv-python-headless": "4.14.0.94",
+            "pydicom": "3.0.2",
+            "scikit-image": "0.26.0",
+            "scipy": "1.18.1",
+            "torch": "2.6.0+cu124"
+          },
+          "numpy": "2.5.4",
+          "python": "3.12.14",
+          "torch": "2.6.0+cu124"
+        },
+        "source_files": [
+          "src/deepretina/__init__.py",
+          "src/deepretina/__main__.py",
+          "src/deepretina/_frozen_v3/__init__.py",
+          "src/deepretina/_frozen_v3/v2.py",
+          "src/deepretina/_frozen_v3/v3.py",
+          "src/deepretina/adapters/__init__.py",
+          "src/deepretina/adapters/additional.py",
+          "src/deepretina/adapters/auxiliary.py",
+          "src/deepretina/adapters/biomisa.py",
+          "src/deepretina/adapters/core.py",
+          "src/deepretina/adapters/labels.py",
+          "src/deepretina/adapters/segmentation.py",
+          "src/deepretina/augment.py",
+          "src/deepretina/bundled.py",
+          "src/deepretina/cli.py",
+          "src/deepretina/comparison.py",
+          "src/deepretina/completion_profiles.py",
+          "src/deepretina/completion_roles.py",
+          "src/deepretina/curated_completion.py",
+          "src/deepretina/dataset.py",
+          "src/deepretina/derived_cache.py",
+          "src/deepretina/engine.py",
+          "src/deepretina/freeze_eligibility.py",
+          "src/deepretina/geometry_policy.py",
+          "src/deepretina/heldout.py",
+          "src/deepretina/inference.py",
+          "src/deepretina/inference_tta.py",
+          "src/deepretina/integrity.py",
+          "src/deepretina/legacy/__init__.py",
+          "src/deepretina/legacy/av.py",
+          "src/deepretina/legacy/checkpoints.py",
+          "src/deepretina/legacy/inference.py",
+          "src/deepretina/legacy/matlab_av.py",
+          "src/deepretina/legacy/matlab_clahe.py",
+          "src/deepretina/legacy/matlab_fov.py",
+          "src/deepretina/legacy/matlab_resize.py",
+          "src/deepretina/legacy/preprocessing.py",
+          "src/deepretina/legacy/raw_proxy.py",
+          "src/deepretina/legacy/single_net.py",
+          "src/deepretina/model.py",
+          "src/deepretina/photometry.py",
+          "src/deepretina/photometry_cache.py",
+          "src/deepretina/prepare.py",
+          "src/deepretina/selection.py",
+          "src/deepretina/sources.py",
+          "src/deepretina/unified.py",
+          "src/deepretina/unified_av.py",
+          "src/deepretina/unified_cli.py",
+          "src/deepretina/unified_legacy.py",
+          "src/deepretina/v3_completion.py",
+          "src/deepretina/val_bridge.py",
+          "src/deepretina/validation_evidence.py",
+          "pyproject.toml",
+          "uv.lock"
+        ],
+        "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation",
+        "training_source_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747"
+      },
+      "original_inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "input_logical_name": "raw384_BEST59",
+      "input_basename": "raw384-BEST59-runtime-redacted.json"
+    },
+    "raw384_LAST60": {
+      "original_sha256": "21e6aaaf1b63d870af4bd295c8c55f19734e09cf543bdeb4077da2de17158602",
+      "derived_count_view_sha256": "dfe4b0dae499b2d91873ca5ee362838dee3ebf29721bba4356ffb844d1939685",
+      "checkpoint_sha256": "e25f35ccac402317576eea165313ff737e332fb301af3e191cfd5847cff50e59",
+      "original_evaluation_source": {
+        "evaluation_source_sha256": "f13a23d1af43e2c23e098ce15f1d69f78251817b1a1be86415a48ffe6330b29a",
+        "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+        "runtime": {
+          "cuda_matmul_allow_tf32": false,
+          "cudnn_allow_tf32": true,
+          "cudnn_benchmark": false,
+          "cudnn_deterministic": false,
+          "default_dtype": "torch.float32",
+          "deterministic_algorithms": false,
+          "deterministic_warn_only": false,
+          "float32_matmul_precision": "highest",
+          "installed_distributions": {
+            "Pillow": "13.0.0",
+            "h5py": "3.16.0",
+            "numpy": "2.5.4",
+            "opencv-python": null,
+            "opencv-python-headless": "4.14.0.94",
+            "pydicom": "3.0.2",
+            "scikit-image": "0.26.0",
+            "scipy": "1.18.1",
+            "torch": "2.6.0+cu124"
+          },
+          "numpy": "2.5.4",
+          "python": "3.12.14",
+          "torch": "2.6.0+cu124"
+        },
+        "source_files": [
+          "src/deepretina/__init__.py",
+          "src/deepretina/__main__.py",
+          "src/deepretina/_frozen_v3/__init__.py",
+          "src/deepretina/_frozen_v3/v2.py",
+          "src/deepretina/_frozen_v3/v3.py",
+          "src/deepretina/adapters/__init__.py",
+          "src/deepretina/adapters/additional.py",
+          "src/deepretina/adapters/auxiliary.py",
+          "src/deepretina/adapters/biomisa.py",
+          "src/deepretina/adapters/core.py",
+          "src/deepretina/adapters/labels.py",
+          "src/deepretina/adapters/segmentation.py",
+          "src/deepretina/augment.py",
+          "src/deepretina/bundled.py",
+          "src/deepretina/cli.py",
+          "src/deepretina/comparison.py",
+          "src/deepretina/completion_profiles.py",
+          "src/deepretina/completion_roles.py",
+          "src/deepretina/curated_completion.py",
+          "src/deepretina/dataset.py",
+          "src/deepretina/derived_cache.py",
+          "src/deepretina/engine.py",
+          "src/deepretina/freeze_eligibility.py",
+          "src/deepretina/geometry_policy.py",
+          "src/deepretina/heldout.py",
+          "src/deepretina/inference.py",
+          "src/deepretina/inference_tta.py",
+          "src/deepretina/integrity.py",
+          "src/deepretina/legacy/__init__.py",
+          "src/deepretina/legacy/av.py",
+          "src/deepretina/legacy/checkpoints.py",
+          "src/deepretina/legacy/inference.py",
+          "src/deepretina/legacy/matlab_av.py",
+          "src/deepretina/legacy/matlab_clahe.py",
+          "src/deepretina/legacy/matlab_fov.py",
+          "src/deepretina/legacy/matlab_resize.py",
+          "src/deepretina/legacy/preprocessing.py",
+          "src/deepretina/legacy/raw_proxy.py",
+          "src/deepretina/legacy/single_net.py",
+          "src/deepretina/model.py",
+          "src/deepretina/photometry.py",
+          "src/deepretina/photometry_cache.py",
+          "src/deepretina/prepare.py",
+          "src/deepretina/selection.py",
+          "src/deepretina/sources.py",
+          "src/deepretina/unified.py",
+          "src/deepretina/unified_av.py",
+          "src/deepretina/unified_cli.py",
+          "src/deepretina/unified_legacy.py",
+          "src/deepretina/v3_completion.py",
+          "src/deepretina/val_bridge.py",
+          "src/deepretina/validation_evidence.py",
+          "pyproject.toml",
+          "uv.lock"
+        ],
+        "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation",
+        "training_source_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747"
+      },
+      "original_inference_protocol": {
+        "activation": [
+          "sigmoid",
+          "conditional_softmax",
+          "conditional_softmax",
+          "sigmoid",
+          "sigmoid"
+        ],
+        "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+        "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+        "av_decoding": "argmax_tie_artery_gated_by_vessel",
+        "av_fusion": "joint_av_mixture_then_conditional",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "cup_containment": "cup_and_disc",
+        "geometry": "canonical_prepared",
+        "metric_support": {
+          "artery": "reference_class_labeled_vessel_pixels",
+          "cup": "annotated_valid_pixels_within_field_of_view",
+          "disc": "annotated_valid_pixels_within_field_of_view",
+          "vein": "reference_class_labeled_vessel_pixels",
+          "vessel": "annotated_valid_pixels_within_field_of_view"
+        },
+        "mode": "tiled",
+        "normalization": "RGB/255-0.5",
+        "overlap": 64,
+        "pixels_per_degree": 25.0,
+        "precision": "float32_no_autocast",
+        "preparation_max_size": null,
+        "preprocessing_profile": "legacy25_raw",
+        "threshold": 0.5,
+        "tile_size": 512,
+        "version": 1,
+        "view_size": null
+      },
+      "input_logical_name": "raw384_LAST60",
+      "input_basename": "raw384-LAST60-runtime-redacted.json"
+    },
+    "original182": {
+      "original_sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+      "derived_count_view_sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+      "checkpoint_sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "original_evaluation_source": {
+        "runtime": {
+          "evaluation_source_sha256": "fc9ea3b740d428c48ddf9deed8524ef115b303bbbda2f0875b614818ccb0332c",
+          "hardware_status": "not queried by CPU metadata gate; fresh validation/test producer must log actual device and driver separately",
+          "runtime": {
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "cudnn_benchmark": false,
+            "cudnn_deterministic": false,
+            "default_dtype": "torch.float32",
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "float32_matmul_precision": "highest",
+            "installed_distributions": {
+              "Pillow": "13.0.0",
+              "h5py": "3.16.0",
+              "numpy": "2.5.4",
+              "opencv-python": null,
+              "opencv-python-headless": "4.14.0.94",
+              "pydicom": "3.0.2",
+              "scikit-image": "0.26.0",
+              "scipy": "1.18.1",
+              "torch": "2.6.0+cu124"
+            },
+            "numpy": "2.5.4",
+            "python": "3.12.13",
+            "torch": "2.6.0+cu124"
+          },
+          "source_files": [
+            "src/deepretina/__init__.py",
+            "src/deepretina/__main__.py",
+            "src/deepretina/adapters/__init__.py",
+            "src/deepretina/adapters/additional.py",
+            "src/deepretina/adapters/auxiliary.py",
+            "src/deepretina/adapters/biomisa.py",
+            "src/deepretina/adapters/core.py",
+            "src/deepretina/adapters/labels.py",
+            "src/deepretina/adapters/segmentation.py",
+            "src/deepretina/augment.py",
+            "src/deepretina/bundled.py",
+            "src/deepretina/cli.py",
+            "src/deepretina/comparison.py",
+            "src/deepretina/dataset.py",
+            "src/deepretina/derived_cache.py",
+            "src/deepretina/engine.py",
+            "src/deepretina/geometry_policy.py",
+            "src/deepretina/heldout.py",
+            "src/deepretina/inference.py",
+            "src/deepretina/integrity.py",
+            "src/deepretina/legacy/__init__.py",
+            "src/deepretina/legacy/av.py",
+            "src/deepretina/legacy/checkpoints.py",
+            "src/deepretina/legacy/inference.py",
+            "src/deepretina/legacy/matlab_av.py",
+            "src/deepretina/legacy/matlab_clahe.py",
+            "src/deepretina/legacy/matlab_fov.py",
+            "src/deepretina/legacy/matlab_resize.py",
+            "src/deepretina/legacy/preprocessing.py",
+            "src/deepretina/legacy/raw_proxy.py",
+            "src/deepretina/legacy/single_net.py",
+            "src/deepretina/model.py",
+            "src/deepretina/prepare.py",
+            "src/deepretina/selection.py",
+            "src/deepretina/sources.py",
+            "src/deepretina/unified.py",
+            "src/deepretina/unified_av.py",
+            "src/deepretina/unified_cli.py",
+            "src/deepretina/unified_legacy.py",
+            "src/deepretina/val_bridge.py",
+            "src/deepretina/validation_evidence.py",
+            "pyproject.toml",
+            "uv.lock"
+          ],
+          "source_status": "actual package Python source bytes and project metadata; not an in-memory or binary attestation"
+        },
+        "scripts": {
+          "compose_original_disc_reference.py": "28654e8c43973167031279f60a247cc6e298f1541e47828947d2657a0f12acdc",
+          "evaluate_original.py": "8d0217743223001ed66724d3a070a8280727e0d055a0567572764da3647157fc",
+          "evaluate_original_frozen.py": "44f1faf4ff41b3dd60b8d6dea747a577bcfd2bb77b1f2366e153bc688fb27a61"
+        }
+      },
+      "original_inference_protocol": null,
+      "input_logical_name": "original182",
+      "input_basename": "validation.json"
+    }
+  },
+  "roles": {
+    "raw512_BEST50": {
+      "macro": 0.8113305328316704,
+      "pooled": {
+        "artery": 0.7344135316240037,
+        "cup": 0.8760275885406007,
+        "disc": 0.9386776514270532,
+        "vein": 0.788574981738833,
+        "vessel": 0.7561257550298077
+      },
+      "conditionalAV": 0.8433128328847909
+    },
+    "raw512_LAST60": {
+      "macro": 0.8097793183466921,
+      "pooled": {
+        "artery": 0.730547922409826,
+        "cup": 0.8773790762824044,
+        "disc": 0.9381714139853609,
+        "vein": 0.7895387025591548,
+        "vessel": 0.7539533683377879
+      },
+      "conditionalAV": 0.8445586996684289
+    }
+  },
+  "pairs": {
+    "raw512_BEST50__minus_TPE5_BEST58_none050": {
+      "macro": {
+        "reference": 0.810897419452556,
+        "candidate": 0.8113305328316702,
+        "candidate_minus_reference": 0.000433113379114225,
+        "paired_percentile_95ci": [
+          -0.0033009772404683614,
+          0.007561773557847645
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "channels": {
+        "vessel": {
+          "pooled_dice": {
+            "reference": 0.7628790161588007,
+            "candidate": 0.7561257550298077,
+            "candidate_minus_reference": -0.006753261128992993,
+            "paired_percentile_95ci": [
+              -0.01128461548092379,
+              -0.002481798845098245
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.787359912585667,
+            "candidate": 0.7785541799363312,
+            "candidate_minus_reference": -0.008805732649335707,
+            "paired_percentile_95ci": [
+              -0.013833181372801396,
+              -0.005235481138364799
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "artery": {
+          "pooled_dice": {
+            "reference": 0.7303235526119429,
+            "candidate": 0.7344135316240037,
+            "candidate_minus_reference": 0.004089979012060763,
+            "paired_percentile_95ci": [
+              -0.00147312317756354,
+              0.01004954291681913
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7056610348682859,
+            "candidate": 0.7105865767635066,
+            "candidate_minus_reference": 0.004925541895220653,
+            "paired_percentile_95ci": [
+              -0.003697695037210288,
+              0.030146586401311317
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "vein": {
+          "pooled_dice": {
+            "reference": 0.7921104712255727,
+            "candidate": 0.788574981738833,
+            "candidate_minus_reference": -0.0035354894867396514,
+            "paired_percentile_95ci": [
+              -0.009457820206488702,
+              0.0015301799213553165
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7729394430160357,
+            "candidate": 0.773590577701101,
+            "candidate_minus_reference": 0.0006511346850652799,
+            "paired_percentile_95ci": [
+              -0.0064576487332267726,
+              0.01045707011107986
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "disc": {
+          "pooled_dice": {
+            "reference": 0.9326714922143646,
+            "candidate": 0.9386776514270532,
+            "candidate_minus_reference": 0.006006159212688544,
+            "paired_percentile_95ci": [
+              0.0017136019164179506,
+              0.011303112195680195
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.9178202548329271,
+            "candidate": 0.9223456761667277,
+            "candidate_minus_reference": 0.004525421333800628,
+            "paired_percentile_95ci": [
+              -0.0015296861155416675,
+              0.011133802146012938
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "cup": {
+          "pooled_dice": {
+            "reference": 0.8807839788066061,
+            "candidate": 0.8760275885406007,
+            "candidate_minus_reference": -0.004756390266005384,
+            "paired_percentile_95ci": [
+              -0.009220900583691915,
+              -0.0006318577507996822
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.8707064519598646,
+            "candidate": 0.8715756535906851,
+            "candidate_minus_reference": 0.0008692016308204931,
+            "paired_percentile_95ci": [
+              -0.005690959331362077,
+              0.0067743249614406935
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        }
+      },
+      "conditionalAV": {
+        "reference": 0.8249195441163256,
+        "candidate": 0.8433128328847909,
+        "candidate_minus_reference": 0.018393288768465244,
+        "paired_percentile_95ci": [
+          0.013882089032203207,
+          0.022636383979549944
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "raw512_BEST50__minus_raw384_BEST59": {
+      "macro": {
+        "reference": 0.8143712433278182,
+        "candidate": 0.8113305328316702,
+        "candidate_minus_reference": -0.003040710496147958,
+        "paired_percentile_95ci": [
+          -0.00652373148720308,
+          -0.00015776062262924719
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "channels": {
+        "vessel": {
+          "pooled_dice": {
+            "reference": 0.7597700067256901,
+            "candidate": 0.7561257550298077,
+            "candidate_minus_reference": -0.003644251695882339,
+            "paired_percentile_95ci": [
+              -0.007431984517733281,
+              0.0006683578541530062
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7847678843017492,
+            "candidate": 0.7785541799363312,
+            "candidate_minus_reference": -0.006213704365417905,
+            "paired_percentile_95ci": [
+              -0.009509199133174806,
+              -0.003174890608665061
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "artery": {
+          "pooled_dice": {
+            "reference": 0.735384999561569,
+            "candidate": 0.7344135316240037,
+            "candidate_minus_reference": -0.0009714679375653068,
+            "paired_percentile_95ci": [
+              -0.0063574344962627535,
+              0.004808973828067431
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7135790513102194,
+            "candidate": 0.7105865767635066,
+            "candidate_minus_reference": -0.002992474546712809,
+            "paired_percentile_95ci": [
+              -0.01316541282267745,
+              0.004292452089642481
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "vein": {
+          "pooled_dice": {
+            "reference": 0.796599178615174,
+            "candidate": 0.788574981738833,
+            "candidate_minus_reference": -0.008024196876341039,
+            "paired_percentile_95ci": [
+              -0.012386758940011098,
+              -0.0036775748630059222
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7807788513152933,
+            "candidate": 0.773590577701101,
+            "candidate_minus_reference": -0.007188273614192386,
+            "paired_percentile_95ci": [
+              -0.012784246816132957,
+              -0.0027421570885248453
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "disc": {
+          "pooled_dice": {
+            "reference": 0.94053083919685,
+            "candidate": 0.9386776514270532,
+            "candidate_minus_reference": -0.0018531877697968158,
+            "paired_percentile_95ci": [
+              -0.003237970869388496,
+              -0.0004238090661595559
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.9249125869687246,
+            "candidate": 0.9223456761667277,
+            "candidate_minus_reference": -0.002566910801996891,
+            "paired_percentile_95ci": [
+              -0.006142207452047718,
+              0.0014894487249463564
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "cup": {
+          "pooled_dice": {
+            "reference": 0.8804691455343935,
+            "candidate": 0.8760275885406007,
+            "candidate_minus_reference": -0.0044415569937927835,
+            "paired_percentile_95ci": [
+              -0.008874821470723151,
+              -0.0005742216254541924
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.8678178427431048,
+            "candidate": 0.8715756535906851,
+            "candidate_minus_reference": 0.003757810847580312,
+            "paired_percentile_95ci": [
+              -0.0025340284700115677,
+              0.012031193278705565
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        }
+      },
+      "conditionalAV": {
+        "reference": 0.8309044261778239,
+        "candidate": 0.8433128328847909,
+        "candidate_minus_reference": 0.012408406706966968,
+        "paired_percentile_95ci": [
+          0.008262276978630545,
+          0.016360686692195158
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "raw512_BEST50__minus_original182": {
+      "macro": {
+        "reference": 0.6670295852091139,
+        "candidate": 0.8113305328316702,
+        "candidate_minus_reference": 0.1443009476225563,
+        "paired_percentile_95ci": [
+          0.1356172412195869,
+          0.15458048252604478
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "channels": {
+        "vessel": {
+          "pooled_dice": {
+            "reference": 0.7701233997938133,
+            "candidate": 0.7561257550298077,
+            "candidate_minus_reference": -0.013997644764005557,
+            "paired_percentile_95ci": [
+              -0.01871129829439133,
+              -0.009760800049209468
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.786656606945927,
+            "candidate": 0.7785541799363312,
+            "candidate_minus_reference": -0.008102427009595736,
+            "paired_percentile_95ci": [
+              -0.012568542516106807,
+              -0.0033754371271052714
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "artery": {
+          "pooled_dice": {
+            "reference": 0.689521829787506,
+            "candidate": 0.7344135316240037,
+            "candidate_minus_reference": 0.04489170183649771,
+            "paired_percentile_95ci": [
+              0.03198498480881343,
+              0.05728756298257282
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.6808690952407886,
+            "candidate": 0.7105865767635066,
+            "candidate_minus_reference": 0.029717481522717915,
+            "paired_percentile_95ci": [
+              0.009518443274423995,
+              0.04789269949271399
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "vein": {
+          "pooled_dice": {
+            "reference": 0.6972863687090058,
+            "candidate": 0.788574981738833,
+            "candidate_minus_reference": 0.09128861302982716,
+            "paired_percentile_95ci": [
+              0.07844837492362959,
+              0.10375234785081751
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.6995405927524971,
+            "candidate": 0.773590577701101,
+            "candidate_minus_reference": 0.07404998494860382,
+            "paired_percentile_95ci": [
+              0.05667647577644449,
+              0.0923062191211587
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "disc": {
+          "pooled_dice": {
+            "reference": 0.8948079084718797,
+            "candidate": 0.9386776514270532,
+            "candidate_minus_reference": 0.04386974295517343,
+            "paired_percentile_95ci": [
+              0.03665800448913695,
+              0.05284026104210354
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7295300905977455,
+            "candidate": 0.9223456761667277,
+            "candidate_minus_reference": 0.19281558556898215,
+            "paired_percentile_95ci": [
+              0.18099048847378485,
+              0.2062524743434065
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "cup": {
+          "pooled_dice": {
+            "reference": 0.4353989841007063,
+            "candidate": 0.8760275885406007,
+            "candidate_minus_reference": 0.4406286044398944,
+            "paired_percentile_95ci": [
+              0.4284341684642815,
+              0.4527766743815717
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.4385515405086113,
+            "candidate": 0.8715756535906851,
+            "candidate_minus_reference": 0.43302411308207384,
+            "paired_percentile_95ci": [
+              0.4069396825408347,
+              0.4649262053829103
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        }
+      },
+      "conditionalAV": {
+        "reference": 0.748566415513326,
+        "candidate": 0.8433128328847909,
+        "candidate_minus_reference": 0.09474641737146483,
+        "paired_percentile_95ci": [
+          0.08186998292657555,
+          0.10734731834902952
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "raw512_LAST60__minus_TPE5_LAST60_none050": {
+      "macro": {
+        "reference": 0.8088325417490292,
+        "candidate": 0.8097793183466921,
+        "candidate_minus_reference": 0.0009467765976629572,
+        "paired_percentile_95ci": [
+          -0.0039045427435676267,
+          0.011579559255030734
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "channels": {
+        "vessel": {
+          "pooled_dice": {
+            "reference": 0.7608027721538213,
+            "candidate": 0.7539533683377879,
+            "candidate_minus_reference": -0.006849403816033384,
+            "paired_percentile_95ci": [
+              -0.011663743385575409,
+              -0.0018697148712903604
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7856754725180168,
+            "candidate": 0.7762214070011293,
+            "candidate_minus_reference": -0.009454065516887544,
+            "paired_percentile_95ci": [
+              -0.014576826784508704,
+              -0.005528958006009442
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "artery": {
+          "pooled_dice": {
+            "reference": 0.7326536675986529,
+            "candidate": 0.730547922409826,
+            "candidate_minus_reference": -0.0021057451888268908,
+            "paired_percentile_95ci": [
+              -0.009634493913667316,
+              0.004543346388941582
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7083105731462538,
+            "candidate": 0.7047424505082843,
+            "candidate_minus_reference": -0.003568122637969462,
+            "paired_percentile_95ci": [
+              -0.01366630625760866,
+              0.029006264490392304
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "vein": {
+          "pooled_dice": {
+            "reference": 0.7907396439681901,
+            "candidate": 0.7895387025591548,
+            "candidate_minus_reference": -0.001200941409035261,
+            "paired_percentile_95ci": [
+              -0.008149518737901276,
+              0.004677763743114749
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7705116793606026,
+            "candidate": 0.7739894463204324,
+            "candidate_minus_reference": 0.00347776695982982,
+            "paired_percentile_95ci": [
+              -0.0063276404256332715,
+              0.02289223005687609
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "disc": {
+          "pooled_dice": {
+            "reference": 0.9353376016101858,
+            "candidate": 0.9381714139853609,
+            "candidate_minus_reference": 0.0028338123751751043,
+            "paired_percentile_95ci": [
+              -0.00037800630748922317,
+              0.006918247471255009
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.9155588301014529,
+            "candidate": 0.9224807730552733,
+            "candidate_minus_reference": 0.006921942953820426,
+            "paired_percentile_95ci": [
+              0.0012890317063029455,
+              0.01335773823343193
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "cup": {
+          "pooled_dice": {
+            "reference": 0.8748724200263419,
+            "candidate": 0.8773790762824044,
+            "candidate_minus_reference": 0.0025066562560625005,
+            "paired_percentile_95ci": [
+              -0.0009866033399005686,
+              0.005985730154100362
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.8641061536188201,
+            "candidate": 0.8714625148483411,
+            "candidate_minus_reference": 0.007356361229520991,
+            "paired_percentile_95ci": [
+              -0.0007266380111681819,
+              0.019386809877918045
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        }
+      },
+      "conditionalAV": {
+        "reference": 0.8217549967939491,
+        "candidate": 0.8445586996684289,
+        "candidate_minus_reference": 0.022803702874479748,
+        "paired_percentile_95ci": [
+          0.017356436013111893,
+          0.028058850205585746
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "raw512_LAST60__minus_raw384_LAST60": {
+      "macro": {
+        "reference": 0.8134957095901518,
+        "candidate": 0.8097793183466921,
+        "candidate_minus_reference": -0.0037163912434596824,
+        "paired_percentile_95ci": [
+          -0.0070468111857887265,
+          0.0004787671983634004
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "channels": {
+        "vessel": {
+          "pooled_dice": {
+            "reference": 0.7597894478330859,
+            "candidate": 0.7539533683377879,
+            "candidate_minus_reference": -0.005836079495297963,
+            "paired_percentile_95ci": [
+              -0.009968786000600808,
+              -0.0013501186983080793
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7852899320471762,
+            "candidate": 0.7762214070011293,
+            "candidate_minus_reference": -0.009068525046046938,
+            "paired_percentile_95ci": [
+              -0.013100056001329347,
+              -0.005684571789589772
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "artery": {
+          "pooled_dice": {
+            "reference": 0.7439764885253032,
+            "candidate": 0.730547922409826,
+            "candidate_minus_reference": -0.013428566115477159,
+            "paired_percentile_95ci": [
+              -0.019976402792842723,
+              -0.007262571952415096
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7203340932486537,
+            "candidate": 0.7047424505082843,
+            "candidate_minus_reference": -0.015591642740369394,
+            "paired_percentile_95ci": [
+              -0.022799430588611336,
+              -0.005201669983031837
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "vein": {
+          "pooled_dice": {
+            "reference": 0.7954366120128236,
+            "candidate": 0.7895387025591548,
+            "candidate_minus_reference": -0.005897909453668748,
+            "paired_percentile_95ci": [
+              -0.011617211385726472,
+              -0.0006224409509106993
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7773858655541582,
+            "candidate": 0.7739894463204324,
+            "candidate_minus_reference": -0.0033964192337258003,
+            "paired_percentile_95ci": [
+              -0.010349450149477172,
+              0.004787897129165456
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "disc": {
+          "pooled_dice": {
+            "reference": 0.9375823731610695,
+            "candidate": 0.9381714139853609,
+            "candidate_minus_reference": 0.0005890408242913425,
+            "paired_percentile_95ci": [
+              -0.0011446537206427493,
+              0.0025156025484885406
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.9218582655249756,
+            "candidate": 0.9224807730552733,
+            "candidate_minus_reference": 0.000622507530297689,
+            "paired_percentile_95ci": [
+              -0.002828066046151717,
+              0.004903596207059124
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "cup": {
+          "pooled_dice": {
+            "reference": 0.8729707459888283,
+            "candidate": 0.8773790762824044,
+            "candidate_minus_reference": 0.004408330293576124,
+            "paired_percentile_95ci": [
+              -0.00127462792156518,
+              0.009917862044752533
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.8626103915757951,
+            "candidate": 0.8714625148483411,
+            "candidate_minus_reference": 0.00885212327254603,
+            "paired_percentile_95ci": [
+              0.0017645201428466372,
+              0.01723650110331451
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        }
+      },
+      "conditionalAV": {
+        "reference": 0.8319701905810644,
+        "candidate": 0.8445586996684289,
+        "candidate_minus_reference": 0.01258850908736453,
+        "paired_percentile_95ci": [
+          0.0075567862156914216,
+          0.01791600064787366
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    },
+    "raw512_LAST60__minus_original182": {
+      "macro": {
+        "reference": 0.6670295852091139,
+        "candidate": 0.8097793183466921,
+        "candidate_minus_reference": 0.14274973313757822,
+        "paired_percentile_95ci": [
+          0.134459022434341,
+          0.1525919918659917
+        ],
+        "defined_bootstrap_draws": 2000
+      },
+      "channels": {
+        "vessel": {
+          "pooled_dice": {
+            "reference": 0.7701233997938133,
+            "candidate": 0.7539533683377879,
+            "candidate_minus_reference": -0.016170031456025358,
+            "paired_percentile_95ci": [
+              -0.021800029720177545,
+              -0.011056403381451745
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.786656606945927,
+            "candidate": 0.7762214070011293,
+            "candidate_minus_reference": -0.01043519994479769,
+            "paired_percentile_95ci": [
+              -0.014804320031219911,
+              -0.005805213038544231
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "artery": {
+          "pooled_dice": {
+            "reference": 0.689521829787506,
+            "candidate": 0.730547922409826,
+            "candidate_minus_reference": 0.04102609262232004,
+            "paired_percentile_95ci": [
+              0.027759871895664805,
+              0.05442429118640278
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.6808690952407886,
+            "candidate": 0.7047424505082843,
+            "candidate_minus_reference": 0.023873355267495677,
+            "paired_percentile_95ci": [
+              0.00832495411033426,
+              0.041495104259527224
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "vein": {
+          "pooled_dice": {
+            "reference": 0.6972863687090058,
+            "candidate": 0.7895387025591548,
+            "candidate_minus_reference": 0.09225233385014897,
+            "paired_percentile_95ci": [
+              0.0797272068487375,
+              0.10419467895850415
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.6995405927524971,
+            "candidate": 0.7739894463204324,
+            "candidate_minus_reference": 0.07444885356793529,
+            "paired_percentile_95ci": [
+              0.05676940590545754,
+              0.09381399886996232
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "disc": {
+          "pooled_dice": {
+            "reference": 0.8948079084718797,
+            "candidate": 0.9381714139853609,
+            "candidate_minus_reference": 0.043363505513481115,
+            "paired_percentile_95ci": [
+              0.03577152724531496,
+              0.05252077619165588
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.7295300905977455,
+            "candidate": 0.9224807730552733,
+            "candidate_minus_reference": 0.19295068245752778,
+            "paired_percentile_95ci": [
+              0.1809963621392264,
+              0.20637507340558767
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        },
+        "cup": {
+          "pooled_dice": {
+            "reference": 0.4353989841007063,
+            "candidate": 0.8773790762824044,
+            "candidate_minus_reference": 0.4419800921816981,
+            "paired_percentile_95ci": [
+              0.4296054731942248,
+              0.4542477484825307
+            ],
+            "defined_bootstrap_draws": 2000
+          },
+          "macro_dataset_dice": {
+            "reference": 0.4385515405086113,
+            "candidate": 0.8714625148483411,
+            "candidate_minus_reference": 0.43291097433972986,
+            "paired_percentile_95ci": [
+              0.40780922107290934,
+              0.46306424534267976
+            ],
+            "defined_bootstrap_draws": 2000
+          }
+        }
+      },
+      "conditionalAV": {
+        "reference": 0.748566415513326,
+        "candidate": 0.8445586996684289,
+        "candidate_minus_reference": 0.09599228415510286,
+        "paired_percentile_95ci": [
+          0.08266438481382936,
+          0.10857816583390036
+        ],
+        "defined_bootstrap_draws": 2000
+      }
+    }
+  },
+  "bootstrap_draws": 2000,
+  "seed": 42,
+  "known_full_VAL_groups": 612,
+  "dense_vessel_actual_groups": 55,
+  "all_source_and_GT_record_support_matches": true,
+  "qualification": "Matching training_best or terminal role and NONE/.5 tiled protocol, but TPE5BESTOld1f vs f13 and TPE5LASTAda72 vs f13 differ runtime/backend. Original historical exposure/preprocessing limits remain. Supplemental55densegroups not provenpatients. No defaultpromotion/TEST."
+}

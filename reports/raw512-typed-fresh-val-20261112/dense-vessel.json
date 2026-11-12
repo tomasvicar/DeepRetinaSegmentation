@@ -1,0 +1,249 @@
+{
+  "scope": "additional vessel-only domain excludes knownpositive-onlyAVRDB only; noobjectivechange",
+  "support": {
+    "photos": 87,
+    "known_split_groups": 55,
+    "sources": [
+      "aria",
+      "chasedb1",
+      "drhagis",
+      "erlangen",
+      "hrf",
+      "iostar",
+      "rite",
+      "stare"
+    ]
+  },
+  "helper_sha256": "13bc973a6c209877e2a250b7f66a79bd65c12029fb183d2c3e355d8327fdb304",
+  "models": {
+    "raw512_BEST50": {
+      "tp": 4366739,
+      "fp": 1428163,
+      "fn": 1526268,
+      "valid_pixels": 60325745,
+      "GT_positive_pixels": 5893007,
+      "GT_negative_pixels": 54432738,
+      "dice": 0.7472233057256007,
+      "precision": 0.7535483775221739,
+      "recall": 0.7410035318132152
+    },
+    "raw512_LAST60": {
+      "tp": 4333577,
+      "fp": 1375233,
+      "fn": 1559430,
+      "valid_pixels": 60325745,
+      "GT_positive_pixels": 5893007,
+      "GT_negative_pixels": 54432738,
+      "dice": 0.7470514316852266,
+      "precision": 0.7591033858194615,
+      "recall": 0.7353761840092842
+    },
+    "TPE5_BEST58_none050": {
+      "tp": 4291277,
+      "fp": 1392639,
+      "fn": 1601730,
+      "valid_pixels": 60325745,
+      "GT_positive_pixels": 5893007,
+      "GT_negative_pixels": 54432738,
+      "dice": 0.7413501843279082,
+      "precision": 0.7549859990893603,
+      "recall": 0.7281981847297992
+    },
+    "TPE5_LAST60_none050": {
+      "tp": 4283570,
+      "fp": 1423973,
+      "fn": 1609437,
+      "valid_pixels": 60325745,
+      "GT_positive_pixels": 5893007,
+      "GT_negative_pixels": 54432738,
+      "dice": 0.7385115360909612,
+      "precision": 0.7505103334306898,
+      "recall": 0.7268903634426364
+    },
+    "raw384_BEST59": {
+      "tp": 4289823,
+      "fp": 1394104,
+      "fn": 1603184,
+      "valid_pixels": 60325745,
+      "GT_positive_pixels": 5893007,
+      "GT_negative_pixels": 54432738,
+      "dice": 0.7410982907909814,
+      "precision": 0.7547287289228028,
+      "recall": 0.7279514516103578
+    },
+    "raw384_LAST60": {
+      "tp": 4240854,
+      "fp": 1352669,
+      "fn": 1652153,
+      "valid_pixels": 60325745,
+      "GT_positive_pixels": 5893007,
+      "GT_negative_pixels": 54432738,
+      "dice": 0.7384047227491679,
+      "precision": 0.7581722645996092,
+      "recall": 0.719641772018937
+    },
+    "original182": {
+      "tp": 4681049,
+      "fp": 1723029,
+      "fn": 1211958,
+      "valid_pixels": 60325745,
+      "GT_positive_pixels": 5893007,
+      "GT_negative_pixels": 54432738,
+      "dice": 0.7613266070780189,
+      "precision": 0.7309481552223442,
+      "recall": 0.7943396300055303
+    }
+  },
+  "paired": {
+    "raw512_BEST50__minus_TPE5_BEST58_none050": {
+      "reference": 0.7413501843279082,
+      "candidate": 0.7472233057256007,
+      "candidate_minus_reference": 0.005873121397692471,
+      "paired_percentile_95ci": [
+        0.0030294030346813493,
+        0.009183849316586027
+      ],
+      "draws": 2000,
+      "seed": 42,
+      "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+      "groups": 55,
+      "stratification": "dataset signature among included vessel-support photos of whole retained group",
+      "strata": {
+        "('aria',)": 16,
+        "('chasedb1',)": 3,
+        "('drhagis',)": 8,
+        "('drive',)": 4,
+        "('erlangen',)": 11,
+        "('hrf',)": 3,
+        "('iostar',)": 6,
+        "('stare',)": 4
+      },
+      "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+    },
+    "raw512_BEST50__minus_raw384_BEST59": {
+      "reference": 0.7410982907909814,
+      "candidate": 0.7472233057256007,
+      "candidate_minus_reference": 0.006125014934619255,
+      "paired_percentile_95ci": [
+        0.0026236278307372267,
+        0.010051467993491192
+      ],
+      "draws": 2000,
+      "seed": 42,
+      "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+      "groups": 55,
+      "stratification": "dataset signature among included vessel-support photos of whole retained group",
+      "strata": {
+        "('aria',)": 16,
+        "('chasedb1',)": 3,
+        "('drhagis',)": 8,
+        "('drive',)": 4,
+        "('erlangen',)": 11,
+        "('hrf',)": 3,
+        "('iostar',)": 6,
+        "('stare',)": 4
+      },
+      "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+    },
+    "raw512_BEST50__minus_original182": {
+      "reference": 0.7613266070780189,
+      "candidate": 0.7472233057256007,
+      "candidate_minus_reference": -0.014103301352418218,
+      "paired_percentile_95ci": [
+        -0.019402645895836408,
+        -0.009955992655343008
+      ],
+      "draws": 2000,
+      "seed": 42,
+      "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+      "groups": 55,
+      "stratification": "dataset signature among included vessel-support photos of whole retained group",
+      "strata": {
+        "('aria',)": 16,
+        "('chasedb1',)": 3,
+        "('drhagis',)": 8,
+        "('drive',)": 4,
+        "('erlangen',)": 11,
+        "('hrf',)": 3,
+        "('iostar',)": 6,
+        "('stare',)": 4
+      },
+      "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+    },
+    "raw512_LAST60__minus_TPE5_LAST60_none050": {
+      "reference": 0.7385115360909612,
+      "candidate": 0.7470514316852266,
+      "candidate_minus_reference": 0.008539895594265379,
+      "paired_percentile_95ci": [
+        0.005245121549575143,
+        0.012506452257355668
+      ],
+      "draws": 2000,
+      "seed": 42,
+      "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+      "groups": 55,
+      "stratification": "dataset signature among included vessel-support photos of whole retained group",
+      "strata": {
+        "('aria',)": 16,
+        "('chasedb1',)": 3,
+        "('drhagis',)": 8,
+        "('drive',)": 4,
+        "('erlangen',)": 11,
+        "('hrf',)": 3,
+        "('iostar',)": 6,
+        "('stare',)": 4
+      },
+      "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+    },
+    "raw512_LAST60__minus_raw384_LAST60": {
+      "reference": 0.7384047227491679,
+      "candidate": 0.7470514316852266,
+      "candidate_minus_reference": 0.008646708936058678,
+      "paired_percentile_95ci": [
+        0.0054684113352609556,
+        0.01260711934092796
+      ],
+      "draws": 2000,
+      "seed": 42,
+      "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+      "groups": 55,
+      "stratification": "dataset signature among included vessel-support photos of whole retained group",
+      "strata": {
+        "('aria',)": 16,
+        "('chasedb1',)": 3,
+        "('drhagis',)": 8,
+        "('drive',)": 4,
+        "('erlangen',)": 11,
+        "('hrf',)": 3,
+        "('iostar',)": 6,
+        "('stare',)": 4
+      },
+      "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+    },
+    "raw512_LAST60__minus_original182": {
+      "reference": 0.7613266070780189,
+      "candidate": 0.7470514316852266,
+      "candidate_minus_reference": -0.014275175392792328,
+      "paired_percentile_95ci": [
+        -0.020402334544415913,
+        -0.00908199407468554
+      ],
+      "draws": 2000,
+      "seed": 42,
+      "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+      "groups": 55,
+      "stratification": "dataset signature among included vessel-support photos of whole retained group",
+      "strata": {
+        "('aria',)": 16,
+        "('chasedb1',)": 3,
+        "('drhagis',)": 8,
+        "('drive',)": 4,
+        "('erlangen',)": 11,
+        "('hrf',)": 3,
+        "('iostar',)": 6,
+        "('stare',)": 4
+      },
+      "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+    }
+  }
+}
