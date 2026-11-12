@@ -1,12 +1,13 @@
 # Stav projektu
 
-**Snímek: 12. 11. 2026 v 14:08 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
+**Snímek: 12. 11. 2026 v 14:21 UTC. Obě rodiny modelů jsou předatelné; cévní zlepšení vůči originálu zůstává nesplněné.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
 Finální kandidát je od13:34UTC zmrazen: raw512 BEST50, rot4/0,35/512/64.
 Kontrola původních vah, dokončení tréninku, výběru i navázané původní reference
-prošla. TEST856 skutečně běží od13:49UTC na Old, se zmrazeným nastavením pro oba modely. Model `unified-raw512-selected` už je přibalený; 53 cílených
+prošla. TEST856 dokončen ve14:17:29UTC na Old: oba modely i vnější spouštěč skončily0,
+stejná fotografická/anotační podpora i nezměněné zdroje byly ověřené. Model `unified-raw512-selected` už je přibalený; 53 cílených
 kontrol prošlo, CLI/API i izolovaný wheel reprodukují výzkumné pravděpodobnosti
 a všech pět masek na skutečném TRAIN snímku přesně. Na dense cévách VAL má
 Dice0,75132 proti původnímu0,76133; původní model zůstává doporučený pro prioritu
@@ -104,7 +105,7 @@ nikoli důkaz finální kvality nebo obecné shody všech GPU backendů.
 ## Výzkum: dokončené běhy a výběr
 
 Výsledky níže jsou VAL. Z nich byl vybrán samostatný raw512 model;
-TEST obou zmrazených sestav nyní běží. Dřívější smíšené časové aktualizace zůstávají beze změny
+TEST obou zmrazených sestav je dokončený. Dřívější smíšené časové aktualizace zůstávají beze změny
 v [historickém přehledu](PROGRESS_HISTORY_2026-11.md#archivovaný-výzkumný-přehled-ze-zdroje-5545f3d).
 
 - **Kontrolované raw/photometry běhy:** raw256, raw384, raw512, CLAHE384 a LC384
@@ -160,16 +161,26 @@ Dosavadní studijní cíle a zdrojové reporty se touto doplňkovou analýzou ne
 Korpus V2 má 21 TRAIN zdrojů / 2 529 fotografií / 5 700 anotovaných variant,
 770 VAL a 856 TEST fotografií; pevné VAL členství zůstalo zachované.
 Geometrické předpoklady jsou výslovné v [datové dokumentaci](CORPUS_V2_PREPARATION.md).
-Výběr a zmrazení přesného protokolu jsou dokončené; následný TEST právě běží.
+Výběr a zmrazení přesného protokolu jsou dokončené; následný TEST je dokončený.
 
 ## Co zbývá k dokončení cíle
 
-1. Provést jeden samostatný TEST zmrazeného raw512 a původní sestavy; jeho výsledky nepoužít k dalšímu ladění.
+1. Hotovo: jeden samostatný TEST zmrazeného raw512 a původní sestavy; výsledky nebyly použity k dalšímu ladění.
 2. Změřit přesně tyto dvě sestavy na pevných TRAIN vstupech a oddělit načítání, rezidentní latenci, parametry a velikost souborů.
 3. Hotovo: samostatný inference checkpoint, přesná shoda predikce s výzkumným zdrojem a instalace přes `uv` mimo checkout.
 4. Předat obě rodiny s výsledky a omezeními. Cévní zlepšení vůči původní síti zůstává nesplněným vědeckým cílem; další trénovací hledání nyní uzavíráme.
 
-**Přibalené jsou původní modely, samostatný vybraný raw512 i dřívější kontroly/preview. TEST výsledky zatím nejsou vydané.**
+**Přibalené jsou původní modely, samostatný vybraný raw512 i dřívější kontroly/preview. TEST výsledky jsou uvedené v kartě raw512; source-pooled zlepšení tepen/žil/disku/cup neodstraňuje horší dense cévy.**
 Podrobný cíl je v [GOAL.md](GOAL.md), historické záznamy v
 [PROGRESS_HISTORY_2026-11.md](PROGRESS_HISTORY_2026-11.md). Operátorské přístupy a
 spotřeba MetaCentra jsou vedené v samostatném soukromém provozním repozitáři.
+
+## Závěrečný TEST
+
+856 fotografií /696 známých skupin; všech pět výstupů obou modelů na stejné
+anotované podpoře. Nový model zlepšil pooled tepny, žíly, disk i cup s kladnými
+párovými intervaly. Conditional A/V je0,86087 proti0,75186. Pooled cévy jsou
+0,78656 proti0,78784 s intervalem rozdílu přes nulu; to nedokládá ekvivalenci.
+Dense doplněk102 fotografií /71 známých skupin: nový0,77655 proti původnímu0,78077,
+rozdíl−0,00422 a95% interval[−0,00631;−0,00216]. Původní cévy tedy zůstávají
+doporučené pro prioritu cévní kvality. [Přesné výsledky a omezení](UNIFIED_RAW512_SELECTED.md).

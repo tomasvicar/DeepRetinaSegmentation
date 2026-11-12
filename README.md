@@ -8,8 +8,7 @@ You can predict immediately without access to the training data.
 
 The selected unified model covers all 2,529 TRAIN photographs / 5,700 annotation
 records from 21 sources. It offers a simpler shared pipeline, while the original
-networks retain better measured dense-vessel VAL quality. Held-out TEST is in
-progress. See [current results and limits](docs/STATUS.md) and [the project goal](docs/GOAL.md).
+networks retain better measured dense-vessel VAL quality. Frozen TEST on856 photographs is complete. See [current results and limits](docs/STATUS.md) and [the project goal](docs/GOAL.md).
 Earlier controls, previews and single-dataset pilots remain explicitly named in
 the model catalog for reproducibility.
 
@@ -75,8 +74,9 @@ The original model aliases and all previous models keep their existing defaults.
 
 Dense-vessel VAL Dice is **0.75132**, versus **0.76133** for the original
 reference. Keep the original pipeline when vessel quality is the priority.
-The unified model offers a smaller five-head alternative; its held-out TEST
-is pending. See [the model card, exact identities and verification](docs/UNIFIED_RAW512_SELECTED.md).
+The unified model offers a smaller five-head alternative; its frozen TEST
+confirms improvements for artery/vein/disc/cup while dense vessels still favor
+the original (0.78077 versus0.77655). See [the model card, exact identities and verification](docs/UNIFIED_RAW512_SELECTED.md).
 
 Use a new or empty output directory for each prediction. A populated directory
 is rejected so that masks from different photographs or models cannot get mixed.
@@ -156,7 +156,7 @@ and [preprocessing evidence](docs/LEGACY_PREPROCESSING.md).
 | Included model | Provenance / outputs |
 | --- | --- |
 | `legacy-universal` | Original trained single_net: vessel, disc, cup |
-| `unified-raw512-selected` | Selected raw512 BEST50, all2,529 TRAIN photos/5,700 records/21sources; five outputs, automatic rot4/.35/512/64. Original dense-vessel VAL quality remains higher; frozen TEST in progress. |
+| `unified-raw512-selected` | Selected raw512 BEST50, all2,529 TRAIN photos/5,700 records/21sources; five outputs, automatic rot4/.35/512/64. Original dense-vessel VAL quality remains higher; frozen TEST complete, dense-vessel deficit retained. |
 | `unified-full-data-baseline` | Corpus-v1 completed60-epoch five-output baseline (17 TRAIN sources, 2,221 photos); selected E56 on validation, no TEST yet |
 | `unified-v2-control` | Corpus-v2 fixed terminal E60: 21 TRAIN sources, 2,529 photos / all 5,700 variants; VAL only, lower vessel Dice than original reference; not optimized/final |
 | `unified-v2-vascular2` | Experimental V2 vascular-sampling preview: completed 60-epoch run, VAL-selected E59 with all 5,700 variants; vessel regression remains, no TEST |

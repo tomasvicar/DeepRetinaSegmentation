@@ -40,8 +40,39 @@ confirms this interval with2,000 source-stratified known-group draws/seed42.
 Original vessels remain preferable for the measured vessel
 priority. Native V3 has a stronger artery result. This is a balanced alternative,
 not an all-task replacement, a global optimum or a clinical claim. Exploratory
-VAL intervals do not establish complete patient independence. **Held-out TEST
-was pending at packaging**; no TEST result is claimed here.
+VAL intervals do not establish complete patient independence. The subsequent frozen TEST is reported below.
+
+## Frozen TEST on856 photographs
+
+Both original and unified executions and their outer observer completed with
+exit0 at14:17:29UTC on12November2026. The same856 photos/annotation records/
+source attribution/GT support were checked; no model selection or tuning followed.
+The exact raw512 protocol was frozen before execution.
+
+| Metric | Original | Selected unified |
+| --- | ---: | ---: |
+| Vessel pooled Dice | 0.787840 | 0.786565 |
+| Artery pooled Dice | 0.695384 | 0.784665 |
+| Vein pooled Dice | 0.706572 | 0.832444 |
+| Disc pooled Dice | 0.892788 | 0.946856 |
+| Cup pooled Dice | 0.454491 | 0.885680 |
+| Conditional A/V accuracy | 0.751861 | 0.860869 |
+| End-to-end A/V accuracy | 0.641228 | 0.752940 |
+| Dataset/head macro Dice | 0.681858 | 0.839614 |
+
+Artery, vein, disc and cup pooled differences have positive paired95% intervals.
+Pooled-vessel difference−0.001275 has an interval crossing zero; this is not
+evidence of equivalence. The dense-vessel supplement excludes only positive-only
+AVRDB:102photos/71known groups, original**0.780768** versus unified**0.776548**,
+difference**−0.004220**, paired95% interval**[−0.006315,−0.002161]**. Both precision
+and recall are lower. Original vessels remain the recommended measured vessel
+reference. Higher macro/other heads do not remove this remaining deficit.
+
+Intervals use2000 source-stratified group draws, seed42 (696known TEST groups
+overall). Known groups do not prove complete patient independence; historical
+exposure of original weights is unknown. Full per-source results and adverse
+subgroups are retained in the TEST report. The selected original521b was tested;
+the CPU deployment292e has separate exact TRAIN integration evidence.
 
 The selection binds original checkpoint SHA
 `521b8881d1b2c69a7395be6687a8b86581838e3f5dbb004a150333d454132cea`
