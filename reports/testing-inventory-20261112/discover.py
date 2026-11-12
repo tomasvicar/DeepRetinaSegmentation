@@ -53,7 +53,15 @@ def inventory():
         )
     return {
         "schema_version": 1,
-        "source_snapshot": "12720f76567989f3ad011ee4b529dda4d8153eb9",
+        "source_snapshot": subprocess.check_output(
+            ["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True
+        ).strip(),
+        "tracked_worktree_dirty": bool(
+            subprocess.check_output(
+                ["git", "-C", str(ROOT), "status", "--porcelain", "--untracked-files=no"],
+                text=True,
+            ).strip()
+        ),
         "tracked_python_files_scanned": len(paths),
         "nonstandard_module_paths": [
             m["path"]
