@@ -147,14 +147,27 @@ def test_new_field_is_appended_to_preserve_existing_positional_configuration_api
     )
     original_names = stable["stable_config_field_order"]
     names = [field.name for field in fields(UnifiedConfig)]
-    assert names == original_names + ["vascular_sampling_weight", "mixed_precision"]
+    compatible_prefix = original_names + [
+        "vascular_sampling_weight",
+        "mixed_precision",
+        "photometric_profile",
+    ]
+    assert names[: len(compatible_prefix)] == compatible_prefix
     defaults = UnifiedConfig()
+    assert defaults.photometric_profile == "raw"
     positional = UnifiedConfig(*(getattr(defaults, name) for name in original_names))
     assert positional == defaults and positional.vascular_sampling_weight == 1
     previous = UnifiedConfig(vascular_sampling_weight=2)
     previous_names = original_names + ["vascular_sampling_weight"]
     positional_with_scalar = UnifiedConfig(*(getattr(previous, name) for name in previous_names))
     assert positional_with_scalar == previous and positional_with_scalar.mixed_precision == "none"
+    previous_bf16 = UnifiedConfig(vascular_sampling_weight=2, mixed_precision="bf16")
+    previous_bf16_names = original_names + ["vascular_sampling_weight", "mixed_precision"]
+    positional_with_bf16 = UnifiedConfig(
+        *(getattr(previous_bf16, name) for name in previous_bf16_names)
+    )
+    assert positional_with_bf16 == previous_bf16
+    assert positional_with_bf16.photometric_profile == "raw"
 
 
 @pytest.mark.parametrize("priority", [None, 1.0, 2.0])
