@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 12. 11. 2026 v 10:36 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
+**Snímek: 12. 11. 2026 v 10:50 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -82,7 +82,7 @@ včetně raw DRIONS TRAIN snímku. To je
 [důkaz kompatibility inference](../reports/v2-inference-parity/README.md),
 nikoli důkaz finální kvality nebo obecné shody všech GPU backendů.
 
-## Výzkum: časový snímek 12. 11. v 10:36 UTC
+## Výzkum: časový snímek 12. 11. v 10:50 UTC
 
 Výsledky níže jsou VAL, nikoli TEST; žádný nový kandidát se tím nestává výchozím
 nebo finálním modelem. Dřívější smíšené časové aktualizace zůstávají beze změny
@@ -108,11 +108,17 @@ v [historickém přehledu](PROGRESS_HISTORY_2026-11.md#archivovaný-výzkumný-p
   Obě cévní regrese vůči původnímu modelu mají záporné celé párové intervaly.
   [Obě role, skutečné exity a úplné výsledky](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/native8-completed-f13-VAL-20261112).
 - **Šířka24:** pokračování původního modelu z E27 do E60 není dokončené;
-  poslední uvedený záznam z 10:36:43 UTC je E39/79 872 kroků. Není tím doložená
+  poslední uvedený záznam z 10:46:43 UTC je E41/83 968 kroků. Není tím doložená
   terminální QA ani výsledná VAL kvalita. Konfigurace a běžící trénink se nemění.
-- **Raw512/rot4 prahy:** jednorázová VAL kalibrace běží; záznam z 10:35:58 UTC
-  uvádí 395/770 fotografií. Výsledek není v tomto snímku dokončený a nelze z něj
-  tvrdit nový práh, lepší kvalitu nebo změnu výchozího chování.
+- **Raw512/rot4 prahy:** jeden průchod všech 770 VAL fotografií dokončený
+  v 10:41:32 UTC, child/outer exit 0. Osm globálních prahů využilo stejné
+  pravděpodobnosti; kontrolní 0,35 přesně zopakovalo dřívější výsledky po snímcích,
+  zdrojích i úlohách. Práh 0,25 zvýšil macro o 0,00242, ale snížil dense vessel
+  Dice o 0,00380 a cup o 0,00366; tyto párové intervaly neprotínají nulu.
+  Práh 0,40 přidal jen 0,00034 dense Dice s intervalem protínajícím nulu a snížil
+  macro. Všech osm cévních rozdílů vůči původní síti má záporný celý interval.
+  Výchozí chování se nemění a finální výběr čeká na širší model.
+  [Všechny prahy, úlohy, zdroje a párové intervaly](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/raw512-BEST50-rot4-threshold-calibration-20261112).
 
 Primární doplňková dense analýza vylučuje pouze známý pozitivně anotovaný AVRDB:
 87 fotografií / 55 známých skupin / 8 zdrojů. Jeho dalších 20 fotografií nemá
