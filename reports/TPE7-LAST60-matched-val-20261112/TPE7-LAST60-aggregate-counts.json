@@ -1,0 +1,1141 @@
+{
+  "kind": "scientific_aggregate_projection_NOT_evaluation_or_completion_QA",
+  "original_report_sha256": "fd83b90131e3f3b7cd0eff31bf178c2c97068c8c627f9924835df5c9e0329ce3",
+  "original_report_kind": "unified_validation_evidence",
+  "role": "fixed_terminal60",
+  "checkpoint": {
+    "epoch": 60,
+    "sha256": "304ad7324f1b260ebf0a76bff420e7d1e874cfabd450bcfd9eb8b915fc6577a2",
+    "steps": 122880,
+    "training_selection_score": 0.8153097398362315
+  },
+  "full_original_training_configuration": {
+    "architecture": "compact_unet",
+    "legacy_initialization": null,
+    "allow_historical_exposure": false,
+    "preprocessing_profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "epochs": 60,
+    "epoch_samples": 8192,
+    "coverage_first": true,
+    "batch_size": 4,
+    "patch_size": 384,
+    "base_channels": 16,
+    "depth": 4,
+    "norm": "batch",
+    "lr": 0.00012495359640492474,
+    "weight_decay": 1.6415158764305418e-06,
+    "scheduler": "cosine",
+    "min_lr_ratio": 0.05,
+    "seed": 42,
+    "workers": 8,
+    "device": "cuda:0",
+    "sampling": "dataset_task_balanced",
+    "train_view": "patch",
+    "view_size": 512,
+    "foreground_probability": 0.5,
+    "augmentation": "basic",
+    "bce_weight": 1.0,
+    "dice_weight": 1.0,
+    "av_weight": 1.0,
+    "vessel_loss_weight": 1.0,
+    "vessel_pos_weight": 1.0,
+    "tile_size": 512,
+    "overlap": 64,
+    "require_all_heads": true,
+    "selection_metric": "macro_dataset_mean_dice",
+    "purpose": "full_data",
+    "max_steps": null,
+    "vascular_sampling_weight": 2.6995567464919183,
+    "mixed_precision": "bf16"
+  },
+  "original_configuration_identity": {
+    "sha256": "0dca45d295f148412db86347495dc01f4c093b735f21ca3bcfbaada52cf1c06b",
+    "values": {
+      "allow_historical_exposure": false,
+      "architecture": "compact_unet",
+      "augmentation": "basic",
+      "av_weight": 1.0,
+      "base_channels": 16,
+      "batch_size": 4,
+      "bce_weight": 1.0,
+      "coverage_first": true,
+      "depth": 4,
+      "dice_weight": 1.0,
+      "epoch_samples": 8192,
+      "epochs": 60,
+      "foreground_probability": 0.5,
+      "legacy_initialization": null,
+      "lr": 0.00012495359640492474,
+      "max_steps": null,
+      "min_lr_ratio": 0.05,
+      "mixed_precision": "bf16",
+      "norm": "batch",
+      "overlap": 64,
+      "patch_size": 384,
+      "pixels_per_degree": 25.0,
+      "preprocessing_profile": "legacy25_raw",
+      "purpose": "full_data",
+      "require_all_heads": true,
+      "sampling": "dataset_task_balanced",
+      "scheduler": "cosine",
+      "seed": 42,
+      "selection_metric": "macro_dataset_mean_dice",
+      "tile_size": 512,
+      "train_view": "patch",
+      "vascular_sampling_weight": 2.6995567464919183,
+      "vessel_loss_weight": 1.0,
+      "vessel_pos_weight": 1.0,
+      "view_size": 512,
+      "weight_decay": 1.6415158764305418e-06,
+      "workers": 8
+    }
+  },
+  "data_identity": {
+    "eligible_photo_counts": {
+      "test": 856,
+      "train": 2529,
+      "val": 770
+    },
+    "fingerprint_schema": 2,
+    "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "prepared_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+    "split_inventory_sha256": "6db8addb98277ee0a62597ce7969eeb482510dfe0cf0f78f683d1e058a49f313"
+  },
+  "original_training_data_contract": {
+    "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "prepared_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+    "geometry_policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+    "derived_cache": {
+      "schema": 1,
+      "fingerprint": "18c3af6ce64e23c896d7befc52e5ba8e8ebda8e4058c2f156574fa755480766e",
+      "canonical_fingerprint": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+      "allow_canonical_fallback": false
+    }
+  },
+  "source": {
+    "training_commit": "72fb321187eca517823083aca80cedace9605570",
+    "training_source_sha256": "3725ad32a76449b2a3383485cbf14ef050a75f945b4c25e98f4b5b511a332f28",
+    "evaluation_source_sha256": "b269a5e5214b8422a5b8028ff6922ff5c19137d7e0354afcd8fbef1c74e3662f",
+    "software_math_runtime": {
+      "cuda_matmul_allow_tf32": false,
+      "cudnn_allow_tf32": true,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms": false,
+      "deterministic_warn_only": false,
+      "float32_matmul_precision": "highest",
+      "installed_distributions": {
+        "Pillow": "13.0.0",
+        "h5py": "3.16.0",
+        "numpy": "2.5.4",
+        "opencv-python": null,
+        "opencv-python-headless": "4.14.0.94",
+        "pydicom": "3.0.2",
+        "scikit-image": "0.26.0",
+        "scipy": "1.18.1",
+        "torch": "2.6.0+cu124"
+      },
+      "numpy": "2.5.4",
+      "python": "3.12.13",
+      "torch": "2.6.0+cu124"
+    },
+    "execution_code_sha256": "347f78ffd2f4a352c0870faad34327945f7d1c64b865dacb7b7d86e5ca4e0aaa"
+  },
+  "inference_protocol": {
+    "activation": [
+      "sigmoid",
+      "conditional_softmax",
+      "conditional_softmax",
+      "sigmoid",
+      "sigmoid"
+    ],
+    "aggregation": "pooled_counts_per_dataset_per_head_then_macro_heads",
+    "annotation_policy": "one photo once; first sorted record per task; AV vessel annotation takes priority; all splits fixed by manifest",
+    "av_decoding": "argmax_tie_artery_gated_by_vessel",
+    "av_fusion": "joint_av_mixture_then_conditional",
+    "channels": [
+      "vessel",
+      "artery",
+      "vein",
+      "disc",
+      "cup"
+    ],
+    "cup_containment": "cup_and_disc",
+    "geometry": "canonical_prepared",
+    "metric_support": {
+      "artery": "reference_class_labeled_vessel_pixels",
+      "cup": "annotated_valid_pixels_within_field_of_view",
+      "disc": "annotated_valid_pixels_within_field_of_view",
+      "vein": "reference_class_labeled_vessel_pixels",
+      "vessel": "annotated_valid_pixels_within_field_of_view"
+    },
+    "mode": "tiled",
+    "normalization": "RGB/255-0.5",
+    "overlap": 64,
+    "pixels_per_degree": 25.0,
+    "precision": "float32_no_autocast",
+    "preparation_max_size": null,
+    "preprocessing_profile": "legacy25_raw",
+    "threshold": 0.5,
+    "tile_size": 512,
+    "version": 1,
+    "view_size": null
+  },
+  "actual_inference_runtime": {
+    "precision": "FP32_no_autocast",
+    "intra_threads": 8,
+    "interop_threads": 1,
+    "matched_native_context_TPE5_TPE6_TPE7": true
+  },
+  "metrics": {
+    "split": "val",
+    "photos": 770,
+    "records": 993,
+    "channels": {
+      "artery": {
+        "dice": 0.7447888046476926,
+        "fn": 400619,
+        "fp": 144629,
+        "iou": 0.5933573628130749,
+        "precision": 0.8461776536479216,
+        "recall": 0.6650970052431652,
+        "tp": 795605,
+        "valid_pixels": 2626284
+      },
+      "cup": {
+        "dice": 0.8731885784830171,
+        "fn": 384352,
+        "fp": 376602,
+        "iou": 0.774919886157594,
+        "precision": 0.8743177787670927,
+        "recall": 0.872062291209808,
+        "tp": 2619860,
+        "valid_pixels": 517984979
+      },
+      "disc": {
+        "dice": 0.9347060261815138,
+        "fn": 997022,
+        "fp": 746760,
+        "iou": 0.8774160458555047,
+        "precision": 0.9435478067133024,
+        "recall": 0.9260284160354985,
+        "tp": 12481424,
+        "valid_pixels": 583880677
+      },
+      "vein": {
+        "dice": 0.7963212932455783,
+        "fn": 374953,
+        "fp": 164786,
+        "iou": 0.66157296691969,
+        "precision": 0.8649176608112351,
+        "recall": 0.737806106037509,
+        "tp": 1055107,
+        "valid_pixels": 2626284
+      },
+      "vessel": {
+        "dice": 0.7643685155792909,
+        "fn": 1541199,
+        "fp": 1509929,
+        "iou": 0.6186055674501071,
+        "precision": 0.7662188644236351,
+        "recall": 0.7625270820534795,
+        "tp": 4948800,
+        "valid_pixels": 60922737
+      }
+    },
+    "by_dataset": {
+      "aria": {
+        "artery": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": 0.8615601734964718,
+          "fn": 35432,
+          "fp": 71492,
+          "iou": 0.7567902610562806,
+          "precision": 0.823129352679952,
+          "recall": 0.9037553138029852,
+          "tp": 332713,
+          "valid_pixels": 21652851
+        },
+        "vein": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vessel": {
+          "dice": 0.71522413145099,
+          "fn": 782236,
+          "fp": 739983,
+          "iou": 0.5566917537599333,
+          "precision": 0.720922786235143,
+          "recall": 0.7096148620455656,
+          "tp": 1911552,
+          "valid_pixels": 27618662
+        }
+      },
+      "avrdb": {
+        "artery": {
+          "dice": 0.7260489676324582,
+          "fn": 79730,
+          "fp": 50231,
+          "iou": 0.5699190543322148,
+          "precision": 0.7741899230381932,
+          "recall": 0.6835445550056163,
+          "tp": 172217,
+          "valid_pixels": 579335
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vein": {
+          "dice": 0.7830135536374365,
+          "fn": 86221,
+          "fp": 47442,
+          "iou": 0.6434036763332711,
+          "precision": 0.8356184318576344,
+          "recall": 0.7366397057925153,
+          "tp": 241167,
+          "valid_pixels": 579335
+        },
+        "vessel": {
+          "dice": 0.9380607163472356,
+          "fn": 69641,
+          "fp": 0,
+          "iou": 0.8833468455188679,
+          "precision": 1.0,
+          "recall": 0.8833468455188679,
+          "tp": 527351,
+          "valid_pixels": 596992
+        }
+      },
+      "chasedb1": {
+        "artery": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vein": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vessel": {
+          "dice": 0.773841961852861,
+          "fn": 30162,
+          "fp": 76991,
+          "iou": 0.6311111111111111,
+          "precision": 0.7042368225943384,
+          "recall": 0.8587154072436342,
+          "tp": 183322,
+          "valid_pixels": 2149450
+        }
+      },
+      "drhagis": {
+        "artery": {
+          "dice": 0.6428114288965057,
+          "fn": 19073,
+          "fp": 6042,
+          "iou": 0.47363457266211173,
+          "precision": 0.7890436786425055,
+          "recall": 0.5423065847571511,
+          "tp": 22599,
+          "valid_pixels": 90307
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vein": {
+          "dice": 0.7174831575474409,
+          "fn": 14928,
+          "fp": 11617,
+          "iou": 0.5594337117440085,
+          "precision": 0.7436898773276851,
+          "recall": 0.6930605530996197,
+          "tp": 33707,
+          "valid_pixels": 90307
+        },
+        "vessel": {
+          "dice": 0.767976998166178,
+          "fn": 50582,
+          "fp": 77081,
+          "iou": 0.6233463149820028,
+          "precision": 0.7326899201686792,
+          "recall": 0.8068349760749105,
+          "tp": 211277,
+          "valid_pixels": 3829875
+        }
+      },
+      "drishti": {
+        "artery": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "cup": {
+          "dice": 0.9078215402440564,
+          "fn": 8546,
+          "fp": 3865,
+          "iou": 0.8312025677991459,
+          "precision": 0.9405201600492459,
+          "recall": 0.8773201647980936,
+          "tp": 61115,
+          "valid_pixels": 4105104
+        },
+        "disc": {
+          "dice": 0.9750748400898799,
+          "fn": 3034,
+          "fp": 3910,
+          "iou": 0.9513619903480447,
+          "precision": 0.9720184635202347,
+          "recall": 0.9781504979871668,
+          "tp": 135825,
+          "valid_pixels": 4105104
+        },
+        "vein": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vessel": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        }
+      },
+      "erlangen": {
+        "artery": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vein": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vessel": {
+          "dice": 0.6395217981628477,
+          "fn": 150505,
+          "fp": 184553,
+          "iou": 0.4700713302861119,
+          "precision": 0.616923188691582,
+          "recall": 0.6638389875747402,
+          "tp": 297212,
+          "valid_pixels": 4235000
+        }
+      },
+      "g1020": {
+        "artery": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "cup": {
+          "dice": 0.8107809021148771,
+          "fn": 116449,
+          "fp": 169785,
+          "iou": 0.681775884323376,
+          "precision": 0.7831675657451113,
+          "recall": 0.8404126147065595,
+          "tp": 613239,
+          "valid_pixels": 151208640
+        },
+        "disc": {
+          "dice": 0.9232271791256897,
+          "fn": 175250,
+          "fp": 477897,
+          "iou": 0.8574020083234032,
+          "precision": 0.8915124964586405,
+          "recall": 0.95728153067893,
+          "tp": 3927191,
+          "valid_pixels": 181550001
+        },
+        "vein": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vessel": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        }
+      },
+      "hrf": {
+        "artery": {
+          "dice": 0.7936374616836849,
+          "fn": 132228,
+          "fp": 30422,
+          "iou": 0.6578764148224807,
+          "precision": 0.9113539344668328,
+          "recall": 0.7028524172398992,
+          "tp": 312763,
+          "valid_pixels": 969819
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vein": {
+          "dice": 0.834027642592953,
+          "fn": 128521,
+          "fp": 29210,
+          "iou": 0.7153065313209563,
+          "precision": 0.9313540939609933,
+          "recall": 0.7551178671869642,
+          "tp": 396307,
+          "valid_pixels": 969819
+        },
+        "vessel": {
+          "dice": 0.7901603148129462,
+          "fn": 221710,
+          "fp": 202538,
+          "iou": 0.6531115853508965,
+          "precision": 0.7977249575551782,
+          "recall": 0.7827377919237373,
+          "tp": 798762,
+          "valid_pixels": 11404397
+        }
+      },
+      "iostar": {
+        "artery": {
+          "dice": 0.6755580322590632,
+          "fn": 114788,
+          "fp": 42409,
+          "iou": 0.5100699379160745,
+          "precision": 0.794199002271095,
+          "recall": 0.5877563773357227,
+          "tp": 163659,
+          "valid_pixels": 583651
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": 0.8984404459727936,
+          "fn": 16386,
+          "fp": 19704,
+          "iou": 0.8156076924648995,
+          "precision": 0.8901292531421116,
+          "recall": 0.9069083058743325,
+          "tp": 159634,
+          "valid_pixels": 5858697
+        },
+        "vein": {
+          "dice": 0.7322786820582455,
+          "fn": 95423,
+          "fp": 57969,
+          "iou": 0.5776337998694837,
+          "precision": 0.7834957983193277,
+          "recall": 0.6873468237637776,
+          "tp": 209781,
+          "valid_pixels": 583651
+        },
+        "vessel": {
+          "dice": 0.8127937697573638,
+          "fn": 122940,
+          "fp": 100617,
+          "iou": 0.6846272779340524,
+          "precision": 0.8282769496489317,
+          "recall": 0.7978788292294767,
+          "tp": 485309,
+          "valid_pixels": 5858697
+        }
+      },
+      "onhsd": {
+        "artery": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": 0.9067217381767014,
+          "fn": 20854,
+          "fp": 14015,
+          "iou": 0.829360438086942,
+          "precision": 0.9236193995280371,
+          "recall": 0.890431255516792,
+          "tp": 169474,
+          "valid_pixels": 8042789
+        },
+        "vein": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vessel": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        }
+      },
+      "refuge": {
+        "artery": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "cup": {
+          "dice": 0.8945861276838558,
+          "fn": 255467,
+          "fp": 195664,
+          "iou": 0.80927709529233,
+          "precision": 0.9072641590363936,
+          "recall": 0.8822575367214973,
+          "tp": 1914243,
+          "valid_pixels": 360015235
+        },
+        "disc": {
+          "dice": 0.9450104372857829,
+          "fn": 742620,
+          "fp": 147215,
+          "iou": 0.8957533521511946,
+          "precision": 0.9811099154883167,
+          "recall": 0.9114732089692176,
+          "tp": 7646027,
+          "valid_pixels": 360015235
+        },
+        "vein": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vessel": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        }
+      },
+      "rimone": {
+        "artery": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "cup": {
+          "dice": 0.8483393031585803,
+          "fn": 3890,
+          "fp": 7288,
+          "iou": 0.7366226054993992,
+          "precision": 0.8109517262846618,
+          "recall": 0.8893408812903593,
+          "tp": 31263,
+          "valid_pixels": 2656000
+        },
+        "disc": {
+          "dice": 0.9326298119303396,
+          "fn": 3446,
+          "fp": 12527,
+          "iou": 0.8737641563860811,
+          "precision": 0.8982264577087751,
+          "recall": 0.9697735206918934,
+          "tp": 110560,
+          "valid_pixels": 2656000
+        },
+        "vein": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vessel": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        }
+      },
+      "rite": {
+        "artery": {
+          "dice": 0.7795862207303351,
+          "fn": 54800,
+          "fp": 15525,
+          "iou": 0.6387884453393051,
+          "precision": 0.889021530895262,
+          "recall": 0.694140103925388,
+          "tp": 124367,
+          "valid_pixels": 403172
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vein": {
+          "dice": 0.8358331453474699,
+          "fn": 49860,
+          "fp": 18548,
+          "iou": 0.7179667948860662,
+          "precision": 0.9037432600042554,
+          "recall": 0.7774156826856543,
+          "tp": 174145,
+          "valid_pixels": 403172
+        },
+        "vessel": {
+          "dice": 0.8040917319360679,
+          "fn": 79815,
+          "fp": 92473,
+          "iou": 0.6723690716160194,
+          "precision": 0.7926823526774205,
+          "recall": 0.815834346669374,
+          "tp": 353572,
+          "valid_pixels": 3364003
+        }
+      },
+      "stare": {
+        "artery": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "cup": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "disc": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vein": {
+          "dice": null,
+          "fn": 0,
+          "fp": 0,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "tp": 0,
+          "valid_pixels": 0
+        },
+        "vessel": {
+          "dice": 0.838904941339464,
+          "fn": 33608,
+          "fp": 35693,
+          "iou": 0.7225118521365879,
+          "precision": 0.8348586075433986,
+          "recall": 0.8429906891348323,
+          "tp": 180443,
+          "valid_pixels": 1865661
+        }
+      }
+    },
+    "macro_dataset_mean_dice": 0.815309798947494,
+    "macro_dataset_channel_dice": {
+      "artery": 0.7235284222404094,
+      "cup": 0.8653819683003424,
+      "disc": 0.920380660868237,
+      "vein": 0.7805272362367092,
+      "vessel": 0.7867307070917726
+    },
+    "mean_dice": 0.8226746436274185,
+    "av_conditional_accuracy": 0.8330252935326111,
+    "av_accuracy": 0.7046884495355414,
+    "av_labeled_pixels": 2626284,
+    "threshold": 0.5
+  },
+  "source_conditional_AV_counts": {
+    "aria": {
+      "counts": {
+        "correct": 0,
+        "scored_pixels": 0,
+        "eligible_pixels": 0,
+        "end_to_end_correct": 0
+      },
+      "conditional_accuracy": null,
+      "end_to_end_accuracy": null
+    },
+    "avrdb": {
+      "counts": {
+        "correct": 452007,
+        "scored_pixels": 579335,
+        "eligible_pixels": 579335,
+        "end_to_end_correct": 413384
+      },
+      "conditional_accuracy": 0.7802169729085935,
+      "end_to_end_accuracy": 0.7135491554972512
+    },
+    "chasedb1": {
+      "counts": {
+        "correct": 0,
+        "scored_pixels": 0,
+        "eligible_pixels": 0,
+        "end_to_end_correct": 0
+      },
+      "conditional_accuracy": null,
+      "end_to_end_accuracy": null
+    },
+    "drhagis": {
+      "counts": {
+        "correct": 66390,
+        "scored_pixels": 90307,
+        "eligible_pixels": 90307,
+        "end_to_end_correct": 56306
+      },
+      "conditional_accuracy": 0.7351589577773594,
+      "end_to_end_accuracy": 0.6234954101010995
+    },
+    "drishti": {
+      "counts": {
+        "correct": 0,
+        "scored_pixels": 0,
+        "eligible_pixels": 0,
+        "end_to_end_correct": 0
+      },
+      "conditional_accuracy": null,
+      "end_to_end_accuracy": null
+    },
+    "erlangen": {
+      "counts": {
+        "correct": 0,
+        "scored_pixels": 0,
+        "eligible_pixels": 0,
+        "end_to_end_correct": 0
+      },
+      "conditional_accuracy": null,
+      "end_to_end_accuracy": null
+    },
+    "g1020": {
+      "counts": {
+        "correct": 0,
+        "scored_pixels": 0,
+        "eligible_pixels": 0,
+        "end_to_end_correct": 0
+      },
+      "conditional_accuracy": null,
+      "end_to_end_accuracy": null
+    },
+    "hrf": {
+      "counts": {
+        "correct": 869942,
+        "scored_pixels": 969819,
+        "eligible_pixels": 969819,
+        "end_to_end_correct": 709070
+      },
+      "conditional_accuracy": 0.8970148037932851,
+      "end_to_end_accuracy": 0.7311364285500697
+    },
+    "iostar": {
+      "counts": {
+        "correct": 444369,
+        "scored_pixels": 583651,
+        "eligible_pixels": 583651,
+        "end_to_end_correct": 373440
+      },
+      "conditional_accuracy": 0.7613608132257119,
+      "end_to_end_accuracy": 0.6398344215978384
+    },
+    "onhsd": {
+      "counts": {
+        "correct": 0,
+        "scored_pixels": 0,
+        "eligible_pixels": 0,
+        "end_to_end_correct": 0
+      },
+      "conditional_accuracy": null,
+      "end_to_end_accuracy": null
+    },
+    "refuge": {
+      "counts": {
+        "correct": 0,
+        "scored_pixels": 0,
+        "eligible_pixels": 0,
+        "end_to_end_correct": 0
+      },
+      "conditional_accuracy": null,
+      "end_to_end_accuracy": null
+    },
+    "rimone": {
+      "counts": {
+        "correct": 0,
+        "scored_pixels": 0,
+        "eligible_pixels": 0,
+        "end_to_end_correct": 0
+      },
+      "conditional_accuracy": null,
+      "end_to_end_accuracy": null
+    },
+    "rite": {
+      "counts": {
+        "correct": 355053,
+        "scored_pixels": 403172,
+        "eligible_pixels": 403172,
+        "end_to_end_correct": 298512
+      },
+      "conditional_accuracy": 0.8806489537963946,
+      "end_to_end_accuracy": 0.7404085601182622
+    },
+    "stare": {
+      "counts": {
+        "correct": 0,
+        "scored_pixels": 0,
+        "eligible_pixels": 0,
+        "end_to_end_correct": 0
+      },
+      "conditional_accuracy": null,
+      "end_to_end_accuracy": null
+    }
+  },
+  "pooled_conditional_AV_counts": {
+    "correct": 2187761,
+    "scored_pixels": 2626284,
+    "eligible_pixels": 2626284,
+    "end_to_end_correct": 1850712
+  },
+  "scope": "Only immutable LAST60/all5700; originalBEST46/5699 ineligible/notselected. Aggregate projection cannot replace any original gate/QA/evaluation artifact. No TEST/model/default promotion."
+}
