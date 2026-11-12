@@ -32,6 +32,7 @@ def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums()
         "unified-v2-control",
         "unified-v2-vascular2",
         "unified-v3-tpe-preview",
+        "unified-raw512-selected",
     }
     for name, info in catalog.items():
         with bundled_checkpoint(name) as checkpoint:
@@ -42,6 +43,20 @@ def test_original_baseline_and_explicit_pilot_models_exist_and_match_checksums()
             assert saved["family"] == info["family"]
             assert "state_dict" in saved
         assert saved["channels"] == info["channels"]
+        if name == "unified-raw512-selected":
+            assert saved["epoch"] == info["selected_epoch"] == 50
+            assert saved["inference_only"] is True
+            assert "training_state" not in saved
+            assert (
+                saved["export_provenance"]["original_checkpoint_sha256"]
+                == info["original_checkpoint_sha256"]
+            )
+            assert saved["export_provenance"]["model_state_sha256"] == info["model_state_sha256"]
+            assert saved["coverage"]["seen_photos"] == 2529
+            assert saved["coverage"]["contributing_annotation_records"] == 5700
+            assert saved["config"]["patch_size"] == 512
+            assert saved["config"]["photometric_profile"] == "raw"
+            assert all(v.device.type == "cpu" for v in saved["state_dict"].values())
         if name == "unified-full-data-baseline":
             assert saved["epoch"] == info["selected_epoch"] == 56
             assert saved["config"]["purpose"] == "full_data"

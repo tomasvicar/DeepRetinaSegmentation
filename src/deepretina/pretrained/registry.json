@@ -521,6 +521,50 @@
         }
       },
       "limitations": "Defaultnone; optionalTTA has separately measured quality/cost. Vessel still below original reference; adverse RIMONE cup deltas. Adaptive VAL evidence is not finalselection/TEST. Original aliases unchanged."
+    },
+    "unified-raw512-selected": {
+      "sha256": "292ea5999a1fc97a767c1c34bb7b4558040267372c5b128f403f2dce50529b29",
+      "family": "unified",
+      "task": "unified",
+      "channels": [
+        "vessel",
+        "artery",
+        "vein",
+        "disc",
+        "cup"
+      ],
+      "description": "VAL-selected raw512 BEST50 CPU inference copy; rot4/.35. Dense-vessel deficit remains; held-out TEST pending.",
+      "selected_epoch": 50,
+      "completed_epochs": 60,
+      "training_photos": 2529,
+      "training_annotation_records": 5700,
+      "training_sources": 21,
+      "architecture": "compact_unet",
+      "base_channels": 16,
+      "depth": 4,
+      "normalization": "batch",
+      "preprocessing_profile": "legacy25_raw",
+      "photometric_profile": "raw",
+      "pixels_per_degree": 25,
+      "training_mixed_precision": "bf16",
+      "inference_precision": "float32_no_autocast",
+      "inference_only": true,
+      "optimizer_state_present": false,
+      "checkpoint_bytes": 8892466,
+      "original_checkpoint_sha256": "521b8881d1b2c69a7395be6687a8b86581838e3f5dbb004a150333d454132cea",
+      "model_state_sha256": "024786572a1d35015104c5a50c01383d2952a030660e9add61ea0cdab4b15ff6",
+      "selection_sha256": "caef7716a5656a151cf6c0ce1e9b8cd694aa9f13620cef36f14abcd0a6368e80",
+      "training_source_commit": "fd44cdfa83d1df9ccc42960df6d1d2018db29900",
+      "training_source_sha256": "2b7076759c8fab1594e5108bcbf348888007a94e06c4d21d4431dbfb31057747",
+      "inference_defaults": {
+        "tta": "rot4",
+        "threshold": 0.35,
+        "tile_size": 512,
+        "overlap": 64
+      },
+      "model_card": "docs/UNIFIED_RAW512_SELECTED.md",
+      "limitations": "VAL selection only; TEST pending. Dense-vessel VAL Dice .751316 vs original .761327; negative paired CI. V3 has stronger artery performance. No all-task replacement or global optimum claim. Original aliases unchanged.",
+      "filename": "unified-raw512-selected.pt"
     }
   },
   "aliases": {

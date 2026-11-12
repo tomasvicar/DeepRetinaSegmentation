@@ -217,7 +217,9 @@ def test_public_API_shares_resolver_and_forwards_raw_input_options(registry, mon
 
 def test_all_existing_registry_models_and_aliases_keep_previous_defaults():
     real = bundled.model_catalog()
-    for name in list(real["models"]) + list(real["aliases"]):
+    for name in [n for n in real["models"] if n != "unified-raw512-selected"] + list(
+        real["aliases"]
+    ):
         assert "inference_defaults" not in real["models"][real.get("aliases", {}).get(name, name)]
         assert b.resolve_prediction_options(name, registry=real) == {
             "tta": "none",
@@ -263,3 +265,12 @@ def test_original_and_custom_explicit_values_keep_backend_contract(registry):
     # Preserve the old backend's validation/threshold semantics, including0/1.
     for model in (None, "original", "pilot"):
         assert b.resolve_prediction_options(model, threshold=0)["threshold"] == 0
+
+
+def test_selected_raw512_uses_all_four_frozen_defaults():
+    assert b.resolve_prediction_options("unified-raw512-selected") == {
+        "tta": "rot4",
+        "threshold": 0.35,
+        "tile_size": 512,
+        "overlap": 64,
+    }

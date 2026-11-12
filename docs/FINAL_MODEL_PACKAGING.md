@@ -154,3 +154,13 @@ remain separate identities; the private artifact is outsideGit. BEST58 already
 has no optimizer fields, so this primarily checks real format/config and storage
 compatibility. No forward/realimage/GT/TEST or finalselection/release occurred;
 all12 original packaged blobs, registry entries and defaults remain unchanged.
+
+## Selected raw512 deployment copy
+
+The subsequently frozen raw512 BEST50 is now separately named
+[`unified-raw512-selected`](UNIFIED_RAW512_SELECTED.md). Its four defaults match
+rot4/.35/512/64, and the original521b…/CPU artifact292e… identities are explicitly
+separate. The [release checks](../reports/release/unified-raw512-selected-20261112/README.md)
+record actual CPU export, preserved old12 blobs/aliases, focused tests, exact
+single-TRAIN probability/mask parity and installed-wheel checks. TEST was pending
+at packaging; this evidence does not add a new quality or clinical claim.
