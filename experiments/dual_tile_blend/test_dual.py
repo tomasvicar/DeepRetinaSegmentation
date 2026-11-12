@@ -206,3 +206,30 @@ def test_reused_counter_matches_frozen_native_partial_labels(monkeypatch):
     for field in dual.FIELDS:
         assert native[field] == expected[field]
     assert valid[4, 0].sum() == 0  # scorer does not mutate caller validity
+
+
+class ContextReplay(FormulaReplay):
+    def __call__(self, x):
+        n = len(self.inputs)
+        self.inputs.append(tuple(x.shape))
+        values = [6.0, 2.0, -2.0, 4.0, 3.0] if n % 2 == 0 else [-2.0, -2.0, 2.0, -3.0, -4.0]
+        return (
+            torch.tensor(values, dtype=torch.float32)[None, :, None, None]
+            .expand(1, 5, *x.shape[-2:])
+            .clone()
+        )
+
+
+def test_hybrid_segmentation_and_conditional_identities_no_added_calls():
+    model = ContextReplay()
+    result, observed = dual.dual_probabilities(model, image(515, 33), "cpu", CFG, u=u)
+    control = result["probability_control"]
+    alternative = result["spatial_logit_alternative"]
+    hybrid = result["segmentation_logit_control_AV"]
+    assert len(result) == 3 and observed["model_calls"] == len(model.inputs) == 8
+    assert np.array_equal(hybrid[[0, 3, 4]], alternative[[0, 3, 4]])
+    assert np.array_equal(hybrid[1:3], control[1:3])
+    assert np.max(np.abs(control[0] - alternative[0])) > 1e-3
+    assert np.isfinite(hybrid).all() and np.all((hybrid >= 0) & (hybrid <= 1))
+    joint = u._joint_probabilities(hybrid)
+    np.testing.assert_allclose(joint[1:3].sum(0), hybrid[0], atol=2e-7, rtol=0)

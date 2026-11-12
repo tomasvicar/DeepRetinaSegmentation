@@ -1,0 +1,21 @@
+{
+  "kind": "experimental_dual_spatial_tile_blend_NOT_gate_evidence",
+  "version": 2,
+  "streams": [
+    "probability_control",
+    "spatial_logit_alternative",
+    "segmentation_logit_control_AV"
+  ],
+  "hybrid": "final V/D/C bit-identical spatial_logit_alternative; final conditional A/V bit-identical probability_control AFTER rot4",
+  "tile_size": 512,
+  "overlap": 64,
+  "threshold": 0.35,
+  "tta": "rot4",
+  "precision": "float32_no_autocast",
+  "window": "existing clipped Hann FP32, min0.05",
+  "control_tile_blend": "FP32 weighted joint probabilities then conditional recovery",
+  "alternative_tile_blend": "FP32 weighted raw5 logits then SAME joint activation and conditional recovery",
+  "view_blend": "both streams: inverse-aligned FP32 JOINT probabilities; never view logits or unweighted conditionals",
+  "shared_model_calls": true,
+  "full_probability_cache": false
+}

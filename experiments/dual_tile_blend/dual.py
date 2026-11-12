@@ -25,6 +25,13 @@ FIELDS = (
 )
 DESCRIPTOR = {
     "kind": "experimental_dual_spatial_tile_blend_NOT_gate_evidence",
+    "version": 2,
+    "streams": [
+        "probability_control",
+        "spatial_logit_alternative",
+        "segmentation_logit_control_AV",
+    ],
+    "hybrid": "final V/D/C bit-identical spatial_logit_alternative; final conditional A/V bit-identical probability_control AFTER rot4",
     "tile_size": 512,
     "overlap": 64,
     "threshold": 0.35,
@@ -45,7 +52,7 @@ def require_source(u):
 
 
 def dual_probabilities(model, image, device, config, *, u):
-    """Return two five-channel conditional views from identical shared tile calls."""
+    """Return three five-channel conditional views from identical shared tile calls."""
     require_source(u)
     cfg = asdict(config) if is_dataclass(config) else dict(config)
     if cfg.get("train_view", "patch") != "patch":
@@ -117,6 +124,9 @@ def dual_probabilities(model, image, device, config, *, u):
         for name, total in totals.items():
             total /= np.float32(len(u.TTA_OPERATORS["rot4"]))
             totals[name] = u._conditional_probabilities(total)
+    hybrid = totals["spatial_logit_alternative"].copy()
+    hybrid[1:3] = totals["probability_control"][1:3]
+    totals["segmentation_logit_control_AV"] = hybrid
     return totals, {"model_calls": calls, "views": 4, "single_shared_model_call_per_tile": True}
 
 
