@@ -1,0 +1,491 @@
+FFFFFF.................................................................. [ 58%]
+....................................................                     [100%]
+=================================== FAILURES ===================================
+_ test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[training_best-none] _
+
+tmp_path = PosixPath('/tmp/pytest-of-tom/pytest-595/test_curated_stage2_forwards_e0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fd567501fa0>
+mode = 'none', role = 'training_best'
+
+    @pytest.mark.parametrize("mode", ["none", "rot4", "dihedral8"])
+    @pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
+    def test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol(
+        tmp_path, monkeypatch, mode, role
+    ):
+        protocol = {"threshold": 0.35, "tile_size": 512, "overlap": 64, **protocol_extension(mode)}
+        artifact = {
+            "schema_version": 2,
+            "checkpoint_role": role,
+            "freeze_eligibility": {"family": "curated_fd44"},
+            "inference_protocol": protocol,
+        }
+        path = tmp_path / "synthetic-selection.json"
+        path.write_text(json.dumps(artifact))
+        monkeypatch.setattr(
+            gate, "evaluation_source_identity", lambda: {"synthetic_metadata_only": True}
+        )
+        monkeypatch.setattr(gate, "_canonical_metadata", lambda path: {})
+    
+        class ReachedTypedOriginalGate(Exception):
+            pass
+    
+        def checked(**kwargs):
+            assert kwargs["checkpoint_role"] == role
+            assert kwargs["completion_family"] == "curated_fd44"
+            assert kwargs["original_curated_index"] == "original-index-not-read.json"
+            assert kwargs["expected_curated_index_sha256"] == "a" * 64
+            assert kwargs["completion_qa"] == "original-qa-not-read.json"
+            assert kwargs["expected_qa_sha256"] == "b" * 64
+            assert kwargs["tta"] == mode and kwargs["threshold"] == 0.35
+            assert kwargs["tile_size"] == 512 and kwargs["overlap"] == 64
+            raise ReachedTypedOriginalGate
+    
+        monkeypatch.setattr(gate, "check_selection", checked)
+        monkeypatch.setattr(heldout, "load_unified", lambda *a, **k: pytest.fail("No model load"))
+        monkeypatch.setattr(
+            heldout, "evaluate_unified_model", lambda *a, **k: pytest.fail("No GT/forward")
+        )
+        with pytest.raises(ReachedTypedOriginalGate):
+>           heldout.evaluate_reviewed_heldout(
+                selection=path,
+                expected_selection_sha256=gate.digest(path.read_bytes()),
+                checkpoint="not-read.pt",
+                best_checkpoint="not-read-best.pt",
+                last_checkpoint="not-read-last.pt",
+                manifest=tmp_path / "absent-manifest.json",
+                validation_evidence="not-read-val.json",
+                metrics_csv="not-read.csv",
+                training_summary="not-read-summary.json",
+                output=tmp_path / "must-not-exist.json",
+                execute_reviewed_heldout=True,
+                checkpoint_role=role,
+                completion_family="curated_fd44",
+                completion_qa="original-qa-not-read.json",
+                expected_qa_sha256="b" * 64,
+                original_curated_index="original-index-not-read.json",
+                expected_curated_index_sha256="a" * 64,
+            )
+
+tests/test_heldout_curated_dispatch_metadata.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepretina/heldout.py:61: in evaluate_reviewed_heldout
+    gate.require(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+message = 'Write held-out evidence outside immutable canonical data'
+
+    def require(condition, message):
+        if not condition:
+>           raise SelectionError(message)
+E           deepretina.selection.SelectionError: Write held-out evidence outside immutable canonical data
+
+src/deepretina/selection.py:61: SelectionError
+_ test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[training_best-rot4] _
+
+tmp_path = PosixPath('/tmp/pytest-of-tom/pytest-595/test_curated_stage2_forwards_e1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fd49cfeef90>
+mode = 'rot4', role = 'training_best'
+
+    @pytest.mark.parametrize("mode", ["none", "rot4", "dihedral8"])
+    @pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
+    def test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol(
+        tmp_path, monkeypatch, mode, role
+    ):
+        protocol = {"threshold": 0.35, "tile_size": 512, "overlap": 64, **protocol_extension(mode)}
+        artifact = {
+            "schema_version": 2,
+            "checkpoint_role": role,
+            "freeze_eligibility": {"family": "curated_fd44"},
+            "inference_protocol": protocol,
+        }
+        path = tmp_path / "synthetic-selection.json"
+        path.write_text(json.dumps(artifact))
+        monkeypatch.setattr(
+            gate, "evaluation_source_identity", lambda: {"synthetic_metadata_only": True}
+        )
+        monkeypatch.setattr(gate, "_canonical_metadata", lambda path: {})
+    
+        class ReachedTypedOriginalGate(Exception):
+            pass
+    
+        def checked(**kwargs):
+            assert kwargs["checkpoint_role"] == role
+            assert kwargs["completion_family"] == "curated_fd44"
+            assert kwargs["original_curated_index"] == "original-index-not-read.json"
+            assert kwargs["expected_curated_index_sha256"] == "a" * 64
+            assert kwargs["completion_qa"] == "original-qa-not-read.json"
+            assert kwargs["expected_qa_sha256"] == "b" * 64
+            assert kwargs["tta"] == mode and kwargs["threshold"] == 0.35
+            assert kwargs["tile_size"] == 512 and kwargs["overlap"] == 64
+            raise ReachedTypedOriginalGate
+    
+        monkeypatch.setattr(gate, "check_selection", checked)
+        monkeypatch.setattr(heldout, "load_unified", lambda *a, **k: pytest.fail("No model load"))
+        monkeypatch.setattr(
+            heldout, "evaluate_unified_model", lambda *a, **k: pytest.fail("No GT/forward")
+        )
+        with pytest.raises(ReachedTypedOriginalGate):
+>           heldout.evaluate_reviewed_heldout(
+                selection=path,
+                expected_selection_sha256=gate.digest(path.read_bytes()),
+                checkpoint="not-read.pt",
+                best_checkpoint="not-read-best.pt",
+                last_checkpoint="not-read-last.pt",
+                manifest=tmp_path / "absent-manifest.json",
+                validation_evidence="not-read-val.json",
+                metrics_csv="not-read.csv",
+                training_summary="not-read-summary.json",
+                output=tmp_path / "must-not-exist.json",
+                execute_reviewed_heldout=True,
+                checkpoint_role=role,
+                completion_family="curated_fd44",
+                completion_qa="original-qa-not-read.json",
+                expected_qa_sha256="b" * 64,
+                original_curated_index="original-index-not-read.json",
+                expected_curated_index_sha256="a" * 64,
+            )
+
+tests/test_heldout_curated_dispatch_metadata.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepretina/heldout.py:61: in evaluate_reviewed_heldout
+    gate.require(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+message = 'Write held-out evidence outside immutable canonical data'
+
+    def require(condition, message):
+        if not condition:
+>           raise SelectionError(message)
+E           deepretina.selection.SelectionError: Write held-out evidence outside immutable canonical data
+
+src/deepretina/selection.py:61: SelectionError
+_ test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[training_best-dihedral8] _
+
+tmp_path = PosixPath('/tmp/pytest-of-tom/pytest-595/test_curated_stage2_forwards_e2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fd49cfefc50>
+mode = 'dihedral8', role = 'training_best'
+
+    @pytest.mark.parametrize("mode", ["none", "rot4", "dihedral8"])
+    @pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
+    def test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol(
+        tmp_path, monkeypatch, mode, role
+    ):
+        protocol = {"threshold": 0.35, "tile_size": 512, "overlap": 64, **protocol_extension(mode)}
+        artifact = {
+            "schema_version": 2,
+            "checkpoint_role": role,
+            "freeze_eligibility": {"family": "curated_fd44"},
+            "inference_protocol": protocol,
+        }
+        path = tmp_path / "synthetic-selection.json"
+        path.write_text(json.dumps(artifact))
+        monkeypatch.setattr(
+            gate, "evaluation_source_identity", lambda: {"synthetic_metadata_only": True}
+        )
+        monkeypatch.setattr(gate, "_canonical_metadata", lambda path: {})
+    
+        class ReachedTypedOriginalGate(Exception):
+            pass
+    
+        def checked(**kwargs):
+            assert kwargs["checkpoint_role"] == role
+            assert kwargs["completion_family"] == "curated_fd44"
+            assert kwargs["original_curated_index"] == "original-index-not-read.json"
+            assert kwargs["expected_curated_index_sha256"] == "a" * 64
+            assert kwargs["completion_qa"] == "original-qa-not-read.json"
+            assert kwargs["expected_qa_sha256"] == "b" * 64
+            assert kwargs["tta"] == mode and kwargs["threshold"] == 0.35
+            assert kwargs["tile_size"] == 512 and kwargs["overlap"] == 64
+            raise ReachedTypedOriginalGate
+    
+        monkeypatch.setattr(gate, "check_selection", checked)
+        monkeypatch.setattr(heldout, "load_unified", lambda *a, **k: pytest.fail("No model load"))
+        monkeypatch.setattr(
+            heldout, "evaluate_unified_model", lambda *a, **k: pytest.fail("No GT/forward")
+        )
+        with pytest.raises(ReachedTypedOriginalGate):
+>           heldout.evaluate_reviewed_heldout(
+                selection=path,
+                expected_selection_sha256=gate.digest(path.read_bytes()),
+                checkpoint="not-read.pt",
+                best_checkpoint="not-read-best.pt",
+                last_checkpoint="not-read-last.pt",
+                manifest=tmp_path / "absent-manifest.json",
+                validation_evidence="not-read-val.json",
+                metrics_csv="not-read.csv",
+                training_summary="not-read-summary.json",
+                output=tmp_path / "must-not-exist.json",
+                execute_reviewed_heldout=True,
+                checkpoint_role=role,
+                completion_family="curated_fd44",
+                completion_qa="original-qa-not-read.json",
+                expected_qa_sha256="b" * 64,
+                original_curated_index="original-index-not-read.json",
+                expected_curated_index_sha256="a" * 64,
+            )
+
+tests/test_heldout_curated_dispatch_metadata.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepretina/heldout.py:61: in evaluate_reviewed_heldout
+    gate.require(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+message = 'Write held-out evidence outside immutable canonical data'
+
+    def require(condition, message):
+        if not condition:
+>           raise SelectionError(message)
+E           deepretina.selection.SelectionError: Write held-out evidence outside immutable canonical data
+
+src/deepretina/selection.py:61: SelectionError
+_ test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[fixed_terminal60-none] _
+
+tmp_path = PosixPath('/tmp/pytest-of-tom/pytest-595/test_curated_stage2_forwards_e3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fd49cff2990>
+mode = 'none', role = 'fixed_terminal60'
+
+    @pytest.mark.parametrize("mode", ["none", "rot4", "dihedral8"])
+    @pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
+    def test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol(
+        tmp_path, monkeypatch, mode, role
+    ):
+        protocol = {"threshold": 0.35, "tile_size": 512, "overlap": 64, **protocol_extension(mode)}
+        artifact = {
+            "schema_version": 2,
+            "checkpoint_role": role,
+            "freeze_eligibility": {"family": "curated_fd44"},
+            "inference_protocol": protocol,
+        }
+        path = tmp_path / "synthetic-selection.json"
+        path.write_text(json.dumps(artifact))
+        monkeypatch.setattr(
+            gate, "evaluation_source_identity", lambda: {"synthetic_metadata_only": True}
+        )
+        monkeypatch.setattr(gate, "_canonical_metadata", lambda path: {})
+    
+        class ReachedTypedOriginalGate(Exception):
+            pass
+    
+        def checked(**kwargs):
+            assert kwargs["checkpoint_role"] == role
+            assert kwargs["completion_family"] == "curated_fd44"
+            assert kwargs["original_curated_index"] == "original-index-not-read.json"
+            assert kwargs["expected_curated_index_sha256"] == "a" * 64
+            assert kwargs["completion_qa"] == "original-qa-not-read.json"
+            assert kwargs["expected_qa_sha256"] == "b" * 64
+            assert kwargs["tta"] == mode and kwargs["threshold"] == 0.35
+            assert kwargs["tile_size"] == 512 and kwargs["overlap"] == 64
+            raise ReachedTypedOriginalGate
+    
+        monkeypatch.setattr(gate, "check_selection", checked)
+        monkeypatch.setattr(heldout, "load_unified", lambda *a, **k: pytest.fail("No model load"))
+        monkeypatch.setattr(
+            heldout, "evaluate_unified_model", lambda *a, **k: pytest.fail("No GT/forward")
+        )
+        with pytest.raises(ReachedTypedOriginalGate):
+>           heldout.evaluate_reviewed_heldout(
+                selection=path,
+                expected_selection_sha256=gate.digest(path.read_bytes()),
+                checkpoint="not-read.pt",
+                best_checkpoint="not-read-best.pt",
+                last_checkpoint="not-read-last.pt",
+                manifest=tmp_path / "absent-manifest.json",
+                validation_evidence="not-read-val.json",
+                metrics_csv="not-read.csv",
+                training_summary="not-read-summary.json",
+                output=tmp_path / "must-not-exist.json",
+                execute_reviewed_heldout=True,
+                checkpoint_role=role,
+                completion_family="curated_fd44",
+                completion_qa="original-qa-not-read.json",
+                expected_qa_sha256="b" * 64,
+                original_curated_index="original-index-not-read.json",
+                expected_curated_index_sha256="a" * 64,
+            )
+
+tests/test_heldout_curated_dispatch_metadata.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepretina/heldout.py:61: in evaluate_reviewed_heldout
+    gate.require(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+message = 'Write held-out evidence outside immutable canonical data'
+
+    def require(condition, message):
+        if not condition:
+>           raise SelectionError(message)
+E           deepretina.selection.SelectionError: Write held-out evidence outside immutable canonical data
+
+src/deepretina/selection.py:61: SelectionError
+_ test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[fixed_terminal60-rot4] _
+
+tmp_path = PosixPath('/tmp/pytest-of-tom/pytest-595/test_curated_stage2_forwards_e4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fd49cfef5f0>
+mode = 'rot4', role = 'fixed_terminal60'
+
+    @pytest.mark.parametrize("mode", ["none", "rot4", "dihedral8"])
+    @pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
+    def test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol(
+        tmp_path, monkeypatch, mode, role
+    ):
+        protocol = {"threshold": 0.35, "tile_size": 512, "overlap": 64, **protocol_extension(mode)}
+        artifact = {
+            "schema_version": 2,
+            "checkpoint_role": role,
+            "freeze_eligibility": {"family": "curated_fd44"},
+            "inference_protocol": protocol,
+        }
+        path = tmp_path / "synthetic-selection.json"
+        path.write_text(json.dumps(artifact))
+        monkeypatch.setattr(
+            gate, "evaluation_source_identity", lambda: {"synthetic_metadata_only": True}
+        )
+        monkeypatch.setattr(gate, "_canonical_metadata", lambda path: {})
+    
+        class ReachedTypedOriginalGate(Exception):
+            pass
+    
+        def checked(**kwargs):
+            assert kwargs["checkpoint_role"] == role
+            assert kwargs["completion_family"] == "curated_fd44"
+            assert kwargs["original_curated_index"] == "original-index-not-read.json"
+            assert kwargs["expected_curated_index_sha256"] == "a" * 64
+            assert kwargs["completion_qa"] == "original-qa-not-read.json"
+            assert kwargs["expected_qa_sha256"] == "b" * 64
+            assert kwargs["tta"] == mode and kwargs["threshold"] == 0.35
+            assert kwargs["tile_size"] == 512 and kwargs["overlap"] == 64
+            raise ReachedTypedOriginalGate
+    
+        monkeypatch.setattr(gate, "check_selection", checked)
+        monkeypatch.setattr(heldout, "load_unified", lambda *a, **k: pytest.fail("No model load"))
+        monkeypatch.setattr(
+            heldout, "evaluate_unified_model", lambda *a, **k: pytest.fail("No GT/forward")
+        )
+        with pytest.raises(ReachedTypedOriginalGate):
+>           heldout.evaluate_reviewed_heldout(
+                selection=path,
+                expected_selection_sha256=gate.digest(path.read_bytes()),
+                checkpoint="not-read.pt",
+                best_checkpoint="not-read-best.pt",
+                last_checkpoint="not-read-last.pt",
+                manifest=tmp_path / "absent-manifest.json",
+                validation_evidence="not-read-val.json",
+                metrics_csv="not-read.csv",
+                training_summary="not-read-summary.json",
+                output=tmp_path / "must-not-exist.json",
+                execute_reviewed_heldout=True,
+                checkpoint_role=role,
+                completion_family="curated_fd44",
+                completion_qa="original-qa-not-read.json",
+                expected_qa_sha256="b" * 64,
+                original_curated_index="original-index-not-read.json",
+                expected_curated_index_sha256="a" * 64,
+            )
+
+tests/test_heldout_curated_dispatch_metadata.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepretina/heldout.py:61: in evaluate_reviewed_heldout
+    gate.require(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+message = 'Write held-out evidence outside immutable canonical data'
+
+    def require(condition, message):
+        if not condition:
+>           raise SelectionError(message)
+E           deepretina.selection.SelectionError: Write held-out evidence outside immutable canonical data
+
+src/deepretina/selection.py:61: SelectionError
+_ test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[fixed_terminal60-dihedral8] _
+
+tmp_path = PosixPath('/tmp/pytest-of-tom/pytest-595/test_curated_stage2_forwards_e5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fd567502630>
+mode = 'dihedral8', role = 'fixed_terminal60'
+
+    @pytest.mark.parametrize("mode", ["none", "rot4", "dihedral8"])
+    @pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
+    def test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol(
+        tmp_path, monkeypatch, mode, role
+    ):
+        protocol = {"threshold": 0.35, "tile_size": 512, "overlap": 64, **protocol_extension(mode)}
+        artifact = {
+            "schema_version": 2,
+            "checkpoint_role": role,
+            "freeze_eligibility": {"family": "curated_fd44"},
+            "inference_protocol": protocol,
+        }
+        path = tmp_path / "synthetic-selection.json"
+        path.write_text(json.dumps(artifact))
+        monkeypatch.setattr(
+            gate, "evaluation_source_identity", lambda: {"synthetic_metadata_only": True}
+        )
+        monkeypatch.setattr(gate, "_canonical_metadata", lambda path: {})
+    
+        class ReachedTypedOriginalGate(Exception):
+            pass
+    
+        def checked(**kwargs):
+            assert kwargs["checkpoint_role"] == role
+            assert kwargs["completion_family"] == "curated_fd44"
+            assert kwargs["original_curated_index"] == "original-index-not-read.json"
+            assert kwargs["expected_curated_index_sha256"] == "a" * 64
+            assert kwargs["completion_qa"] == "original-qa-not-read.json"
+            assert kwargs["expected_qa_sha256"] == "b" * 64
+            assert kwargs["tta"] == mode and kwargs["threshold"] == 0.35
+            assert kwargs["tile_size"] == 512 and kwargs["overlap"] == 64
+            raise ReachedTypedOriginalGate
+    
+        monkeypatch.setattr(gate, "check_selection", checked)
+        monkeypatch.setattr(heldout, "load_unified", lambda *a, **k: pytest.fail("No model load"))
+        monkeypatch.setattr(
+            heldout, "evaluate_unified_model", lambda *a, **k: pytest.fail("No GT/forward")
+        )
+        with pytest.raises(ReachedTypedOriginalGate):
+>           heldout.evaluate_reviewed_heldout(
+                selection=path,
+                expected_selection_sha256=gate.digest(path.read_bytes()),
+                checkpoint="not-read.pt",
+                best_checkpoint="not-read-best.pt",
+                last_checkpoint="not-read-last.pt",
+                manifest=tmp_path / "absent-manifest.json",
+                validation_evidence="not-read-val.json",
+                metrics_csv="not-read.csv",
+                training_summary="not-read-summary.json",
+                output=tmp_path / "must-not-exist.json",
+                execute_reviewed_heldout=True,
+                checkpoint_role=role,
+                completion_family="curated_fd44",
+                completion_qa="original-qa-not-read.json",
+                expected_qa_sha256="b" * 64,
+                original_curated_index="original-index-not-read.json",
+                expected_curated_index_sha256="a" * 64,
+            )
+
+tests/test_heldout_curated_dispatch_metadata.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepretina/heldout.py:61: in evaluate_reviewed_heldout
+    gate.require(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+message = 'Write held-out evidence outside immutable canonical data'
+
+    def require(condition, message):
+        if not condition:
+>           raise SelectionError(message)
+E           deepretina.selection.SelectionError: Write held-out evidence outside immutable canonical data
+
+src/deepretina/selection.py:61: SelectionError
+=========================== short test summary info ============================
+FAILED tests/test_heldout_curated_dispatch_metadata.py::test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[training_best-none]
+FAILED tests/test_heldout_curated_dispatch_metadata.py::test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[training_best-rot4]
+FAILED tests/test_heldout_curated_dispatch_metadata.py::test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[training_best-dihedral8]
+FAILED tests/test_heldout_curated_dispatch_metadata.py::test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[fixed_terminal60-none]
+FAILED tests/test_heldout_curated_dispatch_metadata.py::test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[fixed_terminal60-rot4]
+FAILED tests/test_heldout_curated_dispatch_metadata.py::test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol[fixed_terminal60-dihedral8]
+6 failed, 118 passed in 26.18s

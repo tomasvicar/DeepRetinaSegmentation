@@ -1,0 +1,146 @@
+{
+  "scope": "JSON/source metadata only; no TEST/pixel/GT/model decode, no NN/GPU",
+  "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "eligible_inventory": {
+    "train": {
+      "photos": 2529,
+      "records": 5700,
+      "groups": 2042
+    },
+    "val": {
+      "photos": 770,
+      "records": 993,
+      "groups": 612
+    },
+    "test": {
+      "photos": 856,
+      "records": 1118,
+      "groups": 696
+    }
+  },
+  "all_photo_source_known_group_identities_confined_to_one_split": true,
+  "strong528_sha256": "528233fe50876b15f127f8567fc43d7b8a34a8713cfceff54f02956a0a0bfa2c",
+  "original182_sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836",
+  "fresh_original_reproduction53b_sha256": "53b5c0a64a8aeccb96774c965025093607299bd378a18406206d308ca40a04c6",
+  "same4_component_weight_SHA": true,
+  "same770_photo_record_source_and_GT_support": true,
+  "strong528_vs_original182": {
+    "vessel": {
+      "photo_confusion_tuples_changed": 0,
+      "pooled_count_differences": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "valid_pixels": 0
+      },
+      "strong528_dice": 0.7701233997938133,
+      "original182_dice": 0.7701233997938133
+    },
+    "artery": {
+      "photo_confusion_tuples_changed": 2,
+      "pooled_count_differences": {
+        "tp": -7,
+        "fp": 10,
+        "fn": 7,
+        "valid_pixels": 0
+      },
+      "strong528_dice": 0.6895286744885823,
+      "original182_dice": 0.689521829787506
+    },
+    "vein": {
+      "photo_confusion_tuples_changed": 2,
+      "pooled_count_differences": {
+        "tp": -18,
+        "fp": 6,
+        "fn": 18,
+        "valid_pixels": 0
+      },
+      "strong528_dice": 0.6972977561799012,
+      "original182_dice": 0.6972863687090058
+    },
+    "disc": {
+      "photo_confusion_tuples_changed": 0,
+      "pooled_count_differences": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "valid_pixels": 0
+      },
+      "strong528_dice": 0.8948079084718797,
+      "original182_dice": 0.8948079084718797
+    },
+    "cup": {
+      "photo_confusion_tuples_changed": 0,
+      "pooled_count_differences": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "valid_pixels": 0
+      },
+      "strong528_dice": 0.4353989841007063,
+      "original182_dice": 0.4353989841007063
+    }
+  },
+  "AV_photos_with_any_numeric_count_change": 2,
+  "strong528_numeric_confusion_counts_exact_to_independent_fresh53b": true,
+  "original182_declared_policy": {
+    "av": "vesclass_matlab_provided_fov_calibrated; canonical predicted vessel and provided FOV NN-restored to native frame; strict AV ties\u21920; original NN restore_classes then canonical prepare_mask",
+    "cup": "universal/raw cup>0 intersect SAME-forward dedicated disc0/raw>0 in canonical frame before any NN restoration",
+    "gt": "UnifiedDataset full_data: one photo once; deterministic first sorted annotation per task; AV vessel GT priority; unknown validity excluded",
+    "model_sha256": {
+      "av": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b",
+      "disc": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f",
+      "universal": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f",
+      "vessel": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01"
+    },
+    "name": "original-raw-vessel-calibrated-provided-fov-av-disc0-universal-cup-in-disc0-v1",
+    "single_net": "raw RGB/255 minus0.5; native checkpoint tiling; strict logits>0"
+  },
+  "strong528_declared_cup": {
+    "cup_variant": "disc0",
+    "reference_context": "disc0",
+    "noncup_components": "Exact historical vascular/disc counts and AVaccuracy; fresh standalone disc only used for clipping and drift diagnostics",
+    "policy": "Fresh native cup strictlogit>0 vs cup intersect SAMEforward fresh dedicated disc strictlogit>0; no GTused for clipping",
+    "historical_cup_numeric_drift": "Logged separately; baseline for postprocessing is fresh native cup, NOT historical cup",
+    "reused_prefix_photos": 157,
+    "new_photos": 455,
+    "no_test_evaluation": true,
+    "no_independent_quality_claim": true
+  },
+  "strong528_global_pins": {
+    "manifest_sha256": "529edba7743eb5b9175da429c2124d53f48c419b090a284b5650fd68f1fdcf69",
+    "prepared_content_sha256": "61032be218c623a910c0f3f5e2df3bfdc58e978fe494433a4e6f18d55e41693e"
+  },
+  "original182_global_pins": {
+    "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "prepared_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52"
+  },
+  "source_code_SHA": {
+    "scripts/unified_validation.py": "4d3701feed21aa6b8c1934cfad46a34469505fdc21454767e31a3c543461b73a",
+    "scripts/unified_test.py": "23aea6e11ce0b1d108b787d30dc543a417bd8932f285afcdaab9274ecdd29974",
+    "scripts/evaluate_original_frozen.py": "44f1faf4ff41b3dd60b8d6dea747a577bcfd2bb77b1f2366e153bc688fb27a61",
+    "scripts/compare_reviewed_test.py": "9bccff93fca25155b151dbdfe13065417a85618ff460eacad7352d9c42920a2a",
+    "src/deepretina/heldout.py": "d3a208b33237bf3ed0a45e3df48b9069c17c43682989fedadbf2da59170416eb",
+    "src/deepretina/selection.py": "d5264837681b6abc1e85d0d76cbdffcdbcecfd978d313af5ef9c958e91ed16dd",
+    "src/deepretina/freeze_eligibility.py": "f1e532fb25ff451ada509b602f425826ed82e565bf4106d32cfaa2d0d89cd985",
+    "src/deepretina/curated_completion.py": "b3cba2a0373fc412a0eb91ea2dbffa91bfa1283cb51e7612190e708294a404b0"
+  },
+  "no_report_retagged_or_quality_measurement_run": true,
+  "product_readonly_operator_snapshot": {
+    "commit_observed": "2350bbf",
+    "original_api_source_sha256": "2cf4b53c483c831a482ba5a9920ad5e5ab8ed5bfc170377cabe14825ca3268ba",
+    "fixed_policy_id": "original-raw-vessel-calibrated-provided-fov-av-disc0-universal-cup-in-disc0-v1",
+    "weights_loaded_or_forward_executed": false
+  },
+  "immutable_Old6d_readiness": {
+    "commit": "6d3593f5a8dbf177ebebb231b5120d4fd601ea4f",
+    "typed_curated_TTA_and_stage2_original_index_dispatch_present_in_Git_bytes": true,
+    "raw512_actual_saved_fresh_evaluation_sha256": "f13a23d1af43e2c23e098ce15f1d69f78251817b1a1be86415a48ffe6330b29a",
+    "current705_changed_evaluation_files_vs6d": [
+      "src/deepretina/cli.py",
+      "src/deepretina/unified.py",
+      "src/deepretina/unified_cli.py"
+    ],
+    "do_not_retag_old_evidence_into_new_toolchain": true
+  }
+}

@@ -16,7 +16,8 @@ A/V decoder, cup containment, canonical geometry and support remain independentl
 bound by the existing inference protocol. BF16 training metadata never enables
 BF16 TTA inference, including under an ambient autocast context.
 
-Only `standalone_72` and `pool_72_v3` can request non-default TTA in the final gate.
+`standalone_72`, `pool_72_v3` and the explicit `curated_fd44` adapter can request
+non-default TTA in the final gate.
 They retain their genuine, separate original completion verification paths:
 
 - Standalone: externally pinned original completion QA, reviewed training
@@ -27,13 +28,21 @@ They retain their genuine, separate original completion verification paths:
 - Native V3 pool: genuine original COMPLETE receipt, original task/lease,
   protocol/envelope/profile and original input index through native V3 validation;
   no fabricated standalone terminal or QA. Original index bytes stay unchanged.
+- Curated fd44: externally pinned original curated index **and** original QA SHA;
+  exact selected/BEST/LAST/CSV/summary paths and raw bytes must match that index.
+  The genuine curated checker verifies sourcefd44, full config/photometry/cache,
+  original task/receipt/PBS/readonly milestone chain and each selected weight's
+  own coverage. It is not relabeled standalone or native V3. Raw512 BEST50 rot4/.35
+  is a `curated_fd44` / `training_best` candidate, not an unsupported alias.
 - Both roles remain explicit: `training_best` and `fixed_terminal60`. The selected
   weights' own photo and 5,700-annotation coverage must pass; another epoch's
   full coverage cannot qualify a partial BEST.
 
-Source0b, curated photometry families and untyped aliases are not implicitly
-admitted. TTA changes inference only, not the historical training protocol or QA.
-No completion-family allowlist was broadened or verifier changed in this work.
+Source0b and untyped aliases are not implicitly admitted. Curated raw and saved
+photometry arms must use the explicit original-index adapter above; a family name,
+old TTA report or full-LAST flag alone is insufficient. TTA changes inference only,
+not the historical training protocol or QA. This documentation correction reflects
+the existing adapter; it does not broaden a verifier or admit a fallback.
 
 ## Fresh evidence and frozen decision
 
