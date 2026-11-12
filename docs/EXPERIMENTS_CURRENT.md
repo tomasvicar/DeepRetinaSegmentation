@@ -1,13 +1,17 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-12 05:22 UTC; 17 completed candidate/protocol rows compared**.
+Snapshot: **2026-11-12 05:29 UTC; 17-row overview plus completed loss2 ablation**.
 The final optimized model, selection freeze and held-out TEST comparison remain
 unfinished. Completed-result tables exclude running and failed preparation work.
 
 Controlled source72 vessel-loss2 training completed all60 epochs with original
 supervisor/QA/external exits0. BEST58 and LAST60 EACH cover all2,529 TRAIN photos
-and5,700 annotation variants from21 sources. A matched LAST60-only fresh770VAL
-actually started05:20UTC; its quality result is pending. This ablation changes
+and5,700 annotation variants from21 sources. Matched LAST60-only fresh770VAL completed with actual child/outer0 at05:21:54UTC.
+The [paired count analysis](../reports/loss2-LAST60-matched-val-20261112/README.md)
+shows dense-vessel Dice .7385115→.7440594 versus matched firstTPE5LAST60,
+Δ+.0055479 paired95%CI[+.0034890,+.0079736] (2000/42;87photos/55groups/8sources).
+It remains below original .7613266; cup source-macro regressed and overall macro
+was lower. This is a single-seed primary-endpoint gain with tradeoffs, no promotion. This ablation changes
 only vessel loss weight1→2 relative to first TPE5, preserving patch384/raw25 and
 all other settings. Completion alone does not establish improvement.
 
@@ -17,8 +21,10 @@ The first failed runtime setup is retained in the operations history. A separate
 PhaseB packet remains disabled until actual E27 completion and resource review.
 Genuine native TPE8 was suggested once from all8 completed auxiliary observations;
 its MetaCentrum job never started and was withdrawn once past the start window.
-The same unchanged proposal is being prepared for local Ada after the current
-validation. No retry, changed suggestion, TEST evaluation or quality promotion
+The same unchanged proposal actually launched on local Ada05:26:40UTC after
+original full60/QA0/outer0 and LAST freshVAL0/outer0 review, with its own13UTC
+budget. Actual fullconfig/physicalGPU/BF16/8intra1interop/workers8 entry passed.
+No completed training result, new suggestion, TEST evaluation or quality promotion
 has occurred. Detailed actual receipts and scheduler accounting are in the
 private metacentrum-workflows operations repository.
 
