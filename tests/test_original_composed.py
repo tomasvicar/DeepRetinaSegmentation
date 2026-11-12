@@ -41,7 +41,17 @@ def inputs():
 
 def components():
     models = {
-        k: (ToySingle(c), {"tiling": {"crop_size": n, "border": 4}})
+        k: (
+            ToySingle(c),
+            {
+                "tiling": {
+                    "crop_size": n,
+                    "border": 4,
+                    "blend": "logits",
+                    "window": "native descriptor",
+                }
+            },
+        )
         for k, c, n in (("vessel", 1, 32), ("disc", 1, 40), ("universal", 3, 48))
     }
     provenance = {k: {"model": name, "sha256": sha} for k, (name, sha) in api.COMPONENTS.items()}
@@ -52,7 +62,9 @@ def literal_operation(rgb, fov, models, av, kwargs):
     prepared = prepare_single_net(rgb, fov=fov, normalized=False, **kwargs)
     native = {}
     for name, (model, payload) in models.items():
-        logits = tiled_logits(model, prepared.tensor(), device="cpu", **payload["tiling"])
+        # benchmark main normalizes payload tiling before original_operation.
+        runtime_tiling = {key: payload["tiling"][key] for key in ("crop_size", "border")}
+        logits = tiled_logits(model, prepared.tensor(), device="cpu", **runtime_tiling)
         native[name] = logits.numpy() > 0
     native["universal"][2] &= native["disc"][0]
     restored = {name: prepared.geometry.restore(mask, order=0) for name, mask in native.items()}
@@ -89,6 +101,8 @@ def test_actual_toy_forward_matches_literal_benchmark_and_exports(inputs, monkey
     )
     meta = json.loads((tmp_path / "out/prediction.json").read_text())
     assert meta["policy"] == api.POLICY
+    assert meta["native_tiling"]["vessel"]["blend"] == "logits"
+    assert meta["native_tiling"]["vessel"]["window"] == "native descriptor"
     assert {k: v["sha256"] for k, v in meta["components"].items()} == {
         k: v[1] for k, v in api.COMPONENTS.items()
     }
