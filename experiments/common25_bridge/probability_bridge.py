@@ -10,7 +10,7 @@ from skimage.transform import resize
 
 BACKEND = {"numpy": "2.5.4", "scipy": "1.18.1", "scikit-image": "0.26.0"}
 CONVENTION = {
-    "version": 1,
+    "version": 2,
     "coordinates": "source=(target_index+0.5)*source_size/target_size-0.5 per axis",
     "interpolation": "bilinear/order1 on FP32 joint V/A/V/D/C planes",
     "edge": "nearest edge extension (clamp), skimage mode=edge",
@@ -42,6 +42,7 @@ class Grid:
     geometry_policy_sha256: str
     manifest_sha256: str
     content_sha256: str
+    parent_geometry_policy_sha256: str | None = None
 
     def validate(self):
         require(self.split in {"train", "val"}, "TRAIN/VAL only; no TEST bridge")
@@ -54,6 +55,17 @@ class Grid:
             require(
                 isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value),
                 "Exact policy/manifest/content pins required",
+            )
+        if self.pixels_per_degree == 35:
+            require(
+                isinstance(self.parent_geometry_policy_sha256, str)
+                and re.fullmatch(r"[0-9a-f]{64}", self.parent_geometry_policy_sha256),
+                "Source35 parent geometry policy pin required",
+            )
+        else:
+            require(
+                self.parent_geometry_policy_sha256 is None,
+                "Historical25 has no new35 parent policy",
             )
         require(
             len(self.canonical_owner) == 2
@@ -102,7 +114,7 @@ def _resize_plane(plane, shape):
 def bridge(probability, source: Grid, target: Grid):
     """Map already inverse-TTA conditional probabilities onto fixed25 geometry.
 
-    Identity binds native RGB photo/group/owner/crop/angle/policy. Different
+    Identity binds native RGB photo/group/owner/crop/angle and equal25 policy. Different
     source/target manifest and content pins are retained, never equated/retagged.
     FOV arrays deliberately cannot be passed. Caller must use the original25 GT
     and valid/FOV in its unchanged scorer, with exact observer/source traces.
@@ -118,11 +130,24 @@ def bridge(probability, source: Grid, target: Grid):
         "original_shape",
         "crop_position",
         "field_of_view_degrees",
-        "geometry_policy_sha256",
     ):
         require(
             getattr(source, field) == getattr(target, field),
             "Native geometry/lineage mismatch: " + field,
+        )
+    if source.pixels_per_degree == 35:
+        require(
+            source.geometry_policy_sha256 != target.geometry_policy_sha256,
+            "Source35 requires an actual NEW geometry policy, never reused25 policy",
+        )
+        require(
+            source.parent_geometry_policy_sha256 == target.geometry_policy_sha256,
+            "Source35 parent geometry policy differs from target25 policy",
+        )
+    else:
+        require(
+            source.geometry_policy_sha256 == target.geometry_policy_sha256,
+            "Identity25 actual geometry policy differs",
         )
     p = np.asarray(probability)
     require(

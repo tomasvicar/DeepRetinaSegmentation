@@ -1,6 +1,8 @@
 """Manually specified synthetic probabilities/geometry only; no model or data IO."""
 
+import hashlib
 import importlib.util
+import json
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -16,6 +18,31 @@ sys.modules[spec.name] = m
 spec.loader.exec_module(m)
 
 
+# Genuine hashes of synthetic policy documents, not falsely reused25 hashes.
+POLICY25 = {
+    "policy_id": "fixture25",
+    "target_pixels_per_degree": 25,
+    "source_choices": {"synthetic": "fixed native camera/crop"},
+}
+
+
+def policy_sha(document):
+    return hashlib.sha256(
+        json.dumps(document, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+
+
+TARGET_POLICY = policy_sha(POLICY25)
+POLICY35 = {
+    "policy_id": "fixture35",
+    "target_pixels_per_degree": 35,
+    "parent_pixels_per_degree": 25,
+    "parent_geometry_policy_sha256": TARGET_POLICY,
+    "source_rule_document": POLICY25,
+}
+SOURCE_POLICY = policy_sha(POLICY35)
+
+
 def grids(shape=(2, 3)):
     h, w = shape
     target = m.Grid(
@@ -29,7 +56,7 @@ def grids(shape=(2, 3)):
         max(shape) / 25,
         25,
         "legacy25_raw",
-        "3" * 64,
+        TARGET_POLICY,
         "4" * 64,
         "5" * 64,
     )
@@ -40,6 +67,8 @@ def grids(shape=(2, 3)):
         prepared_shape=tuple(round(n * 1.4) for n in shape),
         manifest_sha256="6" * 64,
         content_sha256="7" * 64,
+        geometry_policy_sha256=SOURCE_POLICY,
+        parent_geometry_policy_sha256=target.geometry_policy_sha256,
     )
     return source, target
 
@@ -128,7 +157,7 @@ def test_zero_vessel_yields_neutral_conditional_without_nan():
         ("split_group_id", "sha256:" + "8" * 64),
         ("canonical_owner", ("other", "native")),
         ("field_of_view_degrees", 0.2),
-        ("geometry_policy_sha256", "8" * 64),
+        ("parent_geometry_policy_sha256", "9" * 64),
     ],
 )
 def test_geometry_or_lineage_mismatch_rejected(field, value):
@@ -167,3 +196,34 @@ def test_partial_source_fov_boundary_is_not_premasked_before_interpolation():
     # the second probability untouched. It never manufactures/reads a GT/FOV mask.
     target25_valid = np.array([[True, False]])
     assert out[0, ~target25_valid][0] == pytest.approx(0.35, abs=6e-8)
+
+
+def test_new35_actual_policy_with_explicit_original25_parent_is_accepted():
+    source, target = grids()
+    assert source.geometry_policy_sha256 == policy_sha(POLICY35)
+    assert target.geometry_policy_sha256 == policy_sha(POLICY25)
+    assert POLICY35["source_rule_document"] == POLICY25
+    assert source.geometry_policy_sha256 != target.geometry_policy_sha256
+    assert source.parent_geometry_policy_sha256 == target.geometry_policy_sha256
+    out = m.bridge(probabilities(source.prepared_shape), source, target)
+    assert out.shape == (5, *target.prepared_shape)
+
+
+@pytest.mark.parametrize("mutation", ["wrong_parent", "missing_parent", "reused25_policy"])
+def test_source35_cannot_fake_parent_or_reuse_actual25_policy(mutation):
+    source, target = grids()
+    if mutation == "wrong_parent":
+        source = replace(source, parent_geometry_policy_sha256="9" * 64)
+    elif mutation == "missing_parent":
+        source = replace(source, parent_geometry_policy_sha256=None)
+    else:
+        source = replace(source, geometry_policy_sha256=target.geometry_policy_sha256)
+    with pytest.raises(ValueError, match="[Pp]olicy"):
+        m.bridge(probabilities(source.prepared_shape), source, target)
+
+
+def test_identity25_requires_equal_actual_policy_not_a35_parent_alias():
+    _, target = grids()
+    source = replace(target, geometry_policy_sha256="9" * 64)
+    with pytest.raises(ValueError, match="Identity25 actual geometry policy"):
+        m.bridge(probabilities(source.prepared_shape), source, target)

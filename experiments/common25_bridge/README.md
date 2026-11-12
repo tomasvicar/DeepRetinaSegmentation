@@ -29,15 +29,23 @@ The interpolation convention is fixed **before any future VAL quality result**:
 `Grid` requires native photo/group identity, TRAIN/VAL split, canonical owner,
 original frame, inclusive crop, camera angle, ppd, prepared dimensions, RAW
 profile, geometry-policy SHA and distinct manifest/content SHAs. Both grids must
-share photo/group/split/owner/frame/crop/angle/policy; each prepared shape must
+share photo/group/split/owner/frame/crop/angle; each prepared shape must
 agree with its native maximum-dimension scale and inclusive crop. Target must be25.
+Source35 requires its actual **new35 policy SHA**, different from target25, and
+`parent_geometry_policy_sha256 == target.geometry_policy_sha256`. Identity25
+requires equal actual policy SHA and no35 parent alias. The frozen2591 policy
+explicitly declares25ppd; reusing that SHA for35 is false provenance.
 TEST is rejected. Shapes are integer tuples; callers normalize JSON arrays to
 tuples explicitly. Different source35 and measurement25 corpus pins are kept
 separate rather than retagged equal.
 
 These metadata checks do not authenticate caller-provided provenance. A future
 reviewed producer must additionally bind actual35 producer/source/backend,
-manifest/content and original encoded resources, and the actual fixed25 manifest
+manifest/content and original encoded resources. In producer policy bytes, bind
+`target_pixels_per_degree=35`, `parent_geometry_policy_sha256=2591`,
+`parent_pixels_per_degree=25` and an unaltered `source_rule_document` containing
+the original25 policy. Verify actual bytes and policy SHA; a metadata field alone
+is not authentication. Bind the actual fixed25 manifest
 17a/content00d9/policy2591. It must check exact770 photos/993 annotation records,
 612 known split groups, canonical owners, sorted observer/A-V-priority traces,
 head-source attribution and GT valid/positive support against unchanged0a5c/6808
@@ -48,7 +56,15 @@ verify that an upstream producer did not already mask its inputs.
 
 ## Synthetic checks actually run
 
-The fourteen cases use only small synthetic arrays. Manual expected values cover
+The original fourteen cases used only small synthetic arrays and passed the math
+checks, but were **insufficient for policy provenance**: they incorrectly let35
+reuse25 policy SHA. Root caught this before integration. Contract revision2 adds
+distinct new35 policy SHA plus explicit parent25 binding. Nineteen current cases
+include hashes of actual synthetic25/35 documents, correct-parent acceptance,
+wrong/missing-parent rejection, fake35-reused25 rejection and identity-policy
+mismatch rejection. The interpolation arithmetic is unchanged.
+
+The cases use only small synthetic arrays. Manual expected values cover
 half-pixel independent-axis3×4→2×3 ramps, clamped1×2→1×4 edges, constants, a
 partial-FOV boundary (.35 without premasking versus erroneous.2), opposing A/V
 joint interpolation (.3 versus conditional-average.7), zero vessel, exact-copy
@@ -66,3 +82,12 @@ run passed0.90s. An intermediate14-case run passed0.44s while Ruff reported two
 import-order issues; those were corrected without changing arithmetic and the
 final checks above reran. No dependency installation, Torch import, real photo,
 mask/model decoding, forward, CUDA, remote query or corpus/cache build occurred.
+
+
+## Policy correction verification
+
+Final revision2: **19 passed in0.93s**, exit0; Ruff check0. See
+`reports/common25-probability-bridge-20261112/verification-policy-v2.json` for
+current source hashes and exact evidence. The previous14-case record remains
+historical and is not treated as a sufficient policy test. No source72/6d,
+original9b850 canary, product code, real policy bytes or real35 corpus were edited.

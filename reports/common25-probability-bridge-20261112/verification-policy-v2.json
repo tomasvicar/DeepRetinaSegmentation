@@ -1,0 +1,26 @@
+{
+  "kind": "synthetic_common25_bridge_policy_revision2_NOT_VAL_quality",
+  "actual_observed_returncode": 0,
+  "tests": {
+    "passed": 19,
+    "seconds": 0.93,
+    "prior_policy_fix_run_seconds": 1.03,
+    "command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 taskset -c4 nice -n17 EXISTING_PYTHON -m pytest -q experiments/common25_bridge/test_probability_bridge.py"
+  },
+  "ruff_final_returncode": 0,
+  "previous14_insufficient_for_policy_provenance": true,
+  "root_found_gap": "Frozen actual25 policy declares target_pixels_per_degree25, so source35 must not reuse its SHA. Earlier equality constraint made an honest35 policy impossible.",
+  "new_contract": "source35 actualpolicy SHA differs target25; source35.parent_geometry_policy_sha256 equals target25actual policy. Identity25 policies equal and no35parent. Other geometry/lineage and interpolation unchanged.",
+  "actual25_policy_metadata_read_only": {
+    "sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+    "declared_target_pixels_per_degree": 25.0
+  },
+  "producer_schema_coordination": "raw35_producer: policy35 target35,parent_pixels25,parent_geometry_policy_sha2562591,unaltered source_rule_document25; producer verifies actualpolicybytes, not this probability-only helper.",
+  "file_sha256": {
+    "experiments/common25_bridge/probability_bridge.py": "cd61c6125b4a6fcb800134125d9fdc2d85491de0d3d3e42dd6d6fdfb6d9cde5c",
+    "experiments/common25_bridge/test_probability_bridge.py": "f9d4a6998a086914ce97e13540dc14cc6bd2a4710640ac5b5edd537b2149520c"
+  },
+  "real35_policy_or_corpus_built": false,
+  "real_image_mask_model_decode_NN_GPU_remote": false,
+  "recorded_utc": "2026-11-12T17:51:48.819985+00:00"
+}
