@@ -24,6 +24,35 @@ network; outputs return to the original photograph geometry. Inference is FP32,
 including on CPU and Pascal GPUs. Optional TTA averages aligned joint vessel/class
 probabilities before decoding, as described in [UNIFIED_TTA.md](UNIFIED_TTA.md).
 
+## Python API
+
+Run this with `uv run python` after installation. This uses the same
+[DRIVE TRAIN photo/FOV pair](PREDICT_ORIGINAL.md#obtain-a-matching-photo-and-fov)
+as the original pipeline. Unlike the CLI's FOV path, this API takes a binary
+**array** for `fov`. Use a separate new/empty output directory.
+
+```python
+from pathlib import Path
+import numpy as np
+from PIL import Image
+from deepretina.bundled import bundled_checkpoint
+from deepretina.unified import predict_unified
+
+with Image.open("inputs/drive21/21_training_mask.gif") as mask:
+    fov = np.asarray(mask.convert("L")) > 0
+with bundled_checkpoint("unified-v3-tpe-preview") as checkpoint:
+    outputs = predict_unified(
+        checkpoint, Path("inputs/drive21/21_training.tif"),
+        Path("predictions/drive21-tpe-api"),
+        dataset="drive", fov=fov, device="cpu", tta="none",
+    )
+```
+
+The bundled checkpoint checksum is verified before loading. The function exports
+masks, probabilities, overlay and metadata; its return value describes the output
+files. The saved photometric profile is applied automatically: do not pre-normalize
+or apply CLAHE to the input photograph.
+
 ## Training and completion provenance
 
 The run completed 60 epochs on corpus V2: **21 TRAIN sources, 2,529 photos and all
