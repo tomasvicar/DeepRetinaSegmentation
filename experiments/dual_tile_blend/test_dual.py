@@ -233,3 +233,75 @@ def test_hybrid_segmentation_and_conditional_identities_no_added_calls():
     assert np.isfinite(hybrid).all() and np.all((hybrid >= 0) & (hybrid <= 1))
     joint = u._joint_probabilities(hybrid)
     np.testing.assert_allclose(joint[1:3].sum(0), hybrid[0], atol=2e-7, rtol=0)
+
+
+def test_stream_counts_retains_all_three_reports_once_per_photo(monkeypatch):
+    import json
+    import os
+
+    scorer_path = os.environ.get("DUAL_TILE_SCORER_HELPER")
+    if not scorer_path:
+        pytest.skip("Explicit pinned7be scorer required by isolated Old synthetic harness")
+    spec = importlib.util.spec_from_file_location("pinned_counter_for_stream", scorer_path)
+    counter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(counter)
+    rgb = torch.zeros(3, 2, 2)
+    target = torch.zeros(5, 2, 2)
+    valid = torch.ones(5, 2, 2, dtype=torch.bool)
+    probability = np.full((5, 2, 2), 0.5, dtype=np.float32)
+    rows = [{"id": "synthetic", "task": "av", "dataset": "synthetic", "split": "val"}]
+    traces = [("synthetic", "av")]
+
+    class Dataset:
+        def __init__(self):
+            self.groups = [rows] * 770
+            self.photo_ids = [f"synthetic-{i}" for i in range(770)]
+            self.samples = 0
+
+        def sample(self, index, **kwargs):
+            self.samples += 1
+            return rgb, target, valid, traces
+
+    dataset = Dataset()
+    expected_photos = [
+        counter.photo_counts(probability, target, valid, rows, traces, pid, [True] * 5, 0.35)
+        for pid in dataset.photo_ids
+    ]
+    expected = counter.aggregate(expected_photos, 0.35)
+    reference = {
+        "checkpoint": {"sha256": dual.CHECKPOINT, "epoch": 50},
+        "metrics": expected,
+        "inference_protocol": {"threshold": 0.35, "tta": {"mode": "rot4"}},
+    }
+    raw = json.dumps(reference).encode()
+    monkeypatch.setattr(dual, "REFERENCE", hashlib.sha256(raw).hexdigest())
+    fake_calls = []
+
+    def fake_prediction(*args, **kwargs):
+        fake_calls.append(1)
+        return {name: probability.copy() for name in dual.DESCRIPTOR["streams"]}, {"model_calls": 4}
+
+    monkeypatch.setattr(dual, "dual_probabilities", fake_prediction)
+    progress_events = []
+    result = dual.stream_counts(
+        None,
+        dataset,
+        "cpu",
+        CFG,
+        {"checkpoint_sha256": dual.CHECKPOINT, "epoch": 50},
+        raw,
+        u=u,
+        counters=counter,
+        progress=progress_events.append,
+    )
+    assert set(result["reports"]) == set(dual.DESCRIPTOR["streams"]) and len(result["reports"]) == 3
+    assert dataset.samples == len(fake_calls) == 770 and result["model_calls"] == 3080
+    assert len(progress_events) == 770 and progress_events[-1] == {
+        "photos": 770,
+        "model_calls": 3080,
+    }
+    assert result["control_parity_pass"] and all(result["control_fields_exact"].values())
+    assert all(
+        report["photos"] == 770 and report["ordinary_freeze_evidence"] is False
+        for report in result["reports"].values()
+    )

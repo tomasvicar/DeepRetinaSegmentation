@@ -130,7 +130,9 @@ def dual_probabilities(model, image, device, config, *, u):
     return totals, {"model_calls": calls, "views": 4, "single_shared_model_call_per_tile": True}
 
 
-def stream_counts(model, dataset, device, config, payload, reference_bytes, *, u, counters):
+def stream_counts(
+    model, dataset, device, config, payload, reference_bytes, *, u, counters, progress=None
+):
     """Under80 lines of scorer reuse; caller binds source/data/eligibility before entry.
 
     No disk output, probability cache, model loading or second dataset sample.
@@ -165,7 +167,11 @@ def stream_counts(model, dataset, device, config, payload, reference_bytes, *, u
         or reference["inference_protocol"].get("tta", {}).get("mode") != "rot4"
     ):
         raise ValueError("Control rot4/.35 protocol differs")
-    photos = {"probability_control": [], "spatial_logit_alternative": []}
+    photos = {
+        "probability_control": [],
+        "spatial_logit_alternative": [],
+        "segmentation_logit_control_AV": [],
+    }
     calls = 0
     supported = getattr(model, "supervised_channels", [True] * 5)
     for index, rows in enumerate(dataset.groups):
@@ -190,6 +196,8 @@ def stream_counts(model, dataset, device, config, payload, reference_bytes, *, u
                 )
             )
         del predictions, image, target, valid
+        if progress is not None:
+            progress({"photos": index + 1, "model_calls": calls})
     reports = {}
     for name, counts in photos.items():
         result = counters.aggregate(counts, 0.35)
