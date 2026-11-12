@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "kind": "fixed_two_geometry_TRAIN_timing_input_cohort_NOT_benchmark_result",
+  "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "prepared_content_sha256": "00d9ef19d262eef74f0ca1350fec260c687dff5cc3a53f8911cbe3403e821e52",
+  "geometry_policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+  "cohort_selected_before_final_model_and_speed": true,
+  "inputs": [
+    {
+      "id": "drive21",
+      "dataset": "drive",
+      "split": "train",
+      "photo_id": "sha256:77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925",
+      "source_id": "drive:21",
+      "split_group_id": "sha256:c1fb1ba4aab5e0720abdc0d7e20514fbed8240fad6cbc54a4f27265851917965",
+      "TRAIN_record_ids": [
+        "drive_21_training_vessels"
+      ],
+      "archive_basename": "DRIVE.zip",
+      "RGB": {
+        "member": "training/images/21_training.tif",
+        "encoded_sha256": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+        "encoded_bytes": 758672,
+        "zip_CRC32": 135287332,
+        "transport_alias_count": 2,
+        "transport_alias_CRC_size_equal": true,
+        "artifact_relative_path": "drive21.tif",
+        "raw_shape_HWC": [
+          584,
+          565,
+          3
+        ],
+        "decoded_photo_id": "sha256:77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925",
+        "decoded_identity_convention": "SHA256(shape little-endian int64 H,W,3 + contiguous RGB uint8 bytes)"
+      },
+      "official_FOV": {
+        "member": "training/mask/21_training_mask.gif",
+        "encoded_sha256": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7",
+        "encoded_bytes": 3306,
+        "zip_CRC32": 635281322,
+        "transport_alias_count": 2,
+        "transport_alias_CRC_size_equal": true,
+        "artifact_relative_path": "drive21-official-FOV.gif",
+        "raw_shape_HW": [
+          584,
+          565
+        ],
+        "decoded_display_intensity_threshold": "PIL convert L >127, exactly dataset adapter",
+        "foreground_pixels": 225600,
+        "binary_pixels_sha256": "486d5375729fbe5279f9473e518611d751c909b35619f3d6980cd5a355cd63ab",
+        "source": "official dataset FOV under mask/, never manual1 or disc/cup/vessel annotation"
+      },
+      "geometry": {
+        "field_of_view_degrees": 45.0,
+        "pixels_per_degree": 25.0,
+        "original_provided_FOV_calibration": {
+          "center_row_one_based": 301,
+          "center_col_one_based": 279,
+          "radius_pixels": 269,
+          "edge_pixels": 1588,
+          "diameter_pixels": 538
+        },
+        "canonical_preparation_geometry": {
+          "original_shape": [
+            584,
+            565
+          ],
+          "crop_position": [
+            32,
+            566,
+            10,
+            545
+          ],
+          "rescale_factor": 1.9263698630136987,
+          "prepared_shape": [
+            1031,
+            1033
+          ]
+        }
+      },
+      "selection_policy": "fixed DRIVE TRAIN21"
+    },
+    {
+      "id": "hrf_lexfirst_train",
+      "dataset": "hrf",
+      "split": "train",
+      "photo_id": "sha256:9fe26b84835217dc9b29988953c7addae320856400d513ba801f32233d0e22a7",
+      "source_id": "hrf:04",
+      "split_group_id": "sha256:c3f6953bd755fadedd57c260e38afa9857bcc678aef8e642ec84e78d3972d8fd",
+      "TRAIN_record_ids": [
+        "hrf_04_dr_av",
+        "hrf_04_dr_vessels"
+      ],
+      "archive_basename": "HRF.zip",
+      "RGB": {
+        "member": "images/04_dr.JPG",
+        "encoded_sha256": "8fcdff8c714cf94b7daac8aa9b3d818d026944dcee6e6ccd7d978719e9008c20",
+        "encoded_bytes": 2045144,
+        "zip_CRC32": 921785346,
+        "transport_alias_count": 2,
+        "transport_alias_CRC_size_equal": true,
+        "artifact_relative_path": "hrf_lexfirst_train.JPG",
+        "raw_shape_HWC": [
+          2336,
+          3504,
+          3
+        ],
+        "decoded_photo_id": "sha256:9fe26b84835217dc9b29988953c7addae320856400d513ba801f32233d0e22a7",
+        "decoded_identity_convention": "SHA256(shape little-endian int64 H,W,3 + contiguous RGB uint8 bytes)"
+      },
+      "official_FOV": {
+        "member": "mask/04_dr_mask.tif",
+        "encoded_sha256": "c167c4c82d6feddb35360ea686ff6d7cc4cc38042f24e4cf41ce170fb2f499a8",
+        "encoded_bytes": 107300,
+        "zip_CRC32": 2297052858,
+        "transport_alias_count": 2,
+        "transport_alias_CRC_size_equal": true,
+        "artifact_relative_path": "hrf_lexfirst_train-official-FOV.tif",
+        "raw_shape_HW": [
+          2336,
+          3504
+        ],
+        "decoded_display_intensity_threshold": "PIL convert L >127, exactly dataset adapter",
+        "foreground_pixels": 6913398,
+        "binary_pixels_sha256": "9fa8f8a5f63cda5c5bc332a283bfbca5371b6a313f57bb9327feaa751cd9f087",
+        "source": "official dataset FOV under mask/, never manual1 or disc/cup/vessel annotation"
+      },
+      "geometry": {
+        "field_of_view_degrees": 60.0,
+        "pixels_per_degree": 25.0,
+        "original_provided_FOV_calibration": {
+          "center_row_one_based": 1166,
+          "center_col_one_based": 1762,
+          "radius_pixels": 1632,
+          "edge_pixels": 4924,
+          "diameter_pixels": 3264
+        },
+        "canonical_preparation_geometry": {
+          "original_shape": [
+            2336,
+            3504
+          ],
+          "crop_position": [
+            0,
+            2335,
+            129,
+            3391
+          ],
+          "rescale_factor": 0.4280821917808219,
+          "prepared_shape": [
+            1000,
+            1397
+          ]
+        }
+      },
+      "selection_policy": "lexicographically first distinct source_image among eligible canonical TRAIN HRF, before any speed/model measurement"
+    }
+  ],
+  "hrf_eligible_distinct_source_images": 27,
+  "hrf_sorted_first10_source_images": [
+    "images/04_dr.JPG",
+    "images/04_g.jpg",
+    "images/04_h.jpg",
+    "images/05_dr.JPG",
+    "images/05_g.jpg",
+    "images/05_h.jpg",
+    "images/06_dr.JPG",
+    "images/06_g.jpg",
+    "images/06_h.jpg",
+    "images/07_dr.JPG"
+  ],
+  "FOV_calibration_source_sha256": "36fea266aee638a600e19f11b51c006806a51ea0322eff0f5420750cecdf1afc",
+  "adapter_source_sha256": "c39ffa5bc91d022adfbb805610f303f8aebf9413d5c128f3ed31841b085460f1",
+  "no_GT_TEST_models_Torch_GPU_or_timing": true,
+  "limitations": [
+    "Two deterministic TRAIN geometries only; not a population/clinical performance estimate.",
+    "Do not replace an image after seeing latency; same RGB/FOV bytes must feed both final pipelines.",
+    "No quality, memory-fit, speedup or final model selection claim."
+  ]
+}
