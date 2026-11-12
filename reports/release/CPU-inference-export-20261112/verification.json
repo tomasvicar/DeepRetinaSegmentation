@@ -1,0 +1,61 @@
+{
+  "kind": "CPU_unified_inference_export_synthetic_verification_NOT_selection",
+  "base_commit": "6eb3ff0",
+  "source_files_sha256": {
+    "src/deepretina/inference_export.py": "3bea5f693511d3f502e57ad2261f6da6fa36a144b027ec4c07b027469f0beb6c",
+    "tests/test_inference_export.py": "6e44b0e917f6f2ccda5cf3a7969ffb059cd9c2ff806807b7d2a3c6c06f21f4df"
+  },
+  "actual_final_tests": {
+    "command": "CUDA_VISIBLE_DEVICES= OMP/MKL/OPENBLAS=1 PYTHONPATH=src CPUaff4 nice17 IO3 existingPython -m pytest -q tests/test_inference_export.py",
+    "passed": 15,
+    "seconds": 2.02,
+    "observed_returncode": true,
+    "returncode": 0,
+    "scope": "Generated base2/depth1 batchnorm CPU checkpoint withBF16 historical config; export/safeCPUreload and one9x11 model forward pair exact. No realmodels/data/GT/training/GPU/TEST."
+  },
+  "earlier_runs": [
+    {
+      "passed": 2,
+      "fixture_errors": 13,
+      "seconds": 3.74,
+      "reason": "Toy fixture patch16 violated unchanged config>=32; rejected before model construction/export. Fixture corrected only."
+    },
+    {
+      "passed": 15,
+      "seconds": 2.18,
+      "scope": "Before plainlocalTorch import clarity change"
+    },
+    {
+      "passed": 15,
+      "seconds": 2.22,
+      "scope": "Before final explicitCPU constructor context; final same15 tests rerun with ambientmeta positive fixture"
+    }
+  ],
+  "proofs": [
+    "mandatory externallypinned original byteSHA verified before Torch load",
+    "weights_onlyCPU snapshot loads",
+    "strict product loader state/config compatibility without export forward",
+    "onlyCPU cloned finite named state tensors; state_dict version metadata retained",
+    "same dtype/shape/rawtensorbytes digest; actual tinyCPU forward outputs equal",
+    "all optimizer/RNG/training_state aliases removed",
+    "raw config/preprocessing/architecture/data/source/epoch metadata preserved",
+    "inference_only marker and originalSHA\u2192separateartifactSHA sidecar",
+    "default-map exportedCPUload works with CUDAinit/query trapped",
+    "ambientmeta export stillconstructsCPUmodels and preservesCPU RNG",
+    "exclusiveexistingoutput/sidecar nooverwrite",
+    "wrongSHA/empty/nonTensor/nonfinite/mismatchedshape/wrongfamily/hiddenTensor/badprofile/reexport rejected"
+  ],
+  "test_module_definitions": [
+    "test_actual_toy_export_safe_CPU_load_model_parity_and_provenance",
+    "test_existing_outputs_preserved_before_any_source_read",
+    "test_bad_or_mismatched_original_pin_fails_before_output",
+    "test_invalid_payload_does_not_publish",
+    "test_reexport_refused_and_all_training_aliases_removed"
+  ],
+  "CLI_checks": "CLI-results.json:help0 andwrongoriginalSHA1 (expected refusal) before model load",
+  "existing_12_weight_registry_or_alias_changes": false,
+  "pretrained_git_tree_unchanged": "d86c907c67f79347a9e69b70459deb1e48c8333e",
+  "actual_real_model_export_or_finalselection": false,
+  "no_selection_TEST_or_quality_authorization": true,
+  "Ruff_and_diff_check": "PASS"
+}

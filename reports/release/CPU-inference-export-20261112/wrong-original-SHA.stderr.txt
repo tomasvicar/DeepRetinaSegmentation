@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/var/home/tom/code/DeepRetinaSegmentation_inference_export/src/deepretina/inference_export.py", line 158, in <module>
+    main()
+  File "/var/home/tom/code/DeepRetinaSegmentation_inference_export/src/deepretina/inference_export.py", line 154, in main
+    print(json.dumps(export_unified_inference(**vars(parser.parse_args())), indent=2))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/home/tom/code/DeepRetinaSegmentation_inference_export/src/deepretina/inference_export.py", line 63, in export_unified_inference
+    raise ValueError("Original checkpoint bytes differ from expected SHA256")
+ValueError: Original checkpoint bytes differ from expected SHA256
