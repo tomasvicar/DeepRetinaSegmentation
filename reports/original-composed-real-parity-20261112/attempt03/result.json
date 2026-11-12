@@ -1,0 +1,122 @@
+{
+  "status": "passed",
+  "scope": "one raw TRAIN DRIVE21 photo; exact masks, no GT/VAL/TEST/quality claim",
+  "source_commit": "e249b81",
+  "staged_files_unchanged": true,
+  "manifest_sha256": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+  "train_record": {
+    "id": "drive_21_training_vessels",
+    "dataset": "drive",
+    "split": "train",
+    "source_id": "drive:21",
+    "photo_id": "sha256:77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925",
+    "image": "images/77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925_c1fb1ba4aab5.png",
+    "mask": "masks/drive_21_training_vessels.npz",
+    "task": "vessels",
+    "usable_for_training": true,
+    "original_size": [
+      584,
+      565
+    ],
+    "preprocessing_profile": "legacy25_raw",
+    "pixels_per_degree": 25.0,
+    "field_of_view_degrees": 45.0,
+    "preparation_preview": false,
+    "metadata": {
+      "annotator": "first",
+      "source_image": "training/images/21_training.tif",
+      "source_annotation": "training/1st_manual/21_manual1.gif",
+      "source_split": "train",
+      "official_split": "train",
+      "preprocessing_profile": "legacy25_raw",
+      "pixels_per_degree": 25.0,
+      "original_geometry": {
+        "original_shape": [
+          584,
+          565
+        ],
+        "crop_position": [
+          32,
+          566,
+          10,
+          545
+        ],
+        "rescale_factor": 1.9263698630136987,
+        "prepared_shape": [
+          1031,
+          1033
+        ]
+      },
+      "raw_rgb_sha256": "77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925",
+      "canonical_field_of_view_degrees": 45.0,
+      "annotation_resources_copied": false
+    },
+    "split_group_id": "sha256:c1fb1ba4aab5e0720abdc0d7e20514fbed8240fad6cbc54a4f27265851917965"
+  },
+  "input_sha256": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+  "fov_sha256": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7",
+  "benchmark_script_sha256": "3a0324e09c128b36381b1ab219c88c8f10e06090918c10023901588da7ac1aae",
+  "quality_policy_script_sha256": "44f1faf4ff41b3dd60b8d6dea747a577bcfd2bb77b1f2366e153bc688fb27a61",
+  "components": {
+    "vessel": {
+      "model": "legacy-vessels",
+      "sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01"
+    },
+    "disc": {
+      "model": "legacy-disc-0",
+      "sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f"
+    },
+    "universal": {
+      "model": "legacy-universal",
+      "sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f"
+    },
+    "av": {
+      "model": "legacy-av",
+      "sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b"
+    }
+  },
+  "channels": [
+    "vessel",
+    "artery",
+    "vein",
+    "disc",
+    "cup"
+  ],
+  "shape": [
+    5,
+    584,
+    565
+  ],
+  "mask_differences": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "positive_pixels": [
+    28394,
+    13537,
+    14999,
+    5575,
+    2051
+  ],
+  "candidate_mask_sha256": "60054453a1f5522187c1c476567e7fbe747d3d2e42339126adf22b950868872c",
+  "baseline_mask_sha256": "60054453a1f5522187c1c476567e7fbe747d3d2e42339126adf22b950868872c",
+  "finite_probabilities": true,
+  "probability_shape": [
+    5,
+    584,
+    565
+  ],
+  "candidate_seconds_including_load_export": 21.89277084299829,
+  "baseline_seconds_reusing_models": 19.853108437964693,
+  "timing_not_a_speed_comparison": true,
+  "torch_threads": 1,
+  "torch_interop_threads": 1,
+  "cuda_initialized": false,
+  "torch": "2.6.0+cu124",
+  "numpy": "2.5.4",
+  "maxrss_kib": 2944968,
+  "loader_instrumentation": "capture actual API loader return once; same loaded immutable models reused by literal benchmark function"
+}

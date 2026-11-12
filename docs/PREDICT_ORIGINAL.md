@@ -52,8 +52,8 @@ Historical model training exposure and raw/normalized input provenance remain
 qualified; the supplied-FOV calibration and Python raw photometry do not certify
 arbitrary-camera MATLAB parity or clinical performance. Benchmark metrics do not
 certify a new photograph. This route does not select new weights or alter model
-aliases. Initial integration tests use synthetic toy forwards; real bundled-model
-end-to-end parity remains a separate measured check.
+aliases. A real TRAIN DRIVE21 check on 2026-11-12 confirmed exact agreement of all five
+binary masks with the frozen benchmark operation (see evidence below).
 
 ## Integration verification
 
@@ -63,5 +63,16 @@ restoration; they check output metadata, probability/support semantics and
 pre-load refusal cases. The broader CLI/output/calibration regression selection
 passed 90 tests in 11.76 seconds. Some existing regressions deserialize bundled
 weights and forward small synthetic CPU images. No real photographs, GT or GPU
-were used. A real
-TRAIN photograph parity check of the complete composition is still pending.
+were used by those tests. The separately authorized real TRAIN parity check
+below then exercised the complete composition.
+
+On 2026-11-12, a single raw DRIVE21 TRAIN photograph (584×565) with its provided
+FOV passed complete FP32/CPU1 comparison against the actual frozen benchmark
+`original_operation(cup_policy="inside-disc")`: all five masks were bitwise equal,
+all scores finite, four checkpoint identities verified, and CUDA uninitialized.
+Child and external observer returned 0 in 43.1s, within 600s/8GiB bounds. Candidate
+and reference reused the same verified loaded objects; this is not a latency
+comparison. Two earlier pre-forward failures (identity hash convention and
+runtime-only tiling argument selection) are preserved alongside the successful
+[original evidence](../reports/original-composed-real-parity-20261112/README.md).
+This one-photo result establishes neither all-camera parity nor segmentation quality.
