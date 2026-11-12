@@ -243,6 +243,9 @@ def check_v2_eligibility(selection, candidate, groups):
             and digest_value(view["annotation_visits_sha256"]),
             "Typed terminal/selected OWN full TRAIN coverage differs",
         )
+    if proof["family"] == "curated_fd44":
+        check_curated_provenance(proof)
+        return
     terminal = proof["original_completion"]
     require(digest_value(terminal["sha256"]), "Original completion outcome byte pin missing")
     if proof["family"] == "pool_72_v3":
@@ -280,6 +283,65 @@ def check_v2_eligibility(selection, candidate, groups):
             and digest_value(terminal["reviewed_protocol_sha256"]),
             "Original standalone outcome provenance differs",
         )
+
+
+def check_curated_provenance(proof):
+    """Check the frozen curated adapter's embedded original chain, not a native alias.
+
+    This only checks saved metadata under the externally pinned selection. It does
+    not repeat the CPU checkpoint checker or authorize a new held-out evaluation.
+    """
+    original = proof.get("original_curated_completion")
+    require(isinstance(original, dict), "Missing original curated completion eligibility")
+    require(
+        proof.get("adapter_kind") == "explicit_original_curated_fd44_final_adapter"
+        and original.get("schema_version") == 1
+        and original.get("kind") == "checked_curated_fd44_completion"
+        and original.get("family") == "curated_fd44"
+        and original.get("PBS_actual_F_Exit0_checked_separately") is True
+        and original.get("native_envelope_supplied_or_fabricated") is False
+        and original.get("selection_created") is False
+        and original.get("test_evaluation_enabled") is False,
+        "Require genuine curated completion adapter/family/outcome",
+    )
+    for key in (
+        "checkpoint_role",
+        "checkpoint_sha256",
+        "checkpoint_epoch",
+        "checkpoint_steps",
+        "selected_training_score",
+        "raw_training_configuration",
+        "selected_checkpoint_coverage",
+        "terminal_coverage",
+        "original_qa_kind",
+    ):
+        require(original.get(key) == proof[key], "Original curated binding differs: " + key)
+    source = proof["source_profile"]
+    require(
+        original.get("source_profile")
+        == {
+            "commit": source["commit"],
+            "execution_sha256": source["execution_code_sha256"],
+            "training_sha256": source["training_source_sha256"],
+        }
+        and original.get("actual_checker_source") == proof["actual_evaluation_source"],
+        "Original curated source/runtime differs",
+    )
+    inputs = original.get("original_inputs_sha256", {})
+    pins = proof["input_sha256"]
+    require(
+        digest_value(original.get("original_receipt_sha256"))
+        and original.get("original_index_sha256") == pins.get("curated_index")
+        and digest_value(pins.get("curated_index"))
+        and inputs.get("receipt60") == original["original_receipt_sha256"]
+        and inputs.get("qa60") == proof["original_qa_sha256"]
+        and inputs.get("best") == proof["training_best"]["sha256"]
+        and inputs.get("last") == proof["training_completion"]["last_checkpoint_sha256"]
+        and inputs.get("csv") == proof["training_completion"]["metrics_csv_sha256"]
+        and inputs.get("summary") == proof["training_completion"]["training_summary_sha256"]
+        and all(digest_value(value) for value in inputs.values()),
+        "Original curated index/receipt/artifact byte pins differ",
+    )
 
 
 def checked_candidate(
@@ -458,8 +520,9 @@ def checked_candidate(
     tta = mode_from_protocol(protocol)
     require(
         tta == "none"
-        or selection["freeze_eligibility"]["family"] in {"standalone_72", "pool_72_v3"},
-        "Reviewed TTA requires source72 typed completion",
+        or selection.get("freeze_eligibility", {}).get("family")
+        in {"standalone_72", "pool_72_v3", "curated_fd44"},
+        "Reviewed TTA requires an explicitly supported typed completion family",
     )
     threshold = protocol["threshold"]
     require(
