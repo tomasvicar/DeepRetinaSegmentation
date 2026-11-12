@@ -1,0 +1,222 @@
+{
+  "kind": "paired_fixed_TWO_TRAIN_GPU_timing_NOT_population_or_quality",
+  "timed_original_unified_checkpoint_sha256": "521b8881d1b2c69a7395be6687a8b86581838e3f5dbb004a150333d454132cea",
+  "frozen_selection_sha256": "caef7716a5656a151cf6c0ce1e9b8cd694aa9f13620cef36f14abcd0a6368e80",
+  "frozen_original_policy_sha256": "f9f54af9610bc9dbf3094ec2b1cb1d9ce972b7b3ca66504de23c45871bd509e2",
+  "original_reference_VAL_sha256": "6808f293d750dec5a94a0593f5c52d054733696d21984a61e399284355f94405",
+  "timed_deployment_artifact": false,
+  "device": "NVIDIA GeForce GTX1060 6GB",
+  "precision": "float32_no_autocast",
+  "runtime": {
+    "torch": "2.6.0+cu124",
+    "python": "3.12.14",
+    "cpu_threads": 2,
+    "interop_threads": 1,
+    "opencv_threads": 1,
+    "affinity": [
+      2,
+      3
+    ],
+    "nice": 15,
+    "idleIO": 3
+  },
+  "warmup": 1,
+  "repeats": 3,
+  "parameters": {
+    "original_four_networks": 5943312,
+    "selected_unified": 1965637
+  },
+  "cases": {
+    "drive21": {
+      "original_report_sha256": "d5d144376afc59e7885cd6934b1a68e6cb7c2070852628012c000fbf8c9b3d9c",
+      "actual_child_returncode": 0,
+      "whole_attempt_returncode": 1,
+      "shape": [
+        584,
+        565,
+        3
+      ],
+      "dataset": "drive",
+      "field_of_view_degrees": 45.0,
+      "input_sha256": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+      "fov_sha256": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7",
+      "original": {
+        "seconds": [
+          2.8033342100679874,
+          2.7596490629948676,
+          3.0100536190439016
+        ],
+        "median_seconds": 2.8033342100679874,
+        "baseline_allocated_bytes": 23908352,
+        "peak_allocated_bytes": 1883774976,
+        "peak_working_bytes": 1859866624,
+        "warmup_calls": 1,
+        "measured_calls": 3,
+        "warmup_seconds": [
+          4.801043201005086
+        ]
+      },
+      "unified": {
+        "seconds": [
+          1.0823515530209988,
+          1.0813390708062798,
+          1.0650632879696786
+        ],
+        "median_seconds": 1.0813390708062798,
+        "baseline_allocated_bytes": 7906304,
+        "peak_allocated_bytes": 135875072,
+        "peak_working_bytes": 127968768,
+        "warmup_calls": 1,
+        "measured_calls": 3,
+        "warmup_seconds": [
+          1.1064127979334444
+        ]
+      },
+      "model_load_seconds": {
+        "original_four_networks": 0.29643645300529897,
+        "unified": 0.18199652107432485
+      },
+      "original_median_divided_by_unified_median": 2.592465477066074,
+      "last_mask_identity_no_extra_forward": {
+        "original": {
+          "shape": [
+            5,
+            584,
+            565
+          ],
+          "dtype": "bool",
+          "sha256": "60054453a1f5522187c1c476567e7fbe747d3d2e42339126adf22b950868872c",
+          "foreground_pixels": [
+            28394,
+            13537,
+            14999,
+            5575,
+            2051
+          ]
+        },
+        "unified": {
+          "shape": [
+            5,
+            584,
+            565
+          ],
+          "dtype": "bool",
+          "sha256": "2f499ad6696b92be82eca997961388d13c6843dd25510b3974d5c19e38ba3a5d",
+          "foreground_pixels": [
+            28339,
+            12729,
+            15610,
+            6168,
+            2100
+          ]
+        }
+      }
+    },
+    "hrf04": {
+      "original_report_sha256": "22f98e9145780e00807a57585ac2f7d15a6ebe58a57125e540b7876e3667d105",
+      "actual_child_returncode": 0,
+      "whole_attempt_returncode": 0,
+      "shape": [
+        2336,
+        3504,
+        3
+      ],
+      "dataset": "hrf",
+      "field_of_view_degrees": 60.0,
+      "input_sha256": "8fcdff8c714cf94b7daac8aa9b3d818d026944dcee6e6ccd7d978719e9008c20",
+      "fov_sha256": "b77130f5b2404e534a0be76e91906c46649b9809d8c2eca613369f9ecf94595e",
+      "original": {
+        "seconds": [
+          5.820296925026923,
+          5.853875319007784,
+          5.717339093098417
+        ],
+        "median_seconds": 5.820296925026923,
+        "baseline_allocated_bytes": 23908352,
+        "peak_allocated_bytes": 2261602304,
+        "peak_working_bytes": 2237693952,
+        "warmup_calls": 1,
+        "measured_calls": 3,
+        "warmup_seconds": [
+          8.341533346101642
+        ]
+      },
+      "unified": {
+        "seconds": [
+          3.3664085688069463,
+          3.3678384539671242,
+          3.3698229300789535
+        ],
+        "median_seconds": 3.3678384539671242,
+        "baseline_allocated_bytes": 7906304,
+        "peak_allocated_bytes": 135875072,
+        "peak_working_bytes": 127968768,
+        "warmup_calls": 1,
+        "measured_calls": 3,
+        "warmup_seconds": [
+          3.5351597759872675
+        ]
+      },
+      "model_load_seconds": {
+        "original_four_networks": 0.32017407682724297,
+        "unified": 0.17872674902901053
+      },
+      "original_median_divided_by_unified_median": 1.728199557247451,
+      "last_mask_identity_no_extra_forward": {
+        "original": {
+          "shape": [
+            5,
+            2336,
+            3504
+          ],
+          "dtype": "bool",
+          "sha256": "02b8e821b68b9a1f02d60e847a5860b99a246d9f43d5998a39c32919314ee660",
+          "foreground_pixels": [
+            535444,
+            367469,
+            168689,
+            91011,
+            37429
+          ]
+        },
+        "unified": {
+          "shape": [
+            5,
+            2336,
+            3504
+          ],
+          "dtype": "bool",
+          "sha256": "785a6be2e3b19ffcf62d8244ff2944154ec1376d0c80320f36bba78ca481d11a",
+          "foreground_pixels": [
+            510916,
+            243339,
+            267577,
+            91688,
+            13089
+          ]
+        }
+      }
+    }
+  },
+  "qualifications": [
+    "Two fixed TRAIN geometries only, chosen before finalmodel/speed. Not population or quality/clinical evidence.",
+    "SameRGB+officialFOV per pipeline, resident full5mask preprocessing/model/restore/decode excludesinputIO/model loading/outputserialization/CLI startup.",
+    "HRFofficialTIFF had3channels and firstattemptfailedbeforemodelload. RootapprovedderivedPNG followscohort PILconvertL>127 exactbinaryproof; no rawTIFFIO measured.",
+    "Firstattemptwholeouter1 remainsfailed despite validDRIVEchild0; separateHRF-onlysecondattemptactualouter0. DRIVEwasnotrepeated.",
+    "Measured originalselectedBESTcheckpoint has no optimizer/training state; artifactsize alone is not compression/latency proof. Deploymentexport is a differentSHA/bytes, not timedhere.",
+    "NoTEST, NNquality evaluation or source/model/default modifications."
+  ],
+  "artifacts": {
+    "original_four_checkpoint_bytes": 25068700,
+    "timed_unified_checkpoint_bytes": 8893810,
+    "unified_model_tensor_bytes": 7874468,
+    "timed_unified_has_optimizer_or_training_state": false
+  },
+  "deployment_artifact": {
+    "sha256": "292ea5999a1fc97a767c1c34bb7b4558040267372c5b128f403f2dce50529b29",
+    "bytes": 8892466,
+    "timed_in_this_report": false,
+    "qualification": "Separate CPU inference-state/probability/mask parity evidence does not constitute another timing measurement.",
+    "TRAIN_parity_evidence_sha256": "53182d6cf545d9d20b6132513baa40c46a539221123d571d7d559b3fb2acfeea"
+  }
+}
