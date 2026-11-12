@@ -1,0 +1,28 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "4",
+    "nice",
+    "-n",
+    "17",
+    "ionice",
+    "-c",
+    "3",
+    "/var/home/tom/code/DeepRetinaSegmentation_hpo/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_tpe_preview_release.py::test_preview_recipe_exact_actual_checkpoint_except_portable_device"
+  ],
+  "started_utc": "2026-11-12T07:50:32.554171+00:00",
+  "base_source_commit": "19f8792d715219fcea1bcb7a5977f93bb7adafbb",
+  "patched_test_sha256": "41486632435239d7e3634042c5e53b6d634e396c974c162e494433fa559f1758",
+  "scope": "Single corrected metadata case; actualBEST58 safeCPUstate/config load, noNN/GT/realphoto/GPU/TEST; prior96passed cases NOT rerun",
+  "timeout_seconds": 60,
+  "timed_out": false,
+  "observed_returncode": true,
+  "returncode": 0,
+  "elapsed_seconds": 3.0220570291858166,
+  "completed_utc": "2026-11-12T07:50:35.576228+00:00"
+}
