@@ -20,7 +20,7 @@ with Image.open("official-fov.png") as image:
     fov = np.asarray(image.convert("L")) > 127
 predict_bundled_unified(
     "unified-raw512-selected", "fundus.png", "predictions/unified-api",
-    dataset="drive", fov_mask=fov,
+    dataset="drive", fov=fov,
 )
 ```
 
@@ -59,7 +59,8 @@ See [export and verification evidence](../reports/release/unified-raw512-selecte
 [packaging rules](FINAL_MODEL_PACKAGING.md) and
 [the frozen selection](../reports/release/raw512-selection-20261112/README.md).
 
-The [matched GPU timing report](../reports/release/selected-raw512-two-TRAIN-GPU-timing-20261112/README.md)
-measures the exact selected protocol against the original four-network pipeline
-on two fixed TRAIN geometries. It keeps input IO, loading and resident inference
-separate; it is not a population latency estimate.
+[Paired GPU timing on two fixed TRAIN inputs](../reports/release/selected-raw512-two-TRAIN-GPU-timing-20261112/README.md)
+measures the original selected checkpoint with this exact rot4/.35 protocol,
+not the separately exported package file. Resident pipeline time and model
+loading are reported separately, with input IO excluded. Two images do not
+establish general speed.

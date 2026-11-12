@@ -6,15 +6,16 @@ object in its registry entry. Its only permitted keys are `tta`, `threshold`,
 and the public `predict_bundled_unified` API, **not** evaluation, selection/TEST,
 custom checkpoint paths, original models or `predict-original`.
 
-No current registry entry declares this object. All12 existing models and their
-aliases retain `tta=none`, `threshold=0.5` and their existing saved/native tiling.
-No model was selected/promoted or registry/default/weight bytes changed here.
-The existing TPE preview remains an experimental preview, not a newly chosen final.
+`unified-raw512-selected` declares the reviewed four defaults shown below.
+The other 12 bundled models and all existing aliases retain `tta=none`,
+`threshold=0.5` and their existing saved/native tiling. In particular, the TPE
+preview keeps its earlier defaults; use the selected model name explicitly.
+See [its model card and qualifications](UNIFIED_RAW512_SELECTED.md).
 
-For a future reviewed model, the entry could contain (illustrative only):
+The selected registry entry contains:
 
 ```json
-"inference_defaults": {"tta": "rot4", "threshold": 0.35}
+"inference_defaults": {"tta": "rot4", "threshold": 0.35, "tile_size": 512, "overlap": 64}
 ```
 
 Omitted keys retain historical defaults; omitted/None tile/overlap use the saved
@@ -29,8 +30,8 @@ rejected. No second named-preset registry or extra user-facing preset flag exist
 # Current preview: ordinary none/.5, saved tiling (unchanged).
 uv run deepretina predict --model unified-v3-tpe-preview \
   --input fundus.png --dataset drive --output predictions/preview --device cpu
-# Explicit protocol always wins, including future models with other defaults.
-uv run deepretina predict --model unified-v3-tpe-preview \
+# Explicit protocol wins, including on the selected model with other defaults.
+uv run deepretina predict --model unified-raw512-selected \
   --input fundus.png --dataset drive --output predictions/preview-explicit \
   --device cpu --tta none --threshold 0.5 --tile-size 512 --overlap 64
 ```
@@ -56,6 +57,8 @@ files = predict_bundled_unified(
 This lazy wrapper resolves the same bundled entry/alias defaults, verifies the
 bundled checksum using the existing loader, and delegates to unchanged unified
 prediction. `fov`, when supplied, is a binary array as in the underlying API.
+Load an image mask as `np.asarray(Image.open(path).convert("L")) > 127`; the
+Python keyword is `fov`, whereas the CLI accepts its file path with `--fov`.
 Input is raw unprocessed RGB; saved preparation/photometry remains automatic.
 The return value is the same output-path dictionary as `predict_unified`.
 
@@ -67,7 +70,10 @@ Direct checkpoint-level `predict_unified` retains its own historical defaults;
 it does not consult model names or this registry. Use the bundled wrapper/CLI
 when the named model's reviewed defaults are intended.
 
-The routing is tested with synthetic registry entries and mocked predictors only.
-It does not rerun model quality, NN inference, training or TEST. See
+The original routing tests use synthetic registry entries and mocked predictors.
+The selected release separately verifies omitted-default CLI/API and installed-wheel
+prediction on one actual TRAIN image; all probabilities and five masks match the
+original selected checkpoint exactly. This is integration evidence, not a fresh
+quality or TEST claim. See [selected release verification](../reports/release/unified-raw512-selected-20261112/README.md),
 [verification](../reports/release/bundled-inference-defaults-20261112/verification.json)
 and [the complete test catalog](TESTING.md).
