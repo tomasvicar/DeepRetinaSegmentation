@@ -1,12 +1,14 @@
 # Stav projektu
 
-**Snímek: 12. 11. 2026 v 13:38 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
+**Snímek: 12. 11. 2026 v 13:50 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
 Finální kandidát je od13:34UTC zmrazen: raw512 BEST50, rot4/0,35/512/64.
 Kontrola původních vah, dokončení tréninku, výběru i navázané původní reference
-prošla. Připravuje se TEST856 a balení nového modelu. Na dense cévách VAL má
+prošla. TEST856 se připravuje. Model `unified-raw512-selected` už je přibalený; 53 cílených
+kontrol prošlo, CLI/API i izolovaný wheel reprodukují výzkumné pravděpodobnosti
+a všech pět masek na skutečném TRAIN snímku přesně. Na dense cévách VAL má
 Dice0,75132 proti původnímu0,76133; původní model zůstává doporučený pro prioritu
 cévní kvality. [Přesné identity a omezení](../reports/release/raw512-selection-20261112/README.md).
 
@@ -45,8 +47,9 @@ se změnilo proti čerstvé inicializaci se stejným seedem. Všech pět nativn�
 presetů tak má funkční kontrolu na reálných datech. A/V pokrývá jedinou vhodnou
 TRAIN fotografii/anotaci, nikoli celý korpus; paměťový peak je pouze z verifikace,
 ne z trénování. [Podrobný GPU důkaz](../reports/native-legacy-real-smoke/av-GPU-functional-proof.json).
-Původní váhy, produkční architektury, konfigurace a počet dvanácti dodávaných
-modelů zůstaly stejné; jednokrokové kontrolní váhy se nevydávají.
+Původní váhy, produkční architektury a konfigurace se touto nativní kontrolou
+nezměnily; jednokrokové kontrolní váhy se nevydávají. Pozdější raw512 přidává
+samostatný třináctý model.
 
 Každá predikce vyžaduje nový nebo prázdný výstupní adresář. Opakované použití
 zaplněného adresáře nyní skončí před načtením modelu a nezmění dřívější soubory;
@@ -162,7 +165,7 @@ Výběr a zmrazení přesného protokolu jsou dokončené; následný TEST zatí
 3. Přidat samostatný inference checkpoint, ověřit shodu predikce s výzkumným zdrojem a instalaci přes `uv` mimo checkout.
 4. Předat obě rodiny s výsledky a omezeními. Cévní zlepšení vůči původní síti zůstává nesplněným vědeckým cílem; další trénovací hledání nyní uzavíráme.
 
-**Přibalené jsou původní modely, kontroly V1/V2 a samostatné vascular2/TPE preview; optimalizovaný finální model a TEST výsledky zatím nejsou vydané.**
+**Přibalené jsou původní modely, samostatný vybraný raw512 i dřívější kontroly/preview. TEST výsledky zatím nejsou vydané.**
 Podrobný cíl je v [GOAL.md](GOAL.md), historické záznamy v
 [PROGRESS_HISTORY_2026-11.md](PROGRESS_HISTORY_2026-11.md). Operátorské přístupy a
 spotřeba MetaCentra jsou vedené v samostatném soukromém provozním repozitáři.

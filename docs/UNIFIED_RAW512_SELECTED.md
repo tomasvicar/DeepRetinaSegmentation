@@ -7,14 +7,20 @@ completed60 epochs; this selected artifact is not the terminal checkpoint.
 The compact UNet has base16/depth4/batch normalization and five outputs.
 
 ```bash
-deepretina predict --model unified-raw512-selected \
-  --input fundus.png --dataset drive --fov official-fov.png --output prediction
+uv run deepretina predict --model unified-raw512-selected \
+  --input fundus.png --dataset drive --fov official-fov.png --output predictions/unified-cli
 ```
 
 ```python
+import numpy as np
+from PIL import Image
 from deepretina import predict_bundled_unified
+
+with Image.open("official-fov.png") as image:
+    fov = np.asarray(image.convert("L")) > 127
 predict_bundled_unified(
-    "unified-raw512-selected", "fundus.png", "prediction", dataset="drive"
+    "unified-raw512-selected", "fundus.png", "predictions/unified-api",
+    dataset="drive", fov_mask=fov,
 )
 ```
 

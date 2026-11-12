@@ -67,50 +67,39 @@ It requires a supplied FOV and known dataset or explicit camera angle. See
 DRIVE input pair, Python API, probability semantics and benchmark qualifications.
 `fundus.png` and `fov.png` are placeholders; TIFF/GIF paths are also supported.
 
-Optional [per-model unified inference defaults](docs/BUNDLED_INFERENCE_DEFAULTS.md)
-are supported for future reviewed bundled models. None of the current12 entries
-uses them; current defaults remain `none`/`0.5`. Explicit prediction flags always
-win. The Python `predict_bundled_unified` API shares the same resolution.
+For the smaller unified network with all five outputs:
+
+```bash
+uv run deepretina predict --model unified-raw512-selected \
+  --input fundus.png --fov fov.png --dataset drive \
+  --output predictions/unified --device cpu
+```
+
+This VAL-selected BEST50 covers all 2,529 TRAIN photographs / 5,700 annotation
+records from 21 sources. CLI and Python API automatically use its measured
+`rot4` / threshold `0.35` / tile `512` / overlap `64` protocol. Explicit flags
+can override these [per-model defaults](docs/BUNDLED_INFERENCE_DEFAULTS.md).
+The original model aliases and all previous models keep their existing defaults.
+
+Dense-vessel VAL Dice is **0.75132**, versus **0.76133** for the original
+reference. Keep the original pipeline when vessel quality is the priority.
+The unified model offers a smaller five-head alternative; its held-out TEST
+is pending. See [the model card, exact identities and verification](docs/UNIFIED_RAW512_SELECTED.md).
 
 Use a new or empty output directory for each prediction. A populated directory
 is rejected so that masks from different photographs or models cannot get mixed.
 
-For all five outputs in one RGB-network pass, use the separate V2 control:
+Earlier models remain available by explicit name:
 
-```bash
-uv run deepretina predict --model unified-v2-control \
-  --input /path/to/fundus.jpg --dataset drive \
-  --output predictions/unified-v2 --device cpu
-```
+| Model | Purpose and evidence |
+| --- | --- |
+| `unified-v2-control` | [All-data V2 control](docs/UNIFIED_V2_CONTROL.md), fixed terminal60. |
+| `unified-v2-vascular2` | [Vascular-sampling preview](docs/UNIFIED_V2_VASCULAR2.md), BEST59. |
+| `unified-v3-tpe-preview` | [First TPE preview](docs/UNIFIED_V3_TPE_PREVIEW.md), BEST58; optional TTA has separate cost measurements. |
 
-`drive` is an example: choose the photograph's actual source/camera. This is a
-control baseline, not an optimized/final model; vessel quality is lower than the
-original reference. See the [model card and task tradeoffs](docs/UNIFIED_V2_CONTROL.md).
-
-A separate validation-selected preview uses the completed vascular-sampling run:
-
-```bash
-uv run deepretina predict --model unified-v2-vascular2 \
-  --input /path/to/fundus.jpg --dataset drive \
-  --output predictions/vascular2-preview --device cpu
-```
-
-This E59 preview used all 21 TRAIN sources and all 5,700 variants. Vessel Dice
-still regresses against the original reference; it is not final or TEST-qualified.
-See [its model card and per-task results](docs/UNIFIED_V2_VASCULAR2.md).
-
-The first completed TPE run also has an explicit preview (BEST58, after 60 epochs):
-
-```bash
-uv run deepretina predict --model unified-v3-tpe-preview \
-  --input /path/to/fundus.jpg --dataset drive \
-  --output predictions/tpe-preview --device cpu
-```
-
-Optional `--tta rot4` explores four-view inference at higher cost. Default `none`
-remains unchanged. Vessel quality still trails the original reference; TEST and
-final selection remain pending. See [the model card, training recipe and separate
-quality/cost evidence](docs/UNIFIED_V3_TPE_PREVIEW.md).
+These controls/previews have their own historical VAL results and no final TEST
+qualification. They are retained for reproducibility, alongside the original
+networks and clearly named single-database pilots.
 
 For the original models, add `--device cpu` to work without a GPU and
 `--dataset drive` (or the correct
