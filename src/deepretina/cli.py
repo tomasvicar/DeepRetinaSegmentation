@@ -114,6 +114,17 @@ def parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--split", choices=["train", "val", "test"], default="test")
     evaluate.add_argument("--output", type=Path, required=True, help="Metrics JSON")
 
+    original = commands.add_parser(
+        "predict-original", help="Compose the four fixed bundled original models for one raw photo"
+    )
+    original.add_argument("--input", type=Path, required=True)
+    original.add_argument("--fov", type=Path, required=True)
+    original.add_argument("--output", type=Path, required=True)
+    original.add_argument("--dataset")
+    original.add_argument("--field-of-view-degrees", type=float)
+    original.add_argument("--fov-diameter-pixels", type=float)
+    original.add_argument("--device", default="auto")
+
     predict = commands.add_parser(
         "predict", help="Predict an image or directory at original resolution"
     )
@@ -206,6 +217,18 @@ def main(argv: list[str] | None = None) -> None:
 
 
 def dispatch(args: argparse.Namespace):
+    if args.command == "predict-original":
+        from .original import predict_original
+
+        return predict_original(
+            args.input,
+            fov=args.fov,
+            output=args.output,
+            dataset=args.dataset,
+            field_of_view_degrees=args.field_of_view_degrees,
+            fov_diameter_pixels=args.fov_diameter_pixels,
+            device=args.device,
+        ).outputs
     if args.command == "datasets":
         import importlib.resources
 

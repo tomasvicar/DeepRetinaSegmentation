@@ -49,6 +49,12 @@ uv run deepretina predict --model legacy-vessels --input /path/to/fundus.jpg --o
 uv run deepretina predict --model legacy-universal --input /path/to/fundus.jpg --output predictions/disc_cup
 ```
 
+For all five outputs from the composed original benchmark pipeline, use
+`deepretina predict-original --input fundus.png --fov fov.png --dataset drive
+--output predictions/original`. It requires a supplied FOV and explicit camera
+calibration. See [composed original prediction](docs/PREDICT_ORIGINAL.md) for the
+API, probability semantics and benchmark qualifications.
+
 Use a new or empty output directory for each prediction. A populated directory
 is rejected so that masks from different photographs or models cannot get mixed.
 
