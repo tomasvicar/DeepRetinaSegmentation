@@ -13,6 +13,7 @@ levels differently. This is **not** a matched-downsampling or width-only ablatio
 | Pooling operations | 4 | 3 |
 | Upsampling | Bilinear interpolation and concatenation | Learned transposed convolutions and concatenation |
 | First high-resolution block | Two convolutions | Three convolutions |
+| Nonlinearity | SiLU | ReLU |
 | Registered parameters | 1,965,637 | 1,304,421 |
 
 The controlled factor is the **whole network family**. All36otherrecipe fields
