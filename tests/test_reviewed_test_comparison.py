@@ -601,3 +601,126 @@ def test_schema2_raw_6b_config_uses_only_explicit_compatibility_defaults(case):
     candidate["freeze_eligibility"] = copy.deepcopy(proof)
     with pytest.raises(ValueError, match="Raw training versus runtime config"):
         m.check_v2_eligibility(selected, candidate, groups)
+
+
+def curated_case(case, role="training_best"):
+    """Exact public curated adapter shape, including its distinct embedded chain."""
+    from deepretina.inference_tta import protocol_extension
+
+    groups = typed_case(case, role, "curated_fd44")
+    values, _ = case
+    selected, candidate = values["selection"], values["candidate"]
+    proof = selected["freeze_eligibility"]
+    proof.pop("original_completion")  # Curated never fabricates a standalone terminal.
+    proof["adapter_kind"] = "explicit_original_curated_fd44_final_adapter"
+    proof["input_sha256"]["curated_index"] = "c" * 64
+    source = proof["source_profile"]
+    proof["original_curated_completion"] = {
+        "schema_version": 1,
+        "kind": "checked_curated_fd44_completion",
+        "family": "curated_fd44",
+        "PBS_actual_F_Exit0_checked_separately": True,
+        "native_envelope_supplied_or_fabricated": False,
+        "selection_created": False,
+        "test_evaluation_enabled": False,
+        **{
+            k: copy.deepcopy(proof[k])
+            for k in (
+                "checkpoint_role",
+                "checkpoint_sha256",
+                "checkpoint_epoch",
+                "checkpoint_steps",
+                "selected_training_score",
+                "raw_training_configuration",
+                "terminal_coverage",
+                "selected_checkpoint_coverage",
+                "original_qa_kind",
+            )
+        },
+        "source_profile": {
+            "commit": source["commit"],
+            "execution_sha256": source["execution_code_sha256"],
+            "training_sha256": source["training_source_sha256"],
+        },
+        "actual_checker_source": copy.deepcopy(proof["actual_evaluation_source"]),
+        "original_index_sha256": "c" * 64,
+        "original_receipt_sha256": "d" * 64,
+        "original_inputs_sha256": {
+            "receipt60": "d" * 64,
+            "qa60": proof["original_qa_sha256"],
+            "best": proof["training_best"]["sha256"],
+            "last": proof["training_completion"]["last_checkpoint_sha256"],
+            "csv": proof["training_completion"]["metrics_csv_sha256"],
+            "summary": proof["training_completion"]["training_summary_sha256"],
+        },
+    }
+    extension = protocol_extension("rot4")
+    selected["inference_protocol"].update(extension)
+    candidate["inference_protocol"] = copy.deepcopy(selected["inference_protocol"])
+    candidate["metrics"].update(extension)
+    candidate["freeze_eligibility"] = copy.deepcopy(proof)
+    repin(case)
+    return groups
+
+
+def repin(case):
+    values, paths = case
+    save(case, "selection")
+    pin = m.sha(paths["selection"].read_bytes())
+    values["candidate"]["selection_sha256"] = pin
+    values["policy"]["selected_unified_selection_sha256"] = pin
+    save(case, "candidate")
+    save(case, "policy")
+    values["original"]["reviewed_policy_sha256"] = m.sha(paths["policy"].read_bytes())
+    save(case, "original")
+
+
+@pytest.mark.parametrize("role", ["training_best", "fixed_terminal60"])
+def test_genuine_curated_rot4_saved_test_comparison(case, role):
+    curated_case(case, role)
+    before = {name: p.read_bytes() for name, p in case[1].items()}
+    assert run(case)["photos"] == 2
+    assert all(p.read_bytes() == before[name] for name, p in case[1].items())
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "unknown_family",
+        "missing_eligibility",
+        "missing_curated",
+        "native_alias",
+        "missing_index",
+        "wrong_receipt",
+        "wrong_source",
+        "wrong_coverage",
+        "wrong_protocol",
+    ],
+)
+def test_curated_tta_never_bypasses_original_chain_or_frozen_protocol(case, mutation):
+    curated_case(case)
+    selected, candidate = case[0]["selection"], case[0]["candidate"]
+    proof = selected["freeze_eligibility"]
+    if mutation == "unknown_family":
+        proof["family"] = "other"
+    elif mutation == "missing_eligibility":
+        selected.pop("freeze_eligibility")
+    elif mutation == "missing_curated":
+        proof.pop("original_curated_completion")
+    elif mutation == "native_alias":
+        proof["original_curated_completion"]["family"] = "standalone_72"
+    elif mutation == "missing_index":
+        proof["input_sha256"].pop("curated_index")
+    elif mutation == "wrong_receipt":
+        proof["original_curated_completion"]["original_receipt_sha256"] = "0" * 64
+    elif mutation == "wrong_source":
+        proof["original_curated_completion"]["source_profile"]["training_sha256"] = "0" * 64
+    elif mutation == "wrong_coverage":
+        proof["original_curated_completion"]["selected_checkpoint_coverage"]["seen_photos"] = 0
+    elif mutation == "wrong_protocol":
+        candidate["metrics"]["tta"]["precision"] = "bf16"
+    if mutation != "missing_eligibility":
+        candidate["freeze_eligibility"] = copy.deepcopy(proof)
+    repin(case)
+    with pytest.raises(ValueError):
+        run(case)
