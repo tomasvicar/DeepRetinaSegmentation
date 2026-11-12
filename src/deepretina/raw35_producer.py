@@ -34,6 +34,7 @@ from .geometry_policy import geometry_rule, validate_geometry_policy
 from .integrity import FINGERPRINT_SCHEMA, prepared_content_fingerprint
 from .legacy.preprocessing import OFFICIAL_FOV_DATASETS, prepare_single_net
 from .prepare import ARCHIVES, CORE_DATASETS, decoded_photo_id
+from .raw_resource_selectors import REQUEST_SCHEMA, refuge_mask_selector, resolve_resource_requests
 from .sources import Source, canonical_path
 
 MANIFEST_SHA = "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767"
@@ -198,6 +199,13 @@ class FrozenPlan:
         for r in self.rows.values():
             for archive, path, role in dependencies(r):
                 self.requests.setdefault(archive, {}).setdefault(path, set()).add(role)
+        self.resource_selectors = {}
+        for r in self.rows.values():
+            if r["dataset"] == "refuge":
+                key, selector = refuge_mask_selector(
+                    r["metadata"]["source_split"], r["metadata"]["source_image"]
+                )
+                self.resource_selectors.setdefault(ARCHIVES["refuge"], {})[key] = selector
         self.signature = sha(
             json.dumps(
                 {
@@ -223,6 +231,8 @@ class FrozenPlan:
                 {r["split_group_id"] for r in self.rows.values() if r["split"] == "val"}
             ),
             "TEST_inventory_records_unmaterialized": len(self.test_inventory),
+            "resource_request_schema": REQUEST_SCHEMA,
+            "resource_selectors": self.resource_selectors,
             "resource_requests": {
                 a: {p: sorted(roles) for p, roles in sorted(v.items())}
                 for a, v in sorted(self.requests.items())
@@ -665,6 +675,7 @@ def validate_profile(profile, plan, canonical, data_root, output):
         and plan.rows == frozen.rows
         and plan.photos == frozen.photos
         and plan.requests == frozen.requests
+        and plan.resource_selectors == frozen.resource_selectors
         and plan.test_inventory == frozen.test_inventory,
         "Execution plan differs from frozen metadata",
     )
@@ -692,6 +703,10 @@ def validate_profile(profile, plan, canonical, data_root, output):
     )
     historical = json.loads((Path(canonical) / "preparation.json").read_text())["runtime_packages"]
     require(profile["runtime_packages"] == historical, "Profile must pin original replay backend")
+    require(
+        profile.get("resource_selectors", {}) == plan.resource_selectors,
+        "Profile typed resource selectors mismatch",
+    )
     require(set(profile["resources"]) == set(plan.requests), "Profile archive closure mismatch")
     for archive, requests in plan.requests.items():
         entry = profile["resources"][archive]
@@ -762,10 +777,12 @@ def run(canonical, data_root, output, profile, plan, policy):
                 source = stack.enter_context(Source(source_path))
                 pinned = profile["resources"][archive]
                 # Resolve before pixel/GT decoding; no source.find fallback or byte-based alias search.
-                actual = resolve_requests(
+                actual = resolve_resource_requests(
                     source.names,
                     plan.requests[archive],
                     source._identities if source.zip is not None else None,
+                    plan.resource_selectors.get(archive, {}),
+                    existing_resolver=resolve_requests,
                 )
                 require(actual == pinned["request_to_member"], "Native member resolution drift")
                 scopes[archive] = FilteredSource(
