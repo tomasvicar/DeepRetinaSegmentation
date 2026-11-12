@@ -1,0 +1,46 @@
+{
+  "scope": "synthetic metadata/constructed tiny checkpoints only; no NN forward/real weights/GT/TEST/GPU",
+  "audited_base_commit": "705b3f5",
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "PYTHONPATH": "src",
+    "cpu_affinity": [
+      4
+    ],
+    "nice": 17,
+    "IO": "idle"
+  },
+  "initial_test_command": [
+    "/var/home/tom/code/DeepRetinaSegmentation_hpo/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_heldout_curated_dispatch_metadata.py",
+    "tests/test_curated_completion.py",
+    "tests/test_curated_final_context.py",
+    "tests/test_reviewed_test_comparison.py",
+    "tests/test_frozen_original_reference.py::test_metadata_dynamic_inventory_and_idrid_geometry",
+    "tests/test_frozen_original_reference.py::test_bad_review_fails_before_device_loader_or_gt",
+    "tests/test_frozen_original_reference.py::test_test_without_explicit_policy_fails_before_metadata"
+  ],
+  "initial_actual_tool_exit_code": 1,
+  "initial_pytest_summary": "6 new-fixture path-guard failures,118 existing passed in26.18s",
+  "initial_failure_explanation": "new metadata fixture incorrectly placed output inside synthetic canonical root; production safety guard correctly rejected before original checker/model/data. Only test fixture path corrected; no runtime change.",
+  "corrected_dispatch_command": [
+    "/var/home/tom/code/DeepRetinaSegmentation_hpo/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_heldout_curated_dispatch_metadata.py"
+  ],
+  "corrected_command_actual_tool_exit_code": 0,
+  "corrected_pytest_summary": "6 passed in1.90s",
+  "corrected_shell_scope": "pytest wrote stdout/stderr, then cat of stdout; numeric exit0 is original shell command witness, successful pytest summary separately retained",
+  "distinct_final_successful_test_cases": 124,
+  "tests_not_rerun_after_this_record": true,
+  "test_source_sha256": "334d48edd1bd66b096ed2c3f3f30c10f675db6b84ba7f17b2a7e71eea16deacc",
+  "all_existing_genuine_curated_chain_tests_use_no_forward_guards": true
+}

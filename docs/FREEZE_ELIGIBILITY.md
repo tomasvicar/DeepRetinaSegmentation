@@ -16,6 +16,12 @@ and summary, and an externally SHA-pinned completion QA. Supported families:
   verifier4b568, separately pinned original reviewed protocol and observed bounded
   supervisor terminal. Raw source/config/data/cache/artifact hashes must agree.
 
+- `curated_fd44`: genuine original curated index and separately pinned original QA;
+  exact selected/BEST/LAST/CSV/summary paths, full original task/receipt/PBS/readonly
+  milestone/source/config/photometry chain and own role coverage. This distinct
+  [curated adapter](CURATED_FD44_SELECTION_PROPOSAL.md) also supports reviewed TTA;
+  it is not a native/standalone alias.
+
 No name/QA retagging or field filtering is permitted. The raw saved training config
 is retained; new runtime defaults do not retroactively enter its source-family hash.
 Native vascular sampling and BF16 features come from1775a2a/5c1d2d6, with fields
