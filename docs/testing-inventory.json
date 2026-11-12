@@ -1,0 +1,4497 @@
+{
+  "kind": "AST_only_tracked_HPO_test_inventory_not_a_test_run",
+  "upstream_snapshot_commit": "faf93acc5f02ac2445b1875f704507e93aa3027c",
+  "generated_utc": "2026-11-12T06:05:09.214034+00:00",
+  "selection": "All git-tracked Python files parsed with AST; at least one FunctionDef/AsyncFunctionDef named test*, including nonstandard report checks.py; zero-definition similarly named CLI tools separately",
+  "collection_performed": false,
+  "new_test_model_GPU_data_or_install_actions": false,
+  "modules": 89,
+  "static_test_definitions": 660,
+  "module_counts": {
+    "report-local": 3,
+    "main": 82,
+    "coordinator": 4
+  },
+  "definition_counts": {
+    "report-local": 10,
+    "main": 625,
+    "coordinator": 25
+  },
+  "default_pytest_testpaths": [
+    "tests"
+  ],
+  "counts_are": "AST definitions, NOT parametrized collected cases, inherited cases, passed results or coverage percentage",
+  "modules_inventory": [
+    {
+      "path": "reports/dense-vessel-support-20261112/checks.py",
+      "sha256": "0369b1b620285ea1aa9fcd5a7e0f36e8403c9be77e7c5f9c0aa3610da4efdca3",
+      "directory_group": "report-local",
+      "run_environment": "U",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 0,
+      "purpose": "Tiny metadata-only negative cases for the supplementary support analysis.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python reports/dense-vessel-support-20261112/checks.py",
+      "test_definitions": [
+        {
+          "name": "test_actual_valid_pair",
+          "line": 10,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_changed_GT_positive_rejected",
+          "line": 12,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_changed_valid_pixels_rejected",
+          "line": 15,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_changed_source_rejected",
+          "line": 18,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_missing_photo_rejected",
+          "line": 21,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_boolean_or_impossible_count_rejected",
+          "line": 23,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "reports/fixed-timing-input-cohort-20261112/test_cohort.py",
+      "sha256": "a2fefc291a64b48f21ada1694448fe5d2079be0231f2c124429319d553d072bc",
+      "directory_group": "report-local",
+      "run_environment": "U",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 0,
+      "purpose": "Synthetic IO/identity guards only; no models, Torch or real annotation inputs.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python reports/fixed-timing-input-cohort-20261112/test_cohort.py",
+      "test_definitions": [
+        {
+          "name": "test_decoded_identity_binds_shape_prefix_and_RGB_pixels",
+          "line": 20,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_exact_official_FOV_alias_and_no_GT_entry_read",
+          "line": 34,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_missing_official_FOV_never_uses_annotation_and_conflict_rejects",
+          "line": 54,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "reports/unified/paired-avweight-e008/test_bootstrap_extension.py",
+      "sha256": "0bbea84a31e18ab8b142d200d0c02f180441ad5bb6d1dd55fd31eada721f061c",
+      "directory_group": "report-local",
+      "run_environment": "T",
+      "static_test_definitions": 1,
+      "parametrized_definitions": 1,
+      "purpose": "Synthetic paired draws shared by pooled and macro comparisons; closed-form difference.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q reports/unified/paired-avweight-e008/test_bootstrap_extension.py",
+      "test_definitions": [
+        {
+          "name": "test_pooled_and_macro_share_paired_draws_and_closed_form_difference",
+          "line": 57,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_adapter_coverage.py",
+      "sha256": "23626ecbb55a4bd8b784023c79b9cba4db94c3ddde386b2b79b0d293882065c6",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 0,
+      "purpose": "Prevent legacy dataset migrations from silently disappearing from the CLI.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_adapter_coverage.py",
+      "test_definitions": [
+        {
+          "name": "test_inventory_covers_every_historical_adapter",
+          "line": 64,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_every_migrated_selector_is_exposed_by_prepare",
+          "line": 91,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_sparse_and_unlabelled_sources_do_not_claim_dense_vessel_ground_truth",
+          "line": 96,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_adapters_additional.py",
+      "sha256": "02a614033af1433ebbec3a1d9ed509bb362fa8e6823af9ad35ec06d53c6c1717",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 0,
+      "purpose": "Native annotation semantics, unknown supervision and official split guards.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_adapters_additional.py",
+      "test_definitions": [
+        {
+          "name": "test_drions_two_observers_binary_disc_and_unknown_cup",
+          "line": 32,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_polygon_one_based_xy_and_rejects_bad_points",
+          "line": 58,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_gamma_native_class_encoding_and_only_fundus_resources",
+          "line": 83,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_idrid_train_only_audit_never_opens_test_labels",
+          "line": 102,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_idrid_palette_indices_are_not_thresholded_rendered_red",
+          "line": 144,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_conflicting_transport_aliases_fail_closed",
+          "line": 167,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_adapters_auxiliary.py",
+      "sha256": "3fab0fe31c780c245f3fb107770a3676ef45dc3749228806f169ffc510d40a87",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 13,
+      "parametrized_definitions": 2,
+      "purpose": "Adapter contracts: auxiliary labels must never become negative segmentations.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_adapters_auxiliary.py",
+      "test_definitions": [
+        {
+          "name": "test_image_only_collections",
+          "line": 48,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_erlangen_exact_visit_green_manual_mask_and_subject_group",
+          "line": 59,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_fire_registration_pair_keeps_original_points",
+          "line": 79,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_idrid_localization_is_not_disc_segmentation",
+          "line": 90,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_inspire_measurements_and_missing_labels_error",
+          "line": 102,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_messidor_grading_table",
+          "line": 112,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_review_keeps_observer_edges_without_filling_vessels",
+          "line": 126,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_roc_preserves_official_test_and_sparse_radius",
+          "line": 143,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_vicavr_keeps_caliber_class_and_coordinates",
+          "line": 158,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_ubmi_optional_dense_mask_and_missing_data",
+          "line": 169,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_every_adapter_rejects_empty_layout",
+          "line": 186,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_diaretdb_lesion_categories_are_not_collapsed",
+          "line": 191,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_duplicate_transport_prefixes_do_not_duplicate_auxiliary_annotations",
+          "line": 200,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_adapters_segmentation.py",
+      "sha256": "6b45fa5ae2d1924b95ab289f7c78812f3abd2b8935641ac0e167932f8f0b0c2a",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 10,
+      "parametrized_definitions": 0,
+      "purpose": "Annotation semantics and geometry regressions for legacy adapters.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_adapters_segmentation.py",
+      "test_definitions": [
+        {
+          "name": "test_aria_transport_counters_and_views_join_without_merging_cohorts",
+          "line": 17,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_g1020_requires_unique_complete_patient_crosswalk",
+          "line": 23,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_g1020_missing_cup_is_not_background_supervision",
+          "line": 44,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_g1020_duplicate_disc_labels_resolve_by_nested_geometry",
+          "line": 53,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_onhsd_matlab_center_becomes_zero_based",
+          "line": 68,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_riga_recovers_nested_outlines_and_refuses_open_curves",
+          "line": 77,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_uoadr72_swap_and_timestamp_ignored",
+          "line": 111,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_avrdb_sparse_lines_have_no_unmarked_negative_supervision",
+          "line": 136,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_rimone_keeps_stereo_right_half_unsupervised_and_observers_grouped",
+          "line": 164,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_riga_bounded_gap_repair_preserves_closed_outline_area",
+          "line": 189,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_augment.py",
+      "sha256": "aae4adeb79b75f2c1ace66de24c9a0248ddde5ada2e8c0f9d36e622b359b0763",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 1,
+      "purpose": "Scientific geometry, ignored-support and reproducibility checks for augmentation.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_augment.py",
+      "test_definitions": [
+        {
+          "name": "test_joint_rotation_matches_integer_reference_for_all_channels",
+          "line": 19,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_zoom_out_padding_never_becomes_negative_supervision",
+          "line": 28,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_nearest_targets_and_unknown_av_support_stay_paired",
+          "line": 42,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_seed_reproduces_exact_outputs_and_preserves_input",
+          "line": 65,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_global_torch_seed_controls_helper_and_basic_adds_no_transform",
+          "line": 82,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_invalid_inputs_fail_clearly",
+          "line": 93,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_benchmark_manifest.py",
+      "sha256": "338ab860ef3a67a9e877afb27b5cb850a9320a67bb51d8fb44ae08a2d1558c6d",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 7,
+      "parametrized_definitions": 0,
+      "purpose": "Scientific eligibility must not be inferred from missing provenance.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_benchmark_manifest.py",
+      "test_definitions": [
+        {
+          "name": "test_missing_mapping_fails_closed",
+          "line": 39,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_legacy_test_is_gradient_unseen_but_tuning_exposed",
+          "line": 45,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_any_original_training_alias_disqualifies",
+          "line": 51,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unknown_legacy_id_cannot_prove_absence",
+          "line": 56,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_explicit_verified_absence_is_required",
+          "line": 61,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_photo_cross_split_collision_disqualifies",
+          "line": 70,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_patient_id_is_not_a_photo_identity",
+          "line": 82,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_biomisa_policy.py",
+      "sha256": "1f5b53923988d171d2f5ed6c256384516099e44d01749cddd0c7831d661681e4",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 0,
+      "purpose": "Fixed source filename roles must never become per-image area sorting.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_biomisa_policy.py",
+      "test_definitions": [
+        {
+          "name": "test_quarantine_is_default_and_explicit_mapping_preserves_pixels",
+          "line": 37,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_missing_named_disc_becomes_disc_only_not_negative_cup",
+          "line": 57,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_policy_violation_fails_without_sorting_or_clipping",
+          "line": 67,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_bn_recalibration.py",
+      "sha256": "5b6a4d46598125c1a1ef286fd40a6e3d66bcb84822b5afff365b58d4a1beb2b6",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 9,
+      "parametrized_definitions": 0,
+      "purpose": "Tiny CPU synthetic forward only; no actual TRAIN/VAL/TEST arrays or weights.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_bn_recalibration.py",
+      "test_definitions": [
+        {
+          "name": "test_actual_update_bn_only_changes_allowed_buffers_and_restores_modes_momenta",
+          "line": 24,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_update_is_cumulative_not_original_momentum_ema",
+          "line": 42,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_centered_batches_count_parent_delivered_indices_only",
+          "line": 50,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_failure_restores_bn_momentum_and_mode",
+          "line": 58,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_non_bn_side_effect_rejected",
+          "line": 70,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_derived_payload_is_prediction_only_and_does_not_rewrite_parent_history",
+          "line": 85,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_same_seed_synthetic_recipe_repeats_exact_bn_state",
+          "line": 117,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_modified_same_version_update_bn_cannot_silently_run",
+          "line": 131,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_tiny_derived_checkpoint_safe_roundtrip_matches_predictions",
+          "line": 137,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_bn_research_validation.py",
+      "sha256": "cc0c027f51c956f2b09fbd31eac85e4a6c07f5ad8a61d89946b7e5ebc0480e30",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 2,
+      "parametrized_definitions": 1,
+      "purpose": "Derived metadata/byte checks only; no actual calibration or VAL run.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_bn_research_validation.py",
+      "test_definitions": [
+        {
+          "name": "test_derived_parent_stats_and_coverage_checked_without_old_score",
+          "line": 48,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_research_producer_rejects_false_derivation",
+          "line": 56,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_bundled_models.py",
+      "sha256": "f34435ee2f03fd0ec53ec545063120e4767418e531bfb9b1b84736e0609c112c",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 0,
+      "purpose": "HPO original/pilot catalog bytes and generated-image CPU prediction using bundled weights.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_bundled_models.py",
+      "test_definitions": [
+        {
+          "name": "test_original_and_explicit_pilot_models_exist_and_match_checksums",
+          "line": 14,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_predicts_without_dataset_or_external_checkpoint",
+          "line": 37,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_corrupt_model_is_rejected_before_loading",
+          "line": 71,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_cli.py",
+      "sha256": "04541c8e4d0c6ed339359976b0649998475ba28d1a0d381dfb4463a082a3c3a9",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 2,
+      "parametrized_definitions": 0,
+      "purpose": "Training TOML/explicit-argument precedence and rejection before execution.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_cli.py",
+      "test_definitions": [
+        {
+          "name": "test_train_config_explicit_options_override_toml",
+          "line": 8,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_train_rejects_unknown_config_before_execution",
+          "line": 47,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_compare_standalone_val.py",
+      "sha256": "0c61f8c929fd1939e58c32226add84ca897db6f68b198c2b74b7627ca28c85e7",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 4,
+      "parametrized_definitions": 1,
+      "purpose": "Standalone BEST/LAST own-coverage and paired-report provenance; immutable inputs.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_compare_standalone_val.py",
+      "test_definitions": [
+        {
+          "name": "test_exact_last_and_own_full_best_roles",
+          "line": 150,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_mixed_or_incomplete_provenance_rejected",
+          "line": 180,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_external_sha_failure_before_reading_referenced_files",
+          "line": 210,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_existing_output_never_overwritten",
+          "line": 219,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_comparison.py",
+      "sha256": "3e48c8b08b611968fcedc19d041a629a7d1de3d4f011c5814ab72ae41ba0bc31",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 10,
+      "parametrized_definitions": 3,
+      "purpose": "Paired group bootstrap, per-source/all-head support and provenance rejection.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_comparison.py",
+      "test_definitions": [
+        {
+          "name": "test_aggregate_gain_does_not_hide_av_regression_and_groups_stay_paired",
+          "line": 58,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_rejects_unpaired_or_inconsistent_reports",
+          "line": 84,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_manifest_group_leakage_is_rejected",
+          "line": 109,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_rejects_summary_counts_that_do_not_match_photo_counts",
+          "line": 123,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_no_supported_output_has_explicitly_undefined_scores",
+          "line": 132,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_two_eyes_of_one_patient_are_resampled_together",
+          "line": 149,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_source_details_share_draws_and_preserve_all_regressions",
+          "line": 179,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_source_head_must_be_eligible_in_manifest",
+          "line": 202,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_conditional_av_uses_identical_stratified_group_draws_and_counts",
+          "line": 223,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_invalid_or_different_conditional_av_domain_is_rejected",
+          "line": 239,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_completed_val_comparison.py",
+      "sha256": "2961bec867d71c3028590a7e67907b878f7dd88bb8332d6f942e055e6a0af376",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 5,
+      "parametrized_definitions": 1,
+      "purpose": "Metadata contract checks without opening real reports, GT, or models.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_completed_val_comparison.py",
+      "test_definitions": [
+        {
+          "name": "test_completed60_can_select_earlier_best_epoch",
+          "line": 47,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_wrong_completion_identity_or_budget_rejected",
+          "line": 68,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_threshold_and_split_must_be_actual_enriched_val",
+          "line": 75,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_self_consistent_subset_completion_cannot_replace_manifest_domain",
+          "line": 86,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_eligible_training_ids_follow_frozen_reader_filters",
+          "line": 97,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_compose_disc_reference.py",
+      "sha256": "979c7e74f0860d3693d40dbfabb6f71d0baa9c23496f44e4d31a5975fcf8a9f3",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 0,
+      "purpose": "Count-only composition must not change GT support or any other head.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_compose_disc_reference.py",
+      "test_definitions": [
+        {
+          "name": "test_only_disc_changes_with_no_added_cup_containment",
+          "line": 74,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_changed_positive_gt_or_source_is_rejected",
+          "line": 92,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_partial_native_support_is_rejected",
+          "line": 103,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_control_e060_verifier.py",
+      "sha256": "a759a31e05db7c44bfecfefb488222a8442693407e7524e3264ae15bd0203084",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 1,
+      "purpose": "Tiny metadata/tensor fixtures only: no real checkpoints, photos or inference.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_control_e060_verifier.py",
+      "test_definitions": [
+        {
+          "name": "test_terminal_first_maximum_and_parent_augmentation_none",
+          "line": 153,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_rejects_broken_evidence",
+          "line": 182,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_independent_copy_is_exact_and_refuses_overwrite",
+          "line": 229,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_corpus_v2_proposal.py",
+      "sha256": "06be600b13f8dc31a38be79f10fd747feff731cb6f9c4fe18f125b2b3bda47b8",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 1,
+      "parametrized_definitions": 1,
+      "purpose": "A proposal cannot turn frozen holdout photo/patient aliases into training.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_corpus_v2_proposal.py",
+      "test_definitions": [
+        {
+          "name": "test_proposal_quarantines_v1_holdout_alias_and_preserves_v1",
+          "line": 18,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_cup_containment.py",
+      "sha256": "d82505e8abb498ef43de88159ef4ea257346b76a533b6dda9c9b8f35ae6514e9",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 0,
+      "purpose": "Postprocessing changes cup predictions only and preserves reference support.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_cup_containment.py",
+      "test_definitions": [
+        {
+          "name": "test_native_reproduction_requires_exact_integer_counts",
+          "line": 20,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_intersection_can_remove_false_positives_and_true_positives_without_mutation",
+          "line": 27,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_partial_cup_validity_never_scores_ignored_pixels",
+          "line": 40,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_empty_but_supervised_cup_keeps_real_false_positives_and_undefined_empty_dice",
+          "line": 50,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_no_cup_supervision_performs_no_forward",
+          "line": 60,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_complete_composition_changes_only_cup_and_rejects_changed_gt_support",
+          "line": 67,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_cup_continuation.py",
+      "sha256": "62d13185bbcd368bede98fd7944a1f20041500a4b03747597fde0a6c9a2b660c",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 9,
+      "parametrized_definitions": 1,
+      "purpose": "Synthetic count/mask fixtures; no production photos/checkpoints or forwards.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_cup_continuation.py",
+      "test_definitions": [
+        {
+          "name": "test_pinned_prefix_proof_is_reused_not_relabelled_new",
+          "line": 67,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_prefix_hard_rejections",
+          "line": 80,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_decoded_GT_observer_shape_checks",
+          "line": 108,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_same_forward_coupling_uses_fresh_native_even_with_historical_drift",
+          "line": 126,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_invalid_and_empty_cup_support_are_not_false_supervision",
+          "line": 142,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_native_control_and_variant_keep_non_cup_and_historical_inputs_untouched",
+          "line": 156,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_no_overwrite_or_protected_tree_write",
+          "line": 186,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_failure_before_output_creation_cannot_mutate_existing_report",
+          "line": 201,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_wrong_frozen_source_rejected_before_data_or_models",
+          "line": 220,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_curated_completion.py",
+      "sha256": "0f0d0600dd13efad881e90584fc97d989a916e2abab729195f445d931f6de2f1",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 17,
+      "parametrized_definitions": 9,
+      "purpose": "Synthetic tiny constructed weights + metadata; no real weights/GT/NN forward.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_curated_completion.py",
+      "test_definitions": [
+        {
+          "name": "test_tiny_synthetic_own_role_positive_no_forward",
+          "line": 448,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_own_weight_and_budget_negative_with_rebound_provenance",
+          "line": 468,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_partial_BEST_cannot_borrow_LAST_but_explicit_LAST_still_valid",
+          "line": 495,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_original_record_changes_rejected_after_index_repin",
+          "line": 522,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_external_index_pin_required",
+          "line": 531,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_all_other_declared_arms_keep_full_config_and_cache",
+          "line": 577,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_saved_nonraw_identity_cannot_be_silently_replaced",
+          "line": 589,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_final_adapter_requires_distinct_original_index_before_reading_inputs",
+          "line": 602,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_original_raw_dependency_bytes_and_canonical_profile_are_separate",
+          "line": 623,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_raw_dependency_cannot_be_replaced_with_canonical_hash",
+          "line": 632,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_final_adapter_preserves_original_chain_and_own_role",
+          "line": 670,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_final_adapter_rejects_foreign_path_even_identical_bytes",
+          "line": 695,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_final_adapter_requires_both_external_pins",
+          "line": 705,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_final_adapter_rejects_wrong_role_and_native_envelope",
+          "line": 712,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_final_adapter_partial_BEST_cannot_borrow_LAST",
+          "line": 720,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_old_family_rejects_curated_index_before_any_read",
+          "line": 730,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_final_adapter_rejects_original_chain_drift_after_checker",
+          "line": 750,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_curated_final_context.py",
+      "sha256": "d356c2851aba25725212a86c8cd9047dfa4ecab986397fab06fdf7a2018263ba",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 4,
+      "parametrized_definitions": 3,
+      "purpose": "Synthetic metadata wiring only; genuine original-chain tests live separately.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_curated_final_context.py",
+      "test_definitions": [
+        {
+          "name": "test_curated_context_requires_exact_fresh_original_chain",
+          "line": 58,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_frozen_curated_proof_json_types_and_external_index_pin",
+          "line": 74,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_producer_rejects_before_any_model_or_gt",
+          "line": 98,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_producer_enters_inference_only_after_typed_original_snapshot",
+          "line": 143,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_derived_cache.py",
+      "sha256": "1231bb8dfcbf3f533a4b26998878b30deea0c5ab73488ddff06f80f6e199d986",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 8,
+      "parametrized_definitions": 1,
+      "purpose": "Lossless derivatives stay explicit, portable, pinned and fail closed.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_derived_cache.py",
+      "test_definitions": [
+        {
+          "name": "test_binary_soft_fov_and_extra_arrays_are_exact_and_test_is_not_decoded",
+          "line": 94,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_partial_coverage_needs_explicit_fallback_and_never_falls_back_for_corruption",
+          "line": 121,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_external_pins_canonical_modification_and_incomplete_cache_rejected",
+          "line": 148,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_paths_relocation_and_existing_output_are_safe",
+          "line": 174,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_dataset_cached_tensors_annotator_traces_and_rng_are_exact",
+          "line": 203,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_negative_zero_is_not_quantized_and_invalid_targets_rejected",
+          "line": 234,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_training_pins_cache_outside_config_and_resume_allows_only_path_relocation",
+          "line": 253,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_capacity_estimate_matches_actual_complete_small_cache",
+          "line": 302,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_engine.py",
+      "sha256": "1abcea44c34bb58cd41c06fc4c9451e4b8c5d2ea15b19120bcb775b88f32d275",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 9,
+      "parametrized_definitions": 1,
+      "purpose": "Generated-data model geometry, masked gradients, tiled coverage and hierarchy decoding.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_engine.py",
+      "test_definitions": [
+        {
+          "name": "test_model_preserves_arbitrary_geometry",
+          "line": 29,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unknown_labels_do_not_contribute_gradient",
+          "line": 35,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_tiling_preserves_pixels_and_has_no_uncovered_edges",
+          "line": 48,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_hierarchy_and_av_conflict_resolution",
+          "line": 62,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_train_save_reload_evaluate_predict",
+          "line": 102,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_crop_geometry_alignment_and_seed",
+          "line": 152,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_crop_cache_is_bounded_and_does_not_mutate_source",
+          "line": 164,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_manifest_rejects_source_leakage_between_tasks",
+          "line": 180,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_av_accuracy_support_distinguishes_detection_from_classification",
+          "line": 191,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_fixed27_proposal.py",
+      "sha256": "617ea4aedaf3d7860df7a55369c19264fff85143fba9b37bed07bb3fe307ed34",
+      "directory_group": "main",
+      "run_environment": "C",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 1,
+      "purpose": "Synthetic CPU metadata only; native Optuna and native8777 validation, no NN/GT.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:tools/optuna_coordinator/src uv run --project tools/optuna_coordinator --frozen --no-sync --group dev python -m pytest -q tests/test_fixed27_proposal.py",
+      "test_definitions": [
+        {
+          "name": "test_native_fixed27_import_and_one_poststartup_tpe_ask",
+          "line": 268,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_duplicate_config_uses_earliest_parent_and_retains_all_origins",
+          "line": 309,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_reject_bad_original_observation_before_sqlite",
+          "line": 325,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_under_four_does_not_create_study",
+          "line": 354,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_real_time_gate_blocks_four_before1035_without_creating_sqlite",
+          "line": 365,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_busy_ada_blocks_even_after_earliest_time",
+          "line": 384,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_freeze_eligibility.py",
+      "sha256": "88443597ddae75b68a0fd428648cdc3c20b1acc049196c1a03f510fb26f05c96",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 4,
+      "parametrized_definitions": 2,
+      "purpose": "Synthetic metadata-only invariants; no model forward, real GT or TEST.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_freeze_eligibility.py",
+      "test_definitions": [
+        {
+          "name": "test_selected_own_weight_coverage_not_another_epoch",
+          "line": 30,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_partial_or_false_own_coverage_rejected",
+          "line": 38,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_unsupported_family_or_ambiguous_role_rejects_before_any_file",
+          "line": 59,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_external_qa_pin_is_required_and_cannot_be_filename_only",
+          "line": 77,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_frozen_completed_val_comparison.py",
+      "sha256": "6a5a9b226309fd78d9949e213b44303f84ddcfde23d21e7b026d13a2c4749b52",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 8,
+      "parametrized_definitions": 2,
+      "purpose": "Synthetic770 VAL metadata only; no real photos, GT, weights or TEST reads.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_frozen_completed_val_comparison.py",
+      "test_definitions": [
+        {
+          "name": "test_distinct_frozen_sources_full770_and_completed60",
+          "line": 221,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_modified_reports_fail_external_context_before_comparison",
+          "line": 246,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_rehashed_context_still_cannot_bypass_scientific_contract",
+          "line": 268,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_wrong_external_context_pin_rejected",
+          "line": 300,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_old_composed_cup_gate_still_rejects_new_family",
+          "line": 310,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_no_checkpoint_or_model_module_import_needed",
+          "line": 324,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_existing_output_rejected_before_comparison",
+          "line": 331,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_input_change_during_comparison_is_rejected",
+          "line": 363,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_frozen_original_reference.py",
+      "sha256": "69b2e33729163e9cee42b59e98505ab4189c85da04949a142e2a292f34e24050",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 9,
+      "parametrized_definitions": 2,
+      "purpose": "Synthetic only: no actual image, annotation, original model or CUDA access.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_frozen_original_reference.py",
+      "test_definitions": [
+        {
+          "name": "test_metadata_dynamic_inventory_and_idrid_geometry",
+          "line": 82,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bad_review_fails_before_device_loader_or_gt",
+          "line": 114,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_test_without_explicit_policy_fails_before_metadata",
+          "line": 156,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_native_forward_is_raw_strict_same_disc_and_clip_before_restore",
+          "line": 162,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_av_calls_calibrated_provided_fov_and_keeps_tie_zero_nn",
+          "line": 188,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_full_val_unknown_cup_support_and_dynamic_attribution",
+          "line": 312,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_freeze_then_reviewed_test_and_tampered_inventory",
+          "line": 325,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bundled_four_models_really_load_from_cpu_bytesio",
+          "line": 354,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_freeze_rejects_inconsistent_saved_val_without_gt",
+          "line": 384,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_geometry_policy.py",
+      "sha256": "0a98fe8813f14169d81af4dcc6eac60d6828e1cc8f002420780f6b8946daf86e",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 14,
+      "parametrized_definitions": 5,
+      "purpose": "Portable preparation policy, original native dimensions, and old model paths.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_geometry_policy.py",
+      "test_definitions": [
+        {
+          "name": "test_gamma_uses_exact_original_native_h_w_not_transpose_or_prepared_shape",
+          "line": 67,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_declared_flat_rules_retain_nominal_or_reported_qualification",
+          "line": 79,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_explicit_angle_wins_and_metadata_retains_unapplied_camera_rule",
+          "line": 85,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_old_checkpoints_and_legacy_datasets_do_not_gain_new_nominal_defaults",
+          "line": 93,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_embedded_version_or_exact_byte_hash_mismatch_fails",
+          "line": 110,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_document_schema_and_coordinate_contract_are_bound",
+          "line": 121,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_capture_binds_sidecar_row_identity_rule_and_native_geometry",
+          "line": 143,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_capture_ignores_orphan_sidecar_for_old_manifest_but_rejects_unbound_new_source",
+          "line": 163,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bad_checkpoint_policy_rejected_before_model_build",
+          "line": 189,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_actual_raw_prediction_uses_embedded_policy_without_external_file_and_restores_native_frame",
+          "line": 200,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_synthetic_training_persists_policy_in_run_best_last_and_checks_resume_binding",
+          "line": 226,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_prediction_rule_matches_unmodified_corpus_preparer",
+          "line": 275,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_policy_cannot_override_historical_dataset_rules",
+          "line": 288,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_explicit_unknown_gamma_shape_records_unknown_without_claiming_fallback_was_applied",
+          "line": 295,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_gui_validation_continuation.py",
+      "sha256": "fa7c9acdc989835d43b145ef9f75e32c19757a815ea9e8d44dfca2b94cac90a7",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 4,
+      "parametrized_definitions": 1,
+      "purpose": "Fake process metadata; no real /proc, GPU, checkpoint or model operations.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_gui_validation_continuation.py",
+      "test_definitions": [
+        {
+          "name": "test_identity_pinned_established_gui_accepted_and_pure_graphics_ignored",
+          "line": 23,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unknown_or_changed_compute_identity_rejected",
+          "line": 30,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_xml_filters_target_uuid_without_retaining_command_lines",
+          "line": 48,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_reused_completed_report_requires_exact_bytes",
+          "line": 55,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_heldout_curated_dispatch_metadata.py",
+      "sha256": "334d48edd1bd66b096ed2c3f3f30c10f675db6b84ba7f17b2a7e71eea16deacc",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 1,
+      "parametrized_definitions": 1,
+      "purpose": "Stage2 curated TTA metadata dispatch only: no weights, GT, forward or CUDA.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_heldout_curated_dispatch_metadata.py",
+      "test_definitions": [
+        {
+          "name": "test_curated_stage2_forwards_exact_original_index_role_and_frozen_protocol",
+          "line": 14,
+          "parametrize_decorators": 2
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_highlevel_predict_tta.py",
+      "sha256": "105a74456789597b83ed12ffd875c6540d029944223d4f3433cea35529e98604",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 7,
+      "parametrized_definitions": 3,
+      "purpose": "High-level TTA wiring with generated RGB and tiny CPU forwards; no real weights/GT.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_highlevel_predict_tta.py",
+      "test_definitions": [
+        {
+          "name": "test_high_level_actual_tiny_forward_and_resolved_provenance",
+          "line": 60,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_default_none_exact_prior_call_arrays_masks_and_rng",
+          "line": 92,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_public_cli_alias_and_custom_use_same_highlevel_route",
+          "line": 114,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_nonunified_tta_rejected_without_entering_inference",
+          "line": 162,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_invalid_highlevel_mode_fails_before_loading",
+          "line": 169,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_module_predict_cli_forwards_tta",
+          "line": 175,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_public_cli_actual_tiny_prediction_writes_selected_metadata",
+          "line": 197,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_hpo.py",
+      "sha256": "d7a276dae45430f3e911fdd978c50decebac64efcaec949456506a4a64b3288d",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 1,
+      "purpose": "Validate search decisions without reading held-out test data or training models.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_hpo.py",
+      "test_definitions": [
+        {
+          "name": "test_promotes_nonbaseline_candidates_and_preserves_baseline",
+          "line": 72,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_baseline_wins_even_if_short_stage_is_bad",
+          "line": 87,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_completed_resume_does_not_train_again",
+          "line": 101,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_baseline_manifest_or_configuration_mismatch_fails_before_training",
+          "line": 114,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_test_evaluation_requires_frozen_selection_and_can_run_only_once",
+          "line": 129,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_invalid_search_rates_fail",
+          "line": 156,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_hpo_context.py",
+      "sha256": "810737177a377ab43802f01a0ec16b399bc75721db0dcf523dd079b7747b6844",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 10,
+      "parametrized_definitions": 1,
+      "purpose": "Context, normalization and crop changes stay opt-in and keep label geometry.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_hpo_context.py",
+      "test_definitions": [
+        {
+          "name": "test_whole_view_geometry_nearest_labels_and_padding",
+          "line": 58,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_whole_inference_exactly_uses_training_view_and_restores_geometry",
+          "line": 70,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_default_dispatch_is_identical_to_original_tiling",
+          "line": 90,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_foreground_probability_one_always_keeps_a_positive_valid_pixel",
+          "line": 98,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_basic_default_crop_draws_and_labels_remain_unchanged",
+          "line": 113,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_whole_train_checkpoint_restore_predict",
+          "line": 127,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_old_checkpoint_absent_new_fields_loads_original_defaults",
+          "line": 165,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_augmentation_rng_does_not_change_basic_crop_sequence",
+          "line": 183,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_balanced_source_sampling_preserves_explicit_budget_and_target_weight",
+          "line": 205,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_explicit_uniform_sampler_uses_requested_number_of_samples",
+          "line": 228,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_hpo_photometry.py",
+      "sha256": "7bf9eb69b886d1ea93dbeb3cbaaf9f2f1c781a732b9ac4bee326ae55e2a1402c",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 8,
+      "parametrized_definitions": 6,
+      "purpose": "Synthetic full-image photometry plus strict HPO TTA/provenance integration.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_hpo_photometry.py",
+      "test_definitions": [
+        {
+          "name": "test_full_profile_once_before_tta_and_metric_descriptor",
+          "line": 26,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_historical_raw_configuration_identity_and_protocol_schema_stay_exact",
+          "line": 72,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_protocol_binds_saved_photometry_without_losing_tta",
+          "line": 89,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_bad_nonraw_descriptor_fails_before_model_or_GT",
+          "line": 98,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_curated_source_still_has_no_new_TTA_completion_admission",
+          "line": 123,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_producer_forwards_admitted_cache_and_records_portable_identity",
+          "line": 148,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_header_only_photometry_boolean_alias_rejected_even_with_valid_metrics",
+          "line": 195,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_existing_benchmark_callers_do_not_silently_feed_raw_to_nonraw",
+          "line": 208,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_integrity.py",
+      "sha256": "c97dcfc031e2f104b8030abfeb1ca7745e82d23336f279374c53bcd08e0c5886",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 1,
+      "purpose": "Data identity must survive relocation and detect annotation changes on resume.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_integrity.py",
+      "test_definitions": [
+        {
+          "name": "test_prepared_identity_is_portable_across_paths_and_timestamps",
+          "line": 52,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_changed_referenced_content_is_detected_even_with_same_timestamp",
+          "line": 61,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_fresh_audit_does_not_silently_replace_frozen_search_data",
+          "line": 78,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_legacy_annotation_completion.py",
+      "sha256": "ceb826c9ab31999cdb082aa7884c6a82130a21fb21405d900aff5eeedaa196a8",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 4,
+      "parametrized_definitions": 0,
+      "purpose": "Secondary observers, disc-only annotations and external source overrides.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_legacy_annotation_completion.py",
+      "test_definitions": [
+        {
+          "name": "test_drive_secondary_observer_is_retained_without_duplicate_photo",
+          "line": 19,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_chase_both_observers_share_eye_pair_identity",
+          "line": 40,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_iostar_disc_ignores_all_border_components_and_masks_missing_cup",
+          "line": 57,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_ubmi_source_override_copies_prediction_resource_without_fake_ground_truth",
+          "line": 92,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_legacy_av.py",
+      "sha256": "d8fe26d65ecc94112cd05ba06f998c7ca4d336c5ee9c3b4d3730af275b83082a",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 10,
+      "parametrized_definitions": 0,
+      "purpose": "Original A/V topology, safe conversion, decoding and reference-numeric checks.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_legacy_av.py",
+      "test_definitions": [
+        {
+          "name": "test_state_dictionary_roundtrip_preserves_logits",
+          "line": 47,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_stacking_preserves_stored_dicom_values_and_channel_order",
+          "line": 61,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_odd_center_crop_uses_round_half_to_even",
+          "line": 72,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_nearest_class_restoration_matches_original_opencv",
+          "line": 81,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_decoding_ignores_background_logit_preserves_ties_and_vessel_gate",
+          "line": 89,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_constant_channel_is_reported_without_altering_original_math",
+          "line": 107,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_affine_rgb_rescaling_is_invariant_without_quantization",
+          "line": 117,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_conversion_never_executes_unlisted_pickle_globals",
+          "line": 138,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_actual_v9_safe_conversion_and_geometry",
+          "line": 163,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_actual_v9_forward_equals_original_git_source",
+          "line": 219,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_legacy_cli.py",
+      "sha256": "6f0250fe83e3f62d32992dd5326bab6187db174863f506e0ad7768ee7258a8c8",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 12,
+      "parametrized_definitions": 4,
+      "purpose": "Original/pilot CLI dispatch, explicit raw proxy and generated-input output contracts.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_legacy_cli.py",
+      "test_definitions": [
+        {
+          "name": "test_cli_original_vessel_alias_outputs_native_geometry",
+          "line": 22,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_av_prepared_array_keeps_original_input_values",
+          "line": 50,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_av_raw_proxy_is_explicit_and_marked",
+          "line": 78,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_refuses_to_treat_raw_rgb_as_certified_av_input",
+          "line": 114,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_matlab_profile_bundled_av_canary",
+          "line": 169,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_matlab_rejects_invalid_modes_before_prediction",
+          "line": 205,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_cli_matlab_rejects_wrong_model",
+          "line": 225,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_matlab_auto_vessel_path_preserves_original_model",
+          "line": 235,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_matlab_geometry_guard_before_vessel_model",
+          "line": 266,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_cli_matlab_bundled_av_automatic_fov_calibration",
+          "line": 291,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_matlab_auto_calibration_fails_closed_before_vessel_model",
+          "line": 312,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_raw_av_automatic_vessel_pipeline_preserves_tiny_positive_default_logits",
+          "line": 340,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_legacy_disc_evaluation.py",
+      "sha256": "1d62fa709adc31d7e5b4c54251d8030ebf2122bc1dc5d79c1cc0882ef53efa40",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 0,
+      "purpose": "Protect the original strict threshold and reference support contract.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_legacy_disc_evaluation.py",
+      "test_definitions": [
+        {
+          "name": "test_zero_logits_background_unknown_pixels_ignored",
+          "line": 16,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_canary_requires_exact_counts_and_annotation_source",
+          "line": 25,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_deferred_launch_requires_complete_reference_and_free_resources",
+          "line": 49,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_legacy_fov_optimization.py",
+      "sha256": "ea233e8b02ccebfb31bea8e9c1262431aa13d8632e8d667bd52127edf11393ab",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 2,
+      "parametrized_definitions": 2,
+      "purpose": "The CPU optimization must preserve the historical disk morphology exactly.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_legacy_fov_optimization.py",
+      "test_definitions": [
+        {
+          "name": "test_crosses_reconstruct_the_original_disk",
+          "line": 9,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_exact_morphology_including_tiny_empty_full_and_border_masks",
+          "line": 17,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_legacy_inference.py",
+      "sha256": "15ecb674f7ad28db6e5e4cda240b5134711a905b8f2efc1bbe06424baa6fb9ef",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 1,
+      "purpose": "Bundled-original CPU integration on generated inputs: geometry, AV decoding and restoration.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_legacy_inference.py",
+      "test_definitions": [
+        {
+          "name": "test_single_net_original_geometry_channels_and_zero_outside_crop",
+          "line": 40,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_av_prepared_outputs_match_original_decoder_and_restore_full_frame",
+          "line": 76,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_av_raw_input_is_rejected_before_outputs_are_created",
+          "line": 115,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_av_empty_mask_and_color_visualization_are_rejected",
+          "line": 124,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_av_stored_dicom_planes_preserve_values_and_decoder",
+          "line": 137,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_single_net_default_strict_logits_and_arbitrary_probability_thresholds",
+          "line": 178,
+          "parametrize_decorators": 2
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_legacy_preprocessing.py",
+      "sha256": "e1cbf70f72f038291736d2f59c4e693d228eaec89dbedf1a20298cb87f3cec21",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 10,
+      "parametrized_definitions": 2,
+      "purpose": "Golden compatibility with original Python preprocessing and stored DICOM units.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_legacy_preprocessing.py",
+      "test_definitions": [
+        {
+          "name": "test_original_source_numeric_golden",
+          "line": 49,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_scale_uses_original_dimension_and_inverse_pastes_inclusive_crop",
+          "line": 67,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_automatic_fov_uses_largest_component_and_fills_holes",
+          "line": 89,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_uoadr_legacy_timestamp_pixels_are_zeroed_without_mutating_input",
+          "line": 100,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_vesclass_array_stacking_preserves_rgb_units_and_binary_support",
+          "line": 114,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_matlab_quantization_uses_positive_half_up_and4096_white",
+          "line": 127,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_dicom_loader_reproduces_network_predict_without_rescale_or_threshold",
+          "line": 156,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bad_fov_and_geometry_fail_clearly",
+          "line": 172,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_raw_av_proxy_preserves_full_frame_and_binary_vessel_geometry",
+          "line": 185,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_raw_av_proxy_marks_heuristic_diameter_and_requires_discrete_vessels",
+          "line": 221,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_legacy_single_net.py",
+      "sha256": "56425b302d0d8888ba01e7fcca233d57ec10c23bd0da4c20eedf9d2ec37e68e3",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 1,
+      "purpose": "Numerical compatibility with the original architecture and checkpoint format.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_legacy_single_net.py",
+      "test_definitions": [
+        {
+          "name": "test_original_module_names_initialization_and_forward_are_identical",
+          "line": 42,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_blending_window_and_traversal_match_original_math",
+          "line": 62,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_tiled_logits_blends_before_sigmoid_and_covers_edges",
+          "line": 73,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_trusted_conversion_keeps_exact_outputs_and_exports_original_splits",
+          "line": 86,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_converter_requires_unambiguous_single_output_channel",
+          "line": 124,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_vendored_original_tiler_matches_cleaned_implementation",
+          "line": 141,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_matlab_av.py",
+      "sha256": "2a657828218bd35c69c166c55c25fb2e0d0d2a7afd71ebdd5ff9265aab41f28d",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 7,
+      "parametrized_definitions": 2,
+      "purpose": "Public-API MATLAB numerical oracles and strict calibrated profile contracts.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_matlab_av.py",
+      "test_definitions": [
+        {
+          "name": "test_scalar_scale_and_nearest_matlab_goldens",
+          "line": 19,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_fixture_identity",
+          "line": 32,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_matlab_constant_photometric_oracle_and_complete_calibrated_contract",
+          "line": 39,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bad_resize_scale_rejected",
+          "line": 65,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_calibration_and_threshold_requirements_are_explicit",
+          "line": 70,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_generic_fov_estimate_and_explicit_calibration_prepare_identical_pixels",
+          "line": 87,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_explicit_diameter_bypasses_fov_estimator_even_for_special_source",
+          "line": 115,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_matlab_clahe.py",
+      "sha256": "f8a1e42d31b4cbd5239c5850a1f26ddaaa1e60a08bd3ca0b7f2b06fe069cbfbd",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 7,
+      "parametrized_definitions": 3,
+      "purpose": "Synthetic MATLAB-oracle comparisons; real-photo arrays remain outside Git.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_matlab_clahe.py",
+      "test_definitions": [
+        {
+          "name": "test_generated_matlab_synthetic_goldens",
+          "line": 23,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_synthetic_fixture_identity_is_recorded",
+          "line": 37,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_histogram_redistribution_preserves_mass_and_cap",
+          "line": 44,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_constant_half_is_not_globally_stretched_to_white",
+          "line": 55,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_av_stage_uses_fixed_source_kernel_and_matlab_rounding",
+          "line": 60,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_undefined_or_unsupported_input_is_rejected",
+          "line": 80,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_invalid_parameters_are_rejected",
+          "line": 99,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_matlab_fov.py",
+      "sha256": "3aa597b0ab2a0a69230fd4ab1f2eba92d1e79e90e900c4095deb93e039c51658",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 5,
+      "parametrized_definitions": 3,
+      "purpose": "Synthetic public-MATLAB oracle tests; no MATLAB or real photos at test runtime.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_matlab_fov.py",
+      "test_definitions": [
+        {
+          "name": "test_fixture_integrity",
+          "line": 16,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_default_binary_sobel_and_calibration_against_matlab",
+          "line": 24,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_special_source_branches_fail_closed",
+          "line": 47,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_invalid_mask_rejected",
+          "line": 62,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_even_circle_rounds_positive_half_up_and_modes_choose_smallest",
+          "line": 67,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_native_v3_count_analysis.py",
+      "sha256": "78063205ec55a70d6b58d63ab5b4ca8cb6ed8004f572850c93794331d70436a4",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 5,
+      "parametrized_definitions": 1,
+      "purpose": "Small metadata-only checks; genuine completed inputs supply the positive proof.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_native_v3_count_analysis.py",
+      "test_definitions": [
+        {
+          "name": "test_saved_exact_count_view_preserves_all_integer_evidence",
+          "line": 24,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_count_view_rejects_partial_photo_membership",
+          "line": 32,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_metadata_writer_never_overwrites",
+          "line": 39,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_native_nondefault_threshold_rejected",
+          "line": 48,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_native_metric_support_cannot_be_guessed",
+          "line": 53,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_partial_supervision.py",
+      "sha256": "82a435a1c045718acda8365374a70f82deed5fda2821d3815312350ec3f0d2cf",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 2,
+      "parametrized_definitions": 0,
+      "purpose": "Partial optic-disc labels must never produce a supposedly trained cup output.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_partial_supervision.py",
+      "test_definitions": [
+        {
+          "name": "test_disc_only_checkpoint_marks_and_suppresses_untrained_cup",
+          "line": 14,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unusable_annotation_is_preserved_but_excluded_from_training",
+          "line": 75,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_photometry_cache.py",
+      "sha256": "207f1bc50362d274076045e475c091734ebbf97908fa177e131c90fde32563b3",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 13,
+      "parametrized_definitions": 2,
+      "purpose": "Small immutable RGB derivatives; no full corpus, real-model training or GPU.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_photometry_cache.py",
+      "test_definitions": [
+        {
+          "name": "test_full_toy_cache_matches_uncached_inputs_targets_crop_rng_and_no_double_apply",
+          "line": 56,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_dependency_descriptor_canonical_external_pin_and_profile_mismatches",
+          "line": 89,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_mapped_bitflip_fails_both_read_and_streaming_audit_without_fallback",
+          "line": 122,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_subset_proof_cannot_be_presented_as_full_cache",
+          "line": 135,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_existing_output_and_unsafe_destination_never_overwrite",
+          "line": 151,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_wrong_source_alias_is_rejected_not_silently_bypassed",
+          "line": 171,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cache_module_is_in_training_fingerprint",
+          "line": 195,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_reader_releases_raw_arrays_and_keeps_only_bounded_tensor_LRU",
+          "line": 206,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_dataset_rejects_cache_descriptor_at_different_physical_scale",
+          "line": 229,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_mutable_config_cannot_relabel_processed_cache_even_after_LRU_hit",
+          "line": 239,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_cache_descriptor_json_boolean_is_not_integer_version",
+          "line": 253,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cached_training_resume_and_relocated_cache_preserve_optimizer_rng",
+          "line": 275,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_public_cli_saves_actual_tiny_photometry_training_and_portable_cache",
+          "line": 340,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_pool_completion_adapter.py",
+      "sha256": "75aeeae1b21cd1d42b91a07337feda8d568d2f28d453a715413c72f6656e5f64",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 12,
+      "parametrized_definitions": 5,
+      "purpose": "Synthetic terminal metadata only; no weights, model/GT loads or CUDA calls.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_pool_completion_adapter.py",
+      "test_definitions": [
+        {
+          "name": "test_consistent_e060_is_typed_and_satisfies_unchanged_comparison_gate",
+          "line": 258,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_actual_stripped_e003_rejected_before_any_milestone_read",
+          "line": 276,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_inconsistent_or_partial_pool_qa_rejected",
+          "line": 306,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_forged_unbound_receipt_and_nonterminal_decision_rejected",
+          "line": 313,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_original_byte_sha_is_mandatory",
+          "line": 323,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_milestone_must_stay_immutable_and_byte_pinned",
+          "line": 338,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_even_rehashed_but_inconsistent_actual_coverage_rejected",
+          "line": 376,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_rehashed_sidecars_cannot_override_bound_source_terminal_or_best_metadata",
+          "line": 392,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_cli_writes_fresh_typed_qa_and_preserves_existing_output",
+          "line": 400,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_exact_manifest_ids_cannot_be_replaced_by_same_count_or_subset",
+          "line": 433,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_manifest_original_bytes_must_match_fixed_corpus_pin",
+          "line": 439,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_canonical_worker_completion_is_bound_without_implying_cache",
+          "line": 445,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_prepare.py",
+      "sha256": "51e3f6248aa7f7c6803c62a78478607945846ab0fd57437d753dee6f4cc52b2f",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 12,
+      "parametrized_definitions": 2,
+      "purpose": "Regression tests for scientific label semantics and source separation.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_prepare.py",
+      "test_definitions": [
+        {
+          "name": "test_unknown_av_pixels_do_not_train_false_negative_classes",
+          "line": 14,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_refuge_disc_includes_cup",
+          "line": 24,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_sources_and_eye_pairs_cannot_leak_between_splits",
+          "line": 29,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_train_only_patient_policy_is_honored_without_forging_an_official_split",
+          "line": 48,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_train_only_policy_cannot_override_a_known_official_alias",
+          "line": 63,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_prepare_drive_deduplicates_export_and_keeps_coordinates",
+          "line": 82,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_preparation_refuses_to_modify_existing_experiment_data",
+          "line": 114,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_photo_hash_uses_original_geometry_and_is_independent_of_memory_layout",
+          "line": 125,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_exact_photo_union_crosses_dataset_ids_and_transitively_keeps_patient_eyes",
+          "line": 136,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_photo_alias_preserves_official_heldout_and_train_only_fails_closed",
+          "line": 174,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_photo_alias_with_official_val_and_test_uses_stricter_test_partition",
+          "line": 193,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_preparation_hashes_raw_rgb_before_resize_and_caches_observer_resources",
+          "line": 202,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_prepare_corpus_v2.py",
+      "sha256": "e867399bc375aaff93b4330c7a11b2e62eed35ac36b3750fc27d8d806b88a8f9",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 10,
+      "parametrized_definitions": 1,
+      "purpose": "Parent immutability, alias holdouts and nominal camera provenance for v2.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_prepare_corpus_v2.py",
+      "test_definitions": [
+        {
+          "name": "test_parent_heldout_alias_is_quarantined_without_row_mutation",
+          "line": 33,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_new_alias_cannot_join_two_parent_partitions",
+          "line": 42,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_new_official_test_cannot_move_parent_training_photo",
+          "line": 50,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_new_train_alias_of_official_new_test_is_quarantined",
+          "line": 58,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cloned_parent_has_no_shared_writable_inodes",
+          "line": 66,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_policy_matches_exact_native_shape_and_remains_unmeasured",
+          "line": 100,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unsplit_train_only_alias_is_quarantined",
+          "line": 121,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_tiny_full_append_preserves_parent_bytes_and_prepares_official_test",
+          "line": 132,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_new_parent_train_alias_reuses_frozen_group_id",
+          "line": 287,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bridge_of_two_old_training_groups_requires_review",
+          "line": 297,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_prepare_unified_data.py",
+      "sha256": "4eadcbab1606b11cfe2670a1948a2a42b60528150cd8ff92d143d2d75a8ef939",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 0,
+      "purpose": "Canonical physical frames, multi-annotator identity and split-safety regressions.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_prepare_unified_data.py",
+      "test_definitions": [
+        {
+          "name": "test_exact_drive_rite_alias_uses_one_canonical_grid_and_preserves_variants",
+          "line": 35,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_missing_cup_and_positive_only_vessels_stay_unknown",
+          "line": 88,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_patient_and_photo_alias_union_cannot_leak_official_test",
+          "line": 138,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_raw_reader_hook_prepares_portable_paired_core_manifest_without_cap",
+          "line": 178,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_explicit_patient_regroup_preserves_pixels_and_joins_same_eye_captures",
+          "line": 213,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_train_only_source_cannot_pull_an_official_heldout_alias_into_training",
+          "line": 317,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_reference_evaluation.py",
+      "sha256": "60500aea83c5bddcb23f5e10cfc8d968d614a25193663f3bfd96e53b0d5cfd3d",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 0,
+      "purpose": "Reference metrics must preserve unknown labels and missed-vessel errors.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_reference_evaluation.py",
+      "test_definitions": [
+        {
+          "name": "test_unknown_cup_predictions_have_no_metric_support",
+          "line": 17,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_missed_vessels_count_as_end_to_end_av_false_negatives",
+          "line": 31,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_task_specific_originals_override_only_their_own_heads",
+          "line": 44,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_refresh_original_av.py",
+      "sha256": "38e32593efa80cec475d51d8aaacce9833a8615f2f4f557f4fa208706d04a4c0",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 2,
+      "parametrized_definitions": 1,
+      "purpose": "A new A/V reference must preserve every other original prediction count.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_refresh_original_av.py",
+      "test_definitions": [
+        {
+          "name": "test_refresh_preserves_nonvascular_heads_and_reaggregates_exactly",
+          "line": 64,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_refresh_refuses_missing_or_mismatched_gt",
+          "line": 84,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_reviewed_heldout.py",
+      "sha256": "eaea0617fc64cad3ad33cf5593590c23356c59f010a59d2ca416c02c9b10d70a",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 21,
+      "parametrized_definitions": 5,
+      "purpose": "Tiny synthetic stage2 forwards; no actual held-out data or GPU experiments.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_reviewed_heldout.py",
+      "test_definitions": [
+        {
+          "name": "test_actual_two_photo_cpu_report_and_metadata_boundary",
+          "line": 140,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_snapshot_only_after_gate_path_replacement",
+          "line": 167,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_invalid_gate_no_test_reader_forward_or_cuda",
+          "line": 206,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_explicit_execution_request_is_separate_and_required",
+          "line": 250,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_existing_output_refused_before_gate",
+          "line": 258,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_canonical_lease_spans_gate_through_emission",
+          "line": 270,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_source_changes_during_forward_fail",
+          "line": 319,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_missing_test_photo_or_wrong_gt_counts_rejected",
+          "line": 338,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_exclusive_output_race_preserves_other_report",
+          "line": 352,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_validated_test_is_not_fake_val_relabel",
+          "line": 366,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_run_dir_and_no_unrecorded_protocol_overrides",
+          "line": 380,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_receipt_metadata_false_is_not_silently_flipped",
+          "line": 437,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_actual_test_ids_and_gt_support_checked",
+          "line": 459,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_nondefault_frozen_protocol_is_reused_without_override_flags",
+          "line": 481,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_execution_load_is_safe_and_only_checked_snapshot",
+          "line": 518,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_concurrently_replaced_output_is_preserved_and_not_reported_success",
+          "line": 531,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_whole_view_frozen_protocol_uses_no_tile_override",
+          "line": 550,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_foreign_symlink_to_open_report_inode_is_preserved",
+          "line": 586,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_actual_backend_mismatch_refused_before_test_read",
+          "line": 606,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_terminal_role_executes_own_snapshot_and_score",
+          "line": 619,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_changed_typed_request_rejects_before_test_gt",
+          "line": 637,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_reviewed_test_comparison.py",
+      "sha256": "f9cdf0adb218b65222071125ca324081e86a7b6a6d270152cee64b09c7dfd078",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 12,
+      "parametrized_definitions": 5,
+      "purpose": "Synthetic saved counts/metadata only; no real TEST data or inference.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_reviewed_test_comparison.py",
+      "test_definitions": [
+        {
+          "name": "test_consistent_differing_pipeline_sources_compare_test_and_preserve_input_bytes",
+          "line": 250,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_mismatched_review_policy_selection_source_and_test_domain_rejected",
+          "line": 287,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_external_original_artifact_byte_sha_required",
+          "line": 301,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_record_identity_and_source_attribution_match_trusted_manifest",
+          "line": 306,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_preserves_existing_output",
+          "line": 314,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_self_consistent_rebound_metadata_cannot_evade_completion_protocol_and_domain_checks",
+          "line": 358,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_paired_positive_gt_support_mismatch_rejected_without_gt_access",
+          "line": 393,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_helper_imports_without_torch_or_execution_gate_modules",
+          "line": 401,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_existing_metric_identity_cannot_be_silently_retagged",
+          "line": 422,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_schema2_typed_roles_and_families_compare_metadata",
+          "line": 550,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_schema2_cannot_retag_role_or_completion",
+          "line": 558,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_schema2_raw_6b_config_uses_only_explicit_compatibility_defaults",
+          "line": 582,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_sampling_exposure_audit.py",
+      "sha256": "0e59243897a23ca509c38f2e1e410860fe3eb6f4202cc7866dbc0e54df3b7dc1",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 4,
+      "parametrized_definitions": 0,
+      "purpose": "Analytic small-corpus checks for pre-crop expected exposure, never ML training.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_sampling_exposure_audit.py",
+      "test_definitions": [
+        {
+          "name": "test_aliased_vascular_choice_and_disc_only_addition_change_expected_exposure",
+          "line": 16,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unknown_av_and_absent_cup_do_not_create_sampling_tasks",
+          "line": 41,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_scenarios_separate_vascular_weight_from_av_bundle_choice",
+          "line": 60,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_task_flag_export_is_train_only_pinned_metadata_and_refuses_overwrite",
+          "line": 84,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_selection_tta.py",
+      "sha256": "30fccdca54f11c769dae5a703e3b18c825f33158d4f8347b8fbf66941eef3d49",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 16,
+      "parametrized_definitions": 8,
+      "purpose": "Reviewed TTA metadata/math only: no network forward, actual GT or TEST scoring.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_selection_tta.py",
+      "test_definitions": [
+        {
+          "name": "test_explicit_typed_tta_freeze_roundtrip",
+          "line": 55,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_changed_fresh_evidence_rejected",
+          "line": 92,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_tta_other_family_not_implicitly_admitted",
+          "line": 123,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_tta_still_requires_typed_original_eligibility",
+          "line": 132,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_fresh_producer_dispatch_without_any_forward",
+          "line": 152,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_none_default_protocol_and_report_schema_exact",
+          "line": 173,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bad_frozen_descriptor_rejected_before_stage2_checker",
+          "line": 184,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_rectangular_inverse_and_joint_fusion_tiny_math",
+          "line": 226,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_stage2_passes_frozen_mode_before_any_scoring",
+          "line": 250,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_zero_vessel_and_joint_class_mixture",
+          "line": 274,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_operator_types_are_not_bool_int_aliases",
+          "line": 287,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_none_preserves_exact_return_object_and_rng",
+          "line": 294,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bf16_training_metadata_does_not_enable_tta_autocast",
+          "line": 308,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_non72_producer_rejected_before_forward",
+          "line": 323,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_declared_operators_match_actual_prediction_order",
+          "line": 338,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_header_only_bool_rotation_rejected_with_unchanged_metrics",
+          "line": 346,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_sources.py",
+      "sha256": "d803e3bdf27721aa3df7ee0432e4e9b584bbe33d7ef921a394688ea0cf9aec7c",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 5,
+      "parametrized_definitions": 0,
+      "purpose": "Resource identity and read-only archive behavior.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_sources.py",
+      "test_definitions": [
+        {
+          "name": "test_zip_transport_prefixes_deduplicate_without_changing_source",
+          "line": 21,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_conflicting_zip_copies_raise_instead_of_selecting_labels",
+          "line": 36,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_ambiguous_basename_requires_qualified_pairing",
+          "line": 45,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_tar_and_gzipped_images_read_without_extraction",
+          "line": 57,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_identical_nested_release_aliases_are_checked_before_resolution",
+          "line": 70,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_streaming_thresholds.py",
+      "sha256": "036875f3646c95c9c20f5d42967047b87c258fc1c040fe74bfc3f8e83a5d2aa7",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 2,
+      "parametrized_definitions": 1,
+      "purpose": "Native threshold counters, ignored support and same-forward producer parity.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_streaming_thresholds.py",
+      "test_definitions": [
+        {
+          "name": "test_exact_native_decoder_counts_unknown_and_containment",
+          "line": 17,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_same_forward_native_producer_parity",
+          "line": 69,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_strong_pipeline_benchmark.py",
+      "sha256": "7f35b6824c9cdd4357d9c3db92bab75de68e4ac23c5189a1d132aa067286aaae",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 20,
+      "parametrized_definitions": 6,
+      "purpose": "Exact four-network composition, reference/TTA/threshold forwarding, phase scopes and retained output checks.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_strong_pipeline_benchmark.py",
+      "test_definitions": [
+        {
+          "name": "test_exact_selected_components_required",
+          "line": 52,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_weaker_or_different_reference_is_rejected",
+          "line": 70,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_four_network_pipeline_uses_dedicated_heads_native_tiles_and_calibrated_av",
+          "line": 76,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_nonfinite_original_predictions_fail",
+          "line": 135,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unified_uses_checkpoint_geometry_and_masks_original_frame",
+          "line": 144,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_selected_threshold_controls_vessel_gate_and_disc_cup",
+          "line": 175,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_invalid_selected_threshold_rejected_before_device_initialization",
+          "line": 198,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_palette_fov_uses_displayed_intensity_not_indices",
+          "line": 209,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_input_identity_matches_decoded_snapshot_after_path_replacement",
+          "line": 225,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_benchmark_report_retains_timed_input_snapshot_hashes",
+          "line": 263,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_explicit_cup_policy_binds_completed_quality_reference",
+          "line": 358,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_cup_clip_exact_strict_source_semantics_before_restoration",
+          "line": 384,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_structurally_exact_completed_reference_metadata",
+          "line": 425,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_explicit_tta_forwards_after_one_fullframe_photometry",
+          "line": 452,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_invalid_tta_fails_before_device_or_inputs",
+          "line": 478,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_phase_measure_synchronizes_every_recorded_call_without_extra_forward",
+          "line": 485,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_historical_measure_default_keeps_warmup_schema",
+          "line": 500,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_extended_benchmark_records_exact_protocol_load_IO_and_last_output_without_forward",
+          "line": 507,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_cli_forwards_selected_protocol_threads_and_scopes_without_model_work",
+          "line": 579,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_lightweight_suite_does_not_initialize_cuda",
+          "line": 607,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_terminal60_threshold_watch.py",
+      "sha256": "0ec4b8c0ad5d9ade63c232e4693a2a77133c7df5890624954ff9acbed2bdb063",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 2,
+      "purpose": "Synthetic metadata only; no real checkpoint/model/GPU/manifest operations.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_terminal60_threshold_watch.py",
+      "test_definitions": [
+        {
+          "name": "test_wait_only_until_true_terminal_or_utc_cutoff",
+          "line": 92,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_reject_terminal_qa_drift",
+          "line": 110,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_actual_gpu_uuid_driver_and_no_other_compute_are_required",
+          "line": 128,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_six_reports_can_change_only_threshold_and_prediction_counts",
+          "line": 139,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_reject_any_evidence_pin_support_or_runtime_drift",
+          "line": 153,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_timeout_signals_only_own_isolated_child_never_training",
+          "line": 174,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_terminal60_val_comparison.py",
+      "sha256": "950819a934cbe78be4222289c1081045abc27a1587d4d76b3b7d5dd1baf86933",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 1,
+      "purpose": "Synthetic all2529/5700/770 metadata only; no real model/data/TEST reads.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_terminal60_val_comparison.py",
+      "test_definitions": [
+        {
+          "name": "test_terminal60_accepts_actual_last_and_preserves_best52",
+          "line": 102,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_rehashed_context_cannot_replace_terminal_contract",
+          "line": 128,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_default_best_route_does_not_accept_terminal_role_or_relabel_hash",
+          "line": 153,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_unified.py",
+      "sha256": "a8680742beee0f2eb087c09a65632ab6c23fa52d3e2a65bb0154cf601295b64a",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 25,
+      "parametrized_definitions": 4,
+      "purpose": "Scientific contracts for one partially supervised five-output RGB network.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_unified.py",
+      "test_definitions": [
+        {
+          "name": "test_mapping_never_makes_missing_annotations_negative",
+          "line": 40,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_unknown_heads_and_unclassified_av_pixels_have_zero_logit_gradient",
+          "line": 50,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_all_five_outputs_receive_correctly_masked_gradients_in_one_rgb_model",
+          "line": 77,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_conditional_av_is_offset_invariant_and_has_no_independent_class_cutoff",
+          "line": 98,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_coannotations_are_merged_per_photo_without_merging_patient_eyes",
+          "line": 165,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_incorrect_photo_alias_pixels_and_cross_split_ids_are_rejected",
+          "line": 188,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_checkpoint_roundtrip_and_functionality_label_cover_all_heads",
+          "line": 204,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly",
+          "line": 262,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_default_model_is_compact_and_still_shared",
+          "line": 306,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_inference_centers_rgb_only_once_and_rejects_centered_input",
+          "line": 313,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_full_data_rejects_wrong_physical_preprocessing_profile",
+          "line": 332,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_tiled_conditional_fusion_weights_classes_by_vessel_confidence",
+          "line": 346,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_restoration_interpolates_joint_av_not_background_conditional_guesses",
+          "line": 365,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_module_cli_overrides_config_without_starting_unrequested_work",
+          "line": 386,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_full_data_never_accepts_preview_records",
+          "line": 426,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_coverage_sampler_visits_all_photos_then_balances_extras",
+          "line": 436,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_full_data_budget_must_cover_every_photo",
+          "line": 450,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_prefetched_samples_do_not_count_as_delivered_coverage",
+          "line": 461,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_training_uses_each_vascular_observer_bundle_without_inconsistent_av",
+          "line": 485,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_best_checkpoint_uses_declared_selection_metric",
+          "line": 513,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_historical_resume_is_exact_without_original_checkpoint",
+          "line": 546,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_resume_recovers_interrupted_best_csv_and_preserves_stronger_selection",
+          "line": 585,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_resume_rejects_unrelated_best_checkpoint",
+          "line": 684,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_resume_refuses_changed_gt_under_unchanged_manifest",
+          "line": 708,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_per_photo_conditional_counts_sum_header_and_include_missed_vessels",
+          "line": 759,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_unified_av_residual.py",
+      "sha256": "63ee4933cf0b026326d3b5f6662fbb9ccb32f1d842172485061a82f0fd96ae91",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 12,
+      "parametrized_definitions": 4,
+      "purpose": "CPU numerical/gradient contracts for optional AV capacity, not quality evidence.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_unified_av_residual.py",
+      "test_definitions": [
+        {
+          "name": "test_feature_refactor_matches_original_forward_and_buffers",
+          "line": 49,
+          "parametrize_decorators": 3
+        },
+        {
+          "name": "test_zero_residual_preserves_backbone_logits_keys_and_rng",
+          "line": 77,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_head_stays_before_odd_frame_crop",
+          "line": 103,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_residual_parameters_cannot_change_direct_vessel_disc_cup_logits",
+          "line": 114,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_residual_gradients_only_follow_valid_av_and_vessel_condition_is_detached",
+          "line": 127,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_zero_initial_last_layer_receives_first_av_gradient",
+          "line": 158,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_safe_checkpoint_roundtrip_keeps_odd_geometry_and_learned_residual",
+          "line": 171,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_legacy_initialization_is_not_an_eligible_residual_option",
+          "line": 197,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_new_module_changes_training_source_fingerprint",
+          "line": 202,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_parameter_overhead_is_bounded_for_trial_baseline",
+          "line": 216,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_public_training_config_accepts_residual_architecture",
+          "line": 226,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_reviewed_hpo_candidate_accepts_residual_without_new_default_plan",
+          "line": 259,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_unified_cli.py",
+      "sha256": "ce4b1c0e3024bc722a1a6bee32a00a1258eb49dc98a454bfd8ed2674d4d4d185",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 13,
+      "parametrized_definitions": 2,
+      "purpose": "Public unified CLI round trips use generated functionality data, never quality claims.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_unified_cli.py",
+      "test_definitions": [
+        {
+          "name": "test_actual_generated_checkpoint_predicts_five_native_outputs_and_default_tiles",
+          "line": 158,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_public_training_resume_restores_config_and_content_pin_exactly",
+          "line": 195,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_public_validation_requires_same_pinned_corpus_and_rejects_test",
+          "line": 237,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unified_prediction_rejects_inapplicable_modes_before_outputs",
+          "line": 291,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_folder_and_whole_view_override_contract",
+          "line": 302,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_pilot_tile_defaults_remain_512_64",
+          "line": 339,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unified_validation_rejects_unpinned_checkpoint_and_changed_manifest",
+          "line": 366,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unified_training_rejects_unknown_or_nonobject_config",
+          "line": 397,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_existing_validation_report_is_preserved_before_model_or_evaluator",
+          "line": 418,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_validation_exclusive_write_handles_late_report_and_hashes_loaded_snapshot",
+          "line": 453,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_prediction_hash_and_weights_use_same_snapshot_when_checkpoint_path_replaced",
+          "line": 509,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_public_cached_training_matches_canonical_and_resumes_after_cache_relocation",
+          "line": 546,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_public_cache_requires_external_pins_without_creating_output",
+          "line": 609,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_unified_hpo.py",
+      "sha256": "bc574d81a1f5b5ffc54eef7dde670a4679bca2779b9a539408de6f6acc5fe5fd",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 5,
+      "parametrized_definitions": 0,
+      "purpose": "Full-data search guards and unchanged scheduling across screen/resume stages.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_unified_hpo.py",
+      "test_definitions": [
+        {
+          "name": "test_full_search_rejects_previews_and_missing_source",
+          "line": 57,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_full_search_requires_real_support_for_every_validation_head",
+          "line": 67,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_search_keeps_full_scheduler_horizon_and_refuses_source_changes",
+          "line": 78,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_trial_provenance_survives_training_failure",
+          "line": 104,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_independent_search_never_accepts_exposure_qualified_teacher",
+          "line": 122,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_unified_loss_balance.py",
+      "sha256": "a0f7151aca4bb35f523959ce8530c14b7fc5b912e14d667de12628392e4e545f",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 7,
+      "parametrized_definitions": 2,
+      "purpose": "Optional v2 vessel emphasis: masked gradients and v1 numerical compatibility.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_unified_loss_balance.py",
+      "test_definitions": [
+        {
+          "name": "test_default_loss_and_gradients_bitwise_equal_v1",
+          "line": 29,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_vessel_multiplier_acts_on_vessel_only_batches_without_cancelling",
+          "line": 64,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_positive_bce_weight_scales_only_positive_vessel_gradient",
+          "line": 76,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_positive_bce_weight_respects_fractional_targets",
+          "line": 88,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_emphasis_does_not_change_av_disc_cup_gradients_or_unknown_support",
+          "line": 99,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_invalid_vessel_weights_fail_in_config_and_loss",
+          "line": 123,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_old_checkpoint_without_new_fields_loads_exact_model_and_state_keys",
+          "line": 130,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_unified_mixed_precision.py",
+      "sha256": "98874a47288930ff74717f1df9b4d8270c6d2c7c6a4f01cc211e79d51dce7b76",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 9,
+      "parametrized_definitions": 1,
+      "purpose": "CPU contracts; no real CUDA, real data, or speed/quality claims.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_unified_mixed_precision.py",
+      "test_definitions": [
+        {
+          "name": "test_only_explicit_precision_modes",
+          "line": 28,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_unsupported_cpu_bf16_fails_before_manifest_or_outputs",
+          "line": 33,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_native_support_checked_on_selected_device",
+          "line": 42,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_none_context_never_calls_autocast_or_cuda",
+          "line": 57,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bf16_cpu_operator_smoke_keeps_master_weights_gradients_float32",
+          "line": 68,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bf16_checkpoint_config_loads_on_cpu_and_ignores_outer_autocast",
+          "line": 87,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_default_functional_training_matches_pinned_original_weights_optimizer_rng",
+          "line": 115,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_precision_change_cannot_resume_existing_epoch",
+          "line": 170,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_bf16_loop_cpu_emulation_preserves_fp32_val_and_checkpoint_states",
+          "line": 195,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_unified_photometry.py",
+      "sha256": "d690fc6a0393ca8345c5ebadb63c82a402402f2bf76583bf93e70258efa6b5e4",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 13,
+      "parametrized_definitions": 5,
+      "purpose": "Opt-in full-image intensity contracts; synthetic fixtures, no scientific scores.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_unified_photometry.py",
+      "test_definitions": [
+        {
+          "name": "test_full_image_deterministic_geometry_range_outside_and_rng",
+          "line": 64,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_background_contract_reuses_actual_legacy_operator",
+          "line": 84,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_missing_fov_invalid_profile_and_degenerate_background_fail",
+          "line": 97,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_default_raw_does_not_read_fov_and_retains_crop_rng",
+          "line": 110,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_full_photo_precedes_crop_targets_unchanged_and_cache_separates_profiles",
+          "line": 133,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_high_level_inference_and_dataset_receive_identical_prepared_pixels",
+          "line": 169,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_safe_checkpoint_records_and_enforces_photometric_parameters",
+          "line": 215,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_optin_missing_image_fov_has_no_target_mask_fallback",
+          "line": 247,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_fov_assets_are_in_existing_canonical_byte_fingerprint",
+          "line": 256,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_new_module_is_in_explicit_training_source_fingerprint",
+          "line": 267,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_lossless_raw_derived_cache_and_canonical_reader_match_after_photometry",
+          "line": 286,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_failed_augmented_crop_falls_back_to_same_photometric_native_image",
+          "line": 321,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_default_raw_step_matches_product_d028_weights_optimizer_and_rng",
+          "line": 349,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_unified_selection.py",
+      "sha256": "6ea9c963718ef715b1fbd0625e8f45e30e509236704990d9976bc96f2d557f56",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 29,
+      "parametrized_definitions": 9,
+      "purpose": "Selection metadata checks use CPU toy snapshots, never any network forward.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_unified_selection.py",
+      "test_definitions": [
+        {
+          "name": "test_valid_metadata_never_decodes_test_gt_or_forwards",
+          "line": 378,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_snapshot_retained_even_when_same_checkpoint_path_is_replaced",
+          "line": 397,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_requested_protocol_override_cannot_reuse_selection",
+          "line": 409,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_mismatched_enriched_evidence_rejected",
+          "line": 428,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_arbitrary_filename_hash_or_old_thin_val_report_is_not_evidence",
+          "line": 435,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_incomplete_or_corrupt_training_budget_rejected",
+          "line": 456,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_pilot_teacher_unsupported_nonfinite_checkpoints_rejected",
+          "line": 472,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_changed_actual_canonical_bytes_fail_even_with_same_path",
+          "line": 478,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_decision_is_required_pinned_and_not_backdated_before_val",
+          "line": 486,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_actual_val_gt_support_is_checked_not_only_report_headers",
+          "line": 496,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_public_test_route_stays_blocked_even_after_valid_selection",
+          "line": 505,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_gate_is_not_removed_by_python_optimization",
+          "line": 531,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_optimizer_steps_must_agree_with_completed_run",
+          "line": 558,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_lr_history_must_follow_frozen_config",
+          "line": 567,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_missing_epoch_does_not_count_as_full_budget",
+          "line": 578,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_incomplete_summary_rejected",
+          "line": 585,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_active_autocast_is_not_the_recorded_float32_protocol",
+          "line": 591,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_duplicate_json_fields_and_nonfinite_json_are_not_accepted",
+          "line": 599,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_artifact_cannot_claim_it_enables_test_execution",
+          "line": 606,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_optional_runtime_module_addition_and_change_affect_source_identity",
+          "line": 614,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_canonical_mutation_after_initial_fingerprint_is_rejected",
+          "line": 672,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_canonical_mutation_during_val_support_read_is_rejected",
+          "line": 692,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_full_canonical_fingerprint_repeated_after_val_gt_read",
+          "line": 717,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_impossible_exclusive_av_decoder_counts_rejected",
+          "line": 772,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_legitimate_exclusive_av_decoder_counts_accepted",
+          "line": 791,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_no_compatible_loader_untyped_fallback",
+          "line": 800,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_historical_selection_not_upgraded_for_execution",
+          "line": 812,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_checked_eligibility_proof_cannot_be_mutated",
+          "line": 821,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_malformed_typed_eligibility_is_rejected",
+          "line": 829,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_unified_warmstart.py",
+      "sha256": "c94d44c3fd7ba4a0060ad60cedf68e1829c064659e234769589561f9efd651f6",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 2,
+      "purpose": "Original-head fidelity, rectangular geometry, and explicit exposure safeguards.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_unified_warmstart.py",
+      "test_definitions": [
+        {
+          "name": "test_warmstart_needs_explicit_ancestry_permission",
+          "line": 47,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_actual_original_three_logits_are_bitwise_identical_and_av_neutral",
+          "line": 56,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_student_corrects_rectangular_odd_geometry_without_changing_reference",
+          "line": 75,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_cold_checkpoint_load_never_reopens_teacher_and_restores_ancestry",
+          "line": 93,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_scratch_original_architecture_has_no_teacher_ancestry_and_all_heads_train",
+          "line": 120,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_wrong_safe_checkpoint_family_is_rejected",
+          "line": 130,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_v3_completion.py",
+      "sha256": "51da833dfb87e77a78f1165917c65d7bd60a967d1261986295bfa5b5fe5df7c2",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 1,
+      "purpose": "Synthetic pool72 full60 task/receipt/milestone chain; reject partial or retagged evidence.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_v3_completion.py",
+      "test_definitions": [
+        {
+          "name": "test_synthetic_native_final60_complete_pool_contract",
+          "line": 266,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_v3_cannot_promote_partial_or_retagged_evidence",
+          "line": 292,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_vendored_native_modules_are_byte_exact",
+          "line": 333,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_val_bridge.py",
+      "sha256": "bc47565b8cdc3c296a4559f75b66ce2f935c5d74c8c90f6287d6b124558ccfd2",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 11,
+      "parametrized_definitions": 3,
+      "purpose": "Synthetic encoded assets only: no GT decoding, NumPy, Torch or model forward.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_val_bridge.py",
+      "test_definitions": [
+        {
+          "name": "test_bridge_keeps_original_body_and_binds_explicit_val_context",
+          "line": 129,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_changed_domain_cannot_bridge",
+          "line": 174,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_scope_rejects_symlinks",
+          "line": 205,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_crosssplit_alias_and_test_measurement_are_rejected",
+          "line": 216,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_changed_observer_inventory_in_measured_reference_is_rejected",
+          "line": 234,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_optin_requires_exact_external_trust_and_current_target_bytes",
+          "line": 247,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_target_only_hashes_val_and_rejects_non770_production_context",
+          "line": 277,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_metadata_number_type_change_is_not_exact_identity",
+          "line": 313,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_whole_operation_detects_rewrite_of_already_hashed_asset",
+          "line": 323,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_strong_comparison_wrapper_requires_external_optin",
+          "line": 343,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_generic_comparison_does_not_implicitly_unwrap_bridge",
+          "line": 366,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_validation_evidence.py",
+      "sha256": "fcdb65ec70ad442eab97f4542d58094bdb6b472b2398227e22df9bf1fea70c7d",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 10,
+      "parametrized_definitions": 3,
+      "purpose": "Fresh tiny CPU forwards, never actual corpus/model evaluation or test GT reads.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_validation_evidence.py",
+      "test_definitions": [
+        {
+          "name": "test_actual_forward_report_accepted_by_selection_gate",
+          "line": 46,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_path_replacement_does_not_change_evaluated_weights",
+          "line": 83,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_existing_output_refused_before_checkpoint_or_model",
+          "line": 104,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_live_identity_changes_fail_without_report",
+          "line": 122,
+          "parametrize_decorators": 2
+        },
+        {
+          "name": "test_missing_val_photo_counts_rejected",
+          "line": 163,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_exclusive_output_race_preserves_other_report",
+          "line": 177,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_partial_or_final_epoch_allowed_under_planned60",
+          "line": 192,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_ineligible_inputs_fail_before_forward",
+          "line": 201,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_cli_actual_tiny_cpu_roundtrip",
+          "line": 220,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_snapshot_is_read_once_and_all_loads_are_safe",
+          "line": 267,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_vascular2_bn_comparison.py",
+      "sha256": "5af659065ba2199c88d1453728c7bf32f17d7b8ea88260ddee1f4c0108ee4b47",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 2,
+      "parametrized_definitions": 1,
+      "purpose": "Real completed research metadata; no model/GT/forward access.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_vascular2_bn_comparison.py",
+      "test_definitions": [
+        {
+          "name": "test_real_research_family_preserves_770_counts",
+          "line": 25,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_no_retaging_or_inherited_measurement",
+          "line": 33,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_vascular2_bn_recalibration.py",
+      "sha256": "41dc1b6951b5b80b5cce112adbc5c1a9ea943fce3c2c479e1330f082ba4214d5",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 9,
+      "parametrized_definitions": 0,
+      "purpose": "Tiny CPU synthetic forward only; no actual TRAIN/VAL/TEST arrays or weights.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_vascular2_bn_recalibration.py",
+      "test_definitions": [
+        {
+          "name": "test_actual_update_bn_only_changes_allowed_buffers_and_restores_modes_momenta",
+          "line": 24,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_update_is_cumulative_not_original_momentum_ema",
+          "line": 42,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_centered_batches_count_parent_delivered_indices_only",
+          "line": 50,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_failure_restores_bn_momentum_and_mode",
+          "line": 58,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_non_bn_side_effect_rejected",
+          "line": 70,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_derived_payload_is_prediction_only_and_does_not_rewrite_parent_history",
+          "line": 85,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_same_seed_synthetic_recipe_repeats_exact_bn_state",
+          "line": 117,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_modified_same_version_update_bn_cannot_silently_run",
+          "line": 131,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_tiny_derived_checkpoint_safe_roundtrip_matches_predictions",
+          "line": 137,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_vascular2_bn_validation.py",
+      "sha256": "e0c04bcf4509611c6f09dfe9d37f86b321b458ec265f8d5eb68fbfaffb8c77e3",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 3,
+      "parametrized_definitions": 1,
+      "purpose": "Derived metadata/byte checks only; no actual calibration or VAL run.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_vascular2_bn_validation.py",
+      "test_definitions": [
+        {
+          "name": "test_derived_parent_stats_and_coverage_checked_without_old_score",
+          "line": 48,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_research_producer_rejects_false_derivation",
+          "line": 56,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_terminal60_cannot_be_mislabeled_as_parent_best59",
+          "line": 72,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_vascular2_comparison.py",
+      "sha256": "88bcae53e6fdd3ba37702fa5aaf0bbffb2769b8c8232070fd6acc9fe9534dc7f",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 4,
+      "parametrized_definitions": 2,
+      "purpose": "Actual completed standalone report metadata; no GT/model access.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_vascular2_comparison.py",
+      "test_definitions": [
+        {
+          "name": "test_actual_roles_preserve_own_coverage",
+          "line": 27,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_no_retaging_or_relaxation",
+          "line": 37,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_worst6_is_pooled_six_objective_not_source_order",
+          "line": 57,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_actual_source_aggregates_reject_tampered_header",
+          "line": 70,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_vascular2_val_readiness.py",
+      "sha256": "2d23c6debf715a45ff9dc210c9c0036760f86c8ae4a6c804c2557488060f2b89",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 4,
+      "parametrized_definitions": 1,
+      "purpose": "Frozen CLI delegation and nested metadata only; no Torch/model/GT/NN work.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_vascular2_val_readiness.py",
+      "test_definitions": [
+        {
+          "name": "test_exact_frozen_cli_delegates_without_pool_qa_dependency",
+          "line": 20,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_nested_metrics_and_fixed_terminal_role",
+          "line": 91,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_best_role_discloses_its_own_coverage",
+          "line": 99,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_metadata_mismatch_rejects",
+          "line": 111,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tests/test_vascular_sampling_weight.py",
+      "sha256": "9493d2c0d327f4c27e8054933f0d7083e477843dae360793c09313505ee4171f",
+      "directory_group": "main",
+      "run_environment": "T",
+      "static_test_definitions": 11,
+      "parametrized_definitions": 4,
+      "purpose": "Frozen6b bit/RNG compatibility and isolated vascular-key weighting; no GT files.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_vascular_sampling_weight.py",
+      "test_definitions": [
+        {
+          "name": "test_frozen_reference_bytes_match_provenance",
+          "line": 56,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_default_one_weights_are_bitwise_frozen6b_for_all_existing_policies",
+          "line": 65,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_default_weights_and_sampler_preserve_every_draw_and_rng_state",
+          "line": 76,
+          "parametrize_decorators": 3
+        },
+        {
+          "name": "test_priority_two_multiplies_only_existing_vascular_key_contributions",
+          "line": 87,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_priority_must_be_numeric_positive_finite_and_not_bool",
+          "line": 117,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_nondefault_priority_rejected_for_every_other_sampling_policy",
+          "line": 123,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_sampling_owner_alias_conflict_guard_still_applies",
+          "line": 128,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_control_and_vascular_presets_differ_only_by_declared_scalar",
+          "line": 136,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_observer_crop_augmentation_loss_and_architecture_are_unchanged",
+          "line": 161,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_direct_weight_computation_rejects_mutated_nondefault_policy",
+          "line": 186,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_new_field_is_appended_to_preserve_existing_positional_configuration_api",
+          "line": 193,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tools/optuna_coordinator/tests/test_baseline_rung_reference.py",
+      "sha256": "6685e9446830cdfdba33052c4ccda622043bfecb7f30da95e85fe7057c1d7c54",
+      "directory_group": "coordinator",
+      "run_environment": "C",
+      "static_test_definitions": 1,
+      "parametrized_definitions": 1,
+      "purpose": "Optuna5 native rung membership, demonstrated in memory; no live study access.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:tools/optuna_coordinator/src uv run --project tools/optuna_coordinator --frozen --no-sync --group dev python -m pytest -q tools/optuna_coordinator/tests/test_baseline_rung_reference.py",
+      "test_definitions": [
+        {
+          "name": "test_intermediate_curve_alone_does_not_enter_native_asha_competition",
+          "line": 8,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tools/optuna_coordinator/tests/test_core.py",
+      "sha256": "41bb441774ac8a958d77ab06a51736b061f1c7dcce66103d7092662677c65a27",
+      "directory_group": "coordinator",
+      "run_environment": "C",
+      "static_test_definitions": 7,
+      "parametrized_definitions": 0,
+      "purpose": "Temporary native Optuna lifecycle, leases, receipts, full60-only completion and config bounds.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:tools/optuna_coordinator/src uv run --project tools/optuna_coordinator --frozen --no-sync --group dev python -m pytest -q tools/optuna_coordinator/tests/test_core.py",
+      "test_definitions": [
+        {
+          "name": "test_full_ask_report_rungs_and_actual60_only",
+          "line": 104,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_missing_fullqa_gpu_or_lease_change_rejected",
+          "line": 130,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_pruner_and_deadline_do_not_create_facade_complete",
+          "line": 145,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_config_bounds_geometry_bool_and_fixed_worker_count",
+          "line": 156,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_local_singlewriter_and_no_torch",
+          "line": 173,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_old_style_pending_e3_promotes_to_distinct_lease_and_survives_restart",
+          "line": 185,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_asha_prunes_weaker_peer_and_new_config_cap",
+          "line": 222,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tools/optuna_coordinator/tests/test_sampler_state.py",
+      "sha256": "928ecd20e8f510b457beb3ad2bf1321b0a3593de5fb334d5cd9960c140f6da86",
+      "directory_group": "coordinator",
+      "run_environment": "C",
+      "static_test_definitions": 6,
+      "parametrized_definitions": 1,
+      "purpose": "Real pinned Optuna5/SQLite tests; no model, data reader, transport or GPU.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:tools/optuna_coordinator/src uv run --project tools/optuna_coordinator --frozen --no-sync --group dev python -m pytest -q tools/optuna_coordinator/tests/test_sampler_state.py",
+      "test_definitions": [
+        {
+          "name": "test_restart_next_parameters_equal_uninterrupted",
+          "line": 63,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_pending_ask_and_promotion_do_not_advance_streams",
+          "line": 88,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_legacy_missing_state_migrates_once_with_recorded_deterministic_seeds",
+          "line": 103,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_corrupt_sampler_json_fails_closed",
+          "line": 135,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_unclean_ask_history_mismatch_is_recorded_not_silently_replayed",
+          "line": 145,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_baseline_import_refreshes_history_without_consuming_seed42",
+          "line": 162,
+          "parametrize_decorators": 0
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    },
+    {
+      "path": "tools/optuna_coordinator/tests/test_v2_finite.py",
+      "sha256": "ec43b1b6de1b4077ab825a84342c4de7ef256a6a431614edcd4b4447ec5122b7",
+      "directory_group": "coordinator",
+      "run_environment": "C",
+      "static_test_definitions": 11,
+      "parametrized_definitions": 5,
+      "purpose": "Real Optuna/SQLite protocol2, synthetic receipts only; no model/data/GPU.",
+      "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:tools/optuna_coordinator/src uv run --project tools/optuna_coordinator --frozen --no-sync --group dev python -m pytest -q tools/optuna_coordinator/tests/test_v2_finite.py",
+      "test_definitions": [
+        {
+          "name": "test_first_control_is_real_trial0_no_completed_baseline_and_queue_is_finite",
+          "line": 49,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_control_overrides_native_prune_but_registers_real_rungs_and_finishes_only60",
+          "line": 77,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_v2_restart_restores_pending_and_never_enqueues_extras",
+          "line": 105,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_dynamic_photo_coverage_and_policy_identity_are_required",
+          "line": 119,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_control_failure_or_deadline_is_not_fake_completion",
+          "line": 136,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_v2_inventory_cannot_be_extended_or_reuse_v1_baseline",
+          "line": 158,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_cached_v2_control_and_canonical_worker_keep_rung_identity",
+          "line": 177,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_v2_cache_requires_explicit_valid_corpus_pin",
+          "line": 190,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_issuance_journal_recovers_real_control_after_each_crash",
+          "line": 214,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_promotion_journal_replays_original_receipt_after_each_crash",
+          "line": 232,
+          "parametrize_decorators": 1
+        },
+        {
+          "name": "test_terminal_journal_recovers_exact_decision_after_each_crash",
+          "line": 249,
+          "parametrize_decorators": 1
+        }
+      ],
+      "execution_status": "available; not executed or collected for this documentation inventory"
+    }
+  ],
+  "similarly_named_non_test_CLI_tools": [
+    {
+      "path": "scripts/compare_reviewed_test.py",
+      "definitions": 0,
+      "purpose": "Compare saved, externally reviewed TEST reports using metadata/counts only.",
+      "classification": "CLI tool; name matches *_test.py but contains no AST test definitions"
+    },
+    {
+      "path": "scripts/unified_test.py",
+      "definitions": 0,
+      "purpose": "Explicit reviewed stage2 held-out evaluation; general test CLI stays blocked.",
+      "classification": "CLI tool; name matches *_test.py but contains no AST test definitions"
+    }
+  ]
+}

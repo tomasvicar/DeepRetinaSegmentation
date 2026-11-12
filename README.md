@@ -243,6 +243,12 @@ comparable with historical original-resolution or differently masked evaluations
 
 ## Development and evidence
 
+See the [complete test inventory and recorded validation evidence](docs/TESTING.md)
+for every HPO test module, separate uv environments, reproducible commands and
+source-specific actual results. Default pytest discovery covers only `tests/`;
+coordinator/report-local tests and the fixed27 Optuna dependency need the explicit
+recipes there. Available tests are not a claim of a current all-green full suite.
+
 ```bash
 uv run pytest -q
 uv run ruff check src tests scripts
