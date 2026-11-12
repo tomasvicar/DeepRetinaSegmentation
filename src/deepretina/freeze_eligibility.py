@@ -112,27 +112,50 @@ def _optimizer(last_bytes, last):
     # Native registration order, CPU construction only; never a model forward.
     with torch.device("cpu"), torch.random.fork_rng(devices=[]):
         model, _, _ = gate.load_unified(io.BytesIO(last_bytes), device="cpu")
-    parameters = list(model.parameters())
+    from .unified_legacy import LegacyUniversalStudent
+
+    parameters = list(model.named_parameters())
+    legacy = last["config"]["architecture"] == "legacy_universal"
+    gate.require(
+        legacy == (type(model) is LegacyUniversalStudent), "Optimizer model architecture differs"
+    )
+    unused = set()
+    if legacy:
+        gate.require(model.up_conv1[1].do_batch == 0, "Legacy BN is not actually disabled")
+        unused = {
+            i
+            for i, (name, _) in enumerate(parameters)
+            if name in {"up_conv1.1.bn.weight", "up_conv1.1.bn.bias"}
+        }
+        gate.require(len(unused) == 2, "Legacy unused BN names differ")
     state = last["training_state"]
     optimizer = state["optimizer"]
     ids = [p for group in optimizer["param_groups"] for p in group["params"]]
     gate.require(
-        len(ids) == len(set(ids)) == len(parameters) and set(ids) == set(optimizer["state"]),
+        all(type(i) is int for i in ids)
+        and ids == list(range(len(parameters)))
+        and all(type(i) is int for i in optimizer["state"])
+        and set(optimizer["state"]) == set(ids) - unused,
         "Optimizer parameter/state coverage differs",
     )
     gate.require(gate._finite(optimizer), "Nonfinite optimizer")
-    for key, parameter in zip(ids, parameters, strict=True):
+    for key, (_, parameter) in zip(ids, parameters, strict=True):
+        if key in unused:
+            continue
         value = optimizer["state"][key]
         step = value.get("step")
         gate.require(
             torch.is_tensor(step) and step.numel() == 1 and 0 < step.item() <= last["steps"],
             "Invalid optimizer step",
         )
-        if last["config"]["architecture"] == "compact_unet":
-            gate.require(step.item() == last["steps"], "Stale compact optimizer step")
+        if legacy or last["config"]["architecture"] == "compact_unet":
+            gate.require(step.item() == last["steps"], "Stale used optimizer step")
         for name in ("exp_avg", "exp_avg_sq"):
             gate.require(
-                torch.is_tensor(value.get(name)) and value[name].shape == parameter.shape,
+                torch.is_tensor(value.get(name))
+                and value[name].numel() > 0
+                and value[name].shape == parameter.shape
+                and value[name].dtype == parameter.dtype,
                 "Optimizer moment/parameter shape differs",
             )
     gate.require(
@@ -181,12 +204,30 @@ def _common_qa(qa, profile, best, last, csv_bytes, summary_bytes):
     )
 
 
+LEGACY_VERIFIER = "412a11bb92c438446f70b5b6aa471e5aa38f2bb35c802723b823f1a89a638d47"
+LEGACY_OPTIMIZER_SCHEMA = "legacy_universal_native_order_unused_bn_v1"
+
+
+def _standalone_verifier(qa, profile, last):
+    legacy = last["config"]["architecture"] == "legacy_universal"
+    if legacy:
+        gate.require(
+            profile[1] == "72fb321187eca517823083aca80cedace9605570"
+            and qa.get("optimizer_binding_schema") == LEGACY_OPTIMIZER_SCHEMA,
+            "Legacy QA requires explicit source72 optimizer binding revision",
+        )
+    else:
+        gate.require("optimizer_binding_schema" not in qa, "Unexpected legacy optimizer schema")
+    gate.require(
+        qa.get("verifier_sha256") == (LEGACY_VERIFIER if legacy else VERIFIER)
+        and qa.get("source_git_verified") is True,
+        "Require architecture-specific original verifier/source observations",
+    )
+
+
 def _standalone(qa, profile, best, last, protocol, protocol_raw, terminal, terminal_raw):
     _kind, commit, execution, training = profile
-    gate.require(
-        qa.get("verifier_sha256") == VERIFIER and qa.get("source_git_verified") is True,
-        "Require original pinned standalone verifier/source observations",
-    )
+    _standalone_verifier(qa, profile, last)
     gate.require(
         qa["reviewed_protocol_sha256"] == gate.digest(protocol_raw)
         and qa["original_supervisor_terminal_sha256"] == gate.digest(terminal_raw)
