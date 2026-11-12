@@ -1,0 +1,43 @@
+{
+  "kind": "standalone72_namespace_materialization_contract_audit_NOT_completion",
+  "baseline_commit": "8961276cdee09fbca9eea3d2a3fd329c0f443d6b",
+  "finding": "Existing standalone72 explicit path arguments and original byte pins support relocation without changing original protocol/terminal/QA. Original4b namespace checks remain strict.",
+  "production_code_changed": false,
+  "source_files_sha256": {
+    "src/deepretina/freeze_eligibility.py": "f1e532fb25ff451ada509b602f425826ed82e565bf4106d32cfaa2d0d89cd985",
+    "src/deepretina/completion_profiles.py": "b119a766a17b1d486b8aa1ea531d8f999970a68add400c39bb8fd15d25e94c39",
+    "scripts/check_freeze_eligibility.py": "a2d735fa9a0b9c4f0c239d96d8a1d76d287f6799b5af704d069788314d7890b2"
+  },
+  "observed_CPU_checks": [
+    {
+      "scope": "new namespace contract fixtures",
+      "passed": 6,
+      "seconds": 1.59,
+      "actual_returncode": 0
+    },
+    {
+      "scope": "existing own-coverage/family/byte-pin fixtures",
+      "passed": 10,
+      "seconds": 1.79,
+      "actual_returncode": 0
+    }
+  ],
+  "initial_fixture_attempt": {
+    "passed": 5,
+    "failed": 1,
+    "seconds": 2.35,
+    "reason": "Fixture shared a source dict between synthetic protocol and terminal; mutating protocol changed expected terminal, so original external-byte guard correctly rejected earlier than asserted. Fixed only fixture isolation, not gate."
+  },
+  "resources": "CUDA hidden; CPU affinity4; numerical threads1; nice17/idleIO; existing Python environment",
+  "claim_boundary": "Actual existing contract/coverage helper checks only, not complete checkpoint eligibility; no actual model/corpus/source archive hashed or loaded, no NN/GT/GPU/Meta query/transport/scheduler/TEST.",
+  "unperformed": "No real future PhaseA27 or PhaseB60 completion reviewed or asserted. Future materialization needs original observed completion, all 7 artifacts+QA/contracts and original external exits, copy-byte checks and real role-specific gate.",
+  "genuine_original4b_contract_probe": {
+    "verifier_sha256": "4b568b7e5e66229e378fd8712000af90a05190364563bad6311687e419eb56fe",
+    "actual_returncode": 0,
+    "matching_original_namespace_passed": true,
+    "direct_relocated_source_and_run_rejected": 2,
+    "scope": "Synthetic contract only; no check_source Git command, checkpoint load, source archive or data/model read. Original verifier loaded byteexact; check_contracts unchanged.",
+    "observed_returncode": true,
+    "observation": "Parent functions tool wait returned actual process exit_code0 after script completed."
+  }
+}
