@@ -34,5 +34,29 @@
     "observed_returncode": true,
     "returncode": 0,
     "qualification": "subset before added explicit-option/old-backend edge checks; do not sum counts"
+  },
+  "focused_existing_regressions": {
+    "initial": {
+      "passed": 96,
+      "failed": 1,
+      "warnings": 4,
+      "pytest_seconds": 16.5,
+      "outer_seconds": 17.859534817980602,
+      "observed_returncode": true,
+      "returncode": 1,
+      "source_commit": "19f8792d715219fcea1bcb7a5977f93bb7adafbb"
+    },
+    "failure": "Historical BEST58 lacks optional photometric_profile, whose new dataclass default is raw; existing recipe strict expected config needed one explicit historical default.",
+    "correction": "Tests only: assert raw in actual config and recipe, setdefault only photometric_profile=raw; all other raw config fields remain compared.",
+    "corrected_case_only": {
+      "passed": 1,
+      "pytest_seconds": 2.29,
+      "outer_seconds": 3.0220570291858166,
+      "observed_returncode": true,
+      "returncode": 0,
+      "test_source_sha256": "41486632435239d7e3634042c5e53b6d634e396c974c162e494433fa559f1758"
+    },
+    "NN_scope": "Initial selected run includes small synthetic bundled/toy CPU forwards; rerun only safe-checkpoint/config metadata, no NN. No realphotos/GT/train/GPU/TEST.",
+    "not_a_fullsuite_or_clean_combined_rerun": true
   }
 }

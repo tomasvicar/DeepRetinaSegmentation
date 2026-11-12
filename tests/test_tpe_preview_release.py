@@ -25,7 +25,12 @@ def test_preview_recipe_exact_actual_checkpoint_except_portable_device():
             hashlib.sha256(path.read_bytes()).hexdigest()
             == "20d4caab1648ea6216a9373efc8f826f19d8517373881a20c884443548f474d4"
         )
+    # Historical BEST58 predates the opt-in photometry field. Admit only its
+    # explicit raw default; retain exact comparison for every other saved field.
+    assert payload["config"].get("photometric_profile", "raw") == "raw"
+    assert config.photometric_profile == "raw"
     expected = dict(payload["config"], device="auto")
+    expected.setdefault("photometric_profile", "raw")
     assert asdict(config) == expected
     assert payload["config"]["lr"] == 0.000287722894608172
     assert payload["config"]["vascular_sampling_weight"] == 2.553934065831788
