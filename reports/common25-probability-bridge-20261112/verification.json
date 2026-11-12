@@ -1,0 +1,33 @@
+{
+  "kind": "synthetic_common25_bridge_math_verification_NOT_VAL_quality",
+  "actual_observed_returncode": 0,
+  "tests": {
+    "passed": 14,
+    "seconds": 0.45,
+    "command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 taskset -c4 nice -n17 EXISTING_PYTHON -m pytest -q experiments/common25_bridge/test_probability_bridge.py"
+  },
+  "ruff": {
+    "final_returncode": 0,
+    "initial_import_order_issues": 2,
+    "corrected": true
+  },
+  "actual_runtime": {
+    "python": "3.12.13",
+    "python_executable": "/var/home/tom/code/DeepRetinaSegmentation_clean/.venv/bin/python",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit-image": "0.26.0",
+    "pytest": "9.2.0"
+  },
+  "file_sha256": {
+    "experiments/common25_bridge/probability_bridge.py": "753c41593e5158ea15b5e5ae07c746b8a6e35eedec24a5dd2ffc6c60f81112bc",
+    "experiments/common25_bridge/test_probability_bridge.py": "da645fc910b87fc461703fdd0eff37fb1eb030a67db66048c495f6e3c9786f0f"
+  },
+  "original_canary_source": "9b850d80c6b8c09991388e529e6ebdeb06f2823f",
+  "original_canary_changed": false,
+  "real_data_or_model_decode": false,
+  "Torch_or_NN_or_GPU": false,
+  "remote_query_or_build": false,
+  "execution_or_new_arm_authorized": false,
+  "recorded_utc": "2026-11-12T17:34:20.820828+00:00"
+}
