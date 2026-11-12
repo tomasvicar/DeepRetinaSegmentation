@@ -153,7 +153,7 @@ def test_unified_uses_checkpoint_geometry_and_masks_original_frame(benchmark_mod
         image=np.zeros((2, 3, 3), dtype=np.uint8), fov=fov, geometry=Geometry()
     )
     monkeypatch.setattr(m, "prepare_single_net", lambda *a, **kw: prepared)
-    cfg = SimpleNamespace(tile_size=96, overlap=16)
+    cfg = SimpleNamespace(tile_size=96, overlap=16, photometric_profile="raw", pixels_per_degree=25.0)
 
     def predict(model, image, device, config, tile, overlap):
         assert config is cfg and (tile, overlap) == (96, 16)
@@ -185,7 +185,7 @@ def test_selected_threshold_controls_vessel_gate_and_disc_cup(benchmark_module, 
     probability[3, 0, 0] = 0.2
     monkeypatch.setattr(m, "predict_probabilities", lambda *a: probability.copy())
     model = SimpleNamespace(supervised_channels=[True] * 5)
-    config = SimpleNamespace(tile_size=96, overlap=16)
+    config = SimpleNamespace(tile_size=96, overlap=16, photometric_profile="raw", pixels_per_degree=25.0)
     baseline = m.unified_operation(None, fov, model, config, "cpu", {})
     selected = m.unified_operation(None, fov, model, config, "cpu", {}, threshold=0.35)
     assert not baseline.any()
@@ -446,3 +446,163 @@ def test_structurally_exact_completed_reference_metadata(benchmark_module, monke
     report["prepared_content_sha256"] = "missing"
     with pytest.raises(ValueError, match="canonical"):
         m.validate_reference(report, paths, cup_policy=policy, disc_variant="disc0/raw")
+
+
+@pytest.mark.parametrize("tta", ["none", "flips2", "rot4", "dihedral8"])
+def test_explicit_tta_forwards_after_one_fullframe_photometry(benchmark_module, monkeypatch, tta):
+    m = benchmark_module
+    events = []
+    fov = np.ones((3, 5), bool)
+    prepared = SimpleNamespace(image=np.zeros((3, 5, 3), np.uint8), fov=fov, geometry=SimpleNamespace(restore=lambda x, order: x))
+    monkeypatch.setattr(m, "prepare_single_net", lambda *a, **k: prepared)
+
+    def photo(image, profile, **kwargs):
+        assert image.shape == (3, 5, 3) and profile == "clahe_hsv_v1"
+        events.append("fullframe-photometry")
+        return image
+
+    def prediction(model, image, device, config, tile, overlap, **kwargs):
+        assert image.shape == (3, 3, 5) and (tile, overlap) == (512, 64)
+        assert kwargs == ({} if tta == "none" else {"tta": tta})
+        events.append("prediction")
+        return np.full((5, 3, 5), .6, np.float32)
+
+    monkeypatch.setattr(m, "apply_photometry", photo)
+    monkeypatch.setattr(m, "predict_probabilities", prediction)
+    monkeypatch.setattr(m, "restore_probabilities", lambda p, g: p)
+    cfg = SimpleNamespace(photometric_profile="clahe_hsv_v1", pixels_per_degree=25., tile_size=512, overlap=64)
+    out = m.unified_operation(None, fov, SimpleNamespace(supervised_channels=[True]*5), cfg, "cpu", {}, threshold=.35, tta=tta)
+    assert out.shape == (5, 3, 5) and events == ["fullframe-photometry", "prediction"]
+
+
+def test_invalid_tta_fails_before_device_or_inputs(benchmark_module, monkeypatch):
+    m = benchmark_module
+    monkeypatch.setattr(m, "resolve_device", lambda *a: pytest.fail("No device"))
+    with pytest.raises(ValueError, match="Unsupported"):
+        m.benchmark(SimpleNamespace(unified_threshold=.5, unified_tta="unknown"))
+
+
+def test_phase_measure_synchronizes_every_recorded_call_without_extra_forward(benchmark_module, monkeypatch):
+    import benchmark_latency as timing
+    events = []
+    monkeypatch.setattr(timing.torch.cuda, "synchronize", lambda *a: events.append("sync"))
+    monkeypatch.setattr(timing.torch.cuda, "memory_allocated", lambda *a: 10)
+    monkeypatch.setattr(timing.torch.cuda, "reset_peak_memory_stats", lambda *a: None)
+    monkeypatch.setattr(timing.torch.cuda, "max_memory_allocated", lambda *a: 14)
+    ticks = iter(range(20))
+    monkeypatch.setattr(timing.time, "perf_counter", lambda: next(ticks))
+    out = timing.measure(lambda: events.append("call"), SimpleNamespace(type="cuda"), warmup=2, repeats=3, record_warmup=True)
+    assert out["warmup_seconds"] == [1, 1] and out["seconds"] == [1, 1, 1]
+    assert events.count("call") == 5 and out["peak_working_bytes"] == 4
+    assert all(events[i-1] == events[i+1] == "sync" for i, x in enumerate(events) if x == "call")
+
+
+def test_historical_measure_default_keeps_warmup_schema(benchmark_module):
+    import benchmark_latency as timing
+    calls = []
+    out = timing.measure(lambda: calls.append(1), torch.device("cpu"), warmup=1, repeats=2)
+    assert len(calls) == 3 and "warmup_seconds" not in out
+
+
+def test_extended_benchmark_records_exact_protocol_load_IO_and_last_output_without_forward(
+    tmp_path, benchmark_module, reference_files, monkeypatch
+):
+    import json
+
+    from PIL import Image
+    m = benchmark_module
+    paths, reference = reference_files
+    image, fov = tmp_path/"train.png", tmp_path/"fov.png"
+    Image.fromarray(np.zeros((3, 5, 3), np.uint8)).save(image)
+    mask = np.ones((3, 5), np.uint8)*255
+    mask[0, 0] = 0
+    Image.fromarray(mask).save(fov)
+    unified, ref = tmp_path/"unified.pt", tmp_path/"reference.json"
+    unified.write_bytes(b"SYNTHETIC_PLACEHOLDER_NOT_MODEL")
+    ref.write_text(json.dumps(reference))
+
+    class Fake:
+        supervised_channels = [True]*5
+        def parameters(self):
+            return iter([torch.zeros(2)])
+        def state_dict(self):
+            return {"fixture": torch.zeros(2)}
+
+    channels = {"vessel": ["vessel"], "disc": ["disc"], "universal": ["vessel", "disc", "cup"]}
+    import weakref
+    references = []
+    def original_model():
+        model = Fake()
+        references.append(weakref.ref(model))
+        return model
+    monkeypatch.setattr(m, "load_single_net", lambda path, device: (original_model(), {"channels": channels[path.stem], "tiling": {"crop_size":288,"border":36}}))
+    monkeypatch.setattr(m, "load_av", lambda *a: (original_model(), {}))
+    def load_selected(*args):
+        assert len(references) == 4 and all(ref() is None for ref in references)
+        return Fake(), {"config": {"purpose":"full_data"}}, torch.device("cpu")
+    monkeypatch.setattr(m, "load_unified", load_selected)
+    calls, snapshots = [], []
+    real_input = m.input_snapshots
+    def read(*args):
+        snapshots.append(1)
+        return real_input(*args)
+    monkeypatch.setattr(m, "input_snapshots", read)
+    def original(*args, **kwargs):
+        calls.append("original")
+        return np.zeros((5,3,5), bool)
+    def selected(*args, **kwargs):
+        assert kwargs == {"threshold":.35,"tta":"rot4"}
+        assert (args[3].tile_size, args[3].overlap) == (640, 80)
+        calls.append("unified")
+        return np.ones((5,3,5), bool)
+    monkeypatch.setattr(m, "original_operation", original)
+    monkeypatch.setattr(m, "unified_operation", selected)
+    args = SimpleNamespace(**paths, unified=unified, reference_report=ref, input=image, fov=fov,
+        dataset="drive",field_of_view_degrees=None,device="cpu",unified_threshold=.35,
+        unified_tta="rot4",unified_tile_size=640,unified_overlap=80,expected_unified_sha256=m.sha256(unified),phase_timings=True,
+        include_input_io=True,original_cup_policy="native",original_disc_variant="disc0/raw",
+        warmup=1,repeats=2)
+    report = m.benchmark(args)
+    assert calls == ["original"]*3 + ["unified"]*3 and len(snapshots) == 7
+    assert report["unified"]["tta"]["mode"] == "rot4" and report["unified"]["threshold"] == .35
+    assert all(v >= 0 for v in report["model_load_seconds"].values())
+    assert len(report["unified"]["timing"]["warmup_seconds"]) == 1
+    assert report["last_mask_identity_no_extra_forward"]["unified"]["foreground_pixels"] == [15]*5
+    assert report["unified"]["model_tensor_bytes"] == 8 and report["unified"]["floating_model_dtypes"] == ["torch.float32"]
+    assert "includes input read/decode/SHA" in report["scope"]
+    assert report["runtime"]["interop_threads"] == torch.get_num_interop_threads()
+    args.expected_unified_sha256 = "f"*64
+    with pytest.raises(ValueError, match="explicit selected byte SHA"):
+        m.benchmark(args)
+
+
+def test_cli_forwards_selected_protocol_threads_and_scopes_without_model_work(
+    tmp_path, benchmark_module, monkeypatch
+):
+    import sys
+    m = benchmark_module
+    seen = []
+    def fake(args):
+        assert (args.unified_tta, args.unified_threshold, args.unified_tile_size, args.unified_overlap) == ("rot4", .35, 512, 64)
+        assert args.expected_unified_sha256 == "a"*64
+        assert args.phase_timings and args.include_input_io
+        seen.append("benchmark")
+        return {"original":{"timing":{}}, "unified":{"timing":{}}}
+    monkeypatch.setattr(m, "benchmark", fake)
+    monkeypatch.setattr(m.torch, "set_num_threads", lambda n: seen.append(("intra", n)))
+    monkeypatch.setattr(m.torch, "set_num_interop_threads", lambda n: seen.append(("interop", n)))
+    monkeypatch.setattr(m.cv2, "setNumThreads", lambda n: seen.append(("opencv", n)))
+    command = ["benchmark_strong_pipeline.py"]
+    for name in ["input","fov","vessel","disc","universal","av","unified","reference-report"]:
+        command += ["--"+name, str(tmp_path/name)]
+    command += ["--output",str(tmp_path/"report.json"),"--dataset","drive","--original-disc-variant","disc0/raw",
+        "--unified-tta","rot4","--unified-threshold",".35","--unified-tile-size","512","--unified-overlap","64",
+        "--expected-unified-sha256","a"*64,"--phase-timings","--include-input-io",
+        "--cpu-threads","1","--interop-threads","1","--opencv-threads","1"]
+    monkeypatch.setattr(sys, "argv", command)
+    m.main()
+    assert seen == [("intra",1),("interop",1),("opencv",1),"benchmark"]
+
+
+def test_lightweight_suite_does_not_initialize_cuda():
+    assert not torch.cuda.is_initialized()

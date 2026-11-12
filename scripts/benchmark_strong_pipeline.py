@@ -11,15 +11,22 @@ import gc
 import hashlib
 import io
 import json
+import os
 import platform
+import resource
+import time
 from pathlib import Path
 
+import cv2
 import numpy as np
 import torch
-from benchmark_latency import measure
+from benchmark_latency import measure, synchronize_device
 from PIL import Image
 
+from deepretina import unified as unified_api
 from deepretina.inference import resolve_device
+from deepretina.inference_tta import MODES
+from deepretina.inference_tta import protocol_extension as tta_protocol
 from deepretina.legacy.av import load_av, predict_av_input
 from deepretina.legacy.checkpoints import load_single_net
 from deepretina.legacy.matlab_av import prepare_vesclass_matlab_calibrated
@@ -29,6 +36,7 @@ from deepretina.photometry import apply as apply_photometry
 from deepretina.unified import (
     UnifiedConfig,
     decode_probabilities,
+    inference_config,
     load_unified,
     predict_probabilities,
     restore_probabilities,
@@ -153,7 +161,8 @@ def original_operation(rgb, fov, models, av, device, kwargs, *, cup_policy="nati
     )
 
 
-def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5):
+def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5, tta="none"):
+    tta_protocol(tta)
     prepared = prepare_single_net(rgb, fov=fov, normalized=False, **kwargs)
     processed = apply_photometry(
         prepared.image,
@@ -163,7 +172,8 @@ def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5)
     )
     image = torch.from_numpy(processed.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(
-        model, image, device, config, config.tile_size, config.overlap
+        model, image, device, config, config.tile_size, config.overlap,
+        **({"tta": tta} if tta != "none" else {}),
     )
     probability[[0, 3, 4]] *= prepared.fov[None]
     restored = restore_probabilities(probability, prepared.geometry)
@@ -173,9 +183,43 @@ def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5)
     return decode_probabilities(restored, threshold=threshold, supported=model.supervised_channels)
 
 
+def package_identity():
+    root = Path(unified_api.__file__).resolve().parent
+    digest = hashlib.sha256()
+    files = sorted(root.rglob("*.py"))
+    for path in files:
+        digest.update(path.relative_to(root).as_posix().encode() + b"\0" + path.read_bytes())
+    return {"package_root": str(root), "python_package_tree_sha256": digest.hexdigest(),
+            "python_files": len(files), "unified_module_sha256": sha256(unified_api.__file__),
+            "timing_helper_sha256": sha256(Path(__file__).with_name("benchmark_latency.py"))}
+
+
+def output_identity(masks, shape):
+    """Inspect the retained last call outside clocks; never add a forward."""
+    if not isinstance(masks, np.ndarray) or masks.dtype != np.bool_ or masks.shape != (5, *shape):
+        raise ValueError("Require five original-frame boolean masks")
+    return {"shape": list(masks.shape), "dtype": str(masks.dtype),
+            "sha256": hashlib.sha256(masks.tobytes()).hexdigest(),
+            "foreground_pixels": masks.sum(axis=(1, 2)).tolist()}
+
+
+def timed_load(operation, device):
+    synchronize_device(device)
+    started = time.perf_counter()
+    result = operation()
+    synchronize_device(device)
+    return result, time.perf_counter() - started
+
+
 def benchmark(args):
+    if torch.get_default_dtype() != torch.float32:
+        raise ValueError("Benchmark requires default float32 inference")
     if not np.isfinite(args.unified_threshold) or not 0 < args.unified_threshold < 1:
         raise ValueError("Unified threshold must be finite and strictly between0 and1")
+    tta = getattr(args, "unified_tta", "none")
+    tta_protocol(tta)
+    phase_timings = getattr(args, "phase_timings", False)
+    include_input_io = getattr(args, "include_input_io", False)
     cup_policy = getattr(args, "original_cup_policy", "native")
     disc_variant = getattr(args, "original_disc_variant", None)
     if cup_policy not in {"native", "inside-disc"}:
@@ -184,10 +228,15 @@ def benchmark(args):
     paths = {name: getattr(args, name) for name in ("vessel", "disc", "universal", "av")}
     all_paths = {**paths, "unified": args.unified, "reference": args.reference_report}
     before = {key: sha256(path) for key, path in all_paths.items()}
+    expected_sha = getattr(args, "expected_unified_sha256", None)
+    if expected_sha is not None and before["unified"] != expected_sha:
+        raise ValueError("Unified checkpoint differs from explicit selected byte SHA")
     reference = json.loads(args.reference_report.read_text())
     validate_reference(reference, paths, cup_policy=cup_policy, disc_variant=disc_variant)
     rgb, fov, input_identity = input_snapshots(args.input, args.fov)
     kwargs = {"dataset": args.dataset, "field_of_view_degrees": args.field_of_view_degrees}
+    synchronize_device(device)
+    load_started = time.perf_counter()
     models = {
         name: load_single_net(paths[name], device) for name in ("vessel", "disc", "universal")
     }
@@ -203,42 +252,72 @@ def benchmark(args):
             key: models[name][1]["tiling"][key] for key in ("crop_size", "border")
         }
     av, _ = load_av(paths["av"], device)
-    with torch.inference_mode():
+    synchronize_device(device)
+    original_load_seconds = time.perf_counter() - load_started
+    last_outputs = {}
+
+    def inputs_for_call():
+        if not include_input_io:
+            return rgb, fov
+        current_rgb, current_fov, identity = input_snapshots(args.input, args.fov)
+        if identity != input_identity:
+            raise ValueError("Input snapshot changed during input-IO timing")
+        return current_rgb, current_fov
+
+    def original_call(models=models, av=av):
+        current_rgb, current_fov = inputs_for_call()
+        last_outputs["original"] = original_operation(
+            current_rgb, current_fov, models, av, device, kwargs, cup_policy=cup_policy
+        )
+
+    timing_options = {"record_warmup": True} if phase_timings else {}
+    with torch.inference_mode(), torch.autocast(device.type, enabled=False):
         original_timing = measure(
-            lambda models=models, av=av: original_operation(
-                rgb, fov, models, av, device, kwargs, cup_policy=cup_policy
-            ),
+            original_call,
             device,
             warmup=args.warmup,
             repeats=args.repeats,
+            **timing_options,
         )
     original_parameters = sum(p.numel() for model, _ in models.values() for p in model.parameters())
     original_parameters += sum(p.numel() for p in av.parameters())
-    del models, av
+    del original_call, models, av
     gc.collect()
     if device.type == "cuda":
         torch.cuda.empty_cache()
-    model, payload, _ = load_unified(args.unified, device)
-    config = UnifiedConfig(**payload["config"])
+    (model, payload, _), unified_load_seconds = timed_load(
+        lambda: load_unified(args.unified, device), device
+    )
+    tile = getattr(args, "unified_tile_size", None)
+    overlap = getattr(args, "unified_overlap", None)
+    config = inference_config(payload, tile_size=tile, overlap=overlap) if tile is not None or overlap is not None else UnifiedConfig(**payload["config"])
     if config.purpose != "full_data" or not all(model.supervised_channels):
         raise ValueError("Require a full-data unified model supervised on all five heads")
     if config.preprocessing_profile != "legacy25_raw":
         raise ValueError("Benchmark requires the declared raw legacy25 unified profile")
-    with torch.inference_mode():
+    def unified_call():
+        current_rgb, current_fov = inputs_for_call()
+        options = {"tta": tta} if tta != "none" else {}
+        last_outputs["unified"] = unified_operation(
+            current_rgb, current_fov, model, config, device, kwargs,
+            threshold=args.unified_threshold, **options
+        )
+
+    with torch.inference_mode(), torch.autocast(device.type, enabled=False):
         unified_timing = measure(
-            lambda: unified_operation(
-                rgb, fov, model, config, device, kwargs, threshold=args.unified_threshold
-            ),
+            unified_call,
             device,
             warmup=args.warmup,
             repeats=args.repeats,
+            **timing_options,
         )
     if before != {key: sha256(path) for key, path in all_paths.items()}:
         raise ValueError("Benchmark checkpoint/reference changed; use immutable snapshots")
+    masks = {key: output_identity(value, rgb.shape[:2]) for key, value in last_outputs.items()}
     return {
         "schema_version": 1,
         "accuracy_claim": False,
-        "scope": "one raw photo, CPU preprocessing + model inference + original-frame mask restoration; excludes file IO/model loading",
+        "scope": "one raw photo; five-mask pipeline preprocessing+model+restore/decode; excludes model loading/output serialization/CLI startup" + ("; includes input read/decode/SHA per call" if include_input_io else "; excludes input file IO"),
         "script_sha256": sha256(__file__),
         "input_sha256": input_identity["input_sha256"],
         "fov_sha256": input_identity["fov_sha256"],
@@ -251,7 +330,28 @@ def benchmark(args):
         else platform.processor(),
         "torch": str(torch.__version__),
         "cpu_threads": torch.get_num_threads(),
+        "runtime": {"python": platform.python_version(), "numpy": np.__version__, "opencv": cv2.__version__,
+            "interop_threads": torch.get_num_interop_threads(),
+            "opencv_threads": cv2.getNumThreads(),
+            "inference_precision": "float32_no_autocast",
+            "affinity": sorted(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else None,
+            "machine": platform.machine(),
+            "cuda_runtime": torch.version.cuda,
+            "gpu_uuid": str(torch.cuda.get_device_properties(device).uuid) if device.type == "cuda" else None,
+            "torch_default_dtype": str(torch.get_default_dtype()),
+            "cudnn_benchmark": torch.backends.cudnn.benchmark,
+            "cudnn_deterministic": torch.backends.cudnn.deterministic,
+            "cudnn_allow_tf32": torch.backends.cudnn.allow_tf32,
+            "process_nice": os.getpriority(os.PRIO_PROCESS, 0) if hasattr(os, "getpriority") else None,
+            "cuda_matmul_allow_tf32": torch.backends.cuda.matmul.allow_tf32,
+            "thread_environment": {k: os.environ.get(k) for k in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS")},
+            "whole_process_peak_RSS_KiB_not_per_pipeline": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss},
+        "execution_source": package_identity(),
+        "last_mask_identity_no_extra_forward": masks,
+        **({"model_load_seconds": {"original_four_networks": original_load_seconds, "unified": unified_load_seconds},
+             "load_scope": "same-process deserialize+device transfer, synchronized; preceding byte hashes warm filesystem; not cold process startup"} if phase_timings else {}),
         "original": {
+            "network_count": 4,
             "checkpoint_sha256": {key: before[key] for key in paths},
             "reference_sha256": before["reference"],
             "reference_manifest_sha256": reference["manifest_sha256"],
@@ -270,22 +370,31 @@ def benchmark(args):
         },
         "unified": {
             "threshold": args.unified_threshold,
+            **tta_protocol(tta),
+            "resolved_tile_size": config.tile_size if config.train_view == "patch" else None,
+            "resolved_overlap": config.overlap if config.train_view == "patch" else None,
             "checkpoint_sha256": before["unified"],
             "parameters": sum(p.numel() for p in model.parameters()),
             "checkpoint_bytes": args.unified.stat().st_size,
             "config": payload["config"],
+            "model_tensor_bytes": sum(t.numel() * t.element_size() for t in model.state_dict().values()),
+            "floating_model_dtypes": sorted({str(t.dtype) for t in model.state_dict().values() if t.is_floating_point()}),
+            "optimizer_or_training_state_present": "optimizer" in payload or "training_state" in payload,
+            "weight_transformation_or_compression_applied": False,
             "checkpoint_epoch": payload.get("epoch"),
             "timing": unified_timing,
         },
         "limitations": [
-            "One photograph cannot establish general speed or quality; repeat on representative geometries",
+            "One photograph cannot establish general speed or quality; repeat on predeclared TRAIN geometries",
+            "Five-mask benchmark matches the declared composition, not full product API probability exports, output file writes or CLI process startup",
+            "Original four-network parameter count includes each complete network even though universal vessel/disc outputs are discarded",
             "Historical original exposure and preprocessing provenance remain unresolved",
             "Calibrated AV photometry retains documented numerical residuals",
             "Original single-net preparation is shared across three networks; individual native tiles are retained",
             "Original threshold is strict logit>0, AV retains original tie0; declared optional cup policy is identical in selected quality reference and timed pipeline",
             "Inside-disc is an added postprocessing variant, not a modification of original weights/defaults; completed paired VAL evidence includes TP losses and backend numeric drift",
             "Unified retains its configured inference geometry, vessel gating and cup containment",
-            "Torch CUDA allocation excludes external/process memory; other CPU/GPU load affects timings",
+            "Torch CUDA allocation covers measured calls after warmup, excludes load/warmup peaks and external/process memory; other CPU/GPU load affects timings",
             "Checkpoint epoch/purpose do not establish final model selection or sufficient convergence",
         ],
     }
@@ -320,11 +429,29 @@ def main():
     parser.add_argument(
         "--unified-threshold", type=float, default=0.5, help="Frozen selected VAL threshold"
     )
+    parser.add_argument("--unified-tta", choices=MODES, default="none")
+    parser.add_argument("--unified-tile-size", type=int)
+    parser.add_argument("--unified-overlap", type=int)
+    parser.add_argument("--expected-unified-sha256", help="Exact already-selected immutable checkpoint SHA; does not select a model")
+    parser.add_argument("--cpu-threads", type=int)
+    parser.add_argument("--interop-threads", type=int)
+    parser.add_argument("--opencv-threads", type=int)
+    parser.add_argument("--phase-timings", action="store_true", help="Record synchronized model-load and each warmup call separately")
+    parser.add_argument("--include-input-io", action="store_true", help="Read/decode/hash same pinned RGB+FOV inside every mask-pipeline call; output IO still excluded")
     parser.add_argument("--warmup", type=int, default=1)
     parser.add_argument("--repeats", type=int, default=3)
     args = parser.parse_args()
     if args.output.exists():
         parser.error("Preserve earlier measurements; choose a new output")
+    for name in ("cpu_threads", "interop_threads", "opencv_threads"):
+        if getattr(args, name) is not None and getattr(args, name) < 1:
+            parser.error("Thread counts must be positive")
+    if args.cpu_threads is not None:
+        torch.set_num_threads(args.cpu_threads)
+    if args.interop_threads is not None:
+        torch.set_num_interop_threads(args.interop_threads)
+    if args.opencv_threads is not None:
+        cv2.setNumThreads(args.opencv_threads)
     report = benchmark(args)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("x") as handle:

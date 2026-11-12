@@ -39,28 +39,36 @@ def file_sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def measure(operation, device, *, warmup=1, repeats=3):
+def synchronize_device(device):
+    if device.type == "cuda":
+        torch.cuda.synchronize(device)
+
+
+def measure(operation, device, *, warmup=1, repeats=3, record_warmup=False):
     """Synchronize CUDA around each complete call; retain all timing samples."""
     if warmup < 0 or repeats < 1:
         raise ValueError("warmup must be nonnegative and repeats positive")
 
-    def synchronize():
-        if device.type == "cuda":
-            torch.cuda.synchronize(device)
-
+    warmup_samples = []
     for _ in range(warmup):
+        if record_warmup:
+            synchronize_device(device)
+            started = time.perf_counter()
         operation()
-    synchronize()
+        if record_warmup:
+            synchronize_device(device)
+            warmup_samples.append(time.perf_counter() - started)
+    synchronize_device(device)
     baseline = peak = None
     if device.type == "cuda":
         baseline = torch.cuda.memory_allocated(device)
         torch.cuda.reset_peak_memory_stats(device)
     samples = []
     for _ in range(repeats):
-        synchronize()
+        synchronize_device(device)
         start = time.perf_counter()
         operation()
-        synchronize()
+        synchronize_device(device)
         samples.append(time.perf_counter() - start)
     if device.type == "cuda":
         peak = torch.cuda.max_memory_allocated(device)
@@ -72,6 +80,7 @@ def measure(operation, device, *, warmup=1, repeats=3):
         "peak_working_bytes": None if peak is None else peak - baseline,
         "warmup_calls": warmup,
         "measured_calls": repeats,
+        **({"warmup_seconds": warmup_samples} if record_warmup else {}),
     }
 
 
