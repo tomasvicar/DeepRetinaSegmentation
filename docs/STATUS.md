@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 11. 11. 2026 v 19:50 UTC, po ověření podpory uloženého preprocessingu. Celkový cíl není dokončený.**
+**Snímek: 12. 11. 2026 v 00:50 UTC, po začlenění společné predikce původních modelů. Celkový cíl není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -10,6 +10,7 @@ Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad,
 | --- | --- |
 | Původní modely | Pět původních checkpointů pro cévy, A/V a disk/cup; architektury, váhy a připravené vstupy numericky ověřené. |
 | Predikce | Python CLI, masky, pravděpodobnosti, overlay a metadata v původní geometrii. Rodiny mají výslovné vstupní profily. |
+| Společná původní predikce | `predict-original`: pevná sestava vessel + disc0 + universal cup + AV; všech pět masek na skutečné TRAIN DRIVE21 fotografii pixelově shodných s původním benchmarkem. Dodaná FOV a známá kamera/kalibrace jsou povinné. [Rozsah ověření](PREDICT_ORIGINAL.md). |
 | Nové trénování | Příprava 21 zdrojů z RAW dat v ownCloudu, unified trainer a čerstvé trénování původních architektur. Nativní recepty nejsou reprodukcí neznámého historického optimalizátoru. |
 | Unified baseline V1 | Dokončených 60 epoch, 2 221 TRAIN fotografií a 5 281 anotovaných variant ze 17 zdrojů. Vybrán checkpoint E56; není finálním modelem na širším V2. |
 | Unified control V2 | Pevný terminální E60, 21 zdrojů, všech 2 529 TRAIN fotografií / 5 700 anotovaných variant skutečně přispělo. Čerstvá VAL; cévní regrese vůči původní sestavě, není optimalizovaný finální model. |
@@ -45,6 +46,17 @@ predikce. Opravu ověřilo 66 cílených CPU testů exportu, původních modelů
 
 ## Co je skutečně změřené
 
+Nový `predict-original` prošel skutečným porovnáním celé sestavy na jedné TRAIN
+fotografii: rozdíly pěti masek `[0, 0, 0, 0, 0]`, skutečný child i outer exit 0,
+CPU1 a bez inicializace CUDA. To ověřuje shodu s Python benchmarkem na tomto
+vstupu; neřeší obecnou bitovou shodu raw fotometrie s MATLABem.
+[Originální doklady](../reports/original-composed-real-parity-20261112/README.md)
+zachovávají i dva předchozí neúspěšné preflighty a opravu parametrů dlaždic.
+Po opravě prošlo jedenáct cílených testů se skutečnou strukturou metadat dlaždic
+a [izolovaná instalace](../reports/product-original-composed-packaging/README.md):
+46 Python modulů a všech 12 vah souhlasilo se zdrojem, registry/aliasy i 42
+existujících distribucí závislostí se nezměnily.
+
 Připravené vstupy původních sítí zachovávají ověřenou numeriku. Celý raw A/V
 řetězec není obecně bitově shodný s MATLABem; zbývající fotometrické rozdíly jsou
 popsané v [dokumentaci profilu](MATLAB_AV_PROFILE.md). Oprava nearest resize
@@ -68,6 +80,25 @@ včetně raw DRIONS TRAIN snímku. To je
 nikoli důkaz finální kvality nebo obecné shody všech GPU backendů.
 
 ## Co právě pokračuje
+
+Kontrolované varianty raw256, raw384, raw512, CLAHE384 a LC384 dokončily trénink
+60 epoch. Každý použitý checkpoint musí mít vlastní doložené pokrytí anotací;
+dokončení tréninku samo nenahrazuje čerstvou validaci. Raw512 ji v tomto časovém
+snímku ještě dokončuje; u LC uspěl pouze BEST, terminální VAL zastavil limit.
+CLAHE dokončilo oba průchody všech 770 VAL fotografií, ale proti odpovídajícím
+raw384 checkpointům zhoršilo všech pět pooled Dice i podmíněnou A/V accuracy,
+vždy se záporným párovým 95% intervalem. [Úplný negativní výsledek a omezení](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/clahe384-typed-fresh-val-20261112).
+Žádná z těchto vah tím nezískává status finálního modelu.
+
+Pooled cévní skóre zahrnuje AVRDB s pouze pozitivní platnou podporou. Samostatný
+výpočet na plně anotovaných cévách proto vylučuje jen AVRDB a zachovává 87
+fotografií / 55 známých skupin / 8 zdrojů. Například TPE BEST58 s rot4/0,35 má
+zde Dice 0,74824 proti původním 0,76133, párový rozdíl −0,01309
+(95% CI [−0,01856; −0,00879]). Blízká pooled skóre tedy neznamenají shodu na
+těchto datech; [karta modelu](UNIFIED_V3_TPE_PREVIEW.md) tento deficit uvádí.
+Pokračuje nativní Optuna běh; následný samostatný kontrolovaný pokus s dvojnásobnou
+váhou vessel loss je připravený, dosud není spuštěný. Finální výběr, zmrazení
+přesného protokolu a následný TEST zůstávají nedokončené.
 
 Korpus V2 má 2 529 TRAIN fotografií / 5 700 anotovaných variant z 21 zdrojů,
 770 VAL a 856 TEST fotografií. Původní VAL data zůstala beze změny. Geometrické
