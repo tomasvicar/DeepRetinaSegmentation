@@ -36,6 +36,11 @@ TRAIN_ONLY_PATIENT_POLICY = {
 }
 
 
+def _retained(source, stem, task="vessels"):
+    """Optional frozen-producer allowlist, checked before annotation decode."""
+    return getattr(source, "retains", lambda stem, task: True)(stem, task)
+
+
 def _base(path):
     return path.replace("\\", "/").split("/")[-1]
 
@@ -111,6 +116,8 @@ def aria(source, emit):
             "source_group_basis": "conservative ARIA cohort/number base; transport counter and view tokens ignored",
         }
         for observer in ("BDP", "BSS"):
+            if not _retained(source, stem + "_" + observer):
+                continue
             mask_name = (
                 name.replace("_markups", "_markup_vessel").rsplit(".", 1)[0] + f"_{observer}.tif"
             )
@@ -128,7 +135,7 @@ def aria(source, emit):
                     **identity,
                 },
             )
-        if group.split(":")[1] == "a":
+        if group.split(":")[1] == "a" or not _retained(source, stem + "_disc", "disc_cup"):
             continue
         base = name.replace("_markups", "_markupdiscfovea").rsplit(".", 1)[0]
         candidates = [base + suffix for suffix in ("_dfs.tif", ".tif", "_dfd.tif")]
@@ -333,6 +340,8 @@ def onhsd(source, emit):
         center = loadmat(io.BytesIO(source.bytes(base + "_C.mat")))["ONHCentre"]
         source_id = stem.rsplit("-", 1)[0]
         for observer in ("AnsuONH", "Bob", "David", "Lee"):
+            if not _retained(source, stem + "_" + observer, "disc_cup"):
+                continue
             annotation_name = base + "_" + observer + ".mat"
             radii = loadmat(io.BytesIO(source.bytes(annotation_name)))["ONHEdge"]
             try:
@@ -447,6 +456,8 @@ def riga(source, emit):
         stem = folder + "_" + re.sub(r"prime\.(jpg|tif)$", "", leaf, flags=re.IGNORECASE)
         image = source.read(name, "RGB")
         for observer in range(1, 7):
+            if not _retained(source, stem + f"_observer{observer}", "disc_cup"):
+                continue
             annotation = next(
                 (
                     source.find(base + f"-{observer}." + ext, optional=True)
@@ -495,6 +506,8 @@ def rimone(source, emit):
             ("expert1", "Expert1_masks", "-exp1"),
             ("expert2", "Expert2_masks", "-exp2"),
         ):
+            if not _retained(source, stem + "_" + observer, "disc_cup"):
+                continue
             prefix = stem if observer == "average" else stem + "-1"
             disc = _binary(source, f"{base}/{folder}/{prefix}-Disc{suffix}.png")
             cup = _binary(source, f"{base}/{folder}/{prefix}-Cup{suffix}.png")
@@ -534,6 +547,8 @@ def stare(source, emit):
         image = source.read(name, "RGB")
         found = False
         for observer in ("ah", "vk"):
+            if not _retained(source, stem + "_" + observer):
+                continue
             annotation = source.find(f"labels-{observer}/{stem}.{observer}.ppm", optional=True)
             if annotation:
                 found = True
