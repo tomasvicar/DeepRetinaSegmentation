@@ -194,6 +194,43 @@ The pilot metrics are not a controlled comparison with the original models;
 [EXPERIMENTS.md](docs/EXPERIMENTS.md) records their limited scope. Dataset photographs
 and ground-truth masks are not distributed.
 
+### Python API for the same bundled models
+
+Run with `uv run python`. First obtain the matching
+[DRIVE TRAIN photo and official FOV](docs/PREDICT_ORIGINAL.md#obtain-a-matching-photo-and-fov).
+These two calls are alternatives; they use separate new/empty output directories:
+
+```python
+import numpy as np
+from PIL import Image
+from deepretina import predict_original, predict_bundled_unified
+
+image = "inputs/drive21/21_training.tif"
+fov_path = "inputs/drive21/21_training_mask.gif"
+
+# Fixed four-network original composition; the FOV may be a path.
+original = predict_original(
+    image, fov=fov_path, dataset="drive", device="cpu",
+    output="predictions/drive21-original-api",
+)
+
+# Separate experimental unified preview; this API takes a binary FOV array.
+with Image.open(fov_path) as mask:
+    fov = np.asarray(mask.convert("L")) > 0
+preview = predict_bundled_unified(
+    "unified-v3-tpe-preview", image, "predictions/drive21-preview-api",
+    fov=fov, dataset="drive", device="cpu",
+)
+```
+
+Pass raw RGB photographs; do not apply normalization or CLAHE yourself. The
+bundled unified wrapper verifies the checkpoint and resolves the same model
+defaults as the CLI (currently `none`/`0.5`); explicit keyword overrides win.
+The original composition is fixed and takes no TTA/threshold overrides. Use the
+actual camera/dataset and matching FOV for other photographs. See the
+[original API contract](docs/PREDICT_ORIGINAL.md#python-api) and
+[bundled unified API](docs/BUNDLED_INFERENCE_DEFAULTS.md#python-api) for details.
+
 ## Prepare data
 
 For complete 21-source retraining from RAW archives, follow the
@@ -261,8 +298,9 @@ architecture limitations.
 The public entry point is `uv run deepretina train-unified`; a starting preset is
 `configs/unified.toml`. Optional native CUDA BF16 uses
 `configs/unified-v2-vascular2-bf16.toml`; float32 remains the default and inference
-precision. Native GPU training-step validation of this stable port is still pending;
-see [precision requirements and scope](docs/UNIFIED_TRAIN_BF16.md). Validate a checkpoint with `deepretina evaluate --split val`
+precision. The BF16 port has a source-scoped synthetic CUDA training-step parity
+check against frozen source72; this is not a full training or quality result.
+See [precision requirements and evidence](docs/UNIFIED_TRAIN_BF16.md). Validate a checkpoint with `deepretina evaluate --split val`
 and predict with `deepretina predict --checkpoint ...`. Experimental unified
 test evaluation remains blocked until final selection is frozen and reviewed.
 
@@ -281,7 +319,7 @@ uv run deepretina train-legacy --manifest data/rebuilt-training21/manifest.json 
   --output runs/native-vessel
 ```
 
-See [native training and prediction](docs/NATIVE_LEGACY_RETRAINING.md) for all four
+See [native training and prediction](docs/NATIVE_LEGACY_RETRAINING.md) for all five
 presets and the AV supplied-vessel contract. This retrains the original
 architectures; historical training settings and quality are not claimed reproduced.
 
