@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "source_snapshot": "cb507d1fbc7facec4ab86ced137a3e4885c39e24",
-  "tracked_python_files_scanned": 172,
+  "source_snapshot": "12720f76567989f3ad011ee4b529dda4d8153eb9",
+  "tracked_python_files_scanned": 174,
   "nonstandard_module_paths": [],
   "method": "All git-tracked Python files parsed with stdlib AST; module/class test* definitions, no imports/collection/execution",
   "count_semantics": "Module/class test* definitions, including nonstandard file/class names; not parametrized pytest cases, collection claims or PASS counts",
-  "modules": 62,
-  "test_definitions": 451,
+  "modules": 63,
+  "test_definitions": 456,
   "test_modules": [
     {
       "path": "tests/test_adapter_coverage.py",
@@ -911,6 +911,51 @@
         {
           "name": "test_explicit_uniform_sampler_uses_requested_number_of_samples",
           "line": 228,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_inference_export.py",
+      "sha256": "6e44b0e917f6f2ccda5cf3a7969ffb059cd9c2ff806807b7d2a3c6c06f21f4df",
+      "purpose_docstring": "Toy CPU checkpoint export/load/forward parity; no real models, datasets or GPU.",
+      "definition_count": 5,
+      "command": "uv run --no-sync pytest -q tests/test_inference_export.py",
+      "tests": [
+        {
+          "name": "test_actual_toy_export_safe_CPU_load_model_parity_and_provenance",
+          "line": 78,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_existing_outputs_preserved_before_any_source_read",
+          "line": 131,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('which', ['output', 'sidecar'])"
+          ]
+        },
+        {
+          "name": "test_bad_or_mismatched_original_pin_fails_before_output",
+          "line": 141,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('pin', ['', 'bad', 'F' * 64, '0' * 64])"
+          ]
+        },
+        {
+          "name": "test_invalid_payload_does_not_publish",
+          "line": 152,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('bad', ['empty', 'non_tensor', 'nonfinite', 'shape', 'family', 'hidden_tensor', 'nonraw_config'])"
+          ]
+        },
+        {
+          "name": "test_reexport_refused_and_all_training_aliases_removed",
+          "line": 175,
           "docstring": null,
           "decorators": []
         }

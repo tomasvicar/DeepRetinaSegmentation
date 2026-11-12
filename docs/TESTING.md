@@ -1,7 +1,7 @@
 # Testing and verification
 
 This is the test inventory for product `for_Leipzig` at
-`cb507d1fbc7facec4ab86ced137a3e4885c39e24` (12 November 2026).
+`12720f76567989f3ad011ee4b529dda4d8153eb9` (12 November 2026).
 **No entire pytest suite, model forward, training, GPU operation or dataset
 decoding was rerun for this inventory.** The separate34-case mocked defaults
 module check is recorded below. Historical PASS records certify their own
@@ -59,10 +59,10 @@ Generating new MATLAB goldens is a separate development activity.
 Counts below are **AST test definitions**, not PASS totals and not expanded
 parametrized cases. The machine-readable [inventory](../reports/testing-inventory-20261112/inventory.json)
 lists every definition, line, decorator and exact test-file SHA. Discovery scans
-**all172 Git-tracked Python files**, including scripts/reports/reference modules,
+**all174 Git-tracked Python files**, including scripts/reports/reference modules,
 for module/class `test*` definitions regardless of filename or class prefix.
 No additional nonstandard test-definition modules were found in this product
-snapshot; all62 discovered modules are under `tests/test_*.py`. This exposes
+snapshot; all63 discovered modules are under `tests/test_*.py`. This exposes
 individual test scope and parametrization without running imports. Regenerate
 it from the repository root with stdlib Python:
 
@@ -75,7 +75,7 @@ review a new inventory and its source identity rather than silently replacing th
 old evidence. The discovery script does not execute tests or claim collection
 success.
 
-Total: **62 modules, 451 definitions**.
+Total: **63 modules, 456 definitions**.
 
 | Module | Definitions | Purpose | Reproducible command |
 | --- | ---: | --- | --- |
@@ -97,6 +97,7 @@ Total: **62 modules, 451 definitions**.
 | [test_hpo.py](../tests/test_hpo.py) | 6 | Validate search decisions without reading held-out test data or training models. | `uv run --no-sync pytest -q tests/test_hpo.py` |
 | [test_hpo_context.py](../tests/test_hpo_context.py) | 10 | Context, normalization and crop changes stay opt-in and keep label geometry. | `uv run --no-sync pytest -q tests/test_hpo_context.py` |
 | [test_integrity.py](../tests/test_integrity.py) | 3 | Data identity must survive relocation and detect annotation changes on resume. | `uv run --no-sync pytest -q tests/test_integrity.py` |
+| [test_inference_export.py](../tests/test_inference_export.py) | 5 | Checksum-pinned CPU-only export, exact tiny model/config/provenance and safe exclusive output. | `uv run --no-sync pytest -q tests/test_inference_export.py` |
 | [test_legacy_annotation_completion.py](../tests/test_legacy_annotation_completion.py) | 4 | Secondary observers, disc-only annotations and external source overrides. | `uv run --no-sync pytest -q tests/test_legacy_annotation_completion.py` |
 | [test_legacy_av.py](../tests/test_legacy_av.py) | 10 | Original A/V topology, safe conversion, decoding and reference-numeric checks. | `uv run --no-sync pytest -q tests/test_legacy_av.py` |
 | [test_legacy_canonical_inference.py](../tests/test_legacy_canonical_inference.py) | 11 | Saved native-training recipes must survive raw-image CLI prediction. | `uv run --no-sync pytest -q tests/test_legacy_canonical_inference.py` |
@@ -239,3 +240,10 @@ Original run96passed/1failed in16.50s; failure was a historical test missing the
 backward-compatible photometric_profile=raw default. Narrow test-only normalization
 then passed that one metadata case in2.29s; the96 passing cases were not rerun.
 No runtime, weights, registry or model defaults were changed by the correction.
+
+
+CPU-only inference export: [exact implementation and actual15 synthetic CPU cases](../reports/release/CPU-inference-export-20261112/verification.json), final2.02s/exit0.
+One tiny9x11 forward pair proves identical toy outputs; no realcheckpoint/data/GPU
+export or newquality/selection/TEST measurement. Initial bad toyfixture and
+earlierruns are preserved separately. [Final packaging procedure](FINAL_MODEL_PACKAGING.md)
+keeps original frozen checkpoint identity separate from the new artifact.

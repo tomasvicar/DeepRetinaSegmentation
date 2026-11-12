@@ -48,3 +48,12 @@ model. Do not combine an existing run with changed source, data, or configuratio
 start a new output directory instead. CPU works for a functionality check; a full
 all-source run requires substantial compute. Do not copy timing expectations
 from a different machine or worker configuration.
+
+
+## Export the chosen unified model for prediction
+
+After selection and review, [export a CPU-only inference artifact](FINAL_MODEL_PACKAGING.md)
+with `uv run --no-sync python -m deepretina.inference_export`. The exporter requires
+the original checkpoint SHA, preserves model/config bytes and records the distinct
+artifact SHA. Keep the original checkpoint for optimizer/RNG resume and frozen
+selection/TEST evidence. The new artifact carries no optimizer state.

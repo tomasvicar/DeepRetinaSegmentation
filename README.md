@@ -379,3 +379,9 @@ and is not silently routed through another model family's preprocessing.
 Hyperparameter search runs, candidate results and new-model selection are tracked on
 `experiments/leipzig-hpo`. The verified training/prediction pipeline is included here;
 experimental results do not replace the bundled original models.
+
+
+To package a selected unified checkpoint for prediction, use the
+[CPU-only inference export procedure](docs/FINAL_MODEL_PACKAGING.md). It preserves
+the model and recipe, removes training state and records the original-to-artifact
+checksum relationship. Existing bundled models remain unchanged.

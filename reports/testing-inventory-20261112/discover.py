@@ -53,7 +53,7 @@ def inventory():
         )
     return {
         "schema_version": 1,
-        "source_snapshot": "cb507d1fbc7facec4ab86ced137a3e4885c39e24",
+        "source_snapshot": "12720f76567989f3ad011ee4b529dda4d8153eb9",
         "tracked_python_files_scanned": len(paths),
         "nonstandard_module_paths": [
             m["path"]
