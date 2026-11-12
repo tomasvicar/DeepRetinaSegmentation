@@ -1,0 +1,64 @@
+Running as unit: deepretina-product-guarded-baseline-275c769.service
+Timeout (0:00:15)!
+Thread 0x00007f333dc536c0 (most recent call first):
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 355 in wait
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/multiprocessing/queues.py", line 251 in _feed
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1012 in run
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007f333e4546c0 (most recent call first):
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 355 in wait
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/multiprocessing/queues.py", line 251 in _feed
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1012 in run
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007f3426646780 (most recent call first):
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/selectors.py", line 415 in select
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/multiprocessing/connection.py", line 1136 in wait
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/multiprocessing/connection.py", line 440 in _poll
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/multiprocessing/connection.py", line 257 in poll
+  File "$MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/multiprocessing/queues.py", line 113 in get
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1251 in _try_get_data
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1420 in _get_data
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1458 in _next_data
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 708 in __next__
+  File "$PRIOR_RUN/source/src/deepretina/unified.py", line 1713 in train_unified
+  File "$PRIOR_RUN/source/tests/test_unified.py", line 281 in test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/python.py", line 187 in pytest_pyfunc_call
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/python.py", line 1798 in runtest
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/runner.py", line 184 in pytest_runtest_call
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/runner.py", line 250 in <lambda>
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/runner.py", line 361 in from_call
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/runner.py", line 249 in call_and_report
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/runner.py", line 139 in runtestprotocol
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/runner.py", line 118 in pytest_runtest_protocol
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/main.py", line 411 in pytest_runtestloop
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/main.py", line 387 in _main
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/main.py", line 333 in wrap_session
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/main.py", line 380 in pytest_cmdline_main
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/config/__init__.py", line 262 in _main
+  File "$EXISTING_RUNTIME/lib/python3.12/site-packages/_pytest/config/__init__.py", line 231 in main
+  File "$PRIOR_RUN/guarded_run.py", line 29 in main
+  File "$PRIOR_RUN/guarded_run.py", line 35 in <module>
+          Finished with result: timeout
+Main processes terminated with: code=killed, status=15/TERM
+               Service runtime: 1min 307ms
+             CPU time consumed: 2.143s
+                   Memory peak: 304.6M (swap: 0B)

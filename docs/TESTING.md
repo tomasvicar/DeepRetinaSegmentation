@@ -1,9 +1,28 @@
 # Testing and verification
 
+## Observed full CPU execution: source b36, 12 November 2026
+
+The actual full product suite at `b36a5ee11be4fc3ba0edfe73a20cd1561a444074`
+finished with **2,851 passed, 0 failed, 0 skipped, 83 warnings in 41.27 s**.
+All 63 modules were collected; the corresponding catalog has 456 AST definitions,
+not 2,851 separate definitions. Both optional owned original-v9 cases ran and passed.
+This was CPU-only on an isolated checkout/existing runtime, intra 1/inter 1 and
+one core, with 3 GiB/zero-swap/30-minute resource bounds. All 588 source-file hashes,
+12 bundled model hashes/aliases and existing shared Git metadata were unchanged.
+
+[Actual verification, JUnit, source/catalog hashes and limits](../reports/release/product-full-CPU-suite-20261112/README.md)
+keep the earlier harness hangs and the complete 275 run's 2,850-pass/1-stale-config-test
+failure separate. Only the historical positional-prefix test was corrected;
+production code/weights stayed unchanged. The spawn candidate was not adopted.
+No real-corpus quality/held-out TEST or GPU result is implied. Later changes have
+not been silently included in this source-scoped PASS.
+
+## Historical static catalog and earlier verification
+
 This is the test inventory for product `for_Leipzig` at
 `12720f76567989f3ad011ee4b529dda4d8153eb9` (12 November 2026).
 **No entire pytest suite, model forward, training, GPU operation or dataset
-decoding was rerun for this inventory.** The separate34-case mocked defaults
+decoding was rerun for this inventory.** The separate 34-case mocked defaults
 module check is recorded below. Historical PASS records certify their own
 source snapshots and scopes, not an unmeasured entire latest checkout.
 
@@ -13,6 +32,9 @@ From the repository root, install the locked development environment once:
 
 ```bash
 uv sync --frozen --dev
+# Set a SHORT owned IPC prefix before starting Python.
+DEEPRETINA_TEST_TMP=$(mktemp -d "$HOME/.drt-XXXXXX")
+export TMPDIR="$DEEPRETINA_TEST_TMP"
 # CPU-focused execution; some cases really optimize tiny synthetic networks.
 CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
   uv run --no-sync pytest -q
@@ -20,9 +42,13 @@ uv run --no-sync ruff check src tests scripts
 uv run --no-sync ruff format --check src tests scripts
 ```
 
-These are **commands to run**, not newly observed results. Use a writable temporary
-directory with sufficient space; an owned HOME-backed `TMPDIR` can avoid a small
-shared `/tmp`. Do not run the whole suite on a busy workstation assuming it only
+The historical inventory below did not execute these commands; the later actual
+b36 execution is recorded above. Use a writable temporary directory with enough
+space and a short IPC path. A deep HOME-backed `TMPDIR` produced 112-byte Unix
+socket names and hung multiprocessing in the observed harness; the short prefix
+above resolved it on unchanged source. Set TMPDIR before interpreter startup;
+results/`--basetemp` may still use longer paths. Remove only the owned prefix
+after tests/children finish. Do not run the whole suite on a busy workstation assuming it only
 reads metadata: bundled-weight cases deserialize real checkpoints; several cases
 perform small CPU forwards/training, write temporary prepared data/checkpoints,
 or launch owned child processes to check termination cleanup. Environment

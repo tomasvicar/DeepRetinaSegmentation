@@ -1,0 +1,91 @@
+........................................................................ [  2%]
+........................................................................ [  5%]
+........................................................................ [  7%]
+........................................................................ [ 10%]
+........................................................................ [ 12%]
+........................................................................ [ 15%]
+........................................................................ [ 17%]
+........................................................................ [ 20%]
+........................................................................ [ 22%]
+........................................................................ [ 25%]
+........................................................................ [ 27%]
+........................................................................ [ 30%]
+........................................................................ [ 32%]
+........................................................................ [ 35%]
+........................................................................ [ 37%]
+........................................................................ [ 40%]
+........................................................................ [ 42%]
+........................................................................ [ 45%]
+........................................................................ [ 47%]
+........................................................................ [ 50%]
+........................................................................ [ 53%]
+........................................................................ [ 55%]
+........................................................................ [ 58%]
+........................................................................ [ 60%]
+........................................................................ [ 63%]
+........................................................................ [ 65%]
+........................................................................ [ 68%]
+........................................................................ [ 70%]
+........................................................................ [ 73%]
+........................................................................ [ 75%]
+........................................................................ [ 78%]
+........................................................................ [ 80%]
+........................................................................ [ 83%]
+........................................................................ [ 85%]
+........................................................................ [ 88%]
+........................................................................ [ 90%]
+........................................................................ [ 93%]
+........................................................................ [ 95%]
+........................................................................ [ 98%]
+.......................................F...                              [100%]
+=================================== FAILURES ===================================
+_ test_new_field_is_appended_to_preserve_existing_positional_configuration_api _
+
+    def test_new_field_is_appended_to_preserve_existing_positional_configuration_api():
+        from dataclasses import fields
+    
+        stable = json.loads(
+            (ROOT / "reports/release/vascular-sampling-compat/source-invariants.json").read_text()
+        )
+        original_names = stable["stable_config_field_order"]
+        names = [field.name for field in fields(UnifiedConfig)]
+>       assert names == original_names + ["vascular_sampling_weight", "mixed_precision"]
+E       AssertionError: assert ['architectur...'epochs', ...] == ['architectur...'epochs', ...]
+E         
+E         Left contains one more item: 'photometric_profile'
+E         Use -v to get more diff
+
+tests/test_vascular_sampling_weight.py:150: AssertionError
+=============================== warnings summary ===============================
+tests/test_legacy_cli.py: 2 warnings
+tests/test_legacy_preprocessing.py: 1 warning
+tests/test_prepare_corpus_v2.py: 9 warnings
+tests/test_prepare_training_data.py: 2 warnings
+tests/test_prepare_unified_data.py: 15 warnings
+tests/test_unified_cli.py: 2 warnings
+  $PRIOR_RUN/source/src/deepretina/legacy/preprocessing.py:68: FutureWarning: `binary_closing` is deprecated since version 0.26 and will be removed in version 0.28. Use `skimage.morphology.closing` instead.
+    mask = binary_closing(mask, disk(10, decomposition="crosses"))
+
+tests/test_legacy_cli.py: 2 warnings
+tests/test_legacy_preprocessing.py: 1 warning
+tests/test_prepare_corpus_v2.py: 9 warnings
+tests/test_prepare_training_data.py: 2 warnings
+tests/test_prepare_unified_data.py: 15 warnings
+tests/test_unified_cli.py: 2 warnings
+  $PRIOR_RUN/source/src/deepretina/legacy/preprocessing.py:69: FutureWarning: `binary_erosion` is deprecated since version 0.26 and will be removed in version 0.28. Use `skimage.morphology.erosion` instead. Note the pixel shift by 1 for even-sized footprints (see docstring notes).
+    mask = sk_binary_erosion(mask, disk(6, decomposition="crosses"))
+
+tests/test_unified.py::test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly[2-basic]
+tests/test_unified.py::test_epoch_boundary_resume_restores_optimizer_scheduler_and_rng_exactly[2-mild]
+tests/test_unified.py::test_prefetched_samples_do_not_count_as_delivered_coverage
+  $EXISTING_RUNTIME/lib/python3.12/site-packages/torch/utils/data/dataloader.py:624: UserWarning: This DataLoader will create 2 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+    warnings.warn(
+
+tests/test_unified.py: 18 warnings
+  $MANAGED_PYTHON/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=OWNED_PROCESS) is multi-threaded, use of fork() may lead to deadlocks in the child.
+    self.pid = os.fork()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_vascular_sampling_weight.py::test_new_field_is_appended_to_preserve_existing_positional_configuration_api
+1 failed, 2850 passed, 83 warnings in 41.70s

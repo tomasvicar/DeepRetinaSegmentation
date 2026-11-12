@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "kind": "actual_source_scoped_full_product_CPU_pytest_verification",
+  "status": "PASS",
+  "source_commit": "b36a5ee11be4fc3ba0edfe73a20cd1561a444074",
+  "finished_utc": "2026-11-12T11:59:26.554905+00:00",
+  "test_catalog": {
+    "modules": 63,
+    "AST_definitions": 456,
+    "expanded_pytest_cases": 2851,
+    "historical_catalog_not_retagged": true
+  },
+  "pytest": {
+    "passed": 2851,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "warnings": 83,
+    "reported_seconds": 41.27,
+    "JUnit_seconds": 41.244,
+    "bootstrap_elapsed_seconds": 41.485822410089895
+  },
+  "actual_exits": {
+    "pytest_main_returncode": 0,
+    "systemd_main": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0"
+    },
+    "systemd_wait_client_returncode": 0
+  },
+  "resource_contract": {
+    "CPUQuota": "100%",
+    "affinity": [
+      2
+    ],
+    "default_torch_intra": 1,
+    "torch_interop": 1,
+    "MemoryMax_bytes": 3221225472,
+    "MemorySwapMax_bytes": 0,
+    "RuntimeMax_seconds": 1800,
+    "nice": 17,
+    "IO_class": "idle",
+    "CUDA_VISIBLE_DEVICES": "",
+    "cuda_initialized_after": false
+  },
+  "measured_resources": {
+    "service_wall_seconds": 43.293,
+    "cgroup_CPU_usage_usec": 42625403,
+    "cgroup_charged_memory_peak_bytes": 793190400,
+    "cgroup_swap_peak_bytes": 0,
+    "main_process_RSS_peak_KiB": 1021324,
+    "scope": "cgroup charged peak includes descendants; process RSS includes shared mappings, so these are distinct accounting scopes, not training-memory estimates"
+  },
+  "runtime": {
+    "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+    "CPU_model": "Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz",
+    "dependencies": {
+      "pytest": "9.2.0",
+      "torch": "2.6.0+cu124",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "Pillow": "13.0.0",
+      "h5py": "3.16.0",
+      "pydicom": "3.0.2",
+      "xlrd": "2.0.2",
+      "scikit-image": "0.26.0",
+      "opencv-python-headless": "4.14.0.94"
+    }
+  },
+  "source_custody": {
+    "tracked_files": 588,
+    "all_tracked_bytes_unchanged": true,
+    "worktree_clean_after": true,
+    "all12_model_blobs_and_aliases_unchanged": true,
+    "shared_original_git_metadata_unchanged": true,
+    "source_file_manifest_sha256": "2ec12cb3074ef0674bc5115c7ed58b541db23edf68218c5e666fe4ce9c91ba99"
+  },
+  "owned_original_v9": {
+    "bytes": 8159748,
+    "sha256": "75c5048aed6adb9f783f8fabb056185c4eb81c23be45b3a152794f59dc8cb1c0",
+    "authorized_readonly_copy": true,
+    "two_actual_cases_passed": [
+      {
+        "classname": "tests.test_legacy_av",
+        "name": "test_actual_v9_safe_conversion_and_geometry",
+        "time": "0.115"
+      },
+      {
+        "classname": "tests.test_legacy_av",
+        "name": "test_actual_v9_forward_equals_original_git_source",
+        "time": "0.451"
+      }
+    ],
+    "source_immutable_during_copy": true
+  },
+  "scope": [
+    "Full configured tests without selectors or exclusions, on existing verified runtime; no dependency installation.",
+    "Safe bundled checkpoints and the authorized known original v9 model are loaded on CPU; tests perform tiny fixture/synthetic forwards and optimizer steps.",
+    "No real cohort TRAIN/VAL/TEST inference, quality evaluation, GPU computation or OwnCloud writes. This is software verification, not new model-quality evidence.",
+    "Earlier source275 completed2850pass/1stale-test-failure. The only production-tree change in b36 is a compatibility test expectation, preserving historical positional prefix and raw defaults; no production code changed.",
+    "Earlier deep-TMPDIR hangs are preserved as harness failures, not product loader defects; fork/spawn candidate b87 was not adopted."
+  ],
+  "evidence_original_sha256": {
+    "final-full.stdout": "34340327114c1136560b43290482f2f92fa8f3960fc343de0a1cb2a0d6d7bda0",
+    "final-full.stderr": "d80036a8239af713eb5c7e0474b111e946da20e077daf6d88f209a35e372bc4b",
+    "final-full-observed-exit.json": "1579b086c60a9b46a461a0898e3a9b1a550c97243cf6dad4aecb8b866db3f693",
+    "final-originals/full/results/junit.xml": "e787fc016897f5339018ddd0acf4c29b6bc2fb270701f2b81f518673fdc1c4be",
+    "final-originals/full/results/runtime.json": "34da33e05ef0b73fb500bbc98b454bce54be4ebce05d933e58eea29c2a4cc141",
+    "final-originals/full/results/systemd-stop.json": "9a52555f638547ebe9e2771f5e28515499205c4c85e02279386a9a13063f4b6c",
+    "final-originals/full/results/pytest-return.json": "867be0ab5410cf289749731e907218e8dfdd8f66d583251ffa269f3a411b24e7",
+    "shorttmp-control.stdout": "f0fb6be9258170b1e7f6a458af60a31bcdffe206a4d2493ac44ac1ff9457e180",
+    "unix-socket-path-reproduction.json": "f113a20e721b7a198996f9696a8bb91100f3e85d38260b8317f5503fe56dc042",
+    "corrected-full.stdout": "cf5eb822cd6a2db2d2e45d9886e1ef1d3799f26b00f5623fef2680fd3a8fb92e",
+    "service.stderr": "e72ffdd21d9cd0e74b3340cc3cbbc861cbd272e488e886c95551079a476e1f8d"
+  }
+}
