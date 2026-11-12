@@ -508,3 +508,12 @@ child0/outer0, report6808f293…f94405 under actualOld6d/f13/Python3.12.14.
 Exact GTsupport equals historical182; tiny numeric count differences retained.
 Use [this original final-source report](../reports/original-f13-Old-VAL-20261112/README.md)
 for later final-source freeze. No selection or TEST yet; no old comparison retagging.
+
+
+Dense-vessel error audit (saved VAL counts only): [precision/recall and prior eight-threshold curve](../reports/dense-vessel-precision-recall-20261112/README.md).
+Both raw512BEST50rot4/.35 and TPE5BEST58rot4/.35 have lower denseprecision AND
+recall than original. The already measured same-forward TPE5rot4 curve peaks at
+.35/Dice.7482361 (.40/.7481516), below original.7613266. Raw512 NONE/.5 versus
+rot4/.35 changesboth factors; it cannot isolate threshold. Streamed8threshold
+adaptation for newtypedcandidates is preparationonly, not newtraining or proof
+calibration closes thisqualitygap. No newNN/data/GT/TEST operation by thisaudit.
