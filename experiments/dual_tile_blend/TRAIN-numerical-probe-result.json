@@ -1,0 +1,64 @@
+{
+  "kind": "TRAIN_image_only_numerical_probe_NOT_quality",
+  "status": "completed",
+  "old_vs_control_maxabs": 0.0,
+  "per_channel_control_maxabs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "old_array_sha256": "53231cecacd578fcd0bbf5518ed81074b508528ea9fbe029a8a3bc2224e3ee0e",
+  "input_tile_hashes_order_count_exact": true,
+  "calls_old": 36,
+  "calls_shared_three_streams": 36,
+  "total_actual_model_calls": 72,
+  "model_state_sha256": "65c06c0565eaff05d30b7c1904c5b77a69ac1afe82db1ad95e5874ebf2a6ed63",
+  "weights_inputs_RNG_source_unchanged": true,
+  "hybrid_segmentation_exact_alternative": true,
+  "hybrid_conditional_AV_exact_control": true,
+  "streams": {
+    "probability_control": {
+      "sha256": "53231cecacd578fcd0bbf5518ed81074b508528ea9fbe029a8a3bc2224e3ee0e",
+      "min": 1.8881571653417417e-12,
+      "max": 0.9999920725822449,
+      "joint_sum_error": 1.1920928955078125e-07
+    },
+    "spatial_logit_alternative": {
+      "sha256": "ecc3126896be59788d356675bc373d56ff3370969e4c9178630c026f728cbb4b",
+      "min": 1.831330009513521e-12,
+      "max": 0.9999922513961792,
+      "joint_sum_error": 1.1920928955078125e-07
+    },
+    "segmentation_logit_control_AV": {
+      "sha256": "e7ac6dc42b6cbcadf570fcd95377998af2095665692ae024e27a5e23bfe0177f",
+      "min": 1.831330009513521e-12,
+      "max": 0.9999922513961792,
+      "joint_sum_error": 1.1920928955078125e-07
+    }
+  },
+  "runtime": {
+    "physical_gpu_uuid": "b60687ab-4376-2130-f328-bb5a7c308a00",
+    "intra": 2,
+    "interop": 1,
+    "affinity": [
+      2,
+      3
+    ],
+    "precision": "FP32/noautocastCPUandGPU"
+  },
+  "GT_opened": false,
+  "quality_claim": false,
+  "TEST_used": false,
+  "original_result_sha256": "b7386faac23c55a467b7d954d71afae5525f4c76a640426b308bb50bbb0e24ac",
+  "original_preliminary_result_sha256": "e1a25d22e1002d8ee33f7c21f34383d79cacf630324db06bc2659b8ae50690a4",
+  "tested_experimental_module_sha256": "6264b25ab73c525d8cb27f0c2dbd022ad5f03b7a9fa5e6e3d833a62cb1d2888d",
+  "source_commit": "6d3593f5a8dbf177ebebb231b5120d4fd601ea4f",
+  "source_execution_sha256": "bcbcf91bd1dd7380f90690770f1953f9ea9db48f1e04718c3006f98aa4783a9b",
+  "checkpoint_sha256": "521b8881d1b2c69a7395be6687a8b86581838e3f5dbb004a150333d454132cea",
+  "child_observed_returncode": 0,
+  "outer_observed_returncode": 0,
+  "completed_utc": "2026-11-12T16:46:43.949403+00:00",
+  "qualification": "Single TRAINimage numerical correctness only, not fullVAL scorer execution or retinal quality."
+}
