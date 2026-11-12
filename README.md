@@ -45,15 +45,27 @@ access to the author's ownCloud, training data or checkpoint directories:
 
 ```bash
 uv run deepretina models
-uv run deepretina predict --model legacy-vessels --input /path/to/fundus.jpg --output predictions/vessels
-uv run deepretina predict --model legacy-universal --input /path/to/fundus.jpg --output predictions/disc_cup
+# Use an actual DRIVE photo and its matching official FOV mask.
+uv run deepretina predict --model legacy-vessels \
+  --input fundus.png --fov fov.png --dataset drive \
+  --output predictions/vessels --device cpu
+uv run deepretina predict --model legacy-universal \
+  --input fundus.png --fov fov.png --dataset drive \
+  --output predictions/disc_cup --device cpu
 ```
 
-For all five outputs from the composed original benchmark pipeline, use
-`deepretina predict-original --input fundus.png --fov fov.png --dataset drive
---output predictions/original`. It requires a supplied FOV and explicit camera
-calibration. See [composed original prediction](docs/PREDICT_ORIGINAL.md) for the
-API, probability semantics and benchmark qualifications.
+For all five outputs from the composed original benchmark pipeline:
+
+```bash
+uv run deepretina predict-original \
+  --input fundus.png --fov fov.png --dataset drive \
+  --output predictions/original --device cpu
+```
+
+It requires a supplied FOV and known dataset or explicit camera angle. See
+[composed original prediction](docs/PREDICT_ORIGINAL.md) for a concrete ownCloud
+DRIVE input pair, Python API, probability semantics and benchmark qualifications.
+`fundus.png` and `fov.png` are placeholders; TIFF/GIF paths are also supported.
 
 Use a new or empty output directory for each prediction. A populated directory
 is rejected so that masks from different photographs or models cannot get mixed.
@@ -98,7 +110,10 @@ quality/cost evidence](docs/UNIFIED_V3_TPE_PREVIEW.md).
 For the original models, add `--device cpu` to work without a GPU and
 `--dataset drive` (or the correct
 source name) to select source-specific geometry. For an unknown source, supply
-`--field-of-view-degrees` explicitly. The original single-net default uses the
+`--field-of-view-degrees` explicitly. The single-net and unified routes retain a
+historical **45° fallback and automatic FOV estimation** when no dataset, angle or
+FOV is supplied; this is not measured camera calibration. `predict-original`
+instead refuses missing camera calibration/FOV. The original single-net default uses the
 source-inferred raw profile; `--normalized` selects its original local-contrast
 profile. The historical training choice is not recoverable from the weights.
 

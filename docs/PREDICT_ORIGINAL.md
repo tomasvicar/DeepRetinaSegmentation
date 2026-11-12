@@ -14,10 +14,54 @@ positive foreground level. Supply a known camera/dataset or an explicit
 need an independently established `--fov-diameter-pixels`. Do not guess a camera
 angle or substitute a bounding-box diameter. This command accepts one photo.
 
+## Obtain a matching photo and FOV
+
+Prediction needs your photograph, not the training corpus. With access to the
+shared ownCloud `fundus_databases/DRIVE.zip`, a non-TEST example is the TRAIN pair
+`training/images/21_training.tif` and `training/mask/21_training_mask.gif`.
+The archive also contains prefixed duplicate entries; use these exact short
+member names. Extract only this pair with Python, without MATLAB or dataset
+preparation:
+
+```bash
+uv run python - <<'PY'
+from pathlib import Path
+from zipfile import ZipFile
+
+archive = Path("/var/home/tom/ownCloud/fundus_databases/DRIVE.zip")
+output = Path("inputs/drive21")
+output.mkdir(parents=True, exist_ok=False)
+with ZipFile(archive) as source:
+    for member in ("training/images/21_training.tif",
+                   "training/mask/21_training_mask.gif"):
+        (output / Path(member).name).write_bytes(source.read(member))
+PY
+uv run deepretina predict-original \
+  --input inputs/drive21/21_training.tif \
+  --fov inputs/drive21/21_training_mask.gif --dataset drive \
+  --output predictions/drive21-original --device cpu
+```
+
+Change the archive path to your ownCloud mount. The repository does not grant
+access to the dataset or download it. For another photo use its actual camera
+angle/source, not `drive` merely to make a command run. A FOV marks the complete
+visible retinal field: it is **not** a vessel/disc/cup annotation or RGB mask
+visualization. It must match the original photo height and width; use a lossless
+binary mask, not an antialiased JPEG.
+
+## Python API
+
+Run Python through `uv run python` in the installed checkout. Paths are accepted
+as well as RGB uint8 and binary FOV arrays:
+
 ```python
 from deepretina import predict_original
 
-result = predict_original(rgb_uint8, fov=binary_fov, dataset="drive", device="cpu")
+result = predict_original(
+    "inputs/drive21/21_training.tif",
+    fov="inputs/drive21/21_training_mask.gif",
+    dataset="drive", device="cpu", output="predictions/drive21-original-api",
+)
 # Arrays have original-frame dimensions, with channels vessel, artery, vein, disc, cup.
 masks = result.masks                      # bool, (5, H, W)
 scores = result.probabilities              # float32, (5, H, W)
