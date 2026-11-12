@@ -1,8 +1,9 @@
 # Stav projektu
 
-**Snímek: 12. 11. 2026 v 14:21 UTC. Obě rodiny modelů jsou předatelné; cévní zlepšení vůči originálu zůstává nesplněné.**
-Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
-Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
+**Finální přijaté předání: 12. 11. 2026.** Původní modely a vybraný unified
+raw512 jsou předatelné. Uživatel přijal malý cévní kompromis, požádal o uzavření
+práce a další optimalizace není podmínkou předání. Nejde o zlepšení všech úloh
+ani ekvivalenci. [Praktické předání a matice důkazů](HANDOVER.md).
 
 Finální kandidát je od13:34UTC zmrazen: raw512 BEST50, rot4/0,35/512/64.
 Kontrola původních vah, dokončení tréninku, výběru i navázané původní reference
@@ -163,17 +164,34 @@ Korpus V2 má 21 TRAIN zdrojů / 2 529 fotografií / 5 700 anotovaných variant,
 Geometrické předpoklady jsou výslovné v [datové dokumentaci](CORPUS_V2_PREPARATION.md).
 Výběr a zmrazení přesného protokolu jsou dokončené; následný TEST je dokončený.
 
-## Co zbývá k dokončení cíle
+Dokončený nativní BEST58 rot4 průchod osmi prahů rovněž nevedl k náhradě:
+maximum dense VAL0,75040618 při0,40 zůstalo pod vybraným0,75131596 a všechny
+intervaly proti původnímu modelu byly záporné. Podrobnosti a odložené práce
+shrnuje [HANDOVER.md](HANDOVER.md). Všechny zde popsané tréninky a inference jsou ukončené.
 
-1. Hotovo: jeden samostatný TEST zmrazeného raw512 a původní sestavy; výsledky nebyly použity k dalšímu ladění.
-2. Změřit přesně tyto dvě sestavy na pevných TRAIN vstupech a oddělit načítání, rezidentní latenci, parametry a velikost souborů.
-3. Hotovo: samostatný inference checkpoint, přesná shoda predikce s výzkumným zdrojem a instalace přes `uv` mimo checkout.
-4. Předat obě rodiny s výsledky a omezeními. Cévní zlepšení vůči původní síti zůstává nesplněným vědeckým cílem; další trénovací hledání nyní uzavíráme.
+## Uzavření a přijaté hranice
 
-**Přibalené jsou původní modely, samostatný vybraný raw512 i dřívější kontroly/preview. TEST výsledky jsou uvedené v kartě raw512; source-pooled zlepšení tepen/žil/disku/cup neodstraňuje horší dense cévy.**
-Podrobný cíl je v [GOAL.md](GOAL.md), historické záznamy v
-[PROGRESS_HISTORY_2026-11.md](PROGRESS_HISTORY_2026-11.md). Operátorské přístupy a
-spotřeba MetaCentra jsou vedené v samostatném soukromém provozním repozitáři.
+- Dokončeno: zmrazený TEST obou sestav, export a skutečná TRAIN shoda CLI/API/wheel,
+  instalace přes `uv` mimo checkout, velikost a párové rychlostní měření na dvou TRAIN snímcích.
+- Předávají se původní modely i samostatný `unified-raw512-selected`; piloty a
+  preview jsou historické alternativy, nikoli finální výběr.
+- Dense TEST **0,776547691 vs 0,780767926**, rozdíl **−0,004220235
+  (−0,422 procentního bodu)**. Uživatel tento kompromis výslovně přijal;
+  cévní deficit ani nepříznivé zdrojové výsledky se tím nemažou.
+- Pozdější scratch nativní LAST60 také dokončil trénink, CPU kontrolu a VAL0.
+  Dense VAL0,74091458 vs matched compact LAST0,73851259 má interval rozdílu
+  [−0,00104357; +0,00618576]; macro se snížilo o0,01656052 s intervalem
+  [−0,02260368; −0,01105339]. Nepřekonal vybraný raw512; žádná výměna modelu.
+  [Úplné nepříznivé porovnání](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/native-topology-LAST60-20261112).
+- RAW35 není dokončený build: skutečný read-only audit zastavil chybějící plochý
+  REFUGE mask request. Typed folder/basename oprava je pouze odložený draft se
+  syntetickými kontrolami; neproběhl nový audit/build/trénink. Neovlivňuje vydané RAW25 modely.
+
+[Čas, velikost a jejich přesný rozsah](../reports/release/selected-raw512-two-TRAIN-GPU-timing-20261112/README.md)
+a [finální wheel](../reports/release/raw512-final-metadata-wheel-20261112/README.md)
+jsou hotové, nikoli pending. Historické záznamy zůstávají v
+[PROGRESS_HISTORY_2026-11.md](PROGRESS_HISTORY_2026-11.md). Provozní přístupy,
+PBS úlohy a spotřeba jsou vedené v soukromém `metacentrum-workflows`.
 
 ## Závěrečný TEST
 

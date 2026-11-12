@@ -6,11 +6,18 @@ prediction. The repository includes the verified original trained networks and a
 smaller, separately named [unified five-output model](docs/UNIFIED_RAW512_SELECTED.md).
 You can predict immediately without access to the training data.
 
-The selected unified model covers all 2,529 TRAIN photographs / 5,700 annotation
-records from 21 sources. It offers a simpler shared pipeline, while the original
-networks retain better measured dense-vessel VAL quality. Frozen TEST on856 photographs is complete. See [current results and limits](docs/STATUS.md) and [the project goal](docs/GOAL.md).
+The final accepted handover includes `unified-raw512-selected` (**BEST50,
+rot4 / 0.35 / tile512 / overlap64**) and the original networks. The selected
+checkpoint covers all **2,529 TRAIN photographs / 5,700 annotation records from
+21 sources**. Frozen TEST on 856 photographs and paired TRAIN timing are complete.
+The user accepted the dense-vessel tradeoff: **0.776547691 versus original
+0.780767926 (−0.422 percentage points)**, alongside strong artery/vein/disc/cup
+gains. This is not all-task superiority or equivalence.
+
+Start with [the handover and evidence matrix](docs/HANDOVER.md),
+[current results and limits](docs/STATUS.md), or [the accepted goal](docs/GOAL.md).
 Earlier controls, previews and single-dataset pilots remain explicitly named in
-the model catalog for reproducibility.
+the model catalog for reproducibility; they are not the final selected model.
 
 ## Install
 

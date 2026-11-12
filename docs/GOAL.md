@@ -1,8 +1,16 @@
 # Cíl: původní reference i lepší jednotný model
 
-Uživatel chce **obě varianty**: původní ověřené modely a nové jednodušší jednotné
-řešení s doloženým zlepšením. Samotný malý pilot, dobrý průměr nebo úspěšné testy
-programu tento cíl nesplňují. **Cíl zůstává nedokončený.**
+Uživatel chce **obě použitelné varianty**: původní ověřené modely a jednodušší
+jednotné řešení s doloženými výsledky. Finální předání je přijato: samostatný
+`unified-raw512-selected` a původní modely jsou přibalené, instalace/predikce,
+retraining, zmrazený TEST i měření velikosti a rychlosti jsou doložené.
+
+Uživatel výslovně přijal malý cévní kompromis a uzavřel další optimalizaci:
+dense TEST Dice je **0,776547691 proti původnímu 0,780767926**,
+rozdíl **−0,004220235 (−0,422 procentního bodu)**. Tepny, žíly, disk a cup
+se zlepšily; toto přijetí není důkazem superiority ve všech úlohách ani ekvivalence.
+Původní modely zůstávají dostupné pro prioritu cévní kvality.
+[Finální předání a matice důkazů](HANDOVER.md).
 
 Aktuální výsledky a zbývající práci shrnuje [STATUS.md](STATUS.md). Starší časové
 záznamy jsou zachované v [historii práce](PROGRESS_HISTORY_2026-11.md).
@@ -19,7 +27,7 @@ záznamy jsou zachované v [historii práce](PROGRESS_HISTORY_2026-11.md).
   Aplikační kód je v Pythonu; MATLAB slouží pouze jako ověřovací reference.
 - Předat kolegům přístup k repozitáři s použitelnými modely. Zdrojový ZIP nevytvářet.
 
-## Nový jednotný model na experimentální větvi
+## Doložený rozsah jednotného modelu a hranice tvrzení
 
 - Jedna jednoduchá síť pro cévy, artery/vein a disk/cup. Zacházet správně
   s částečnými anotacemi: neoznačená úloha není negativní target. Body, AVR
@@ -45,7 +53,8 @@ záznamy jsou zachované v [historii práce](PROGRESS_HISTORY_2026-11.md).
   TEST nepoužívat pro ladění; vyhodnotit jej až po zmrazení výběru a protokolu.
 - Zlepšení doložit vůči původním modelům při deklarované geometrii a stejné
   podpoře anotací. Uvést jednotlivé úlohy a zdroje i jejich omezení. Růst průměru
-  způsobený disk/cup při horších cévách či A/V není splněním celého cíle.
+  způsobený disk/cup neprokazuje zlepšení cév. Přijaté předání výše tento
+  konkrétní cévní kompromis uvádí; původní ambice zlepšit každou úlohu prokázána není.
 - Ověřený nový model zpřístupnit vedle původních modelů s přesným původem vah,
   konfigurací, vstupním kontraktem a výsledky. Neoznačovat pilot z jedné databáze
   za finální náhradu originálů.
