@@ -372,3 +372,144 @@ def test_correct_actual_unit_metadata_is_logged_without_other_environment(monkey
     monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "")
     proof = m.Runtime({"unit": unit, "cpu_core": 4}).proof
     assert proof["actual_cgroup"] == cg and proof["core"] == 4 and "environment" not in proof
+
+
+@pytest.mark.parametrize("ceiling", ["entries", "names"])
+def test_empty_hidden_and_test_directory_nodes_count_toward_metadata_caps(
+    tmp_path, monkeypatch, ceiling
+):
+    d = tmp_path / "dataset"
+    d.mkdir()
+    for folder in ["empty", ".hidden", "TEST"]:
+        (d / folder).mkdir()
+    (d / "a.jpg").write_bytes(b"A")
+    if ceiling == "entries":
+        monkeypatch.setattr(m, "MAX_ENTRIES", 2)
+    else:
+        monkeypatch.setattr(m, "MAX_NAMES", 3)
+
+    def forbidden(*a, **kw):
+        raise AssertionError("No payload after metadata bound failed")
+
+    monkeypatch.setattr(m, "open_member", forbidden)
+    with pytest.raises(ValueError, match="Directory metadata ceiling"):
+        m.audit_requests({"dataset": {"a.jpg": ["RGB"]}}, tmp_path, budget())
+
+
+def test_hidden_and_test_tree_metadata_is_allowed_but_only_retained_payload_read(
+    tmp_path, monkeypatch
+):
+    d = tmp_path / "dataset"
+    (d / ".hidden/empty").mkdir(parents=True)
+    (d / "TEST/empty").mkdir(parents=True)
+    (d / "TEST/unselected.jpg").write_bytes(b"notread")
+    (d / "a.jpg").write_bytes(b"A")
+    opened = []
+    original = m.open_member
+
+    def recording(root, name):
+        opened.append(name)
+        return original(root, name)
+
+    monkeypatch.setattr(m, "open_member", recording)
+    result = m.audit_requests({"dataset": {"a.jpg": ["RGB"]}}, tmp_path, budget())
+    assert opened == ["a.jpg"] and result["member_payload_bytes"] == 1
+
+
+def test_fifo_rejected_by_regular_type_before_leaf_open_without_blocking(tmp_path, monkeypatch):
+    fifo = tmp_path / "fifo"
+    m.os.mkfifo(fifo)
+    opened = []
+    original = m.os.open
+
+    def recording(path, *args, **kwargs):
+        opened.append(path)
+        assert path != "fifo", "FIFO leaf must never be opened"
+        return original(path, *args, **kwargs)
+
+    monkeypatch.setattr(m.os, "open", recording)
+    with (
+        pytest.raises(ValueError, match="Regular retained resource required before open"),
+        m.open_member(tmp_path, "fifo"),
+    ):
+        raise AssertionError("No payload")
+    assert "fifo" not in opened
+
+
+def test_regular_leaf_open_has_nonblock_nofollow_and_final_stat_binding(tmp_path, monkeypatch):
+    (tmp_path / "a").write_bytes(b"abc")
+    flags = []
+    original = m.os.open
+
+    def recording(path, options, *args, **kwargs):
+        if path == "a":
+            flags.append(options)
+        return original(path, options, *args, **kwargs)
+
+    monkeypatch.setattr(m.os, "open", recording)
+    with m.open_member(tmp_path, "a") as stream:
+        assert stream.read() == b"abc"
+    assert flags and flags[0] & m.os.O_NONBLOCK and flags[0] & m.os.O_NOFOLLOW
+
+
+def test_regular_leaf_replacement_between_precheck_and_open_rejected(tmp_path, monkeypatch):
+    (tmp_path / "a").write_bytes(b"original")
+    (tmp_path / "replacement").write_bytes(b"changed")
+    original = m.os.open
+
+    def replace_before_open(path, options, *args, **kwargs):
+        if path == "a":
+            m.os.replace(tmp_path / "replacement", tmp_path / "a")
+        return original(path, options, *args, **kwargs)
+
+    monkeypatch.setattr(m.os, "open", replace_before_open)
+    with (
+        pytest.raises(ValueError, match="type/stat changed at open"),
+        m.open_member(tmp_path, "a"),
+    ):
+        raise AssertionError("Changed resource must not reach payload")
+
+
+def test_dangling_partial_symlink_refused_before_any_audit(tmp_path, monkeypatch):
+    source = tmp_path / "source"
+    source.mkdir()
+    parent = tmp_path / "output"
+    parent.mkdir()
+    output = parent / "audit.json"
+    output.with_name("audit.json.partial").symlink_to(tmp_path / "missing")
+    plan = tmp_path / "plan.json"
+    plan.write_text("{}")
+    p = json.loads((HERE / "profile-DISABLED.json").read_bytes())
+    p.update(
+        execution_authorized=True,
+        root_reviewed=True,
+        tool_sha256=m.digest(HERE / "audit.py"),
+        plan_sha256=m.digest(plan),
+        source_root=str(source),
+        output_parent=str(parent),
+        output=str(output),
+    )
+    profile = tmp_path / "True.json"
+    profile.write_text(json.dumps(p))
+    monkeypatch.setattr(m, "Runtime", lambda p: Limits())
+    monkeypatch.setattr(m, "check_plan", lambda p: None)
+
+    def forbidden(*a, **k):
+        raise AssertionError("No audit with dangling partial")
+
+    monkeypatch.setattr(m, "audit_requests", forbidden)
+    with pytest.raises(ValueError, match="Exclusive output and partial"):
+        m.main(
+            [
+                "--profile",
+                str(profile),
+                "--trusted-profile-sha256",
+                m.digest(profile),
+                "--plan",
+                str(plan),
+                "--source-root",
+                str(source),
+                "--output",
+                str(output),
+            ]
+        )

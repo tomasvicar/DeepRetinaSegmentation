@@ -233,11 +233,14 @@ def open_member(root, relative):
             child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
             os.close(fd)
             fd = child
-        final = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW, dir_fd=fd)
+        before = os.stat(parts[-1], dir_fd=fd, follow_symlinks=False)
+        need(stat.S_ISREG(before.st_mode), "Regular retained resource required before open")
+        final = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=fd)
         with os.fdopen(final, "rb") as stream:
+            actual = os.fstat(stream.fileno())
             need(
-                stat.S_ISREG(os.fstat(stream.fileno()).st_mode),
-                "Regular retained resource required",
+                stat.S_ISREG(actual.st_mode) and file_stat(actual) == file_stat(before),
+                "Regular retained resource type/stat changed at open",
             )
             yield stream
     finally:
@@ -315,11 +318,7 @@ def directory_index(root, r, budget):
         for leaf in [*dirs, *files]:
             budget.before(0, "container")
             p = Path(folder) / leaf
-            need(not p.is_symlink(), "Directory symlink forbidden")
-        for leaf in sorted(files):
-            p = Path(folder) / leaf
-            relative = p.relative_to(root).as_posix()
-            name = r.canonical_path(relative)
+            name = r.canonical_path(p.relative_to(root).as_posix())
             clean_relative(name)
             count += 1
             total_names += len(name.encode())
@@ -327,6 +326,12 @@ def directory_index(root, r, budget):
                 count <= MAX_ENTRIES and total_names <= MAX_NAMES,
                 "Directory metadata ceiling exceeded",
             )
+            need(not p.is_symlink(), "Directory symlink forbidden")
+        for leaf in sorted(files):
+            p = Path(folder) / leaf
+            relative = p.relative_to(root).as_posix()
+            name = r.canonical_path(relative)
+            clean_relative(name)
             if "__MACOSX" in name or any(x.startswith(".") for x in Path(name).parts):
                 continue
             # Unlike ZIP there is no CRC metadata to prove a duplicate harmless.
@@ -527,7 +532,8 @@ def main(argv=None):
     need(
         not out.exists()
         and not out.is_symlink()
-        and not out.with_name(out.name + ".partial").exists(),
+        and not out.with_name(out.name + ".partial").exists()
+        and not out.with_name(out.name + ".partial").is_symlink(),
         "Exclusive output and partial required before audit",
     )
     result = audit_requests(plan["requests"], a.source_root, budget)

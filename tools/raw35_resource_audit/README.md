@@ -51,7 +51,10 @@ independent hard containment if a filesystem operation blocks. No timeout retry
 or child-launch framework is included.
 
 ZIP EOCD/ZIP64 metadata is checked before `ZipFile` allocates its index: at most
-64MiB central directory,200000 entries and32MiB canonical names per archive.
+64MiB central directory and200000 **declared** entries. Actual entry count and
+32MiB canonical-name totals are checked after parsing, under the independent
+2GiB hard cap. A malformed EOCD can underreport entries: there is no claimed
+preallocation guarantee for the actual entry count and no second ZIP parser.
 The Python3.12.13 stdlib ZIP parser is used, including its EOCD/ZIP64 interpretation;
 its actual module hash is recorded. Directories are indexed without following
 links; retained files are opened via O_NOFOLLOW component traversal. Selected
@@ -112,3 +115,22 @@ An intermediate21-case run passed0.13s; the final source was rerun as above.
 CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   taskset -c4 nice -n17 EXISTING_PYTHON -m pytest -q tools/raw35_resource_audit/test_audit.py
 ```
+
+
+## Review correction, revision2
+
+The first21 cases did not cover counting directory nodes or opening special
+files. Independent review found those concrete gaps before activation. The new
+revision counts empty, hidden and TEST directory nodes/names as well as files;
+no payload is read when the metadata ceiling fails. A selected leaf must pass
+regular-file lstat via dir_fd/no-follow **before** open; O_NONBLOCK/O_NOFOLLOW
+and matching final fstat protect the open. The synthetic FIFO has no writer and
+is rejected before leaf open. A replacement-between-stat/open fixture rejects.
+A dangling `.partial` symlink is also rejected before any audit, not after hashing.
+The v1 disabled profile and21-case evidence are retained as historical bytes;
+use `profile-DISABLED-v2.json` for this revision. No real audit occurred.
+
+Revision2 final result: **28 passed in0.17s**, exit0; Ruff check0. New regression
+fixtures initially exposed3 failures against unchangedv1 (23 passed); their FIFO
+spy refused the leaf open, so no hang occurred. After the concrete fixes, final
+FIFO/type/stat and directory-node limits pass. See verification-v2.json.
