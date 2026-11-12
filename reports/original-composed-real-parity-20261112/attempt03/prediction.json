@@ -1,0 +1,136 @@
+{
+  "kind": "original_composed_prediction",
+  "policy": "original-raw-vessel-calibrated-provided-fov-av-disc0-universal-cup-in-disc0-v1",
+  "channels": [
+    "vessel",
+    "artery",
+    "vein",
+    "disc",
+    "cup"
+  ],
+  "output_shape": [
+    5,
+    584,
+    565
+  ],
+  "components": {
+    "vessel": {
+      "model": "legacy-vessels",
+      "sha256": "dae07480ec048aa8bb065c40d1dc07a3b9eb62b8e2f5ef9e66fe5acc70130d01"
+    },
+    "disc": {
+      "model": "legacy-disc-0",
+      "sha256": "7d6ddc3bf144e970cc7f5e011e834e241b8d3762464aeacf08d6a87287cdc51f"
+    },
+    "universal": {
+      "model": "legacy-universal",
+      "sha256": "9fa4f9ffddb2fa39828f32bde85299ffaff74b7b8817a70c70243fa11362569f"
+    },
+    "av": {
+      "model": "legacy-av",
+      "sha256": "824289039bad6c4c4bdc05ca289e157813c5307aaf3d31b49775499e227f270b"
+    }
+  },
+  "image": {
+    "encoded_sha256": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+    "shape": [
+      584,
+      565,
+      3
+    ],
+    "dtype": "uint8"
+  },
+  "provided_fov": {
+    "encoded_sha256": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7",
+    "shape": [
+      584,
+      565
+    ],
+    "dtype": "uint8"
+  },
+  "single_net_geometry": {
+    "original_shape": [
+      584,
+      565
+    ],
+    "crop_position": [
+      32,
+      566,
+      10,
+      545
+    ],
+    "rescale_factor": 1.9263698630136987,
+    "prepared_shape": [
+      1031,
+      1033
+    ]
+  },
+  "single_net_preprocessing": "raw RGB/255-.5 at 25 pixels/degree",
+  "native_tiling": {
+    "vessel": {
+      "crop_size": 320,
+      "border": 40,
+      "blend": "logits",
+      "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+    },
+    "disc": {
+      "crop_size": 192,
+      "border": 24,
+      "blend": "logits",
+      "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+    },
+    "universal": {
+      "crop_size": 288,
+      "border": 36,
+      "blend": "logits",
+      "window": "2*boxcar_fraction_y*boxcar_fraction_x-1, clipped to0.01"
+    }
+  },
+  "av_preprocessing": {
+    "name": "vesclass_matlab_provided_fov_calibrated",
+    "matlab_parity_certified": false,
+    "reference_runtime": "R2026b Update1",
+    "scope": "provided FOV with explicit or verified generic calibration; numerical residuals remain",
+    "geometry": "full frame; no bbox crop; scalar-scale bicubic with antialiasing; ceil shape",
+    "pixels_per_degree": 25.0,
+    "photometry_pixels_per_degree": 25.0,
+    "field_of_view_degrees": 45.0,
+    "fov_diameter_pixels": 538.0,
+    "fov_source": "provided original-frame FOV",
+    "diameter_source": "provided FOV generic souradnice estimate",
+    "fov_calibration": {
+      "mode": "estimated_from_provided_fov",
+      "method": "souradnice_generic_binary_sobel",
+      "center_row_one_based": 301,
+      "center_col_one_based": 279,
+      "radius_pixels": 269,
+      "edge_pixels": 1588
+    },
+    "mask_resampling": "nearest to explicit resized image dimensions",
+    "storage": "dicom12",
+    "historical_training_file_provenance_verified": false,
+    "original_single_net_python_profile_changed": false
+  },
+  "device": "cpu",
+  "precision": "float32",
+  "binary_policy": "strict raw logits>0; cup intersects same-forward disc0 before nearest restore; AV ties unclassified",
+  "probability_semantics": {
+    "vessel_disc_cup": "independent sigmoid scores, linearly restored; cup score is not clipped",
+    "artery_vein": "conditional softmax, linearly restored and gated by nearest-restored calibrated binary vessel; not soft-vessel joint probabilities",
+    "masks": "authoritative nearest-restored decisions; not thresholds of exported interpolated scores"
+  },
+  "scope": "Provided-FOV calibrated benchmark policy; AV vessel roundtrip can differ at boundaries. No extra FOV clipping. Historical raw photometry/training exposure and arbitrary-camera MATLAB parity are not certified.",
+  "benchmark_script_sha256": "3a0324e09c128b36381b1ab219c88c8f10e06090918c10023901588da7ac1aae",
+  "quality_policy_script_sha256": "44f1faf4ff41b3dd60b8d6dea747a577bcfd2bb77b1f2366e153bc688fb27a61",
+  "outputs": {
+    "probabilities": "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt03/prediction/probabilities.npz",
+    "vessel": "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt03/prediction/vessel.png",
+    "artery": "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt03/prediction/artery.png",
+    "vein": "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt03/prediction/vein.png",
+    "disc": "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt03/prediction/disc.png",
+    "cup": "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt03/prediction/cup.png",
+    "classes": "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt03/prediction/classes.png",
+    "overlay": "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt03/prediction/overlay.png",
+    "metadata": "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt03/prediction/prediction.json"
+  }
+}
