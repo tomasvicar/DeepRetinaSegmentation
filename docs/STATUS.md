@@ -153,14 +153,14 @@ Dosavadní studijní cíle a zdrojové reporty se touto doplňkovou analýzou ne
 Korpus V2 má 21 TRAIN zdrojů / 2 529 fotografií / 5 700 anotovaných variant,
 770 VAL a 856 TEST fotografií; pevné VAL členství zůstalo zachované.
 Geometrické předpoklady jsou výslovné v [datové dokumentaci](CORPUS_V2_PREPARATION.md).
-Finální výběr, zmrazení přesného protokolu a následný TEST nejsou dokončené.
+Výběr a zmrazení přesného protokolu jsou dokončené; následný TEST zatím neběžel.
 
 ## Co zbývá k dokončení cíle
 
-1. Dokončit a zkontrolovat skutečné trénovací běhy včetně pokrytí všech vhodných TRAIN dat.
-2. Porovnávat další kandidáty párově po úlohách a zdrojích; kontrolovaně změřit patch, preprocessing a inference dlaždice a řešit zbývající cévní regresi.
-3. Zmrazit vybraný checkpoint, konfiguraci, prahy a inference protokol; poté provést samostatný TEST.
-4. Doložit kvalitu, velikost a rychlost vybraného modelu a předat jeho váhy vedle původních sítí.
+1. Provést jeden samostatný TEST zmrazeného raw512 a původní sestavy; jeho výsledky nepoužít k dalšímu ladění.
+2. Změřit přesně tyto dvě sestavy na pevných TRAIN vstupech a oddělit načítání, rezidentní latenci, parametry a velikost souborů.
+3. Přidat samostatný inference checkpoint, ověřit shodu predikce s výzkumným zdrojem a instalaci přes `uv` mimo checkout.
+4. Předat obě rodiny s výsledky a omezeními. Cévní zlepšení vůči původní síti zůstává nesplněným vědeckým cílem; další trénovací hledání nyní uzavíráme.
 
 **Přibalené jsou původní modely, kontroly V1/V2 a samostatné vascular2/TPE preview; optimalizovaný finální model a TEST výsledky zatím nejsou vydané.**
 Podrobný cíl je v [GOAL.md](GOAL.md), historické záznamy v
