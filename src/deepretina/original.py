@@ -92,7 +92,14 @@ def _compose(rgb, fov, prepared, models, av, device, kwargs, diameter):
     native, scores = {}, {}
     image = prepared.tensor()
     for name, (model, payload) in models.items():
-        logits = tiled_logits(model, image, device=device, **payload["tiling"])
+        tiling = payload["tiling"]
+        logits = tiled_logits(
+            model,
+            image,
+            device=device,
+            crop_size=tiling["crop_size"],
+            border=tiling["border"],
+        )
         if not torch.isfinite(logits).all():
             raise ValueError(f"Nonfinite original {name} logits")
         native[name] = logits.numpy() > 0
