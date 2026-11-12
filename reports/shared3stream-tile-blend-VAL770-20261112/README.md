@@ -67,7 +67,7 @@ is49a3860829aea0f0435b1becd506aff763687b2841c09b4ea97990d84d49d048.
 Byte-exact inputs and receipts are indexed in [artifact-index.json](artifact-index.json):
 
 - [Shared probability control](probability-control.json), [all5 logit alternative](all5-logit.json), [hybrid](hybrid-control-AV.json).
-- [Original6808 VAL](original 6808-validation.json), [prior0a5c VAL](prior0a5c-validation.json), [six-field control equality](control-parity.json).
+- [Original6808 VAL](original6808-validation.json), [prior0a5c VAL](prior0a5c-validation.json), [six-field control equality](control-parity.json).
 - [All point/source results](point-summary.json), [NN observed exit](NN-observed-exit.json), [NN actual resource properties](NN-resource-properties.json).
 - [CPU analysis observed exit](CPU-analysis-observed-exit.json), [CPU actual resource properties](CPU-analysis-resource-properties.json), [root CPU byte review](root-independent-review.json), [root NN byte/count review](NN-root-independent-review.json).
 
