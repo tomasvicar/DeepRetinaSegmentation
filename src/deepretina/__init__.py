@@ -8,3 +8,10 @@ def predict_original(image, **kwargs):
     from .original import predict_original as predict
 
     return predict(image, **kwargs)
+
+
+def predict_bundled_unified(model, image_path, output, **kwargs):
+    """Lazy bundled unified prediction with optional per-model inference defaults."""
+    from .bundled_inference import predict_bundled_unified as predict
+
+    return predict(model, image_path, output, **kwargs)
