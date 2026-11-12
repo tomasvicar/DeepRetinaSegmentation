@@ -1,0 +1,889 @@
+{
+  "kind": "dense_vessel_saved_VAL_precision_recall_triage_NOT_selection",
+  "support": {
+    "photos": 87,
+    "known_split_groups": 55,
+    "sources": [
+      "aria",
+      "chasedb1",
+      "drhagis",
+      "erlangen",
+      "hrf",
+      "iostar",
+      "rite",
+      "stare"
+    ]
+  },
+  "excluded": [
+    "avrdb"
+  ],
+  "input_pins": {
+    "original182": {
+      "path": "reports/frozen-original-val-nearest/validation.json",
+      "sha256": "182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836"
+    },
+    "original_final6808": {
+      "path": "reports/original-f13-Old-VAL-20261112/validation.json",
+      "sha256": "6808f293d750dec5a94a0593f5c52d054733696d21984a61e399284355f94405"
+    },
+    "TPE5_BEST58_rot4_035": {
+      "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/threshold-0.35.json",
+      "sha256": "1414f2eb8c751187ab86ca30d8991597903219aa0c3123fe02d2c30d0eee67af"
+    },
+    "TPE5_BEST58_rot4_050": {
+      "path": "reports/first-TPE-BEST58-rot4-threshold-20261111/threshold-0.50.json",
+      "sha256": "122e485f594d0b56351a4ae8ad0b9ee6e2921c941d59fa1e9fb70042b55e195c"
+    },
+    "raw512_BEST50_none_050": {
+      "path": "reports/raw512-typed-fresh-val-20261112/raw512-BEST50-aggregate-counts.json",
+      "sha256": "57dcdffffd00ac25f6bab8fdab7d8ca79d90e9e162cdc9265fa766a7ec90f224"
+    },
+    "raw512_BEST50_rot4_035": {
+      "path": "reports/raw512-BEST50-rot4-035-fresh-val-20261112/raw512-BEST50-rot4-035-aggregate-counts.json",
+      "sha256": "9ddee4705e4595ebceb66ab789a14ccbe5e6ea38c1434ee1678f936300c1d3a3"
+    }
+  },
+  "models": {
+    "original182": {
+      "pooled": {
+        "tp": 4681049,
+        "fp": 1723029,
+        "fn": 1211958,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7309481552223442,
+        "recall": 0.7943396300055303,
+        "dice": 0.7613266070780189
+      },
+      "by_source": {
+        "aria": {
+          "tp": 2052605,
+          "fp": 855025,
+          "fn": 641183,
+          "valid_pixels": 27618662,
+          "positive_pixels": 2693788,
+          "precision": 0.7059374817291059,
+          "recall": 0.761977186029487,
+          "dice": 0.732887636666287
+        },
+        "chasedb1": {
+          "tp": 191076,
+          "fp": 78643,
+          "fn": 22408,
+          "valid_pixels": 2149450,
+          "positive_pixels": 213484,
+          "precision": 0.7084261768729678,
+          "recall": 0.8950366303797943,
+          "dice": 0.7908725732249179
+        },
+        "drhagis": {
+          "tp": 222870,
+          "fp": 77316,
+          "fn": 38989,
+          "valid_pixels": 3829875,
+          "positive_pixels": 261859,
+          "precision": 0.7424396873938158,
+          "recall": 0.8511068934044658,
+          "dice": 0.7930681706980758
+        },
+        "erlangen": {
+          "tp": 269730,
+          "fp": 151943,
+          "fn": 177987,
+          "valid_pixels": 4235000,
+          "positive_pixels": 447717,
+          "precision": 0.6396662816922117,
+          "recall": 0.6024564624528441,
+          "dice": 0.6205040315623598
+        },
+        "hrf": {
+          "tp": 866049,
+          "fp": 258483,
+          "fn": 154423,
+          "valid_pixels": 11404397,
+          "positive_pixels": 1020472,
+          "precision": 0.7701417122856442,
+          "recall": 0.8486749268965733,
+          "dice": 0.8075033892710689
+        },
+        "iostar": {
+          "tp": 512345,
+          "fp": 133760,
+          "fn": 95904,
+          "valid_pixels": 5858697,
+          "positive_pixels": 608249,
+          "precision": 0.7929748260731615,
+          "recall": 0.8423277309128334,
+          "dice": 0.8169065511012042
+        },
+        "rite": {
+          "tp": 369351,
+          "fp": 105757,
+          "fn": 64036,
+          "valid_pixels": 3364003,
+          "positive_pixels": 433387,
+          "precision": 0.7774042954444043,
+          "recall": 0.8522429145313541,
+          "dice": 0.8131051904523415
+        },
+        "stare": {
+          "tp": 197023,
+          "fp": 62102,
+          "fn": 17028,
+          "valid_pixels": 1865661,
+          "positive_pixels": 214051,
+          "precision": 0.7603396044380125,
+          "recall": 0.9204488649901191,
+          "dice": 0.8327683568059242
+        }
+      }
+    },
+    "original_final6808": {
+      "pooled": {
+        "tp": 4681051,
+        "fp": 1723029,
+        "fn": 1211956,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7309482392474798,
+        "recall": 0.794339969390839,
+        "dice": 0.7613268085360378
+      },
+      "by_source": {
+        "aria": {
+          "tp": 2052608,
+          "fp": 855025,
+          "fn": 641180,
+          "valid_pixels": 27618662,
+          "positive_pixels": 2693788,
+          "precision": 0.7059377851331307,
+          "recall": 0.7619782997028719,
+          "dice": 0.7328883153042772
+        },
+        "chasedb1": {
+          "tp": 191076,
+          "fp": 78643,
+          "fn": 22408,
+          "valid_pixels": 2149450,
+          "positive_pixels": 213484,
+          "precision": 0.7084261768729678,
+          "recall": 0.8950366303797943,
+          "dice": 0.7908725732249179
+        },
+        "drhagis": {
+          "tp": 222870,
+          "fp": 77316,
+          "fn": 38989,
+          "valid_pixels": 3829875,
+          "positive_pixels": 261859,
+          "precision": 0.7424396873938158,
+          "recall": 0.8511068934044658,
+          "dice": 0.7930681706980758
+        },
+        "erlangen": {
+          "tp": 269729,
+          "fp": 151943,
+          "fn": 177988,
+          "valid_pixels": 4235000,
+          "positive_pixels": 447717,
+          "precision": 0.6396654271566525,
+          "recall": 0.602454228899059,
+          "dice": 0.6205024448204428
+        },
+        "hrf": {
+          "tp": 866049,
+          "fp": 258483,
+          "fn": 154423,
+          "valid_pixels": 11404397,
+          "positive_pixels": 1020472,
+          "precision": 0.7701417122856442,
+          "recall": 0.8486749268965733,
+          "dice": 0.8075033892710689
+        },
+        "iostar": {
+          "tp": 512345,
+          "fp": 133760,
+          "fn": 95904,
+          "valid_pixels": 5858697,
+          "positive_pixels": 608249,
+          "precision": 0.7929748260731615,
+          "recall": 0.8423277309128334,
+          "dice": 0.8169065511012042
+        },
+        "rite": {
+          "tp": 369351,
+          "fp": 105757,
+          "fn": 64036,
+          "valid_pixels": 3364003,
+          "positive_pixels": 433387,
+          "precision": 0.7774042954444043,
+          "recall": 0.8522429145313541,
+          "dice": 0.8131051904523415
+        },
+        "stare": {
+          "tp": 197023,
+          "fp": 62102,
+          "fn": 17028,
+          "valid_pixels": 1865661,
+          "positive_pixels": 214051,
+          "precision": 0.7603396044380125,
+          "recall": 0.9204488649901191,
+          "dice": 0.8327683568059242
+        }
+      }
+    },
+    "TPE5_BEST58_rot4_035": {
+      "pooled": {
+        "tp": 4564527,
+        "fp": 1743233,
+        "fn": 1328480,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7236367585323474,
+        "recall": 0.7745667025340374,
+        "dice": 0.7482360740107569
+      },
+      "by_source": {
+        "aria": {
+          "tp": 1949210,
+          "fp": 807058,
+          "fn": 744578,
+          "valid_pixels": 27618662,
+          "positive_pixels": 2693788,
+          "precision": 0.7071917534869614,
+          "recall": 0.7235944328209941,
+          "dice": 0.7152990721563228
+        },
+        "chasedb1": {
+          "tp": 188590,
+          "fp": 87991,
+          "fn": 24894,
+          "valid_pixels": 2149450,
+          "positive_pixels": 213484,
+          "precision": 0.6818617330908486,
+          "recall": 0.8833917295909763,
+          "dice": 0.7696530052135941
+        },
+        "drhagis": {
+          "tp": 222400,
+          "fp": 102386,
+          "fn": 39459,
+          "valid_pixels": 3829875,
+          "positive_pixels": 261859,
+          "precision": 0.6847585794954216,
+          "recall": 0.8493120343390909,
+          "dice": 0.7582098202490433
+        },
+        "erlangen": {
+          "tp": 314079,
+          "fp": 219002,
+          "fn": 133638,
+          "valid_pixels": 4235000,
+          "positive_pixels": 447717,
+          "precision": 0.589176879311024,
+          "recall": 0.7015123392678857,
+          "dice": 0.6404560368189984
+        },
+        "hrf": {
+          "tp": 832062,
+          "fp": 242081,
+          "fn": 188410,
+          "valid_pixels": 11404397,
+          "positive_pixels": 1020472,
+          "precision": 0.7746287039993743,
+          "recall": 0.8153697504684106,
+          "dice": 0.7944772667053372
+        },
+        "iostar": {
+          "tp": 502470,
+          "fp": 124602,
+          "fn": 105779,
+          "valid_pixels": 5858697,
+          "positive_pixels": 608249,
+          "precision": 0.8012955450091855,
+          "recall": 0.8260926035225705,
+          "dice": 0.8135051537211786
+        },
+        "rite": {
+          "tp": 364849,
+          "fp": 108586,
+          "fn": 68538,
+          "valid_pixels": 3364003,
+          "positive_pixels": 433387,
+          "precision": 0.7706422212130493,
+          "recall": 0.8418549702690666,
+          "dice": 0.8046761106369277
+        },
+        "stare": {
+          "tp": 190867,
+          "fp": 51527,
+          "fn": 23184,
+          "valid_pixels": 1865661,
+          "positive_pixels": 214051,
+          "precision": 0.7874246062196258,
+          "recall": 0.8916893637497606,
+          "dice": 0.8363198194744164
+        }
+      }
+    },
+    "TPE5_BEST58_rot4_050": {
+      "pooled": {
+        "tp": 4310595,
+        "fp": 1361628,
+        "fn": 1582412,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7599480838464919,
+        "recall": 0.7314763074267517,
+        "dice": 0.7454404279032929
+      },
+      "by_source": {
+        "aria": {
+          "tp": 1819484,
+          "fp": 631858,
+          "fn": 874304,
+          "valid_pixels": 27618662,
+          "positive_pixels": 2693788,
+          "precision": 0.7422399648845408,
+          "recall": 0.6754369683137649,
+          "dice": 0.7072645394771366
+        },
+        "chasedb1": {
+          "tp": 180231,
+          "fp": 69204,
+          "fn": 33253,
+          "valid_pixels": 2149450,
+          "positive_pixels": 213484,
+          "precision": 0.7225569787720247,
+          "recall": 0.8442365704221394,
+          "dice": 0.7786718626800802
+        },
+        "drhagis": {
+          "tp": 213518,
+          "fp": 77873,
+          "fn": 48341,
+          "valid_pixels": 3829875,
+          "positive_pixels": 261859,
+          "precision": 0.7327542717517013,
+          "recall": 0.8153930168525809,
+          "dice": 0.7718680524175328
+        },
+        "erlangen": {
+          "tp": 294217,
+          "fp": 180760,
+          "fn": 153500,
+          "valid_pixels": 4235000,
+          "positive_pixels": 447717,
+          "precision": 0.6194342041825183,
+          "recall": 0.65714949398839,
+          "dice": 0.6377347202864655
+        },
+        "hrf": {
+          "tp": 790201,
+          "fp": 185484,
+          "fn": 230271,
+          "valid_pixels": 11404397,
+          "positive_pixels": 1020472,
+          "precision": 0.809893561959034,
+          "recall": 0.7743485367555406,
+          "dice": 0.7917222943886678
+        },
+        "iostar": {
+          "tp": 481423,
+          "fp": 95614,
+          "fn": 126826,
+          "valid_pixels": 5858697,
+          "positive_pixels": 608249,
+          "precision": 0.8343017865405511,
+          "recall": 0.7914899983394958,
+          "dice": 0.8123322134910899
+        },
+        "rite": {
+          "tp": 349353,
+          "fp": 84147,
+          "fn": 84034,
+          "valid_pixels": 3364003,
+          "positive_pixels": 433387,
+          "precision": 0.8058892733564014,
+          "recall": 0.8060993984591139,
+          "dice": 0.805994322212699
+        },
+        "stare": {
+          "tp": 182168,
+          "fp": 36688,
+          "fn": 31883,
+          "valid_pixels": 1865661,
+          "positive_pixels": 214051,
+          "precision": 0.8323646598676755,
+          "recall": 0.8510495162367847,
+          "dice": 0.8416033928765301
+        }
+      }
+    },
+    "raw512_BEST50_none_050": {
+      "pooled": {
+        "tp": 4366739,
+        "fp": 1428163,
+        "fn": 1526268,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7535483775221739,
+        "recall": 0.7410035318132152,
+        "dice": 0.7472233057256007
+      },
+      "by_source": {
+        "aria": {
+          "tp": 1898546,
+          "fp": 732290,
+          "fn": 795242,
+          "valid_pixels": 27618662,
+          "positive_pixels": 2693788,
+          "precision": 0.7216512165714625,
+          "recall": 0.7047867166978248,
+          "dice": 0.713119273774073
+        },
+        "chasedb1": {
+          "tp": 179329,
+          "fp": 67230,
+          "fn": 34155,
+          "valid_pixels": 2149450,
+          "positive_pixels": 213484,
+          "precision": 0.7273269278347171,
+          "recall": 0.8400114294279665,
+          "dice": 0.7796184269731308
+        },
+        "drhagis": {
+          "tp": 209177,
+          "fp": 66146,
+          "fn": 52682,
+          "valid_pixels": 3829875,
+          "positive_pixels": 261859,
+          "precision": 0.7597512739582236,
+          "recall": 0.7988153930168526,
+          "dice": 0.7787937793894807
+        },
+        "erlangen": {
+          "tp": 285273,
+          "fp": 164124,
+          "fn": 162444,
+          "valid_pixels": 4235000,
+          "positive_pixels": 447717,
+          "precision": 0.6347906194300362,
+          "recall": 0.6371725889345279,
+          "dice": 0.6359793738588407
+        },
+        "hrf": {
+          "tp": 783266,
+          "fp": 178872,
+          "fn": 237206,
+          "valid_pixels": 11404397,
+          "positive_pixels": 1020472,
+          "precision": 0.8140890392022766,
+          "recall": 0.7675526619054712,
+          "dice": 0.7901362345594948
+        },
+        "iostar": {
+          "tp": 481871,
+          "fp": 97655,
+          "fn": 126378,
+          "valid_pixels": 5858697,
+          "positive_pixels": 608249,
+          "precision": 0.831491598306202,
+          "recall": 0.7922265388023655,
+          "dice": 0.8113843110016628
+        },
+        "rite": {
+          "tp": 347166,
+          "fp": 83805,
+          "fn": 86221,
+          "valid_pixels": 3364003,
+          "positive_pixels": 433387,
+          "precision": 0.8055437604850443,
+          "recall": 0.8010531003468032,
+          "dice": 0.8032921544082429
+        },
+        "stare": {
+          "tp": 182111,
+          "fp": 38041,
+          "fn": 31940,
+          "valid_pixels": 1865661,
+          "positive_pixels": 214051,
+          "precision": 0.8272057487554053,
+          "recall": 0.8507832245586332,
+          "dice": 0.8388288427302437
+        }
+      }
+    },
+    "raw512_BEST50_rot4_035": {
+      "pooled": {
+        "tp": 4613808,
+        "fp": 1775123,
+        "fn": 1279199,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.722156492220686,
+        "recall": 0.7829293262336189,
+        "dice": 0.7513159568139817
+      },
+      "by_source": {
+        "aria": {
+          "tp": 2013910,
+          "fp": 896812,
+          "fn": 679878,
+          "valid_pixels": 27618662,
+          "positive_pixels": 2693788,
+          "precision": 0.6918936263923522,
+          "recall": 0.7476126554873658,
+          "dice": 0.7186747815598509
+        },
+        "chasedb1": {
+          "tp": 188000,
+          "fp": 84470,
+          "fn": 25484,
+          "valid_pixels": 2149450,
+          "positive_pixels": 213484,
+          "precision": 0.6899842184460675,
+          "recall": 0.8806280564351426,
+          "dice": 0.7737357856916498
+        },
+        "drhagis": {
+          "tp": 220446,
+          "fp": 86783,
+          "fn": 41413,
+          "valid_pixels": 3829875,
+          "positive_pixels": 261859,
+          "precision": 0.717529920678061,
+          "recall": 0.8418500032460217,
+          "dice": 0.7747343117408907
+        },
+        "erlangen": {
+          "tp": 305941,
+          "fp": 197657,
+          "fn": 141776,
+          "valid_pixels": 4235000,
+          "positive_pixels": 447717,
+          "precision": 0.6075103554819519,
+          "recall": 0.6833356785648077,
+          "dice": 0.6431959971197763
+        },
+        "hrf": {
+          "tp": 827942,
+          "fp": 231981,
+          "fn": 192530,
+          "valid_pixels": 11404397,
+          "positive_pixels": 1020472,
+          "precision": 0.7811341012507512,
+          "recall": 0.8113324030448655,
+          "dice": 0.7959469235409622
+        },
+        "iostar": {
+          "tp": 502880,
+          "fp": 121138,
+          "fn": 105369,
+          "valid_pixels": 5858697,
+          "positive_pixels": 608249,
+          "precision": 0.8058741895265842,
+          "recall": 0.826766669571179,
+          "dice": 0.8161867517348107
+        },
+        "rite": {
+          "tp": 364099,
+          "fp": 106121,
+          "fn": 69288,
+          "valid_pixels": 3364003,
+          "positive_pixels": 433387,
+          "precision": 0.7743162774871337,
+          "recall": 0.8401244153608668,
+          "dice": 0.8058791045222093
+        },
+        "stare": {
+          "tp": 190590,
+          "fp": 50161,
+          "fn": 23461,
+          "valid_pixels": 1865661,
+          "positive_pixels": 214051,
+          "precision": 0.7916478020859726,
+          "recall": 0.890395279629621,
+          "dice": 0.8381229633994574
+        }
+      }
+    }
+  },
+  "candidate_minus_original182": {
+    "TPE5_BEST58_rot4_035": {
+      "tp": -116522,
+      "fp": 20204,
+      "fn": 116522,
+      "precision": -0.0073113966899968075,
+      "recall": -0.01977292747149295,
+      "dice": -0.013090533067262045,
+      "extra_FP_plus_FN": 136726,
+      "by_source": {
+        "aria": {
+          "tp": -103395,
+          "fp": -47967,
+          "fn": 103395,
+          "precision": 0.0012542717578555296,
+          "recall": -0.03838275320849294,
+          "dice": -0.017588564509964155
+        },
+        "chasedb1": {
+          "tp": -2486,
+          "fp": 9348,
+          "fn": 2486,
+          "precision": -0.026564443782119196,
+          "recall": -0.011644900788817969,
+          "dice": -0.02121956801132374
+        },
+        "drhagis": {
+          "tp": -470,
+          "fp": 25070,
+          "fn": 470,
+          "precision": -0.0576811078983942,
+          "recall": -0.0017948590653749097,
+          "dice": -0.034858350449032516
+        },
+        "erlangen": {
+          "tp": 44349,
+          "fp": 67059,
+          "fn": -44349,
+          "precision": -0.05048940238118771,
+          "recall": 0.09905587681504158,
+          "dice": 0.01995200525663865
+        },
+        "hrf": {
+          "tp": -33987,
+          "fp": -16402,
+          "fn": 33987,
+          "precision": 0.004486991713730126,
+          "recall": -0.033305176428162664,
+          "dice": -0.013026122565731657
+        },
+        "iostar": {
+          "tp": -9875,
+          "fp": -9158,
+          "fn": 9875,
+          "precision": 0.00832071893602404,
+          "recall": -0.016235127390262893,
+          "dice": -0.0034013973800256503
+        },
+        "rite": {
+          "tp": -4502,
+          "fp": 2829,
+          "fn": 4502,
+          "precision": -0.0067620742313549975,
+          "recall": -0.010387944262287507,
+          "dice": -0.008429079815413854
+        },
+        "stare": {
+          "tp": -6156,
+          "fp": -10575,
+          "fn": 6156,
+          "precision": 0.027085001781613327,
+          "recall": -0.02875950124035853,
+          "dice": 0.0035514626684921557
+        }
+      }
+    },
+    "raw512_BEST50_rot4_035": {
+      "tp": -67241,
+      "fp": 52094,
+      "fn": 67241,
+      "precision": -0.008791663001658234,
+      "recall": -0.011410303771911434,
+      "dice": -0.010010650264037246,
+      "extra_FP_plus_FN": 119335,
+      "by_source": {
+        "aria": {
+          "tp": -38695,
+          "fp": 41787,
+          "fn": 38695,
+          "precision": -0.014043855336753674,
+          "recall": -0.014364530542121279,
+          "dice": -0.014212855106436106
+        },
+        "chasedb1": {
+          "tp": -3076,
+          "fp": 5827,
+          "fn": 3076,
+          "precision": -0.01844195842690033,
+          "recall": -0.01440857394465167,
+          "dice": -0.017136787533268083
+        },
+        "drhagis": {
+          "tp": -2424,
+          "fp": 9467,
+          "fn": 2424,
+          "precision": -0.024909766715754844,
+          "recall": -0.009256890158444109,
+          "dice": -0.01833385895718509
+        },
+        "erlangen": {
+          "tp": 36211,
+          "fp": 45714,
+          "fn": -36211,
+          "precision": -0.032155926210259866,
+          "recall": 0.08087921611196358,
+          "dice": 0.022691965557416482
+        },
+        "hrf": {
+          "tp": -38107,
+          "fp": -26502,
+          "fn": 38107,
+          "precision": 0.010992388965107014,
+          "recall": -0.037342523851707776,
+          "dice": -0.011556465730106713
+        },
+        "iostar": {
+          "tp": -9465,
+          "fp": -12622,
+          "fn": 9465,
+          "precision": 0.012899363453422685,
+          "recall": -0.01556106134165447,
+          "dice": -0.0007197993663935476
+        },
+        "rite": {
+          "tp": -5252,
+          "fp": 364,
+          "fn": 5252,
+          "precision": -0.003088017957270539,
+          "recall": -0.012118499170487351,
+          "dice": -0.007226085930132187
+        },
+        "stare": {
+          "tp": -6433,
+          "fp": -11941,
+          "fn": 6433,
+          "precision": 0.03130819764796011,
+          "recall": -0.03005358536049818,
+          "dice": 0.005354606593533151
+        }
+      }
+    }
+  },
+  "observed_TPE5_same_forward_dense_curve": [
+    {
+      "threshold": 0.25,
+      "dense_vessel": {
+        "tp": 4741793,
+        "fp": 2095683,
+        "fn": 1151214,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.6935004963819983,
+        "recall": 0.804647440602056,
+        "dice": 0.7449509967532261
+      },
+      "report_sha256": "7237ea16290f2cb407343de7f5e1bb100fb0a224c0b31b8bf7239e7d99b2bd8a"
+    },
+    {
+      "threshold": 0.3,
+      "dense_vessel": {
+        "tp": 4650930,
+        "fp": 1903850,
+        "fn": 1242077,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7095478414225954,
+        "recall": 0.7892286569488208,
+        "dice": 0.7472701774218984
+      },
+      "report_sha256": "c2904ea27fb86e2b3479c3d88b4f9a450c3194c3e904123b996fe5a3a5c3068e"
+    },
+    {
+      "threshold": 0.35,
+      "dense_vessel": {
+        "tp": 4564527,
+        "fp": 1743233,
+        "fn": 1328480,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7236367585323474,
+        "recall": 0.7745667025340374,
+        "dice": 0.7482360740107569
+      },
+      "report_sha256": "1414f2eb8c751187ab86ca30d8991597903219aa0c3123fe02d2c30d0eee67af"
+    },
+    {
+      "threshold": 0.4,
+      "dense_vessel": {
+        "tp": 4479984,
+        "fp": 1603148,
+        "fn": 1413023,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7364600998301533,
+        "recall": 0.760220376456366,
+        "dice": 0.7481516371845718
+      },
+      "report_sha256": "7ce7c50fd23bedc742c46c0065b546b9651c8037fa5fb5aae6fb49bd1e49d7b3"
+    },
+    {
+      "threshold": 0.45,
+      "dense_vessel": {
+        "tp": 4395532,
+        "fp": 1477749,
+        "fn": 1497475,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7483946366604969,
+        "recall": 0.7458894924102415,
+        "dice": 0.7471399646175583
+      },
+      "report_sha256": "7f29755c61e0d9bdce3293bc4175abd3c6affb7c5d322e3377a0b7f059c82fa3"
+    },
+    {
+      "threshold": 0.5,
+      "dense_vessel": {
+        "tp": 4310595,
+        "fp": 1361628,
+        "fn": 1582412,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7599480838464919,
+        "recall": 0.7314763074267517,
+        "dice": 0.7454404279032929
+      },
+      "report_sha256": "122e485f594d0b56351a4ae8ad0b9ee6e2921c941d59fa1e9fb70042b55e195c"
+    },
+    {
+      "threshold": 0.55,
+      "dense_vessel": {
+        "tp": 4222917,
+        "fp": 1252656,
+        "fn": 1670090,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.771228326240925,
+        "recall": 0.7165979948776575,
+        "dice": 0.7429101963481807
+      },
+      "report_sha256": "93334880bd11521c785dd77489ecd93f794842773537e6fbc6e607eff2e5e9d0"
+    },
+    {
+      "threshold": 0.6,
+      "dense_vessel": {
+        "tp": 4129769,
+        "fp": 1147581,
+        "fn": 1763238,
+        "valid_pixels": 60325745,
+        "positive_pixels": 5893007,
+        "precision": 0.7825459747790084,
+        "recall": 0.7007914635092067,
+        "dice": 0.7394157590487036
+      },
+      "report_sha256": "53763393eee61e834e58564af6dad55acec8e6b35d6a055a7231fe4b7941e1ca"
+    }
+  ],
+  "observed_dense_grid_peak_NOT_new_selection": 0.35,
+  "threshold_isolation": {
+    "TPE5_rot4_035_vs_rot4_050": "same checkpoint/protocol except threshold, same saved forward for each photo; threshold-only decoder contrast",
+    "raw512_rot4_035_vs_NONE_050": "BOTH threshold and TTA changed; not isolated; published full per-photo typed report remains private"
+  },
+  "qualifications": [
+    "Known55 split groups inherited from pinned prior support audit, not newly inferred patient independence",
+    "raw512 projection has source aggregates only; matching source GT counts verified here, full87photo identity/support proven in prior completed original report/analysis, not independently reread here",
+    "Final6808 original is reported separately; historical182 never retagged",
+    "No probability values or GT/model/image arrays loaded; no NN/training/host/TEST/DB operation"
+  ]
+}
