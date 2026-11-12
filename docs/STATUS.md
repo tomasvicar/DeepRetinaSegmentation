@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 12. 11. 2026 v 10:50 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
+**Snímek: 12. 11. 2026 v 12:54 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -49,6 +49,15 @@ predikce. Opravu ověřilo 66 cílených CPU testů exportu, původních modelů
 
 ## Co je skutečně změřené
 
+Aktuální programová kontrola zdroje `b36a5ee` dokončila **2 851 CPU testů bez
+selhání a bez přeskočení**, včetně obou kontrol původního A/V checkpointu a přesného
+obnovení tréninku s nulou i dvěma workery. Všech 12 přibalených vah zůstalo beze
+změny. Chyba příliš dlouhé dočasné cesty ve spouštěči testů a dřívější zastaralé
+očekávání konfigurace jsou zachované odděleně od konečného úspěšného běhu.
+[Výsledky, zdroj, JUnit a rozsah ověření](../reports/release/product-full-CPU-suite-20261112/README.md).
+Tato kontrola programu nenahrazuje měření kvality modelu ani následný TEST.
+
+
 Nový `predict-original` prošel skutečným porovnáním celé sestavy na jedné TRAIN
 fotografii: rozdíly pěti masek `[0, 0, 0, 0, 0]`, skutečný child i outer exit 0,
 CPU1 a bez inicializace CUDA. To ověřuje shodu s Python benchmarkem na tomto
@@ -82,7 +91,7 @@ včetně raw DRIONS TRAIN snímku. To je
 [důkaz kompatibility inference](../reports/v2-inference-parity/README.md),
 nikoli důkaz finální kvality nebo obecné shody všech GPU backendů.
 
-## Výzkum: časový snímek 12. 11. v 10:50 UTC
+## Výzkum: časový snímek 12. 11. v 12:54 UTC
 
 Výsledky níže jsou VAL, nikoli TEST; žádný nový kandidát se tím nestává výchozím
 nebo finálním modelem. Dřívější smíšené časové aktualizace zůstávají beze změny
@@ -107,9 +116,13 @@ v [historickém přehledu](PROGRESS_HISTORY_2026-11.md#archivovaný-výzkumný-p
   Macro BEST/LAST je 0,80853/0,80240, dense vessel Dice 0,74245/0,74510.
   Obě cévní regrese vůči původnímu modelu mají záporné celé párové intervaly.
   [Obě role, skutečné exity a úplné výsledky](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/native8-completed-f13-VAL-20261112).
-- **Šířka24:** pokračování původního modelu z E27 do E60 není dokončené;
-  poslední uvedený záznam z 10:46:43 UTC je E41/83 968 kroků. Není tím doložená
-  terminální QA ani výsledná VAL kvalita. Konfigurace a běžící trénink se nemění.
+- **Šířka24:** pokračování E27→60 úspěšně dokončeno 12:27:45 UTC. BEST58 i
+  LAST60 mají vlastní pokrytí všech 2 529 fotografií / 5 700 anotovaných variant;
+  kontrola dokončení i nezávislé CPU kontroly obou checkpointů prošly. Váhy jsou
+  zálohované s ověřenými kontrolními součty. Od 12:50:42 UTC běží čerstvá validace
+  obou rolí na všech 770 VAL fotografiích, FP32/NONE/0,5/512/64, ve stejném
+  konečném evaluačním prostředí jako ostatní kandidáti. Výsledná kvalita a finální
+  výběr zatím nejsou doložené; tyto váhy ještě nejsou vydané jako nový model.
 - **Raw512/rot4 prahy:** jeden průchod všech 770 VAL fotografií dokončený
   v 10:41:32 UTC, child/outer exit 0. Osm globálních prahů využilo stejné
   pravděpodobnosti; kontrolní 0,35 přesně zopakovalo dřívější výsledky po snímcích,
