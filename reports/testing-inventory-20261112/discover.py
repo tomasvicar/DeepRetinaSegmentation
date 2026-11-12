@@ -3,6 +3,7 @@
 import ast
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -10,18 +11,22 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def inventory():
     modules = []
-    for path in sorted((ROOT / "tests").rglob("test_*.py")):
+    tracked = (
+        subprocess.check_output(["git", "-C", str(ROOT), "ls-files", "-z", "--", "*.py"])
+        .decode()
+        .split("\0")
+    )
+    paths = [ROOT / name for name in sorted(filter(None, tracked))]
+    for path in paths:
         raw = path.read_bytes()
         tree = ast.parse(raw, filename=str(path))
         definitions = []
-        for item in tree.body:
-            owners = [(item, "")]
-            if isinstance(item, ast.ClassDef) and item.name.startswith("Test"):
-                owners = [(method, item.name + ".") for method in item.body]
-            for node, prefix in owners:
+
+        def scan(body, prefix="", definitions=definitions):
+            for node in body:
                 if isinstance(
                     node, (ast.FunctionDef, ast.AsyncFunctionDef)
-                ) and node.name.startswith("test_"):
+                ) and node.name.startswith("test"):
                     definitions.append(
                         {
                             "name": prefix + node.name,
@@ -30,6 +35,12 @@ def inventory():
                             "decorators": [ast.unparse(d) for d in node.decorator_list],
                         }
                     )
+                elif isinstance(node, ast.ClassDef):
+                    scan(node.body, prefix + node.name + ".")
+
+        scan(tree.body)
+        if not definitions:
+            continue
         modules.append(
             {
                 "path": path.relative_to(ROOT).as_posix(),
@@ -42,9 +53,15 @@ def inventory():
         )
     return {
         "schema_version": 1,
-        "source_snapshot": "e27a7747c711c4714fd0616422b405a3132a34e6",
-        "method": "stdlib AST only; no imports/collection/execution of test modules",
-        "count_semantics": "Collected-looking top-level test functions and Test-class methods, not parametrized pytest cases or PASS counts",
+        "source_snapshot": "2fc9441",
+        "tracked_python_files_scanned": len(paths),
+        "nonstandard_module_paths": [
+            m["path"]
+            for m in modules
+            if not (m["path"].startswith("tests/") and Path(m["path"]).name.startswith("test_"))
+        ],
+        "method": "All git-tracked Python files parsed with stdlib AST; module/class test* definitions, no imports/collection/execution",
+        "count_semantics": "Module/class test* definitions, including nonstandard file/class names; not parametrized pytest cases, collection claims or PASS counts",
         "modules": len(modules),
         "test_definitions": sum(m["definition_count"] for m in modules),
         "test_modules": modules,
