@@ -1,6 +1,6 @@
 # Stav projektu
 
-**Snímek: 12. 11. 2026 v 00:50 UTC, po začlenění společné predikce původních modelů. Celkový cíl není dokončený.**
+**Snímek: 12. 11. 2026 v 02:55 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
@@ -83,8 +83,8 @@ nikoli důkaz finální kvality nebo obecné shody všech GPU backendů.
 
 Kontrolované varianty raw256, raw384, raw512, CLAHE384 a LC384 dokončily trénink
 60 epoch. Každý použitý checkpoint musí mít vlastní doložené pokrytí anotací;
-dokončení tréninku samo nenahrazuje čerstvou validaci. Raw512 ji v tomto časovém
-snímku ještě dokončuje; u LC uspěl pouze BEST, terminální VAL zastavil limit.
+dokončení tréninku samo nenahrazuje čerstvou validaci. Raw512 ji dokončilo pro BEST50 i LAST60; u LC uspěl pouze BEST, terminální
+VAL zastavil limit.
 CLAHE dokončilo oba průchody všech 770 VAL fotografií, ale proti odpovídajícím
 raw384 checkpointům zhoršilo všech pět pooled Dice i podmíněnou A/V accuracy,
 vždy se záporným párovým 95% intervalem. [Úplný negativní výsledek a omezení](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/clahe384-typed-fresh-val-20261112).
@@ -96,9 +96,22 @@ fotografií / 55 známých skupin / 8 zdrojů. Například TPE BEST58 s rot4/0,3
 zde Dice 0,74824 proti původním 0,76133, párový rozdíl −0,01309
 (95% CI [−0,01856; −0,00879]). Blízká pooled skóre tedy neznamenají shodu na
 těchto datech; [karta modelu](UNIFIED_V3_TPE_PREVIEW.md) tento deficit uvádí.
-Pokračuje nativní Optuna běh; následný samostatný kontrolovaný pokus s dvojnásobnou
-váhou vessel loss je připravený, dosud není spuštěný. Finální výběr, zmrazení
-přesného protokolu a následný TEST zůstávají nedokončené.
+Dokončený raw512 BEST50 s rot4/0,35 zlepšil stejný model proti NONE/0,5:
+macro Dice o 0,01150 a dense vessel Dice o 0,00409, v obou případech s kladným
+párovým intervalem. Změnily se současně TTA i práh; nelze připsat efekt pouze
+jednomu z nich. Dense vessel Dice 0,75132 stále zaostává za původním 0,76133
+a zůstávají také regrese některých zdrojů. [Výsledky a všechny úlohy](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/raw512-BEST50-rot4-035-fresh-val-20261112).
+
+Nativní Optuna trial7 dokončil všech 60 epoch. Jeho LAST60 má vlastní plné
+pokrytí 5 700 variant; BEST46 má jen 5 699 a nesplňuje tuto podmínku předání.
+Čerstvý LAST60 dense vessel Dice 0,74785 je vyšší než odpovídající první TPE
+LAST60 (0,73851), ale stále pod původní sestavou. [Párové výsledky a omezení](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/experiments/leipzig-hpo/reports/TPE7-LAST60-matched-val-20261112).
+
+Samostatný kontrolovaný pokus s dvojnásobnou vahou vessel loss se skutečně učí
+na Adě (poslední kontrola 02:54 UTC: dokončeno 24/60 epoch). Širší jednotný model
+prošel první zkušební epochou; nové pokračování do E27 je odeslané přes PBS.
+Tyto rozběhnuté pokusy dosud nemají konečné porovnání kvality. Finální výběr,
+zmrazení přesného protokolu a následný TEST zůstávají nedokončené.
 
 Korpus V2 má 2 529 TRAIN fotografií / 5 700 anotovaných variant z 21 zdrojů,
 770 VAL a 856 TEST fotografií. Původní VAL data zůstala beze změny. Geometrické
