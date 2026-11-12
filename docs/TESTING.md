@@ -314,3 +314,7 @@ not a new .35 measurement, a TTA quality guarantee or timing of a later candidat
 See the [separate final recipe](FINAL_BENCHMARK_RECIPE.md); it is prepared code,
 not a benchmark of a final selected checkpoint. No source/doc speed correction
 was needed after checking the saved clocks, inventories and original source.
+
+
+Additional real-data verification 2026-11-12: [final-source original full770VAL reproduction](../reports/original-f13-Old-VAL-20261112/README.md), actual child0/outer0,
+exact GTsupport unchanged;807.9985s. This is validation, not TEST or a timing benchmark.

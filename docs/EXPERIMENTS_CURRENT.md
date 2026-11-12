@@ -501,3 +501,10 @@ Finish and audit actual arms, retain all heads/sources and adverse outcomes, the
 freeze the selected checkpoint/threshold/inference protocol before the separate
 reviewed TEST gate. No final selection, TEST permission or release promotion is
 created by this snapshot.
+
+
+Final-source original baseline reproduction completed 2026-11-12 07:21UTC: all770VAL,
+child0/outer0, report6808f293…f94405 under actualOld6d/f13/Python3.12.14.
+Exact GTsupport equals historical182; tiny numeric count differences retained.
+Use [this original final-source report](../reports/original-f13-Old-VAL-20261112/README.md)
+for later final-source freeze. No selection or TEST yet; no old comparison retagging.
