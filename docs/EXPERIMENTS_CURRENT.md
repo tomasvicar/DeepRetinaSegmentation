@@ -40,6 +40,36 @@ checkpoint/TTA/threshold/tiling and distinguishes resident five-mask pipeline,
 input IO, model loading and warmup. It is prepared code, not a new speed result
 or full product API/CLI timing. Final timing follows actual model selection.
 
+## Finish the current comparison
+
+The current search will finish the already running genuine native8 and width24
+experiments, including width24's separately reviewed E27→60 continuation. Do not
+ask another TPE suggestion or add a new manual search arm during this closeout.
+This limits further search work; it does not remove the final deliverables.
+
+1. Verify actual full60 completion and the selected checkpoint's own full TRAIN
+   photo/annotation coverage, then compare exact VAL protocols with all five
+   heads, conditional A/V, dense-vessel support and adverse source results.
+   Partial milestones and the single-database pilots are not final candidates.
+2. Select and freeze one eligible unified checkpoint and exact preprocessing,
+   threshold, TTA and tiling from VAL evidence. Use source-balanced five-head
+   macro as the common research score, alongside per-head/source tradeoffs,
+   simplicity and documented cost. Do not claim uniform improvement when vessels
+   regress. Keep the original verified models available and unchanged.
+3. Evaluate that frozen choice and the fixed strong original four-network recipe
+   on the same untouched856TEST photos. No tuning or replacement of the selection
+   using those TEST results. Measure actual size and the exact selected prediction
+   protocol on paired fixed TRAIN timing inputs, retaining all timing samples.
+4. Publish the selected model, reproducible uv commands, source/weight/data
+   identities and quality/size/speed report beside the original networks.
+   Ship through the repository; no source ZIP or OwnCloud data modification.
+
+Existing reviewed routes already support genuine `curated_fd44` TTA candidates,
+including raw512BEST50/rot4/.35, using the original curated index and selected
+role coverage. The [readiness audit](../reports/heldout-readiness-20261112/README.md)
+records exact future commands and remaining real execution. Its synthetic tests
+are not a TEST-quality result or a selection decision.
+
 ## Product and common data
 
 Use [`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig)
