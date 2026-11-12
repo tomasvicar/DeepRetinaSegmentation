@@ -1,7 +1,7 @@
 # Testing and verification
 
 This is the test inventory for product `for_Leipzig` at
-`d280cf504663136861cc38bcd0e3beeb0219b55e` (12 November 2026).
+`cb507d1fbc7facec4ab86ced137a3e4885c39e24` (12 November 2026).
 **No entire pytest suite, model forward, training, GPU operation or dataset
 decoding was rerun for this inventory.** The separate34-case mocked defaults
 module check is recorded below. Historical PASS records certify their own
@@ -231,3 +231,11 @@ This inventory update ran **stdlib AST/file-metadata checks and static lint of
 the discovery utility only**, as recorded in the [inventory check notes](../reports/testing-inventory-20261112/README.md). Its generated
 JSON enumerates source files and definitions; it cannot replace actual pytest
 collection, execution logs, real-data parity or installed-wheel proofs.
+
+
+Additional focused product regression verification: [original run and corrected historical
+recipe case](../reports/release/bundled-inference-defaults-20261112/focused-existing-regressions/README.md).
+Original run96passed/1failed in16.50s; failure was a historical test missing the
+backward-compatible photometric_profile=raw default. Narrow test-only normalization
+then passed that one metadata case in2.29s; the96 passing cases were not rerun.
+No runtime, weights, registry or model defaults were changed by the correction.
