@@ -144,7 +144,13 @@ wheel as optimizer-free, or silently change that older blob while adding a new
 inference-only model. Original5 reference-model conversions are separate preserved
 safe artifacts. Existing wheel/parity reports are linked in [TESTING.md](TESTING.md).
 
-The new utility has only tiny synthetic CPU export/load/forward parity tests:
+Initial implementation used tiny synthetic CPU export/load/forward parity tests:
 [verification](../reports/release/CPU-inference-export-20261112/verification.json).
-No real model was exported, no packaging/NN-quality/TEST result was created, and
-no final model or inference defaults were chosen during implementation.
+Subsequent [actual existing bundled BEST58 export preflight](../reports/release/CPU-inference-export-20261112/actual-bundled-preview-preflight.json)
+completed onCPU with external exit0. All128 model tensors/config were preserved,
+original SHA/stat unchanged, and safe reload without map_location confirmed CPU
+storage with CUDA uninitialized. Original20d4caab…4d4 and artifact696038a0…5ce
+remain separate identities; the private artifact is outsideGit. BEST58 already
+has no optimizer fields, so this primarily checks real format/config and storage
+compatibility. No forward/realimage/GT/TEST or finalselection/release occurred;
+all12 original packaged blobs, registry entries and defaults remain unchanged.

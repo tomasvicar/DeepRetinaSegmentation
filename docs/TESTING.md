@@ -247,3 +247,10 @@ One tiny9x11 forward pair proves identical toy outputs; no realcheckpoint/data/G
 export or newquality/selection/TEST measurement. Initial bad toyfixture and
 earlierruns are preserved separately. [Final packaging procedure](FINAL_MODEL_PACKAGING.md)
 keeps original frozen checkpoint identity separate from the new artifact.
+
+
+Actual model-format export preflight08:26UTC: [existing bundledTPE BEST58](../reports/release/CPU-inference-export-20261112/actual-bundled-preview-preflight.json),
+[external0 receipt](../reports/release/CPU-inference-export-20261112/actual-bundled-preview-preflight-exit.json).
+All128 model tensors/config preserved, sourceSHA/statunchanged, actualdefault safe
+reload allCPU/CUDAuninitialized. No forward/photos/GT/TEST/finalselection or changed
+registry/blobs; new CPUartifact is a private backup, not a promoted model.
