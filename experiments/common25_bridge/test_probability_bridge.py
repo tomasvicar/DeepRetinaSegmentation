@@ -63,7 +63,7 @@ def grids(shape=(2, 3)):
     source = replace(
         target,
         pixels_per_degree=35,
-        preprocessing_profile="legacy35_raw",
+        preprocessing_profile="experimental35_raw",
         prepared_shape=tuple(round(n * 1.4) for n in shape),
         manifest_sha256="6" * 64,
         content_sha256="7" * 64,
@@ -227,3 +227,14 @@ def test_identity25_requires_equal_actual_policy_not_a35_parent_alias():
     source = replace(target, geometry_policy_sha256="9" * 64)
     with pytest.raises(ValueError, match="Identity25 actual geometry policy"):
         m.bridge(probabilities(source.prepared_shape), source, target)
+
+
+@pytest.mark.parametrize("alias", ["legacy35_raw", "legacy25_raw"])
+def test_source35_requires_exact_producer_profile_without_legacy_alias(alias):
+    source, target = grids()
+    with pytest.raises(ValueError, match="RAW physical profile differs"):
+        m.bridge(
+            probabilities(source.prepared_shape),
+            replace(source, preprocessing_profile=alias),
+            target,
+        )

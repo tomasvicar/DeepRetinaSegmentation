@@ -10,7 +10,7 @@ from skimage.transform import resize
 
 BACKEND = {"numpy": "2.5.4", "scipy": "1.18.1", "scikit-image": "0.26.0"}
 CONVENTION = {
-    "version": 2,
+    "version": 3,
     "coordinates": "source=(target_index+0.5)*source_size/target_size-0.5 per axis",
     "interpolation": "bilinear/order1 on FP32 joint V/A/V/D/C planes",
     "edge": "nearest edge extension (clamp), skimage mode=edge",
@@ -95,7 +95,8 @@ class Grid:
             "Only explicit25/35 grid supported",
         )
         require(
-            self.preprocessing_profile == f"legacy{self.pixels_per_degree:g}_raw",
+            self.preprocessing_profile
+            == {25: "legacy25_raw", 35: "experimental35_raw"}[self.pixels_per_degree],
             "RAW physical profile differs",
         )
         scale = self.pixels_per_degree * self.field_of_view_degrees / max(h, w)

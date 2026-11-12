@@ -91,3 +91,16 @@ Final revision2: **19 passed in0.93s**, exit0; Ruff check0. See
 current source hashes and exact evidence. The previous14-case record remains
 historical and is not treated as a sufficient policy test. No source72/6d,
 original9b850 canary, product code, real policy bytes or real35 corpus were edited.
+
+
+## Explicit producer profile alignment (revision3)
+
+The reviewed RAW35 producer f9d5e66 truthfully emits `experimental35_raw`.
+Source35 admission now requires exactly that profile; target25 remains exactly
+`legacy25_raw`. `legacy35_raw` is not a silent alias, and completed25 data or
+old canary metadata are never relabelled. The distinct actual35 policy plus
+parent25 binding remains mandatory. Root made this naming decision before any
+actual35 build. Geometry/interpolation and identity25 arithmetic are unchanged.
+Two additional synthetic cases reject both legacy aliases for35.
+
+Revision3 actual focused result: **21 passed in0.98s**, exit0; Ruff check0.
