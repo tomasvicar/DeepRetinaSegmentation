@@ -1,7 +1,7 @@
 # Testing and verification
 
 This is the test inventory for product `for_Leipzig` at
-`e27a7747c711c4714fd0616422b405a3132a34e6` (12 November 2026).
+`2fc9441` (12 November 2026; test modules unchanged from `e27a774`).
 **No pytest suite, model forward, training, GPU operation or dataset decoding was
 rerun to write this document.** Historical PASS records below certify their own
 source snapshots and scopes, not an unmeasured entire latest checkout.
@@ -57,7 +57,11 @@ Generating new MATLAB goldens is a separate development activity.
 
 Counts below are **AST test definitions**, not PASS totals and not expanded
 parametrized cases. The machine-readable [inventory](../reports/testing-inventory-20261112/inventory.json)
-lists every definition, line, decorator and exact test-file SHA; this exposes
+lists every definition, line, decorator and exact test-file SHA. Discovery scans
+**all170 Git-tracked Python files**, including scripts/reports/reference modules,
+for module/class `test*` definitions regardless of filename or class prefix.
+No additional nonstandard test-definition modules were found in this product
+snapshot; all61 discovered modules are under `tests/test_*.py`. This exposes
 individual test scope and parametrization without running imports. Regenerate
 it from the repository root with stdlib Python:
 

@@ -1,19 +1,21 @@
 # Current product test inventory, not a test execution result
 
-Snapshot: `e27a7747c711c4714fd0616422b405a3132a34e6`, 12 November 2026.
+Snapshot: `2fc9441` (test modules unchanged from `e27a774`), 12 November 2026.
 
 [docs/TESTING.md](../../docs/TESTING.md) documents every current test module,
 reproducible selected/full-suite commands, input requirements, and existing
 source-scoped observed verification records. The inventory contains **61 modules
 and439 test definitions**, not expanded pytest cases or new PASS counts.
 
-`discover.py` uses stdlib AST to inspect `tests/test_*.py` recursively. It never
+`discover.py` uses Git to enumerate **all170 tracked Python files**, then stdlib
+AST to inspect module/class `test*` definitions regardless of filename or class
+prefix. No additional nonstandard modules were found in this product snapshot. It never
 imports test modules, pytest, Torch, datasets or model checkpoints. `inventory.json`
 records exact module SHAs, every test definition/line/decorator, module docstrings
-and per-module commands. All current modules use top-level test functions;
-Test-prefixed class methods are supported by the discovery helper as well.
-Reference modules under `tests/reference` are supporting oracles, not separate
-pytest modules. Actual pytest import/collection/parameter expansion is a separate
+and per-module commands. All current test modules use top-level functions; methods in any class and
+nonstandard test-bearing report/script files are also supported.
+Reference modules under `tests/reference` were scanned too; they are supporting
+oracles, not additional test-bearing modules in this snapshot. Actual pytest import/collection/parameter expansion is a separate
 operation described in the guide, not claimed here.
 
 Actual documentation checks observed in this work:
