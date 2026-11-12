@@ -6,6 +6,8 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+from scipy.ndimage import binary_fill_holes
+
 from deepretina.legacy.matlab_fov_source import (
     automatic_fov_source,
     automatic_fov_stages,
@@ -15,7 +17,6 @@ from deepretina.legacy.matlab_fov_source import (
     source_rgb2gray,
     source_seed_components,
 )
-from scipy.ndimage import binary_fill_holes
 
 ROOT = Path(__file__).parent / "reference" / "matlab_fov_source"
 META = json.loads((ROOT / "automatic-metadata.json").read_text())

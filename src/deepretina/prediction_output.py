@@ -10,9 +10,7 @@ def check_prediction_output(output: Path) -> Path:
     In particular, a vessel-only prediction must not leave an older cup mask.
     """
     output = Path(output)
-    if output.is_symlink() or (
-        output.exists() and (not output.is_dir() or any(output.iterdir()))
-    ):
+    if output.is_symlink() or (output.exists() and (not output.is_dir() or any(output.iterdir()))):
         raise FileExistsError(
             f"Prediction output must be a new or empty directory: {output}. "
             "Choose a different --output for each prediction."

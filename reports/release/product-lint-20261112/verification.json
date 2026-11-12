@@ -1,0 +1,60 @@
+{
+  "utc": "2026-11-12T10:56:47.817715+00:00",
+  "source_commit": "d2ada5bdedc7bec2d52884b08a3bebcbcdc4efba",
+  "checks": {
+    "check": {
+      "command": [
+        "timeout",
+        "30",
+        "taskset",
+        "-c",
+        "6",
+        "nice",
+        "-n",
+        "17",
+        "ionice",
+        "-c",
+        "3",
+        ".venv/bin/ruff",
+        "check",
+        "--no-cache",
+        "src",
+        "tests",
+        "scripts"
+      ],
+      "returncode": 1,
+      "observed_returncode": true,
+      "seconds": 0.3009147469419986,
+      "stdout": "I001 [*] Import block is un-sorted or un-formatted\n  --> tests/test_matlab_firstcut.py:3:1\n   |\n 1 |   \"\"\"First-cutoff required contract: source oracles, not full-vector certification.\"\"\"\n 2 |\n 3 | / import hashlib\n 4 | | import json\n 5 | | from dataclasses import asdict\n 6 | | from pathlib import Path\n 7 | |\n 8 | | import numpy as np\n 9 | | import pytest\n10 | | from deepretina.legacy.matlab_firstcut import first_cutoff_source\n11 | | from deepretina.legacy.matlab_fov_source import automatic_fov_source, automatic_fov_stages\n   | |__________________________________________________________________________________________^\n12 |\n13 |   ROOT = Path(__file__).parent / \"reference\" / \"matlab_fov_source\"\n   |\nhelp: Organize imports\n   |\n9  | import pytest\n10 +\n11 | from deepretina.legacy.matlab_firstcut import first_cutoff_source\n   |\n\nI001 [*] Import block is un-sorted or un-formatted\n  --> tests/test_matlab_fov_automatic.py:3:1\n   |\n 1 |   \"\"\"Synthetic MATLAB source-stage goldens; no production profile activation.\"\"\"\n 2 |\n 3 | / import hashlib\n 4 | | import json\n 5 | | from pathlib import Path\n 6 | |\n 7 | | import numpy as np\n 8 | | import pytest\n 9 | | from deepretina.legacy.matlab_fov_source import (\n10 | |     automatic_fov_source,\n11 | |     automatic_fov_stages,\n12 | |     source_close,\n13 | |     source_disk10,\n14 | |     source_histcounts250,\n15 | |     source_rgb2gray,\n16 | |     source_seed_components,\n17 | | )\n18 | | from scipy.ndimage import binary_fill_holes\n   | |___________________________________________^\n19 |\n20 |   ROOT = Path(__file__).parent / \"reference\" / \"matlab_fov_source\"\n   |\nhelp: Organize imports\n   |\n8  | import pytest\n9  + from scipy.ndimage import binary_fill_holes\n10 +\n11 | from deepretina.legacy.matlab_fov_source import (\n--------------------------------------------------------------------------------\n19 | )\n   - from scipy.ndimage import binary_fill_holes\n20 |\n   |\n\nI001 [*] Import block is un-sorted or un-formatted\n  --> tests/test_matlab_source_auto.py:3:1\n   |\n 1 |   \"\"\"Optional automatic-source composition: no network or actual GT reader.\"\"\"\n 2 |\n 3 | / import hashlib\n 4 | | import inspect\n 5 | | import json\n 6 | | from pathlib import Path\n 7 | |\n 8 | | import numpy as np\n 9 | | import pytest\n10 | | from deepretina.legacy import matlab_av\n11 | | from deepretina.legacy import matlab_source_auto as module\n12 | | from deepretina.legacy.matlab_fov_source import automatic_fov_source, automatic_fov_stages\n13 | | from deepretina.legacy.matlab_resize import imresize_bicubic\n   | |____________________________________________________________^\n14 |\n15 |   ROOT = Path(__file__).parent / \"reference\" / \"matlab_fov_source\"\n   |\nhelp: Organize imports\n   |\n9  | import pytest\n10 +\n11 | from deepretina.legacy import matlab_av\n   |\n\nI001 [*] Import block is un-sorted or un-formatted\n  --> tests/test_matlab_threshold_study.py:3:1\n   |\n 1 |   \"\"\"Fixed250-bin source goldens and explicitly uncertified threshold candidate.\"\"\"\n 2 |\n 3 | / import hashlib\n 4 | | import importlib.util\n 5 | | import json\n 6 | | from pathlib import Path\n 7 | |\n 8 | | import numpy as np\n 9 | | import pytest\n10 | | from deepretina.legacy.matlab_fov_source import implicit_histcounts250_edges\n   | |____________________________________________________________________________^\n11 |\n12 |   ROOT = Path(__file__).parent / \"reference\" / \"matlab_fov_source\"\n   |\nhelp: Organize imports\n   |\n9  | import pytest\n10 +\n11 | from deepretina.legacy.matlab_fov_source import implicit_histcounts250_edges\n   |\n\nFound 4 errors.\n[*] 4 fixable with `--fix`.\n",
+      "stderr": ""
+    },
+    "format": {
+      "command": [
+        "timeout",
+        "30",
+        "taskset",
+        "-c",
+        "6",
+        "nice",
+        "-n",
+        "17",
+        "ionice",
+        "-c",
+        "3",
+        ".venv/bin/ruff",
+        "format",
+        "--check",
+        "--no-cache",
+        "src",
+        "tests",
+        "scripts"
+      ],
+      "returncode": 1,
+      "observed_returncode": true,
+      "seconds": 0.2970977819059044,
+      "stdout": "unformatted: File would be reformatted\n  --> src/deepretina/prediction_output.py:13:32\n   |\n12 |     output = Path(output)\n   -     if output.is_symlink() or (\n   -         output.exists() and (not output.is_dir() or any(output.iterdir()))\n   -     ):\n13 +     if output.is_symlink() or (output.exists() and (not output.is_dir() or any(output.iterdir()))):\n14 |         raise FileExistsError(\n   |\n\nunformatted: File would be reformatted\n  --> tests/test_prediction_output.py:19:11\n   |\n18 |     probability = np.full((3, 3, 4), 0.75, np.float32)\n   -     _save(\n   -         output, rgb, probability, (\"vessel\", \"disc\", \"cup\"), probability > 0.5, {}\n   -     )\n19 +     _save(output, rgb, probability, (\"vessel\", \"disc\", \"cup\"), probability > 0.5, {})\n20 |     original = {p.name: p.read_bytes() for p in output.iterdir()}\n   |\n\n2 files would be reformatted, 134 files already formatted\n",
+      "stderr": ""
+    }
+  },
+  "no_model_data_GPU_or_NN": true
+}

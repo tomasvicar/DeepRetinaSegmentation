@@ -7,6 +7,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+
 from deepretina.legacy import matlab_av
 from deepretina.legacy import matlab_source_auto as module
 from deepretina.legacy.matlab_fov_source import automatic_fov_source, automatic_fov_stages

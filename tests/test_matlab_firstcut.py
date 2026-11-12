@@ -7,6 +7,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+
 from deepretina.legacy.matlab_firstcut import first_cutoff_source
 from deepretina.legacy.matlab_fov_source import automatic_fov_source, automatic_fov_stages
 

@@ -1,0 +1,93 @@
+{
+  "utc": "2026-11-12T10:57:43.047718+00:00",
+  "parent_commit": "d2ada5bdedc7bec2d52884b08a3bebcbcdc4efba",
+  "ruff_version": "ruff 0.17.4",
+  "changed_sources": {
+    "src/deepretina/prediction_output.py": {
+      "all_nonimport_AST_equal": true,
+      "whole_module_AST_equal": true,
+      "sha256_after": "81d6f88a8d25bb42cac97b5ebbd5e095f720b2443d426e01ed9268bf99251ab5"
+    },
+    "tests/test_matlab_firstcut.py": {
+      "all_nonimport_AST_equal": true,
+      "whole_module_AST_equal": true,
+      "sha256_after": "51835ead8ef3c587787ff043b098c4293c00ddd5e4c03140c4a5853ea4f0bfef"
+    },
+    "tests/test_matlab_fov_automatic.py": {
+      "all_nonimport_AST_equal": true,
+      "whole_module_AST_equal": false,
+      "sha256_after": "46b42a2bd6465ffc695cf6e583721299c4028e1abb3b057bb10488cc10a64bc8"
+    },
+    "tests/test_matlab_source_auto.py": {
+      "all_nonimport_AST_equal": true,
+      "whole_module_AST_equal": true,
+      "sha256_after": "b6f11ad14c159012da9cc50dcf142dcbcb4f7bec6f704ec4bc9d18a6b73e6a90"
+    },
+    "tests/test_matlab_threshold_study.py": {
+      "all_nonimport_AST_equal": true,
+      "whole_module_AST_equal": true,
+      "sha256_after": "cfca85a2114c689a97616c39b35e29c174a38a93f0ca18cc98302ec4ac20d551"
+    },
+    "tests/test_prediction_output.py": {
+      "all_nonimport_AST_equal": true,
+      "whole_module_AST_equal": true,
+      "sha256_after": "fbd923c053b6a390f7e63696ab5d818c0d52956d2d7b5038b100dd774ccedbeb"
+    }
+  },
+  "checks": {
+    "check": {
+      "command": [
+        "timeout",
+        "30",
+        "taskset",
+        "-c",
+        "6",
+        "nice",
+        "-n",
+        "17",
+        "ionice",
+        "-c",
+        "3",
+        ".venv/bin/ruff",
+        "check",
+        "--no-cache",
+        "src",
+        "tests",
+        "scripts"
+      ],
+      "returncode": 0,
+      "observed_returncode": true,
+      "seconds": 0.20699105481617153,
+      "stdout": "All checks passed!\n",
+      "stderr": ""
+    },
+    "format": {
+      "command": [
+        "timeout",
+        "30",
+        "taskset",
+        "-c",
+        "6",
+        "nice",
+        "-n",
+        "17",
+        "ionice",
+        "-c",
+        "3",
+        ".venv/bin/ruff",
+        "format",
+        "--check",
+        "--no-cache",
+        "src",
+        "tests",
+        "scripts"
+      ],
+      "returncode": 0,
+      "observed_returncode": true,
+      "seconds": 0.18869421281851828,
+      "stdout": "136 files already formatted\n",
+      "stderr": ""
+    }
+  },
+  "no_model_data_GPU_or_NN": true
+}

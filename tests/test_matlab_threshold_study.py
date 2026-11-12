@@ -7,6 +7,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+
 from deepretina.legacy.matlab_fov_source import implicit_histcounts250_edges
 
 ROOT = Path(__file__).parent / "reference" / "matlab_fov_source"

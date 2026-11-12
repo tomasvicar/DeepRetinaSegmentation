@@ -1,0 +1,115 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/test_matlab_firstcut.py:3:1
+   |
+ 1 |   """First-cutoff required contract: source oracles, not full-vector certification."""
+ 2 |
+ 3 | / import hashlib
+ 4 | | import json
+ 5 | | from dataclasses import asdict
+ 6 | | from pathlib import Path
+ 7 | |
+ 8 | | import numpy as np
+ 9 | | import pytest
+10 | | from deepretina.legacy.matlab_firstcut import first_cutoff_source
+11 | | from deepretina.legacy.matlab_fov_source import automatic_fov_source, automatic_fov_stages
+   | |__________________________________________________________________________________________^
+12 |
+13 |   ROOT = Path(__file__).parent / "reference" / "matlab_fov_source"
+   |
+help: Organize imports
+   |
+9  | import pytest
+10 +
+11 | from deepretina.legacy.matlab_firstcut import first_cutoff_source
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/test_matlab_fov_automatic.py:3:1
+   |
+ 1 |   """Synthetic MATLAB source-stage goldens; no production profile activation."""
+ 2 |
+ 3 | / import hashlib
+ 4 | | import json
+ 5 | | from pathlib import Path
+ 6 | |
+ 7 | | import numpy as np
+ 8 | | import pytest
+ 9 | | from deepretina.legacy.matlab_fov_source import (
+10 | |     automatic_fov_source,
+11 | |     automatic_fov_stages,
+12 | |     source_close,
+13 | |     source_disk10,
+14 | |     source_histcounts250,
+15 | |     source_rgb2gray,
+16 | |     source_seed_components,
+17 | | )
+18 | | from scipy.ndimage import binary_fill_holes
+   | |___________________________________________^
+19 |
+20 |   ROOT = Path(__file__).parent / "reference" / "matlab_fov_source"
+   |
+help: Organize imports
+   |
+8  | import pytest
+9  + from scipy.ndimage import binary_fill_holes
+10 +
+11 | from deepretina.legacy.matlab_fov_source import (
+--------------------------------------------------------------------------------
+19 | )
+   - from scipy.ndimage import binary_fill_holes
+20 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/test_matlab_source_auto.py:3:1
+   |
+ 1 |   """Optional automatic-source composition: no network or actual GT reader."""
+ 2 |
+ 3 | / import hashlib
+ 4 | | import inspect
+ 5 | | import json
+ 6 | | from pathlib import Path
+ 7 | |
+ 8 | | import numpy as np
+ 9 | | import pytest
+10 | | from deepretina.legacy import matlab_av
+11 | | from deepretina.legacy import matlab_source_auto as module
+12 | | from deepretina.legacy.matlab_fov_source import automatic_fov_source, automatic_fov_stages
+13 | | from deepretina.legacy.matlab_resize import imresize_bicubic
+   | |____________________________________________________________^
+14 |
+15 |   ROOT = Path(__file__).parent / "reference" / "matlab_fov_source"
+   |
+help: Organize imports
+   |
+9  | import pytest
+10 +
+11 | from deepretina.legacy import matlab_av
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/test_matlab_threshold_study.py:3:1
+   |
+ 1 |   """Fixed250-bin source goldens and explicitly uncertified threshold candidate."""
+ 2 |
+ 3 | / import hashlib
+ 4 | | import importlib.util
+ 5 | | import json
+ 6 | | from pathlib import Path
+ 7 | |
+ 8 | | import numpy as np
+ 9 | | import pytest
+10 | | from deepretina.legacy.matlab_fov_source import implicit_histcounts250_edges
+   | |____________________________________________________________________________^
+11 |
+12 |   ROOT = Path(__file__).parent / "reference" / "matlab_fov_source"
+   |
+help: Organize imports
+   |
+9  | import pytest
+10 +
+11 | from deepretina.legacy.matlab_fov_source import implicit_histcounts250_edges
+   |
+
+Found 4 errors.
+[*] 4 fixable with `--fix`.

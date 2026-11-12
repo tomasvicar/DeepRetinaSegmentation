@@ -1,0 +1,23 @@
+unformatted: File would be reformatted
+  --> src/deepretina/prediction_output.py:13:32
+   |
+12 |     output = Path(output)
+   -     if output.is_symlink() or (
+   -         output.exists() and (not output.is_dir() or any(output.iterdir()))
+   -     ):
+13 +     if output.is_symlink() or (output.exists() and (not output.is_dir() or any(output.iterdir()))):
+14 |         raise FileExistsError(
+   |
+
+unformatted: File would be reformatted
+  --> tests/test_prediction_output.py:19:11
+   |
+18 |     probability = np.full((3, 3, 4), 0.75, np.float32)
+   -     _save(
+   -         output, rgb, probability, ("vessel", "disc", "cup"), probability > 0.5, {}
+   -     )
+19 +     _save(output, rgb, probability, ("vessel", "disc", "cup"), probability > 0.5, {})
+20 |     original = {p.name: p.read_bytes() for p in output.iterdir()}
+   |
+
+2 files would be reformatted, 134 files already formatted

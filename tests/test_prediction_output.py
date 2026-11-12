@@ -16,9 +16,7 @@ def test_reusing_universal_output_for_vessel_preserves_entire_first_prediction(t
     output = tmp_path / "prediction"
     rgb = np.zeros((3, 4, 3), np.uint8)
     probability = np.full((3, 3, 4), 0.75, np.float32)
-    _save(
-        output, rgb, probability, ("vessel", "disc", "cup"), probability > 0.5, {}
-    )
+    _save(output, rgb, probability, ("vessel", "disc", "cup"), probability > 0.5, {})
     original = {p.name: p.read_bytes() for p in output.iterdir()}
     with pytest.raises(FileExistsError, match="new or empty"):
         _save(output, rgb, probability[:1], ("vessel",), probability[:1] > 0.5, {})
