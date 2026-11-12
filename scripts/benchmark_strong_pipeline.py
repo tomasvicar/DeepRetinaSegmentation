@@ -68,10 +68,48 @@ def input_snapshots(image_path, fov_path):
 
 
 CUP_COMPONENT_POLICY = "Fresh native cup strictlogit>0 vs cup intersect SAMEforward fresh dedicated disc strictlogit>0; no GTused for clipping"
+FROZEN_ORIGINAL_POLICY_SHA256 = "eed8e889e138624acecfc583ab6ac455ef7f8312d950626c574ca12823907705"
+
+
+def frozen_reference_policy(reference):
+    """Read the explicit frozen producer schema without retagging its report."""
+    if reference.get("family") != "frozen_original_reference":
+        return None
+    policy = reference.get("policy_spec")
+    raw = json.dumps(policy, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+    if (
+        reference.get("schema_version") != 1
+        or hashlib.sha256(raw).hexdigest() != FROZEN_ORIGINAL_POLICY_SHA256
+    ):
+        raise ValueError("Frozen original policy differs from the fixed four-network recipe")
+    keys = {
+        "vessel": "vessel_checkpoint_sha256",
+        "disc": "disc_checkpoint_sha256",
+        "universal": "checkpoint_sha256",
+        "av": "av_checkpoint_sha256",
+    }
+    if any(reference.get(key) != policy["model_sha256"][name] for name, key in keys.items()):
+        raise ValueError("Frozen original report model identities differ from its policy")
+    return policy
+
+
+def reference_disc_variant(reference):
+    return (
+        "disc0/raw"
+        if frozen_reference_policy(reference) is not None
+        else reference["disc_reference_variant"]
+    )
+
+
+def reference_gt_policy(reference):
+    frozen = frozen_reference_policy(reference)
+    return frozen["gt"] if frozen is not None else reference.get("policy")
 
 
 def reference_cup_policy(reference):
     """Identify the completed paired source policy, without reading GT/resources."""
+    if frozen_reference_policy(reference) is not None:
+        return "inside-disc"
     component = reference.get("fresh_paired_cup_component")
     if component is None:
         if reference.get("optional_cup_postprocessing_experiment") is not None:
@@ -93,21 +131,26 @@ def reference_cup_policy(reference):
 
 def validate_reference(reference, paths, *, cup_policy="native", disc_variant=None):
     """Require precisely the calibrated four-component validation reference."""
+    frozen = frozen_reference_policy(reference)
     if (
-        reference.get("family")
-        not in {"original_reference", "optional_fresh_paired_cup_experiment"}
-        or reference.get("family") == "optional_fresh_paired_cup_experiment"
-        and not reference.get("fresh_paired_cup_component")
-        or reference.get("split") != "val"
+        reference.get("split") != "val"
         or reference.get("preview_only") is not False
-        or reference.get("av_preprocessing_profile") != "vesclass_matlab_provided_fov_calibrated"
-        or reference.get("disc_reference_variant") not in {"disc0/raw", "disc1/raw"}
-        or reference.get("single_net_normalized") is not False
+        or frozen is None
+        and (
+            reference.get("family")
+            not in {"original_reference", "optional_fresh_paired_cup_experiment"}
+            or reference.get("family") == "optional_fresh_paired_cup_experiment"
+            and not reference.get("fresh_paired_cup_component")
+            or reference.get("av_preprocessing_profile")
+            != "vesclass_matlab_provided_fov_calibrated"
+            or reference.get("disc_reference_variant") not in {"disc0/raw", "disc1/raw"}
+            or reference.get("single_net_normalized") is not False
+        )
     ):
         raise ValueError("Require a full calibrated AV + dedicated raw disc validation reference")
     if cup_policy not in {"native", "inside-disc"}:
         raise ValueError("Unknown original cup policy")
-    if disc_variant is not None and reference["disc_reference_variant"] != disc_variant:
+    if disc_variant is not None and reference_disc_variant(reference) != disc_variant:
         raise ValueError("Selected disc variant differs from reference")
     if cup_policy == "inside-disc" and disc_variant is None:
         raise ValueError("Inside-disc requires an explicit selected disc variant")
@@ -121,7 +164,7 @@ def validate_reference(reference, paths, *, cup_policy="native", disc_variant=No
             or any(c not in "0123456789abcdef" for c in value)
         ):
             raise ValueError("Require exact reference manifest/canonical SHA256 metadata")
-    if not isinstance(reference.get("policy"), str) or not reference["policy"]:
+    if not isinstance(reference_gt_policy(reference), str) or not reference_gt_policy(reference):
         raise ValueError("Require declared quality reference GT/decoding policy")
     keys = {
         "vessel": "vessel_checkpoint_sha256",
@@ -172,7 +215,12 @@ def unified_operation(rgb, fov, model, config, device, kwargs, *, threshold=0.5,
     )
     image = torch.from_numpy(processed.transpose(2, 0, 1).copy()).float() / 255
     probability = predict_probabilities(
-        model, image, device, config, config.tile_size, config.overlap,
+        model,
+        image,
+        device,
+        config,
+        config.tile_size,
+        config.overlap,
         **({"tta": tta} if tta != "none" else {}),
     )
     probability[[0, 3, 4]] *= prepared.fov[None]
@@ -189,18 +237,25 @@ def package_identity():
     files = sorted(root.rglob("*.py"))
     for path in files:
         digest.update(path.relative_to(root).as_posix().encode() + b"\0" + path.read_bytes())
-    return {"package_root": str(root), "python_package_tree_sha256": digest.hexdigest(),
-            "python_files": len(files), "unified_module_sha256": sha256(unified_api.__file__),
-            "timing_helper_sha256": sha256(Path(__file__).with_name("benchmark_latency.py"))}
+    return {
+        "package_root": str(root),
+        "python_package_tree_sha256": digest.hexdigest(),
+        "python_files": len(files),
+        "unified_module_sha256": sha256(unified_api.__file__),
+        "timing_helper_sha256": sha256(Path(__file__).with_name("benchmark_latency.py")),
+    }
 
 
 def output_identity(masks, shape):
     """Inspect the retained last call outside clocks; never add a forward."""
     if not isinstance(masks, np.ndarray) or masks.dtype != np.bool_ or masks.shape != (5, *shape):
         raise ValueError("Require five original-frame boolean masks")
-    return {"shape": list(masks.shape), "dtype": str(masks.dtype),
-            "sha256": hashlib.sha256(masks.tobytes()).hexdigest(),
-            "foreground_pixels": masks.sum(axis=(1, 2)).tolist()}
+    return {
+        "shape": list(masks.shape),
+        "dtype": str(masks.dtype),
+        "sha256": hashlib.sha256(masks.tobytes()).hexdigest(),
+        "foreground_pixels": masks.sum(axis=(1, 2)).tolist(),
+    }
 
 
 def timed_load(operation, device):
@@ -290,17 +345,28 @@ def benchmark(args):
     )
     tile = getattr(args, "unified_tile_size", None)
     overlap = getattr(args, "unified_overlap", None)
-    config = inference_config(payload, tile_size=tile, overlap=overlap) if tile is not None or overlap is not None else UnifiedConfig(**payload["config"])
+    config = (
+        inference_config(payload, tile_size=tile, overlap=overlap)
+        if tile is not None or overlap is not None
+        else UnifiedConfig(**payload["config"])
+    )
     if config.purpose != "full_data" or not all(model.supervised_channels):
         raise ValueError("Require a full-data unified model supervised on all five heads")
     if config.preprocessing_profile != "legacy25_raw":
         raise ValueError("Benchmark requires the declared raw legacy25 unified profile")
+
     def unified_call():
         current_rgb, current_fov = inputs_for_call()
         options = {"tta": tta} if tta != "none" else {}
         last_outputs["unified"] = unified_operation(
-            current_rgb, current_fov, model, config, device, kwargs,
-            threshold=args.unified_threshold, **options
+            current_rgb,
+            current_fov,
+            model,
+            config,
+            device,
+            kwargs,
+            threshold=args.unified_threshold,
+            **options,
         )
 
     with torch.inference_mode(), torch.autocast(device.type, enabled=False):
@@ -317,7 +383,12 @@ def benchmark(args):
     return {
         "schema_version": 1,
         "accuracy_claim": False,
-        "scope": "one raw photo; five-mask pipeline preprocessing+model+restore/decode; excludes model loading/output serialization/CLI startup" + ("; includes input read/decode/SHA per call" if include_input_io else "; excludes input file IO"),
+        "scope": "one raw photo; five-mask pipeline preprocessing+model+restore/decode; excludes model loading/output serialization/CLI startup"
+        + (
+            "; includes input read/decode/SHA per call"
+            if include_input_io
+            else "; excludes input file IO"
+        ),
         "script_sha256": sha256(__file__),
         "input_sha256": input_identity["input_sha256"],
         "fov_sha256": input_identity["fov_sha256"],
@@ -330,34 +401,59 @@ def benchmark(args):
         else platform.processor(),
         "torch": str(torch.__version__),
         "cpu_threads": torch.get_num_threads(),
-        "runtime": {"python": platform.python_version(), "numpy": np.__version__, "opencv": cv2.__version__,
+        "runtime": {
+            "python": platform.python_version(),
+            "numpy": np.__version__,
+            "opencv": cv2.__version__,
             "interop_threads": torch.get_num_interop_threads(),
             "opencv_threads": cv2.getNumThreads(),
             "inference_precision": "float32_no_autocast",
-            "affinity": sorted(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else None,
+            "affinity": sorted(os.sched_getaffinity(0))
+            if hasattr(os, "sched_getaffinity")
+            else None,
             "machine": platform.machine(),
             "cuda_runtime": torch.version.cuda,
-            "gpu_uuid": str(torch.cuda.get_device_properties(device).uuid) if device.type == "cuda" else None,
+            "gpu_uuid": str(torch.cuda.get_device_properties(device).uuid)
+            if device.type == "cuda"
+            else None,
             "torch_default_dtype": str(torch.get_default_dtype()),
             "cudnn_benchmark": torch.backends.cudnn.benchmark,
             "cudnn_deterministic": torch.backends.cudnn.deterministic,
             "cudnn_allow_tf32": torch.backends.cudnn.allow_tf32,
-            "process_nice": os.getpriority(os.PRIO_PROCESS, 0) if hasattr(os, "getpriority") else None,
+            "process_nice": os.getpriority(os.PRIO_PROCESS, 0)
+            if hasattr(os, "getpriority")
+            else None,
             "cuda_matmul_allow_tf32": torch.backends.cuda.matmul.allow_tf32,
-            "thread_environment": {k: os.environ.get(k) for k in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS")},
-            "whole_process_peak_RSS_KiB_not_per_pipeline": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss},
+            "thread_environment": {
+                k: os.environ.get(k)
+                for k in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS")
+            },
+            "whole_process_peak_RSS_KiB_not_per_pipeline": resource.getrusage(
+                resource.RUSAGE_SELF
+            ).ru_maxrss,
+        },
         "execution_source": package_identity(),
         "last_mask_identity_no_extra_forward": masks,
-        **({"model_load_seconds": {"original_four_networks": original_load_seconds, "unified": unified_load_seconds},
-             "load_scope": "same-process deserialize+device transfer, synchronized; preceding byte hashes warm filesystem; not cold process startup"} if phase_timings else {}),
+        **(
+            {
+                "model_load_seconds": {
+                    "original_four_networks": original_load_seconds,
+                    "unified": unified_load_seconds,
+                },
+                "load_scope": "same-process deserialize+device transfer, synchronized; preceding byte hashes warm filesystem; not cold process startup",
+            }
+            if phase_timings
+            else {}
+        ),
         "original": {
             "network_count": 4,
             "checkpoint_sha256": {key: before[key] for key in paths},
             "reference_sha256": before["reference"],
             "reference_manifest_sha256": reference["manifest_sha256"],
             "reference_prepared_content_sha256": reference["prepared_content_sha256"],
-            "quality_reference_gt_policy": reference["policy"],
-            "disc_variant": reference["disc_reference_variant"],
+            "reference_family": reference["family"],
+            "quality_reference_gt_policy": reference_gt_policy(reference),
+            "disc_variant": reference_disc_variant(reference),
             "cup_policy": cup_policy,
             "cup_decoding": "native universal/raw strictlogit>0"
             if cup_policy == "native"
@@ -377,9 +473,14 @@ def benchmark(args):
             "parameters": sum(p.numel() for p in model.parameters()),
             "checkpoint_bytes": args.unified.stat().st_size,
             "config": payload["config"],
-            "model_tensor_bytes": sum(t.numel() * t.element_size() for t in model.state_dict().values()),
-            "floating_model_dtypes": sorted({str(t.dtype) for t in model.state_dict().values() if t.is_floating_point()}),
-            "optimizer_or_training_state_present": "optimizer" in payload or "training_state" in payload,
+            "model_tensor_bytes": sum(
+                t.numel() * t.element_size() for t in model.state_dict().values()
+            ),
+            "floating_model_dtypes": sorted(
+                {str(t.dtype) for t in model.state_dict().values() if t.is_floating_point()}
+            ),
+            "optimizer_or_training_state_present": "optimizer" in payload
+            or "training_state" in payload,
             "weight_transformation_or_compression_applied": False,
             "checkpoint_epoch": payload.get("epoch"),
             "timing": unified_timing,
@@ -432,12 +533,23 @@ def main():
     parser.add_argument("--unified-tta", choices=MODES, default="none")
     parser.add_argument("--unified-tile-size", type=int)
     parser.add_argument("--unified-overlap", type=int)
-    parser.add_argument("--expected-unified-sha256", help="Exact already-selected immutable checkpoint SHA; does not select a model")
+    parser.add_argument(
+        "--expected-unified-sha256",
+        help="Exact already-selected immutable checkpoint SHA; does not select a model",
+    )
     parser.add_argument("--cpu-threads", type=int)
     parser.add_argument("--interop-threads", type=int)
     parser.add_argument("--opencv-threads", type=int)
-    parser.add_argument("--phase-timings", action="store_true", help="Record synchronized model-load and each warmup call separately")
-    parser.add_argument("--include-input-io", action="store_true", help="Read/decode/hash same pinned RGB+FOV inside every mask-pipeline call; output IO still excluded")
+    parser.add_argument(
+        "--phase-timings",
+        action="store_true",
+        help="Record synchronized model-load and each warmup call separately",
+    )
+    parser.add_argument(
+        "--include-input-io",
+        action="store_true",
+        help="Read/decode/hash same pinned RGB+FOV inside every mask-pipeline call; output IO still excluded",
+    )
     parser.add_argument("--warmup", type=int, default=1)
     parser.add_argument("--repeats", type=int, default=3)
     args = parser.parse_args()

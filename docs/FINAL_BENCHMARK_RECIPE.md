@@ -25,6 +25,19 @@ borrow that report's full quality metrics silently. Existing product TRAIN
 parity evidence confirms the five composed masks match the historical3a03
 benchmark operation; this preparation does not repeat a model forward.
 
+The current `frozen_original_reference` VAL schema (including original182) is
+also accepted explicitly. Its complete `policy_spec` must match the fixed
+four-network policy SHAeed8e889…07705, including all four model identities; the
+actual files must match the unchanged top-level hashes. Its original family,
+whole report SHA and GT policy are recorded directly. No synthetic historical
+cup-component fields are inserted into the report. Changed cup/AV policy,
+checkpoint identity, disc variant, TEST/preview or incompatible schema is rejected.
+The [schema check](../reports/final-benchmark-preparation-20261112/frozen-reference-schema-check.json)
+records51 targeted test cases and an actual original182 metadata/four-weight-byte
+check, with CUDA uninitialized and no model deserialization/forward. This is not
+a timing or memory-fit result. Earlier staged timing script bytes are historical;
+use the current script and matching helper for the eventual final measurement.
+
 Do not use `benchmark_latency.py`'s old benchmark entrypoint for this comparison:
 it measures a universal+AV **two-network proxy**, with uncertified raw AV and,
 for nonraw unified, unlike model-only timing. Only its shared CUDA-synchronized

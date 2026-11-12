@@ -1,0 +1,22 @@
+{
+  "kind": "frozen_original_reference_benchmark_schema_compatibility_not_timing",
+  "reason": "The existing timing validator only accepted historical composed-report families; the current frozen_original_reference producer stores its fixed recipe in policy_spec. Accept that schema explicitly without retagging or rewriting input.",
+  "tests": {
+    "command": "CUDA_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 timeout 60 taskset -c 6 nice -n 17 ionice -c 3 /var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/bin/python -m pytest -q tests/test_strong_pipeline_benchmark.py tests/test_benchmark_manifest.py --basetemp=/var/home/tom/code/DeepRetinaSegmentation_hpo/.pytest-frozen-reference-root",
+    "actual_returncode": 0,
+    "observed_tool_chunk": "58b200",
+    "stdout": "51 passed in 7.61s",
+    "scope": "Synthetic metadata/prediction/timing fixtures; no real model or image/GT/TEST evaluation"
+  },
+  "actual_reference_metadata_check": {
+    "chunk_id": "cf1ae8",
+    "wall_time_seconds": 0.000028774,
+    "exit_code": 0,
+    "original_token_count": 117,
+    "output": "{\"actual_frozen182_reference_metadata_passed\": true, \"report_sha256\": \"182ad346b7bda554ae58e76acbc3f17d99228a30bd19cfa335c89534e9f66836\", \"report_family_unchanged\": \"frozen_original_reference\", \"four_actual_encoded_weight_SHA_checked\": true, \"policy_sha256\": \"eed8e889e138624acecfc583ab6ac455ef7f8312d950626c574ca12823907705\", \"disc\": \"disc0/raw\", \"cup\": \"inside-disc\", \"model_deserialization_or_forward\": false, \"CUDA_initialized\": false, \"GT_or_TEST_read\": false}\n"
+  },
+  "policy_sha256": "eed8e889e138624acecfc583ab6ac455ef7f8312d950626c574ca12823907705",
+  "Ruff_and_diff_check_returncode": 0,
+  "changed_model_arithmetic": false,
+  "actual_benchmark_executed": false
+}
