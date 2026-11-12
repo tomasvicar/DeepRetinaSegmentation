@@ -134,3 +134,9 @@ Revision2 final result: **28 passed in0.17s**, exit0; Ruff check0. New regressio
 fixtures initially exposed3 failures against unchangedv1 (23 passed); their FIFO
 spy refused the leaf open, so no hang occurred. After the concrete fixes, final
 FIFO/type/stat and directory-node limits pass. See verification-v2.json.
+
+## Final handover status — deferred
+
+The user stopped further RAW35 experiments and accepted the selected raw512 model's documented vessel Dice tradeoff. This tool is an isolated research preparation, not a requirement for the usable product handover. The one actual encoded-resource audit failed on the REFUGE scoped mask lookup; it did not publish a complete resources manifest. A later bounded ZIP-directory-only query identified the intervening `Glaucoma/` folder. No successful full audit or native35 data build is claimed.
+
+A shared typed selector draft was prepared separately by another agent. Its adoption into this auditor, revised plan export, new activation and actual byte audit are **DEFERRED / INCOMPLETE**. Existing failed-run receipts and old profiles remain unchanged. Do not treat synthetic tests or that unintegrated draft as real data readiness or authorization to run.
