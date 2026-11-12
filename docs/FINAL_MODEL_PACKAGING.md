@@ -1,10 +1,11 @@
 # Package a selected unified model without changing its frozen identity
 
-This is a future release procedure, **not** selection of raw512 or another
-candidate. No new real checkpoint, registry entry, inference default or alias is
-introduced by the CPU export utility. All12 existing bundled blobs remain exact.
-Formal training-completion/freeze/TEST evidence and ordinary product prediction
-are separate contracts.
+This procedure has been applied to the separately named
+[`unified-raw512-selected`](UNIFIED_RAW512_SELECTED.md) release: the registry now
+contains 13 models, and all 12 prior blobs/entries/aliases remain unchanged. The
+CPU export utility itself does not select a model or add a registry entry; those
+are separate reviewed release steps. Formal training-completion/freeze/TEST
+evidence and ordinary product prediction remain separate contracts.
 
 ## Keep original selection/TEST bytes
 
