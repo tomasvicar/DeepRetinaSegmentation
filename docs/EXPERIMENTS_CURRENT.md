@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-## Current update: 12 November 2026, 18:55 UTC
+## Current update: 12 November 2026, 19:10 UTC
 
 The selected raw512 BEST50 unified model is available beside the original models
 on [`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig).
@@ -34,9 +34,11 @@ against the matched control, while macro change -0.016561 has interval
 `669a67e95bbfba07b2a299a9ef61629a09fdfa968e5778a8c4eb032d6b5792ec`.
 Original execution receipts are preserved in the private operations repository.
 
-The native BEST58 checkpoint has independent full TRAIN coverage. Its separate
-CPU eligibility and a prospective shared rot4/eight-threshold calibration are
-being prepared; no calibration result or promotion is claimed. No new TEST,
+The native BEST58 checkpoint has independent full TRAIN coverage and passed its
+separate CPU eligibility check. One shared rot4/eight-threshold calibration
+launched on Old at 19:06:56 UTC; the existing 19:10 observer confirms 93/770
+photos processed with the expected physical GPU, FP32 and resource limits.
+It has no completed calibration result or promotion yet. No new TEST,
 Optuna suggestion, product default change or PBS submission occurs in these
 follow-ups. RAW35 producer and common25 bridge code remain isolated experimental
 preparations with synthetic checks, not a completed full-corpus build or training.
