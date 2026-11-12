@@ -1,0 +1,71 @@
+{
+  "kind": "paired_TEST_dense_vessel_saved_count_supplement",
+  "support": {
+    "photos": 102,
+    "known_split_groups": 71,
+    "sources": [
+      "aria",
+      "chasedb1",
+      "drhagis",
+      "erlangen",
+      "hrf",
+      "iostar",
+      "rite",
+      "stare"
+    ]
+  },
+  "excluded_only": "AVRDB positive-only vessel support",
+  "AVRDB_supported_photos": 20,
+  "original": {
+    "tp": 5946366,
+    "fp": 2055911,
+    "fn": 1283453,
+    "valid_pixels": 73457653,
+    "GT_positive_pixels": 7229819,
+    "GT_negative_pixels": 66227834,
+    "dice": 0.7807679258324002,
+    "precision": 0.7430842496454446,
+    "recall": 0.8224778517968431
+  },
+  "candidate": {
+    "tp": 5883387,
+    "fp": 2039468,
+    "fn": 1346432,
+    "valid_pixels": 73457653,
+    "GT_positive_pixels": 7229819,
+    "GT_negative_pixels": 66227834,
+    "dice": 0.7765476905264378,
+    "precision": 0.742584207334351,
+    "recall": 0.8137668453387285
+  },
+  "paired": {
+    "reference": 0.7807679258324002,
+    "candidate": 0.7765476905264378,
+    "candidate_minus_reference": -0.004220235305962383,
+    "paired_percentile_95ci": [
+      -0.006314643859371921,
+      -0.0021610598002829978
+    ],
+    "draws": 2000,
+    "seed": 42,
+    "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+    "groups": 71,
+    "stratification": "dataset signature among included vessel-support photos of whole retained group",
+    "strata": {
+      "('aria',)": 16,
+      "('chasedb1',)": 3,
+      "('drhagis',)": 8,
+      "('drive',)": 20,
+      "('erlangen',)": 11,
+      "('hrf',)": 3,
+      "('iostar',)": 6,
+      "('stare',)": 4
+    },
+    "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+  },
+  "dense_helper_sha256": "13bc973a6c209877e2a250b7f66a79bd65c12029fb183d2c3e355d8327fdb304",
+  "new_selection_or_protocol_change": false,
+  "no_model_or_GT_or_NN": true,
+  "original_report_sha256": "620f037b1b07c64bd4b92a5b309fb12cec006e29341bca9960c71b26a0c09852",
+  "candidate_report_sha256": "a2e63c77c8e04473d8d281f81e77428dba3abb8413fc2b2884d09aee850e20ae"
+}

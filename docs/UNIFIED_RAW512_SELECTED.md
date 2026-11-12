@@ -74,6 +74,11 @@ exposure of original weights is unknown. Full per-source results and adverse
 subgroups are retained in the TEST report. The selected original521b was tested;
 the CPU deployment292e has separate exact TRAIN integration evidence.
 
+[Full TEST report, source results and exact count/exit evidence](../reports/release/selected-raw512-TEST-20261112/README.md)
+retain adverse subgroups and all precision values. Root independently rechecked
+the two original report hashes, both exits,856-photo support and all five pooled
+confusion totals.
+
 The selection binds original checkpoint SHA
 `521b8881d1b2c69a7395be6687a8b86581838e3f5dbb004a150333d454132cea`
 and selection SHA

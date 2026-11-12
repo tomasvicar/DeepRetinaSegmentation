@@ -298,3 +298,25 @@ records63 modules and457 definitions at its actual clean source snapshot. This
 stdlib AST scan is not pytest collection or execution. Earlier inventories remain
 unchanged. Held-out quality results and fixed-TRAIN latency remain separate from
 software tests.
+
+## Completed frozen TEST and final metadata wheel
+
+Both856-photo inference children and their actual outer observer returned0 at
+14:17:29UTC. [Final quality evidence](../reports/release/selected-raw512-TEST-20261112/README.md)
+includes all source/head/AV intervals and the negative dense-vessel result; these
+are model quality measurements, separate from software test pass counts. Root
+independently checked whole-report hashes, all856 photo/record/source/GT support
+and independently resummed all five pooled count channels.
+
+After updating only the new registry description/limitations and README/docs for
+these results, a [new final metadata wheel check](../reports/release/raw512-final-metadata-wheel-20261112/README.md)
+passed build/install-no-deps/module-origin/all48modulebytes/all13weightSHAs/old12
+entries/aliases/fourdefaults and CLIhelp. Torch was absent and no NN or tests were
+repeated. This updates final packaging metadata scope; the earlier installed TRAIN
+probability/mask parity covers the unchanged model/runtime. The failed first checker
+attempt (missing staged inventory) is retained separately from corrected check0.
+
+The HPO-only saved-count comparison's curated-family admission passed60 focused
+checks; that source4f2b metadata operation changed no running frozen6d evaluator,
+selection, inference options or checkpoint. Its result and source/input byte leases
+are included in the TEST report.
