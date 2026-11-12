@@ -35,7 +35,9 @@ On770 VAL photographs the selected protocol's macro Dice is0.82283410 and
 conditional A/V accuracy0.85119431. Dense-vessel Dice is**0.75131596** versus
 original**0.76132681**, on87 photographs/55known groups/8sources. The paired
 95% interval for the difference is[−0.01435434,−0.00656358]; precision and recall
-are also lower. Original vessels remain preferable for the measured vessel
+are also lower. [Exact current6808 saved-count verification](../reports/release/raw512-current6808-dense-20261112/README.md)
+confirms this interval with2,000 source-stratified known-group draws/seed42.
+Original vessels remain preferable for the measured vessel
 priority. Native V3 has a stronger artery result. This is a balanced alternative,
 not an all-task replacement, a global optimum or a clinical claim. Exploratory
 VAL intervals do not establish complete patient independence. **Held-out TEST

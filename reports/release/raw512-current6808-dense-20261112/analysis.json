@@ -1,0 +1,76 @@
+{
+  "kind": "postfreeze_saved_VAL_count_uncertainty_exact_current6808_NOT_new_selection",
+  "input_sha256": {
+    "original6808": "6808f293d750dec5a94a0593f5c52d054733696d21984a61e399284355f94405",
+    "selected0a5c": "0a5c65e6ecd0ceef68bba554504f0d2e2222905d5ebf27813b07242cb3e7aa0f",
+    "manifest": "17a2277c39cb37b7eee1b2063cfd13f2cf4adf4ebdf86cf449a1f51367c5a767",
+    "existing_helper": "13bc973a6c209877e2a250b7f66a79bd65c12029fb183d2c3e355d8327fdb304"
+  },
+  "support": {
+    "photos": 87,
+    "known_split_groups": 55,
+    "sources": 8,
+    "GT_positive_pixels": 5893007,
+    "valid_pixels": 60325745,
+    "excluded_source_only": "avrdb"
+  },
+  "all770photo_record_source_5head_GTsupport_and_aggregates": "PASS",
+  "pooled_dense_counts": {
+    "original6808": {
+      "tp": 4681051,
+      "fp": 1723029,
+      "fn": 1211956,
+      "valid_pixels": 60325745,
+      "GT_positive_pixels": 5893007,
+      "GT_negative_pixels": 54432738,
+      "dice": 0.7613268085360378,
+      "precision": 0.7309482392474798,
+      "recall": 0.794339969390839
+    },
+    "selected0a5c": {
+      "tp": 4613808,
+      "fp": 1775123,
+      "fn": 1279199,
+      "valid_pixels": 60325745,
+      "GT_positive_pixels": 5893007,
+      "GT_negative_pixels": 54432738,
+      "dice": 0.7513159568139817,
+      "precision": 0.722156492220686,
+      "recall": 0.7829293262336189
+    }
+  },
+  "paired_contrast": {
+    "reference": 0.7613268085360378,
+    "candidate": 0.7513159568139817,
+    "candidate_minus_reference": -0.01001085172205618,
+    "paired_percentile_95ci": [
+      -0.014354340037928445,
+      -0.006563583431137865
+    ],
+    "draws": 2000,
+    "seed": 42,
+    "unit": "known split_group_id in actual vessel domain; not proven independent patients",
+    "groups": 55,
+    "stratification": "dataset signature among included vessel-support photos of whole retained group",
+    "strata": {
+      "('aria',)": 16,
+      "('chasedb1',)": 3,
+      "('drhagis',)": 8,
+      "('drive',)": 4,
+      "('erlangen',)": 11,
+      "('hrf',)": 3,
+      "('iostar',)": 6,
+      "('stare',)": 4
+    },
+    "scope": "contrast of these explicitly different checkpoint roles/inference pipelines; not isolated training/capacity effect"
+  },
+  "computation_seconds": 1.0065016217995435,
+  "TEST_used": false,
+  "selection_or_original_policy_changed": false,
+  "qualifications": [
+    "Existing source-stratified known-group bootstrap2000/seed42, not proven patient independence/training-seed uncertainty.",
+    "Actual frozen choice/policy remain unchanged; no model/image/GT-array/TEST read.",
+    "Historical182 interval stays historical; this is a NEW exact6808 contrast.",
+    "AdaptiveVALreuse/multiplicity/sourcebackend limitations remain."
+  ]
+}

@@ -29,3 +29,8 @@ and a subsequently exported deployment artifact have distinct SHAs.
 
 At this commit, held-out856 TEST, matched final latency and deployment packaging
 remain pending. This report is selection evidence, not a completed release claim.
+
+[Current original6808 dense-vessel uncertainty](../raw512-current6808-dense-20261112/README.md)
+was independently recomputed from the exact saved VAL counters after freeze.
+It confirms the negative interval without changing selection, source or policy;
+no heldout result or new inference informed that bookkeeping check.
