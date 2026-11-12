@@ -1,8 +1,14 @@
 # Stav projektu
 
-**Snímek: 12. 11. 2026 v 12:54 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
+**Snímek: 12. 11. 2026 v 13:38 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
+
+Finální kandidát je od13:34UTC zmrazen: raw512 BEST50, rot4/0,35/512/64.
+Kontrola původních vah, dokončení tréninku, výběru i navázané původní reference
+prošla. Připravuje se TEST856 a balení nového modelu. Na dense cévách VAL má
+Dice0,75132 proti původnímu0,76133; původní model zůstává doporučený pro prioritu
+cévní kvality. [Přesné identity a omezení](../reports/release/raw512-selection-20261112/README.md).
 
 ## Co lze použít z `for_Leipzig`
 
