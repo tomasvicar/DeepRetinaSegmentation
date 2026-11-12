@@ -1,0 +1,19 @@
+{
+  "observed_utc": "2026-11-12T03:11:25.281103+00:00",
+  "implementation_commit": "5552456",
+  "benchmark_tests": {
+    "command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src taskset -c4 nice -n17 native87-python -m pytest -q tests/test_strong_pipeline_benchmark.py",
+    "returncode": 0,
+    "passed": 34,
+    "seconds": 2.65,
+    "real_models_or_GT_or_NN_or_GPU_used": false
+  },
+  "comparison_projection_check": {
+    "command": "python reports/all-head-candidate-comparison-20261112/checks.py",
+    "returncode": 0,
+    "prior9_rows_and21_input_citations_exact": true,
+    "total_completed_rows": 17,
+    "new_statistics_computed": false
+  },
+  "root_review": "Reviewed exact4net original composition, inherited shared preparation/native tiling, TTA descriptor and correct kwargs, synchronized per-phase load/warmup/inference, no additional verification forward, weakref coverage for released original models, unchanged default measure schema, truthful IO/API scope. No model/default/TEST selection or actual speed claim."
+}

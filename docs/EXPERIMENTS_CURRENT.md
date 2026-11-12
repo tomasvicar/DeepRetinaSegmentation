@@ -1,9 +1,28 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-12 01:14 UTC; raw512 BEST50 rot4/.35 fresh VAL completed**. Completed VAL and
-CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
-claim about current execution. The final optimized model, selection freeze and held-out TEST
-comparison are **not finished**. No released default is changed by this overview.
+Snapshot: **2026-11-12 03:11 UTC; 17 completed candidate/protocol rows compared**.
+The final optimized model, selection freeze and held-out TEST comparison remain
+unfinished. Completed-result tables exclude running and failed preparation work.
+
+Controlled source72 vessel-loss2 training reached its genuine E27 milestone and
+the original supervisor resumed toward60. At27,5686/5700 annotation variants had
+contributed; this partial state is not full coverage or final quality. Width24
+completed one finite resource-probe epoch. Its first E1-to27 continuation stopped
+before NN because the runtime image lacked Git for the genuine source verifier;
+a separate immutable Git-enabled runtime is being prepared. No failed setup or
+partial checkpoint is a completed optimized model.
+
+The [current 17-row comparison](../reports/all-head-candidate-comparison-20261112)
+preserves all prior source values and adds completed raw384/CLAHE/raw512 and native
+TPE7 roles, with five heads, conditional AV and separate dense-vessel support.
+All available exact dense-vessel-versus-original intervals remain below zero;
+higher macro scores do not establish all-task improvement. TPE7BEST46 has5699
+annotation variants and is ineligible here; its genuine LAST60 has5700.
+
+A [reusable final benchmark recipe](FINAL_BENCHMARK_RECIPE.md) now binds exact
+checkpoint/TTA/threshold/tiling and distinguishes resident five-mask pipeline,
+input IO, model loading and warmup. It is prepared code, not a new speed result
+or full product API/CLI timing. Final timing follows actual model selection.
 
 ## Product and common data
 
@@ -28,8 +47,8 @@ unknown patient identity is not thereby resolved. No new TEST evaluation is
 reported here. Conditional A/V accuracy scores reference class-labeled vessel
 pixels and does not measure vessel discovery by itself.
 
-The [compact all-head comparison](../reports/all-head-candidate-comparison-20261111)
-puts nine completed model/protocol results side by side, with full-precision
+The [compact all-head comparison](../reports/all-head-candidate-comparison-20261112)
+puts seventeen completed model/protocol results side by side, with full-precision
 counts, input hashes and separate speed evidence. It is an overview of existing
 VAL evidence, not a frozen selection or a new evaluation.
 
