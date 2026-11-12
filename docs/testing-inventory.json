@@ -1,12 +1,12 @@
 {
   "kind": "AST_only_tracked_HPO_test_inventory_not_a_test_run",
-  "upstream_snapshot_commit": "faf93acc5f02ac2445b1875f704507e93aa3027c",
-  "generated_utc": "2026-11-12T06:05:09.214034+00:00",
+  "upstream_snapshot_commit": "5cea6d5e18a035b2e71df72c399f06e7aaafa59a",
+  "generated_utc": "2026-11-12T06:39:17.000103+00:00",
   "selection": "All git-tracked Python files parsed with AST; at least one FunctionDef/AsyncFunctionDef named test*, including nonstandard report checks.py; zero-definition similarly named CLI tools separately",
   "collection_performed": false,
   "new_test_model_GPU_data_or_install_actions": false,
   "modules": 89,
-  "static_test_definitions": 660,
+  "static_test_definitions": 662,
   "module_counts": {
     "report-local": 3,
     "main": 82,
@@ -14,7 +14,7 @@
   },
   "definition_counts": {
     "report-local": 10,
-    "main": 625,
+    "main": 627,
     "coordinator": 25
   },
   "default_pytest_testpaths": [
@@ -3006,112 +3006,122 @@
     },
     {
       "path": "tests/test_strong_pipeline_benchmark.py",
-      "sha256": "7f35b6824c9cdd4357d9c3db92bab75de68e4ac23c5189a1d132aa067286aaae",
+      "sha256": "33563d3515d7dc952bdc46103fdf51edecf3b9bc494cd254e92a39664cb3684c",
       "directory_group": "main",
       "run_environment": "T",
-      "static_test_definitions": 20,
-      "parametrized_definitions": 6,
+      "static_test_definitions": 22,
+      "parametrized_definitions": 7,
       "purpose": "Exact four-network composition, reference/TTA/threshold forwarding, phase scopes and retained output checks.",
       "reproducible_command": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src uv run --frozen --no-sync --group dev python -m pytest -q tests/test_strong_pipeline_benchmark.py",
       "test_definitions": [
         {
+          "name": "test_frozen_original_reference_schema_without_retagging",
+          "line": 40,
+          "parametrize_decorators": 0
+        },
+        {
+          "name": "test_frozen_reference_protocol_and_identity_drift_rejected",
+          "line": 57,
+          "parametrize_decorators": 1
+        },
+        {
           "name": "test_exact_selected_components_required",
-          "line": 52,
+          "line": 123,
           "parametrize_decorators": 0
         },
         {
           "name": "test_weaker_or_different_reference_is_rejected",
-          "line": 70,
+          "line": 141,
           "parametrize_decorators": 1
         },
         {
           "name": "test_four_network_pipeline_uses_dedicated_heads_native_tiles_and_calibrated_av",
-          "line": 76,
+          "line": 147,
           "parametrize_decorators": 0
         },
         {
           "name": "test_nonfinite_original_predictions_fail",
-          "line": 135,
+          "line": 206,
           "parametrize_decorators": 0
         },
         {
           "name": "test_unified_uses_checkpoint_geometry_and_masks_original_frame",
-          "line": 144,
+          "line": 215,
           "parametrize_decorators": 0
         },
         {
           "name": "test_selected_threshold_controls_vessel_gate_and_disc_cup",
-          "line": 175,
+          "line": 248,
           "parametrize_decorators": 0
         },
         {
           "name": "test_invalid_selected_threshold_rejected_before_device_initialization",
-          "line": 198,
+          "line": 273,
           "parametrize_decorators": 1
         },
         {
           "name": "test_palette_fov_uses_displayed_intensity_not_indices",
-          "line": 209,
+          "line": 284,
           "parametrize_decorators": 0
         },
         {
           "name": "test_input_identity_matches_decoded_snapshot_after_path_replacement",
-          "line": 225,
+          "line": 300,
           "parametrize_decorators": 0
         },
         {
           "name": "test_benchmark_report_retains_timed_input_snapshot_hashes",
-          "line": 263,
+          "line": 338,
           "parametrize_decorators": 1
         },
         {
           "name": "test_explicit_cup_policy_binds_completed_quality_reference",
-          "line": 358,
+          "line": 433,
           "parametrize_decorators": 1
         },
         {
           "name": "test_cup_clip_exact_strict_source_semantics_before_restoration",
-          "line": 384,
+          "line": 459,
           "parametrize_decorators": 0
         },
         {
           "name": "test_structurally_exact_completed_reference_metadata",
-          "line": 425,
+          "line": 500,
           "parametrize_decorators": 1
         },
         {
           "name": "test_explicit_tta_forwards_after_one_fullframe_photometry",
-          "line": 452,
+          "line": 527,
           "parametrize_decorators": 1
         },
         {
           "name": "test_invalid_tta_fails_before_device_or_inputs",
-          "line": 478,
+          "line": 568,
           "parametrize_decorators": 0
         },
         {
           "name": "test_phase_measure_synchronizes_every_recorded_call_without_extra_forward",
-          "line": 485,
+          "line": 575,
           "parametrize_decorators": 0
         },
         {
           "name": "test_historical_measure_default_keeps_warmup_schema",
-          "line": 500,
+          "line": 601,
           "parametrize_decorators": 0
         },
         {
           "name": "test_extended_benchmark_records_exact_protocol_load_IO_and_last_output_without_forward",
-          "line": 507,
+          "line": 609,
           "parametrize_decorators": 0
         },
         {
           "name": "test_cli_forwards_selected_protocol_threads_and_scopes_without_model_work",
-          "line": 579,
+          "line": 719,
           "parametrize_decorators": 0
         },
         {
           "name": "test_lightweight_suite_does_not_initialize_cuda",
-          "line": 607,
+          "line": 786,
           "parametrize_decorators": 0
         }
       ],

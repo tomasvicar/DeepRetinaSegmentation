@@ -1,6 +1,6 @@
 # Testing and validation evidence
 
-Snapshot: HPO **faf93ac**, including34e0abf curated stage2 dispatch and the fixed
+Snapshot: HPO **5cea6d5**, including34e0abf curated stage2 dispatch and the fixed
 TRAIN timing-cohort tests. This is an
 **AST inventory, not a new test run**. No pytest collection, test/model/Torch import,
 NN forward, real image/GT read, GPU query, installation, selection freeze or TEST
@@ -9,7 +9,7 @@ Private Meta/host controllers and the separate `for_Leipzig` product catalog hav
 separate inventories; this page covers every tracked HPO test module, including
 the coordinator and the historical and nonstandard report-local modules.
 
-There are **89 test modules / 660 static test definitions**:82/625 under `tests/`,
+There are **89 test modules / 662 static test definitions**:82/627 under `tests/`,
 4/25 in the coordinator, and3/10 report-local. A definition is a `test*` function or
 method in parsed source. Parametrization and fixtures expand execution cases;
 these numbers are **not collected cases or passed-test counts**. The `Param`
@@ -133,7 +133,7 @@ gated operation; these test commands do not authorize it.
 | [test_selection_tta.py](../tests/test_selection_tta.py) | 16 | 8 | Reviewed TTA metadata/math only: no network forward, actual GT or TEST scoring. | `T tests/test_selection_tta.py` |
 | [test_sources.py](../tests/test_sources.py) | 5 | 0 | Resource identity and read-only archive behavior. | `T tests/test_sources.py` |
 | [test_streaming_thresholds.py](../tests/test_streaming_thresholds.py) | 2 | 1 | Native threshold counters, ignored support and same-forward producer parity. | `T tests/test_streaming_thresholds.py` |
-| [test_strong_pipeline_benchmark.py](../tests/test_strong_pipeline_benchmark.py) | 20 | 6 | Exact four-network composition, reference/TTA/threshold forwarding, phase scopes and retained output checks. | `T tests/test_strong_pipeline_benchmark.py` |
+| [test_strong_pipeline_benchmark.py](../tests/test_strong_pipeline_benchmark.py) | 22 | 7 | Exact four-network composition, reference/TTA/threshold forwarding, phase scopes and retained output checks. | `T tests/test_strong_pipeline_benchmark.py` |
 | [test_terminal60_threshold_watch.py](../tests/test_terminal60_threshold_watch.py) | 6 | 2 | Synthetic metadata only; no real checkpoint/model/GPU/manifest operations. | `T tests/test_terminal60_threshold_watch.py` |
 | [test_terminal60_val_comparison.py](../tests/test_terminal60_val_comparison.py) | 3 | 1 | Synthetic all2529/5700/770 metadata only; no real model/data/TEST reads. | `T tests/test_terminal60_val_comparison.py` |
 | [test_unified.py](../tests/test_unified.py) | 25 | 4 | Scientific contracts for one partially supervised five-output RGB network. | `T tests/test_unified.py` |
@@ -231,7 +231,7 @@ individual execution receipt where none is linked.
 | Native proposal/sampler contracts | [11 cases with Optuna5 and no live-study change](../reports/fixed27-proposal/verification.json); coordinator modules above | Temporary native SQLite/Optuna tests are not an actual ask/tell or model training. Original native studies/sampler decisions remain operational evidence outside this inventory. |
 | MATLAB/legacy numerical oracles | [CLAHE stored comparisons](../reports/legacy/matlab-clahe/comparison.json), [AV profile comparisons](../reports/legacy/matlab-av-profile/comparison.json), [FOV calibration](../reports/legacy/matlab-fov-calibration/comparison.json) | Fixture/oracle numerical evidence, not universal raw-path MATLAB certification or new quality evidence. Public tests use retained synthetic/golden inputs; MATLAB is not needed at test runtime. Real-photo full-chain residual qualifications remain. |
 | Dense-count and fixed timing-cohort guards | [Six metadata checks](../reports/dense-vessel-support-20261112/README.md); [three synthetic cohort IO/identity tests](../reports/fixed-timing-input-cohort-20261112/test-exit.json), [cohort preparation scope](../reports/fixed-timing-input-cohort-20261112/README.md) | Dense README records six successful checks without a separate numeric tester-exit artifact. Cohort tester has observed exit0/3 cases; generated IO/framed identity and official-FOV selection guards. Preparing two TRAIN inputs is not a benchmark/model/GT/TEST run. |
-| Final benchmark instrumentation | [34 mocked/lightweight cases recorded by recipe](FINAL_BENCHMARK_RECIPE.md); [actual prior CPU tradeoff](../reports/benchmark/tpe72-tta-cpu-drive21/README.md) | Mocked CUDA synchronization/call counts and tiny RGB/FOV fixtures do not measure real latency. The separate actual CPU run has16 operations, child/outer0, no extra NN checks; see speed scope below. |
+| Final benchmark instrumentation | [51 targeted benchmark/manifest cases plus actual frozen182 metadata check](../reports/final-benchmark-preparation-20261112/frozen-reference-schema-check.json); historical34-case preparation is separately recorded in [the recipe](FINAL_BENCHMARK_RECIPE.md); [actual prior CPU tradeoff](../reports/benchmark/tpe72-tta-cpu-drive21/README.md) | Mocked CUDA synchronization/call counts and tiny RGB/FOV fixtures do not measure real latency. The separate actual CPU run has16 operations, child/outer0, no extra NN checks; see speed scope below. |
 
 ## Scientific validation evidence: separate from software tests
 
