@@ -1,0 +1,264 @@
+{
+  "kind": "TRAIN_only_release_integration_NOT_quality_or_TEST",
+  "original_checkpoint_sha256": "521b8881d1b2c69a7395be6687a8b86581838e3f5dbb004a150333d454132cea",
+  "artifact_sha256": "292ea5999a1fc97a767c1c34bb7b4558040267372c5b128f403f2dce50529b29",
+  "image_sha256": "e7af55375ba088ac63db120377eaf94b2405fe80b7874d6e1d236cda4f8c4c83",
+  "official_FOV_sha256": "acf23eeef91bd7c59624b9c2bb014703bcb37ef65cc8da2c0d221f3ca43dadc7",
+  "photo_id": "sha256:77d1a4436a1cac7f3397c9a2f2e84bf1e2d2b13647a833a3d7559aa6aa0d6925",
+  "split": "train",
+  "source_record": "drive_21_training_vessels",
+  "stages": [
+    {
+      "case": "research",
+      "returncode": 0,
+      "observed_returncode": true,
+      "seconds": 23.092362632974982
+    },
+    {
+      "case": "API",
+      "returncode": 0,
+      "observed_returncode": true,
+      "seconds": 20.25567841110751
+    },
+    {
+      "case": "CLI",
+      "returncode": 0,
+      "observed_returncode": true,
+      "seconds": 20.856671368936077
+    }
+  ],
+  "comparisons": {
+    "API": {
+      "max_absolute_probability_difference": 0.0,
+      "mask_changed_pixels": {
+        "vessel": 0,
+        "artery": 0,
+        "vein": 0,
+        "disc": 0,
+        "cup": 0
+      },
+      "metadata": {
+        "checkpoint_sha256": "292ea5999a1fc97a767c1c34bb7b4558040267372c5b128f403f2dce50529b29",
+        "threshold": 0.35,
+        "inference": {
+          "mode": "tiled",
+          "tile_size": 512,
+          "overlap": 64,
+          "view_size": null,
+          "checkpoint_tile_size": 512,
+          "checkpoint_overlap": 64,
+          "overrides": {
+            "tile_size": 512,
+            "overlap": 64
+          }
+        },
+        "tta": {
+          "mode": "rot4",
+          "operators": [
+            {
+              "rot90_ccw": 0,
+              "horizontal_flip_after_rotation": false
+            },
+            {
+              "rot90_ccw": 1,
+              "horizontal_flip_after_rotation": false
+            },
+            {
+              "rot90_ccw": 2,
+              "horizontal_flip_after_rotation": false
+            },
+            {
+              "rot90_ccw": 3,
+              "horizontal_flip_after_rotation": false
+            }
+          ],
+          "domain": "full_prepared_RGB01_after_photometry_before_tiling",
+          "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+          "precision": "float32_no_autocast",
+          "experimental": true,
+          "original_standalone_certification": false
+        },
+        "preprocessing": {
+          "profile": "legacy25_raw",
+          "pixels_per_degree": 25.0,
+          "field_of_view_degrees": 45.0,
+          "normalized": false,
+          "normalization": "RGB/255-0.5",
+          "fov_source": "provided original-frame mask",
+          "geometry": {
+            "original_shape": [
+              584,
+              565
+            ],
+            "crop_position": [
+              32,
+              566,
+              10,
+              545
+            ],
+            "rescale_factor": 1.9263698630136987,
+            "prepared_shape": [
+              1031,
+              1033
+            ]
+          },
+          "geometry_policy": {
+            "policy_id": "corpusv2_nominal_fov_20261110_v1",
+            "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+            "dataset": "drive",
+            "native_shape_hw": [
+              584,
+              565
+            ],
+            "policy_applied": false,
+            "selection": "outside_new_source_scope; existing_legacy_or_explicit_angle"
+          }
+        },
+        "probability_semantics": [
+          "P(vessel|RGB)",
+          "P(artery|vessel,RGB)",
+          "P(vein|vessel,RGB)",
+          "P(disc|RGB)",
+          "P(cup|RGB)"
+        ],
+        "fusion": "joint AV probabilities interpolated/blended before recovering conditional AV",
+        "decoding": "conditional artery/vein argmax gated by vessel threshold; cup within disc; outside FOV segmentation probabilities zero, conditional probabilities0.5",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "supervised_channels": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    "CLI": {
+      "max_absolute_probability_difference": 0.0,
+      "mask_changed_pixels": {
+        "vessel": 0,
+        "artery": 0,
+        "vein": 0,
+        "disc": 0,
+        "cup": 0
+      },
+      "metadata": {
+        "checkpoint_sha256": "292ea5999a1fc97a767c1c34bb7b4558040267372c5b128f403f2dce50529b29",
+        "threshold": 0.35,
+        "inference": {
+          "mode": "tiled",
+          "tile_size": 512,
+          "overlap": 64,
+          "view_size": null,
+          "checkpoint_tile_size": 512,
+          "checkpoint_overlap": 64,
+          "overrides": {
+            "tile_size": 512,
+            "overlap": 64
+          }
+        },
+        "tta": {
+          "mode": "rot4",
+          "operators": [
+            {
+              "rot90_ccw": 0,
+              "horizontal_flip_after_rotation": false
+            },
+            {
+              "rot90_ccw": 1,
+              "horizontal_flip_after_rotation": false
+            },
+            {
+              "rot90_ccw": 2,
+              "horizontal_flip_after_rotation": false
+            },
+            {
+              "rot90_ccw": 3,
+              "horizontal_flip_after_rotation": false
+            }
+          ],
+          "domain": "full_prepared_RGB01_after_photometry_before_tiling",
+          "combination": "inverse_align_then_float32_mean_of_vessel_jointAV_disc_cup_then_conditionalAV",
+          "precision": "float32_no_autocast",
+          "experimental": true,
+          "original_standalone_certification": false
+        },
+        "preprocessing": {
+          "profile": "legacy25_raw",
+          "pixels_per_degree": 25.0,
+          "field_of_view_degrees": 45.0,
+          "normalized": false,
+          "normalization": "RGB/255-0.5",
+          "fov_source": "provided original-frame mask",
+          "geometry": {
+            "original_shape": [
+              584,
+              565
+            ],
+            "crop_position": [
+              32,
+              566,
+              10,
+              545
+            ],
+            "rescale_factor": 1.9263698630136987,
+            "prepared_shape": [
+              1031,
+              1033
+            ]
+          },
+          "geometry_policy": {
+            "policy_id": "corpusv2_nominal_fov_20261110_v1",
+            "policy_sha256": "2591d8461b56433529105532c20203e0b17a48c781c1a74fd3a2901bcb301e3d",
+            "dataset": "drive",
+            "native_shape_hw": [
+              584,
+              565
+            ],
+            "policy_applied": false,
+            "selection": "outside_new_source_scope; existing_legacy_or_explicit_angle"
+          }
+        },
+        "probability_semantics": [
+          "P(vessel|RGB)",
+          "P(artery|vessel,RGB)",
+          "P(vein|vessel,RGB)",
+          "P(disc|RGB)",
+          "P(cup|RGB)"
+        ],
+        "fusion": "joint AV probabilities interpolated/blended before recovering conditional AV",
+        "decoding": "conditional artery/vein argmax gated by vessel threshold; cup within disc; outside FOV segmentation probabilities zero, conditional probabilities0.5",
+        "channels": [
+          "vessel",
+          "artery",
+          "vein",
+          "disc",
+          "cup"
+        ],
+        "supervised_channels": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    }
+  },
+  "shape": [
+    5,
+    584,
+    565
+  ],
+  "TEST_or_GT_read": false,
+  "original_proof_sha256": "bde61cb626c19f06fd7b49c41eea9160460b4fa664b6468d3da5c111b010bdd9",
+  "research_source_commit": "6d3593f5a8dbf177ebebb231b5120d4fd601ea4f",
+  "product_base_commit": "be942b5",
+  "scope": "One preidentified TRAIN photograph; no all770 equivalence or quality claim"
+}
