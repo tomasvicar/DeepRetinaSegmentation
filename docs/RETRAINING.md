@@ -19,7 +19,7 @@ Native training uses freshly initialized original architectures with a new expli
 training recipe. It preserves the shipped original weights and their historical
 preprocessing paths. The AV recipe uses full canonical RGB plus its paired vessel
 support; it does not relabel canonical crops as historical MATLAB/DICOM inputs.
-See [native retraining and prediction](NATIVE_LEGACY_RETRAINING.md) for all four
+See [native retraining and prediction](NATIVE_LEGACY_RETRAINING.md) for all five
 presets, coverage, partial labels and supplied-vessel inference.
 
 ```bash
