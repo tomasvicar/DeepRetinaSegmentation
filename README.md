@@ -2,13 +2,19 @@
 
 This `experiments/leipzig-hpo` branch adds the [shared five-output network](docs/UNIFIED.md),
 [audited preparation of all supervised sources](docs/UNIFIED_DATA.md) and
-[validation-only hyperparameter search](docs/UNIFIED_HPO.md). Full-data training and validation search are running;
-no final quality improvement comparison is established yet. Original models below remain available here;
+[validation-only hyperparameter search](docs/UNIFIED_HPO.md). Full-data training,
+model selection and the first frozen TEST comparison have completed. The selected
+model improves A/V, disc and cup while retaining a small dense-vessel deficit;
+follow-up experiments remain separate from that frozen result. Original models below remain available here;
 the handover branch is [`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig).
 
-**Status:** original trained models are bundled with verified prepared-input
-inference. Three additional single-dataset pilots remain explicitly preliminary.
-Full unified-model training and comparison are still in progress.
+**Status, 12 November 2026:** use the handover branch for the verified original
+models and the selected full-data unified model, trained on all 2,529 TRAIN
+photos / 5,700 annotation records / 21 sources. Its
+[frozen TEST report](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig/reports/release/selected-raw512-TEST-20261112)
+includes every head and the vessel regression. This research checkout retains
+earlier explicitly preliminary pilots and experimental code. Read
+[current evidence](docs/EXPERIMENTS_CURRENT.md) before interpreting older snapshots.
 The agreed deliverable is recorded in [GOAL.md](docs/GOAL.md).
 
 A Python package for retinal **vessel segmentation**, **artery/vein classification**,

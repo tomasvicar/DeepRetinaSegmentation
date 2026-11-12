@@ -1,5 +1,48 @@
 # Current full-data research evidence
 
+## Current update: 12 November 2026, 18:55 UTC
+
+The selected raw512 BEST50 unified model is available beside the original models
+on [`for_Leipzig`](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig).
+Its actual full60 run and selected checkpoint each cover all 2,529 TRAIN photos /
+5,700 annotation records from 21 sources. The frozen 856-photo TEST comparison
+and fixed TRAIN latency measurements have completed; they are not pending work.
+[The release evidence](https://github.com/tomasvicar/DeepRetinaSegmentation/tree/for_Leipzig/reports/release/selected-raw512-TEST-20261112)
+records gains in A/V, disc and cup, but dense-vessel Dice 0.77655 versus original
+0.78077 with a negative paired interval. The wider vessel-improvement goal remains
+open. Follow-ups do not reopen or tune against that TEST result.
+
+The [three-stream tile-blend study](../reports/shared3stream-tile-blend-VAL770-20261112)
+completed all 770 VAL photos. Both logit-blending alternatives lowered the
+five-head macro score; neither improves dense-vessel Dice. The shipped
+probability-blending protocol remains unchanged.
+
+A separate native-topology scratch run has now completed all 60 epochs and its
+own full photo/annotation coverage, with genuine train/postcheck/QA/outer exits0.
+Fresh common-fe33/895 LAST60 validation completed at 18:45:59 UTC, FP32,
+NONE/0.5/tile512/overlap64, all 770 photos / 993 records. Macro is 0.7922772404,
+pooled vessel Dice 0.7629116935; dense-vessel Dice from the 87-photo support is
+0.7409145783. The matched first-TPE5 LAST60 control has macro 0.8088377565 and
+dense-vessel Dice 0.7385125867. This small vessel gain accompanies worse other
+heads and does not beat the selected raw512 protocol (dense Dice 0.7513159568).
+The latter comparison also changes checkpoint role and TTA/threshold, so it is
+not an isolated architecture effect. Paired count analysis is being completed;
+the exact original report is SHA256
+`669a67e95bbfba07b2a299a9ef61629a09fdfa968e5778a8c4eb032d6b5792ec`.
+Original execution receipts are preserved in the private operations repository.
+
+The native BEST58 checkpoint has independent full TRAIN coverage. Its separate
+CPU eligibility and a prospective shared rot4/eight-threshold calibration are
+being prepared; no calibration result or promotion is claimed. No new TEST,
+Optuna suggestion, product default change or PBS submission occurs in these
+follow-ups. RAW35 producer and common25 bridge code remain isolated experimental
+preparations with synthetic checks, not a completed full-corpus build or training.
+
+## Historical snapshot: 05:29 UTC
+
+The following text records the earlier state; its pending/running statements are
+superseded by the current update above. Original reports remain unchanged.
+
 Snapshot: **2026-11-12 05:29 UTC; 17-row overview plus completed loss2 ablation**.
 The final optimized model, selection freeze and held-out TEST comparison remain
 unfinished. Completed-result tables exclude running and failed preparation work.
