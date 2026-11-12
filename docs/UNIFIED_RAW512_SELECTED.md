@@ -58,3 +58,8 @@ In particular `vessels`, `av` and `disc_cup` retain their original models.
 See [export and verification evidence](../reports/release/unified-raw512-selected-20261112/README.md),
 [packaging rules](FINAL_MODEL_PACKAGING.md) and
 [the frozen selection](../reports/release/raw512-selection-20261112/README.md).
+
+The [matched GPU timing report](../reports/release/selected-raw512-two-TRAIN-GPU-timing-20261112/README.md)
+measures the exact selected protocol against the original four-network pipeline
+on two fixed TRAIN geometries. It keeps input IO, loading and resident inference
+separate; it is not a population latency estimate.

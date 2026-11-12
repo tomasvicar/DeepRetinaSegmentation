@@ -1,12 +1,12 @@
 # Stav projektu
 
-**Snímek: 12. 11. 2026 v 13:50 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
+**Snímek: 12. 11. 2026 v 13:55 UTC. Původní společná predikce je předatelná; finální optimalizovaný model ještě není dokončený.**
 Tento přehled rozlišuje předatelnou implementaci a dosud nedokončený výzkum.
 Běžící úlohy je vždy nutné znovu ověřit; časový snímek není doklad, že stále běží.
 
 Finální kandidát je od13:34UTC zmrazen: raw512 BEST50, rot4/0,35/512/64.
 Kontrola původních vah, dokončení tréninku, výběru i navázané původní reference
-prošla. TEST856 se připravuje. Model `unified-raw512-selected` už je přibalený; 53 cílených
+prošla. TEST856 skutečně běží od13:49UTC na Old, se zmrazeným nastavením pro oba modely. Model `unified-raw512-selected` už je přibalený; 53 cílených
 kontrol prošlo, CLI/API i izolovaný wheel reprodukují výzkumné pravděpodobnosti
 a všech pět masek na skutečném TRAIN snímku přesně. Na dense cévách VAL má
 Dice0,75132 proti původnímu0,76133; původní model zůstává doporučený pro prioritu
@@ -23,6 +23,7 @@ cévní kvality. [Přesné identity a omezení](../reports/release/raw512-select
 | Unified baseline V1 | Dokončených 60 epoch, 2 221 TRAIN fotografií a 5 281 anotovaných variant ze 17 zdrojů. Vybrán checkpoint E56; není finálním modelem na širším V2. |
 | Unified control V2 | Pevný terminální E60, 21 zdrojů, všech 2 529 TRAIN fotografií / 5 700 anotovaných variant skutečně přispělo. Čerstvá VAL; cévní regrese vůči původní sestavě, není optimalizovaný finální model. |
 | Unified vascular2 preview | Dokončený běh 60 epoch; přibalený VAL-best E59 už pokrývá všech 2 529 fotografií / 5 700 variant. Macro 0,80390, conditional A/V 0,81026; vessel 0,75671 stále pod původním 0,77012. Experimentální, bez TEST. |
+| Vybraný raw512 | BEST50 dokončeného60epochového běhu, všech2 529 TRAIN fotografií /5 700 záznamů /21 zdrojů. Automatické rot4/0,35/512/64; export,53 cílených kontrol a skutečná CLI/API/wheel shoda prošly. [Karta a omezení](UNIFIED_RAW512_SELECTED.md). |
 | Unified TPE preview | První dokončený TPE běh, BEST58 po 60 epochách; všech 2 529 fotografií / 5 700 variant. Čerstvá NONE macro 0,8108954, vessel 0,7628822, conditional A/V 0,8249115. Volitelné rot4/dihedral8 mají samostatné měření kvality i ceny; stále cévní regrese a TEST pending. [Karta a recept](UNIFIED_V3_TPE_PREVIEW.md). |
 | Piloty | Tři starší pokusy na jednotlivých databázích, jasně označené jako piloty. |
 | Instalace a kontrola | `uv`, ověřený wheel a izolovaná instalace; předchozí integrační kontrola 2 605 CPU testů; přidání V2 ověřuje 59 cílených testů, CPU RAW smoke a wheel s deseti modely. Vascular2 preview přidává 45 cílených CPU testů, RAW TRAIN smoke a wheel s jedenácti modely; všech deset dřívějších vah zachovalo původní bajty. TPE preview má 32 cílených testů, skutečný RAW TRAIN rot4 smoke a wheel s dvanácti modely; všech jedenáct starších checkpointů i aliasy zůstaly přesně stejné. |
@@ -162,7 +163,7 @@ Výběr a zmrazení přesného protokolu jsou dokončené; následný TEST zatí
 
 1. Provést jeden samostatný TEST zmrazeného raw512 a původní sestavy; jeho výsledky nepoužít k dalšímu ladění.
 2. Změřit přesně tyto dvě sestavy na pevných TRAIN vstupech a oddělit načítání, rezidentní latenci, parametry a velikost souborů.
-3. Přidat samostatný inference checkpoint, ověřit shodu predikce s výzkumným zdrojem a instalaci přes `uv` mimo checkout.
+3. Hotovo: samostatný inference checkpoint, přesná shoda predikce s výzkumným zdrojem a instalace přes `uv` mimo checkout.
 4. Předat obě rodiny s výsledky a omezeními. Cévní zlepšení vůči původní síti zůstává nesplněným vědeckým cílem; další trénovací hledání nyní uzavíráme.
 
 **Přibalené jsou původní modely, samostatný vybraný raw512 i dřívější kontroly/preview. TEST výsledky zatím nejsou vydané.**
