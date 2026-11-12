@@ -1,6 +1,6 @@
 # Current full-data research evidence
 
-Snapshot: **2026-11-12 00:41 UTC; both CLAHE fresh VAL roles completed**. Completed VAL and
+Snapshot: **2026-11-12 01:14 UTC; raw512 BEST50 rot4/.35 fresh VAL completed**. Completed VAL and
 CPU tradeoff reports are reviewed below. A last observed scheduler state is not a
 claim about current execution. The final optimized model, selection freeze and held-out TEST
 comparison are **not finished**. No released default is changed by this overview.
@@ -68,8 +68,8 @@ A separate explicitly reviewed own-Ada window ends04UTC/max12h, with the same
 21:13:51UTC; GPU/config/intra8/inter1/workers8/BF16 were observed. E1/2048updates
 completed with finite loss and236.834s TRAIN+VAL. At22:06UTC the same observer,
 supervisor and trainer were live, with E13/26624 updates completed and finite
-loss/VAL. This is unfinished training,
-not a quality result. No extra Meta job, main-study mutation or TEST was used.
+loss/VAL. That observation preceded the full60 completion recorded below; its early
+metrics are not a final quality result. No extra Meta job, main-study mutation or TEST was used.
 
 The [native V3 trial4 BEST54 TTA sweep](../reports/v3-trial4-inference-tta-val)
 completed all four modes on all 770 VAL with observed child and external supervisor
@@ -119,7 +119,7 @@ are retained. Worst-six point.999143678 remains below1. This distinct standalone
 model is not the V3 trial4; no default, equivalence or TEST claim follows.
 
 
-## Completed patch256 and pending patch/photometry arms
+## Completed patch/photometry arms and fresh-VAL outcomes
 
 [Raw256 fresh BEST52/LAST60 validation](../reports/curated-raw256-fresh-val-20261111)
 completed on all770 VAL with actual child/outer exits0. Original fd44 training
@@ -183,8 +183,8 @@ CLAHE BEST/LAST dense vessel Dice .7341292/.7316758 trail matched raw384
 are below zero. The all-source objective is unchanged; sparse precision1 is not
 used as dense evidence. Saved/fresh tiny numeric differences and backend/role
 limits are preserved, without a global bit-parity claim. No model/default/TEST
-promotion follows. Raw512 follow-up is tracked separately; this addendum claims
-no completed raw512 result. No new job was submitted by this analysis.
+promotion follows. The completed raw512 results are recorded separately below.
+No new job was submitted by this count analysis.
 Current elapsed scheduler time is not model quality, and unfinished arms are not
 ranked. Product `for_Leipzig` supports saved full-image photometry profiles without
 stripping config fields. Real TRAIN inference parity checks for the existing TPE
@@ -366,10 +366,25 @@ and A/V regressions remain explicitly reported: BEST-vessel minus raw384
 −.09404969 CI[−.11884641,−.07430343]. Neither pooled nor dense support alone
 replaces the full result. Both selected roles own2529TRAIN photos/all5700variants.
 
-A separate prospective raw512BEST50 rot4/.35 full770 check is running; it transfers
-the earlier firstTPE setting without a new threshold search. Changing TTA and
-threshold together will not isolate their individual effects. No result,
-default change, candidate promotion, freeze or TEST is implied by its launch.
+The [single raw512 BEST50 rot4/.35 fresh typed check](../reports/raw512-BEST50-rot4-035-fresh-val-20261112)
+subsequently completed all770 VAL with actual child0 and external observer0 at
+01:14:41UTC, no timeout/retry and unchanged original source/inputs. Macro
+.822834096695, pooled vessel.762398925122 and conditionalAV.851194311049
+improve against SAME BEST50 NONE/.5: paired deltas+.01150356[+.00885396,+.01419706],
++.00627317[+.00438800,+.00817194] and+.00788148[+.00381071,+.01113166].
+Both rot4 and threshold.35 were transferred together from the earlier firstTPE
+setting without a new threshold search; this contrast cannot isolate their effects.
+
+Dense vessel Dice.751315956814 improves over SAME NONE by+.00409265
+[+.00216325,+.00602027], on87photos/55groups excluding only positive-only AVRDB.
+It remains below original182 by−.01001065[−.01435384,−.00656370]; full vessel
+also remains below original by−.00772447[−.01177759,−.00421117]. Adverse sources
+are retained: SAME NONE RIMONEdisc−.01005061 and CHASEvessel−.00588264 have
+negative intervals; DRHAGISvessel versus original−.01833386 and AVRDBvessel
+versus raw384−.06083227 also have negative intervals. Full all-head/source/AV
+counts accompany the gains. Stage621.8904s is not a latency benchmark. The
+protocol/source-family evidence is not retagged; no default promotion, final
+selection, freeze, TEST or equivalence claim follows.
 
 ## Native TPE7 completion and role eligibility
 
