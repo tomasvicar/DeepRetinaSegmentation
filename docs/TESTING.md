@@ -1,9 +1,10 @@
 # Testing and verification
 
 This is the test inventory for product `for_Leipzig` at
-`2fc9441` (12 November 2026; test modules unchanged from `e27a774`).
-**No pytest suite, model forward, training, GPU operation or dataset decoding was
-rerun to write this document.** Historical PASS records below certify their own
+`d280cf504663136861cc38bcd0e3beeb0219b55e` (12 November 2026).
+**No entire pytest suite, model forward, training, GPU operation or dataset
+decoding was rerun for this inventory.** The separate34-case mocked defaults
+module check is recorded below. Historical PASS records certify their own
 source snapshots and scopes, not an unmeasured entire latest checkout.
 
 ## Reproduce checks
@@ -58,10 +59,10 @@ Generating new MATLAB goldens is a separate development activity.
 Counts below are **AST test definitions**, not PASS totals and not expanded
 parametrized cases. The machine-readable [inventory](../reports/testing-inventory-20261112/inventory.json)
 lists every definition, line, decorator and exact test-file SHA. Discovery scans
-**all170 Git-tracked Python files**, including scripts/reports/reference modules,
+**all172 Git-tracked Python files**, including scripts/reports/reference modules,
 for module/class `test*` definitions regardless of filename or class prefix.
 No additional nonstandard test-definition modules were found in this product
-snapshot; all61 discovered modules are under `tests/test_*.py`. This exposes
+snapshot; all62 discovered modules are under `tests/test_*.py`. This exposes
 individual test scope and parametrization without running imports. Regenerate
 it from the repository root with stdlib Python:
 
@@ -74,7 +75,7 @@ review a new inventory and its source identity rather than silently replacing th
 old evidence. The discovery script does not execute tests or claim collection
 success.
 
-Total: **61 modules, 439 definitions**.
+Total: **62 modules, 451 definitions**.
 
 | Module | Definitions | Purpose | Reproducible command |
 | --- | ---: | --- | --- |
@@ -85,6 +86,7 @@ Total: **61 modules, 439 definitions**.
 | [test_augment.py](../tests/test_augment.py) | 6 | Scientific geometry, ignored-support and reproducibility checks for augmentation. | `uv run --no-sync pytest -q tests/test_augment.py` |
 | [test_benchmark_manifest.py](../tests/test_benchmark_manifest.py) | 7 | Scientific eligibility must not be inferred from missing provenance. | `uv run --no-sync pytest -q tests/test_benchmark_manifest.py` |
 | [test_biomisa_policy.py](../tests/test_biomisa_policy.py) | 3 | Fixed source filename roles must never become per-image area sorting. | `uv run --no-sync pytest -q tests/test_biomisa_policy.py` |
+| [test_bundled_inference_defaults.py](../tests/test_bundled_inference_defaults.py) | 12 | Prediction-only defaults routing with fake metadata/predictors; no NN or weights. | `uv run --no-sync pytest -q tests/test_bundled_inference_defaults.py` |
 | [test_bundled_models.py](../tests/test_bundled_models.py) | 3 | The shared package must include usable, intact inference checkpoints. | `uv run --no-sync pytest -q tests/test_bundled_models.py` |
 | [test_cli.py](../tests/test_cli.py) | 2 | TOML/CLI precedence and rejection of unknown configuration before training. | `uv run --no-sync pytest -q tests/test_cli.py` |
 | [test_comparison.py](../tests/test_comparison.py) | 6 | Paired grouped metric comparisons, support consistency, leakage and regression visibility. | `uv run --no-sync pytest -q tests/test_comparison.py` |
@@ -140,6 +142,19 @@ Total: **61 modules, 439 definitions**.
 | [test_unified_warmstart.py](../tests/test_unified_warmstart.py) | 6 | Original-head fidelity, rectangular geometry, and explicit exposure safeguards. | `uv run --no-sync pytest -q tests/test_unified_warmstart.py` |
 | [test_vascular_sampling_weight.py](../tests/test_vascular_sampling_weight.py) | 10 | Frozen6b bit/RNG compatibility and isolated vascular-key weighting; no GT files. | `uv run --no-sync pytest -q tests/test_vascular_sampling_weight.py` |
 
+## Prediction defaults routing check added2026-11-12
+
+The source snapshot above adds one module protecting optional per-bundled-unified
+prediction defaults, explicit overrides, legacy/custom/evaluation isolation,
+lazy public API and CLI-to-mocked-predict routing. Its **34 parametrized cases
+passed in0.14s**, CPU1/CUDAhidden, with fake registries/predictors and no NN,
+checkpoint/data/GT/GPU operations or installations. The earlier26-case subset is
+not added to this count. One initial mocked evaluation fixture omitted required
+`--output`; it was corrected without actual evaluation. Full source scope/results:
+[verification](../reports/release/bundled-inference-defaults-20261112/verification.json).
+All12 existing model entries/aliases still resolve to previous defaults, and no
+real inference-default declaration was added. This is not a fresh entire suite.
+
 ## What has actually been observed
 
 The entries below are **existing recorded observations**, not results of the
@@ -153,7 +168,7 @@ runs can overlap: do not add their counts to advertise a new full-suite total.
 | --- | --- | --- | --- |
 | Four original single-net checkpoints | Original reference `7a152c3`; Torch2.6 CPU. Each model has identical converted state tensors and zero maximum logit error on ramp/random native-size inputs and odd rectangular tiled input. Calendar execution timestamp not recorded in this conversion JSON. | Actual saved weights versus original Python model/tiler; synthetic prepared inputs. Historical raw/normalized provenance remains unverified, not reconstructed by this check. | [conversion JSON](../reports/legacy/single_net_conversion.json), [architecture/reference notes](LEGACY_MODELS.md), [`tests/reference/single_net`](../tests/reference/single_net) |
 | Original v9 A/V checkpoint | Original reference `7bb0539`; Python3.12.13/Torch2.6 CPU. All75 saved state tensors equal and recorded prepared-input forward logit errors zero; exact model/input hashes retained. Calendar execution timestamp not recorded in this conversion JSON. | Actual owned pickle converted to safe state dictionary, with rectangular/odd synthetic stored-unit inputs. Does not certify arbitrary-camera MATLAB preprocessing. | [conversion JSON](../reports/legacy/av_conversion.json), [AV contract and optional external original](LEGACY_AV.md), [pinned original reference](../tests/reference/av/README.md) |
-| Historical whole CPU suite | `0c6eaa7`, 2026-11-10T20:44:29UTC: 2,440 passed, 58 warnings, 45.47s. | An entire earlier source snapshot; not the current 61-module inventory's measured status. Parameter expansion explains why case totals exceed definition counts. | [original command/log hash/result](../reports/release/source-cli-integration/verification.json) |
+| Historical whole CPU suite | `0c6eaa7`, 2026-11-10T20:44:29UTC: 2,440 passed, 58 warnings, 45.47s. | An entire earlier source snapshot; not the current62-module inventory's measured status. Parameter expansion explains why case totals exceed definition counts. | [original command/log hash/result](../reports/release/source-cli-integration/verification.json) |
 | Native legacy synthetic training | Base `4ec7344`; 2,540 passed/51.94s in the original implementation record, then 2,605 passed/53.52s in an integration record. Calendar timestamps and exact final tested commit are not both present in these JSONs. | Actual small synthetic CPU optimizer/VAL/save/reload, default production architecture metadata, plus wider regression suite at those snapshots. New fresh recipe, not reproduction of unavailable historical optimizer/data pipeline. | [initial verification](../reports/native-legacy-training/verification.json), [integration verification](../reports/release/native-training-integration/verification.json), [recipe](NATIVE_LEGACY_RETRAINING.md) |
 | Four original production single-net presets, real data | 2026-11-11 bounded workflow; launch/source metadata in linked receipts. All four actual child exits0: vessel42.56s, disc19212.02s, disc25613.02s, universal44.06s. All74 trainable tensors changed versus same-seed fresh constructors. | Actual one-epoch training on a four-photo TRAIN/VAL subset, native patch sizes, full-frame VAL, finite optimizer/checkpoint and reloaded real64×64 TRAIN crops. Task-specific TRAIN coverage is one or two photos, **not** all2,529/5,700. No TEST. | [workflow/limits/failures](../reports/native-legacy-real-smoke/README.md), [actual verification](../reports/native-legacy-real-smoke/root-four-native-verification.json), [subset proof](../reports/native-legacy-real-smoke/subset-proof.json) |
 | Original production full-frame A/V, real data | `d028314` on2026-11-11: actual fresh GPU training child/observer0 (4.753508s) and independent verification child/observer0 (2.652429s). | One unchanged full-frame TRAIN photo/AV record and one full VAL photo; all54 trainable parameter tensors changed, safe reload finite. GT vessel is the training input; this is functional training, not useful new weights or full-corpus quality. Earlier CPU RSS defer is retained. | [GPU scientific proof](../reports/native-legacy-real-smoke/av-GPU-functional-proof.json), [CPU defer and GPU qualification](../reports/native-legacy-real-smoke/README.md) |

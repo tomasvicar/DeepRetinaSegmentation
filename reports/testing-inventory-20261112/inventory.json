@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "source_snapshot": "2fc9441",
-  "tracked_python_files_scanned": 170,
+  "source_snapshot": "d280cf504663136861cc38bcd0e3beeb0219b55e",
+  "tracked_python_files_scanned": 172,
   "nonstandard_module_paths": [],
   "method": "All git-tracked Python files parsed with stdlib AST; module/class test* definitions, no imports/collection/execution",
   "count_semantics": "Module/class test* definitions, including nonstandard file/class names; not parametrized pytest cases, collection claims or PASS counts",
-  "modules": 61,
-  "test_definitions": 439,
+  "modules": 62,
+  "test_definitions": 451,
   "test_modules": [
     {
       "path": "tests/test_adapter_coverage.py",
@@ -360,6 +360,97 @@
         {
           "name": "test_policy_violation_fails_without_sorting_or_clipping",
           "line": 67,
+          "docstring": null,
+          "decorators": []
+        }
+      ]
+    },
+    {
+      "path": "tests/test_bundled_inference_defaults.py",
+      "sha256": "bbfd6ce1275de5bac25b588b9729ac5854eeff1511b6c007bc8dd42e77b42ff2",
+      "purpose_docstring": "Prediction-only defaults routing with fake metadata/predictors; no NN or weights.",
+      "definition_count": 12,
+      "command": "uv run --no-sync pytest -q tests/test_bundled_inference_defaults.py",
+      "tests": [
+        {
+          "name": "test_model_and_alias_defaults_and_explicit_overrides",
+          "line": 40,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_historical_defaults_and_saved_tiles_unchanged",
+          "line": 52,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('model', [None, 'old-unified', 'original', 'pilot'])"
+          ]
+        },
+        {
+          "name": "test_invalid_stored_defaults_cannot_be_hidden_by_overrides",
+          "line": 78,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('settings', [{'other': 1}, None, [], {'tta': 'bogus'}, {'threshold': True}, {'threshold': float('nan')}, {'threshold': 0}, {'threshold': 1}, {'tile_size': True}, {'tile_size': 7}, {'overlap': -1}, {'tile_size': 32, 'overlap': 32}])"
+          ]
+        },
+        {
+          "name": "test_nonunified_cannot_advertise_defaults",
+          "line": 87,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('model', ['original', 'pilot'])"
+          ]
+        },
+        {
+          "name": "test_unknown_model_and_option_rejected",
+          "line": 93,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_CLI_to_mocked_unified_predict_preserves_resolved_protocol",
+          "line": 115,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('extra,expected', [([], ('rot4', 0.35, 768, 192)), (['--tta', 'none', '--threshold', '.5', '--tile-size', '512', '--overlap', '64'], ('none', 0.5, 512, 64))])"
+          ]
+        },
+        {
+          "name": "test_custom_checkpoint_fallback_and_evaluation_not_preset",
+          "line": 147,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_public_API_shares_resolver_and_forwards_raw_input_options",
+          "line": 184,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_all_existing_registry_models_and_aliases_keep_previous_defaults",
+          "line": 218,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_loader_API_is_lazy_and_no_tensor_calls_in_routing",
+          "line": 230,
+          "docstring": null,
+          "decorators": []
+        },
+        {
+          "name": "test_invalid_explicit_unified_options_rejected",
+          "line": 257,
+          "docstring": null,
+          "decorators": [
+            "pytest.mark.parametrize('option', [{'tta': 'bogus'}, {'threshold': True}, {'threshold': float('inf')}, {'threshold': 0}, {'threshold': 1}, {'tile_size': True}, {'overlap': -1}])"
+          ]
+        },
+        {
+          "name": "test_original_and_custom_explicit_values_keep_backend_contract",
+          "line": 262,
           "docstring": null,
           "decorators": []
         }

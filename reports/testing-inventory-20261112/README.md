@@ -1,13 +1,13 @@
 # Current product test inventory, not a test execution result
 
-Snapshot: `2fc9441` (test modules unchanged from `e27a774`), 12 November 2026.
+Snapshot: `d280cf504663136861cc38bcd0e3beeb0219b55e`, 12 November 2026.
 
 [docs/TESTING.md](../../docs/TESTING.md) documents every current test module,
 reproducible selected/full-suite commands, input requirements, and existing
-source-scoped observed verification records. The inventory contains **61 modules
-and439 test definitions**, not expanded pytest cases or new PASS counts.
+source-scoped observed verification records. The inventory contains **62 modules
+and451 test definitions**, not expanded pytest cases or new PASS counts.
 
-`discover.py` uses Git to enumerate **all170 tracked Python files**, then stdlib
+`discover.py` uses Git to enumerate **all172 tracked Python files**, then stdlib
 AST to inspect module/class `test*` definitions regardless of filename or class
 prefix. No additional nonstandard modules were found in this product snapshot. It never
 imports test modules, pytest, Torch, datasets or model checkpoints. `inventory.json`
@@ -20,16 +20,20 @@ operation described in the guide, not claimed here.
 
 Actual documentation checks observed in this work:
 
-- Regeneration produces an equal JSON value; all61 discovered module paths
+- Regeneration produces an equal JSON value; all62 discovered module paths
   match the table and each module's command is present.
-- All439 definition records retain source line/name/decorators; every module
+- All451 definition records retain source line/name/decorators; every module
   SHA matches the unchanged file.
 - Every local Markdown link in the guide resolves; no linked dataset is opened.
 - Torch remains absent from the process module registry.
 - Ruff check/format on the discovery utility and `git diff --check` pass.
 
-No pytest collection/execution, NN forward, checkpoint tensor load, GT decode,
+The original inventory-only operation did no pytest execution. Its later optional
+bundled-defaults update links one separately observed34-case mocked metadata-only
+module run in docs/TESTING.md; no entire-suite rerun is claimed. No NN forward,
+checkpoint tensor load, GT decode,
 training, GPU operation, dependency installation or package rebuild was performed.
 The guide links historical successes and failures with their own source/role/data
-scope; it does not assert the current entire suite is green. Product runtime,
-models, defaults and all test source files remain unchanged.
+scope; it does not assert the current entire suite is green. The inventory script itself does not change runtime, weights or defaults.
+The later optional-defaults feature is separately documented; existing model
+defaults and weights remain unchanged.
