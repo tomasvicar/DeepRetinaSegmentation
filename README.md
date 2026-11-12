@@ -1,28 +1,17 @@
 # DeepRetinaSegmentation · Leipzig
 
-**Status:** original trained models are bundled with verified prepared-input
-inference. Three additional single-dataset pilots remain explicitly preliminary.
-Completed corpus-v1 and corpus-v2 control baselines are bundled, alongside an
-[experimental vascular-sampling preview](docs/UNIFIED_V2_VASCULAR2.md) and a
-[completed TPE BEST58 preview](docs/UNIFIED_V3_TPE_PREVIEW.md). The current
-[VAL-selected raw512 BEST50](docs/UNIFIED_RAW512_SELECTED.md) is also bundled
-under its explicit name, with reviewed rot4/0.35/512/64 prediction defaults.
-V2 uses 21 TRAIN sources, 2,529 photos and all 5,700 annotation variants;
-its fixed terminal E60 is not an optimized/final model. The broader optimization
-objective remains unmet, and held-out TEST results remain pending.
-Unified checkpoints can also retain [full-image raw/CLAHE/LC preprocessing](docs/UNIFIED_PHOTOMETRY.md);
-prediction automatically uses the saved recipe. Existing bundled weights retain raw defaults.
-See the [current status and remaining work](docs/STATUS.md) and the
-[agreed deliverable](docs/GOAL.md).
+Python/uv tools for retinal **vessel segmentation**, **artery/vein classification**,
+and **optic disc/cup segmentation**, from dataset preparation to retraining and
+prediction. The repository includes the verified original trained networks and a
+smaller, separately named [unified five-output model](docs/UNIFIED_RAW512_SELECTED.md).
+You can predict immediately without access to the training data.
 
-A Python package for retinal **vessel segmentation**, **artery/vein classification**,
-and **optic disc/cup segmentation**, with one workflow from dataset ZIPs to predictions.
-The branch preserves five original trained checkpoints and three explicitly named
-pilot checkpoints. Original architectures, weights and prepared-input inference
-have been checked numerically against the historical implementations. The newer
-pilots are small single-dataset experiments; they are not replacements for the
-original models. Both separately named unified controls are also ready for inference.
-See [the project goal and completion criteria](docs/GOAL.md).
+The selected unified model covers all 2,529 TRAIN photographs / 5,700 annotation
+records from 21 sources. It offers a simpler shared pipeline, while the original
+networks retain better measured dense-vessel VAL quality. Held-out TEST is in
+progress. See [current results and limits](docs/STATUS.md) and [the project goal](docs/GOAL.md).
+Earlier controls, previews and single-dataset pilots remain explicitly named in
+the model catalog for reproducibility.
 
 ## Install
 
