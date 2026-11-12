@@ -24,7 +24,7 @@ shape-prefixed hash and canonical photo ID before any model load.
 `stage-manifest.json` identifies every actual staged source/input/helper file.
 The code was staged from product commit a045bb1, with exact four original model
 copies under a new namespace, separate from frozen training sources.
-`driver.py`, `observe.py` and `launch-once.sh` are the actual failed invocation.
+`driver.py.txt`, `observe.py.txt` and `launch-once.sh` preserve the actual failed invocation.
 External byte-pinned dependencies were the frozen timing benchmark script
 SHA3a0324e09c128b36381b1ab219c88c8f10e06090918c10023901588da7ac1aae
 and owned process-group helper SHA382a39797a2695bfc5a4d55e7df1eb6e01e23db9d4fced30ca6021e67607a8a7.
@@ -84,3 +84,10 @@ The actual external source/helper dependencies are identified in stage manifests
 full duplicate helper/benchmark code is retained at the immutable Ada namespace,
 not copied into this product report. `artifact-sha256.json` pins the copied
 small artifacts and invocation scripts.
+
+The original Python invocation snapshots are stored with `.py.txt` suffixes so
+repository linters do not rewrite the byte-pinned historical evidence. Remote
+stage manifests retain the actual executed `.py` filenames. Original child and
+observer logs are explicitly retained despite the repository's general log ignore.
+Runtime source/tests pass Ruff; historical observation snapshots are not rewritten
+for import formatting, AST execution or cleanup-handler lint preferences.

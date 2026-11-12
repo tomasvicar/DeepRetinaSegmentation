@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt02/driver.py", line 158, in <module>
+    main()
+  File "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt02/driver.py", line 92, in main
+    candidate = api.predict_original(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt02/source/src/deepretina/original.py", line 182, in predict_original
+    masks, probability, conditional, support, classes, av_info = _compose(
+                                                                 ^^^^^^^^^
+  File "/var/home/tom/code/DeepRetinaSegmentation_original_composed_parity_20261112_attempt02/source/src/deepretina/original.py", line 95, in _compose
+    logits = tiled_logits(model, image, device=device, **payload["tiling"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/home/tom/code/DeepRetinaSegmentation_unified_run_87cf045/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+TypeError: tiled_logits() got an unexpected keyword argument 'blend'
